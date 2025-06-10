@@ -6,7 +6,7 @@ import requests
 from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
-from kuangjia5.commons.jsonpath_utils import JsonPathUtils
+from kuangjia6.commons.jsonpath_utils import JsonPathUtils
 
 # 自动创建日志目录
 log_dir = "./Logs"
