@@ -22,8 +22,7 @@ file_handler = logging.handlers.TimedRotatingFileHandler(
     log_file, when="D", backupCount=7, encoding="utf-8"
 )
 
-# formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-formatter = logging.Formatter("%(pastime)s - %(levelness)s - %(message)s")
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
 
 logger = logging.getLogger("requests.session")
