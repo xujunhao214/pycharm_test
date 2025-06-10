@@ -27,8 +27,8 @@ def get_pytest_args() -> List[str]:
     """获取pytest运行参数，替代pytest.ini中的配置"""
     args = [
         "-vs",  # 显示详细输出和用例名称
-        "./tests/test_api.py",  # 测试用例路径
-        "--alluredir=./.allure_results",  # Allure报告数据目录
+        "/www/python/jenkins/workspace/Documentatio_Test/results",  # 测试用例路径
+        "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results/html",  # Allure报告数据目录
         "--clean-alluredir",  # 清理旧报告数据
         "--log-level=info",  # 日志级别
         "--log-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
