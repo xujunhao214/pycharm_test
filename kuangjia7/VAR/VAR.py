@@ -3,6 +3,7 @@ import pymysql
 # VAR/VAR.py
 # test测试环境
 # URL
+ENVIRONMENT="测试环境test"
 
 BASE_URL = 'http://39.99.136.49:9000'
 

@@ -4,7 +4,7 @@ import datetime
 import pymysql
 import pytest
 from commons.session import JunhaoSession
-from kuangjia5.VAR.VAR import *
+from kuangjia7.VAR.VAR import *
 from typing import Generator, Dict, Any  # 导入类型注解，增强代码可读性
 
 

@@ -30,7 +30,6 @@ pytest.main([
 # --clean: 生成前清理旧的报告文件
 os.system('allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
 
-
 # pytest.main([
 #     "-vs",
 #     "./tests/test_api.py",
@@ -49,3 +48,5 @@ os.system('allure generate report/results -o /www/python/jenkins/workspace/Docum
 # # .allure_results: 源数据目录
 # # --clean: 生成前清理旧的报告文件
 # os.system('allure generate -o report .allure_results --clean')
+
+os.system(r'python3 webhook.py')
