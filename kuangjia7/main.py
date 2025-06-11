@@ -29,7 +29,7 @@ if __name__ == '__main__':
     # --log-level=info: 对应pytest.ini中的result_log_level_verbose配置
     pytest.main([
         "-vs",
-        "/www/python/jenkins/workspace/Documentatio_Test/kuangjia7/tests/test_api.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/pycharm_test/tests/test_api.py",
         "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/pycharm_test/results",
         "--clean-alluredir",
         "--log-file=pytest.log",
@@ -56,6 +56,7 @@ if __name__ == '__main__':
     # -o report: 指定输出目录为report
     # .allure_results: 源数据目录
     # --clean: 生成前清理旧的报告文件
-    os.system('allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/pycharm_test/results/html --clean')
+    os.system(
+        'allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/pycharm_test/results/html --clean')
 
     send_message("http://39.108.0.84:8080/job/Documentatio_Test/")
