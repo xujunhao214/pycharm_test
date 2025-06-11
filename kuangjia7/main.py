@@ -37,7 +37,7 @@ if __name__ == '__main__':
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
         "--log-level=info"
     ])
-    #
+    #git
     # pytest.main([
     #     "-vs",
     #     "./tests/test_api.py",
