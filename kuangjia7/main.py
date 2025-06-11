@@ -1,5 +1,20 @@
 import os
 import pytest
+import requests
+
+WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2"
+
+
+def send_message(allure_URL):
+    """发送飞书消息"""
+    message = {
+        "msg_type": "text",
+        "content": {
+            "text": allure_URL
+        }
+    }
+    requests.post(WEBHOOK_URL, json=message)
+
 
 # 启动测试框架并传递参数（替代pytest.ini中的addopts）
 # -vs: 详细输出模式并显示标准输出
@@ -30,23 +45,5 @@ pytest.main([
 # --clean: 生成前清理旧的报告文件
 os.system('allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
 
-# pytest.main([
-#     "-vs",
-#     "./tests/test_api.py",
-#     "--alluredir=./.allure_results",
-#     "--clean-alluredir",
-#     "--log-file=./Logs/pytest.log",
-#     "--log-file-level=info",
-#     "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
-#     "--log-file-date-format=%Y-%m-%d %H:%M:%S",
-#     "--log-level=info"
-# ])
-#
-# # 生成Allure报告
-# # 使用系统命令调用Allure CLI生成HTML报告
-# # -o report: 指定输出目录为report
-# # .allure_results: 源数据目录
-# # --clean: 生成前清理旧的报告文件
-# os.system('allure generate -o report .allure_results --clean')
-
-os.system(r'python3 webhook.py')
+if __name__ == '__main__':
+    send_message("http://39.108.0.84:8080/job/Documentatio_Test/")

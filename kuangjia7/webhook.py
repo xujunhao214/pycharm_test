@@ -6,9 +6,7 @@ import base64
 import hmac
 from kuangjia7.VAR.VAR import *
 
-secret = "r0q6TnY9j9LOOwh9P8K7Hd"  # 飞书机器人密钥
-url = "https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2"  # 飞书webhook地址
-server_url = "http://120.xx.xx.xxx:9091"  # allure地址，即服务器ip:nginx端口号
+WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2"  # 飞书webhook地址
 
 
 def buildresult():

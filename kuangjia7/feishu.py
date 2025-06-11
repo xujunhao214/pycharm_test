@@ -8,16 +8,10 @@ import sys
 import requests
 import datetime
 
-# 定义python系统变量
-JOB_URL = sys.argv[1]
-JOB_NAME = sys.argv[2]
-
 # 获取当前系统时间
 current_time = datetime.datetime.now()
 # 飞书机器人的webhook地址
 url = 'https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2'
-method = 'post'
-headers = {'Content-Type': 'application/json'}
 
 data = {
     "msg_type": "interactive",
@@ -56,3 +50,23 @@ data = {
 res = requests.request(method=method, url=url, headers=headers, json=data)
 print(res)
 print(res.json())
+
+
+import requests
+
+WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2"
+
+
+def send_message(allure_URL):
+    """发送飞书消息"""
+    message = {
+        "msg_type": "text",
+        "content": {
+            "text": allure_URL
+        }
+    }
+    requests.post(WEBHOOK_URL, json=message)
+
+
+if __name__ == '__main__':
+    send_message("http://39.108.0.84:8080/job/Documentatio_Test/")
