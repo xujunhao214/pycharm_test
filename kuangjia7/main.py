@@ -26,29 +26,29 @@ if __name__ == '__main__':
     # --log-file-format: 日志格式配置，包含级别、时间、模块和消息
     # --log-file-date-format: 日志时间戳格式
     # --log-level=info: 对应pytest.ini中的result_log_level_verbose配置
-    # pytest.main([
-    #     "-vs",
-    #     "/www/python/jenkins/workspace/Documentatio_Test/kuangjia6/tests/test_api.py",
-    #     "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",
-    #     "--clean-alluredir",
-    #     "--log-file=pytest.log",
-    #     "--log-file-level=info",
-    #     "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
-    #     "--log-file-date-format=%Y-%m-%d %H:%M:%S",
-    #     "--log-level=info"
-    # ])
-
     pytest.main([
         "-vs",
-        "./tests/test_api.py",
-        "--alluredir=./.allure_results",
+        "/www/python/jenkins/workspace/Documentatio_Test/kuangjia6/tests/test_api.py",
+        "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",
         "--clean-alluredir",
-        "--log-file=./Logs/pytest.log",
+        "--log-file=pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
         "--log-level=info"
     ])
+    #
+    # pytest.main([
+    #     "-vs",
+    #     "./tests/test_api.py",
+    #     "--alluredir=./.allure_results",
+    #     "--clean-alluredir",
+    #     "--log-file=./Logs/pytest.log",
+    #     "--log-file-level=info",
+    #     "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+    #     "--log-file-date-format=%Y-%m-%d %H:%M:%S",
+    #     "--log-level=info"
+    # ])
 
     # 生成Allure报告
     # 使用系统命令调用Allure CLI生成HTML报告
