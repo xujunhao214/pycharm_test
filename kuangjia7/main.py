@@ -2,7 +2,7 @@ import os
 import pytest
 import requests
 
-WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2"
+WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
 
 
 def send_message(allure_URL):
@@ -14,6 +14,7 @@ def send_message(allure_URL):
         }
     }
     requests.post(WEBHOOK_URL, json=message)
+
 
 if __name__ == '__main__':
     # 启动测试框架并传递参数（替代pytest.ini中的addopts）
@@ -28,7 +29,7 @@ if __name__ == '__main__':
     # --log-level=info: 对应pytest.ini中的result_log_level_verbose配置
     pytest.main([
         "-vs",
-        "/www/python/jenkins/workspace/Documentatio_Test/kuangjia6/tests/test_api.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/kuangjia7/tests/test_api.py",
         "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",
         "--clean-alluredir",
         "--log-file=pytest.log",
@@ -37,7 +38,7 @@ if __name__ == '__main__':
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
         "--log-level=info"
     ])
-    #git
+    # git
     # pytest.main([
     #     "-vs",
     #     "./tests/test_api.py",
