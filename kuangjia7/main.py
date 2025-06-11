@@ -29,3 +29,23 @@ pytest.main([
 # .allure_results: 源数据目录
 # --clean: 生成前清理旧的报告文件
 os.system('allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
+
+
+# pytest.main([
+#     "-vs",
+#     "./tests/test_api.py",
+#     "--alluredir=./.allure_results",
+#     "--clean-alluredir",
+#     "--log-file=./Logs/pytest.log",
+#     "--log-file-level=info",
+#     "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+#     "--log-file-date-format=%Y-%m-%d %H:%M:%S",
+#     "--log-level=info"
+# ])
+#
+# # 生成Allure报告
+# # 使用系统命令调用Allure CLI生成HTML报告
+# # -o report: 指定输出目录为report
+# # .allure_results: 源数据目录
+# # --clean: 生成前清理旧的报告文件
+# os.system('allure generate -o report .allure_results --clean')

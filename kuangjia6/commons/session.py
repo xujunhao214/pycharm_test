@@ -7,6 +7,8 @@ from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
 from kuangjia6.commons.jsonpath_utils import JsonPathUtils
+import requests
+from requests.exceptions import RequestException, ConnectionError, Timeout, HTTPError
 
 # 自动创建日志目录
 log_dir = "./Logs"
@@ -55,18 +57,40 @@ class JunhaoSession(requests.Session):
         # 记录请求日志（优化日志格式）
         req_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         logger.info(f"{req_time}发送请求>>>>>>>       接口地址={request.method} {request.url}")
-        logger.info(f"发送请求>>>>>>>                 请求头={request.headers}")
-        logger.info(f"发送请求>>>>>>>                 请求体={request.body.decode('utf-8') if request.body else '无'}")
+        logger.info(f"{req_time}发送请求>>>>>>>       请求头={request.headers}")
+        logger.info(f"{req_time}发送请求 >>>>>>>      请求体={request.body.decode('utf-8') if request.body else '无'}")
 
-        # 发送请求
-        response = super().send(request, **kwargs)
-        self.last_response = response  # 保存响应
+        try:
+            # 发送请求并捕获异常
+            response = super().send(request, **kwargs)
+            response.raise_for_status()  # 主动抛出HTTP错误（如4xx/5xx）
+
+        except ConnectionError:
+            # 服务器连接失败（如IP错误、服务未启动）
+            logger.error(f"{req_time} 连接异常 >>> 服务器不可达，请求URL：{request.url}")
+            raise
+
+        except Timeout:
+            # 请求超时（网络延迟或服务器无响应）
+            logger.error(f"{req_time} 超时异常 >>> 请求超时，URL：{request.url}")
+            raise
+
+        except HTTPError as e:
+            # 服务器返回错误状态码（400/500等）
+            logger.error(f"{req_time} HTTP错误 >>> 状态码={e.response.status_code}，URL：{request.url}")
+            raise
+
+        except RequestException as e:
+            # 其他请求异常（如DNS解析失败）
+            logger.error(f"{req_time} 未知请求异常 >>> {str(e)}，URL：{request.url}")
+            raise
 
         # 记录响应日志
         resp_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         logger.info(f"{resp_time}接收响应<<<<<<<       状态码={response.status_code}")
-        logger.info(f"接收响应<<<<<<<                  响应头={response.headers}")
-        logger.info(f"接收响应<<<<<<<                  响应体={response.content[:500]}...")  # 截断长响应体
+        logger.info(f"{resp_time}接收响应<<<<<<<       响应头={response.headers}")
+        # 截断长响应体
+        logger.info(f"{resp_time}接收响应<<<<<<<       响应体={response.content[:500].decode('utf-8', errors='replace')}...")
 
         return response
 

@@ -30,8 +30,8 @@ def test_login(session, data, res_msg):
     with allure.step("2. 登录成功，提取access_token"):
         if res_msg == "success":
             access_token = session.extract_jsonpath("$.data.access_token")
-            print(f"Refresh Token: {access_token}")
-            logging.info(f"Refresh Token: {access_token}")
+            print(f"access Token: {access_token}")
+            logging.info(f"access Token: {access_token}")
             session.headers.update({
                 "Authorization": f"{access_token}",
                 "x-sign": "417B110F1E71BD2CFE96366E67849B0B",
@@ -61,7 +61,7 @@ def test_getstatdata(api_with_db, db):
         # 查询数据库获取数据
         with db.cursor() as cursor:
             # sql = "SELECT * FROM COLLATIONS WHERE CHARACTER_SET_NAME = 'ascii'"
-            sql = "SELECT * FROM COLLATIONS WHERE CHARACTER_SET_NAME = 'ascdddii'"
+            sql = "SELECT * FROM COLLATIONS WHERE CHARACTER_SET_NAME = 'ascii'"
             cursor.execute(sql)
             # 获取数据库查询结果
             db_data = cursor.fetchall()

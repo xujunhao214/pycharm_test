@@ -16,7 +16,7 @@ pytest.main([
     "./tests/test_api.py",
     "--alluredir=./.allure_results",
     "--clean-alluredir",
-    "--log-file=pytest.log",
+    "--log-file=./Logs/pytest.log",
     "--log-file-level=info",
     "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
     "--log-file-date-format=%Y-%m-%d %H:%M:%S",

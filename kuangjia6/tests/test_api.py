@@ -30,12 +30,12 @@ def test_login(session, data, res_msg):
     with allure.step("2. 登录成功，提取access_token"):
         if res_msg == "success":
             access_token = session.extract_jsonpath("$.data.access_token")
-            print(f"Refresh Token: {access_token}")
-            logging.info(f"Refresh Token: {access_token}")
-            session.headers.update({
+            print(f"返回access_token: {access_token}")
+            logging.info(f"access_token: {access_token}")
+            session.headers = {
                 "Authorization": f"{access_token}",
                 "x-sign": "417B110F1E71BD2CFE96366E67849B0B",
-            })
+            }
 
 
 # 头部统计
