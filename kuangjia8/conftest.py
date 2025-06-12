@@ -90,7 +90,6 @@ def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str]
 
     # 构建 markdown 消息内容
     markdown_content = f"""
-# 【{env}】接口自动化测试报告
 ### 测试信息
 - **环境**: {env}
 - **开始时间**: {statistics['start_time']}
