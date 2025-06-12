@@ -1,72 +1,76 @@
-# -*- encoding: utf-8 -*-
-"""
-@Author  : xujunhao
-@File    : feishu.py
-@Remark :飞书通知
-"""
-import sys
-import requests
-import datetime
-
-# 获取当前系统时间
-current_time = datetime.datetime.now()
-# 飞书机器人的webhook地址
-url = 'https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2'
-
-data = {
-    "msg_type": "interactive",
-    "card": {
-        "config": {
-            "wide_screen_mode": True,
-            "enable_forward": True
-        },
-        "elements": [{
-            "tag": "div",
-            "text": {
-                "content": f"【测试完毕】{current_time}",  # 这是卡片的内容，也可以添加其他的内容：比如构建分支，构建编号等
-                "tag": "lark_md"
-            }
-        }, {
-            "actions": [{
-                "tag": "button",
-                "text": {
-                    "content": "查看测试报告",  # 这是卡片的按钮，点击可以跳转到url指向的allure路径
-                    "tag": "lark_md"
-                },
-                "url": f"{JOB_URL}/allure/",  # JOB_URL 调用python定义的变量，该url是服务器下的allure路径
-                "type": "default",
-                "value": {}
-            }],
-            "tag": "action"
-        }],
-        "header": {
-            "title": {
-                "content": JOB_NAME + "构建报告",  # JOB_NAME 调用python定义的变量，这是卡片的标题
-                "tag": "plain_text"
-            }
-        }
-    }
-}
-res = requests.request(method=method, url=url, headers=headers, json=data)
-print(res)
-print(res.json())
-
-
 import requests
 
-WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/70a419cd-755c-42c6-92ed-befad7a8c4f2"
+text_all = 12
+text_error = 10
+text_pass = 30
+allure_URL = "https://open.feishu.cn/open-apis/bot/v2"
+WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
 
 
-def send_message(allure_URL):
+def send_message(allure_URL: str, text_all: str, text_error: str, text_pass: str):
     """发送飞书消息"""
     message = {
-        "msg_type": "text",
+        "msg_type": "post",
         "content": {
-            "text": allure_URL
+            "post": {
+                "zh_cn": {
+                    "title": "接口自动化测试报告：",
+                    "content": [
+                        [{
+                            "tag": "text",
+                            "text": "allure报告路径 :"
+                        },
+                            {
+                                "tag": "text",
+                                "text": allure_URL
+                            }
+                        ],
+                        [{
+                            "tag": "text",
+                            "text": "总共执行用例:"
+                        },
+                            {
+                                "tag": "text",
+                                "text": text_all
+                            }
+                        ],
+                        [{
+                            "tag": "text",
+                            "text": "错误用例:"
+                        },
+                            {
+                                "tag": "text",
+                                "text": text_error
+                            }
+                        ],
+                        [{
+                            "tag": "text",
+                            "text": "通过用例:"
+                        },
+                            {
+                                "tag": "text",
+                                "text": text_pass
+                            }
+                        ],
+                        [{
+                            "tag": "text",
+                            "text": "第二行:"
+                        },
+                            {
+                                "tag": "text",
+                                "text": "all"
+                            }
+                        ],
+                    ]
+                }
+            }
         }
     }
+    print(message)
     requests.post(WEBHOOK_URL, json=message)
 
 
 if __name__ == '__main__':
-    send_message("http://39.108.0.84:8080/job/Documentatio_Test/")
+    send_message(allure_URL, text_all, text_error, text_pass)
+
+    print(send_message(allure_URL, text_all, text_error, text_pass))

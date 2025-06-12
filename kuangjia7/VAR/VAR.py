@@ -3,7 +3,7 @@ import pymysql
 # VAR/VAR.py
 # test测试环境
 # URL
-ENVIRONMENT="测试环境test"
+ENVIRONMENT = "测试环境test"
 
 BASE_URL = 'http://39.99.136.49:9000'
 
@@ -19,5 +19,9 @@ DB_CONFIG = {
     "connect_timeout": 10  # 连接超时时间（秒），防止长时间阻塞
 }
 
+
+# 飞书机器人WEBHOOK_URL
+WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
+
 # conftest.py 中导入
-from kuangjia5.VAR.VAR import DB_CONFIG
+from kuangjia7.VAR.VAR import DB_CONFIG
