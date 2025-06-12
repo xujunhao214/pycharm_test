@@ -104,7 +104,7 @@ def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str]
 - 🌟 成功率: {success_rate}
 
 ### 查看报告
-[查看 Jenkins 详细报告]:{JENKINS}
+[Allure报告]:{JENKINS}
 - **账号**: {JENKINS_USERNAME}
 - **密码**: {JENKINS_PASSWORD}
 """

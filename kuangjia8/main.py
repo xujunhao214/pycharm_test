@@ -1,8 +1,5 @@
 import os
 import pytest
-
-import os
-import pytest
 import requests
 
 if __name__ == '__main__':
@@ -29,6 +26,7 @@ if __name__ == '__main__':
     ])
     os.system(
         'allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
+
     # pytest.main([
     #     "-vs",
     #     "./tests/test_api.py",
@@ -40,5 +38,5 @@ if __name__ == '__main__':
     #     "--log-file-date-format=%Y-%m-%d %H:%M:%S",
     #     "--log-level=info"
     # ])
-
+    #
     # os.system('allure generate -o report .allure_results --clean')
