@@ -2,6 +2,8 @@
 import _pytest.hookspec
 import datetime
 import pymysql
+import allure
+import logging
 import pytest
 import requests
 import os
@@ -353,12 +355,54 @@ def pytest_unconfigure(config):
 
 
 # ------------------------------
-# 接口会话夹具
+# 接口会话夹具,控制请求URL
 # ------------------------------
 @pytest.fixture(scope='session')
 def session() -> Generator[JunhaoSession, None, None]:
     api = JunhaoSession(base_url=BASE_URL)
+
     yield api
+
+
+# ------------------------------
+# 登录夹具
+# ------------------------------
+# 登录夹具：依赖 session 夹具，完成登录并返回携带 token 的 session
+@pytest.fixture(scope="session")
+def logged_session(session: JunhaoSession) -> Generator[JunhaoSession, None, None]:
+    """
+    session: 基础会话夹具（未登录状态）
+    返回：已登录、携带 token 的会话
+    """
+    # 1. 构造登录请求数据
+    login_data = {
+        "username": USERNAME,
+        "password": PASSWORD,
+    }
+    login_headers = {
+        "x-sign": "417B110F1E71BD20FE96366E67849B0B",  # 若有固定请求头可直接写
+    }
+
+    with allure.step("1. 执行登录操作"):
+        login_response = session.post(
+            url="/sys/auth/login",  # 替换为实际登录接口路径
+            json=login_data,
+            headers=login_headers,
+        )
+        # 断言登录成功（可选，保证后续用例拿到有效 token ）
+        assert login_response.status_code == 200, "登录接口返回状态码非 200"
+        assert "access_token" in login_response.json().get("data", {}), "响应无 access_token"
+
+    # 2. 提取 token 并更新 session 的默认请求头
+    access_token = login_response.json()["data"]["access_token"]
+    logging.info(f"登录成功，获取 token: {access_token}")
+    session.headers.update({
+        "Authorization": f"{access_token}",  # 将 token 加入请求头
+        "x-sign": "417B110F1E71BD20FE96366E67849B0B",  # 保持其他固定请求头
+    })
+
+    # 3. 返回已登录的 session，供其他用例直接使用
+    yield session
 
 
 # ------------------------------

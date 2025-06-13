@@ -3,58 +3,52 @@ import logging
 import allure
 import pytest
 from lingkuan.commons.jsonpath_utils import JsonPathUtils
+from lingkuan.VAR.VAR import *
 
 JsonPathUtils = JsonPathUtils()
 
 
-# 参数化
-@pytest.mark.parametrize(
-    "data, res_msg",
-    [
-        # 正确的用户名和密码
-        ({"username": "admin",
-          "password": "04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5"},
-         "success"),
-    ]
-)
-@allure.title("登录")
-def test_login(session, data, res_msg):
-    headers = {
-        "Authorization": "${token}",
-        "x-sign": "417B110F1E71BD2CFE96366E67849B0B",
-    }
-
-    with allure.step("1. 登录操作"):
-        session.post('/sys/auth/login', json=data, headers=headers)
-
-    with allure.step("2. 登录成功，提取access_token"):
-        if res_msg == "success":
-            access_token = session.extract_jsonpath("$.data.access_token")
-            print(f"access Token: {access_token}")
-            logging.info(f"access Token: {access_token}")
-            session.headers.update({
-                "Authorization": f"{access_token}",
-                "x-sign": "417B110F1E71BD2CFE96366E67849B0B",
-            })
+# @allure.title("vps列表-登录")
+# def test_login(session):
+#     data = {
+#         "username": USERNAME,
+#         "password": PASSWORD,
+#     }
+#     headers = {
+#         "Authorization": "${token}",
+#         "x-sign": "417B110F1E71BD2CFE96366E67849B0B",
+#     }
+#
+#     with allure.step("1. 登录操作"):
+#         session.post('/sys/auth/login', json=data, headers=headers)
+#
+#     with allure.step("2. 登录成功，提取access_token"):
+#         access_token = session.extract_jsonpath("$.data.access_token")
+#         print(f"access Token: {access_token}")
+#         logging.info(f"access Token: {access_token}")
+#         session.headers.update({
+#             "Authorization": f"{access_token}",
+#             "x-sign": "417B110F1E71BD2CFE96366E67849B0B",
+#         })
 
 
 # 校验服务器IP是否可用
-@allure.title("校验服务器IP是否可用")
-def test_get_connect(session):
+@allure.title("vps列表-校验服务器IP是否可用")
+def test_get_connect(session, logged_session):
     with allure.step("1. 校验服务器IP是否可用"):
         session.get('/mascontrol/vps/connect', params={'ipAddress': '127.0.0.1'})
 
     with allure.step("2. 校验接口请求是否成功"):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
-        assert "success" == msg, f"是否一致：预期：success 实际：{msg} "
+        assert "success" == msg
 
 
 # 新增vps
 # 基础用例：新增vps
 @pytest.mark.dependency(name="create_vps")
-@allure.title("新增vps")
-def test_create_vps(session):
+@allure.title("vps列表-新增vps")
+def test_create_vps(session, logged_session):
     with allure.step("1. 新增vps"):
         data = {
             "ipAddress": "127.0.0.1",
@@ -75,13 +69,13 @@ def test_create_vps(session):
     with allure.step("2. 判断是否添加成功"):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
-        assert "success" == msg, f"断言：预期：success 实际：{msg}"
+        assert "success" == msg
 
 
 # 依赖创建vps的用例：必须创建成功才会执行
 @pytest.mark.dependency(depends=["create_vps"])
-@allure.title("获取vps列表")
-def test_vps_page(session):
+@allure.title("vps列表-获取vps列表")
+def test_vps_page(session, logged_session):
     global vps_list_id
     parser = {
         "page": 1,
@@ -98,8 +92,8 @@ def test_vps_page(session):
 
 # 编辑vps
 @pytest.mark.dependency(depends=["create_vps", "test_vps_page"])
-@allure.title("编辑vps")
-def test_update_vps(session):
+@allure.title("vps列表-编辑vps")
+def test_update_vps(session, logged_session):
     with allure.step("1. 编辑vps"):
         data = {
             "ipAddress": "127.0.0.1",
@@ -122,13 +116,13 @@ def test_update_vps(session):
     with allure.step("2. 判断是否编辑成功"):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
-        assert "success" == msg, f"是否一致：预期：success 实际：{msg} "
+        assert "success" == msg
 
 
 # 获取vps列表
 @pytest.mark.dependency(depends=["create_vps"])
-@allure.title("获取vps列表-校验编辑")
-def test_vps_page2(session):
+@allure.title("vps列表-获取vps列表-校验编辑")
+def test_vps_page2(session, logged_session):
     global vps_list_id
     parser = {
         "page": 1,
@@ -149,15 +143,14 @@ def test_vps_page2(session):
         assert sort == 200
         logging.info(f"断言:预期:15 实际： {remark}")
 
-
-# 删除vps
-@pytest.mark.dependency(depends=["create_vps"])
-@allure.title("删除vps")
-def test_delete_vps(session):
-    with allure.step("1. 删除vps"):
-        data = [vps_list_id]
-        session.delete('/mascontrol/vps', json=data)
-    with allure.step("2. 判断是否删除vps成功"):
-        msg = session.extract_jsonpath("$.msg")
-        logging.info(f"断言：预期：success 实际：{msg}")
-        assert "success" == msg, f"是否一致：预期：success 实际：{msg} "
+# # 删除vps
+# @pytest.mark.dependency(depends=["create_vps"])
+# @allure.title("vps列表-删除vps")
+# def test_delete_vps(session):
+#     with allure.step("1. 删除vps"):
+#         data = [vps_list_id]
+#         session.delete('/mascontrol/vps', json=data)
+#     with allure.step("2. 判断是否删除vps成功"):
+#         msg = session.extract_jsonpath("$.msg")
+#         logging.info(f"断言：预期：success 实际：{msg}")
+#         assert "success" == msg

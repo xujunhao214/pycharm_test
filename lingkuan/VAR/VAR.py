@@ -25,5 +25,9 @@ JENKINS = "http://39.108.0.84:8080/job/Documentatio_Test/"
 JENKINS_USERNAME = "admin"
 JENKINS_PASSWORD = "admin"
 
+# 跟单平台账号密码
+USERNAME = "admin"
+PASSWORD = "04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5"
+
 # conftest.py 中导入
 from kuangjia5.VAR.VAR import DB_CONFIG
