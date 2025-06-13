@@ -5,21 +5,22 @@ import pymysql
 import pytest
 import requests
 import os
-from commons.session import JunhaoSession
+from typing import Generator, Dict, Any, List
+import datetime
 from kuangjia8.VAR.VAR import *
-from typing import Generator, Dict, Any, List, Optional
-from _pytest.runner import TestReport
+from kuangjia8.VAR.VAR import BASE_URL, DB_CONFIG
+from kuangjia8.commons.session import JunhaoSession
+from collections import defaultdict
 
 # ------------------------------
-# 飞书通知配置
+# 飞书通知配置（补充缺失的变量定义）
 # ------------------------------
-FEISHU_HOOK_URL = os.getenv("FEISHU_HOOK_URL",
-                            "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f")
+FEISHU_HOOK_URL = os.getenv("FEISHU_HOOK_URL", WEBHOOK_URL)
 TEST_ENV = os.getenv("TEST_ENV", "测试环境")
 
 
 # ------------------------------
-# 测试结果追踪器（添加调试日志）
+# 测试结果追踪器（最终精确版）
 # ------------------------------
 class TestResultTracker:
     def __init__(self):
@@ -29,39 +30,86 @@ class TestResultTracker:
         self.skipped = 0
         self.start_time = None
         self.end_time = None
-        self.test_reports = []
+        self.failed_test_names = []
+        self.skipped_test_names = []
+        self.test_results = defaultdict(str)  # 存储每个测试用例的结果
+        self.processed_test_ids = set()  # 跟踪已处理的测试用例
+        self.call_results = {}  # 专门存储call阶段的结果
 
-    def start_test(self):
+    def pytest_sessionstart(self, session):
         self.start_time = datetime.datetime.now()
-        print("[DEBUG] 测试追踪器启动")
+        print(f"[DEBUG] 测试会话开始: {self.start_time}")
 
-    def end_test(self):
+    def pytest_sessionfinish(self, session, exitstatus):
         self.end_time = datetime.datetime.now()
-        print(f"[DEBUG] 测试追踪器结束，总用例数: {self.total}")
+        print(
+            f"[DEBUG] 测试会话结束，总用例数: {self.total}, 耗时: {(self.end_time - self.start_time).total_seconds():.2f}秒")
 
-    def update_result(self, outcome: str):
-        self.total += 1
-        print(f"[DEBUG] 用例计数: {self.total}, 结果: {outcome}")
-        if outcome == "passed":
-            self.passed += 1
-        elif outcome == "failed":
-            self.failed += 1
-        elif outcome == "skipped":
-            self.skipped += 1
+        # 最终统计（确保包含所有用例）
+        self._finalize_statistics()
 
-    def add_report(self, report: TestReport):
-        self.test_reports.append(report)
-        print(f"[DEBUG] 报告添加: {report.nodeid}, 结果: {report.outcome}")
+    def pytest_runtest_logreport(self, report):
+        """
+        最终精确版：精确区分call阶段结果
+        """
+        test_id = report.nodeid  # 获取测试用例唯一标识
 
-    def get_failed_test_names(self) -> List[str]:
-        return [report.nodeid.split("::")[-1] for report in self.test_reports
-                if report.outcome == "failed"]
+        # 跳过已处理的测试用例
+        if test_id in self.processed_test_ids:
+            return
+
+        self.processed_test_ids.add(test_id)
+        self.total += 1  # 每个测试用例只计数一次
+
+        # 记录call阶段的结果（这是真正的测试执行结果）
+        if report.when == "call":
+            self.call_results[test_id] = report.outcome
+            print(f"[DEBUG] 记录call阶段结果: {test_id}, 结果: {report.outcome}")
+
+        # 记录所有阶段的结果（用于调试）
+        self.test_results[f"{test_id}_{report.when}"] = report.outcome
+        print(f"[DEBUG] 记录测试用例结果: {test_id}, 阶段: {report.when}, 结果: {report.outcome}")
+
+        # 记录跳过的测试用例
+        if report.outcome == "skipped":
+            test_name = test_id.split("::")[-1]
+            self.skipped_test_names.append(test_name)
+            print(f"[DEBUG] 记录跳过用例: {test_id}")
+
+    def _finalize_statistics(self):
+        """
+        最终统计所有测试用例结果
+        """
+        # 统计call阶段的结果
+        for test_id, outcome in self.call_results.items():
+            if outcome == "passed":
+                self.passed += 1
+            elif outcome == "failed":
+                self.failed += 1
+                test_name = test_id.split("::")[-1]
+                self.failed_test_names.append(test_name)
+
+        # 统计跳过的测试用例
+        self.skipped = len(self.skipped_test_names)
+
+        # 严格验证统计数据
+        actual_total = self.passed + self.failed + self.skipped
+        if self.total != actual_total:
+            print(f"[ERROR] 统计数据不一致: 记录={self.total}, 计算={actual_total}")
+            print(f"[ERROR] 详细: 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+            print(f"[DEBUG] call阶段结果: {self.call_results}")
+            print(f"[DEBUG] 所有阶段结果: {self.test_results}")
+        else:
+            print(
+                f"[DEBUG] 统计数据一致: 总用例={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
 
     def get_statistics(self) -> Dict[str, Any]:
         if not self.start_time or not self.end_time:
             return {"error": "测试时间未记录"}
+
         duration = (self.end_time - self.start_time).total_seconds()
         success_rate = (self.passed / self.total * 100) if self.total > 0 else 0
+
         return {
             "total": self.total,
             "passed": self.passed,
@@ -75,11 +123,127 @@ class TestResultTracker:
         }
 
 
-def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str] = None):
-    """发送飞书通知（使用 markdown 格式）"""
-    print("[DEBUG] 开始发送飞书通知（markdown 格式）...")
+# ------------------------------
+# 测试结果追踪器（最终兼容版）
+# ------------------------------
+class TestResultTracker:
+    def __init__(self):
+        self.total = 0
+        self.passed = 0
+        self.failed = 0
+        self.skipped = 0
+        self.start_time = None
+        self.end_time = None
+        self.failed_test_names = []
+        self.skipped_test_names = []
+        self.test_results = defaultdict(lambda: defaultdict(str))  # 存储每个测试用例各阶段的结果
+        self.processed_test_ids = set()  # 跟踪已处理的测试用例
+        self.final_results = {}  # 存储每个测试用例的最终结果
 
-    # 解析统计数据
+    def pytest_sessionstart(self, session):
+        self.start_time = datetime.datetime.now()
+        print(f"[DEBUG] 测试会话开始: {self.start_time}")
+
+    def pytest_sessionfinish(self, session, exitstatus):
+        self.end_time = datetime.datetime.now()
+        print(
+            f"[DEBUG] 测试会话结束，总用例数: {self.total}, 耗时: {(self.end_time - self.start_time).total_seconds():.2f}秒")
+
+        # 最终统计（确保包含所有用例）
+        self._finalize_statistics()
+
+    def pytest_runtest_logreport(self, report):
+        """
+        最终兼容版：统计所有阶段的结果，并确定最终结果
+        """
+        test_id = report.nodeid  # 获取测试用例唯一标识
+
+        # 记录每个测试用例各阶段的结果
+        self.test_results[test_id][report.when] = report.outcome
+        print(f"[DEBUG] 记录测试用例结果: {test_id}, 阶段: {report.when}, 结果: {report.outcome}")
+
+        # 如果是新的测试用例，增加总用例数
+        if test_id not in self.processed_test_ids:
+            self.processed_test_ids.add(test_id)
+            self.total += 1
+
+        # 记录跳过的测试用例（在任何阶段被跳过都记录）
+        if report.outcome == "skipped":
+            test_name = test_id.split("::")[-1]
+            if test_name not in self.skipped_test_names:
+                self.skipped_test_names.append(test_name)
+                print(f"[DEBUG] 记录跳过用例: {test_id}")
+
+    def _finalize_statistics(self):
+        """
+        最终统计所有测试用例结果，确定最终结果
+        """
+        for test_id, stage_results in self.test_results.items():
+            # 确定最终结果的优先级：failed > skipped > passed
+            final_outcome = "passed"
+
+            if "call" in stage_results:
+                # 如果有call阶段，以call阶段结果为准
+                final_outcome = stage_results["call"]
+            elif "setup" in stage_results:
+                # 如果没有call阶段，以setup阶段结果为准
+                final_outcome = stage_results["setup"]
+
+            self.final_results[test_id] = final_outcome
+
+            if final_outcome == "passed":
+                self.passed += 1
+            elif final_outcome == "failed":
+                self.failed += 1
+                test_name = test_id.split("::")[-1]
+                if test_name not in self.failed_test_names:
+                    self.failed_test_names.append(test_name)
+            elif final_outcome == "skipped":
+                # 跳过用例已经在pytest_runtest_logreport中统计过
+                pass
+
+        # 严格验证统计数据
+        actual_total = self.passed + self.failed + len(self.skipped_test_names)
+        self.skipped = len(self.skipped_test_names)
+
+        if self.total != actual_total:
+            print(f"[ERROR] 统计数据不一致: 记录={self.total}, 计算={actual_total}")
+            print(f"[ERROR] 详细: 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+            print(f"[DEBUG] 所有阶段结果: {self.test_results}")
+            print(f"[DEBUG] 最终结果: {self.final_results}")
+        else:
+            print(
+                f"[DEBUG] 统计数据一致: 总用例={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+
+    def get_statistics(self) -> Dict[str, Any]:
+        if not self.start_time or not self.end_time:
+            return {"error": "测试时间未记录"}
+
+        duration = (self.end_time - self.start_time).total_seconds()
+        success_rate = (self.passed / self.total * 100) if self.total > 0 else 0
+
+        return {
+            "total": self.total,
+            "passed": self.passed,
+            "failed": self.failed,
+            "skipped": self.skipped,
+            "duration": f"{duration:.2f}秒",
+            "success_rate": f"{success_rate:.2f}%",
+            "start_time": self.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "end_time": self.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "env": TEST_ENV
+        }
+
+
+# ------------------------------
+# 飞书通知逻辑
+# ------------------------------
+def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str] = None,
+                             skipped_cases: List[str] = None):
+    print(f"[DEBUG] 统计信息: {statistics}")
+    print(f"[DEBUG] 失败用例: {failed_cases}")
+    print(f"[DEBUG] 跳过用例: {skipped_cases}")
+
     total = statistics["total"]
     passed = statistics["passed"]
     failed = statistics["failed"]
@@ -88,36 +252,43 @@ def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str]
     success_rate = statistics["success_rate"]
     env = statistics["env"]
 
-    # 构建 markdown 消息内容
+    # 处理除零错误
+    passed_percent = f"{passed / total * 100:.1f}%" if total > 0 else "0.0%"
+    failed_percent = f"{failed / total * 100:.1f}%" if total > 0 else "0.0%"
+    skipped_percent = f"{skipped / total * 100:.1f}%" if total > 0 else "0.0%"
+
     markdown_content = f"""
-### 测试信息
+**测试信息**:
 - **环境**: {env}
 - **开始时间**: {statistics['start_time']}
 - **结束时间**: {statistics['end_time']}
 - **执行耗时**: {duration}
 
-### 用例统计
-- 📊 总用例数: {total}
-- ✅ 通过数: {passed} ({passed / total * 100:.1f}%)
-- ❌ 失败数: {failed} ({failed / total * 100:.1f}%)
-- ⏩ 跳过数: {skipped}
-- 🌟 成功率: {success_rate}
+**用例统计**:
+- 📊 **总用例数**: {total}
+- ✅ **通过数**: {passed} ({passed_percent})
+- ❌ **失败数**: {failed} ({failed_percent})
+- ⏩ **跳过数**: {skipped} ({skipped_percent})
+- 🌟 **成功率**: {success_rate}
 
-### 查看报告
-[Allure报告]:{JENKINS}
+**查看报告**:
+- **Allure报告**: {JENKINS}
 - **账号**: {JENKINS_USERNAME}
 - **密码**: {JENKINS_PASSWORD}
 """
 
-    # 添加失败用例列表
     if failed_cases and len(failed_cases) > 0:
-        markdown_content += "\n### 失败用例列表\n"
+        markdown_content += "\n**失败用例列表**:\n"
         for case in failed_cases:
             markdown_content += f"- {case}\n"
 
-    # 构建消息（使用 markdown 格式）
+    if skipped_cases and len(skipped_cases) > 0:
+        markdown_content += "\n**跳过用例列表**:\n"
+        for case in skipped_cases:
+            markdown_content += f"- {case}\n"
+
     message = {
-        "msg_type": "interactive",  # 使用 interactive 类型支持 markdown
+        "msg_type": "interactive",
         "card": {
             "config": {
                 "wide_screen_mode": True,
@@ -137,19 +308,19 @@ def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str]
                     "tag": "plain_text",
                     "content": f"【{env}】接口自动化测试报告"
                 },
-                "template": "blue"  # 可选：green、red、yellow、blue
+                "template": "red" if failed > 0 else "blue"
             }
         }
     }
 
-    # 打印消息内容（便于调试）
-    print("[DEBUG] 飞书 markdown 消息内容:")
-    print(markdown_content)
-
-    # 发送消息
     try:
         headers = {"Content-Type": "application/json"}
+        print(f"[DEBUG] 发送飞书消息，URL: {FEISHU_HOOK_URL}")
         response = requests.post(FEISHU_HOOK_URL, json=message, headers=headers, timeout=10)
+
+        print(f"[DEBUG] 飞书响应状态码: {response.status_code}")
+        print(f"[DEBUG] 飞书响应内容: {response.text}")
+
         if response.status_code == 200:
             result = response.json()
             if result.get("code") == 0:
@@ -160,52 +331,25 @@ def send_feishu_notification(statistics: Dict[str, Any], failed_cases: List[str]
             print(f"[FEISHU] 状态码: {response.status_code}, 响应: {response.text}")
     except Exception as e:
         print(f"[FEISHU] 异常: {str(e)}")
-    finally:
-        print("[DEBUG] 飞书通知发送结束")
 
 
 # ------------------------------
-# pytest 钩子函数
+# 注册 pytest hook
 # ------------------------------
-test_tracker = TestResultTracker()
+def pytest_configure(config):
+    tracker = TestResultTracker()
+    print(f"[DEBUG] 注册测试结果追踪器: {tracker}")
+    config.pluginmanager.register(tracker)
+    config._test_result_tracker = tracker
 
 
-def pytest_sessionstart(session):
-    test_tracker.start_test()
-    print(f"[{datetime.datetime.now()}] 测试会话开始，环境：{TEST_ENV}")
-
-
-def pytest_runtest_makereport(item, call) -> TestReport:
-    """只统计测试执行阶段（call）的结果，忽略setup/teardown"""
-    if call.when != "call":  # 只处理测试执行阶段
-        return None
-    outcome = "passed" if call.excinfo is None else "failed"
-    test_tracker.update_result(outcome)
-
-    # 构建报告对象
-    longrepr = str(call.excinfo) if call.excinfo else None
-    report = TestReport(
-        nodeid=item.nodeid,
-        location=item.location,
-        keywords=item.keywords,
-        outcome=outcome,
-        duration=call.duration,
-        when=call.when,
-        excinfo=call.excinfo,
-        longrepr=longrepr,
-        user_properties=item.user_properties,
-        sections=[]
-    )
-    test_tracker.add_report(report)
-    return report
-
-
-def pytest_sessionfinish(session, exitstatus):
-    test_tracker.end_test()
-    statistics = test_tracker.get_statistics()
-    failed_cases = test_tracker.get_failed_test_names()
-    send_feishu_notification(statistics, failed_cases)
-    print(f"[{datetime.datetime.now()}] 测试会话结束，总用例数：{statistics['total']}，通过数：{statistics['passed']}")
+def pytest_unconfigure(config):
+    tracker = getattr(config, "_test_result_tracker", None)
+    if tracker:
+        statistics = tracker.get_statistics()
+        print(f"[DEBUG] 测试统计: {statistics}")
+        send_feishu_notification(statistics, tracker.failed_test_names, tracker.skipped_test_names)
+        config.pluginmanager.unregister(tracker)
 
 
 # ------------------------------
@@ -230,15 +374,15 @@ def db() -> Generator[pymysql.connections.Connection, None, None]:
             version = cursor.fetchone()
             if not version:
                 raise Exception("数据库连接成功但无法获取版本信息")
-            print(f"[DB INFO] 成功连接到 MySQL 数据库，版本：{version['VERSION()']}")
+            # print(f"[DB INFO] 成功连接到 MySQL 数据库，版本：{version['VERSION()']}")
         yield conn
     except pymysql.Error as e:
-        print(f"[DB ERROR] 数据库连接失败：{str(e)}")
+        # print(f"[DB ERROR] 数据库连接失败：{str(e)}")
         raise
     finally:
         if conn:
             conn.close()
-            print("[DB INFO] 数据库连接已关闭")
+            # print("[DB INFO] 数据库连接已关闭")
 
 
 # ------------------------------

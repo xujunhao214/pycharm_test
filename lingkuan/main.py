@@ -1,8 +1,18 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import os
 import pytest
+import requests
 
 if __name__ == '__main__':
-    pytest.main(['-v', './testcase/test_query.py', '--alluredir', 'report/results', '--clean-alluredir'])
-    os.system('allure generate report/results -o report/report-allure --clean')
+    pytest.main([
+        "-vs",
+        "./testcase/test_vps.py",
+        "--alluredir=./.allure_results",
+        "--clean-alluredir",
+        "--log-file=./Logs/pytest.log",
+        "--log-file-level=info",
+        "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+        "--log-file-date-format=%Y-%m-%d %H:%M:%S",
+        "--log-level=info"
+    ])
+
+    os.system('allure generate -o report .allure_results --clean')
