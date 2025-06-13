@@ -5,7 +5,7 @@ import requests
 if __name__ == '__main__':
     pytest.main([
         "-vs",
-        "./testcase/test_vps.py",
+        "./testcase/test_platform.py",
         "--alluredir=./.allure_results",
         "--clean-alluredir",
         "--log-file=./Logs/pytest.log",

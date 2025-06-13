@@ -385,7 +385,7 @@ def logged_session(session: JunhaoSession) -> Generator[JunhaoSession, None, Non
 
     with allure.step("1. 执行登录操作"):
         login_response = session.post(
-            url="/sys/auth/login",  # 替换为实际登录接口路径
+            url="/sys/auth/login",
             json=login_data,
             headers=login_headers,
         )

@@ -133,14 +133,15 @@ def test_platfor_list2(session, logged_session):
         assert maxLots == 2.0
         logging.info(f"断言：预期：2.0 实际：{maxLots}")
 
-# @allure.title("平台列表-删除列表数据")
-# @pytest.mark.dependency(depends=["create_platform"])
-# def test_delete_platform(session, logged_session):
-#     data = [list_id]
-#
-#     with allure.step("1. 删除列表数据"):
-#         session.delete("/mascontrol/platform", json=data)
-#     with allure.step("2. 校验是否删除成功"):
-#         msg = session.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert msg == "success"
+
+@allure.title("平台列表-删除列表数据")
+@pytest.mark.dependency(depends=["create_platform"])
+def test_delete_platform(session, logged_session):
+    data = [list_id]
+
+    with allure.step("1. 删除列表数据"):
+        session.delete("/mascontrol/platform", json=data)
+    with allure.step("2. 校验是否删除成功"):
+        msg = session.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert msg == "success"
