@@ -44,6 +44,32 @@ def test_get_connect(session, logged_session):
         assert "success" == msg
 
 
+# 获取可见用户列表
+@allure.title("vps列表-获取可见用户信息")
+def test_get_user(session, logged_session):
+    global user_data1, user_data2
+    with allure.step("1. 请求可见用户列表接口"):
+        session.get('/sys/user/user')
+
+    with allure.step("2. 获取可见用户信息"):
+        user_data1 = session.extract_jsonpath("$.data[0]")
+        user_data2 = session.extract_jsonpath("$.data[1]")
+        logging.info(f"获取的可见用户信息：{user_data1}{user_data2}")
+
+
+# 获取组别信息
+@allure.title("vps列表-获取组别信息")
+def test_get_group_list(session, logged_session):
+    global group_data1, group_data2
+    with allure.step("1. 请求组别信息接口"):
+        session.get('/mascontrol/group/list', params={'type': '1'})
+
+    with allure.step("2. 获取组别信息"):
+        group_data1 = session.extract_jsonpath("$.data[0]")
+        group_data2 = session.extract_jsonpath("$.data[1]")
+        logging.info(f"获取的组别信息：{group_data1}{group_data2}")
+
+
 # 新增vps
 # 基础用例：新增vps
 @pytest.mark.dependency(name="create_vps")
@@ -63,7 +89,7 @@ def test_create_vps(session, logged_session):
             "isSpecializedRepair": 1,
             "isAutoRepair": 1,
             "groupId": "62,44",
-            "sort": 100
+            "sort": 150
         }
         session.post('/mascontrol/vps', json=data)
     with allure.step("2. 判断是否添加成功"):
@@ -102,13 +128,13 @@ def test_update_vps(session, logged_session):
             "remark": "测试编辑备注",
             "isOpen": 1,
             "isActive": 1,
-            "userList": ["sun", "admin"],
+            "userList": [user_data1, user_data2],
             "isSelectAccount": 1,
             "isMonitorRepair": 1,
             "isSpecializedRepair": 1,
             "isAutoRepair": 1,
-            "groupId": "62,44",
-            "sort": 200,
+            "groupId": "group_data1,group_data2",
+            "sort": 160,
             "id": vps_list_id
         }
 
@@ -140,17 +166,21 @@ def test_vps_page2(session, logged_session):
         logging.info(f"断言:预期:'测试编辑name' 实际： {name}")
         assert remark == "测试编辑备注"
         logging.info(f"断言:预期:'测试编辑备注' 实际： {remark}")
-        assert sort == 200
-        logging.info(f"断言:预期:15 实际： {remark}")
+        assert sort == 160
+        logging.info(f"断言:预期:160 实际： {remark}")
+
 
 # # 删除vps
 # @pytest.mark.dependency(depends=["create_vps"])
 # @allure.title("vps列表-删除vps")
 # def test_delete_vps(session):
-#     with allure.step("1. 删除vps"):
-#         data = [vps_list_id]
+#     # 定义白名单（不可删除的ID列表）
+#     WHITE_LIST_IDS = ["6", "91", "22", "49"]
+#     if vps_list_id not in WHITE_LIST_IDS:
+#         with allure.step("1. 删除vps"):
+#             data = [vps_list_id]
 #         session.delete('/mascontrol/vps', json=data)
-#     with allure.step("2. 判断是否删除vps成功"):
-#         msg = session.extract_jsonpath("$.msg")
+#         with allure.step("2. 判断是否删除vps成功"):
+#             msg = session.extract_jsonpath("$.msg")
 #         logging.info(f"断言：预期：success 实际：{msg}")
 #         assert "success" == msg
