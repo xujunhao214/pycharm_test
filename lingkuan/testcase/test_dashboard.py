@@ -21,7 +21,7 @@ JsonPathUtils = JsonPathUtils()
          "用户名或密码错误"),
     ]
 )
-@allure.title("登录")
+@allure.title("仪表盘-登录")
 @pytest.mark.dependency(name="login")
 def test_login(session, data, res_msg):
     headers = {
@@ -44,10 +44,20 @@ def test_login(session, data, res_msg):
 
 
 @pytest.mark.dependency(depends=["login"])
-@allure.title("获取仪表盘数据")
+@allure.title("仪表盘-获取仪表盘数据")
 def test_dashboard(session):
     with allure.step("1. 获取仪表盘数据"):
         session.get("/dashboard/getStatData")
+    with allure.step("2. 校验是否获取成功"):
+        msg = session.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert msg == "success", f"是否一致：预期：success 实际：{msg} "
+
+@pytest.mark.dependency(depends=["login"])
+@allure.title("仪表盘-获取仪表盘数据")
+def test_dashboard(session):
+    with allure.step("1. 获取仪表盘数据"):
+        session.get("/socket/dashboardSymbol")
     with allure.step("2. 校验是否获取成功"):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")

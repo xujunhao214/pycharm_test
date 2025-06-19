@@ -12,11 +12,10 @@ DB_CONFIG = {
     "port": 3306,  # 数据库端口（整数类型）
     "user": "root",  # 数据库用户名
     "password": "xizcJWmXFkB5f4fm",  # 数据库密码
-    "database": "information_schema",  # 要连接的数据库名
+    "database": "follow-order-cp",  # 要连接的数据库名
     "charset": "utf8mb4",  # 字符集（支持中文及特殊字符）
     "cursorclass": pymysql.cursors.DictCursor,  # 返回字典格式结果，便于字段访问
     "connect_timeout": 10  # 连接超时时间（秒），防止长时间阻塞
 }
 
 # conftest.py 中导入
-from kuangjia5.VAR.VAR import DB_CONFIG

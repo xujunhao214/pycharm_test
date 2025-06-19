@@ -10,7 +10,7 @@ import os
 from typing import Generator, Dict, Any, List
 import datetime
 from lingkuan.VAR.VAR import *
-from lingkuan.VAR.VAR import BASE_URL, DB_CONFIG
+# from lingkuan.VAR.VAR import BASE_URL, DB_CONFIG
 from lingkuan.commons.session import JunhaoSession
 from collections import defaultdict
 
@@ -21,112 +21,112 @@ FEISHU_HOOK_URL = os.getenv("FEISHU_HOOK_URL", WEBHOOK_URL)
 TEST_ENV = os.getenv("TEST_ENV", "测试环境")
 
 
+# # ------------------------------
+# # 测试结果追踪器
+# # ------------------------------
+# class TestResultTracker:
+#     def __init__(self):
+#         self.total = 0
+#         self.passed = 0
+#         self.failed = 0
+#         self.skipped = 0
+#         self.start_time = None
+#         self.end_time = None
+#         self.failed_test_names = []
+#         self.skipped_test_names = []
+#         self.test_results = defaultdict(str)  # 存储每个测试用例的结果
+#         self.processed_test_ids = set()  # 跟踪已处理的测试用例
+#         self.call_results = {}  # 专门存储call阶段的结果
+#
+#     def pytest_sessionstart(self, session):
+#         self.start_time = datetime.datetime.now()
+#         print(f"[DEBUG] 测试会话开始: {self.start_time}")
+#
+#     def pytest_sessionfinish(self, session, exitstatus):
+#         self.end_time = datetime.datetime.now()
+#         print(
+#             f"[DEBUG] 测试会话结束，总用例数: {self.total}, 耗时: {(self.end_time - self.start_time).total_seconds():.2f}秒")
+#
+#         # 最终统计（确保包含所有用例）
+#         self._finalize_statistics()
+#
+#     def pytest_runtest_logreport(self, report):
+#         """
+#         最终精确版：精确区分call阶段结果
+#         """
+#         test_id = report.nodeid  # 获取测试用例唯一标识
+#
+#         # 跳过已处理的测试用例
+#         if test_id in self.processed_test_ids:
+#             return
+#
+#         self.processed_test_ids.add(test_id)
+#         self.total += 1  # 每个测试用例只计数一次
+#
+#         # 记录call阶段的结果（这是真正的测试执行结果）
+#         if report.when == "call":
+#             self.call_results[test_id] = report.outcome
+#             print(f"[DEBUG] 记录call阶段结果: {test_id}, 结果: {report.outcome}")
+#
+#         # 记录所有阶段的结果（用于调试）
+#         self.test_results[f"{test_id}_{report.when}"] = report.outcome
+#         print(f"[DEBUG] 记录测试用例结果: {test_id}, 阶段: {report.when}, 结果: {report.outcome}")
+#
+#         # 记录跳过的测试用例
+#         if report.outcome == "skipped":
+#             test_name = test_id.split("::")[-1]
+#             self.skipped_test_names.append(test_name)
+#             print(f"[DEBUG] 记录跳过用例: {test_id}")
+#
+#     def _finalize_statistics(self):
+#         """
+#         最终统计所有测试用例结果
+#         """
+#         # 统计call阶段的结果
+#         for test_id, outcome in self.call_results.items():
+#             if outcome == "passed":
+#                 self.passed += 1
+#             elif outcome == "failed":
+#                 self.failed += 1
+#                 test_name = test_id.split("::")[-1]
+#                 self.failed_test_names.append(test_name)
+#
+#         # 统计跳过的测试用例
+#         self.skipped = len(self.skipped_test_names)
+#
+#         # 严格验证统计数据
+#         actual_total = self.passed + self.failed + self.skipped
+#         if self.total != actual_total:
+#             print(f"[ERROR] 统计数据不一致: 记录={self.total}, 计算={actual_total}")
+#             print(f"[ERROR] 详细: 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+#             print(f"[DEBUG] call阶段结果: {self.call_results}")
+#             print(f"[DEBUG] 所有阶段结果: {self.test_results}")
+#         else:
+#             print(
+#                 f"[DEBUG] 统计数据一致: 总用例={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+#
+#     def get_statistics(self) -> Dict[str, Any]:
+#         if not self.start_time or not self.end_time:
+#             return {"error": "测试时间未记录"}
+#
+#         duration = (self.end_time - self.start_time).total_seconds()
+#         success_rate = (self.passed / self.total * 100) if self.total > 0 else 0
+#
+#         return {
+#             "total": self.total,
+#             "passed": self.passed,
+#             "failed": self.failed,
+#             "skipped": self.skipped,
+#             "duration": f"{duration:.2f}秒",
+#             "success_rate": f"{success_rate:.2f}%",
+#             "start_time": self.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+#             "end_time": self.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+#             "env": TEST_ENV
+#         }
+
+
 # ------------------------------
-# 测试结果追踪器（最终精确版）
-# ------------------------------
-class TestResultTracker:
-    def __init__(self):
-        self.total = 0
-        self.passed = 0
-        self.failed = 0
-        self.skipped = 0
-        self.start_time = None
-        self.end_time = None
-        self.failed_test_names = []
-        self.skipped_test_names = []
-        self.test_results = defaultdict(str)  # 存储每个测试用例的结果
-        self.processed_test_ids = set()  # 跟踪已处理的测试用例
-        self.call_results = {}  # 专门存储call阶段的结果
-
-    def pytest_sessionstart(self, session):
-        self.start_time = datetime.datetime.now()
-        print(f"[DEBUG] 测试会话开始: {self.start_time}")
-
-    def pytest_sessionfinish(self, session, exitstatus):
-        self.end_time = datetime.datetime.now()
-        print(
-            f"[DEBUG] 测试会话结束，总用例数: {self.total}, 耗时: {(self.end_time - self.start_time).total_seconds():.2f}秒")
-
-        # 最终统计（确保包含所有用例）
-        self._finalize_statistics()
-
-    def pytest_runtest_logreport(self, report):
-        """
-        最终精确版：精确区分call阶段结果
-        """
-        test_id = report.nodeid  # 获取测试用例唯一标识
-
-        # 跳过已处理的测试用例
-        if test_id in self.processed_test_ids:
-            return
-
-        self.processed_test_ids.add(test_id)
-        self.total += 1  # 每个测试用例只计数一次
-
-        # 记录call阶段的结果（这是真正的测试执行结果）
-        if report.when == "call":
-            self.call_results[test_id] = report.outcome
-            print(f"[DEBUG] 记录call阶段结果: {test_id}, 结果: {report.outcome}")
-
-        # 记录所有阶段的结果（用于调试）
-        self.test_results[f"{test_id}_{report.when}"] = report.outcome
-        print(f"[DEBUG] 记录测试用例结果: {test_id}, 阶段: {report.when}, 结果: {report.outcome}")
-
-        # 记录跳过的测试用例
-        if report.outcome == "skipped":
-            test_name = test_id.split("::")[-1]
-            self.skipped_test_names.append(test_name)
-            print(f"[DEBUG] 记录跳过用例: {test_id}")
-
-    def _finalize_statistics(self):
-        """
-        最终统计所有测试用例结果
-        """
-        # 统计call阶段的结果
-        for test_id, outcome in self.call_results.items():
-            if outcome == "passed":
-                self.passed += 1
-            elif outcome == "failed":
-                self.failed += 1
-                test_name = test_id.split("::")[-1]
-                self.failed_test_names.append(test_name)
-
-        # 统计跳过的测试用例
-        self.skipped = len(self.skipped_test_names)
-
-        # 严格验证统计数据
-        actual_total = self.passed + self.failed + self.skipped
-        if self.total != actual_total:
-            print(f"[ERROR] 统计数据不一致: 记录={self.total}, 计算={actual_total}")
-            print(f"[ERROR] 详细: 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
-            print(f"[DEBUG] call阶段结果: {self.call_results}")
-            print(f"[DEBUG] 所有阶段结果: {self.test_results}")
-        else:
-            print(
-                f"[DEBUG] 统计数据一致: 总用例={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
-
-    def get_statistics(self) -> Dict[str, Any]:
-        if not self.start_time or not self.end_time:
-            return {"error": "测试时间未记录"}
-
-        duration = (self.end_time - self.start_time).total_seconds()
-        success_rate = (self.passed / self.total * 100) if self.total > 0 else 0
-
-        return {
-            "total": self.total,
-            "passed": self.passed,
-            "failed": self.failed,
-            "skipped": self.skipped,
-            "duration": f"{duration:.2f}秒",
-            "success_rate": f"{success_rate:.2f}%",
-            "start_time": self.start_time.strftime("%Y-%m-%d %H:%M:%S"),
-            "end_time": self.end_time.strftime("%Y-%m-%d %H:%M:%S"),
-            "env": TEST_ENV
-        }
-
-
-# ------------------------------
-# 测试结果追踪器（最终兼容版）
+# 测试结果追踪器
 # ------------------------------
 class TestResultTracker:
     def __init__(self):
@@ -359,7 +359,10 @@ def pytest_unconfigure(config):
 # ------------------------------
 @pytest.fixture(scope='session')
 def session() -> Generator[JunhaoSession, None, None]:
-    api = JunhaoSession(base_url=BASE_URL)
+    with allure.step("1. 初始化请求URL"):
+        api = JunhaoSession(base_url=BASE_URL)
+        # 注册第二个URL
+        api.register_url("vps_api", VPS_URL)
 
     yield api
 
@@ -394,12 +397,13 @@ def logged_session(session: JunhaoSession) -> Generator[JunhaoSession, None, Non
         assert "access_token" in login_response.json().get("data", {}), "响应无 access_token"
 
     # 2. 提取 token 并更新 session 的默认请求头
-    access_token = login_response.json()["data"]["access_token"]
-    logging.info(f"登录成功，获取 token: {access_token}")
-    session.headers.update({
-        "Authorization": f"{access_token}",  # 将 token 加入请求头
-        "x-sign": "417B110F1E71BD20FE96366E67849B0B",  # 保持其他固定请求头
-    })
+    with allure.step("2. 提取toekn，固定请求头"):
+        access_token = login_response.json()["data"]["access_token"]
+        logging.info(f"登录成功，获取 token: {access_token}")
+        session.headers.update({
+            "Authorization": f"{access_token}",  # 将 token 加入请求头
+            "x-sign": "417B110F1E71BD20FE96366E67849B0B",  # 保持其他固定请求头
+        })
 
     # 3. 返回已登录的 session，供其他用例直接使用
     yield session

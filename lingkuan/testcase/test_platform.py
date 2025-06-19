@@ -1,5 +1,7 @@
 import json
 import logging
+import time
+
 import allure
 import pytest
 from lingkuan.commons.jsonpath_utils import JsonPathUtils
@@ -40,9 +42,10 @@ def test_platform_list(session, logged_session):
     with allure.step("2. 提取一个服务器数据"):
         platformList = session.extract_jsonpath("$.data[15].serverName")
         logging.info(f"提取一个服务数据platformList: {platformList}")
+        time.sleep(1)
 
 
-@allure.title("平台列表-新增列表数据")
+@allure.title("平台列表-新增列表")
 @pytest.mark.dependency(name="create_platform")
 def test_create_platform(session, logged_session):
     data = {
@@ -54,29 +57,36 @@ def test_create_platform(session, logged_session):
         "maxLots": "1.00"
     }
 
-    with allure.step("1. 新增列表数据"):
+    with allure.step("1. 新增列表"):
         session.post("/mascontrol/platform", json=data)
     with allure.step("2. 校验是否新增成功"):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
         assert msg == "success", f"是否一致：预期：success 实际：{msg} "
+        time.sleep(3)
 
 
-@allure.title("平台列表-获取列表数据")
+@allure.title("平台列表-获取平台列表数据")
 @pytest.mark.dependency(depends=["create_platform"])
 def test_platfor_list(session, logged_session):
-    global list_id
+    global list_id, server, serverNode
     parms = {
         "page": 1,
         "limit": 50,
         "asc": "false",
         "order": "update_time",
     }
-    with allure.step("1. 获取订单列表数据"):
+    with allure.step("1. 获取平台列表数据"):
         session.get("/mascontrol/platform/page", params=parms)
-    with allure.step("2. 获取新建订单id"):
+    with allure.step("2. 获取新建列表id"):
         list_id = session.extract_jsonpath("$.data.list[0].id")
-        logging.info(f"新建订单id: {list_id}")
+        logging.info(f"新建列表id: {list_id}")
+    with allure.step("3. 获取服务器名称"):
+        server = session.extract_jsonpath("$.data.list[0].server")
+        logging.info(f"服务器名称: {server}")
+    with allure.step("3. 获取服务器node"):
+        serverNode = session.extract_jsonpath("$.data.list[0].serverNode")
+        logging.info(f"新建订单id: {serverNode}")
 
 
 @allure.title("平台列表-编辑列表数据")
@@ -86,16 +96,16 @@ def test_update_platform(session, logged_session):
         "id": list_id,
         "brokerName": "测试编辑",
         "platformType": "MT4",
-        "server": "AdvancedMarkets-Demo",
-        "serverNode": "185.97.160.58:443",
+        "server": server,
+        "serverNode": serverNode,
         "remark": "测试数据编辑",
         "version": 0,
         "deleted": 0,
         "creator": "10000",
-        "createTime": "2025-06-13 14:18:41",
+        "createTime": DATETIME_NOW,
         "updater": "null",
-        "updateTime": "2025-06-13 14:18:41",
-        "platformList": ["AdvancedMarkets-Demo"],
+        "updateTime": DATETIME_NOW,
+        "platformList": [platformList],
         "logo": "https://java-copytrade-new.oss-cn-beijing.aliyuncs.com/test/20250613/yanshi_51459.png",
         "maxLots": "2.00"
     }
@@ -106,6 +116,7 @@ def test_update_platform(session, logged_session):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
         assert msg == "success", f"是否一致：预期：success 实际：{msg} "
+        time.sleep(3)
 
 
 @allure.title("平台列表-获取列表数据-校验编辑功能是否正确")
@@ -132,6 +143,7 @@ def test_platfor_list2(session, logged_session):
         maxLots = session.extract_jsonpath("$.data.list[0].maxLots")
         assert maxLots == 2.0
         logging.info(f"断言：预期：2.0 实际：{maxLots}")
+        time.sleep(3)
 
 
 @allure.title("平台列表-删除列表数据")

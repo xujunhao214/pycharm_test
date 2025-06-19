@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 import allure
 import pytest
 from lingkuan.commons.jsonpath_utils import JsonPathUtils
@@ -10,7 +11,8 @@ JsonPathUtils = JsonPathUtils()
 
 # @allure.title("品种管理-登录")
 # @pytest.mark.dependency(name="login")
-# def test_login(session,logged_session):
+# def test_login(session, logged_session):
+#     global access_token
 #     data = {
 #         "username": USERNAME,
 #         "password": PASSWORD,
@@ -63,14 +65,14 @@ def test_get_variety_id(session, logged_session):
     with allure.step("2. 获取新加品种的ID"):
         variety_id = session.extract_jsonpath("$.data[-1].templateId")
         logging.info(f"新品种ID：{variety_id}")
+        time.sleep(3)
 
 
-# @allure.title("品种管理-删除新添加的品种")
-# def test_delete_variety(session, logged_session):
-#     data = [variety_id]
-#     with allure.step("1. 删除新添加的品种"):
-#         session.delete('/mascontrol/variety/deleteTemplate', json=data)
-#     with allure.step("2. 判断是否删除成功"):
-#         msg = session.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
+@allure.title("品种管理-删除新添加的品种")
+def test_delete_variety(session, logged_session):
+    with allure.step("1. 删除新添加的品种"):
+        session.delete('/mascontrol/variety/deleteTemplate', json=[variety_id], )
+    with allure.step("2. 判断是否删除成功"):
+        msg = session.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg

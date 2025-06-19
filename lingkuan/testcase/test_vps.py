@@ -1,5 +1,7 @@
 import json
 import logging
+import time
+
 import allure
 import pytest
 from lingkuan.commons.jsonpath_utils import JsonPathUtils
@@ -77,9 +79,9 @@ def test_get_group_list(session, logged_session):
 def test_create_vps(session, logged_session):
     with allure.step("1. 新增vps"):
         data = {
-            "ipAddress": "127.0.0.1",
+            "ipAddress": IPADDRESS,
             "name": "测试",
-            "expiryDate": "2025-06-30 00:00:00",
+            "expiryDate": DATETIME_ENDTIME,
             "remark": "测试",
             "isOpen": 1,
             "isActive": 1,
@@ -96,6 +98,7 @@ def test_create_vps(session, logged_session):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
         assert "success" == msg
+        time.sleep(3)
 
 
 # 依赖创建vps的用例：必须创建成功才会执行
@@ -122,9 +125,9 @@ def test_vps_page(session, logged_session):
 def test_update_vps(session, logged_session):
     with allure.step("1. 编辑vps"):
         data = {
-            "ipAddress": "127.0.0.1",
+            "ipAddress": IPADDRESS,
             "name": "测试编辑name",
-            "expiryDate": "2025-06-30 00:00:00",
+            "expiryDate": DATETIME_ENDTIME,
             "remark": "测试编辑备注",
             "isOpen": 1,
             "isActive": 1,
@@ -143,44 +146,47 @@ def test_update_vps(session, logged_session):
         msg = session.extract_jsonpath("$.msg")
         logging.info(f"断言：预期：success 实际：{msg}")
         assert "success" == msg
+        time.sleep(3)
 
 
-# 获取vps列表
-@pytest.mark.dependency(depends=["create_vps"])
-@allure.title("vps列表-获取vps列表-校验编辑")
-def test_vps_page2(session, logged_session):
-    global vps_list_id
-    parser = {
-        "page": 1,
-        "limit": 50,
-        "asc": "false",
-        "order": "sort",
-    }
-    with allure.step("1. 获取vps列表-校验编辑"):
-        session.get('/mascontrol/vps/page', params=parser)
-    with allure.step("2. 检查编辑后的信息是否正确"):
-        name = session.extract_jsonpath("$.data.list[0].name")
-        remark = session.extract_jsonpath("$.data.list[0].remark")
-        sort = session.extract_jsonpath("$.data.list[0].sort")
-        assert name == "测试编辑name"
-        logging.info(f"断言:预期:'测试编辑name' 实际： {name}")
-        assert remark == "测试编辑备注"
-        logging.info(f"断言:预期:'测试编辑备注' 实际： {remark}")
-        assert sort == 160
-        logging.info(f"断言:预期:160 实际： {remark}")
-
-
-# # 删除vps
+# # 获取vps列表
 # @pytest.mark.dependency(depends=["create_vps"])
-# @allure.title("vps列表-删除vps")
-# def test_delete_vps(session):
-#     # 定义白名单（不可删除的ID列表）
-#     WHITE_LIST_IDS = ["6", "91", "22", "49"]
-#     if vps_list_id not in WHITE_LIST_IDS:
-#         with allure.step("1. 删除vps"):
-#             data = [vps_list_id]
-#         session.delete('/mascontrol/vps', json=data)
-#         with allure.step("2. 判断是否删除vps成功"):
-#             msg = session.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
+# @allure.title("vps列表-获取vps列表-校验编辑")
+# def test_vps_page2(session, logged_session):
+#     parser = {
+#         "page": 1,
+#         "limit": 50,
+#         "asc": "false",
+#         "order": "sort",
+#     }
+#     with allure.step("1. 获取vps列表-校验编辑"):
+#         session.get('/mascontrol/vps/page', params=parser)
+#     with allure.step("2. 检查编辑后的信息是否正确:name"):
+#         name = session.extract_jsonpath("$.data.list[0].name")
+#         assert name == "测试编辑name"
+#         logging.info(f"断言:预期:'测试编辑name' 实际： {name}")
+#     with allure.step("3. 检查编辑后的信息是否正确:remark"):
+#         remark = session.extract_jsonpath("$.data.list[0].remark")
+#         assert remark == "测试编辑备注"
+#         logging.info(f"断言:预期:'测试编辑备注' 实际： {remark}")
+#     with allure.step("4. 检查编辑后的信息是否正确:sort"):
+#         sort = session.extract_jsonpath("$.data.list[0].sort")
+#         assert sort == 160
+#         logging.info(f"断言:预期:160 实际： {remark}")
+#         time.sleep(3)
+
+
+# 删除vps
+@pytest.mark.dependency(depends=["create_vps"])
+@allure.title("vps列表-删除vps")
+def test_delete_vps(session):
+    # 定义白名单（不可删除的ID列表）
+    WHITE_LIST_IDS = ["6", "91", "22", "49"]
+    if vps_list_id not in WHITE_LIST_IDS:
+        with allure.step("1. 删除vps"):
+            data = [vps_list_id]
+        session.delete('/mascontrol/vps', json=data)
+        with allure.step("2. 判断是否删除vps成功"):
+            msg = session.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
