@@ -1,6 +1,6 @@
 import json
-import Crypto
 from Crypto.Cipher import AES
+import binascii
 
 
 def zero_pad(data, block_size):
@@ -79,7 +79,6 @@ if __name__ == "__main__":
     password = "Qw123456"
     encrypted = aes_encrypt_str(password, MT4_KEY)
     print("Encrypted:", encrypted)
-
     # 解密
     password = '5b3fe6cb1acedfbda639a6b1236ec870'
     decrypted = decrypt_str(password, MT4_KEY)
