@@ -402,6 +402,7 @@ def logged_session(session: JunhaoSession) -> Generator[JunhaoSession, None, Non
         logging.info(f"登录成功，获取 token: {access_token}")
         session.headers.update({
             "Authorization": f"{access_token}",  # 将 token 加入请求头
+            # "Authorization":  f"Bearer {access_token}",  # 将 token 加入请求头
             "x-sign": "417B110F1E71BD20FE96366E67849B0B",  # 保持其他固定请求头
         })
 
