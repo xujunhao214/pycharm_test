@@ -29,13 +29,13 @@ def run_tests(env: str = "test"):
         # "test_youhua/test_create.py",  # 测试用例目录
         # "test_youhua/test_delete.py",  # 测试用例目录
         # "test_youhua/test_vps_ordersend.py",  # 测试用例目录
-        # "test_youhua/test_vps_louping.py",  # 测试用例目录
-        # "test_youhua/test_vps_loukai.py",  # 测试用例目录
+        # "test_youhua/test_vps_Leakage_level.py",  # 测试用例目录
+        # "test_youhua/test_vps_Leakage_open.py",  # 测试用例目录
         # "test_youhua/test_masOrderSend.py",  # 测试用例目录
         # "test_youhua/test_masOrderSend_copy.py",  # 测试用例目录
         # "test_youhua/test_vps_ordersend_followMode0.py",  # 测试用例目录
         # "test_youhua/test_vps_ordersend_followMode2.py",  # 测试用例目录
-        "test_youhua/test_lianxi.py",  # 测试用例目录
+        # "test_youhua/test_lianxi.py",  # 测试用例目录
         "--log-file=./Logs/pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",

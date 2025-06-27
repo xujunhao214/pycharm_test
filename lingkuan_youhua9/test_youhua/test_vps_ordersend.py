@@ -137,15 +137,15 @@ class TestVPSOrderSend(APITestBase):
             symbol = trader_ordersend["symbol"]
 
             sql = f"""
-            SELECT * 
-            FROM {table_name} 
-            WHERE symbol LIKE %s 
-              AND status = %s 
-              AND if_follow = %s
-              AND master_order_status = %s 
-              AND type = %s 
-              AND trader_id = %s
-            """
+                SELECT * 
+                FROM {table_name} 
+                WHERE symbol LIKE %s 
+                  AND status = %s 
+                  AND if_follow = %s
+                  AND master_order_status = %s 
+                  AND type = %s 
+                  AND trader_id = %s
+                """
             params = (
                 f"%{symbol}%",
                 "1",
@@ -174,15 +174,18 @@ class TestVPSOrderSend(APITestBase):
 
                 total_lots = list(map(lambda x: x["total_lots"], db_data))
                 logging.info(f"总手数: {total_lots}")
-                true_total_orders = list(map(lambda x: x["true_total_orders"], db_data))
-                logging.info(f"实际总手数: {true_total_orders}")
+                true_total_lots = list(map(lambda x: x["true_total_lots"], db_data))
+                logging.info(f"实际总手数: {true_total_lots}")
 
-                if total_lots != true_total_orders:
-                    pytest.fail(f"总手数：{total_lots}  ！= 实际总手数：{true_total_orders}")
+                if total_lots != true_total_lots:
+                    pytest.fail(f"总手数：{total_lots}  ！= 实际总手数：{true_total_lots}")
 
                 traded_lots = list(map(lambda x: x["traded_lots"], db_data))
+                traded_lots_sum = sum(traded_lots)
+                print(traded_lots)
                 followParam = add_Slave["followParam"]
-                if sum(traded_lots) != followParam:
+                print(f"followParam的值：{followParam}")
+                if float(traded_lots_sum) != float(followParam):
                     pytest.fail(f"手数的数据有问题，实际下单手数：{traded_lots} 下单手数：{followParam}")
 
             # 执行验证
