@@ -13,43 +13,43 @@ JsonPathUtils = JsonPathUtils()
 var_manager = VariableManager("test_vars.json")
 
 
-# # 新增vps策略
-# @allure.title("跟单软件看板-新增vps策略")
-# def test_create_trader(api_with_db, db, logged_session):
-#     api = api_with_db["api"]
-#     db = api_with_db["db"]
-#     data = {
-#         "account": ACCOUNT,
-#         "password": ACCOUNTPASS,
-#         "remark": "测试vps策略",
-#         "followStatus": 1,
-#         "templateId": 1,
-#         "type": 0,
-#         "platform": USER_SERVER
-#     }
-#     with allure.step("1. 新增vps策略"):
-#         api.post('/subcontrol/trader', json=data)
-#     with allure.step("2. 判断策略是否新增成功"):
-#         msg = api.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
-#         time.sleep(3)
-#     with allure.step("3. 从数据库获取新增策略id"):
-#         # 查询数据库获取数据
-#         with db.cursor() as cursor:
-#             sql = 'SELECT * FROM follow_trader ORDER BY create_time DESC'
-#             cursor.execute(sql)
-#             # 获取数据库查询结果
-#             db_data = cursor.fetchall()
-#
-#         # 提取数据库中的值
-#         if db_data:
-#             id = db_data[0]["id"]
-#             var_manager.set_variable("vps_trader_id", id)
-#             logging.info(f"新增策略id: {id}")
-#             time.sleep(5)
-#         else:
-#             pytest.fail("数据库查询结果为空，无法进行对比")
+# 新增vps策略
+@allure.title("跟单软件看板-新增vps策略")
+def test_create_trader(api_with_db, db, logged_session):
+    api = api_with_db["api"]
+    db = api_with_db["db"]
+    data = {
+        "account": ACCOUNT,
+        "password": ACCOUNTPASS,
+        "remark": "测试vps策略",
+        "followStatus": 1,
+        "templateId": 1,
+        "type": 0,
+        "platform": USER_SERVER
+    }
+    with allure.step("1. 新增vps策略"):
+        api.post('/subcontrol/trader', json=data)
+    with allure.step("2. 判断策略是否新增成功"):
+        msg = api.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
+        time.sleep(3)
+    with allure.step("3. 从数据库获取新增策略id"):
+        # 查询数据库获取数据
+        with db.cursor() as cursor:
+            sql = 'SELECT * FROM follow_trader ORDER BY create_time DESC'
+            cursor.execute(sql)
+            # 获取数据库查询结果
+            db_data = cursor.fetchall()
+
+        # 提取数据库中的值
+        if db_data:
+            id = db_data[0]["id"]
+            var_manager.set_variable("vps_trader_id", id)
+            logging.info(f"新增策略id: {id}")
+            time.sleep(5)
+        else:
+            pytest.fail("数据库查询结果为空，无法进行对比")
 
 
 # # 新增vps跟单账号

@@ -13,144 +13,144 @@ JsonPathUtils = JsonPathUtils()
 var_manager = VariableManager("test_vars.json")
 
 
-# # 新增账号
-# @allure.title("账号列表-新增账号")
-# def test_create_user(api_with_db, db, logged_session):
-#     api = api_with_db["api"]
-#     db = api_with_db["db"]
-#     global id
-#     data = {
-#         "account": ACCOUNT,
-#         "password": ACCOUNTPASS,
-#         "platform": USER_SERVER,
-#         "accountType": "0",
-#         "serverNode": USER_SERVERNODE,
-#         "remark": "测试数据",
-#         "sort": "12",
-#         "vpsDescs": []
-#     }
-#     with allure.step("1. 新增用户"):
-#         api.post('/mascontrol/user', json=data)
-#     with allure.step("2. 判断用户是否新增成功"):
-#         msg = api.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
-#         time.sleep(3)
-#     with allure.step("3. 从数据库获取新增用户id"):
-#         # 查询数据库获取数据
-#         with db.cursor() as cursor:
-#             sql = 'select * from FOLLOW_TRADER_USER where account ="119999305"'
-#             cursor.execute(sql)
-#             # 获取数据库查询结果
-#             db_data = cursor.fetchall()
-#
-#         # 提取数据库中的值
-#         if db_data:
-#             id = db_data[0]["id"]
-#             var_manager.set_variable("user_id", id)
-#             logging.info(f"新增用户id: {id}")
-#             time.sleep(5)
-#         else:
-#             pytest.fail("数据库查询结果为空，无法进行对比")
+# 新增账号
+@allure.title("账号列表-新增账号")
+def test_create_user(api_with_db, db, logged_session):
+    api = api_with_db["api"]
+    db = api_with_db["db"]
+    global id
+    data = {
+        "account": ACCOUNT,
+        "password": ACCOUNTPASS,
+        "platform": USER_SERVER,
+        "accountType": "0",
+        "serverNode": USER_SERVERNODE,
+        "remark": "测试数据",
+        "sort": "12",
+        "vpsDescs": []
+    }
+    with allure.step("1. 新增用户"):
+        api.post('/mascontrol/user', json=data)
+    with allure.step("2. 判断用户是否新增成功"):
+        msg = api.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
+        time.sleep(3)
+    with allure.step("3. 从数据库获取新增用户id"):
+        # 查询数据库获取数据
+        with db.cursor() as cursor:
+            sql = 'select * from FOLLOW_TRADER_USER where account ="119999305"'
+            cursor.execute(sql)
+            # 获取数据库查询结果
+            db_data = cursor.fetchall()
+
+        # 提取数据库中的值
+        if db_data:
+            id = db_data[0]["id"]
+            var_manager.set_variable("user_id", id)
+            logging.info(f"新增用户id: {id}")
+            time.sleep(5)
+        else:
+            pytest.fail("数据库查询结果为空，无法进行对比")
 
 
-# # 批量新增账号
-# @allure.title("账号列表-批量新增账号")
-# def test_import_user(api_with_db, db, logged_session):
-#     api = api_with_db["api"]
-#     db = api_with_db["db"]
-#     global id
-#     # 1. 读取CSV文件
-#     csv_path = "./Files/账号列表数据.csv"
-#     with open(csv_path, 'rb') as f:
-#         csv_file = f.read()
-#
-#     # 2. 构造请求参数（文件上传使用files参数）
-#     files = {
-#         "file": ("账号列表数据.csv", csv_file, "text/csv")
-#     }
-#     with allure.step("1. 批量新增用户"):
-#         api.post('/mascontrol/user/import', files=files)
-#     with allure.step("2. 判断用户是否新增成功"):
-#         msg = api.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
-#         time.sleep(3)
-#     with allure.step("3. 从数据库获取新增用户id"):
-#         # 查询数据库获取数据
-#         with db.cursor() as cursor:
-#             sql = 'select * from FOLLOW_TRADER_USER where account ="%s"'
-#             cursor.execute(sql, (119999257))
-#             # 获取数据库查询结果
-#             db_data = cursor.fetchall()
-#
-#         # 提取数据库中的值
-#         if db_data:
-#             id = db_data[0]["id"]
-#             var_manager.set_variable("user_id", id)
-#             logging.info(f"新增用户id: {id}")
-#             time.sleep(5)
-#         else:
-#             pytest.fail("数据库查询结果为空，无法进行对比")
+# 批量新增账号
+@allure.title("账号列表-批量新增账号")
+def test_import_user(api_with_db, db, logged_session):
+    api = api_with_db["api"]
+    db = api_with_db["db"]
+    global id
+    # 1. 读取CSV文件
+    csv_path = "./Files/账号列表数据.csv"
+    with open(csv_path, 'rb') as f:
+        csv_file = f.read()
+
+    # 2. 构造请求参数（文件上传使用files参数）
+    files = {
+        "file": ("账号列表数据.csv", csv_file, "text/csv")
+    }
+    with allure.step("1. 批量新增用户"):
+        api.post('/mascontrol/user/import', files=files)
+    with allure.step("2. 判断用户是否新增成功"):
+        msg = api.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
+        time.sleep(3)
+    with allure.step("3. 从数据库获取新增用户id"):
+        # 查询数据库获取数据
+        with db.cursor() as cursor:
+            sql = 'select * from FOLLOW_TRADER_USER where account ="%s"'
+            cursor.execute(sql, (119999257))
+            # 获取数据库查询结果
+            db_data = cursor.fetchall()
+
+        # 提取数据库中的值
+        if db_data:
+            id = db_data[0]["id"]
+            var_manager.set_variable("user_id", id)
+            logging.info(f"新增用户id: {id}")
+            time.sleep(5)
+        else:
+            pytest.fail("数据库查询结果为空，无法进行对比")
 
 
-# # 新建账号组别
-# @allure.title("组别列表-新建账号组别")
-# def test_create_group(session, logged_session):
-#     data = {
-#         "name": "测试",
-#         "color": "#EF7979",
-#         "sort": 20,
-#         "type": 0
-#     }
-#     with allure.step("1. 新建账号组别"):
-#         session.post('/mascontrol/group', json=data)
-#     with allure.step("2. 判断是否新增成功"):
-#         msg = session.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
-#         time.sleep(3)
+# 新建账号组别
+@allure.title("组别列表-新建账号组别")
+def test_create_group(session, logged_session):
+    data = {
+        "name": "测试",
+        "color": "#EF7979",
+        "sort": 20,
+        "type": 0
+    }
+    with allure.step("1. 新建账号组别"):
+        session.post('/mascontrol/group', json=data)
+    with allure.step("2. 判断是否新增成功"):
+        msg = session.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
+        time.sleep(3)
 
 
-# # 新增账号
-# @allure.title("账号列表-新增账号")
-# def test_create_user(api_with_db, db, logged_session):
-#     api = api_with_db["api"]
-#     db = api_with_db["db"]
-#     global id
-#     data = {
-#         "account": ACCOUNT,
-#         "password": ACCOUNTPASS,
-#         "platform": USER_SERVER,
-#         "accountType": "0",
-#         "serverNode": USER_SERVERNODE,
-#         "remark": "测试数据",
-#         "sort": "12",
-#         "vpsDescs": []
-#     }
-#     with allure.step("1. 新增用户"):
-#         api.post('/mascontrol/user', json=data)
-#     with allure.step("2. 判断用户是否新增成功"):
-#         msg = api.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
-#         time.sleep(3)
-#     with allure.step("3. 从数据库获取新增用户id"):
-#         # 查询数据库获取数据
-#         with db.cursor() as cursor:
-#             sql = 'select * from FOLLOW_TRADER_USER where account ="119999305"'
-#             cursor.execute(sql)
-#             # 获取数据库查询结果
-#             db_data = cursor.fetchall()
-#
-#         # 提取数据库中的值
-#         if db_data:
-#             id = db_data[0]["id"]
-#             var_manager.set_variable("user_id", id)
-#             logging.info(f"新增用户id: {id}")
-#             time.sleep(5)
-#         else:
-#             pytest.fail("数据库查询结果为空，无法进行对比")
+# 新增账号
+@allure.title("账号列表-新增账号")
+def test_create_user(api_with_db, db, logged_session):
+    api = api_with_db["api"]
+    db = api_with_db["db"]
+    global id
+    data = {
+        "account": ACCOUNT,
+        "password": ACCOUNTPASS,
+        "platform": USER_SERVER,
+        "accountType": "0",
+        "serverNode": USER_SERVERNODE,
+        "remark": "测试数据",
+        "sort": "12",
+        "vpsDescs": []
+    }
+    with allure.step("1. 新增用户"):
+        api.post('/mascontrol/user', json=data)
+    with allure.step("2. 判断用户是否新增成功"):
+        msg = api.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
+        time.sleep(3)
+    with allure.step("3. 从数据库获取新增用户id"):
+        # 查询数据库获取数据
+        with db.cursor() as cursor:
+            sql = 'select * from FOLLOW_TRADER_USER where account ="119999305"'
+            cursor.execute(sql)
+            # 获取数据库查询结果
+            db_data = cursor.fetchall()
+
+        # 提取数据库中的值
+        if db_data:
+            id = db_data[0]["id"]
+            var_manager.set_variable("user_id", id)
+            logging.info(f"新增用户id: {id}")
+            time.sleep(5)
+        else:
+            pytest.fail("数据库查询结果为空，无法进行对比")
 
 
 @allure.title("品种管理-添加品种")
@@ -194,42 +194,42 @@ def test_create_variety(api_with_db, db, logged_session):
             pytest.fail("数据库查询结果为空，无法提取数据")
 
 
-# # 新建vps组别
-# @allure.title("组别列表-新建VPS组别")
-# def test_create_groupvps(api_with_db, db, logged_session):
-#     api = api_with_db["api"]
-#     db = api_with_db["db"]
-#     data = {
-#         "name": "测试vps",
-#         "color": "#EF7979",
-#         "sort": 9999999999999,
-#         "type": 1
-#     }
-#     with allure.step("1. 新建VPS组别"):
-#         api.post('/mascontrol/group', json=data)
-#     with allure.step("2. 判断是否新增成功"):
-#         msg = api.extract_jsonpath("$.msg")
-#         logging.info(f"断言：预期：success 实际：{msg}")
-#         assert "success" == msg
-#         time.sleep(3)
-#     with allure.step("3. 从数据库获取新增用户id"):
-#         # 查询数据库获取数据
-#         with db.cursor() as cursor:
-#             sql = 'select * from follow_group where name="测试vps"'
-#             cursor.execute(sql)
-#             # 获取数据库查询结果
-#             db_data = cursor.fetchall()
-#
-#         # 提取数据库中的值
-#         if db_data:
-#             group_vpsid = db_data[0]["id"]
-#             var_manager.set_variable("group_vpsid", group_vpsid)
-#             logging.info(f"新增用户id: {group_vpsid}")
-#             time.sleep(5)
-#         else:
-#             pytest.fail("数据库查询结果为空，无法提取数据")
+# 新建vps组别
+@allure.title("组别列表-新建VPS组别")
+def test_create_groupvps(api_with_db, db, logged_session):
+    api = api_with_db["api"]
+    db = api_with_db["db"]
+    data = {
+        "name": "测试vps",
+        "color": "#EF7979",
+        "sort": 9999999999999,
+        "type": 1
+    }
+    with allure.step("1. 新建VPS组别"):
+        api.post('/mascontrol/group', json=data)
+    with allure.step("2. 判断是否新增成功"):
+        msg = api.extract_jsonpath("$.msg")
+        logging.info(f"断言：预期：success 实际：{msg}")
+        assert "success" == msg
+        time.sleep(3)
+    with allure.step("3. 从数据库获取新增用户id"):
+        # 查询数据库获取数据
+        with db.cursor() as cursor:
+            sql = 'select * from follow_group where name="测试vps"'
+            cursor.execute(sql)
+            # 获取数据库查询结果
+            db_data = cursor.fetchall()
 
-"""
+        # 提取数据库中的值
+        if db_data:
+            group_vpsid = db_data[0]["id"]
+            var_manager.set_variable("group_vpsid", group_vpsid)
+            logging.info(f"新增用户id: {group_vpsid}")
+            time.sleep(5)
+        else:
+            pytest.fail("数据库查询结果为空，无法提取数据")
+
+
 # ---------------------------
 # 新建vps
 # ---------------------------
@@ -257,16 +257,6 @@ def test_get_user(session, logged_session):
         logging.info(f"获取的可见用户信息：{user_data}")
 
 
-# 获取组别信息
-@allure.title("vps列表-获取组别信息")
-def test_get_group_list(session, logged_session):
-    global group_data
-    with allure.step("1. 请求组别信息接口"):
-        session.get('/mascontrol/group/list', params={'type': '1'})
-
-    with allure.step("2. 获取组别信息"):
-        group_data = session.extract_jsonpath("$.data[1].id")
-        logging.info(f"获取的组别信息：{group_data}")
 
 
 # 新增vps
@@ -314,8 +304,7 @@ def test_create_vps(api_with_db, db, logged_session):
             time.sleep(5)
         else:
             pytest.fail("数据库查询结果为空，无法进行对比")
-            
-"""
+
 
 '''
 @allure.title("vps列表-获取vps列表")
