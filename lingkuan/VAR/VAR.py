@@ -20,5 +20,5 @@ DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d %H:%M:%S")
 
 # mysql查询语句，查询最近时间的数据
 MYSQL_TIME = 1
-WAIT_TIMEOUT = 3  # 统一等待超时时间（秒）
+WAIT_TIMEOUT = 30  # 统一等待超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）

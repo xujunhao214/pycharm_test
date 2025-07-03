@@ -21,8 +21,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    @pytest.mark.url("vps")
-    def test_trader_orderSend(self, api_session, var_manager, logged_session):
+    def test_trader_orderSend(self, vps_api_session, var_manager, logged_session):
         # 1. 发送策略开仓请求
         trader_ordersend = var_manager.get_variable("trader_ordersend")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -39,7 +38,7 @@ class TestVPSOrderSend_Scence(APITestBase):
             "traderId": vps_trader_id
         }
         response = self.send_post_request(
-            api_session,
+            vps_api_session,
             '/subcontrol/trader/orderSend',
             json_data=data,
             sleep_seconds=3  # 不需要等待，由后续数据库查询处理
@@ -224,7 +223,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改净值")
-    def test_dbtrader_upeuqit(self, var_manager, db_transaction):
+    def test_dbtrader_euqit(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader = var_manager.get_variable("vps_trader")
@@ -278,9 +277,8 @@ class TestVPSOrderSend_Scence(APITestBase):
     # 跟单软件看板-VPS数据-策略平仓
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, api_session, var_manager, logged_session, db_transaction):
+    def test_trader_orderclose(self, vps_api_session, var_manager, logged_session, db_transaction):
         # 1. 发送全平订单平仓请求
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         vps_trader_isCloseAll = var_manager.get_variable("vps_trader_isCloseAll")
@@ -291,7 +289,7 @@ class TestVPSOrderSend_Scence(APITestBase):
             "account": vps_trader_isCloseAll["account"]
         }
         response = self.send_post_request(
-            api_session,
+            vps_api_session,
             '/subcontrol/trader/orderClose',
             json_data=data,
             sleep_seconds=3

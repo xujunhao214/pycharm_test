@@ -6,7 +6,10 @@ import datetime
 from typing import Dict, List
 from lingkuan.commons.session import EnvironmentSession, Environment
 from lingkuan.commons.variable_manager import VariableManager
+from lingkuan.commons.test_tracker import TestResultTracker  # 新增：测试结果追踪器
+from lingkuan.commons.feishu_notification import send_feishu_notification  # 新增：飞书通知
 from pathlib import Path
+from lingkuan.commons.test_tracker import TestResultTracker
 import sys
 import os
 
@@ -16,11 +19,15 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = str(Path(__file__).parent.resolve())
 sys.path.insert(0, PROJECT_ROOT)
 
-# 环境配置（复用现有配置，base_url=9000，vps_url=9001）
+# 打印路径用于调试
+print(f"[DEBUG] 添加项目根目录到Python路径: {PROJECT_ROOT}")
+print(f"[DEBUG] 当前Python路径: {sys.path}")
+
+# 环境配置
 ENV_CONFIG = {
     Environment.TEST: {
-        "base_url": "http://39.99.136.49:9000",  # 后面用例的URL
-        "vps_url": "http://39.99.136.49:9001",  # 前面用例的URL
+        "base_url": "http://39.99.136.49:9000",
+        "vps_url": "http://39.99.136.49:9001",
         "db_config": {
             "host": "39.99.136.49",
             "port": 3306,
@@ -48,44 +55,35 @@ ENV_CONFIG = {
         },
         "data_source_dir": "lingkuan/VAR"
     }
+
 }
 
 
-# ------------------------------
-# 核心：基于标记的URL切换fixture（替换原有api_session逻辑）
-# ------------------------------
-@pytest.fixture(scope="function")  # 每个用例独立会话，避免URL污染
-def api_session(request, environment):
-    """根据用例标记选择URL（vps_url=9001或base_url=9000）"""
-    # 获取用例标记（@pytest.mark.url("vps") 或 @pytest.mark.url("base")）
-    url_marker = next(request.node.iter_markers(name="url"), None)
-    # 从环境配置中获取对应的URL
-    env_config = ENV_CONFIG[environment]
-    if url_marker and url_marker.args[0] == "vps":
-        # 标记为"vps"的用例使用9001（vps_url）
-        current_url = env_config["vps_url"]
-    else:
-        # 默认使用9000（base_url）
-        current_url = env_config["base_url"]
-
-    # 创建独立会话并设置URL
-    session = EnvironmentSession(
-        environment=environment,
-        base_url=current_url  # 动态设置当前URL
-    )
-    logger.info(f"用例 {request.node.nodeid} 使用URL: {current_url}")
-    yield session
-    session.close()  # 用例结束后关闭会话，确保隔离
-
-
-# ------------------------------
-# 其他原有fixture保持不变（复用即可）
-# ------------------------------
 @pytest.fixture(scope="session")
 def environment(request):
     """获取测试环境，可通过命令行参数指定"""
     env = request.config.getoption("--env", default="test")
     return Environment(env)
+
+
+@pytest.fixture(scope="session")
+def api_session(environment) -> EnvironmentSession:
+    """创建支持多URL的API会话"""
+    config = ENV_CONFIG[environment]
+    session = EnvironmentSession(
+        environment=environment,
+        base_url=config["base_url"],
+        vps_url=config.get("vps_url")
+    )
+    yield session
+    session.close()
+
+
+# 新增fixture：需要时使用vps_url的会话
+@pytest.fixture(scope="function")
+def vps_api_session(api_session):
+    """使用vps_url的API会话（函数作用域）"""
+    return api_session.use_vps_url()
 
 
 @pytest.fixture(scope="session")
@@ -96,12 +94,11 @@ def var_manager(environment):
     manager.save_runtime_variables()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def logged_session(api_session, var_manager):
-    """登录并获取认证token的夹具（复用动态URL的会话）"""
+    """登录并获取认证token的夹具"""
     with allure.step("1.执行登录操作"):
         login_data = var_manager.get_variable("login")
-        # 注意：此处使用的是api_session动态切换后的URL（9001或9000）
         response = api_session.post("/sys/auth/login", json=login_data)
         assert response.status_code == 200, f"登录失败: {response.text}"
         response_json = response.json()
@@ -116,14 +113,16 @@ def logged_session(api_session, var_manager):
     yield api_session
 
 
-# 数据库相关夹具（保持不变）
+# 数据库相关夹具
 @pytest.fixture(scope="session")
 def db_config(environment) -> dict:
+    """获取对应环境的数据库配置"""
     return ENV_CONFIG[environment]["db_config"]
 
 
 @pytest.fixture(scope="session")
 def db(db_config) -> pymysql.connections.Connection:
+    """数据库连接夹具"""
     conn = pymysql.connect(**db_config)
     yield conn
     conn.close()
@@ -131,6 +130,7 @@ def db(db_config) -> pymysql.connections.Connection:
 
 @pytest.fixture
 def db_transaction(db):
+    """数据库事务管理，自动回滚测试操作"""
     try:
         db.begin()
         yield db
@@ -142,12 +142,11 @@ def db_transaction(db):
 
 
 # ------------------------------
-# 测试结果追踪与命令行参数（保持不变）
+# 测试结果追踪与飞书通知集成
 # ------------------------------
 class TestResultTracker:
     """测试结果追踪器，收集测试用例详细信息"""
 
-    # （原有逻辑不变）
     def __init__(self):
         self.start_time = None
         self.end_time = None
@@ -158,37 +157,77 @@ class TestResultTracker:
         self.failed_test_names = []
         self.skipped_test_names = []
         self.skipped_reasons = {}
-        self.duration = "未知"
+        self.duration = "未知"  # 初始化duration属性
 
     def pytest_sessionstart(self, session):
+        """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         logger.info(f"测试会话开始: {self.start_time}")
 
     def pytest_runtest_logreport(self, report):
+        """记录每个测试用例的结果（包括setup/teardown阶段）"""
+        # 初始化已处理用例集合
         if not hasattr(self, 'processed_test_ids'):
             self.processed_test_ids = set()
+
+        # 总用例数统计（每个用例只统计一次）
         if report.when == "setup" and report.nodeid not in self.processed_test_ids:
             self.processed_test_ids.add(report.nodeid)
             self.total += 1
+
+        # 处理测试结果
         if report.outcome == "failed":
             self.failed += 1
             self.failed_test_names.append(report.nodeid)
         elif report.outcome == "skipped":
             self.skipped += 1
             self.skipped_test_names.append(report.nodeid)
+            # 提取跳过原因
             self.skipped_reasons[report.nodeid] = getattr(report, "reason", "未指定原因")
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
     def pytest_sessionfinish(self, session, exitstatus):
+        """测试会话结束时计算耗时并发送通知"""
         self.end_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         start = datetime.datetime.strptime(self.start_time, "%Y-%m-%d %H:%M:%S")
         end = datetime.datetime.strptime(self.end_time, "%Y-%m-%d %H:%M:%S")
         self.duration = f"{(end - start).total_seconds():.2f}秒"
         logger.info(f"测试会话结束，总耗时: {self.duration}")
 
+        # 发送飞书通知
+        try:
+            statistics = self.get_statistics()
+            environment = session.config.getoption("--env", "test")
+            send_feishu_notification(
+                statistics=statistics,
+                environment=environment,
+                failed_cases=self.failed_test_names,
+                skipped_cases=self.skipped_test_names
+            )
+            logger.info("飞书通知发送成功")
+        except Exception as e:
+            logger.error(f"发送飞书通知失败: {str(e)}")
+
+    def get_statistics(self) -> Dict[str, any]:
+        """获取测试统计数据"""
+        success_rate = f"{(self.passed / self.total * 100):.1f}%" if self.total > 0 else "0.0%"
+
+        return {
+            "total": self.total,
+            "passed": self.passed,
+            "failed": self.failed,
+            "skipped": self.skipped,
+            "success_rate": success_rate,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "duration": self.duration,
+            "skipped_reasons": self.skipped_reasons
+        }
+
 
 def pytest_addoption(parser):
+    """添加命令行环境参数"""
     parser.addoption(
         "--env",
         action="store",
@@ -199,15 +238,20 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
+    """注册测试结果追踪器并设置环境"""
+    # 注册追踪器
     tracker = TestResultTracker()
     config.pluginmanager.register(tracker)
-    config._test_result_tracker = tracker
+    config._test_result_tracker = tracker  # 保存到config以便后续访问
+
+    # 设置环境
     env_value = config.getoption("--env").lower()
     config.environment = env_value
     logger.info(f"测试环境设置为: {config.environment}")
 
 
 def pytest_unconfigure(config):
+    """测试会话结束时取消注册追踪器"""
     tracker = getattr(config, "_test_result_tracker", None)
     if tracker and hasattr(config, "pluginmanager"):
         config.pluginmanager.unregister(tracker)

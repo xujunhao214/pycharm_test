@@ -305,7 +305,7 @@ class TestVPSOrderSend_Scene(APITestBase):
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改净值")
-    def test_dbtrader_upeuqit(self, var_manager, db_transaction):
+    def test_dbtrader_euqit(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader = var_manager.get_variable("vps_trader")
