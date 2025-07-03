@@ -13,18 +13,18 @@ def run_tests(env: str = "test"):
     # report_dir = f"report/allure-results_{timestamp}"
     # html_dir = f"report/html_{timestamp}"
     # brief_dir = "report/brief-{timestamp}"
-    """运行测试并生成报告（固定路径版本）"""
-    """智能生成报告：失败时详细报告，通过时简要报告"""
-    report_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/allure-results"
-    html_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/html-report"
-    brief_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/brief-report"
+    # """运行测试并生成报告（固定路径版本）"""
+    # """智能生成报告：失败时详细报告，通过时简要报告"""
+    # report_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/allure-results"
+    # html_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/html-report"
+    # brief_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/brief-report"
 
     # 构建pytest参数
     args = [
         "-s",  # 显示标准输出
         "-v",  # 详细输出
         f"--env={env}",  # 指定环境
-        f"--alluredir={report_dir}",  # allure结果目录
+        f"--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",  # allure结果目录
         "--clean-alluredir",  # 清理旧结果
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_create.py",  # 测试用例目录
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_vps_ordersend.py",  # 测试用例目录
@@ -50,18 +50,18 @@ def run_tests(env: str = "test"):
 
     # 执行测试
     exit_code = pytest.main(args)
-
-    try:
-        if exit_code != 0:
-            # 测试失败，生成详细报告
-            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
-            print(f"测试失败，详细报告: file://{os.path.abspath(html_dir)}/index.html")
-        else:
-            # 测试通过，生成简要报告
-            os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
-            print(f"测试通过，简要报告: file://{os.path.abspath(brief_dir)}/index.html")
-    except Exception as e:
-        print(f"生成报告失败: {str(e)}")
+    os.system('allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
+    # try:
+    #     if exit_code != 0:
+    #         # 测试失败，生成详细报告
+    #         os.system(f"allure generate {report_dir} -o {html_dir} --clean")
+    #         print(f"测试失败，详细报告: file://{os.path.abspath(html_dir)}/index.html")
+    #     else:
+    #         # 测试通过，生成简要报告
+    #         os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
+    #         print(f"测试通过，简要报告: file://{os.path.abspath(brief_dir)}/index.html")
+    # except Exception as e:
+    #     print(f"生成报告失败: {str(e)}")
 
     return exit_code
 
