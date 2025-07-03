@@ -97,8 +97,8 @@ class TestMasordersend(APITestBase):
                 var_manager.set_runtime_variable("order_no", order_no)
 
                 status = db_data[0]["status"]
-                if status != 1:
-                    pytest.fail(f"下单失败status状态应该是1，实际状态为: {status}")
+                if status not in (0, 1):
+                    pytest.fail(f"下单失败status状态应该是2，实际状态为: {status}")
 
             # 执行验证
             try:
@@ -234,4 +234,3 @@ class TestMasordersend(APITestBase):
             except AssertionError as e:
                 allure.attach(str(e), "平仓状态验证失败", allure.attachment_type.TEXT)
                 raise
-

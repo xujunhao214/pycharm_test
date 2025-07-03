@@ -1,0 +1,262 @@
+{
+  "uid" : "32cb1b8e8c55c60c",
+  "name" : "数据库校验-策略平仓-跟单平仓指令",
+  "fullName" : "test_youhua.test_vps_ordersend.TestVPSOrderSend#test_dbquery_close_addsalve",
+  "historyId" : "44a038943b607e0a67121e03d358497d",
+  "time" : {
+    "start" : 1751342493194,
+    "stop" : 1751342493297,
+    "duration" : 103
+  },
+  "status" : "broken",
+  "statusMessage" : "TypeError: 'NoneType' object is not iterable",
+  "statusTrace" : "self = <lingkuan_630.test_youhua.test_vps_ordersend.TestVPSOrderSend object at 0x00000256503D6C40>\nvar_manager = <lingkuan_630.commons.variable_manager.VariableManager object at 0x00000256503D6850>\ndb_transaction = <pymysql.connections.Connection object at 0x00000256503D6610>\n\n    @allure.title(\"数据库校验-策略平仓-跟单平仓指令\")\n    def test_dbquery_close_addsalve(self, var_manager, db_transaction):\n        with allure.step(\"1. 根据订单详情数据库数据，校验跟单指令数据是否正确\"):\n            vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n    \n            table_name = trader_ordersend[\"table\"]\n            symbol = trader_ordersend[\"symbol\"]\n    \n            sql = f\"\"\"\n                    SELECT *\n                    FROM {table_name}\n                    WHERE symbol LIKE %s\n                      AND instruction_type = %s\n                      AND if_follow = %s\n                      AND master_order_status = %s\n                      AND type = %s\n                      AND trader_id = %s\n                    \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                \"2\",\n                \"1\",\n                \"1\",\n                trader_ordersend[\"type\"],\n                vps_trader_id,\n            )\n    \n            # 使用智能等待查询\n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME,\n                timeout=WAIT_TIMEOUT,\n                poll_interval=POLL_INTERVAL,\n                order_by=\"create_time DESC\"\n            )\n    \n        with allure.step(\"2. 验证下单指令的跟单账号数据\"):\n            close_send_nos = var_manager.get_variable(\"close_send_nos\")\n            order_no = [record[\"order_no\"] for record in db_data]\n>           assert set(close_send_nos) == set(\n                order_no), f\"订单详情的订单号{close_send_nos}和平仓指令{order_no}的订单号不一致\"\nE           TypeError: 'NoneType' object is not iterable\n\ntest_youhua\\test_vps_ordersend.py:519: TypeError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1751342486224,
+      "stop" : 1751342486456,
+      "duration" : 232
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1751342482895,
+      "stop" : 1751342482895,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1751342493146,
+      "stop" : 1751342493194,
+      "duration" : 48
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1751342486224,
+      "stop" : 1751342486224,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1751342482894,
+      "stop" : 1751342482895,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "broken",
+    "statusMessage" : "TypeError: 'NoneType' object is not iterable",
+    "statusTrace" : "self = <lingkuan_630.test_youhua.test_vps_ordersend.TestVPSOrderSend object at 0x00000256503D6C40>\nvar_manager = <lingkuan_630.commons.variable_manager.VariableManager object at 0x00000256503D6850>\ndb_transaction = <pymysql.connections.Connection object at 0x00000256503D6610>\n\n    @allure.title(\"数据库校验-策略平仓-跟单平仓指令\")\n    def test_dbquery_close_addsalve(self, var_manager, db_transaction):\n        with allure.step(\"1. 根据订单详情数据库数据，校验跟单指令数据是否正确\"):\n            vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n    \n            table_name = trader_ordersend[\"table\"]\n            symbol = trader_ordersend[\"symbol\"]\n    \n            sql = f\"\"\"\n                    SELECT *\n                    FROM {table_name}\n                    WHERE symbol LIKE %s\n                      AND instruction_type = %s\n                      AND if_follow = %s\n                      AND master_order_status = %s\n                      AND type = %s\n                      AND trader_id = %s\n                    \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                \"2\",\n                \"1\",\n                \"1\",\n                trader_ordersend[\"type\"],\n                vps_trader_id,\n            )\n    \n            # 使用智能等待查询\n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME,\n                timeout=WAIT_TIMEOUT,\n                poll_interval=POLL_INTERVAL,\n                order_by=\"create_time DESC\"\n            )\n    \n        with allure.step(\"2. 验证下单指令的跟单账号数据\"):\n            close_send_nos = var_manager.get_variable(\"close_send_nos\")\n            order_no = [record[\"order_no\"] for record in db_data]\n>           assert set(close_send_nos) == set(\n                order_no), f\"订单详情的订单号{close_send_nos}和平仓指令{order_no}的订单号不一致\"\nE           TypeError: 'NoneType' object is not iterable\n\ntest_youhua\\test_vps_ordersend.py:519: TypeError",
+    "steps" : [ {
+      "name" : "1. 根据订单详情数据库数据，校验跟单指令数据是否正确",
+      "time" : {
+        "start" : 1751342493194,
+        "stop" : 1751342493296,
+        "duration" : 102
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录出现",
+        "time" : {
+          "start" : 1751342493194,
+          "stop" : 1751342493296,
+          "duration" : 102
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "d21b0bfe005ee2fc",
+          "name" : "条件检查日志",
+          "source" : "d21b0bfe005ee2fc.txt",
+          "type" : "text/plain",
+          "size" : 3411
+        }, {
+          "uid" : "6c5fb48f939a471c",
+          "name" : "最终结果",
+          "source" : "6c5fb48f939a471c.txt",
+          "type" : "text/plain",
+          "size" : 29
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 2,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 2,
+      "stepsCount" : 1,
+      "hasContent" : true
+    }, {
+      "name" : "2. 验证下单指令的跟单账号数据",
+      "time" : {
+        "start" : 1751342493296,
+        "stop" : 1751342493296,
+        "duration" : 0
+      },
+      "status" : "broken",
+      "statusMessage" : "TypeError: 'NoneType' object is not iterable\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_630\\test_youhua\\test_vps_ordersend.py\", line 519, in test_dbquery_close_addsalve\n    assert set(close_send_nos) == set(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "1a2d7c53fb242d4e",
+      "name" : "log",
+      "source" : "1a2d7c53fb242d4e.txt",
+      "type" : "text/plain",
+      "size" : 3598
+    } ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 3,
+    "stepsCount" : 3,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1751342493603,
+      "stop" : 1751342493603,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1751342493605,
+      "stop" : 1751342493606,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1751342493556,
+      "stop" : 1751342493602,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-正常开仓平仓"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_youhua"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_ordersend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "24156-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_youhua.test_vps_ordersend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "32cb1b8e8c55c60c.json",
+  "parameterValues" : [ ]
+}

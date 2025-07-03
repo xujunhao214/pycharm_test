@@ -131,7 +131,7 @@ class TestVPSOrderSend(APITestBase):
         with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             trader_ordersend = var_manager.get_variable("trader_ordersend")
-            add_Slave = var_manager.get_variable("add_Slave")
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
 
             table_name = trader_ordersend["table"]
             symbol = trader_ordersend["symbol"]
@@ -183,10 +183,10 @@ class TestVPSOrderSend(APITestBase):
                 traded_lots = list(map(lambda x: x["traded_lots"], db_data))
                 traded_lots_sum = sum(traded_lots)
                 print(traded_lots)
-                followParam = add_Slave["followParam"]
-                print(f"followParam的值：{followParam}")
-                if float(traded_lots_sum) != float(followParam):
-                    pytest.fail(f"手数的数据有问题，实际下单手数：{traded_lots} 下单手数：{followParam}")
+                totalSzie = trader_ordersend["totalSzie"]
+                print(f"followParam的值：{totalSzie}")
+                if float(traded_lots_sum) != float(totalSzie):
+                    pytest.fail(f"手数的数据有问题，实际下单手数：{traded_lots} 下单手数：{totalSzie}")
 
             # 执行验证
             try:
