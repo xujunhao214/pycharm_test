@@ -15,7 +15,9 @@ if __name__ == '__main__':
     # --log-level=info: 对应pytest.ini中的result_log_level_verbose配置
     pytest.main([
         "-vs",
-        "/www/python/jenkins/workspace/Documentatio_Test/kuangjia8/tests/test_api.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_api.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_api.py",
+        "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",
         "--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",
         "--clean-alluredir",
         "--log-file=pytest.log",
@@ -24,8 +26,7 @@ if __name__ == '__main__':
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
         "--log-level=info"
     ])
-    os.system(
-        'allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
+    os.system('allure generate report/results -o /www/python/jenkins/workspace/Documentatio_Test/results/html --clean')
 
     # pytest.main([
     #     "-vs",

@@ -1,38 +1,22 @@
-# jsonpath_utils.py
 from jsonpath_ng import parse
-from typing import Optional, Any, List, Dict, Union
-
 
 class JsonPathUtils:
-    """JSONPath 提取工具类（基于 jsonpath-ng）"""
+    """JSONPath工具类，用于从JSON响应中提取数据"""
 
-    @staticmethod
-    def extract(
-            data: Union[Dict, List],  # 支持字典或列表
-            expr: str,
-            default: Optional[Any] = None,
-            multi_match: bool = False
-    ) -> Any:
-        """
-        从 JSON 数据中提取值
+    def extract(self, data: dict, expression: str) -> any:
+        """使用JSONPath表达式从数据中提取值"""
+        jsonpath_expr = parse(expression)
+        result = [match.value for match in jsonpath_expr.find(data)]
+        if result:
+            return result[0] if len(result) == 1 else result
+        return None
 
-        Args:
-            data: 要提取的 JSON 数据（字典或列表）
-            expr: JSONPath 表达式（如 "$.data.id"）
-            default: 未匹配到时返回的默认值（默认为 None）
-            multi_match: 是否返回所有匹配结果（默认返回第一个匹配值）
+    def assert_value(self, data: dict, expression: str, expected: any) -> None:
+        """断言JSONPath表达式提取的值与预期值相等"""
+        actual = self.extract(data, expression)
+        assert actual == expected, f"断言失败：预期值 '{expected}'，实际值 '{actual}'"
 
-        Returns:
-            匹配到的值（单个或列表），未匹配到返回 default
-        """
-        try:
-            jsonpath_expr = parse(expr)
-            matches: List[Any] = jsonpath_expr.find(data)
-
-            if not matches:
-                return default
-
-            return matches if multi_match else matches[0].value
-        except Exception as e:
-            print(f"JSONPath 提取失败: {str(e)}")
-            return default
+    def assert_contains(self, data: dict, expression: str, expected: any) -> None:
+        """断言JSONPath表达式提取的值包含预期值"""
+        actual = self.extract(data, expression)
+        assert expected in actual, f"断言失败：'{actual}' 不包含 '{expected}'"
