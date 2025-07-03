@@ -4,7 +4,7 @@ import time
 import json
 from typing import Dict, Any, List, Optional, Union
 from decimal import Decimal
-from lingkuan_703.commons.wait_utils import wait_for_condition
+from lingkuan.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 

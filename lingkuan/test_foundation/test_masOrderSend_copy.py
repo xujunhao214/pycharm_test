@@ -1,12 +1,12 @@
-# lingkuan_703/tests/test_masOrderSend.py
+# lingkuan/tests/test_masOrderSend.py
 import time
 
 import allure
 import logging
 import pytest
-from lingkuan_703.VAR.VAR import *
-from lingkuan_703.conftest import var_manager
-from lingkuan_703.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因

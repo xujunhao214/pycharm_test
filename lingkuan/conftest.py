@@ -4,8 +4,8 @@ import allure
 import logging
 import datetime
 from typing import Dict, List
-from lingkuan_703.commons.session import EnvironmentSession, Environment
-from lingkuan_703.commons.variable_manager import VariableManager
+from lingkuan.commons.session import EnvironmentSession, Environment
+from lingkuan.commons.variable_manager import VariableManager
 from pathlib import Path
 import sys
 import os
@@ -31,7 +31,7 @@ ENV_CONFIG = {
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10
         },
-        "data_source_dir": "lingkuan_703/VAR"
+        "data_source_dir": "lingkuan/VAR"
     },
     Environment.PROD: {
         "base_url": "http://39.99.136.49:9000",
@@ -46,7 +46,7 @@ ENV_CONFIG = {
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10
         },
-        "data_source_dir": "lingkuan_703/VAR"
+        "data_source_dir": "lingkuan/VAR"
     }
 }
 
