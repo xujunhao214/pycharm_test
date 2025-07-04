@@ -5,9 +5,9 @@ import json
 from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
-from lingkuan_704.commons.jsonpath_utils import JsonPathUtils
-from lingkuan_704.commons.enums import Environment
-from lingkuan_704.conftest import *
+from lingkuan.commons.jsonpath_utils import JsonPathUtils
+from lingkuan.commons.enums import Environment
+from lingkuan.conftest import *
 
 # 自动创建日志目录
 log_dir = Path(__file__).parent.parent / "logs"

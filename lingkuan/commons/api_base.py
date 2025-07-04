@@ -2,9 +2,10 @@ import allure
 import logging
 import time
 import json
+import pymysql
 from typing import Dict, Any, List, Optional, Union
 from decimal import Decimal
-from lingkuan_704.commons.wait_utils import wait_for_condition
+from lingkuan.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 
@@ -118,60 +119,161 @@ class APITestBase:
             f"期望值: {expected_value}"
         )
 
-    def query_database(self, db_transaction, sql, params, time_field: Optional[str] = None,
-                       time_range_minutes: int = 3, order_by: str = "create_time DESC",
-                       convert_decimal: bool = True):
-        """统一的数据库查询方法"""
+    def query_database(self, db_transaction: pymysql.connections.Connection,
+                       sql: str,
+                       params: tuple = (),
+                       order_by: str = "",  # 可选排序，不再强制添加
+                       convert_decimal: bool = True) -> List[Dict[str, Any]]:
+        """
+        基础数据库查询方法（不含自动时间范围）
+        :param db_transaction: 数据库连接事务
+        :param sql: SQL查询语句
+        :param params: SQL参数（防止注入）
+        :param order_by: 排序语句（如"create_time DESC"，为空则不排序）
+        :param convert_decimal: 是否将Decimal类型转为float
+        :return: 查询结果列表
+        """
         sql_upper = sql.upper()
+        final_sql = sql
 
-        if time_field:
-            if "WHERE" in sql_upper:
-                sql += f" AND {time_field} BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE"
-                params = params + (time_range_minutes, time_range_minutes)
-            else:
-                sql += f" WHERE {time_field} BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE"
-                params = params + (time_range_minutes, time_range_minutes)
-
-        if order_by:
-            if "ORDER BY" in sql_upper:
-                logger.warning(f"SQL中已包含ORDER BY子句，使用原始排序: {sql}")
-            else:
-                sql += f" ORDER BY {order_by}"
+        # 处理排序（仅当用户指定且SQL中无ORDER BY时）
+        if order_by and "ORDER BY" not in sql_upper:
+            final_sql += f" ORDER BY {order_by}"
+        elif order_by:
+            logging.warning(f"SQL已包含ORDER BY，忽略传入的排序: {order_by}")
 
         with db_transaction.cursor() as cursor:
-            logger.info(f"执行SQL查询: {sql}", extra={"params": params})
-            cursor.execute(sql, params)
+            logging.info(f"执行SQL: {final_sql}", extra={"params": params})
+            cursor.execute(final_sql, params)
             result = cursor.fetchall()
 
+            # 转换Decimal类型（避免JSON序列化问题）
             if convert_decimal and result:
                 result = self.convert_decimal_to_float(result)
 
-            logger.info(f"数据库查询结果: {result}", extra={"sql": sql, "params": params})
+            logging.info(f"查询结果（{len(result)}条）: {result}")
             return result
 
-    def query_database_with_time(self, db_transaction, sql, params, time_field=None, time_range=3,
-                                 order_by="create_time DESC", convert_decimal: bool = True):
-        """带时间范围的数据库查询"""
-        return self.query_database(
-            db_transaction, sql, params, time_field, time_range, order_by, convert_decimal
+    def query_database_with_time(self, db_transaction: pymysql.connections.Connection,
+                                 sql: str,
+                                 params: tuple = (),
+                                 time_field: str = "create_time",  # 时间字段名
+                                 time_range_minutes: int = 5,  # 时间范围（分钟）
+                                 order_by: str = "create_time DESC",
+                                 convert_decimal: bool = True) -> List[Dict[str, Any]]:
+        """
+        带时间范围的数据库查询（手动指定时间字段和范围）
+        :param time_field: 时间过滤字段（如"create_time"）
+        :param time_range_minutes: 时间范围（前后N分钟）
+        """
+        sql_upper = sql.upper()
+        final_sql = sql
+        final_params = list(params)  # 转为列表方便追加
+
+        # 拼接时间条件
+        time_condition = (
+            f" {time_field} BETWEEN NOW() - INTERVAL %s MINUTE "
+            f"AND NOW() + INTERVAL %s MINUTE "
         )
 
-    def wait_for_database_record(self, db_transaction, sql, params, time_field=None, time_range=3,
-                                 order_by="create_time DESC", timeout=30, poll_interval=2,
-                                 convert_decimal: bool = True):
-        """等待数据库记录出现"""
+        # 处理WHERE子句
+        if "WHERE" in sql_upper:
+            final_sql += f" AND {time_condition}"
+        else:
+            final_sql += f" WHERE {time_condition}"
 
-        def check_db():
-            return self.query_database(
-                db_transaction, sql, params, time_field, time_range, order_by, convert_decimal
-            )
+        # 追加时间参数（前后各N分钟）
+        final_params.extend([time_range_minutes, time_range_minutes])
 
-        return wait_for_condition(
-            condition=check_db,
-            timeout=timeout,
-            poll_interval=poll_interval,
-            error_message=f"数据库查询超时，未找到记录 (SQL: {sql}, PARAMS: {params})",
-            step_title="等待数据库记录出现"
+        # 调用基础查询方法
+        return self.query_database(
+            db_transaction=db_transaction,
+            sql=final_sql,
+            params=tuple(final_params),
+            order_by=order_by,
+            convert_decimal=convert_decimal
+        )
+
+    def convert_decimal_to_float(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """将查询结果中的Decimal类型转为float（避免JSON序列化失败）"""
+        converted = []
+        for row in data:
+            converted_row = {}
+            for key, value in row.items():
+                if isinstance(value, Decimal):
+                    converted_row[key] = float(value)
+                else:
+                    converted_row[key] = value
+            converted.append(converted_row)
+        return converted
+
+    def wait_for_database_record(self, db_transaction: pymysql.connections.Connection,
+                                 sql: str,
+                                 params: tuple = (),
+                                 time_field: Optional[str] = None,  # 可选时间字段
+                                 time_range: int = 1,  # 时间范围（分钟）
+                                 order_by: str = "create_time DESC",
+                                 timeout: int = 60,  # 超时时间（秒）
+                                 poll_interval: int = 2) -> List[Dict[str, Any]]:
+        """
+        轮询等待数据库记录出现
+        :param timeout: 最大等待时间
+        :param poll_interval: 轮询间隔（秒）
+        """
+        import time
+        start_time = time.time()
+
+        while time.time() - start_time < timeout:
+            # 每次查询前刷新事务，确保能看到最新数据
+            db_transaction.commit()
+
+            # 根据是否需要时间范围选择查询方法
+            if time_field:
+                result = self.query_database_with_time(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field=time_field,
+                    time_range_minutes=time_range,
+                    order_by=order_by
+                )
+            else:
+                result = self.query_database(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    order_by=order_by
+                )
+
+            if result:
+                logging.info(f"等待成功（耗时{time.time() - start_time:.1f}秒），结果: {result}")
+                return result
+
+            elapsed = time.time() - start_time
+            logging.info(f"未查询到记录（已等待{elapsed:.1f}秒，剩余{timeout - elapsed:.1f}秒）")
+            time.sleep(poll_interval)
+
+        # 超时后最后一次查询
+        db_transaction.commit()
+        final_result = self.query_database_with_time(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field=time_field,
+            time_range_minutes=time_range,
+            order_by=order_by
+        ) if time_field else self.query_database(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            order_by=order_by
+        )
+
+        raise TimeoutError(
+            f"等待超时（{timeout}秒），未查询到记录。\n"
+            f"SQL: {sql}\n"
+            f"参数: {params}\n"
+            f"最终结果: {final_result}"
         )
 
     def wait_for_api_condition(self, logged_session, method, url, params=None, json_data=None,

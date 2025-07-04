@@ -4,9 +4,9 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因

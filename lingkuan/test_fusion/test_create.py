@@ -1,13 +1,13 @@
-# lingkuan_704/tests/test_create.py
+# lingkuan/tests/test_create.py
 import time
 
 import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -62,15 +62,19 @@ class TestCreate(APITestBase):
     def test_dbquery_user(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             db_query = var_manager.get_variable("db_query")
+            sql = f"SELECT * FROM {db_query['table']} WHERE account = %s"
+            params = (db_query["account"],)
 
-            # 优化后的数据库查询
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM {db_query['table']} WHERE account = %s",
-                (db_query["account"],),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME,
-                order_by="create_time DESC"
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
             # 提取数据库中的值
@@ -129,14 +133,18 @@ class TestCreate(APITestBase):
     def test_dbquery__importuser(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             db_query = var_manager.get_variable("db_query")
-
-            # 执行数据库查询
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM {db_query['table']} WHERE remark = %s",
-                (db_query["remark"],),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
+            sql = f"SELECT * FROM {db_query['table']} WHERE remark = %s"
+            params = (db_query["remark"],)
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
             # 验证查询结果
@@ -205,13 +213,19 @@ class TestCreate(APITestBase):
     def test_dbquery_vpsgroup(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             db_group = var_manager.get_variable("db_group")
+            sql = f"SELECT * FROM {db_group['table']} WHERE name = %s"
+            params = (db_group["name"],)
 
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM {db_group['table']} WHERE name = %s",
-                (db_group["name"],),
-                time_field="create_time",  # 指定时间字段名
-                time_range_minutes=MYSQL_TIME  # 可选：指定时间范围（分钟）
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
             # 提取数据库中的值

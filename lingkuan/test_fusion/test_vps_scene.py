@@ -1,12 +1,12 @@
-# lingkuan_704/tests/test_vps_ordersend.py
+# lingkuan/tests/test_vps_ordersend.py
 import time
 
 import allure
 import logging
 import pytest
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -85,16 +85,16 @@ class TestVPSOrderSend_Scence(APITestBase):
                 user_accounts_2,
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -130,16 +130,16 @@ class TestVPSOrderSend_Scence(APITestBase):
                 user_accounts_3,
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -163,19 +163,24 @@ class TestVPSOrderSend_Scence(APITestBase):
             vps_trader_id = var_manager.get_variable("vps_trader_id")
 
             sql = f"""
-                                                SELECT * 
-                                                FROM {table_trader} 
-                                                WHERE id = %s
-                                                """
+                    SELECT * 
+                    FROM {table_trader} 
+                    WHERE id = %s
+                    """
             params = (
                 vps_trader_id
             )
 
-            # 使用智能等待查询
-            db_data = self.query_database(
-                db_transaction,
-                sql,
-                params,
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 提取数据"):

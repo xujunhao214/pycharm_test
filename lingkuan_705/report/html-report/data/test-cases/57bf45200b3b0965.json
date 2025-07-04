@@ -1,0 +1,235 @@
+{
+  "uid" : "57bf45200b3b0965",
+  "name" : "数据库校验-策略开仓-修改币种p",
+  "fullName" : "test_foundation.test_vps_money.TestVPSOrderSend_money#test_dbtrader_cfdp",
+  "historyId" : "68f9b5f7ab0afc70366e576b3477b972",
+  "time" : {
+    "start" : 1751629121819,
+    "stop" : 1751629129586,
+    "duration" : 7767
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：0.96\nassert (0.96 == 0.02 or 0.96 == 0.03 or 0.96 == 1)\n +  where 0.96 = float(0.96)\n +  and   0.96 = float(0.96)\n +  and   0.96 = float(0.96)",
+  "statusTrace" : "self = <lingkuan_705.test_foundation.test_vps_money.TestVPSOrderSend_money object at 0x000001987B4B4550>\nvar_manager = <lingkuan_705.commons.variable_manager.VariableManager object at 0x000001987B4B4EB0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001987B4CF280>\n\n    @allure.title(\"数据库校验-策略开仓-修改币种p\")\n    def test_dbtrader_cfdp(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_trader = var_manager.get_variable(\"vps_trader\")\n            table_name = trader_ordersend[\"table_detail\"]\n            user_accounts_6 = var_manager.get_variable(\"user_accounts_6\")\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM {table_name}\n                WHERE source_user = %s\n                  AND account = %s\n                \"\"\"\n            params = (\n                vps_trader[\"account\"],\n                user_accounts_6,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"create_time\",  # 按创建时间过滤\n                time_range=MYSQL_TIME,  # 只查前后1分钟的数据\n                timeout=WAIT_TIMEOUT,  # 最多等60秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                order_by=\"create_time DESC\"  # 按创建时间倒序\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfdp = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfdp\", addsalve_size_cfdp)\n            addsalve_size_cfdp_total = sum(addsalve_size_cfdp)\n>           assert float(\n                addsalve_size_cfdp_total) == 0.02 or float(\n                addsalve_size_cfdp_total) == 0.03 or float(\n                addsalve_size_cfdp_total) == 1, f\"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}\"\nE           AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：0.96\nE           assert (0.96 == 0.02 or 0.96 == 0.03 or 0.96 == 1)\nE            +  where 0.96 = float(0.96)\nE            +  and   0.96 = float(0.96)\nE            +  and   0.96 = float(0.96)\n\ntest_foundation\\test_vps_money.py:224: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1751629111219,
+      "stop" : 1751629111219,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1751629111219,
+      "stop" : 1751629111219,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1751629111219,
+      "stop" : 1751629111219,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1751629111219,
+      "stop" : 1751629111451,
+      "duration" : 232
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1751629121772,
+      "stop" : 1751629121818,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：0.96\nassert (0.96 == 0.02 or 0.96 == 0.03 or 0.96 == 1)\n +  where 0.96 = float(0.96)\n +  and   0.96 = float(0.96)\n +  and   0.96 = float(0.96)",
+    "statusTrace" : "self = <lingkuan_705.test_foundation.test_vps_money.TestVPSOrderSend_money object at 0x000001987B4B4550>\nvar_manager = <lingkuan_705.commons.variable_manager.VariableManager object at 0x000001987B4B4EB0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001987B4CF280>\n\n    @allure.title(\"数据库校验-策略开仓-修改币种p\")\n    def test_dbtrader_cfdp(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_trader = var_manager.get_variable(\"vps_trader\")\n            table_name = trader_ordersend[\"table_detail\"]\n            user_accounts_6 = var_manager.get_variable(\"user_accounts_6\")\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM {table_name}\n                WHERE source_user = %s\n                  AND account = %s\n                \"\"\"\n            params = (\n                vps_trader[\"account\"],\n                user_accounts_6,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"create_time\",  # 按创建时间过滤\n                time_range=MYSQL_TIME,  # 只查前后1分钟的数据\n                timeout=WAIT_TIMEOUT,  # 最多等60秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                order_by=\"create_time DESC\"  # 按创建时间倒序\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfdp = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfdp\", addsalve_size_cfdp)\n            addsalve_size_cfdp_total = sum(addsalve_size_cfdp)\n>           assert float(\n                addsalve_size_cfdp_total) == 0.02 or float(\n                addsalve_size_cfdp_total) == 0.03 or float(\n                addsalve_size_cfdp_total) == 1, f\"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}\"\nE           AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：0.96\nE           assert (0.96 == 0.02 or 0.96 == 0.03 or 0.96 == 1)\nE            +  where 0.96 = float(0.96)\nE            +  and   0.96 = float(0.96)\nE            +  and   0.96 = float(0.96)\n\ntest_foundation\\test_vps_money.py:224: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1751629121819,
+        "stop" : 1751629129585,
+        "duration" : 7766
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : false,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 校验数据",
+      "time" : {
+        "start" : 1751629129585,
+        "stop" : 1751629129586,
+        "duration" : 1
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：0.96\nassert (0.96 == 0.02 or 0.96 == 0.03 or 0.96 == 1)\n +  where 0.96 = float(0.96)\n +  and   0.96 = float(0.96)\n +  and   0.96 = float(0.96)\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_705\\test_foundation\\test_vps_money.py\", line 224, in test_dbtrader_cfdp\n    assert float(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "9d78ec6bb03b23fe",
+      "name" : "log",
+      "source" : "9d78ec6bb03b23fe.txt",
+      "type" : "text/plain",
+      "size" : 10113
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 2,
+    "attachmentsCount" : 1,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1751629138476,
+      "stop" : 1751629138477,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1751629138475,
+      "stop" : 1751629138475,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1751629129685,
+      "stop" : 1751629129735,
+      "duration" : 50
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟单修改币种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_foundation"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_money"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_money"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "36860-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_foundation.test_vps_money"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "57bf45200b3b0965.json",
+  "parameterValues" : [ ]
+}

@@ -4,10 +4,10 @@ import allure
 import logging
 import datetime
 from typing import Dict, List
-from lingkuan_704.commons.session import EnvironmentSession, Environment
-from lingkuan_704.commons.variable_manager import VariableManager
-from lingkuan_704.commons.test_tracker import TestResultTracker
-from lingkuan_704.commons.feishu_notification import send_feishu_notification
+from lingkuan.commons.session import EnvironmentSession, Environment
+from lingkuan.commons.variable_manager import VariableManager
+from lingkuan.commons.test_tracker import TestResultTracker
+from lingkuan.commons.feishu_notification import send_feishu_notification
 from pathlib import Path
 import sys
 import os
@@ -37,7 +37,7 @@ ENV_CONFIG = {
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10
         },
-        "data_source_dir": "lingkuan_704/VAR"
+        "data_source_dir": "lingkuan/VAR"
     },
     Environment.PROD: {
         "base_url": "http://39.99.136.49:9000",
@@ -52,7 +52,7 @@ ENV_CONFIG = {
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10
         },
-        "data_source_dir": "lingkuan_704/VAR"
+        "data_source_dir": "lingkuan/VAR"
     }
 }
 
@@ -132,7 +132,7 @@ def db(db_config) -> pymysql.connections.Connection:
 
 @pytest.fixture
 def db_transaction(db):
-    """数据库事务管理，自动回滚测试操作"""
+    """数据库事务管理，自动提交以获取最新数据"""
     try:
         db.begin()
         yield db
@@ -140,7 +140,8 @@ def db_transaction(db):
         db.rollback()
         raise
     finally:
-        db.rollback()
+        # 关键：每次查询后提交事务，刷新数据可见性
+        db.commit()  # 替代 rollback()，确保看到其他会话的新数据
 
 
 # ------------------------------

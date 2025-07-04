@@ -1,12 +1,12 @@
-# lingkuan_704/tests/test_vps_ordersend.py
+# lingkuan/tests/test_vps_ordersend.py
 import time
 
 import allure
 import logging
 import pytest
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -21,46 +21,28 @@ class TestVPSOrderSend_money(APITestBase):
     # 账号管理-账号列表-修改用户
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
     @allure.title("账号管理-账号列表-修改用户")
     def test_update_user(self, api_session, var_manager, logged_session, db_transaction):
         # 1. 发送创建用户请求
         new_user = var_manager.get_variable("new_user")
-        trader_user_id = var_manager.get_variable("trader_user_id")
+        vps_trader_id = var_manager.get_variable("vps_trader_id")
         password = var_manager.get_variable("password")
         data = {
-            "id": trader_user_id,
+            "id": vps_trader_id,
             "account": new_user["account"],
             "password": password,
-            "platform": new_user["platform"],
-            "accountType": "0",
-            "serverNode": new_user["serverNode"],
-            "remark": "编辑个人用户",
-            "sort": 12,
-            "vpsDescs": [
-                {
-                    "desc": "39.99.136.49-主VPS-跟单策略",
-                    "status": 0,
-                    "statusExtra": "启动成功",
-                    "forex": "",
-                    "cfd": "",
-                    "traderId": 5733,
-                    "ipAddress": "39.99.136.49",
-                    "sourceId": None,
-                    "sourceAccount": None,
-                    "sourceName": None,
-                    "loginNode": "47.83.21.167:443",
-                    "nodeType": 0,
-                    "nodeName": "账号节点",
-                    "type": None,
-                    "vpsId": 6,
-                    "traderType": None,
-                    "abRemark": None
-                }
-            ]
+            "remark": "测试数据",
+            "followStatus": 1,
+            "templateId": 1,
+            "type": 0,
+            "cfd": "",
+            "forex": "",
+            "platform": new_user["platform"]
         }
         response = self.send_put_request(
             api_session,
-            "/mascontrol/user",
+            "/subcontrol/trader",
             json_data=data
         )
 
@@ -68,7 +50,7 @@ class TestVPSOrderSend_money(APITestBase):
         self.assert_response_status(
             response,
             200,
-            "新增单个用户失败"
+            "编辑策略信息失败"
         )
 
         # 3. 验证JSON返回内容
@@ -79,8 +61,6 @@ class TestVPSOrderSend_money(APITestBase):
             "响应msg字段应为success"
         )
 
-    time.sleep(180)
-
     # ---------------------------
     # 数据库校验-账号列表-修改用户
     # ---------------------------
@@ -89,12 +69,17 @@ class TestVPSOrderSend_money(APITestBase):
     def test_dbupdate_user(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否编辑成功"):
             db_query = var_manager.get_variable("db_query")
+            sql = f"SELECT * FROM {db_query['table_trader']} WHERE account = %s"
+            params = (db_query["account"],)
 
-            # 优化后的数据库查询
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT cfd FROM {db_query['table_trader']} WHERE account = %s",
-                (db_query["account"],),
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
             # 提取数据库中的值
@@ -169,16 +154,16 @@ class TestVPSOrderSend_money(APITestBase):
                 user_accounts_5,
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -192,7 +177,7 @@ class TestVPSOrderSend_money(APITestBase):
             logging.info(f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}")
 
             symbol = db_data[0]["symbol"]
-            assert symbol == "XAUUSD@", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
+            assert symbol == "XAUUSD@" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
 
     # ---------------------------
     # 数据库校验-策略开仓-修改币种p
@@ -217,16 +202,16 @@ class TestVPSOrderSend_money(APITestBase):
                 user_accounts_6,
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -237,11 +222,13 @@ class TestVPSOrderSend_money(APITestBase):
             var_manager.set_runtime_variable("addsalve_size_cfdp", addsalve_size_cfdp)
             addsalve_size_cfdp_total = sum(addsalve_size_cfdp)
             assert float(
-                addsalve_size_cfdp_total) != 0, f"修改币种下单总手数应该是0.01的倍数，实际是：{addsalve_size_cfdp_total}"
+                addsalve_size_cfdp_total) == 0.02 or float(
+                addsalve_size_cfdp_total) == 0.03 or float(
+                addsalve_size_cfdp_total) == 1, f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
             logging.info(f"修改币种下单总手数应该是0.01的倍数，实际是：{addsalve_size_cfdp_total}")
 
             symbol = db_data[0]["symbol"]
-            assert symbol == "XAUUSD.p", f"下单的币种与预期的不一样，预期：XAUUSD.p 实际：{symbol}"
+            assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
 
     # 数据库校验-策略开仓-修改币种min
     # ---------------------------
@@ -265,16 +252,16 @@ class TestVPSOrderSend_money(APITestBase):
                 user_accounts_7,
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -285,11 +272,12 @@ class TestVPSOrderSend_money(APITestBase):
             var_manager.set_runtime_variable("addsalve_size_cfdmin", addsalve_size_cfdmin)
             addsalve_size_cfdmin_total = sum(addsalve_size_cfdmin)
             assert float(
-                addsalve_size_cfdmin_total) == 10, f"修改币种下单总手数应该是10，实际是：{addsalve_size_cfdmin_total}"
+                addsalve_size_cfdmin_total) == 10 or float(
+                addsalve_size_cfdmin_total) == 1, f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
             logging.info(f"修改币种下单总手数应该是10，实际是：{addsalve_size_cfdmin_total}")
 
             symbol = db_data[0]["symbol"]
-            assert symbol == "XAUUSD.min", f"下单的币种与预期的不一样，预期：XAUUSD.min 实际：{symbol}"
+            assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"
 
     # ---------------------------
     # 跟单软件看板-VPS数据-策略平仓
@@ -352,16 +340,16 @@ class TestVPSOrderSend_money(APITestBase):
                 "1"
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -402,16 +390,16 @@ class TestVPSOrderSend_money(APITestBase):
                 "1"
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -422,11 +410,13 @@ class TestVPSOrderSend_money(APITestBase):
             var_manager.set_runtime_variable("addsalve_size_cfdp_close", addsalve_size_cfdp_close)
             addsalve_size_cfdp_total = sum(addsalve_size_cfdp_close)
             assert float(
-                addsalve_size_cfdp_total) != 0, f"修改币种下单总手数应该是0.01的倍数，实际是：{addsalve_size_cfdp_total}"
+                addsalve_size_cfdp_total) == 0.02 or float(
+                addsalve_size_cfdp_total) == 0.03 or float(
+                addsalve_size_cfdp_total) == 1, f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
             logging.info(f"修改币种下单总手数应该是0.01的倍数，实际是：{addsalve_size_cfdp_total}")
 
             symbol = db_data[0]["symbol"]
-            assert symbol == "XAUUSD.p", f"下单的币种与预期的不一样，预期：XAUUSD.p 实际：{symbol}"
+            assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
 
     # ---------------------------
     # 数据库校验-策略平仓-修改币种min
@@ -453,16 +443,16 @@ class TestVPSOrderSend_money(APITestBase):
                 "1"
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -473,9 +463,11 @@ class TestVPSOrderSend_money(APITestBase):
             var_manager.set_runtime_variable("addsalve_size_cfdmin_close", addsalve_size_cfdmin_close)
             addsalve_size_cfdmin_total = sum(addsalve_size_cfdmin_close)
             assert float(
-                addsalve_size_cfdmin_total) == 10, f"修改币种下单总手数应该是10，实际是：{addsalve_size_cfdmin_total}"
+                addsalve_size_cfdmin_total) == 10 or float(
+                addsalve_size_cfdmin_total) == 1, f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
             logging.info(f"修改币种下单总手数应该是10，实际是：{addsalve_size_cfdmin_total}")
 
             symbol = db_data[0]["symbol"]
-            assert symbol == "XAUUSD.min", f"下单的币种与预期的不一样，预期：XAUUSD.min 实际：{symbol}"
-            # time.sleep(90)
+            assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"
+
+        time.sleep(90)

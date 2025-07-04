@@ -1,13 +1,13 @@
-# lingkuan_704/tests/test_create.py
+# lingkuan/tests/test_create.py
 import time
 
 import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -454,11 +454,16 @@ class TestCreate(APITestBase):
             sql = f"SELECT * FROM {add_VPS['table']} WHERE ip_address=%s AND deleted=%s"
             params = (add_VPS["ipAddress"], add_VPS["deleted"])
 
-            # 使用智能等待
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
             # 提取数据库中的值
@@ -706,4 +711,3 @@ class TestCreate(APITestBase):
             slave_account = db_data2[0]["slave_account"]
             if slave_account != user_accounts_1:
                 pytest.fail(f"账号新增失败，新增账号：{user_accounts_1}  数据库账号:{slave_account}")
-                time.sleep(15)

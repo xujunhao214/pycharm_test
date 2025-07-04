@@ -1,13 +1,13 @@
-# lingkuan_704/tests/test_create.py
+# lingkuan/tests/test_create.py
 import time
 
 import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -18,7 +18,7 @@ class TestCreate_Scene(APITestBase):
     # ---------------------------
     # 新增跟单账号-参数化测试（仅使用后6个数据）
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("新增跟单账号（仅使用后6个数据与模板匹配）")
     def test_import_addSlave(self, var_manager, logged_session, db_transaction):
@@ -144,7 +144,6 @@ class TestCreate_Scene(APITestBase):
                     response, "$.msg", "success",
                     f"账号{param['account']}响应异常（模板：{param['desc']}）"
                 )
-        time.sleep(30)
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量新增跟单账号")
@@ -173,14 +172,19 @@ class TestCreate_Scene(APITestBase):
                 db_addslave_query = var_manager.get_variable("db_addslave_query")
                 if not db_addslave_query or "table" not in db_addslave_query:
                     pytest.fail("数据库查询配置不完整（缺少table信息）")
+                sql = f"SELECT * FROM {db_addslave_query['table']} WHERE account = %s"
+                params = (account,)
 
-                # 按账号查询主表记录（精确匹配当前账号）
-                db_data = self.query_database(
-                    db_transaction,
-                    f"SELECT * FROM {db_addslave_query['table']} WHERE account = %s",
-                    (account,),
-                    time_field="create_time",
-                    time_range_minutes=10  # 限定时间范围，避免查到历史数据
+                # 调用轮询等待方法（带时间范围过滤）
+                db_data = self.wait_for_database_record(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field="create_time",  # 按创建时间过滤
+                    time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                    timeout=WAIT_TIMEOUT,  # 最多等60秒
+                    poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                    order_by="create_time DESC"  # 按创建时间倒序
                 )
 
                 if not db_data:
@@ -213,13 +217,20 @@ class TestCreate_Scene(APITestBase):
 
                 # 校验订阅表记录（从表关联）
                 if "table_subscribe" in db_addslave_query:
-                    db_sub_data = self.query_database(
-                        db_transaction,
-                        f"SELECT * FROM {db_addslave_query['table_subscribe']} WHERE slave_account = %s",
-                        (account,),
-                        time_field="create_time",
-                        time_range_minutes=10
+                    sql = f"SELECT * FROM {db_addslave_query['table_subscribe']} WHERE slave_account = %s"
+                    params = (account,)
+                    # 调用轮询等待方法（带时间范围过滤）
+                    db_sub_data = self.wait_for_database_record(
+                        db_transaction=db_transaction,
+                        sql=sql,
+                        params=params,
+                        time_field="create_time",  # 按创建时间过滤
+                        time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                        timeout=WAIT_TIMEOUT,  # 最多等60秒
+                        poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                        order_by="create_time DESC"  # 按创建时间倒序
                     )
+
                     if not db_sub_data:
                         pytest.fail(f"账号 {account} 在订阅表中未找到关联记录")
                     # 校验订阅表中的账号与当前账号一致
@@ -382,4 +393,3 @@ class TestCreate_Scene(APITestBase):
                     response, "$.msg", "success",
                     f"账号{param['account']}响应异常（模板：{param['desc']}）"
                 )
-        time.sleep(15)

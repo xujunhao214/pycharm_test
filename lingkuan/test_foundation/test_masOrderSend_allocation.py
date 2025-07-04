@@ -1,11 +1,11 @@
-# lingkuan_704/tests/test_masOrderSend.py
+# lingkuan/tests/test_masOrderSend.py
 import allure
 import logging
 import pytest
 import time
-from lingkuan_704.VAR.VAR import *
-from lingkuan_704.conftest import var_manager
-from lingkuan_704.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -80,14 +80,16 @@ class TestMasordersend(APITestBase):
                 vps_addslave_id
             )
 
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 提取数据"):
@@ -131,12 +133,16 @@ class TestMasordersend(APITestBase):
                 vps_addslave_id
             )
 
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 校验数据"):
@@ -201,16 +207,16 @@ class TestMasordersend(APITestBase):
                 "1",
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
         with ((allure.step("2. 提取数据"))):
             if not db_data:
@@ -250,16 +256,16 @@ class TestMasordersend(APITestBase):
                 vps_addslave_id
             )
 
-            # 使用智能等待查询
+            # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
-                db_transaction,
-                sql,
-                params,
-                time_field="create_time",
-                time_range=MYSQL_TIME,
-                timeout=WAIT_TIMEOUT,
-                poll_interval=POLL_INTERVAL,
-                order_by="create_time DESC"
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",  # 按创建时间过滤
+                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
+                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                order_by="create_time DESC"  # 按创建时间倒序
             )
 
         with allure.step("2. 验证下单指令的跟单账号数据"):
