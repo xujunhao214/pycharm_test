@@ -26,7 +26,7 @@ def run_tests(env: str = "test"):
         f"--env={env}",  # 指定环境
         f"--alluredir={report_dir}",  # allure结果目录
         "--clean-alluredir",  # 清理旧结果
-        # "test_foundation/test_create.py",  # 测试用例目录
+        "test_foundation/test_create.py",  # 测试用例目录
         # "test_foundation/test_vps_ordersend.py",  # 测试用例目录
         # "test_foundation/test_vps_Leakage_level.py",  # 测试用例目录
         # "test_foundation/test_vps_Leakage_open.py",  # 测试用例目录
@@ -37,8 +37,9 @@ def run_tests(env: str = "test"):
         # "test_foundation/test_vps.py",  # 测试用例目录
         # "test_foundation/test_trade_order.py",  # 测试用例目录
         # "test_foundation/test_create_scene.py",  # 测试用例目录
-        "test_foundation/test_vps_ordersend_scene.py",  # 测试用例目录
-        # "test_foundation/test_vps_ordersend_money.py",  # 测试用例目录
+        # "test_foundation/test_vps_scene.py",  # 测试用例目录
+        # "test_foundation/test_vps_money.py",  # 测试用例目录
+        # "test_foundation/test_vps_scenefusion.py",  # 测试用例目录
         # "test_foundation/test_delete.py",  # 测试用例目录
         # "test_foundation/test_deleteuser.py",  # 测试用例目录
         "--log-file=./Logs/pytest.log",

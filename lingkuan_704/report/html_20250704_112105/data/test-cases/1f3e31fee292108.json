@@ -1,0 +1,262 @@
+{
+  "uid" : "1f3e31fee292108",
+  "name" : "数据库校验-VPS分配下单-持仓检查",
+  "fullName" : "test_foundation.test_masOrderSend_copy.TestMasordersendcopy#test_dbquery_order_detail",
+  "historyId" : "8bdcf3ba02cf5d60b4b8bbc3797d8d21",
+  "time" : {
+    "start" : 1751600033648,
+    "stop" : 1751600033697,
+    "duration" : 49
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 跟单总手数和下单的手数不相等 (实际: 0.67, 预期: 1.00)\nassert 0.67 == 1.0\n +  where 0.67 = float(0.67)\n +  and   1.0 = float('1.00')",
+  "statusTrace" : "self = <lingkuan_704.test_foundation.test_masOrderSend_copy.TestMasordersendcopy object at 0x0000028DAED102E0>\nvar_manager = <lingkuan_704.commons.variable_manager.VariableManager object at 0x0000028DAF83F640>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028DAED1E700>\n\n    @allure.title(\"数据库校验-VPS分配下单-持仓检查\")\n    def test_dbquery_order_detail(self, var_manager, db_transaction):\n        with allure.step(\"1. 根据下单指令仓库的order_no字段获取跟单账号订单数据\"):\n            order_no = var_manager.get_variable(\"order_no\")\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n            masOrderSend = var_manager.get_variable(\"masOrderSend\")\n    \n            table_name = masOrderSend[\"table_detail\"]\n            symbol = masOrderSend[\"symbol\"]\n    \n            sql = f\"\"\"\n            SELECT *\n            FROM {table_name}\n            WHERE symbol LIKE %s\n              AND send_no = %s\n              AND type = %s\n              AND trader_id = %s\n            \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                order_no,\n                masOrderSend[\"type\"],\n                vps_addslave_id\n            )\n    \n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n            addsalve_size = [record[\"size\"] for record in db_data]\n            total = sum(addsalve_size)\n            logging.info(f\"手数: {addsalve_size}   手数总和: {total}\")\n            totalSzie = trader_ordersend[\"totalSzie\"]\n>           assert float(total) == float(\n                totalSzie), f\"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})\"\nE           AssertionError: 跟单总手数和下单的手数不相等 (实际: 0.67, 预期: 1.00)\nE           assert 0.67 == 1.0\nE            +  where 0.67 = float(0.67)\nE            +  and   1.0 = float('1.00')\n\ntest_foundation\\test_masOrderSend_copy.py:152: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1751600033180,
+      "stop" : 1751600033180,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1751600033602,
+      "stop" : 1751600033648,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1751599445702,
+      "stop" : 1751599445703,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1751599445703,
+      "stop" : 1751599445934,
+      "duration" : 231
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1751599445703,
+      "stop" : 1751599445703,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 跟单总手数和下单的手数不相等 (实际: 0.67, 预期: 1.00)\nassert 0.67 == 1.0\n +  where 0.67 = float(0.67)\n +  and   1.0 = float('1.00')",
+    "statusTrace" : "self = <lingkuan_704.test_foundation.test_masOrderSend_copy.TestMasordersendcopy object at 0x0000028DAED102E0>\nvar_manager = <lingkuan_704.commons.variable_manager.VariableManager object at 0x0000028DAF83F640>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028DAED1E700>\n\n    @allure.title(\"数据库校验-VPS分配下单-持仓检查\")\n    def test_dbquery_order_detail(self, var_manager, db_transaction):\n        with allure.step(\"1. 根据下单指令仓库的order_no字段获取跟单账号订单数据\"):\n            order_no = var_manager.get_variable(\"order_no\")\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n            masOrderSend = var_manager.get_variable(\"masOrderSend\")\n    \n            table_name = masOrderSend[\"table_detail\"]\n            symbol = masOrderSend[\"symbol\"]\n    \n            sql = f\"\"\"\n            SELECT *\n            FROM {table_name}\n            WHERE symbol LIKE %s\n              AND send_no = %s\n              AND type = %s\n              AND trader_id = %s\n            \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                order_no,\n                masOrderSend[\"type\"],\n                vps_addslave_id\n            )\n    \n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n            addsalve_size = [record[\"size\"] for record in db_data]\n            total = sum(addsalve_size)\n            logging.info(f\"手数: {addsalve_size}   手数总和: {total}\")\n            totalSzie = trader_ordersend[\"totalSzie\"]\n>           assert float(total) == float(\n                totalSzie), f\"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})\"\nE           AssertionError: 跟单总手数和下单的手数不相等 (实际: 0.67, 预期: 1.00)\nE           assert 0.67 == 1.0\nE            +  where 0.67 = float(0.67)\nE            +  and   1.0 = float('1.00')\n\ntest_foundation\\test_masOrderSend_copy.py:152: AssertionError",
+    "steps" : [ {
+      "name" : "1. 根据下单指令仓库的order_no字段获取跟单账号订单数据",
+      "time" : {
+        "start" : 1751600033648,
+        "stop" : 1751600033696,
+        "duration" : 48
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录出现",
+        "time" : {
+          "start" : 1751600033648,
+          "stop" : 1751600033696,
+          "duration" : 48
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "edbf08e883a83789",
+          "name" : "条件检查日志",
+          "source" : "edbf08e883a83789.txt",
+          "type" : "text/plain",
+          "size" : 1525
+        }, {
+          "uid" : "5d86341feaafd435",
+          "name" : "最终结果",
+          "source" : "5d86341feaafd435.txt",
+          "type" : "text/plain",
+          "size" : 29
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 2,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 2,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 1,
+      "hasContent" : true
+    }, {
+      "name" : "2. 校验数据",
+      "time" : {
+        "start" : 1751600033696,
+        "stop" : 1751600033697,
+        "duration" : 1
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 跟单总手数和下单的手数不相等 (实际: 0.67, 预期: 1.00)\nassert 0.67 == 1.0\n +  where 0.67 = float(0.67)\n +  and   1.0 = float('1.00')\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_704\\test_foundation\\test_masOrderSend_copy.py\", line 152, in test_dbquery_order_detail\n    assert float(total) == float(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "f2e5bc8106405466",
+      "name" : "log",
+      "source" : "f2e5bc8106405466.txt",
+      "type" : "text/plain",
+      "size" : 2026
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 3,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 3,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1751600691215,
+      "stop" : 1751600691216,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1751600033797,
+      "stop" : 1751600033842,
+      "duration" : 45
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1751600691197,
+      "stop" : 1751600691197,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS交易下单-复制下单"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_foundation"
+  }, {
+    "name" : "suite",
+    "value" : "test_masOrderSend_copy"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestMasordersendcopy"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "30528-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_foundation.test_masOrderSend_copy"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "1f3e31fee292108.json",
+  "parameterValues" : [ ]
+}

@@ -1,0 +1,262 @@
+{
+  "uid" : "94022a938ab190f8",
+  "name" : "数据库校验-策略平仓-修改币种@",
+  "fullName" : "test_foundation.test_vps_money.TestVPSOrderSend_money#test_dbclose_cfda",
+  "historyId" : "8fe9c3968c53ae8702b60ee908897354",
+  "time" : {
+    "start" : 1751600538104,
+    "stop" : 1751600539355,
+    "duration" : 1251
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 下单的币种与预期的不一样，预期：XAUUSD@ 实际：XAUUSD\nassert 'XAUUSD' == 'XAUUSD@'\n  - XAUUSD@\n  ?       -\n  + XAUUSD",
+  "statusTrace" : "self = <lingkuan_704.test_foundation.test_vps_money.TestVPSOrderSend_money object at 0x0000028DAED21880>\nvar_manager = <lingkuan_704.commons.variable_manager.VariableManager object at 0x0000028DAF7BC730>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028DAED1E700>\n\n    @allure.title(\"数据库校验-策略平仓-修改币种@\")\n    def test_dbclose_cfda(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_trader = var_manager.get_variable(\"vps_trader\")\n            table_name = trader_ordersend[\"table_detail\"]\n            user_accounts_5 = var_manager.get_variable(\"user_accounts_5\")\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM {table_name}\n                WHERE source_user = %s\n                  AND account = %s\n                  AND close_status = %s\n                \"\"\"\n            params = (\n                vps_trader[\"account\"],\n                user_accounts_5,\n                \"1\"\n            )\n    \n            # 使用智能等待查询\n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME,\n                timeout=WAIT_TIMEOUT,\n                poll_interval=POLL_INTERVAL,\n                order_by=\"create_time DESC\"\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfda_close = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfda_close\", addsalve_size_cfda_close)\n            addsalve_size_cfda_total = sum(addsalve_size_cfda_close)\n            assert float(addsalve_size_cfda_total) == 1, f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\"\n            logging.info(f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\")\n    \n            symbol = db_data[0][\"symbol\"]\n>           assert symbol == \"XAUUSD@\", f\"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}\"\nE           AssertionError: 下单的币种与预期的不一样，预期：XAUUSD@ 实际：XAUUSD\nE           assert 'XAUUSD' == 'XAUUSD@'\nE             - XAUUSD@\nE             ?       -\nE             + XAUUSD\n\ntest_foundation\\test_vps_money.py:378: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1751600538058,
+      "stop" : 1751600538104,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1751600495839,
+      "stop" : 1751600495839,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1751599445702,
+      "stop" : 1751599445703,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1751599445703,
+      "stop" : 1751599445934,
+      "duration" : 231
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1751599445703,
+      "stop" : 1751599445703,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 下单的币种与预期的不一样，预期：XAUUSD@ 实际：XAUUSD\nassert 'XAUUSD' == 'XAUUSD@'\n  - XAUUSD@\n  ?       -\n  + XAUUSD",
+    "statusTrace" : "self = <lingkuan_704.test_foundation.test_vps_money.TestVPSOrderSend_money object at 0x0000028DAED21880>\nvar_manager = <lingkuan_704.commons.variable_manager.VariableManager object at 0x0000028DAF7BC730>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028DAED1E700>\n\n    @allure.title(\"数据库校验-策略平仓-修改币种@\")\n    def test_dbclose_cfda(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_trader = var_manager.get_variable(\"vps_trader\")\n            table_name = trader_ordersend[\"table_detail\"]\n            user_accounts_5 = var_manager.get_variable(\"user_accounts_5\")\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM {table_name}\n                WHERE source_user = %s\n                  AND account = %s\n                  AND close_status = %s\n                \"\"\"\n            params = (\n                vps_trader[\"account\"],\n                user_accounts_5,\n                \"1\"\n            )\n    \n            # 使用智能等待查询\n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME,\n                timeout=WAIT_TIMEOUT,\n                poll_interval=POLL_INTERVAL,\n                order_by=\"create_time DESC\"\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfda_close = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfda_close\", addsalve_size_cfda_close)\n            addsalve_size_cfda_total = sum(addsalve_size_cfda_close)\n            assert float(addsalve_size_cfda_total) == 1, f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\"\n            logging.info(f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\")\n    \n            symbol = db_data[0][\"symbol\"]\n>           assert symbol == \"XAUUSD@\", f\"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}\"\nE           AssertionError: 下单的币种与预期的不一样，预期：XAUUSD@ 实际：XAUUSD\nE           assert 'XAUUSD' == 'XAUUSD@'\nE             - XAUUSD@\nE             ?       -\nE             + XAUUSD\n\ntest_foundation\\test_vps_money.py:378: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1751600538104,
+        "stop" : 1751600539351,
+        "duration" : 1247
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录出现",
+        "time" : {
+          "start" : 1751600538104,
+          "stop" : 1751600539351,
+          "duration" : 1247
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "43c3c238a26146fe",
+          "name" : "条件检查日志",
+          "source" : "43c3c238a26146fe.txt",
+          "type" : "text/plain",
+          "size" : 3361
+        }, {
+          "uid" : "489e301a03b9475a",
+          "name" : "最终结果",
+          "source" : "489e301a03b9475a.txt",
+          "type" : "text/plain",
+          "size" : 29
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 2,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 2,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 1,
+      "hasContent" : true
+    }, {
+      "name" : "2. 校验数据",
+      "time" : {
+        "start" : 1751600539351,
+        "stop" : 1751600539353,
+        "duration" : 2
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 下单的币种与预期的不一样，预期：XAUUSD@ 实际：XAUUSD\nassert 'XAUUSD' == 'XAUUSD@'\n  - XAUUSD@\n  ?       -\n  + XAUUSD\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_704\\test_foundation\\test_vps_money.py\", line 378, in test_dbclose_cfda\n    assert symbol == \"XAUUSD@\", f\"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "58233bc56f511ec9",
+      "name" : "log",
+      "source" : "58233bc56f511ec9.txt",
+      "type" : "text/plain",
+      "size" : 3968
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 3,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 3,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1751600539364,
+      "stop" : 1751600539410,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1751600691207,
+      "stop" : 1751600691208,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1751600691197,
+      "stop" : 1751600691197,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟单修改币种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_foundation"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_money"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_money"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "30528-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_foundation.test_vps_money"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "94022a938ab190f8.json",
+  "parameterValues" : [ ]
+}

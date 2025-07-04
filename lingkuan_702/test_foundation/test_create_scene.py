@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-@allure.feature("账号管理-创建")
+@allure.feature("账号管理-创建跟单账号")
 class TestCreate_Scene(APITestBase):
     # ---------------------------
     # 新增跟单账号-参数化测试（仅使用后6个数据）

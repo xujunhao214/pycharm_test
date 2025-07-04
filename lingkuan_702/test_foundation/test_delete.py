@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-@allure.feature("跟单软件看板")
+@allure.feature("删除跟单账号和策略账号")
 class TestDeleteTrader(APITestBase):
     # ---------------------------
     # 跟单软件看板-VPS数据-删除跟单账号

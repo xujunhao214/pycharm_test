@@ -1,0 +1,262 @@
+{
+  "uid" : "5123bf5fb885b58f",
+  "name" : "数据库校验-策略平仓-跟单账号修改品种",
+  "fullName" : "test_foundation.test_vps_scene.TestVPSOrderSend_Scence#test_dbclose_templateId3",
+  "historyId" : "3352c57e698a903468ccfe76f27eff7b",
+  "time" : {
+    "start" : 1751600402949,
+    "stop" : 1751600404376,
+    "duration" : 1427
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 修改下单品种之后平仓手数之和应该是3，实际是：1.0\nassert 1.0 == 3\n +  where 1.0 = float(1.0)",
+  "statusTrace" : "self = <lingkuan_704.test_foundation.test_vps_scene.TestVPSOrderSend_Scence object at 0x0000028DAED65EB0>\nvar_manager = <lingkuan_704.commons.variable_manager.VariableManager object at 0x0000028DAF6DB670>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028DAED1E700>\n\n    @allure.title(\"数据库校验-策略平仓-跟单账号修改品种\")\n    def test_dbclose_templateId3(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_trader = var_manager.get_variable(\"vps_trader\")\n            table_name = trader_ordersend[\"table_detail\"]\n            user_accounts_3 = var_manager.get_variable(\"user_accounts_3\")\n            symbol = trader_ordersend[\"symbol\"]\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM {table_name}\n                WHERE symbol LIKE %s\n                  AND source_user = %s\n                  AND account = %s\n                  AND close_status = %s\n                \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                vps_trader[\"account\"],\n                user_accounts_3,\n                \"1\"\n            )\n    \n            # 使用智能等待查询\n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME,\n                timeout=WAIT_TIMEOUT,\n                poll_interval=POLL_INTERVAL,\n                order_by=\"create_time DESC\"\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_templateId3 = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_templateId3\", addsalve_size_templateId3)\n            total = sum(addsalve_size_templateId3)\n>           assert float(total) == 3, f\"修改下单品种之后平仓手数之和应该是3，实际是：{total}\"\nE           AssertionError: 修改下单品种之后平仓手数之和应该是3，实际是：1.0\nE           assert 1.0 == 3\nE            +  where 1.0 = float(1.0)\n\ntest_foundation\\test_vps_scene.py:407: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1751600390041,
+      "stop" : 1751600390042,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1751600402902,
+      "stop" : 1751600402948,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1751599445702,
+      "stop" : 1751599445703,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1751599445703,
+      "stop" : 1751599445934,
+      "duration" : 231
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1751599445703,
+      "stop" : 1751599445703,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 修改下单品种之后平仓手数之和应该是3，实际是：1.0\nassert 1.0 == 3\n +  where 1.0 = float(1.0)",
+    "statusTrace" : "self = <lingkuan_704.test_foundation.test_vps_scene.TestVPSOrderSend_Scence object at 0x0000028DAED65EB0>\nvar_manager = <lingkuan_704.commons.variable_manager.VariableManager object at 0x0000028DAF6DB670>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028DAED1E700>\n\n    @allure.title(\"数据库校验-策略平仓-跟单账号修改品种\")\n    def test_dbclose_templateId3(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            vps_trader = var_manager.get_variable(\"vps_trader\")\n            table_name = trader_ordersend[\"table_detail\"]\n            user_accounts_3 = var_manager.get_variable(\"user_accounts_3\")\n            symbol = trader_ordersend[\"symbol\"]\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM {table_name}\n                WHERE symbol LIKE %s\n                  AND source_user = %s\n                  AND account = %s\n                  AND close_status = %s\n                \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                vps_trader[\"account\"],\n                user_accounts_3,\n                \"1\"\n            )\n    \n            # 使用智能等待查询\n            db_data = self.wait_for_database_record(\n                db_transaction,\n                sql,\n                params,\n                time_field=\"create_time\",\n                time_range=MYSQL_TIME,\n                timeout=WAIT_TIMEOUT,\n                poll_interval=POLL_INTERVAL,\n                order_by=\"create_time DESC\"\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_templateId3 = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_templateId3\", addsalve_size_templateId3)\n            total = sum(addsalve_size_templateId3)\n>           assert float(total) == 3, f\"修改下单品种之后平仓手数之和应该是3，实际是：{total}\"\nE           AssertionError: 修改下单品种之后平仓手数之和应该是3，实际是：1.0\nE           assert 1.0 == 3\nE            +  where 1.0 = float(1.0)\n\ntest_foundation\\test_vps_scene.py:407: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1751600402949,
+        "stop" : 1751600404375,
+        "duration" : 1426
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录出现",
+        "time" : {
+          "start" : 1751600402949,
+          "stop" : 1751600404375,
+          "duration" : 1426
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "9118175c8ab1302f",
+          "name" : "条件检查日志",
+          "source" : "9118175c8ab1302f.txt",
+          "type" : "text/plain",
+          "size" : 5022
+        }, {
+          "uid" : "664537cab3badf1a",
+          "name" : "最终结果",
+          "source" : "664537cab3badf1a.txt",
+          "type" : "text/plain",
+          "size" : 29
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 2,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 2,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 1,
+      "hasContent" : true
+    }, {
+      "name" : "2. 校验数据",
+      "time" : {
+        "start" : 1751600404375,
+        "stop" : 1751600404376,
+        "duration" : 1
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 修改下单品种之后平仓手数之和应该是3，实际是：1.0\nassert 1.0 == 3\n +  where 1.0 = float(1.0)\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_704\\test_foundation\\test_vps_scene.py\", line 407, in test_dbclose_templateId3\n    assert float(total) == 3, f\"修改下单品种之后平仓手数之和应该是3，实际是：{total}\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "cdf967c15262fe36",
+      "name" : "log",
+      "source" : "cdf967c15262fe36.txt",
+      "type" : "text/plain",
+      "size" : 5575
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 3,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 3,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1751600691210,
+      "stop" : 1751600691211,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1751600404381,
+      "stop" : 1751600404426,
+      "duration" : 45
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1751600691197,
+      "stop" : 1751600691197,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟单修改模式、品种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_foundation"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_Scence"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "30528-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_foundation.test_vps_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "5123bf5fb885b58f.json",
+  "parameterValues" : [ ]
+}
