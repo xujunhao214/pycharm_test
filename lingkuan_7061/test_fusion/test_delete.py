@@ -53,7 +53,7 @@ class TestDeleteUser(APITestBase):
                     "success",
                     f"第{i}个账号删除响应msg字段应为success"
                 )
-                logger.info(f"第{i}个跟单账号（ID: {slave_id}）删除成功")
+                logger.info(f"[{DATETIME_NOW}] 第{i}个跟单账号（ID: {slave_id}）删除成功")
 
     # ---------------------------
     # 数据库校验：批量验证删除结果

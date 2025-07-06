@@ -2,6 +2,7 @@
 import os
 import json
 import logging
+from lingkuan_7061.VAR.VAR import *
 from typing import Dict, Any, Optional, List
 
 logger = logging.getLogger(__name__)
@@ -35,12 +36,12 @@ class VariableManager:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     self.static_vars = json.load(f)
-                logger.info(f"成功加载静态变量: {file_path}")
+                logger.info(f"[{DATETIME_NOW}] 成功加载静态变量: {file_path}")
             except Exception as e:
-                logger.error(f"静态变量加载失败: {str(e)}")
+                logger.error(f"[{DATETIME_NOW}] 静态变量加载失败: {str(e)}")
                 self.static_vars = {}
         else:
-            logger.warning(f"静态变量文件不存在: {file_path}")
+            logger.warning(f"[{DATETIME_NOW}] 静态变量文件不存在: {file_path}")
             self.static_vars = {}
 
     def load_runtime_variables(self):
@@ -51,12 +52,12 @@ class VariableManager:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     self.runtime_vars = json.load(f)
-                logger.info(f"成功加载运行时变量: {file_path}")
+                logger.info(f"[{DATETIME_NOW}] 成功加载运行时变量: {file_path}")
             except Exception as e:
-                logger.error(f"运行时变量加载失败: {str(e)}")
+                logger.error(f"[{DATETIME_NOW}] 运行时变量加载失败: {str(e)}")
                 self.runtime_vars = {}
         else:
-            logger.warning(f"运行时变量文件不存在: {file_path}")
+            logger.warning(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
             self.runtime_vars = {}
 
     def get_variable(
@@ -97,9 +98,9 @@ class VariableManager:
         try:
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(self.runtime_vars, f, ensure_ascii=False, indent=2)
-            logger.info("运行时变量已保存")
+            logger.info(f"[{DATETIME_NOW}] 运行时变量已保存")
         except Exception as e:
-            logger.error(f"保存运行时变量失败: {str(e)}")
+            logger.error(f"[{DATETIME_NOW}] 保存运行时变量失败: {str(e)}")
 
     def _get_nested_variable(
             self,
@@ -144,7 +145,7 @@ class VariableManager:
 
         # 确保变量是列表类型
         if not isinstance(current_value, list):
-            logger.warning(f"变量 {var_name} 不是列表类型，将重置为列表")
+            logger.warning(f"[{DATETIME_NOW}] 变量 {var_name} 不是列表类型，将重置为列表")
             current_value = []
 
         # 追加新值
@@ -152,7 +153,7 @@ class VariableManager:
 
         # 更新变量
         self.set_runtime_variable(var_name, current_value)
-        logger.info(f"向列表 {var_name} 追加值: {value}")
+        logger.info(f"[{DATETIME_NOW}] 向列表 {var_name} 追加值: {value}")
 
     def get_variable_list(self, name: str, default: List[Any] = None) -> List[Any]:
         """
@@ -170,7 +171,7 @@ class VariableManager:
 
         # 确保返回值为列表类型
         if not isinstance(value, list):
-            logger.warning(f"变量 {name} 不是列表类型，强制转换为列表（原值: {value}）")
+            logger.warning(f"[{DATETIME_NOW}] 变量 {name} 不是列表类型，强制转换为列表（原值: {value}）")
             return default
         return value
 
@@ -184,7 +185,7 @@ class VariableManager:
         for var_name, value in var_dict.items():
             self.set_runtime_variable(var_name, value)
         self.save_runtime_variables()
-        logger.info(f"批量设置 {len(var_dict)} 个运行时变量")
+        logger.info(f"[{DATETIME_NOW}] 批量设置 {len(var_dict)} 个运行时变量")
 
     def delete_variable(self, name: str) -> None:
         """
@@ -204,8 +205,8 @@ class VariableManager:
             # 删除目标变量
             del current[parts[-1]]
             self.save_runtime_variables()
-            logger.info(f"删除运行时变量: {name}")
+            logger.info(f"[{DATETIME_NOW}] 删除运行时变量: {name}")
         except KeyError:
-            logger.warning(f"变量 {name} 不存在，无法删除")
+            logger.warning(f"[{DATETIME_NOW}] 变量 {name} 不存在，无法删除")
         except Exception as e:
-            logger.error(f"删除变量失败: {str(e)}")
+            logger.error(f"[{DATETIME_NOW}] 删除变量失败: {str(e)}")

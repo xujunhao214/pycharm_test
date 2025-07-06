@@ -1,5 +1,6 @@
 import pytest
 import pymysql
+from lingkuan_7061.VAR.VAR import *
 import allure
 import logging
 import datetime
@@ -82,7 +83,7 @@ def api_session(environment) -> EnvironmentSession:
 def logged_session(api_session, var_manager, request):
     # 1. 始终使用base_url进行登录
     api_session.use_base_url()  # 强制使用base_url
-    logger.info(f"用例 {request.node.nodeid} 使用默认URL进行登录: {api_session.base_url}")
+    logger.info(f"[{DATETIME_NOW}] 用例 {request.node.nodeid} 使用默认URL进行登录: {api_session.base_url}")
 
     # 执行登录
     login_data = var_manager.get_variable("login")
@@ -102,7 +103,7 @@ def logged_session(api_session, var_manager, request):
     url_marker = next(request.node.iter_markers(name="url"), None)
     if url_marker and url_marker.args[0] == "vps":
         api_session.use_vps_url()
-        logger.info(f"登录后切换到VPS URL: {api_session.vps_url}")
+        logger.info(f"[{DATETIME_NOW}] 登录后切换到VPS URL: {api_session.vps_url}")
 
     yield api_session
 
@@ -165,7 +166,7 @@ class TestResultTracker:
     def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logger.info(f"测试会话开始: {self.start_time}")
+        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}")
 
     def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果"""
@@ -192,7 +193,7 @@ class TestResultTracker:
         start = datetime.datetime.strptime(self.start_time, "%Y-%m-%d %H:%M:%S")
         end = datetime.datetime.strptime(self.end_time, "%Y-%m-%d %H:%M:%S")
         self.duration = f"{(end - start).total_seconds():.2f}秒"
-        logger.info(f"测试会话结束，总耗时: {self.duration}")
+        logger.info(f"[{DATETIME_NOW}] 测试会话结束，总耗时: {self.duration}")
 
         try:
             statistics = self.get_statistics()
@@ -203,9 +204,9 @@ class TestResultTracker:
                 failed_cases=self.failed_test_names,
                 skipped_cases=self.skipped_test_names
             )
-            logger.info("飞书通知发送成功")
+            logger.info(f"[{DATETIME_NOW}] 飞书通知发送成功")
         except Exception as e:
-            logger.error(f"发送飞书通知失败: {str(e)}")
+            logger.error(f"[{DATETIME_NOW}] 发送飞书通知失败: {str(e)}")
 
     def get_statistics(self) -> Dict[str, any]:
         """获取测试统计数据"""
@@ -250,7 +251,7 @@ def pytest_configure(config):
 
     env_value = config.getoption("--env").lower()
     config.environment = env_value
-    logger.info(f"测试环境设置为: {config.environment}")
+    logger.info(f"[{DATETIME_NOW}] 测试环境设置为: {config.environment}")
 
 
 def pytest_unconfigure(config):

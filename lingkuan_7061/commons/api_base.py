@@ -45,7 +45,7 @@ class APITestBase:
         try:
             return json.dumps(converted_data, ensure_ascii=False)
         except json.JSONDecodeError as e:
-            logger.error(f"数据序列化失败: {str(e)} | 原始数据: {converted_data}")
+            logger.error(f"[{DATETIME_NOW}] 数据序列化失败: {str(e)} | 原始数据: {converted_data}")
             raise ValueError(f"数据序列化失败: {str(e)}") from e
 
     def deserialize_data(self, json_str: str) -> Any:
@@ -53,7 +53,7 @@ class APITestBase:
         try:
             return json.loads(json_str)
         except json.JSONDecodeError as e:
-            logger.error(f"JSON反序列化失败: {str(e)} | 原始字符串: {json_str[:500]}")
+            logger.error(f"[{DATETIME_NOW}] JSON反序列化失败: {str(e)} | 原始字符串: {json_str[:500]}")
             raise ValueError(f"JSON反序列化失败: {str(e)}") from e
 
     def send_post_request(self, logged_session, url, json_data=None, data=None, files=None, sleep_seconds=5):
@@ -83,22 +83,22 @@ class APITestBase:
                 return response
 
             except ConnectionError as e:
-                error_msg = f"POST请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] POST请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except Timeout as e:
-                error_msg = f"POST请求超时: {str(e)} | URL: {url}"
+                error_msg = f"[{DATETIME_NOW}] POST请求超时: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except SSLError as e:
-                error_msg = f"POST请求SSL验证失败: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] POST请求SSL验证失败: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except RequestException as e:
-                error_msg = f"POST请求异常: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] POST请求异常: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
@@ -118,22 +118,22 @@ class APITestBase:
                 return response
 
             except ConnectionError as e:
-                error_msg = f"GET请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] GET请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except Timeout as e:
-                error_msg = f"GET请求超时: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] GET请求超时: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except SSLError as e:
-                error_msg = f"GET请求SSL验证失败: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] GET请求SSL验证失败: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except RequestException as e:
-                error_msg = f"GET请求异常: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] GET请求异常: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
@@ -152,22 +152,22 @@ class APITestBase:
                 return response
 
             except ConnectionError as e:
-                error_msg = f"DELETE请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] DELETE请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except Timeout as e:
-                error_msg = f"DELETE请求超时: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] DELETE请求超时: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except SSLError as e:
-                error_msg = f"DELETE请求SSL验证失败: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] DELETE请求SSL验证失败: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except RequestException as e:
-                error_msg = f"DELETE请求异常: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] DELETE请求异常: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
@@ -186,22 +186,22 @@ class APITestBase:
                 return response
 
             except ConnectionError as e:
-                error_msg = f"PUT请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] PUT请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except Timeout as e:
-                error_msg = f"PUT请求超时: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] PUT请求超时: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except SSLError as e:
-                error_msg = f"PUT请求SSL验证失败: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] PUT请求SSL验证失败: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
             except RequestException as e:
-                error_msg = f"PUT请求异常: {str(e)} | URL: {url}"
+                error_msg = f"{DATETIME_NOW}] PUT请求异常: {str(e)} | URL: {url}"
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
@@ -237,7 +237,7 @@ class APITestBase:
                 f"期望值: {expected_value}"
             )
         except Exception as e:
-            logger.error(f"JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}")
+            logger.error(f"[{DATETIME_NOW}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}")
             raise
 
     def query_database(self, db_transaction: pymysql.connections.Connection,
@@ -253,7 +253,7 @@ class APITestBase:
         if order_by and "ORDER BY" not in sql_upper:
             final_sql += f" ORDER BY {order_by}"
         elif order_by:
-            logger.warning(f"SQL已包含ORDER BY，忽略传入的排序: {order_by}")
+            logger.warning(f"[{DATETIME_NOW}] SQL已包含ORDER BY，忽略传入的排序: {order_by}")
 
         try:
             with db_transaction.cursor() as cursor:
@@ -481,7 +481,7 @@ class APITestBase:
                 return expected_condition(response)
 
             except Exception as e:
-                logger.error(f"API请求异常: {str(e)} | URL: {url}")
+                logger.error(f"[{DATETIME_NOW}] API请求异常: {str(e)} | URL: {url}")
                 # 返回False继续等待，避免因临时异常导致测试中断
                 return False
 

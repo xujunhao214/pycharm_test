@@ -37,7 +37,7 @@ def send_feishu_notification(
         skipped_cases: 跳过用例列表
     """
     if not FEISHU_HOOK_URL:
-        logger.warning("飞书Webhook未配置，跳过通知发送")
+        logger.warning(f"[{DATETIME_NOW}] 飞书Webhook未配置，跳过通知发送")
         return
 
     total = statistics.get("total", 0)
@@ -125,7 +125,7 @@ def send_feishu_notification(
     # 发送飞书消息
     try:
         headers = {"Content-Type": "application/json"}
-        logger.info(f"发送飞书消息，URL: {FEISHU_HOOK_URL}")
+        logger.info(f"[{DATETIME_NOW}] 发送飞书消息，URL: {FEISHU_HOOK_URL}")
         response = requests.post(
             FEISHU_HOOK_URL,
             json=message,
@@ -133,16 +133,16 @@ def send_feishu_notification(
             timeout=10
         )
 
-        logger.info(f"飞书响应状态码: {response.status_code}")
-        logger.info(f"飞书响应内容: {response.text}")
+        logger.info(f"[{DATETIME_NOW}] 飞书响应状态码: {response.status_code}")
+        logger.info(f"[{DATETIME_NOW}] 飞书响应内容: {response.text}")
 
         if response.status_code == 200:
             result = response.json()
             if result.get("code") == 0:
-                logger.info("[FEISHU] 消息发送成功")
+                logger.info(f"[{DATETIME_NOW}] [FEISHU] 消息发送成功")
             else:
-                logger.warning(f"[FEISHU] 错误码: {result['code']}, 消息: {result['msg']}")
+                logger.warning(f"[{DATETIME_NOW}] [FEISHU] 错误码: {result['code']}, 消息: {result['msg']}")
         else:
-            logger.warning(f"[FEISHU] 状态码: {response.status_code}, 响应: {response.text}")
+            logger.warning(f"[{DATETIME_NOW}] [FEISHU] 状态码: {response.status_code}, 响应: {response.text}")
     except Exception as e:
-        logger.error(f"[FEISHU] 发送通知异常: {str(e)}")
+        logger.error(f"[{DATETIME_NOW}] [FEISHU] 发送通知异常: {str(e)}")

@@ -2,13 +2,14 @@ import os
 import datetime
 import requests
 import json
+from lingkuan_7061.VAR.VAR import *
 from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
 from requests.exceptions import (
     RequestException, ConnectionError, Timeout,
     HTTPError, SSLError
-)  # 移除 DNSLookupError，改用 ConnectionError
+)
 
 # 导入项目内部模块
 from lingkuan_7061.commons.jsonpath_utils import JsonPathUtils
@@ -20,9 +21,9 @@ log_dir = Path(__file__).parent.parent / "logs"
 log_dir.mkdir(parents=True, exist_ok=True)
 log_file = log_dir / "requests.log"
 
-# 按天轮转日志，保留7天
+# 按天轮转日志，保留1天
 file_handler = logging.handlers.TimedRotatingFileHandler(
-    log_file, when="D", backupCount=7, encoding="utf-8"
+    log_file, when="D", backupCount=1, encoding="utf-8"
 )
 
 # 日志格式包含时间、级别、环境标识和消息
@@ -54,18 +55,18 @@ class EnvironmentSession(requests.Session):
 
         # 设置环境标识到日志适配器
         self.logger = logging.LoggerAdapter(logger, {"env": environment.value})
-        self.logger.info(f"初始化环境会话: {environment.value} | Base URL: {self.base_url}")
+        self.logger.info(f"[{DATETIME_NOW}] 初始化环境会话: {environment.value} | Base URL: {self.base_url}")
 
     def use_base_url(self):
         """切换回默认base_url"""
         self.current_url = self.base_url
-        self.logger.info(f"切换到Base URL: {self.current_url}")
+        self.logger.info(f"[{DATETIME_NOW}] 切换到Base URL: {self.current_url}")
         return self
 
     def use_vps_url(self):
         """切换到vps_url"""
         self.current_url = self.vps_url
-        self.logger.info(f"切换到VPS URL: {self.current_url}")
+        self.logger.info(f"[{DATETIME_NOW}] 切换到VPS URL: {self.current_url}")
         return self
 
     def register_url(self, name: str, url: str):
@@ -73,7 +74,7 @@ class EnvironmentSession(requests.Session):
         注册命名URL，支持后续通过名称快速调用
         """
         self.named_urls[name] = url.rstrip('/')  # 确保URL末尾无斜杠
-        self.logger.info(f"注册命名URL: {name} -> {self.named_urls[name]}")
+        self.logger.info(f"[{DATETIME_NOW}] 注册命名URL: {name} -> {self.named_urls[name]}")
 
     def build_url(self, path: str) -> str:
         """
@@ -84,7 +85,7 @@ class EnvironmentSession(requests.Session):
         """
         # 检查是否为完整URL
         if path.startswith(("http://", "https://")):
-            self.logger.info(f"使用完整URL: {path}")
+            self.logger.info(f"[{DATETIME_NOW}] 使用完整URL: {path}")
             return path
 
         # 检查是否为命名URL
@@ -92,12 +93,12 @@ class EnvironmentSession(requests.Session):
             if path.startswith(f"{name}/"):
                 sub_path = path[len(name) + 1:].lstrip('/')
                 full_url = f"{base}/{sub_path}" if sub_path else base
-                self.logger.info(f"使用命名URL: {name} -> {full_url}")
+                self.logger.info(f"[{DATETIME_NOW}] 使用命名URL: {name} -> {full_url}")
                 return full_url
 
         # 普通相对路径
         full_url = f"{self.current_url}/{path.lstrip('/')}" if self.current_url else path
-        self.logger.info(f"构建相对URL: {self.current_url} + {path} -> {full_url}")
+        self.logger.info(f"[{DATETIME_NOW}] 构建相对URL: {self.current_url} + {path} -> {full_url}")
         return full_url
 
     def request(self, method: str, url: str, *args, **kwargs) -> requests.Response:
@@ -182,16 +183,16 @@ class EnvironmentSession(requests.Session):
         """
         response = response or self.last_response
         if not response:
-            self.logger.warning("无可用响应数据，无法执行JSONPath提取")
+            self.logger.warning(f"[{DATETIME_NOW}] 无可用响应数据，无法执行JSONPath提取")
             return default
 
         try:
             data = response.json() if response.headers.get('Content-Type', '').startswith('application/json') else {}
             result = self.jsonpath_utils.extract(data, expr, default, multi_match)
-            self.logger.info(f"JSONPath提取成功: {expr} -> {result}")
+            self.logger.info(f"[{DATETIME_NOW}] JSONPath提取成功: {expr} -> {result}")
             return result
         except Exception as e:
-            self.logger.error(f"JSONPath提取失败: {str(e)} | 表达式: {expr}")
+            self.logger.error(f"[{DATETIME_NOW}] JSONPath提取失败: {str(e)} | 表达式: {expr}")
             return default
 
     def info_response_encoding(self, response: requests.Response = None) -> None:
@@ -200,19 +201,19 @@ class EnvironmentSession(requests.Session):
         """
         response = response or self.last_response
         if not response:
-            self.logger.info("无可用响应数据")
+            self.logger.info(f"[{DATETIME_NOW}] 无可用响应数据")
             return
 
-        self.logger.info(f"响应声明编码: {response.encoding}")
-        self.logger.info(f"自动检测编码: {response.apparent_encoding}")
+        self.logger.info(f"[{DATETIME_NOW}] 响应声明编码: {response.encoding}")
+        self.logger.info(f"[{DATETIME_NOW}] 自动检测编码: {response.apparent_encoding}")
 
         try:
-            self.logger.info(f"JSON解析结果: {response.json()}")
+            self.logger.info(f"[{DATETIME_NOW}] JSON解析结果: {response.json()}")
         except ValueError:
-            self.logger.warning("非JSON响应内容")
+            self.logger.warning(f"[{DATETIME_NOW}] 非JSON响应内容")
 
         try:
             content_sample = response.content.decode('utf-8', errors='replace')[:200]
-            self.logger.info(f"响应内容样本: {content_sample}")
+            self.logger.info(f"[{DATETIME_NOW}] 响应内容样本: {content_sample}")
         except Exception as e:
-            self.logger.warning(f"响应解码失败: {str(e)}")
+            self.logger.warning(f"[{DATETIME_NOW}] 响应解码失败: {str(e)}")

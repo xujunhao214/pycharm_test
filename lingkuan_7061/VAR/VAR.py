@@ -9,7 +9,7 @@ JENKINS_USERNAME = "admin"
 JENKINS_PASSWORD = "admin"
 
 # 优化时间格式：
-DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
 
 # 获取当前时间
 current_time = datetime.datetime.now()
