@@ -207,6 +207,76 @@ class APITestBase:
             converted.append(converted_row)
         return converted
 
+    def wait_for_database_deletion(self, db_transaction: pymysql.connections.Connection,
+                                   sql: str,
+                                   params: tuple = (),
+                                   time_field: Optional[str] = None,  # 可选时间字段
+                                   time_range: int = 1,  # 时间范围（分钟）
+                                   order_by: str = "create_time DESC",
+                                   timeout: int = 60,  # 超时时间（秒）
+                                   poll_interval: int = 2) -> None:
+        """
+        轮询等待数据库记录被删除（即查询结果为空）
+        :param timeout: 最大等待时间
+        :param poll_interval: 轮询间隔（秒）
+        """
+        import time
+        start_time = time.time()
+
+        while time.time() - start_time < timeout:
+            # 每次查询前刷新事务，确保能看到最新数据
+            db_transaction.commit()
+
+            # 根据是否需要时间范围选择查询方法
+            if time_field:
+                result = self.query_database_with_time(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field=time_field,
+                    time_range_minutes=time_range,
+                    order_by=order_by
+                )
+            else:
+                result = self.query_database(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    order_by=order_by
+                )
+
+            # 修改判断逻辑：如果结果为空，表示数据已删除
+            if not result:
+                logging.info(f"删除成功（耗时{time.time() - start_time:.1f}秒），记录已不存在")
+                return
+
+            elapsed = time.time() - start_time
+            logging.info(f"记录仍存在（已等待{elapsed:.1f}秒，剩余{timeout - elapsed:.1f}秒），结果: {result}")
+            time.sleep(poll_interval)
+
+        # 超时后最后一次查询
+        db_transaction.commit()
+        final_result = self.query_database_with_time(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field=time_field,
+            time_range_minutes=time_range,
+            order_by=order_by
+        ) if time_field else self.query_database(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            order_by=order_by
+        )
+
+        raise TimeoutError(
+            f"等待超时（{timeout}秒），记录仍然存在。\n"
+            f"SQL: {sql}\n"
+            f"参数: {params}\n"
+            f"最终结果: {final_result}"
+        )
+
     def wait_for_database_record(self, db_transaction: pymysql.connections.Connection,
                                  sql: str,
                                  params: tuple = (),

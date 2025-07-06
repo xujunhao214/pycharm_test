@@ -82,7 +82,7 @@ class TestDeleteUser(APITestBase):
                 db_data = self.query_database(db_transaction, sql, (account,))
 
                 # 验证逻辑：根据实际业务判断（逻辑删除/物理删除）
-                assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+                assert not db_data, "删除失败,还有查询结果"
 
                 # 验证订阅表是否同步删除
                 table_subscribe = db_addslave_query["table_subscribe"]
@@ -139,7 +139,7 @@ class TestDeleteUser(APITestBase):
 
             db_data = self.query_database(db_transaction, sql, params)
 
-            assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+            assert not db_data, "删除失败,还有查询结果"
 
             db_data2 = self.query_database(
                 db_transaction,
@@ -194,7 +194,7 @@ class TestDeleteUser(APITestBase):
 
             db_data = self.query_database(db_transaction, sql, params)
 
-            assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+            assert not db_data, "删除失败,还有查询结果"
 
     # ---------------------------
     # 账号管理-账号列表-删除账号
@@ -243,7 +243,7 @@ class TestDeleteUser(APITestBase):
 
             # 执行查询
             db_data = self.query_database(db_transaction, sql, params)
-            assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+            assert not db_data, "删除失败,还有查询结果"
 
     # ---------------------------
     # 账号管理-账号列表-批量删除账号（参数化）
@@ -321,7 +321,7 @@ class TestDeleteUser(APITestBase):
 
                 # 4. 验证删除结果（逻辑删除/物理删除）
                 if db_data:
-                    assert not db_data, f"删除后查询结果不为空，正确删除之后，查询结果应该为空，查询结果：{db_data}"
+                    assert not db_data, f"删除失败,还有查询结果，查询结果：{db_data}"
 
     # ---------------------------
     # 账号管理-组别列表-删除VPS组别
@@ -419,7 +419,7 @@ class TestDeleteUser(APITestBase):
             sql = f"SELECT * FROM {add_variety['table']} WHERE template_name = %s"
             params = (add_variety["templateName"],)
             db_data = self.query_database(db_transaction, sql, params)
-            assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+            assert not db_data, "删除失败,还有查询结果"
 
     # ---------------------------
     # 平台管理-品种管理-删除品种
@@ -466,7 +466,7 @@ class TestDeleteUser(APITestBase):
 
             db_data = self.query_database(db_transaction, sql, params)
 
-            assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+            assert not db_data, "删除失败,还有查询结果"
 
     # ---------------------------
     # VPS管理-VPS列表列表-清空VPS数据
@@ -554,4 +554,4 @@ class TestDeleteUser(APITestBase):
 
             db_data = self.query_database(db_transaction, sql, params)
 
-            assert not db_data, "删除后查询结果不为空，正确删除之后，查询结果应该为空"
+            assert not db_data, "删除失败,还有查询结果"

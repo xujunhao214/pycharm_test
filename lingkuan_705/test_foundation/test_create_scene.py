@@ -18,7 +18,7 @@ class TestCreate_Scene(APITestBase):
     # ---------------------------
     # 新增跟单账号-参数化测试（仅使用后6个数据）
     # ---------------------------
-    @pytest.mark.skip(reason=SKIP_REASON)
+    # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("新增跟单账号（仅使用后6个数据与模板匹配）")
     def test_import_addSlave(self, var_manager, logged_session, db_transaction):
@@ -112,7 +112,7 @@ class TestCreate_Scene(APITestBase):
                     "platform": add_Slave["platform"],
                     "account": param["account"],
                     "password": password,
-                    "remark": param["desc"],  # 备注包含模板信息
+                    "remark": "参数化新增跟单账号",
                     "followMode": param["followMode"],
                     "followParam": param["followParam"],
                     "templateId": param["templateId"],
@@ -144,6 +144,7 @@ class TestCreate_Scene(APITestBase):
                     response, "$.msg", "success",
                     f"账号{param['account']}响应异常（模板：{param['desc']}）"
                 )
+                time.sleep(5)
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量新增跟单账号")
@@ -180,8 +181,6 @@ class TestCreate_Scene(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",  # 按创建时间过滤
-                    time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                     timeout=WAIT_TIMEOUT,  # 最多等60秒
                     poll_interval=POLL_INTERVAL,  # 每2秒查一次
                     order_by="create_time DESC"  # 按创建时间倒序
@@ -224,8 +223,6 @@ class TestCreate_Scene(APITestBase):
                         db_transaction=db_transaction,
                         sql=sql,
                         params=params,
-                        time_field="create_time",  # 按创建时间过滤
-                        time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                         timeout=WAIT_TIMEOUT,  # 最多等60秒
                         poll_interval=POLL_INTERVAL,  # 每2秒查一次
                         order_by="create_time DESC"  # 按创建时间倒序
@@ -243,7 +240,6 @@ class TestCreate_Scene(APITestBase):
         addslave_count = len(all_ids)
         var_manager.set_runtime_variable("addslave_count", addslave_count)
         print(f"后6个账号数据库校验完成，共提取{addslave_count}个ID，已保存到变量 addslave_count")
-        time.sleep(30)
 
     # ---------------------------
     # 修改跟单账号-参数化测试（仅使用后6个数据）
@@ -393,3 +389,4 @@ class TestCreate_Scene(APITestBase):
                     response, "$.msg", "success",
                     f"账号{param['account']}响应异常（模板：{param['desc']}）"
                 )
+                time.sleep(5)

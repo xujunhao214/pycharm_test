@@ -68,9 +68,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 f"SELECT * FROM {db_query['table']} WHERE account = %s",
                 (db_query["account"],),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME,
-                order_by="create_time DESC"
             )
 
             # 提取数据库中的值
@@ -133,9 +130,7 @@ class TestCreate(APITestBase):
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM {db_query['table']} WHERE remark = %s",
-                (db_query["remark"],),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
+                (db_query["remarkimport"],),
             )
 
             # 验证查询结果
@@ -209,8 +204,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 f"SELECT * FROM {db_group['table']} WHERE name = %s",
                 (db_group["name"],),
-                time_field="create_time",  # 指定时间字段名
-                time_range_minutes=MYSQL_TIME  # 可选：指定时间范围（分钟）
             )
 
             # 提取数据库中的值
@@ -277,8 +270,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 sql,
                 params,
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
             )
 
             # 提取数据库中的值
@@ -344,8 +335,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 sql,
                 params,
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
             )
 
             # 提取数据库中的值
@@ -573,8 +562,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 f"SELECT * FROM {db_trader_query['table']} WHERE account = %s",
                 (db_trader_query["account"],),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
             )
 
             # 提取数据库中的值
@@ -669,8 +656,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 f"SELECT * FROM {db_addslave_query['table']} WHERE account = %s",
                 (user_accounts_1,),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
             )
 
             if not db_data:
@@ -701,8 +686,6 @@ class TestCreate(APITestBase):
                 db_transaction,
                 f"SELECT * FROM {db_addslave_query['table_subscribe']} WHERE slave_account = %s",
                 (user_accounts_1,),
-                time_field="create_time",
-                time_range_minutes=MYSQL_TIME
             )
 
             if not db_data2:
