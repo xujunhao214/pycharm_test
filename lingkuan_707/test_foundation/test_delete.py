@@ -61,7 +61,7 @@ class TestDeleteUser(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                    timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                     poll_interval=POLL_INTERVAL  # 每2秒查询一次
                 )
                 allure.attach(f"VPS组别 {db_group['name']} 已成功从数据库删除", "验证结果")

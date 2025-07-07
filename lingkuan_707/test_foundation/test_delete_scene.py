@@ -61,7 +61,7 @@ class TestDeleteTrader(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                    timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                     poll_interval=POLL_INTERVAL  # 每2秒查询一次
                 )
                 allure.attach(f"跟单账号 {db_addslave_query['account']} 已成功从数据库删除", "验证结果")
@@ -148,7 +148,7 @@ class TestDeleteTrader(APITestBase):
                         db_transaction=db_transaction,
                         sql=sql,
                         params=(account,),
-                        timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                        timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                         poll_interval=POLL_INTERVAL  # 每2秒查询一次
                     )
                     allure.attach(f"跟单账号 {account} 已成功从数据库删除", "验证结果")
@@ -212,7 +212,7 @@ class TestDeleteTrader(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                    timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                     poll_interval=POLL_INTERVAL  # 每2秒查询一次
                 )
                 allure.attach(f"策略账号 {db_trader_query['account']} 已成功从数据库删除", "验证结果")
@@ -267,7 +267,7 @@ class TestDeleteTrader(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                    timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                     poll_interval=POLL_INTERVAL  # 每2秒查询一次
                 )
                 allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果")
@@ -323,7 +323,7 @@ class TestDeleteTrader(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                    timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                     poll_interval=POLL_INTERVAL  # 每2秒查询一次
                 )
                 allure.attach(f"账号 {db_query['account']} 已成功从数据库删除", "验证结果")
@@ -409,7 +409,7 @@ class TestDeleteTrader(APITestBase):
                         db_transaction=db_transaction,
                         sql=sql,
                         params=params,
-                        timeout=WAIT_TIMEOUT,  # 设置60秒超时时间
+                        timeout=WAIT_TIMEOUT,  # 设置30秒超时时间
                         poll_interval=POLL_INTERVAL  # 每2秒查询一次
                     )
                     allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果")

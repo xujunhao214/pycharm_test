@@ -20,7 +20,7 @@ DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d %H:%M:%S")
 
 # mysql查询语句，查询最近时间的数据
 MYSQL_TIME = 2  # 时间范围（分钟）
-WAIT_TIMEOUT = 60  # 超时时间（秒）
+WAIT_TIMEOUT = 30  # 超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）
 STBLE_PERIOD=3 # 稳定期（秒）：数据连续5秒不变则认为加载完成
 

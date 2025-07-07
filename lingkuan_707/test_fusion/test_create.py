@@ -72,7 +72,7 @@ class TestCreate(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 order_by="create_time DESC"  # 按创建时间倒序
             )
@@ -142,7 +142,7 @@ class TestCreate(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 order_by="create_time DESC"  # 按创建时间倒序
             )
@@ -223,7 +223,7 @@ class TestCreate(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 order_by="create_time DESC"  # 按创建时间倒序
             )

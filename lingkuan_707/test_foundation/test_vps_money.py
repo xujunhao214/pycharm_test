@@ -1,5 +1,6 @@
 # lingkuan_707/tests/test_vps_ordersend.py
 import time
+import math
 
 import allure
 import logging
@@ -62,7 +63,7 @@ class TestVPSOrderSend_money(APITestBase):
         )
 
     # ---------------------------
-    # 数据库校验-账号列表-修改用户
+    # 数据库校验-账号列表-修改用户是否成功
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-修改用户是否成功")
@@ -77,7 +78,7 @@ class TestVPSOrderSend_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -133,7 +134,7 @@ class TestVPSOrderSend_money(APITestBase):
         )
 
     # ---------------------------
-    # 数据库校验-策略开仓-持仓检查跟单账号数据-修改币种@
+    # 数据库校验-策略开仓-修改币种@
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种@")
@@ -162,7 +163,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -175,7 +176,8 @@ class TestVPSOrderSend_money(APITestBase):
             addsalve_size_cfda = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfda", addsalve_size_cfda)
             addsalve_size_cfda_total = sum(addsalve_size_cfda)
-            assert float(addsalve_size_cfda_total) == 1, f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}"
+            assert math.isclose(addsalve_size_cfda_total, 1.0,
+                                rel_tol=1e-9), f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}"
             logging.info(f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}")
 
             symbol = db_data[0]["symbol"]
@@ -211,7 +213,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -224,11 +226,11 @@ class TestVPSOrderSend_money(APITestBase):
             addsalve_size_cfdp = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdp", addsalve_size_cfdp)
             addsalve_size_cfdp_total = sum(addsalve_size_cfdp)
-            assert float(
-                addsalve_size_cfdp_total) == 0.02 or float(
-                addsalve_size_cfdp_total) == 0.03 or float(
-                addsalve_size_cfdp_total) == 1, f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
-            logging.info(f"修改币种下单总手数应该是0.01的倍数，实际是：{addsalve_size_cfdp_total}")
+            assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or
+                    math.isclose(addsalve_size_cfdp_total, 0.03, rel_tol=1e-9) or
+                    math.isclose(addsalve_size_cfdp_total, 1.0,
+                                 rel_tol=1e-9)), f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
+            logging.info(f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}")
 
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
@@ -262,7 +264,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -275,10 +277,11 @@ class TestVPSOrderSend_money(APITestBase):
             addsalve_size_cfdmin = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdmin", addsalve_size_cfdmin)
             addsalve_size_cfdmin_total = sum(addsalve_size_cfdmin)
-            assert float(
-                addsalve_size_cfdmin_total) == 10 or float(
-                addsalve_size_cfdmin_total) == 1, f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
-            logging.info(f"修改币种下单总手数应该是10，实际是：{addsalve_size_cfdmin_total}")
+            assert (math.isclose(addsalve_size_cfdmin_total, 10.0, rel_tol=1e-9) or
+                    math.isclose(addsalve_size_cfdmin_total, 1.0,
+                                 rel_tol=1e-9)), f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
+            logging.info(
+                f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}")
 
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"
@@ -351,7 +354,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -364,7 +367,8 @@ class TestVPSOrderSend_money(APITestBase):
             addsalve_size_cfda_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfda_close", addsalve_size_cfda_close)
             addsalve_size_cfda_total = sum(addsalve_size_cfda_close)
-            assert float(addsalve_size_cfda_total) == 1, f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}"
+            assert math.isclose(addsalve_size_cfda_total, 1.0,
+                                rel_tol=1e-9), f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}"
             logging.info(f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}")
 
             symbol = db_data[0]["symbol"]
@@ -402,7 +406,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -415,11 +419,11 @@ class TestVPSOrderSend_money(APITestBase):
             addsalve_size_cfdp_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdp_close", addsalve_size_cfdp_close)
             addsalve_size_cfdp_total = sum(addsalve_size_cfdp_close)
-            assert float(
-                addsalve_size_cfdp_total) == 0.02 or float(
-                addsalve_size_cfdp_total) == 0.03 or float(
-                addsalve_size_cfdp_total) == 1, f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
-            logging.info(f"修改币种下单总手数应该是0.01的倍数，实际是：{addsalve_size_cfdp_total}")
+            assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or
+                    math.isclose(addsalve_size_cfdp_total, 0.03, rel_tol=1e-9) or
+                    math.isclose(addsalve_size_cfdp_total, 1.0,
+                                 rel_tol=1e-9)), f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
+            logging.info(f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}")
 
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
@@ -456,7 +460,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
@@ -469,10 +473,11 @@ class TestVPSOrderSend_money(APITestBase):
             addsalve_size_cfdmin_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdmin_close", addsalve_size_cfdmin_close)
             addsalve_size_cfdmin_total = sum(addsalve_size_cfdmin_close)
-            assert float(
-                addsalve_size_cfdmin_total) == 10 or float(
-                addsalve_size_cfdmin_total) == 1, f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
-            logging.info(f"修改币种下单总手数应该是10，实际是：{addsalve_size_cfdmin_total}")
+            assert (math.isclose(addsalve_size_cfdmin_total, 10.0, rel_tol=1e-9) or
+                    math.isclose(addsalve_size_cfdmin_total, 1.0,
+                                 rel_tol=1e-9)), f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
+            logging.info(
+                f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}")
 
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"

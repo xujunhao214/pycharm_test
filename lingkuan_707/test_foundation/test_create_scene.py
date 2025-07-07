@@ -181,7 +181,7 @@ class TestCreate_Scene(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 最多等60秒
+                    timeout=WAIT_TIMEOUT,  # 最多等30秒
                     poll_interval=POLL_INTERVAL,  # 每2秒查一次
                     order_by="create_time DESC"  # 按创建时间倒序
                 )
@@ -223,7 +223,7 @@ class TestCreate_Scene(APITestBase):
                         db_transaction=db_transaction,
                         sql=sql,
                         params=params,
-                        timeout=WAIT_TIMEOUT,  # 最多等60秒
+                        timeout=WAIT_TIMEOUT,  # 最多等30秒
                         poll_interval=POLL_INTERVAL,  # 每2秒查一次
                         order_by="create_time DESC"  # 按创建时间倒序
                     )

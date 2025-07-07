@@ -450,7 +450,7 @@ class TestCreate(APITestBase):
                 params=params,
                 time_field="create_time",  # 按创建时间过滤
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等60秒
+                timeout=WAIT_TIMEOUT,  # 最多等30秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
                 order_by="create_time DESC"  # 按创建时间倒序
             )
@@ -576,7 +576,7 @@ class TestCreate(APITestBase):
             def verify_order_status():
                 status = db_data[0]["status"]
                 if status != 0:
-                    pytest.fail(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
+                    pytest.fail(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
                 euqit = db_data[0]["euqit"]
                 if euqit == 0:
                     pytest.fail(f"账号净值euqit有钱，实际金额为: {euqit}")
