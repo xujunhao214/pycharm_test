@@ -73,5 +73,5 @@ def run_tests(env: str = "test"):
 
 if __name__ == "__main__":
     # 默认使用测试环境，可通过命令行参数指定
-    env = sys.argv[1] if len(sys.argv) > 1 else "prod"
+    env = sys.argv[1] if len(sys.argv) > 1 else "test"
     sys.exit(run_tests(env))
