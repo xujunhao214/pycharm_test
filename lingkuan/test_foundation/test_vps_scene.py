@@ -94,6 +94,7 @@ class TestVPSOrderSend_Scence(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -103,6 +104,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
             addsalve_size_followParam = db_data[0]["size"]
             assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
+            logging.info(f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)")
 
     # ---------------------------
     # 数据库校验-策略开仓-跟单账号修改品种
@@ -139,6 +141,7 @@ class TestVPSOrderSend_Scence(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -150,6 +153,7 @@ class TestVPSOrderSend_Scence(APITestBase):
             var_manager.set_runtime_variable("addsalve_size_templateId3", addsalve_size_templateId3)
             total = sum(addsalve_size_templateId3)
             assert float(total) == 3, f"修改下单品种之后下单手数之和应该是3，实际是：{total}"
+            logging.info(f"修改下单品种之后下单手数之和应该是3，实际是：{total}")
 
     # ---------------------------
     # 数据库-获取主账号净值
@@ -253,6 +257,7 @@ class TestVPSOrderSend_Scence(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -272,6 +277,7 @@ class TestVPSOrderSend_Scence(APITestBase):
             true_size = addsalve_euqit / dbtrader_euqit * 1
             # 断言（调整误差范围为合理值，如±0.1）
             assert abs(total - true_size) < 3, f"size总和与预期比例偏差过大：预期{true_size}，实际{total}，误差超过3"
+            logging.info(f"预期: {true_size} 实际: {total}")
 
     # ---------------------------
     # 跟单软件看板-VPS数据-策略平仓
@@ -346,6 +352,7 @@ class TestVPSOrderSend_Scence(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -355,6 +362,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
             addsalve_size_followParam = db_data[0]["size"]
             assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
+            logging.info(f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)")
 
     # ---------------------------
     # 数据库校验-策略平仓-跟单账号修改品种
@@ -393,6 +401,7 @@ class TestVPSOrderSend_Scence(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -404,6 +413,7 @@ class TestVPSOrderSend_Scence(APITestBase):
             var_manager.set_runtime_variable("addsalve_size_templateId3", addsalve_size_templateId3)
             total = sum(addsalve_size_templateId3)
             assert float(total) == 3, f"修改下单品种之后平仓手数之和应该是3，实际是：{total}"
+            logging.info(f"修改下单品种之后平仓手数之和应该是3，实际是：{total}")
 
     # ---------------------------
     # 数据库校验-策略平仓-修改净值
@@ -442,6 +452,7 @@ class TestVPSOrderSend_Scence(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -461,5 +472,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             true_size = addsalve_euqit / dbtrader_euqit * 1
             # 断言（调整误差范围为合理值，如±0.1）
             assert abs(total - true_size) < 3, f"size总和与预期比例偏差过大：预期{true_size}，实际{total}，误差超过3"
+            logging.info(f"预期:{true_size}实际:{total}")
 
         time.sleep(90)

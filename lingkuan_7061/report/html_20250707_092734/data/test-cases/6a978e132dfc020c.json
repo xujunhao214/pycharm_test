@@ -1,0 +1,220 @@
+{
+  "uid" : "6a978e132dfc020c",
+  "name" : "数据库校验-VPS数据-修改跟单账号是否成功",
+  "fullName" : "test_foundation.test_vps_Leakage_level.TestLeakagelevel#test_dbquery_updateslave2",
+  "historyId" : "1e6942391b68817a1e53e2540c86a2a1",
+  "time" : {
+    "start" : 1751851795636,
+    "stop" : 1751851856690,
+    "duration" : 61054
+  },
+  "status" : "broken",
+  "statusMessage" : "pymysql.err.ProgrammingError: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\")",
+  "statusTrace" : "self = <lingkuan_7061.test_foundation.test_vps_Leakage_level.TestLeakagelevel object at 0x0000018161307DF0>\nvar_manager = <lingkuan_7061.commons.variable_manager.VariableManager object at 0x0000018161DF7190>\ndb_transaction = <pymysql.connections.Connection object at 0x0000018161C9A700>\n\n    @allure.title(\"数据库校验-VPS数据-修改跟单账号是否成功\")\n    def test_dbquery_updateslave2(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否修改成功\"):\n            follow_trader_subscribe = var_manager.get_variable(\"follow_trader_subscribe\")\n            user_accounts_1 = var_manager.get_variable(\"user_accounts_1\")\n            sql = f\"SELECT * FROM {follow_trader_subscribe['table']} WHERE slave_account = %s ORDER BY create_time DESC\"\n            params = (user_accounts_1,)\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"create_time\",  # 按创建时间过滤\n                time_range=MYSQL_TIME,  # 只查前后1分钟的数据\n                timeout=WAIT_TIMEOUT,  # 最多等60秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                order_by=\"create_time DESC\"  # 按创建时间倒序\n            )\n\ntest_foundation\\test_vps_Leakage_level.py:622: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:440: in wait_for_database_record\n    final_result = self.query_database_with_time(\ncommons\\api_base.py:314: in query_database_with_time\n    return self.query_database(\ncommons\\api_base.py:261: in query_database\n    cursor.execute(final_sql, params)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\cursors.py:153: in execute\n    result = self._query(query)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\cursors.py:322: in _query\n    conn.query(q)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:563: in query\n    self._affected_rows = self._read_query_result(unbuffered=unbuffered)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:825: in _read_query_result\n    result.read()\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:1199: in read\n    first_packet = self.connection._read_packet()\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:775: in _read_packet\n    packet.raise_for_error()\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\protocol.py:219: in raise_for_error\n    err.raise_mysql_exception(self._data)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ndata = b\"\\xff(\\x04#42000You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version ... right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\"\n\n    def raise_mysql_exception(data):\n        errno = struct.unpack(\"<h\", data[1:3])[0]\n        # https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_err_packet.html\n        # Error packet has optional sqlstate that is 5 bytes and starts with '#'.\n        if data[3] == 0x23:  # '#'\n            # sqlstate = data[4:9].decode()\n            # TODO: Append (sqlstate) in the error message. This will be come in next minor release.\n            errval = data[9:].decode(\"utf-8\", \"replace\")\n        else:\n            errval = data[3:].decode(\"utf-8\", \"replace\")\n        errorclass = error_map.get(errno)\n        if errorclass is None:\n            errorclass = InternalError if errno < 1000 else OperationalError\n>       raise errorclass(errno, errval)\nE       pymysql.err.ProgrammingError: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\")\n\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\err.py:150: ProgrammingError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1751851766369,
+      "stop" : 1751851766370,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1751851654967,
+      "stop" : 1751851654967,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1751851795587,
+      "stop" : 1751851795636,
+      "duration" : 49
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1751851654968,
+      "stop" : 1751851654968,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1751851654968,
+      "stop" : 1751851655196,
+      "duration" : 228
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "broken",
+    "statusMessage" : "pymysql.err.ProgrammingError: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\")",
+    "statusTrace" : "self = <lingkuan_7061.test_foundation.test_vps_Leakage_level.TestLeakagelevel object at 0x0000018161307DF0>\nvar_manager = <lingkuan_7061.commons.variable_manager.VariableManager object at 0x0000018161DF7190>\ndb_transaction = <pymysql.connections.Connection object at 0x0000018161C9A700>\n\n    @allure.title(\"数据库校验-VPS数据-修改跟单账号是否成功\")\n    def test_dbquery_updateslave2(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否修改成功\"):\n            follow_trader_subscribe = var_manager.get_variable(\"follow_trader_subscribe\")\n            user_accounts_1 = var_manager.get_variable(\"user_accounts_1\")\n            sql = f\"SELECT * FROM {follow_trader_subscribe['table']} WHERE slave_account = %s ORDER BY create_time DESC\"\n            params = (user_accounts_1,)\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"create_time\",  # 按创建时间过滤\n                time_range=MYSQL_TIME,  # 只查前后1分钟的数据\n                timeout=WAIT_TIMEOUT,  # 最多等60秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                order_by=\"create_time DESC\"  # 按创建时间倒序\n            )\n\ntest_foundation\\test_vps_Leakage_level.py:622: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:440: in wait_for_database_record\n    final_result = self.query_database_with_time(\ncommons\\api_base.py:314: in query_database_with_time\n    return self.query_database(\ncommons\\api_base.py:261: in query_database\n    cursor.execute(final_sql, params)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\cursors.py:153: in execute\n    result = self._query(query)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\cursors.py:322: in _query\n    conn.query(q)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:563: in query\n    self._affected_rows = self._read_query_result(unbuffered=unbuffered)\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:825: in _read_query_result\n    result.read()\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:1199: in read\n    first_packet = self.connection._read_packet()\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py:775: in _read_packet\n    packet.raise_for_error()\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\protocol.py:219: in raise_for_error\n    err.raise_mysql_exception(self._data)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ndata = b\"\\xff(\\x04#42000You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version ... right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\"\n\n    def raise_mysql_exception(data):\n        errno = struct.unpack(\"<h\", data[1:3])[0]\n        # https://dev.mysql.com/doc/dev/mysql-server/latest/page_protocol_basic_err_packet.html\n        # Error packet has optional sqlstate that is 5 bytes and starts with '#'.\n        if data[3] == 0x23:  # '#'\n            # sqlstate = data[4:9].decode()\n            # TODO: Append (sqlstate) in the error message. This will be come in next minor release.\n            errval = data[9:].decode(\"utf-8\", \"replace\")\n        else:\n            errval = data[3:].decode(\"utf-8\", \"replace\")\n        errorclass = error_map.get(errno)\n        if errorclass is None:\n            errorclass = InternalError if errno < 1000 else OperationalError\n>       raise errorclass(errno, errval)\nE       pymysql.err.ProgrammingError: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\")\n\nD:\\python_tools\\python\\lib\\site-packages\\pymysql\\err.py:150: ProgrammingError",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否修改成功",
+      "time" : {
+        "start" : 1751851795636,
+        "stop" : 1751851856690,
+        "duration" : 61054
+      },
+      "status" : "broken",
+      "statusMessage" : "pymysql.err.ProgrammingError: (1064, \"You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND  create_time BETWEEN NOW() - INTERVAL 1 MINUTE AND NOW() + INTERVAL 1 MINUTE' at line 1\")\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_7061\\test_foundation\\test_vps_Leakage_level.py\", line 622, in test_dbquery_updateslave2\n    db_data = self.wait_for_database_record(\n  File \"D:\\pycharm_test\\lingkuan_7061\\commons\\api_base.py\", line 440, in wait_for_database_record\n    final_result = self.query_database_with_time(\n  File \"D:\\pycharm_test\\lingkuan_7061\\commons\\api_base.py\", line 314, in query_database_with_time\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_7061\\commons\\api_base.py\", line 261, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\cursors.py\", line 153, in execute\n    result = self._query(query)\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\cursors.py\", line 322, in _query\n    conn.query(q)\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py\", line 563, in query\n    self._affected_rows = self._read_query_result(unbuffered=unbuffered)\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py\", line 825, in _read_query_result\n    result.read()\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py\", line 1199, in read\n    first_packet = self.connection._read_packet()\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\connections.py\", line 775, in _read_packet\n    packet.raise_for_error()\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\protocol.py\", line 219, in raise_for_error\n    err.raise_mysql_exception(self._data)\n  File \"D:\\python_tools\\python\\lib\\site-packages\\pymysql\\err.py\", line 150, in raise_mysql_exception\n    raise errorclass(errno, errval)\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "2f58d3c959d0b177",
+      "name" : "log",
+      "source" : "2f58d3c959d0b177.txt",
+      "type" : "text/plain",
+      "size" : 84344
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 1,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 1
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1751852953399,
+      "stop" : 1751852953400,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1751851856756,
+      "stop" : 1751851856808,
+      "duration" : 52
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1751852953386,
+      "stop" : 1751852953386,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-漏平"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_foundation"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_Leakage_level"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestLeakagelevel"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "8168-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_foundation.test_vps_Leakage_level"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "6a978e132dfc020c.json",
+  "parameterValues" : [ ]
+}

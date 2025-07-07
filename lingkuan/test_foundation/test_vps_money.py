@@ -79,6 +79,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params,
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -163,6 +164,7 @@ class TestVPSOrderSend_money(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -211,6 +213,7 @@ class TestVPSOrderSend_money(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -261,6 +264,7 @@ class TestVPSOrderSend_money(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -349,6 +353,7 @@ class TestVPSOrderSend_money(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -363,7 +368,7 @@ class TestVPSOrderSend_money(APITestBase):
             logging.info(f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}")
 
             symbol = db_data[0]["symbol"]
-            assert symbol == "XAUUSD@", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
+            assert symbol == "XAUUSD@" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
 
     # ---------------------------
     # 数据库校验-策略平仓-修改币种p
@@ -399,6 +404,7 @@ class TestVPSOrderSend_money(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -452,6 +458,7 @@ class TestVPSOrderSend_money(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 

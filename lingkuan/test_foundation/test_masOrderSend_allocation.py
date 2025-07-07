@@ -89,6 +89,7 @@ class TestMasordersend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -142,6 +143,7 @@ class TestMasordersend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -216,6 +218,7 @@ class TestMasordersend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
         with ((allure.step("2. 提取数据"))):
@@ -265,6 +268,7 @@ class TestMasordersend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 

@@ -26,19 +26,19 @@ def run_tests(env: str = "test"):
         f"--env={env}",  # 指定环境
         f"--alluredir={report_dir}",  # allure结果目录
         "--clean-alluredir",  # 清理旧结果
-        "test_foundation/test_create.py",  # 测试用例目录
+        # "test_foundation/test_create.py",  # 测试用例目录
         # "test_foundation/test_vps_ordersend.py",  # 测试用例目录
         # "test_foundation/test_vps_Leakage_level.py",  # 测试用例目录
         # "test_foundation/test_vps_Leakage_open.py",  # 测试用例目录
         # "test_foundation/test_masOrderSend_allocation.py",  # 测试用例目录
         # "test_foundation/test_masOrderSend_copy.py",  # 测试用例目录
-        # "test_foundation/test_lianxi.py",  # 测试用例目录
+        "test_foundation/test_lianxi.py",  # 测试用例目录
         # "test_foundation/test_lianxi2.py",  # 测试用例目录
-        "test_foundation/test_create_scene.py",  # 测试用例目录
+        # "test_foundation/test_create_scene.py",  # 测试用例目录
         # "test_foundation/test_vps_scene.py",  # 测试用例目录
         # "test_foundation/test_vps_money.py",  # 测试用例目录
-        "test_foundation/test_delete.py",  # 测试用例目录
-        "test_foundation/test_delete_scene.py",  # 测试用例目录
+        # "test_foundation/test_delete.py",  # 测试用例目录
+        # "test_foundation/test_delete_scene.py",  # 测试用例目录
 
         # "test_fusion/test_create.py",  # 测试用例目录
         # "test_fusion/test_vps.py",  # 测试用例目录

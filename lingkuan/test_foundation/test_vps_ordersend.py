@@ -101,6 +101,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -157,6 +158,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -210,6 +212,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -269,6 +272,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -358,6 +362,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -365,9 +370,9 @@ class TestVPSOrderSend(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            order_no_close = db_data[0]["order_no"]
-            logging.info(f"获取策略平仓的订单号: {order_no_close}")
-            var_manager.set_runtime_variable("order_no_close", order_no_close)
+            order_no_detail = db_data[0]["order_no"]
+            logging.info(f"获取策略平仓的订单号: {order_no_detail}")
+            var_manager.set_runtime_variable("order_no_detail", order_no_detail)
 
     # ---------------------------
     # 数据库校验-策略平仓-平仓订单详情持仓检查
@@ -376,7 +381,7 @@ class TestVPSOrderSend(APITestBase):
     @allure.title("数据库校验-策略平仓-平仓订单详情持仓检查")
     def test_dbquery_closed_orderdetail(self, var_manager, db_transaction):
         with allure.step("1. 检查订单详情界面的数据"):
-            order_no_close = var_manager.get_variable("order_no_close")
+            order_no_detail = var_manager.get_variable("order_no_detail")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             trader_ordersend = var_manager.get_variable("trader_ordersend")
 
@@ -393,7 +398,7 @@ class TestVPSOrderSend(APITestBase):
                 """
             params = (
                 f"%{symbol}%",
-                order_no_close,
+                order_no_detail,
                 trader_ordersend["type"],
                 vps_trader_id
             )
@@ -403,10 +408,9 @@ class TestVPSOrderSend(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 
@@ -462,6 +466,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
         with (allure.step("2. 提取数据")):
@@ -521,6 +526,7 @@ class TestVPSOrderSend(APITestBase):
                 time_range=MYSQL_TIME,  # 只查前后1分钟的数据
                 timeout=WAIT_TIMEOUT,  # 最多等60秒
                 poll_interval=POLL_INTERVAL,  # 每2秒查一次
+                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成
                 order_by="create_time DESC"  # 按创建时间倒序
             )
 

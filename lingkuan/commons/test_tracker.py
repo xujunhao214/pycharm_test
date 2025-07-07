@@ -1,5 +1,6 @@
 # test_tracker.py
 import datetime
+from lingkuan.VAR.VAR import *
 from collections import defaultdict
 from typing import Dict
 import logging
@@ -26,7 +27,7 @@ class TestResultTracker:
     def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logger.info(f"测试会话开始: {self.start_time}")
+        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}")
 
     def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果（包括setup/teardown阶段）"""
@@ -53,8 +54,8 @@ class TestResultTracker:
         start = datetime.datetime.strptime(self.start_time, "%Y-%m-%d %H:%M:%S")
         end = datetime.datetime.strptime(self.end_time, "%Y-%m-%d %H:%M:%S")
         self.duration = f"{(end - start).total_seconds():.2f}秒"
-        logger.info(f"测试会话结束，总耗时: {self.duration}")
-        logger.info(f"最终统计: 总={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+        logger.info(f"[{DATETIME_NOW}] 测试会话结束，总耗时: {self.duration}")
+        logger.info(f"[{DATETIME_NOW}] 最终统计: 总={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
 
         # 发送飞书通知
         try:
@@ -67,9 +68,9 @@ class TestResultTracker:
                 failed_cases=self.failed_test_names,
                 skipped_cases=self.skipped_test_names
             )
-            logger.info("飞书通知发送成功")
+            logger.info(f"[{DATETIME_NOW}] 飞书通知发送成功")
         except Exception as e:
-            logger.error(f"发送飞书通知失败: {str(e)}")
+            logger.error(f"[{DATETIME_NOW}] 发送飞书通知失败: {str(e)}")
 
     def get_statistics(self) -> Dict[str, any]:
         """获取测试统计数据"""
