@@ -4,7 +4,11 @@ from lingkuan.VAR.VAR import *
 import allure
 import logging
 import datetime
+import os
+import xml.etree.ElementTree as ET
+from pytest import Config
 from typing import Dict, List
+from lingkuan.commons.Encryption_and_decryption import aes_encrypt_str
 from lingkuan.commons.session import EnvironmentSession, Environment
 from lingkuan.commons.variable_manager import VariableManager
 from lingkuan.commons.test_tracker import TestResultTracker
@@ -259,3 +263,12 @@ def pytest_unconfigure(config):
     tracker = getattr(config, "_test_result_tracker", None)
     if tracker and hasattr(config, "pluginmanager"):
         config.pluginmanager.unregister(tracker)
+
+
+@pytest.fixture
+def encrypted_password(request):
+    # 获取加密密钥
+    MT4_KEY = MT4
+    """夹具：对输入的明文密码进行加密"""
+    plain_password = PASSWORD
+    return aes_encrypt_str(plain_password, MT4_KEY)

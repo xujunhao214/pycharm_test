@@ -22,5 +22,5 @@ DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d %H:%M:%S")
 MYSQL_TIME = 2  # 时间范围（分钟）
 WAIT_TIMEOUT = 30  # 超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）
-STBLE_PERIOD=3 # 稳定期（秒）：数据连续5秒不变则认为加载完成
+STBLE_PERIOD=1 # 稳定期（秒）：数据连续3秒不变则认为加载完成
 

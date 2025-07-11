@@ -1,0 +1,256 @@
+{
+  "uid" : "970b5d61863e9872",
+  "name" : "新增跟单账号（仅使用后6个数据与模板匹配）",
+  "fullName" : "test_vps.test_create_scene.TestCreate_Scene#test_import_addSlave",
+  "historyId" : "0baf4873c7adb4f9ea329855d6f56a10",
+  "time" : {
+    "start" : 1752224706702,
+    "stop" : 1752224711874,
+    "duration" : 5172
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 账号119999354响应异常（模板：账号119999354-固定手数（5倍））\nURL: http://39.99.136.49:9001/subcontrol/follow/addSlave\nJSON路径: $.msg\n实际值: 喊单账号状态异常，请确认\n期望值: success",
+  "statusTrace" : "self = <lingkuan.test_vps.test_create_scene.TestCreate_Scene object at 0x000001D284C92C10>\nvar_manager = <lingkuan.commons.variable_manager.VariableManager object at 0x000001D284CB76D0>\nlogged_session = <lingkuan.commons.session.EnvironmentSession object at 0x000001D284CE4220>\nencrypted_password = '60e230abc816a01749f119307e24efb7'\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"新增跟单账号（仅使用后6个数据与模板匹配）\")\n    def test_import_addSlave(self, var_manager, logged_session, encrypted_password):\n        # 1. 获取总用户数（需确保至少有7个，才能取后6个）\n        user_count = var_manager.get_variable(\"user_count\", 0)\n        if user_count < 7:\n            pytest.fail(f\"用户总数需至少为7，当前为{user_count}，无法提取后6个数据\")\n    \n        # 2. 仅提取后6个账号（索引1~6，对应user_accounts_2~user_accounts_7）\n        all_accounts = []\n        for i in range(2, 8):  # 直接指定取2~7共6个账号\n            account = var_manager.get_variable(f\"user_accounts_{i}\")\n            if not account:\n                pytest.fail(f\"未找到第{i}个账号（变量：user_accounts_{i}）\")\n            all_accounts.append(account)\n        print(f\"已提取后6个账号：{all_accounts}\")\n        template_id = var_manager.get_variable(\"template_id\")\n    \n        # 3. 定义6个模板（与账号一一对应）\n        templates: List[Dict[str, Any]] = [\n            {\n                \"followMode\": 0,\n                \"followParam\": \"5.00\",\n                \"templateId\": 1,\n                \"Cfd\": \"\",\n                \"mode_desc\": \"固定手数（5倍）\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": template_id,\n                \"Cfd\": \"\",\n                \"mode_desc\": \"修改品种（3倍）\"\n            },\n            {\n                \"followMode\": 2,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \"\",\n                \"mode_desc\": \"净值比例\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \"@\",\n                \"mode_desc\": \"修改币种\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \".p\",\n                \"mode_desc\": \"修改币种\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \".min\",\n                \"mode_desc\": \"修改币种\"\n            },\n        ]\n    \n        # 4. 生成参数化数据（后6个账号与6个模板一一对应）\n        parametrize_data = []\n        for i in range(len(all_accounts)):\n            account = all_accounts[i]\n            template = templates[i]  # 直接一一对应（账号1→模板1，账号2→模板2，...）\n            parametrize_data.append({\n                \"account\": account,\n                \"followMode\": template[\"followMode\"],\n                \"followParam\": template[\"followParam\"],\n                \"templateId\": template[\"templateId\"],\n                \"Cfd\": template[\"Cfd\"],  # 新增Cfd参数\n                \"desc\": f\"账号{account}-{template['mode_desc']}\"\n            })\n        print(f\"生成{len(parametrize_data)}条参数化测试数据（后6个账号）\")\n    \n        # 5. 循环执行后6个账号的新增操作\n        for param in parametrize_data:\n            with allure.step(f\"执行参数: {param['desc']}\"):\n                # 获取基础配置\n                add_Slave = var_manager.get_variable(\"add_Slave\")\n                vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n    \n                # 构造请求数据\n                data = {\n                    \"traderId\": vps_trader_id,\n                    \"platform\": add_Slave[\"platform\"],\n                    \"account\": param[\"account\"],\n                    \"password\": encrypted_password,\n                    \"remark\": \"参数化新增跟单账号\",\n                    \"followMode\": param[\"followMode\"],\n                    \"followParam\": param[\"followParam\"],\n                    \"templateId\": param[\"templateId\"],\n                    \"followDirection\": 0,\n                    \"remainder\": 0,\n                    \"placedType\": 0,\n                    \"followStatus\": 1,\n                    \"followOpen\": 1,\n                    \"followClose\": 1,\n                    \"followRep\": 0,\n                    \"fixedComment\": add_Slave[\"fixedComment\"],\n                    \"commentType\": 2,\n                    \"digits\": 0,\n                    \"cfd\": param[\"Cfd\"],  # 使用模板中的Cfd值\n                    \"forex\": \"\",\n                    \"abRemark\": \"\"\n                }\n    \n                # 发送请求并验证\n                response = self.send_post_request(\n                    logged_session, '/subcontrol/follow/addSlave', json_data=data\n                )\n    \n                self.assert_response_status(\n                    response, 200,\n                    f\"账号{param['account']}创建失败（模板：{param['desc']}）\"\n                )\n>               self.assert_json_value(\n                    response, \"$.msg\", \"success\",\n                    f\"账号{param['account']}响应异常（模板：{param['desc']}）\"\n                )\n\ntest_vps\\test_create_scene.py:142: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan.test_vps.test_create_scene.TestCreate_Scene object at 0x000001D284C92C10>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '账号119999354响应异常（模板：账号119999354-固定手数（5倍））'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 账号119999354响应异常（模板：账号119999354-固定手数（5倍））\nE           URL: http://39.99.136.49:9001/subcontrol/follow/addSlave\nE           JSON路径: $.msg\nE           实际值: 喊单账号状态异常，请确认\nE           期望值: success\n\ncommons\\api_base.py:245: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "environment",
+    "time" : {
+      "start" : 1752224706546,
+      "stop" : 1752224706546,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1752224706547,
+      "stop" : 1752224706547,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1752224706547,
+      "stop" : 1752224706697,
+      "duration" : 150
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1752224706546,
+      "stop" : 1752224706547,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "encrypted_password",
+    "time" : {
+      "start" : 1752224706697,
+      "stop" : 1752224706701,
+      "duration" : 4
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 账号119999354响应异常（模板：账号119999354-固定手数（5倍））\nURL: http://39.99.136.49:9001/subcontrol/follow/addSlave\nJSON路径: $.msg\n实际值: 喊单账号状态异常，请确认\n期望值: success",
+    "statusTrace" : "self = <lingkuan.test_vps.test_create_scene.TestCreate_Scene object at 0x000001D284C92C10>\nvar_manager = <lingkuan.commons.variable_manager.VariableManager object at 0x000001D284CB76D0>\nlogged_session = <lingkuan.commons.session.EnvironmentSession object at 0x000001D284CE4220>\nencrypted_password = '60e230abc816a01749f119307e24efb7'\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"新增跟单账号（仅使用后6个数据与模板匹配）\")\n    def test_import_addSlave(self, var_manager, logged_session, encrypted_password):\n        # 1. 获取总用户数（需确保至少有7个，才能取后6个）\n        user_count = var_manager.get_variable(\"user_count\", 0)\n        if user_count < 7:\n            pytest.fail(f\"用户总数需至少为7，当前为{user_count}，无法提取后6个数据\")\n    \n        # 2. 仅提取后6个账号（索引1~6，对应user_accounts_2~user_accounts_7）\n        all_accounts = []\n        for i in range(2, 8):  # 直接指定取2~7共6个账号\n            account = var_manager.get_variable(f\"user_accounts_{i}\")\n            if not account:\n                pytest.fail(f\"未找到第{i}个账号（变量：user_accounts_{i}）\")\n            all_accounts.append(account)\n        print(f\"已提取后6个账号：{all_accounts}\")\n        template_id = var_manager.get_variable(\"template_id\")\n    \n        # 3. 定义6个模板（与账号一一对应）\n        templates: List[Dict[str, Any]] = [\n            {\n                \"followMode\": 0,\n                \"followParam\": \"5.00\",\n                \"templateId\": 1,\n                \"Cfd\": \"\",\n                \"mode_desc\": \"固定手数（5倍）\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": template_id,\n                \"Cfd\": \"\",\n                \"mode_desc\": \"修改品种（3倍）\"\n            },\n            {\n                \"followMode\": 2,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \"\",\n                \"mode_desc\": \"净值比例\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \"@\",\n                \"mode_desc\": \"修改币种\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \".p\",\n                \"mode_desc\": \"修改币种\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"Cfd\": \".min\",\n                \"mode_desc\": \"修改币种\"\n            },\n        ]\n    \n        # 4. 生成参数化数据（后6个账号与6个模板一一对应）\n        parametrize_data = []\n        for i in range(len(all_accounts)):\n            account = all_accounts[i]\n            template = templates[i]  # 直接一一对应（账号1→模板1，账号2→模板2，...）\n            parametrize_data.append({\n                \"account\": account,\n                \"followMode\": template[\"followMode\"],\n                \"followParam\": template[\"followParam\"],\n                \"templateId\": template[\"templateId\"],\n                \"Cfd\": template[\"Cfd\"],  # 新增Cfd参数\n                \"desc\": f\"账号{account}-{template['mode_desc']}\"\n            })\n        print(f\"生成{len(parametrize_data)}条参数化测试数据（后6个账号）\")\n    \n        # 5. 循环执行后6个账号的新增操作\n        for param in parametrize_data:\n            with allure.step(f\"执行参数: {param['desc']}\"):\n                # 获取基础配置\n                add_Slave = var_manager.get_variable(\"add_Slave\")\n                vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n    \n                # 构造请求数据\n                data = {\n                    \"traderId\": vps_trader_id,\n                    \"platform\": add_Slave[\"platform\"],\n                    \"account\": param[\"account\"],\n                    \"password\": encrypted_password,\n                    \"remark\": \"参数化新增跟单账号\",\n                    \"followMode\": param[\"followMode\"],\n                    \"followParam\": param[\"followParam\"],\n                    \"templateId\": param[\"templateId\"],\n                    \"followDirection\": 0,\n                    \"remainder\": 0,\n                    \"placedType\": 0,\n                    \"followStatus\": 1,\n                    \"followOpen\": 1,\n                    \"followClose\": 1,\n                    \"followRep\": 0,\n                    \"fixedComment\": add_Slave[\"fixedComment\"],\n                    \"commentType\": 2,\n                    \"digits\": 0,\n                    \"cfd\": param[\"Cfd\"],  # 使用模板中的Cfd值\n                    \"forex\": \"\",\n                    \"abRemark\": \"\"\n                }\n    \n                # 发送请求并验证\n                response = self.send_post_request(\n                    logged_session, '/subcontrol/follow/addSlave', json_data=data\n                )\n    \n                self.assert_response_status(\n                    response, 200,\n                    f\"账号{param['account']}创建失败（模板：{param['desc']}）\"\n                )\n>               self.assert_json_value(\n                    response, \"$.msg\", \"success\",\n                    f\"账号{param['account']}响应异常（模板：{param['desc']}）\"\n                )\n\ntest_vps\\test_create_scene.py:142: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan.test_vps.test_create_scene.TestCreate_Scene object at 0x000001D284C92C10>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '账号119999354响应异常（模板：账号119999354-固定手数（5倍））'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 账号119999354响应异常（模板：账号119999354-固定手数（5倍））\nE           URL: http://39.99.136.49:9001/subcontrol/follow/addSlave\nE           JSON路径: $.msg\nE           实际值: 喊单账号状态异常，请确认\nE           期望值: success\n\ncommons\\api_base.py:245: AssertionError",
+    "steps" : [ {
+      "name" : "执行参数: 账号119999354-固定手数（5倍）",
+      "time" : {
+        "start" : 1752224706702,
+        "stop" : 1752224711873,
+        "duration" : 5171
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 账号119999354响应异常（模板：账号119999354-固定手数（5倍））\nURL: http://39.99.136.49:9001/subcontrol/follow/addSlave\nJSON路径: $.msg\n实际值: 喊单账号状态异常，请确认\n期望值: success\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan\\test_vps\\test_create_scene.py\", line 142, in test_import_addSlave\n    self.assert_json_value(\n  File \"D:\\pycharm_test\\lingkuan\\commons\\api_base.py\", line 245, in assert_json_value\n    assert actual_value == expected_value, (\n",
+      "steps" : [ {
+        "name" : "发送POST请求到 /subcontrol/follow/addSlave",
+        "time" : {
+          "start" : 1752224706702,
+          "stop" : 1752224711867,
+          "duration" : 5165
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "d1dbc6610552283f",
+          "name" : "请求JSON数据",
+          "source" : "d1dbc6610552283f.json",
+          "type" : "application/json",
+          "size" : 444
+        }, {
+          "uid" : "7715f512f08b73c",
+          "name" : "请求URL",
+          "source" : "7715f512f08b73c.txt",
+          "type" : "text/plain",
+          "size" : 27
+        }, {
+          "uid" : "a3f7cfc1b09ef340",
+          "name" : "响应结果",
+          "source" : "a3f7cfc1b09ef340.txt",
+          "type" : "text/plain",
+          "size" : 92
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "hasContent" : true,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "202139fe7acb8824",
+      "name" : "log",
+      "source" : "202139fe7acb8824.txt",
+      "type" : "text/plain",
+      "size" : 6350
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 2,
+    "hasContent" : true,
+    "attachmentsCount" : 4,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1752224711986,
+      "stop" : 1752224711986,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1752224711985,
+      "stop" : 1752224711985,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1752224877726,
+      "stop" : 1752224877727,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "账号管理-创建跟单账号"
+  }, {
+    "name" : "tag",
+    "value" : "url('vps')"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_create_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_Scene"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "41556-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_create_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ "url('vps')" ]
+  },
+  "source" : "970b5d61863e9872.json",
+  "parameterValues" : [ ]
+}

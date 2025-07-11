@@ -1,0 +1,250 @@
+{
+  "uid" : "200bb5ab715d552f",
+  "name" : "数据库校验-策略平仓-平仓订单详情持仓检查",
+  "fullName" : "test_vps.test_vps_ordersend.TestVPSOrderSend#test_dbquery_closed_orderdetail",
+  "historyId" : "54019b8637dbc04f17b53a3c02803679",
+  "time" : {
+    "start" : 1752225240902,
+    "stop" : 1752225247332,
+    "duration" : 6430
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 跟单总手数和下单的手数不相等 (实际: 2.0, 预期: 1.00)\nassert 2.0 == 1.0\n +  where 2.0 = float(2.0)\n +  and   1.0 = float('1.00')",
+  "statusTrace" : "self = <lingkuan_711.test_vps.test_vps_ordersend.TestVPSOrderSend object at 0x000002671F348EB0>\nvar_manager = <lingkuan_711.commons.variable_manager.VariableManager object at 0x000002671F57C430>\ndb_transaction = <pymysql.connections.Connection object at 0x000002671F41BF10>\n\n    @allure.title(\"数据库校验-策略平仓-平仓订单详情持仓检查\")\n    def test_dbquery_closed_orderdetail(self, var_manager, db_transaction):\n        with allure.step(\"1. 检查订单详情界面的数据\"):\n            order_no_detail = var_manager.get_variable(\"order_no_detail\")\n            vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            symbol = trader_ordersend[\"symbol\"]\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM follow_order_detail\n                WHERE symbol LIKE %s\n                  AND close_no = %s\n                  AND type = %s\n                  AND trader_id = %s\n                \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                order_no_detail,\n                trader_ordersend[\"type\"],\n                vps_trader_id\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                timeout=WAIT_TIMEOUT,  # 最多等30秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成\n                order_by=\"create_time DESC\"  # 按创建时间倒序\n            )\n    \n        with allure.step(\"2. 提取数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            order_nos = list(map(lambda x: x[\"order_no\"], db_data))\n            logging.info(f\"持仓订单的订单号: {order_nos}\")\n            var_manager.set_runtime_variable(\"order_nos\", order_nos)\n    \n        with allure.step(\"3. 校验数据\"):\n            addsalve_size = [record[\"size\"] for record in db_data]\n            total = sum(addsalve_size)\n            logging.info(f\"手数: {addsalve_size} 手数总和: {total}\")\n            totalSzie = trader_ordersend[\"totalSzie\"]\n>           assert float(total) == float(totalSzie), f\"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})\"\nE           AssertionError: 跟单总手数和下单的手数不相等 (实际: 2.0, 预期: 1.00)\nE           assert 2.0 == 1.0\nE            +  where 2.0 = float(2.0)\nE            +  and   1.0 = float('1.00')\n\ntest_vps\\test_vps_ordersend.py:424: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "environment",
+    "time" : {
+      "start" : 1752225129886,
+      "stop" : 1752225129886,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1752225135174,
+      "stop" : 1752225135174,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1752225196976,
+      "stop" : 1752225196976,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1752225135174,
+      "stop" : 1752225135406,
+      "duration" : 232
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1752225240856,
+      "stop" : 1752225240901,
+      "duration" : 45
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 跟单总手数和下单的手数不相等 (实际: 2.0, 预期: 1.00)\nassert 2.0 == 1.0\n +  where 2.0 = float(2.0)\n +  and   1.0 = float('1.00')",
+    "statusTrace" : "self = <lingkuan_711.test_vps.test_vps_ordersend.TestVPSOrderSend object at 0x000002671F348EB0>\nvar_manager = <lingkuan_711.commons.variable_manager.VariableManager object at 0x000002671F57C430>\ndb_transaction = <pymysql.connections.Connection object at 0x000002671F41BF10>\n\n    @allure.title(\"数据库校验-策略平仓-平仓订单详情持仓检查\")\n    def test_dbquery_closed_orderdetail(self, var_manager, db_transaction):\n        with allure.step(\"1. 检查订单详情界面的数据\"):\n            order_no_detail = var_manager.get_variable(\"order_no_detail\")\n            vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            symbol = trader_ordersend[\"symbol\"]\n    \n            sql = f\"\"\"\n                SELECT *\n                FROM follow_order_detail\n                WHERE symbol LIKE %s\n                  AND close_no = %s\n                  AND type = %s\n                  AND trader_id = %s\n                \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                order_no_detail,\n                trader_ordersend[\"type\"],\n                vps_trader_id\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                timeout=WAIT_TIMEOUT,  # 最多等30秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成\n                order_by=\"create_time DESC\"  # 按创建时间倒序\n            )\n    \n        with allure.step(\"2. 提取数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            order_nos = list(map(lambda x: x[\"order_no\"], db_data))\n            logging.info(f\"持仓订单的订单号: {order_nos}\")\n            var_manager.set_runtime_variable(\"order_nos\", order_nos)\n    \n        with allure.step(\"3. 校验数据\"):\n            addsalve_size = [record[\"size\"] for record in db_data]\n            total = sum(addsalve_size)\n            logging.info(f\"手数: {addsalve_size} 手数总和: {total}\")\n            totalSzie = trader_ordersend[\"totalSzie\"]\n>           assert float(total) == float(totalSzie), f\"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})\"\nE           AssertionError: 跟单总手数和下单的手数不相等 (实际: 2.0, 预期: 1.00)\nE           assert 2.0 == 1.0\nE            +  where 2.0 = float(2.0)\nE            +  and   1.0 = float('1.00')\n\ntest_vps\\test_vps_ordersend.py:424: AssertionError",
+    "steps" : [ {
+      "name" : "1. 检查订单详情界面的数据",
+      "time" : {
+        "start" : 1752225240902,
+        "stop" : 1752225247330,
+        "duration" : 6428
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : false
+    }, {
+      "name" : "2. 提取数据",
+      "time" : {
+        "start" : 1752225247330,
+        "stop" : 1752225247331,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : false
+    }, {
+      "name" : "3. 校验数据",
+      "time" : {
+        "start" : 1752225247331,
+        "stop" : 1752225247331,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 跟单总手数和下单的手数不相等 (实际: 2.0, 预期: 1.00)\nassert 2.0 == 1.0\n +  where 2.0 = float(2.0)\n +  and   1.0 = float('1.00')\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_711\\test_vps\\test_vps_ordersend.py\", line 424, in test_dbquery_closed_orderdetail\n    assert float(total) == float(totalSzie), f\"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "e5bcc563cf3262f6",
+      "name" : "log",
+      "source" : "e5bcc563cf3262f6.txt",
+      "type" : "text/plain",
+      "size" : 7973
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 1,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 3,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1752226390795,
+      "stop" : 1752226390795,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1752226390796,
+      "stop" : 1752226390796,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1752225247431,
+      "stop" : 1752225247477,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-正常开仓平仓"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_ordersend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "49564-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vps_ordersend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "200bb5ab715d552f.json",
+  "parameterValues" : [ ]
+}

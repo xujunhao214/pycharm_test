@@ -13,12 +13,13 @@ def run_tests(env: str = "test"):
     report_dir = f"report/allure-results_{timestamp}"
     html_dir = f"report/html_{timestamp}"
     brief_dir = "report/brief-{timestamp}"
-    # """运行测试并生成报告（固定路径版本）"""
+    """运行测试并生成报告（固定路径版本）"""
     # """智能生成报告：失败时详细报告，通过时简要报告"""
     # report_dir = "report/allure-results"
     # html_dir = "report/html-report"
     # brief_dir = "report/brief-report"
 
+    # 构建pytest参数
     # 构建pytest参数
     args = [
         "-s",  # 显示标准输出
@@ -40,7 +41,16 @@ def run_tests(env: str = "test"):
         # "test_foundation/test_delete_scene.py",  # 测试用例目录
 
         # "test_cloudTrader/test_create.py",  # 测试用例目录
-        "test_cloudTrader/test_lianxi.py",  # 测试用例目录
+        # "test_cloudTrader/test_delete.py",  # 测试用例目录
+        # "test_cloudTrader/test_lianxi.py",  # 测试用例目录
+        # "test_cloudTrader/test_lianxi2.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_allocation.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_copy.py",  # 测试用例目录
+        "test_cloudTrader/test_cloudOrderSend_manageropen.py",  # 测试用例目录
+        # "test_cloudTrader/test_masOrderSend_cloudcopy.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_managerlevel.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_open.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_level.py",  # 测试用例目录
 
         "--log-file=./Logs/pytest.log",
         "--log-file-level=info",

@@ -259,3 +259,17 @@ def pytest_unconfigure(config):
     tracker = getattr(config, "_test_result_tracker", None)
     if tracker and hasattr(config, "pluginmanager"):
         config.pluginmanager.unregister(tracker)
+
+
+@pytest.fixture(scope="module")
+def clear_runtime_vars_after_test_delete(var_manager):
+    """在test_delete.py模块执行完毕后清空runtime_vars.json"""
+    # 前置操作：模块开始前不做处理
+    yield
+    # 终结器：模块所有用例执行完毕后触发
+    # 获取当前执行的模块文件名（如"test_delete.py"）
+    current_module = os.path.basename(pytest.current_test_node.fspath)
+    if current_module == "test_delete.py":
+        # 调用变量管理器的清空方法
+        var_manager.clear_runtime_variables()
+        print(f"模块{current_module}执行完毕，已清空runtime_vars.json")

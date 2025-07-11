@@ -12,18 +12,33 @@ def run_tests(env: str = "test"):
         f"--env={env}",  # 指定环境
         f"--alluredir=/www/python/jenkins/workspace/Documentatio_Test/results",  # allure结果目录
         "--clean-alluredir",  # 清理旧结果
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_create.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_vps_ordersend.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_vps_Leakage_level.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_vps_Leakage_open.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_masOrderSend_allocation.py",
-        # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_masOrderSend_copy.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_create_scene.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_vps_scene.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_vps_money.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_delete.py",  # 测试用例目录
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_foundation/test_delete_scene.py",  # 测试用例目录
+
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_ordersend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_level.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_open.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_masOrderSend_allocation.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_masOrderSend_copy.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_money.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete_scene.py",
+
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_allocation.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_copy.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_manageropen.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_masOrderSend_cloudcopy.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_managerlevel.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_open.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_level.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudtrader_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudtrader_money.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete.py",
+
         "--log-file=./Logs/pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",

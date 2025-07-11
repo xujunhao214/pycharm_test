@@ -225,6 +225,19 @@ class APITestBase:
             f"响应内容: {response.text[:500]}"
         )
 
+    def assert_values_equal(self, actual_value, expected_value, error_msg):
+        """
+        断言两个值是否相等，增强错误信息提示
+        :param actual_value: 实际获取的值
+        :param expected_value: 期望的值
+        :param error_msg: 自定义的错误提示前缀信息
+        """
+        assert actual_value == expected_value, (
+            f"{error_msg}\n"
+            f"实际值: {actual_value}\n"
+            f"期望值: {expected_value}"
+        )
+
     def assert_json_value(self, response, json_path, expected_value, error_msg):
         """断言JSON路径对应的值（增强错误处理）"""
         try:
@@ -408,6 +421,7 @@ class APITestBase:
         start_time = time.time()
         last_result = None
         stable_start_time = None
+        has_data = False  # 标记是否查询到过数据
 
         logger.info(
             f"[{DATETIME_NOW}] 开始等待数据库记录稳定 | "
@@ -423,20 +437,28 @@ class APITestBase:
                     db_transaction, sql, params, time_field, order_by, time_range
                 )
 
-                # 判断结果是否稳定（数量和内容都不变）
-                if self._is_result_stable(result, last_result):
-                    if stable_start_time is None:
-                        stable_start_time = time.time()
-                        logger.debug(f"[{DATETIME_NOW}] 数据首次稳定，开始计时")
-                    elif time.time() - stable_start_time >= stable_period:
-                        logger.info(
-                            f"[{DATETIME_NOW}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| "
-                            f"结果数: {len(result)}"
-                        )
-                        return result
+                # 检查是否有数据
+                if len(result) > 0:
+                    has_data = True
+                    # 判断结果是否稳定（数量和内容都不变）
+                    if self._is_result_stable(result, last_result):
+                        if stable_start_time is None:
+                            stable_start_time = time.time()
+                            logger.debug(f"[{DATETIME_NOW}] 数据首次稳定，开始计时")
+                        elif time.time() - stable_start_time >= stable_period:
+                            logger.info(
+                                f"[{DATETIME_NOW}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| "
+                                f"结果数: {len(result)}"
+                            )
+                            return result
+                    else:
+                        stable_start_time = None  # 结果变化，重置稳定计时器
+                        logger.debug(f"[{DATETIME_NOW}] 数据仍在变化，重置稳定计时器")
                 else:
-                    stable_start_time = None  # 结果变化，重置稳定计时器
-                    logger.debug(f"[{DATETIME_NOW}] 数据仍在变化，重置稳定计时器")
+                    # 结果为空，重置稳定计时器
+                    stable_start_time = None
+                    has_data = False
+                    logger.debug(f"[{DATETIME_NOW}] 查询结果为空，继续等待")
 
                 last_result = result
                 elapsed = time.time() - start_time
@@ -456,13 +478,20 @@ class APITestBase:
             db_transaction, sql, params, time_field, order_by, time_range
         )
 
-        raise TimeoutError(
-            f"等待超时（{timeout}秒），数据未在{stable_period}秒内保持稳定。\n"
-            f"SQL: {sql}\n"
-            f"参数: {params}\n"
-            f"最终结果数: {len(final_result)}\n"
-            f"最终结果: {json.dumps(self._simplify_result(final_result[:3]), ensure_ascii=False)}..."
-        )
+        if len(final_result) == 0:
+            raise TimeoutError(
+                f"等待超时（{timeout}秒），未查询到任何数据。\n"
+                f"SQL: {sql}\n"
+                f"参数: {params}"
+            )
+        else:
+            raise TimeoutError(
+                f"等待超时（{timeout}秒），数据未在{stable_period}秒内保持稳定。\n"
+                f"SQL: {sql}\n"
+                f"参数: {params}\n"
+                f"最终结果数: {len(final_result)}\n"
+                f"最终结果: {json.dumps(self._simplify_result(final_result[:3]), ensure_ascii=False)}..."
+            )
 
     def _execute_query(
             self,

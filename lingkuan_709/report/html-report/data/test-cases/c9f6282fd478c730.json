@@ -1,0 +1,235 @@
+{
+  "uid" : "c9f6282fd478c730",
+  "name" : "数据库校验-策略开仓-修改币种@",
+  "fullName" : "test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money#test_dbtrader_cfda",
+  "historyId" : "8fbbb6db333f73e2eab814bcd396c192",
+  "time" : {
+    "start" : 1752136716759,
+    "stop" : 1752136727797,
+    "duration" : 11038
+  },
+  "status" : "broken",
+  "statusMessage" : "KeyError: 'symbol'",
+  "statusTrace" : "self = <lingkuan_709.test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money object at 0x000001F6F2517CA0>\nvar_manager = <lingkuan_709.commons.variable_manager.VariableManager object at 0x000001F6F2DB1370>\ndb_transaction = <pymysql.connections.Connection object at 0x000001F6F2DB1190>\n\n    @allure.title(\"数据库校验-策略开仓-修改币种@\")\n    def test_dbtrader_cfda(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            user_accounts_cloudTrader_8 = var_manager.get_variable(\"user_accounts_cloudTrader_8\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.send_no,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type=%s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '0',\n                user_accounts_cloudTrader_8,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\",  # 按创建时间过滤\n                time_range=MYSQL_TIME,  # 只查前后1分钟的数据\n                timeout=WAIT_TIMEOUT,  # 最多等30秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成\n                order_by=\"foi.create_time DESC\"  # 按创建时间倒序\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfda = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfda\", addsalve_size_cfda)\n            addsalve_size_cfda_total = sum(addsalve_size_cfda)\n            assert math.isclose(addsalve_size_cfda_total, 1.0,\n                                rel_tol=1e-9), f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\"\n            logging.info(f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\")\n    \n>           symbol = db_data[0][\"symbol\"]\nE           KeyError: 'symbol'\n\ntest_cloudTrader\\test_cloudtrader_money.py:210: KeyError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1752136704355,
+      "stop" : 1752136704595,
+      "duration" : 240
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1752136704354,
+      "stop" : 1752136704354,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1752136704355,
+      "stop" : 1752136704355,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1752136704355,
+      "stop" : 1752136704355,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1752136716713,
+      "stop" : 1752136716759,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "broken",
+    "statusMessage" : "KeyError: 'symbol'",
+    "statusTrace" : "self = <lingkuan_709.test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money object at 0x000001F6F2517CA0>\nvar_manager = <lingkuan_709.commons.variable_manager.VariableManager object at 0x000001F6F2DB1370>\ndb_transaction = <pymysql.connections.Connection object at 0x000001F6F2DB1190>\n\n    @allure.title(\"数据库校验-策略开仓-修改币种@\")\n    def test_dbtrader_cfda(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            user_accounts_cloudTrader_8 = var_manager.get_variable(\"user_accounts_cloudTrader_8\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.send_no,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type=%s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '0',\n                user_accounts_cloudTrader_8,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\",  # 按创建时间过滤\n                time_range=MYSQL_TIME,  # 只查前后1分钟的数据\n                timeout=WAIT_TIMEOUT,  # 最多等30秒\n                poll_interval=POLL_INTERVAL,  # 每2秒查一次\n                stable_period=STBLE_PERIOD,  # 新增：数据连续5秒不变则认为加载完成\n                order_by=\"foi.create_time DESC\"  # 按创建时间倒序\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfda = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfda\", addsalve_size_cfda)\n            addsalve_size_cfda_total = sum(addsalve_size_cfda)\n            assert math.isclose(addsalve_size_cfda_total, 1.0,\n                                rel_tol=1e-9), f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\"\n            logging.info(f\"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}\")\n    \n>           symbol = db_data[0][\"symbol\"]\nE           KeyError: 'symbol'\n\ntest_cloudTrader\\test_cloudtrader_money.py:210: KeyError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1752136716759,
+        "stop" : 1752136727796,
+        "duration" : 11037
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : false
+    }, {
+      "name" : "2. 校验数据",
+      "time" : {
+        "start" : 1752136727796,
+        "stop" : 1752136727797,
+        "duration" : 1
+      },
+      "status" : "broken",
+      "statusMessage" : "KeyError: 'symbol'\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_709\\test_cloudTrader\\test_cloudtrader_money.py\", line 210, in test_dbtrader_cfda\n    symbol = db_data[0][\"symbol\"]\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "d9718e95b01d7d33",
+      "name" : "log",
+      "source" : "d9718e95b01d7d33.txt",
+      "type" : "text/plain",
+      "size" : 9035
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 1,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 2,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1752136780954,
+      "stop" : 1752136780954,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1752136780955,
+      "stop" : 1752136780956,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1752136727802,
+      "stop" : 1752136727850,
+      "duration" : 48
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟单修改币种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudtrader_money"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_money"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "32328-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudtrader_money"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "c9f6282fd478c730.json",
+  "parameterValues" : [ ]
+}

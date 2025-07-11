@@ -1,0 +1,293 @@
+{
+  "uid" : "f97e3c4156d8427e",
+  "name" : "账号管理-账号列表-修改用户",
+  "fullName" : "test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money#test_update_user",
+  "historyId" : "7d2b9293ad87669be1ba2f81691bcaf5",
+  "time" : {
+    "start" : 1752136704780,
+    "stop" : 1752136709888,
+    "duration" : 5108
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 编辑策略信息失败\nURL: http://39.99.136.49:9001/mascontrol/user\n实际状态码: 404\n响应内容: 404 Not Found: mascontrol/user",
+  "statusTrace" : "self = <lingkuan_709.test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money object at 0x000001F6F252CEE0>\napi_session = <lingkuan_709.commons.session.EnvironmentSession object at 0x000001F6F2DB1DF0>\nvar_manager = <lingkuan_709.commons.variable_manager.VariableManager object at 0x000001F6F2DB1370>\nlogged_session = <lingkuan_709.commons.session.EnvironmentSession object at 0x000001F6F2DB1DF0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001F6F2DB1190>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"账号管理-账号列表-修改用户\")\n    def test_update_user(self, api_session, var_manager, logged_session, db_transaction):\n        # 1. 发送创建用户请求\n        user_ids_cloudTrader_3 = var_manager.get_variable(\"user_ids_cloudTrader_3\")\n        user_accounts_cloudTrader_3 = var_manager.get_variable(\"user_accounts_cloudTrader_3\")\n        vps_cloudTrader_ids_2 = var_manager.get_variable(\"vps_cloudTrader_ids_2\")\n        vps_id_cloudTrader = var_manager.get_variable(\"vps_cloudTrader_ids_2\")\n        user_accounts_cloudTrader_1 = var_manager.get_variable(\"user_accounts_cloudTrader_1\")\n        vpsId = var_manager.get_variable(\"vpsId\")\n        data = {\n            \"id\": user_ids_cloudTrader_3,\n            \"account\": user_accounts_cloudTrader_3,\n            \"password\": \"b7e9fafa953d50f0e2278cacd85a8d15\",\n            \"platform\": \"FXAdamantStone-Demo\",\n            \"accountType\": \"0\",\n            \"serverNode\": \"47.83.21.167:443\",\n            \"remark\": \"参数化新增云策略账号\",\n            \"sort\": 100,\n            \"vpsDescs\": [\n                {\n                    \"desc\": \"39.99.136.49-主VPS-跟单账号\",\n                    \"status\": 0,\n                    \"statusExtra\": \"启动成功\",\n                    \"forex\": \"\",\n                    \"cfd\": \"\",\n                    \"traderId\": vps_cloudTrader_ids_2,\n                    \"ipAddress\": \"39.99.136.49\",\n                    \"sourceId\": vps_id_cloudTrader,\n                    \"sourceAccount\": user_accounts_cloudTrader_1,\n                    \"sourceName\": \"测试数据\",\n                    \"loginNode\": \"47.83.21.167:443\",\n                    \"nodeType\": 0,\n                    \"nodeName\": \"账号节点\",\n                    \"type\": None,\n                    \"vpsId\": vpsId,\n                    \"traderType\": None,\n                    \"abRemark\": None\n                }\n            ]\n        }\n        response = self.send_put_request(\n            api_session,\n            \"/mascontrol/user\",\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n>       self.assert_response_status(\n            response,\n            200,\n            \"编辑策略信息失败\"\n        )\n\ntest_cloudTrader\\test_cloudtrader_money.py:73: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_709.test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money object at 0x000001F6F252CEE0>\nresponse = <Response [404]>, expected_status = 200, error_msg = '编辑策略信息失败'\n\n    def assert_response_status(self, response, expected_status, error_msg):\n        \"\"\"断言响应状态码（增强错误信息）\"\"\"\n>       assert response.status_code == expected_status, (\n            f\"{error_msg}\\n\"\n            f\"URL: {response.url}\\n\"\n            f\"实际状态码: {response.status_code}\\n\"\n            f\"响应内容: {response.text[:500]}\"\n        )\nE       AssertionError: 编辑策略信息失败\nE       URL: http://39.99.136.49:9001/mascontrol/user\nE       实际状态码: 404\nE       响应内容: 404 Not Found: mascontrol/user\n\ncommons\\api_base.py:221: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1752136704355,
+      "stop" : 1752136704595,
+      "duration" : 240
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1752136704595,
+      "stop" : 1752136704734,
+      "duration" : 139
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1752136704354,
+      "stop" : 1752136704354,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1752136704595,
+      "stop" : 1752136704595,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1752136704355,
+      "stop" : 1752136704355,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1752136704355,
+      "stop" : 1752136704355,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1752136704734,
+      "stop" : 1752136704780,
+      "duration" : 46
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 编辑策略信息失败\nURL: http://39.99.136.49:9001/mascontrol/user\n实际状态码: 404\n响应内容: 404 Not Found: mascontrol/user",
+    "statusTrace" : "self = <lingkuan_709.test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money object at 0x000001F6F252CEE0>\napi_session = <lingkuan_709.commons.session.EnvironmentSession object at 0x000001F6F2DB1DF0>\nvar_manager = <lingkuan_709.commons.variable_manager.VariableManager object at 0x000001F6F2DB1370>\nlogged_session = <lingkuan_709.commons.session.EnvironmentSession object at 0x000001F6F2DB1DF0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001F6F2DB1190>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"账号管理-账号列表-修改用户\")\n    def test_update_user(self, api_session, var_manager, logged_session, db_transaction):\n        # 1. 发送创建用户请求\n        user_ids_cloudTrader_3 = var_manager.get_variable(\"user_ids_cloudTrader_3\")\n        user_accounts_cloudTrader_3 = var_manager.get_variable(\"user_accounts_cloudTrader_3\")\n        vps_cloudTrader_ids_2 = var_manager.get_variable(\"vps_cloudTrader_ids_2\")\n        vps_id_cloudTrader = var_manager.get_variable(\"vps_cloudTrader_ids_2\")\n        user_accounts_cloudTrader_1 = var_manager.get_variable(\"user_accounts_cloudTrader_1\")\n        vpsId = var_manager.get_variable(\"vpsId\")\n        data = {\n            \"id\": user_ids_cloudTrader_3,\n            \"account\": user_accounts_cloudTrader_3,\n            \"password\": \"b7e9fafa953d50f0e2278cacd85a8d15\",\n            \"platform\": \"FXAdamantStone-Demo\",\n            \"accountType\": \"0\",\n            \"serverNode\": \"47.83.21.167:443\",\n            \"remark\": \"参数化新增云策略账号\",\n            \"sort\": 100,\n            \"vpsDescs\": [\n                {\n                    \"desc\": \"39.99.136.49-主VPS-跟单账号\",\n                    \"status\": 0,\n                    \"statusExtra\": \"启动成功\",\n                    \"forex\": \"\",\n                    \"cfd\": \"\",\n                    \"traderId\": vps_cloudTrader_ids_2,\n                    \"ipAddress\": \"39.99.136.49\",\n                    \"sourceId\": vps_id_cloudTrader,\n                    \"sourceAccount\": user_accounts_cloudTrader_1,\n                    \"sourceName\": \"测试数据\",\n                    \"loginNode\": \"47.83.21.167:443\",\n                    \"nodeType\": 0,\n                    \"nodeName\": \"账号节点\",\n                    \"type\": None,\n                    \"vpsId\": vpsId,\n                    \"traderType\": None,\n                    \"abRemark\": None\n                }\n            ]\n        }\n        response = self.send_put_request(\n            api_session,\n            \"/mascontrol/user\",\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n>       self.assert_response_status(\n            response,\n            200,\n            \"编辑策略信息失败\"\n        )\n\ntest_cloudTrader\\test_cloudtrader_money.py:73: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_709.test_cloudTrader.test_cloudtrader_money.TestVPSOrderSend_money object at 0x000001F6F252CEE0>\nresponse = <Response [404]>, expected_status = 200, error_msg = '编辑策略信息失败'\n\n    def assert_response_status(self, response, expected_status, error_msg):\n        \"\"\"断言响应状态码（增强错误信息）\"\"\"\n>       assert response.status_code == expected_status, (\n            f\"{error_msg}\\n\"\n            f\"URL: {response.url}\\n\"\n            f\"实际状态码: {response.status_code}\\n\"\n            f\"响应内容: {response.text[:500]}\"\n        )\nE       AssertionError: 编辑策略信息失败\nE       URL: http://39.99.136.49:9001/mascontrol/user\nE       实际状态码: 404\nE       响应内容: 404 Not Found: mascontrol/user\n\ncommons\\api_base.py:221: AssertionError",
+    "steps" : [ {
+      "name" : "发送PUT请求到 /mascontrol/user",
+      "time" : {
+        "start" : 1752136704780,
+        "stop" : 1752136709888,
+        "duration" : 5108
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "98febdd737d46df0",
+        "name" : "请求参数",
+        "source" : "98febdd737d46df0.json",
+        "type" : "application/json",
+        "size" : 623
+      }, {
+        "uid" : "7d1525e480ec0142",
+        "name" : "响应结果",
+        "source" : "7d1525e480ec0142.txt",
+        "type" : "text/plain",
+        "size" : 53
+      } ],
+      "parameters" : [ ],
+      "attachmentsCount" : 2,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "e9f5e18dc5f7a483",
+      "name" : "log",
+      "source" : "e9f5e18dc5f7a483.txt",
+      "type" : "text/plain",
+      "size" : 6057
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 3,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 1,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1752136780954,
+      "stop" : 1752136780954,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1752136710040,
+      "stop" : 1752136710040,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1752136710040,
+      "stop" : 1752136710040,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1752136780955,
+      "stop" : 1752136780956,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1752136709983,
+      "stop" : 1752136710039,
+      "duration" : 56
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟单修改币种"
+  }, {
+    "name" : "tag",
+    "value" : "url('vps')"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudtrader_money"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_money"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "32328-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudtrader_money"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ "url('vps')" ]
+  },
+  "source" : "f97e3c4156d8427e.json",
+  "parameterValues" : [ ]
+}
