@@ -573,7 +573,7 @@ class TestCreate_cloudTrader(APITestBase):
             "file": ("品种数据300.csv", csv_file, "text/csv")
         }
         data = {
-            "templateName": add_variety["templateName"]
+            "templateName": add_variety["templateName2"]
         }
 
         # 1. 添加品种
@@ -601,7 +601,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_variety = var_manager.get_variable("add_variety")
             # 从变量中获取表名和模板名
-            template_name = add_variety["templateName"]
+            template_name = add_variety["templateName2"]
             # 使用f-string正确格式化SQL语句
             sql = f"SELECT * FROM follow_variety WHERE template_name = %s"
             params = (template_name,)
@@ -616,6 +616,6 @@ class TestCreate_cloudTrader(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            template_id = db_data[0]["template_id"]
-            logging.info(f"新增品种id: {template_id}")
-            var_manager.set_runtime_variable("template_id", template_id)
+            template_id2 = db_data[0]["template_id"]
+            logging.info(f"新增品种id: {template_id2}")
+            var_manager.set_runtime_variable("template_id2", template_id2)

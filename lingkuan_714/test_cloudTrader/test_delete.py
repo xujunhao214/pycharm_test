@@ -406,11 +406,11 @@ class TestDelete_cloudTrader(APITestBase):
     def test_deleteTemplate(self, api_session, var_manager, logged_session, db_transaction):
         """测试删除用户接口"""
         # 1. 发送删除品种请求
-        template_id = var_manager.get_variable("template_id")
+        template_id2 = var_manager.get_variable("template_id2")
         response = self.send_delete_request(
             api_session,
             '/mascontrol/variety/deleteTemplate',
-            json_data=[template_id]
+            json_data=[template_id2]
         )
 
         # 2. 验证响应状态码
@@ -436,10 +436,10 @@ class TestDelete_cloudTrader(APITestBase):
     def test_dbdelete_template(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             add_variety = var_manager.get_variable("add_variety")
-            logging.info(f"查询条件: table=follow_variety, templateName2={add_variety['templateName']}")
+            logging.info(f"查询条件: table=follow_variety, templateName2={add_variety['templateName2']}")
 
             sql = f"SELECT * FROM follow_variety WHERE template_name = %s"
-            params = (add_variety["templateName"],)
+            params = (add_variety["templateName2"],)
             try:
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
@@ -448,7 +448,7 @@ class TestDelete_cloudTrader(APITestBase):
                     timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
                     poll_interval=POLL_INTERVAL  # 每2秒查询一次
                 )
-                allure.attach(f"品种 {add_variety['templateName']} 已成功从数据库删除", "验证结果")
+                allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
