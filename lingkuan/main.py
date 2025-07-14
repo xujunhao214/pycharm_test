@@ -54,7 +54,7 @@ def run_tests(env: str = "test"):
         # 并行执行关键参数
         "-n", "2",  # 2个进程（分别处理两个目录，实现并行）
         "--dist=loadfile",  # 按文件分配进程：同一文件的用例在同一进程执行
-        "--order-by=definition",  # 按文件传入顺序执行（即列表中的顺序）
+        "--order-scope=module",  # 按文件顺序执行（兼容 pytest-order==1.1.0）
 
         # 传入所有测试文件（按定义的顺序）
         *all_test_files,
