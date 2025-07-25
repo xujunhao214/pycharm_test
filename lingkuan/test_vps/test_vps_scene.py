@@ -277,12 +277,12 @@ class TestVPSOrderSend_Scence(APITestBase):
     def test_trader_orderclose(self, var_manager, logged_session, db_transaction):
         # 1. 发送全平订单平仓请求
         vps_trader_id = var_manager.get_variable("vps_trader_id")
-        vps_trader_isCloseAll = var_manager.get_variable("vps_trader_isCloseAll")
+        new_user = var_manager.get_variable("new_user")
         data = {
             "isCloseAll": 1,
             "intervalTime": 100,
             "traderId": vps_trader_id,
-            "account": vps_trader_isCloseAll["account"]
+            "account": new_user["account"]
         }
         response = self.send_post_request(
             logged_session,

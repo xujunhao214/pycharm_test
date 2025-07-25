@@ -1,0 +1,236 @@
+{
+  "uid" : "1d0f1f9308728788",
+  "name" : "账号管理-账号列表-新增单个用户",
+  "fullName" : "test_vps.test_create.TestCreate#test_create_user",
+  "historyId" : "9e53eb78533d7b7a174e7b5edf17fc33",
+  "time" : {
+    "start" : 1753084518377,
+    "stop" : 1753084523453,
+    "duration" : 5076
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 响应msg字段应为success\nURL: http://39.99.136.49:9000/mascontrol/user\nJSON路径: $.msg\n实际值: 重复添加,请重新输入\n期望值: success",
+  "statusTrace" : "self = <lingkuan_718.test_vps.test_create.TestCreate object at 0x000001D180A7E130>\napi_session = <lingkuan_718.commons.session.EnvironmentSession object at 0x000001D180A704F0>\nvar_manager = <lingkuan_718.commons.variable_manager.VariableManager object at 0x000001D180A70A00>\nlogged_session = <lingkuan_718.commons.session.EnvironmentSession object at 0x000001D180A704F0>\nencrypted_password = 'fa1af751c83d311f091c9393a364068c'\n\n    @allure.title(\"账号管理-账号列表-新增单个用户\")\n    def test_create_user(self, api_session, var_manager, logged_session, encrypted_password):\n        # 1. 发送创建用户请求\n        new_user = var_manager.get_variable(\"new_user\")\n        data = {\n            \"account\": new_user[\"account\"],\n            \"password\": encrypted_password,\n            \"platform\": new_user[\"platform\"],\n            \"accountType\": \"0\",\n            \"serverNode\": new_user[\"serverNode\"],\n            \"remark\": new_user[\"remark\"],\n            \"sort\": \"12\",\n            \"vpsDescs\": []\n        }\n        response = self.send_post_request(\n            api_session,\n            \"/mascontrol/user\",\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n        self.assert_response_status(\n            response,\n            200,\n            \"新增单个用户失败\"\n        )\n    \n        # 3. 验证JSON返回内容\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_vps\\test_create.py:50: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_718.test_vps.test_create.TestCreate object at 0x000001D180A7E130>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 响应msg字段应为success\nE           URL: http://39.99.136.49:9000/mascontrol/user\nE           JSON路径: $.msg\nE           实际值: 重复添加,请重新输入\nE           期望值: success\n\ncommons\\api_base.py:245: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1753084518238,
+      "stop" : 1753084518238,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "encrypted_password",
+    "time" : {
+      "start" : 1753084518374,
+      "stop" : 1753084518377,
+      "duration" : 3
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1753084518238,
+      "stop" : 1753084518374,
+      "duration" : 136
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1753084518237,
+      "stop" : 1753084518237,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1753084518237,
+      "stop" : 1753084518237,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 响应msg字段应为success\nURL: http://39.99.136.49:9000/mascontrol/user\nJSON路径: $.msg\n实际值: 重复添加,请重新输入\n期望值: success",
+    "statusTrace" : "self = <lingkuan_718.test_vps.test_create.TestCreate object at 0x000001D180A7E130>\napi_session = <lingkuan_718.commons.session.EnvironmentSession object at 0x000001D180A704F0>\nvar_manager = <lingkuan_718.commons.variable_manager.VariableManager object at 0x000001D180A70A00>\nlogged_session = <lingkuan_718.commons.session.EnvironmentSession object at 0x000001D180A704F0>\nencrypted_password = 'fa1af751c83d311f091c9393a364068c'\n\n    @allure.title(\"账号管理-账号列表-新增单个用户\")\n    def test_create_user(self, api_session, var_manager, logged_session, encrypted_password):\n        # 1. 发送创建用户请求\n        new_user = var_manager.get_variable(\"new_user\")\n        data = {\n            \"account\": new_user[\"account\"],\n            \"password\": encrypted_password,\n            \"platform\": new_user[\"platform\"],\n            \"accountType\": \"0\",\n            \"serverNode\": new_user[\"serverNode\"],\n            \"remark\": new_user[\"remark\"],\n            \"sort\": \"12\",\n            \"vpsDescs\": []\n        }\n        response = self.send_post_request(\n            api_session,\n            \"/mascontrol/user\",\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n        self.assert_response_status(\n            response,\n            200,\n            \"新增单个用户失败\"\n        )\n    \n        # 3. 验证JSON返回内容\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_vps\\test_create.py:50: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_718.test_vps.test_create.TestCreate object at 0x000001D180A7E130>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 响应msg字段应为success\nE           URL: http://39.99.136.49:9000/mascontrol/user\nE           JSON路径: $.msg\nE           实际值: 重复添加,请重新输入\nE           期望值: success\n\ncommons\\api_base.py:245: AssertionError",
+    "steps" : [ {
+      "name" : "发送POST请求到 /mascontrol/user",
+      "time" : {
+        "start" : 1753084518377,
+        "stop" : 1753084523447,
+        "duration" : 5070
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "4cceff2a9c830e68",
+        "name" : "请求JSON数据",
+        "source" : "4cceff2a9c830e68.json",
+        "type" : "application/json",
+        "size" : 214
+      }, {
+        "uid" : "db33c6bdca0ab494",
+        "name" : "请求URL",
+        "source" : "db33c6bdca0ab494.txt",
+        "type" : "text/plain",
+        "size" : 16
+      }, {
+        "uid" : "21a73605203fd538",
+        "name" : "响应结果",
+        "source" : "21a73605203fd538.txt",
+        "type" : "text/plain",
+        "size" : 84
+      } ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "48747b4a63ac7339",
+      "name" : "log",
+      "source" : "48747b4a63ac7339.txt",
+      "type" : "text/plain",
+      "size" : 5492
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 4,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 1,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1753084523560,
+      "stop" : 1753084523560,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1753084523560,
+      "stop" : 1753084523560,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1753085075837,
+      "stop" : 1753085075838,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "账号管理-创建基本信息"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "33416-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "1d0f1f9308728788.json",
+  "parameterValues" : [ ]
+}

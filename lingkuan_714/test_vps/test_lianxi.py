@@ -1,55 +1,101 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time    : 2025/2/13 16:43
-# @Author  : Cyj
-# @File    : mfa_key.py
-# @Software: PyCharm
-# @synopsis: 获取MFA验证码
+import time
 
-import base64
-import hashlib
-import hmac
+import pytest
 import logging
-import time as sys_time
+import allure
+from typing import Dict, Any, List
+from lingkuan_714.VAR.VAR import *
+from lingkuan_714.conftest import var_manager
+from lingkuan_714.commons.api_base import APITestBase  # 导入基础类
+
+logger = logging.getLogger(__name__)
+SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-def add_padding(secret):
-    """自动为Base32密钥添加填充符"""
-    padding = '=' * (8 - len(secret) % 8) if len(secret) % 8 != 0 else ''
-    return secret + padding
+@allure.feature("跟单软件看板")
+class TestDeleteFollowSlave(APITestBase):
+    # ---------------------------
+    # VPS管理-VPS列表-新增vps
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-新增vps")
+    def test_create_vps(self, api_session, var_manager, logged_session):
+        # 1. 发送新增vps请求
+        add_VPS = var_manager.get_variable("add_VPS")
+        user_data = var_manager.get_variable("user_data")
+        group_id = var_manager.get_variable("group_id")
+        data = {
+            "ipAddress": add_VPS["ipAddress"],
+            "name": "测试",
+            "expiryDate": DATETIME_ENDTIME,
+            "remark": "测试",
+            "isOpen": 1,
+            "isActive": 1,
+            "userList": [user_data],
+            "isSelectAccount": 1,
+            "isMonitorRepair": 1,
+            "isSpecializedRepair": 1,
+            "isAutoRepair": 1,
+            "groupId": f"{group_id}",
+            "sort": 120
+        }
+        response = self.send_post_request(
+            api_session,
+            '/mascontrol/vps',
+            json_data=data
+        )
 
+        # 2. 判断是否添加成功
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
 
-def generate_code(secret):
-    """根据已有密钥生成当前时间的验证码"""
-    secret = add_padding(secret)  # 自动添加填充符
-    decoded_key = base64.b32decode(secret)  # 解码密钥
+    # ---------------------------
+    # 数据库校验-VPS列表-新增vps
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS列表-新增vps")
+    def test_dbquery_vps(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            add_VPS = var_manager.get_variable("add_VPS")
 
-    # 获取当前时间，单位为秒，按30秒为周期
-    t = int(sys_time.time() // 30)
+            # 定义数据库查询条件
+            sql = f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s"
+            params = (add_VPS["ipAddress"], add_VPS["deleted"])
 
-    # 将时间戳转换为8字节数组
-    data = bytearray(8)
-    for i in range(8):
-        data[7 - i] = (t >> (i * 8)) & 0xff
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.query_database(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params
+            )
 
-    # 使用 HMAC-SHA1 生成哈希值
-    mac = hmac.new(decoded_key, data, hashlib.sha1)
-    hash_bytes = mac.digest()
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
 
-    # 动态截断
-    offset = hash_bytes[19] & 0x0f
-    truncated_hash = 0
-    for i in range(4):
-        truncated_hash = (truncated_hash << 8) | (hash_bytes[offset + i] & 0xff)
+            vps_list_id = db_data[0]["id"]
+            logging.info(f"新增vps的id: {vps_list_id}")
+            var_manager.set_runtime_variable("vps_list_id", vps_list_id)
 
-    truncated_hash = truncated_hash & 0x7fffffff  # 取低31位
-    truncated_hash = truncated_hash % 1000000  # 生成6位验证码
+    # ---------------------------
+    # VPS管理-VPS列表-获取要复制的VPS的ID
+    # ---------------------------
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-获取要复制的VPS的ID")
+    def test_get_vps_pageid(self, api_session, var_manager, logged_session):
+        # 1. 请求VPS列表接口
+        list_query = var_manager.get_variable("list_query")
+        response = self.send_get_request(
+            api_session,
+            'mascontrol/vps/page',
+            params=list_query
+        )
 
-    return truncated_hash
-
-
-if __name__ == '__main__':
-    # 使用提供的密钥
-    secret_key = '5TT6BNORG52XBQLH5XQE5UHELYHRGQWMULEDPRRQ67YSMO3MYXBA'
-    code = generate_code(secret_key)
-    logging.info(f"{code}")
+        # 2. 获取要复制的VPS的ID
+        vps_page_id = response.extract_jsonpath("$.data.list[1].id")
+        logging.info(f"获取vps的id：{vps_page_id}")
+        var_manager.set_runtime_variable("vps_page_id", vps_page_id)

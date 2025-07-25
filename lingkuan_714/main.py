@@ -35,28 +35,28 @@ def run_tests(env: str = "test"):
         # "test_vps/test_masOrderSend_allocation.py",  # 测试用例目录
         # "test_vps/test_masOrderSend_copy.py",  # 测试用例目录
         # "test_vps/test_lianxi.py",  # 测试用例目录
-        # "test_vps/test_lianxi2.py",  # 测试用例目录
+        "test_vps/test_lianxi2.py",  # 测试用例目录
         # "test_vps/test_create_scene.py",  # 测试用例目录
         # "test_vps/test_vps_scene.py",  # 测试用例目录
         # "test_vps/test_vps_money.py",  # 测试用例目录
         # "test_vps/test_delete.py",  # 测试用例目录
         # "test_vps/test_delete_scene.py",  # 测试用例目录
 
-        "test_cloudTrader/test_create.py",  # 测试用例目录
+        # "test_cloudTrader/test_create.py",  # 测试用例目录
         # "test_cloudTrader/test_lianxi.py",  # 测试用例目录
         # "test_cloudTrader/test_lianxi2.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudOrderSend_allocation.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudOrderSend_copy.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudOrderSend_manageropen.py",  # 测试用例目录
-        "test_cloudTrader/test_masOrderSend_cloudcopy.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudOrderSend_managerlevel.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudOrderSend_open.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudOrderSend_level.py",  # 测试用例目录
-        "test_cloudTrader/test_create_scene.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudtrader_scene.py",  # 测试用例目录
-        "test_cloudTrader/test_cloudtrader_money.py",  # 测试用例目录
-        "test_cloudTrader/test_delete_scene.py",  # 测试用例目录
-        "test_cloudTrader/test_delete.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_allocation.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_copy.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_manageropen.py",  # 测试用例目录
+        # "test_cloudTrader/test_masOrderSend_cloudcopy.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_managerlevel.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_open.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudOrderSend_level.py",  # 测试用例目录
+        # "test_cloudTrader/test_create_scene.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudtrader_scene.py",  # 测试用例目录
+        # "test_cloudTrader/test_cloudtrader_money.py",  # 测试用例目录
+        # "test_cloudTrader/test_delete_scene.py",  # 测试用例目录
+        # "test_cloudTrader/test_delete.py",  # 测试用例目录
 
         "--log-file=./Logs/pytest.log",
         "--log-file-level=info",

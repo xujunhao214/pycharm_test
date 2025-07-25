@@ -1,0 +1,39 @@
+7061这个版本优化异常处理：
+HTTP 请求：在发送 HTTP 请求时，虽然记录了响应状态码等信息，但对于一些网络异常（如连接超时、DNS 解析失败等）的处理不够完善，可以增加相应的异常捕获和处理，给出更友好的错误提示。
+数据库操作：数据库操作部分同样可以增强异常处理，例如捕获数据库连接失败、SQL 语法错误等异常，并给出详细的错误信息，方便排查问题。
+
+所有的日志加上时间：
+logger.info
+logger.warning
+logger.error
+error_msg
+
+707这个版本优化：
+数据库轮询等待存在问题，如果有3个结果，但是查询了两条记录就轮询结束，增加了一个字段：
+stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
+
+709这个版本优化：
+1.轮询等待先是看30秒内是否有数据，有数据再看等待期，没有数据就不用等待期
+2.新增allure报告环境数据展示
+
+
+710这个版本优化：这个是一个正常的版本
+之前vps的代码结构进行优化:主要是移除数据库查询，表名字段从json文件中获取
+
+711这个版本优化：
+password使用的是加解密形式
+
+718这个版本：
+是一个完善可以运行的版本
+
+
+721这个版本：
+新增redis数据校验
+新增config.py redis_utils.py文件，修改conftest.py文件
+commons/enums.py  →  定义Environment枚举
+       ↑
+config.py        →  导入Environment，定义ENV_CONFIG
+       ↑
+conftest.py      →  导入Environment和ENV_CONFIG，导入redis_utils
+       ↑
+redis_utils.py   →  导入Environment和ENV_CONFIG（不导入conftest）

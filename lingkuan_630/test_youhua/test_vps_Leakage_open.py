@@ -365,12 +365,12 @@ class TestLoukai(APITestBase):
     def test_trader_orderclose(self, vps_api_session, var_manager, logged_session, db_transaction):
         # 1. 发送全平订单平仓请求
         vps_trader_id = var_manager.get_variable("vps_trader_id")
-        vps_trader_isCloseAll = var_manager.get_variable("vps_trader_isCloseAll")
+        new_user = var_manager.get_variable("new_user")
         data = {
             "isCloseAll": 1,
             "intervalTime": 100,
             "traderId": vps_trader_id,
-            "account": vps_trader_isCloseAll["account"]
+            "account": new_user["account"]
         }
         response = self.send_post_request(
             vps_api_session,
@@ -397,14 +397,12 @@ class TestLoukai(APITestBase):
     def test_dbquery_traderclose(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否有策略平仓指令"):
             vps_trader_id = var_manager.get_variable("vps_trader_id")
-            vps_trader_isCloseAll = var_manager.get_variable("vps_trader_isCloseAll")
-
-            table_name = vps_trader_isCloseAll["table"]
-            symbol = vps_trader_isCloseAll["symbol"]
+            new_user = var_manager.get_variable("new_user")
+            symbol = new_user["symbol"]
 
             sql = f"""
             SELECT * 
-            FROM {table_name} 
+            FROM follow_order_instruct 
             WHERE symbol LIKE %s 
               AND instruction_type = %s 
               AND master_order_status = %s 
