@@ -622,6 +622,32 @@ class TestLeakagelevel(APITestBase):
                 "响应msg字段应为success"
             )
 
+    @allure.title("跟单软件看板-VPS数据-跟单账号自己平仓")
+    @pytest.mark.url("vps")
+    def test_follow_orderClose(self, var_manager, logged_session):
+        with allure.step("1. 发送平仓请求"):
+            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+            user_accounts_1 = var_manager.get_variable("user_accounts_1")
+            data = {
+                "traderId": vps_addslave_id,
+                "account": user_accounts_1,
+                "ifAccount": "true",
+                "isCloseAll": 1
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderClose',
+                json_data=data
+            )
+
+        with allure.step("2. 平仓成功"):
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
     # ---------------------------
     # 数据库校验-策略平仓-跟单指令及订单详情数据检查
     # ---------------------------

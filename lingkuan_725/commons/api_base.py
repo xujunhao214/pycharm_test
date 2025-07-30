@@ -632,6 +632,7 @@ class APITestBase:
         # 检查长度
         assert len(actual_sorted) == len(expected_sorted), \
             f"数据长度不一致: actual={len(actual_sorted)}, expected={len(expected_sorted)}"
+        logging.info(f"两个数据：{actual_sorted} {expected_sorted}")
 
         # 逐个字段比较
         for a, e in zip(actual_sorted, expected_sorted):

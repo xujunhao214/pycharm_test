@@ -51,7 +51,7 @@ class TestDeleteTrader(APITestBase):
     @allure.title("数据库校验-VPS数据-删除跟单账号")
     def test_dbdelete_addsalve(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
-            user_accounts_1=var_manager.get_variable("user_accounts_1")
+            user_accounts_1 = var_manager.get_variable("user_accounts_1")
             logging.info(f"查询条件: table=follow_trader, account={user_accounts_1}")
 
             sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -96,6 +96,7 @@ class TestDeleteTrader(APITestBase):
                 slave_id = var_manager.get_variable(f"vps_addslave_ids_{i}")
                 if not slave_id:
                     pytest.fail(f"未找到需要删除的账号ID：vps_addslave_ids_{i}")
+                print(f"删除第{i}个跟单账号:vps_addslave_ids_{i}")
 
                 # 发送删除请求（接口支持单个ID删除，参数为列表形式）
                 response = self.send_delete_request(
