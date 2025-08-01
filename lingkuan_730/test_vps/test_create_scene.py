@@ -175,10 +175,7 @@ class TestCreate_Scene(APITestBase):
                 db_data = self.wait_for_database_record(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=WAIT_TIMEOUT,  # 最多等30秒
-                    poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                    order_by="create_time DESC"  # 按创建时间倒序
+                    params=params
                 )
 
                 if not db_data:
@@ -216,10 +213,7 @@ class TestCreate_Scene(APITestBase):
                 db_sub_data = self.wait_for_database_record(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=WAIT_TIMEOUT,  # 最多等30秒
-                    poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                    order_by="create_time DESC"  # 按创建时间倒序
+                    params=params
                 )
 
                 if not db_sub_data:

@@ -415,7 +415,7 @@ class TestLeakagelevel(APITestBase):
             assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
 
             close_remark = db_data[0]["close_remark"]
-            logging.info(f"出现漏平，平仓异常信息应该是未开通平仓状态，实际是：{close_remark}")
+            logging.info(f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}")
             assert close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是未开通平仓状态，实际是：{close_remark}"
 
     # ---------------------------

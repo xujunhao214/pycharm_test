@@ -387,7 +387,7 @@ class APITestBase:
                                    time_field: Optional[str] = None,
                                    time_range: int = MYSQL_TIME,
                                    order_by: str = "create_time DESC",
-                                   timeout: int = WAIT_TIMEOUT,
+                                   timeout: int = DELETE_WAIT_TIMEOUT,
                                    poll_interval: int = POLL_INTERVAL) -> None:
         """轮询等待数据库记录删除（增强日志）"""
         import time
@@ -759,7 +759,7 @@ class APITestBase:
         return [{k: v for k, v in item.items() if k in key_fields} for item in results]
 
     def wait_for_api_condition(self, logged_session, method, url, params=None, json_data=None,
-                               expected_condition=None, timeout=30, poll_interval=2):
+                               expected_condition=None, timeout=WAIT_TIMEOUT, poll_interval=POLL_INTERVAL):
         """等待API响应满足特定条件（增强异常处理）"""
         if expected_condition is None:
             raise ValueError("必须提供expected_condition函数")

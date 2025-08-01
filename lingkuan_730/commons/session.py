@@ -21,7 +21,8 @@ log_file = log_dir / "requests.log"
 
 # 按天轮转日志，保留1天
 file_handler = logging.handlers.TimedRotatingFileHandler(
-    log_file, when="D", interval=1, backupCount=1, encoding="utf-8"
+    log_file, when="D", interval=1, backupCount=10, encoding="utf-8"
+    # log_file, when="H", interval=1, backupCount=10, encoding="utf-8"
 )
 
 # 日志格式包含时间、级别、环境标识和消息
@@ -30,6 +31,7 @@ file_handler.setFormatter(formatter)
 
 # 配置基础logger（支持info级别）
 logger = logging.getLogger("requests.session")
+logger.propagate = False
 logger.addHandler(file_handler)
 logger.setLevel(logging.INFO)
 
@@ -151,6 +153,10 @@ class EnvironmentSession(requests.Session):
 
             return response
 
+        except SSLError as e:
+            error_msg = f"[{request_id}] SSL验证失败: {str(e)} | URL: {full_url}"
+            self.logger.error(error_msg, exc_info=True)
+            raise
         except ConnectionError as e:
             # 统一处理所有连接相关异常（包括DNS解析失败）
             error_msg = f"[{request_id}] 网络连接异常（可能包含DNS解析失败）: {str(e)} | URL: {full_url}"
@@ -158,10 +164,6 @@ class EnvironmentSession(requests.Session):
             raise
         except Timeout as e:
             error_msg = f"[{request_id}] 请求超时: {str(e)} | URL: {full_url}"
-            self.logger.error(error_msg, exc_info=True)
-            raise
-        except SSLError as e:
-            error_msg = f"[{request_id}] SSL验证失败: {str(e)} | URL: {full_url}"
             self.logger.error(error_msg, exc_info=True)
             raise
         except RequestException as e:
@@ -186,9 +188,9 @@ class EnvironmentSession(requests.Session):
 
         try:
             data = response.json() if response.headers.get('Content-Type', '').startswith('application/json') else {}
-            result = self.jsonpath_utils.extract(data, expr, default, multi_match)
+            result = self.jsonpath_utils.extract(data, expr, multi_match=multi_match)
             self.logger.info(f"[{DATETIME_NOW}] JSONPath提取成功: {expr} -> {result}")
-            return result
+            return result if result is not None else default
         except Exception as e:
             self.logger.error(f"[{DATETIME_NOW}] JSONPath提取失败: {str(e)} | 表达式: {expr}")
             return default

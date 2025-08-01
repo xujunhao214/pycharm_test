@@ -30,8 +30,7 @@ class TestMasordersend_allocation(APITestBase):
             "startSize": "0.10",
             "endSize": "1.00",
             "totalSzie": "1.00",
-            "remark": "测试数据",
-            "totalNum": "3"
+            "remark": "测试数据"
         }
         response = self.send_post_request(
             api_session,

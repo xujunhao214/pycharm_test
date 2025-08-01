@@ -92,12 +92,7 @@ class TestMasordersend(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 对数据进行校验"):

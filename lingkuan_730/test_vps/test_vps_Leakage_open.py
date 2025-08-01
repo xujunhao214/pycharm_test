@@ -279,7 +279,8 @@ class TestLeakageopen(APITestBase):
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params
+                params=params,
+                time_field="create_time"
             )
 
         with allure.step("2. 转换Redis数据为可比较格式"):

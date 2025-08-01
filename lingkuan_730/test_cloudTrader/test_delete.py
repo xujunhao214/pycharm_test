@@ -64,9 +64,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"云策略跟单账号 {traderList_cloudTrader_4} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -81,10 +79,16 @@ class TestDelete_cloudTrader(APITestBase):
     def test_delete_managercloudTrader(self, api_session, var_manager, logged_session):
         # 1. 删除云策略manager账号请求
         traderList_cloudTrader_3 = var_manager.get_variable("traderList_cloudTrader_3")
+        data = {
+            "idList": [
+                traderList_cloudTrader_3
+            ],
+            "isForceDel": 1
+        }
         response = self.send_delete_request(
             api_session,
             "/mascontrol/cloudTrader",
-            json_data=[traderList_cloudTrader_3]
+            json_data=data
         )
 
         # 2. 验证响应状态码
@@ -118,9 +122,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"云策略manager账号 {traderList_cloudTrader_3} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -135,10 +137,16 @@ class TestDelete_cloudTrader(APITestBase):
     def test_delete_cloudTrader(self, api_session, var_manager, logged_session):
         # 1. 删除云策略manager账号请求
         traderList_cloudTrader_2 = var_manager.get_variable("traderList_cloudTrader_2")
+        data = {
+            "idList": [
+                traderList_cloudTrader_2
+            ],
+            "isForceDel": 1
+        }
         response = self.send_delete_request(
             api_session,
             "/mascontrol/cloudTrader",
-            json_data=[traderList_cloudTrader_2]
+            json_data=data
         )
 
         # 2. 验证响应状态码
@@ -172,9 +180,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"云策略账号 {traderList_cloudTrader_2} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -242,9 +248,7 @@ class TestDelete_cloudTrader(APITestBase):
                     self.wait_for_database_deletion(
                         db_transaction=db_transaction,
                         sql=sql,
-                        params=(account,),
-                        timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                        poll_interval=POLL_INTERVAL,  # 每2秒查询一次
+                        params=(account,)
                     )
                     allure.attach(f"账号 {account} 已成功从数据库下架", "验证结果")
                     print(f"账号 {account} 已成功从数据库下架")
@@ -306,9 +310,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"策略账号 {user_accounts_cloudTrader_1} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -388,9 +390,7 @@ class TestDelete_cloudTrader(APITestBase):
                     self.wait_for_database_deletion(
                         db_transaction=db_transaction,
                         sql=sql,
-                        params=params,
-                        timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                        poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                        params=params
                     )
                     allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果")
                 except TimeoutError as e:
@@ -443,9 +443,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -498,9 +496,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"云策略 {cloudMaster_id} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -552,9 +548,7 @@ class TestDelete_cloudTrader(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"云策略组别 {cloudgroup_id} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:

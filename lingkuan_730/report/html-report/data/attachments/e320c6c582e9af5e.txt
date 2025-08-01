@@ -1,0 +1,66 @@
+INFO     lingkuan_730.commons.variable_manager:variable_manager.py:39 [2025-08-01 13:48] 成功加载静态变量: VAR\test_data.json
+INFO     lingkuan_730.commons.variable_manager:variable_manager.py:55 [2025-08-01 13:48] 成功加载运行时变量: VAR\runtime_vars.json
+INFO     lingkuan_730.conftest:conftest.py:59 [2025-08-01 13:48] 用例 test_vps/test_create_scene.py::TestCreate_Scene::test_import_addSlave 使用默认URL进行登录: http://39.99.136.49:9000
+INFO     lingkuan_730.commons.variable_manager:variable_manager.py:101 [2025-08-01 13:48] 运行时变量已保存
+INFO     lingkuan_730.conftest:conftest.py:79 [2025-08-01 13:48] 登录后切换到VPS URL: http://39.99.136.49:9001
+ERROR    lingkuan_730.commons.api_base:api_base.py:108 2025-08-01 13:48] POST请求连接异常（可能包含DNS解析失败）: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None)) | URL: /subcontrol/follow/addSlave
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connection.py", line 507, in getresponse
+    httplib_response = super().getresponse()
+  File "D:\python_tools\python\lib\http\client.py", line 1347, in getresponse
+    response.begin()
+  File "D:\python_tools\python\lib\http\client.py", line 307, in begin
+    version, status, reason = self._read_status()
+  File "D:\python_tools\python\lib\http\client.py", line 268, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "D:\python_tools\python\lib\socket.py", line 669, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connection.py", line 507, in getresponse
+    httplib_response = super().getresponse()
+  File "D:\python_tools\python\lib\http\client.py", line 1347, in getresponse
+    response.begin()
+  File "D:\python_tools\python\lib\http\client.py", line 307, in begin
+    version, status, reason = self._read_status()
+  File "D:\python_tools\python\lib\http\client.py", line 268, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "D:\python_tools\python\lib\socket.py", line 669, in readinto
+    return self._sock.recv_into(b)
+urllib3.exceptions.ProtocolError: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_730\commons\api_base.py", line 84, in send_post_request
+    response = logged_session.post(url, json=json_data)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "D:\pycharm_test\lingkuan_730\commons\session.py", line 127, in request
+    response = super().request(method, full_url, *args, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 682, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))

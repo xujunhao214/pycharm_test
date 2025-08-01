@@ -20,31 +20,34 @@ class TestcloudTrader_managerlevel(APITestBase):
     @allure.title("云策略-云策略列表-修改云策略跟单")
     def test_cloudTrader_cloudBatchUpdate(self, var_manager, logged_session, db_transaction):
         with allure.step("1. 发送修改跟单策略账号请求，将followClose改为0，关闭平仓"):
-            traderList_cloudTrader_4 = var_manager.get_variable("traderList_cloudTrader_4")
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-            data = {
-                "traderList": [
-                    traderList_cloudTrader_4
-                ],
-                "remark": "修改云策略跟单账号",
-                "followDirection": 0,
-                "followMode": 1,
-                "remainder": 0,
-                "followParam": 1,
-                "placedType": 0,
-                "templateId": 1,
-                "followStatus": 1,
-                "followOpen": 1,
-                "followClose": 0,
-                "followRep": None,
-                "fixedComment": "ceshi",
-                "commentType": None,
-                "digits": 0,
-                "cfd": "@",
-                "forex": "",
-                "sort": 1,
-                "cloudId": cloudMaster_id
-            }
+            traderList_cloudTrader_4 = var_manager.get_variable("traderList_cloudTrader_4")
+            traderList_cloudTrader_3 = var_manager.get_variable("traderList_cloudTrader_3")
+            user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
+            data = [
+                {
+                    "traderList": [
+                        traderList_cloudTrader_4
+                    ],
+                    "cloudId": cloudMaster_id,
+                    "masterId": traderList_cloudTrader_3,
+                    "masterAccount": user_accounts_cloudTrader_3,
+                    "followDirection": 0,
+                    "followMode": 1,
+                    "followParam": 1,
+                    "remainder": 0,
+                    "placedType": 0,
+                    "templateId": 1,
+                    "followStatus": 1,
+                    "followOpen": 1,
+                    "followClose": 0,
+                    "fixedComment": "ceshi",
+                    "commentType": "",
+                    "digits": 0,
+                    "followTraderIds": [],
+                    "sort": "100"
+                }
+            ]
 
             response = self.send_post_request(
                 logged_session,
@@ -56,7 +59,7 @@ class TestcloudTrader_managerlevel(APITestBase):
             self.assert_response_status(
                 response,
                 200,
-                "修改跟单账号失败"
+                "修改云跟单账号失败"
             )
 
             # 3. 验证JSON返回内容
@@ -70,19 +73,15 @@ class TestcloudTrader_managerlevel(APITestBase):
     @allure.title("数据库校验-云策略列表-修改云策略跟单账号是否成功")
     def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
-            user_accounts_cloudTrader_4 = var_manager.get_variable("user_accounts_cloudTrader_4")
+            user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
             sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
-            params = (user_accounts_cloudTrader_4,)
+            params = (user_accounts_cloudTrader_3,)
 
             # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                params=params
             )
         with allure.step("2. 对数据进行校验"):
             follow_close = db_data[0]["follow_close"]
@@ -91,7 +90,7 @@ class TestcloudTrader_managerlevel(APITestBase):
     # ---------------------------
     # 账号管理-交易下单-云策略账号复制下单
     # ---------------------------
-    @allure.title("账号管理-交易下单-云策略账号复制下单")
+    @allure.title("账号管理-交易下单-云策略manager策略账号复制下单")
     def test_bargain_masOrderSend(self, api_session, var_manager, logged_session):
         # 1. 发送云策略复制下单请求
         global user_ids_cloudTrader_3
@@ -125,167 +124,187 @@ class TestcloudTrader_managerlevel(APITestBase):
             "响应msg字段应为success"
         )
 
-    @allure.title("数据库校验-云策略下单-下单指令")
-    def test_dbbargain_masOrderSend(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否有下单"):
-            cloudOrderSend = var_manager.get_variable("cloudOrderSend")
-            vps_cloudTrader_ids_2 = var_manager.get_variable("vps_cloudTrader_ids_2")
-            symbol = cloudOrderSend["symbol"]
-
+    # ---------------------------
+    # 数据库校验-交易开仓-指令及订单详情数据检查
+    # ---------------------------
+    @allure.title("数据库校验-交易开仓-主指令及订单详情数据检查")
+    def test_dbquery_orderSend(self, var_manager, db_transaction):
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
+            user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
             sql = f"""
-                SELECT * 
-                FROM follow_order_instruct
-                WHERE symbol LIKE %s 
-                  AND master_order_status = %s 
-                  AND type = %s 
-                  AND min_lot_size = %s 
-                  AND max_lot_size = %s 
-                  AND remark = %s 
-                  AND total_lots = %s 
-                  AND trader_id = %s
-                """
+                SELECT 
+                    fod.size,
+                    fod.send_no,
+                    fod.magical,
+                    fod.open_price,
+                    fod.symbol,
+                    fod.order_no,
+                    foi.true_total_lots,
+                    foi.order_no,
+                    foi.operation_type,
+                    foi.create_time,
+                    foi.status,
+                    foi.min_lot_size,
+                    foi.max_lot_size,
+                    foi.total_lots,
+                    foi.total_orders
+                FROM 
+                    follow_order_detail fod
+                INNER JOIN 
+                    follow_order_instruct foi 
+                ON 
+                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s
+                    AND fod.account = %s
+                    """
             params = (
-                f"%{symbol}%",
-                "0",
-                cloudOrderSend["type"],
-                cloudOrderSend["endSize"],
-                cloudOrderSend["startSize"],
-                cloudOrderSend["remark"],
-                cloudOrderSend["totalSzie"],
-                vps_cloudTrader_ids_2
+                '0',
+                user_accounts_cloudTrader_3,
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                time_field="fod.open_time"
             )
 
-        with allure.step("2. 提取数据"):
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
-
-            order_no = db_data[0]["order_no"]
-            logging.info(f"获取交易账号下单的订单号: {order_no}")
-            var_manager.set_runtime_variable("order_no", order_no)
-
-        with allure.step("3. 对数据进行校验"):
-            operation_type = db_data[0]["operation_type"]
-            assert operation_type == 0, f"操作类型operation_type应为0(下单)，实际状态为: {operation_type}"
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
 
-    @allure.title("数据库校验-云策略分配下单-持仓检查")
-    def test_dbquery_order_detail(self, var_manager, db_transaction):
-        with allure.step("1. 根据下单指令仓库的order_no字段获取跟单账号订单数据"):
-            order_no = var_manager.get_variable("order_no")
-            cloudOrderSend = var_manager.get_variable("cloudOrderSend")
-            symbol = cloudOrderSend["symbol"]
+            # 手数范围：结束手数校验
+            min_lot_size = db_data[0]["min_lot_size"]
+            endsize = trader_ordersend["endSize"]
+            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
+                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
+            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
 
-            sql = f"""
-            SELECT * 
-            FROM follow_order_detail
-            WHERE symbol LIKE %s 
-              AND send_no = %s 
-              AND type = %s 
-            """
-            params = (
-                f"%{symbol}%",
-                order_no,
-                cloudOrderSend["type"],
-            )
+            # 手数范围：开始手数校验
+            max_lot_size = db_data[0]["max_lot_size"]
+            startSize = trader_ordersend["startSize"]
+            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
+                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
+            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
 
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
+            total_orders = db_data[0]["total_orders"]
+            totalNum = trader_ordersend["totalNum"]
+            assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \
+                f'总订单数量是：{totalNum}，实际是：{total_orders}'
+            logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
 
-        with allure.step("2. 校验数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
-            addsalve_size = [record["size"] for record in db_data]
-            total = sum(addsalve_size)
-            logging.info(f"手数: {addsalve_size}   手数总和: {total}")
-            totalSzie = cloudOrderSend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
+            # 下单总手数与指令表总手数校验
+            total_lots = db_data[0]["total_lots"]
+            totalSzie = trader_ordersend["totalSzie"]
+            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，实际是：{total_lots}'
+            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
 
-    @allure.title("数据库校验-云策略开仓-云策略跟单账号数据校验")
-    def test_dbbargain_masOrderSend3(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否有下单"):
-            cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+            # 下单总手数与订单详情总手数校验
+            totalSzie = trader_ordersend["totalSzie"]
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
+                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+
+    @allure.title("数据库校验-交易开仓-跟单指令及订单详情数据检查")
+    def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
             user_accounts_cloudTrader_4 = var_manager.get_variable("user_accounts_cloudTrader_4")
-
             sql = f"""
-                   SELECT 
+                    SELECT 
                         fod.size,
                         fod.send_no,
+                        fod.magical,
+                        fod.open_price,
+                        fod.symbol,
+                        fod.order_no,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
                         foi.create_time,
-                        foi.status
+                        foi.status,
+                        foi.min_lot_size,
+                        foi.max_lot_size,
+                        foi.total_lots,
+                        foi.total_orders
                     FROM 
                         follow_order_detail fod
                     INNER JOIN 
                         follow_order_instruct foi 
                     ON 
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.cloud_id = %s
-                        AND foi.operation_type = %s 
-                        AND fod.account = %s 
-                   """
+                    WHERE foi.operation_type = %s
+                        AND fod.account = %s
+                        """
             params = (
-                cloudMaster_id,
-                "0",
-                user_accounts_cloudTrader_4
+                '0',
+                user_accounts_cloudTrader_4,
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="fod.open_time"
             )
-        with allure.step("2. 对数据进行校验"):
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
+            status = db_data[0]["status"]
+            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+
+            # 手数范围：结束手数校验（使用math.isclose替换直接比较）
+            min_lot_size = db_data[0]["min_lot_size"]
+            endsize = trader_ordersend["endSize"]
+            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
+                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
+            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+
+            # 手数范围：开始手数校验
+            max_lot_size = db_data[0]["max_lot_size"]
+            startSize = trader_ordersend["startSize"]
+            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
+                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
+            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+
+            # 总订单数量校验
+            total_orders = db_data[0]["total_orders"]
+            totalNum = trader_ordersend["totalNum"]
+            assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9, abs_tol=1e-9), \
+                f'总订单数量是：{totalNum}，实际是：{total_orders}'
+            logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
+
+            # 下单总手数与指令表总手数校验
+            total_lots = db_data[0]["total_lots"]
+            totalSzie = trader_ordersend["totalSzie"]
+            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，实际是：{total_lots}'
+            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+
+            # 下单总手数与订单详情总手数校验
+            totalSzie = trader_ordersend["totalSzie"]
             size = [record["size"] for record in db_data]
-            cloudOrderSend = var_manager.get_variable("cloudOrderSend")
             total = sum(size)
-            totalSzie = cloudOrderSend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
+            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
+                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
     # ---------------------------
     # 账号管理-交易下单-云策略平仓
     # ---------------------------
-    @allure.title("账号管理-交易下单-云策略平仓")
+    @allure.title("账号管理-交易下单-云平仓")
     def test_bargain_masOrderClose(self, api_session, var_manager, logged_session):
         # 1. 发送平仓请求
         data = {
@@ -307,104 +326,74 @@ class TestcloudTrader_managerlevel(APITestBase):
             "响应msg字段应为success"
         )
 
-    @allure.title("数据库校验-交易平仓-云策略平仓指令")
-    def test_dbquery_close_addsalve(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否有平仓指令"):
-            # 从变量管理器获取参数
-            vps_cloudTrader_ids_2 = var_manager.get_variable("vps_cloudTrader_ids_2")
-
-            # 构建SQL（不含时间条件，由wait_for_database_record控制）
-            sql = f"""
-                   SELECT * 
-                   FROM follow_order_instruct 
-                   WHERE cloud_type = %s
-                     AND trader_id = %s
-                     AND operation_type = %s
-                   """
-            params = (
-                "0",  # cloud_type
-                vps_cloudTrader_ids_2,  # trader_id
-                "1"  # operation_type（平仓指令）
-            )
-
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
-
-        with allure.step("2. 提取并保存数据"):
-            # 从查询结果中提取订单号（假设第一条是最新的）
-            close_send_nos = db_data[0]["order_no"]
-            logging.info(f"平仓之后的跟单账号持仓订单号: {close_send_nos}")
-
-            # 保存到运行时变量，供其他用例使用
-            var_manager.set_runtime_variable("close_send_nos", close_send_nos)
-
-        with allure.step("3. 验证结果有效性"):
-            assert close_send_nos is not None, "平仓指令订单号为空"
-            assert len(db_data) >= 1, "未查询到平仓指令记录"
-
     # ---------------------------
-    # 数据库校验-交易平仓-持仓检查跟单账号数据
+    # 数据库校验-交易平仓-指令及订单详情数据检查
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-交易平仓-持仓检查跟单账号数据")
-    def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
+    @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
+    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
-            cloudOrderSend = var_manager.get_variable("cloudOrderSend")
             user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
-            close_send_nos = var_manager.get_variable("close_send_nos")
-
+            vps_cloudTrader_ids_2 = var_manager.get_variable("vps_cloudTrader_ids_2")
             sql = f"""
-                SELECT * 
-                FROM follow_order_detail 
-                WHERE source_user = %s
-                  AND account = %s
-                  AND close_status = %s
-                  AND close_no = %s
-                """
+                SELECT 
+                    fod.size,
+                    fod.close_no,
+                    fod.magical,
+                    fod.open_price,
+                    fod.symbol,
+                    fod.order_no,
+                    foi.true_total_lots,
+                    foi.order_no,
+                    foi.operation_type,
+                    foi.create_time,
+                    foi.status,
+                    foi.min_lot_size,
+                    foi.max_lot_size,
+                    foi.total_lots,
+                    foi.master_order,
+                    foi.total_orders
+                FROM 
+                    follow_order_detail fod
+                INNER JOIN 
+                    follow_order_instruct foi 
+                ON 
+                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s
+                    AND fod.account = %s
+                    AND fod.trader_id = %s
+                    """
             params = (
+                '1',
                 user_accounts_cloudTrader_3,
-                user_accounts_cloudTrader_3,
-                "1",
-                close_send_nos
+                vps_cloudTrader_ids_2,
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                time_field="fod.close_time"
             )
-        with allure.step("2. 校验数据"):
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            close_addsalve_size = [record["size"] for record in db_data]
-            var_manager.set_runtime_variable("close_addsalve_size", close_addsalve_size)
-            total = sum(close_addsalve_size)
-            logging.info(f"手数: {close_addsalve_size} 手数总和: {total}")
-            totalSzie = cloudOrderSend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
+            status = db_data[0]["status"]
+            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+
+            # 平仓总手数校验
+            totalSzie = trader_ordersend["totalSzie"]
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
 
     # ---------------------------
-    # 数据库校验-交易平仓-持仓检查跟单账号数据
+    # 数据库校验-交易平仓-跟单账号出现漏平
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-跟单账号出现漏平")
@@ -432,12 +421,7 @@ class TestcloudTrader_managerlevel(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                time_field="create_time"
             )
         with allure.step("2. 校验数据"):
             if not db_data:
@@ -454,31 +438,34 @@ class TestcloudTrader_managerlevel(APITestBase):
     @allure.title("云策略-云策略列表-修改云策略跟单")
     def test_cloudTrader_cloudBatchUpdate2(self, var_manager, logged_session, db_transaction):
         with allure.step("1. 发送修改跟单策略账号请求，将followClose改为1，开启开仓"):
-            traderList_cloudTrader_4 = var_manager.get_variable("traderList_cloudTrader_4")
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-            data = {
-                "traderList": [
-                    traderList_cloudTrader_4
-                ],
-                "remark": "修改云策略跟单账号",
-                "followDirection": 0,
-                "followMode": 1,
-                "remainder": 0,
-                "followParam": 1,
-                "placedType": 0,
-                "templateId": 1,
-                "followStatus": 1,
-                "followOpen": 1,
-                "followClose": 1,
-                "followRep": None,
-                "fixedComment": "ceshi",
-                "commentType": None,
-                "digits": 0,
-                "cfd": "@",
-                "forex": "",
-                "sort": 1,
-                "cloudId": cloudMaster_id
-            }
+            traderList_cloudTrader_4 = var_manager.get_variable("traderList_cloudTrader_4")
+            traderList_cloudTrader_3 = var_manager.get_variable("traderList_cloudTrader_3")
+            user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
+            data = [
+                {
+                    "traderList": [
+                        traderList_cloudTrader_4
+                    ],
+                    "cloudId": cloudMaster_id,
+                    "masterId": traderList_cloudTrader_3,
+                    "masterAccount": user_accounts_cloudTrader_3,
+                    "followDirection": 0,
+                    "followMode": 1,
+                    "followParam": 1,
+                    "remainder": 0,
+                    "placedType": 0,
+                    "templateId": 1,
+                    "followStatus": 1,
+                    "followOpen": 1,
+                    "followClose": 1,
+                    "fixedComment": "ceshi",
+                    "commentType": "",
+                    "digits": 0,
+                    "followTraderIds": [],
+                    "sort": "100"
+                }
+            ]
 
             response = self.send_post_request(
                 logged_session,
@@ -490,7 +477,7 @@ class TestcloudTrader_managerlevel(APITestBase):
             self.assert_response_status(
                 response,
                 200,
-                "修改跟单账号失败"
+                "修改云跟单账号失败"
             )
 
             # 3. 验证JSON返回内容
@@ -501,7 +488,7 @@ class TestcloudTrader_managerlevel(APITestBase):
                 "响应msg字段应为success"
             )
 
-    @allure.title("数据库校验-云策略列表-修改云策略跟单账号是否成功")
+    @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
     def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             user_accounts_cloudTrader_4 = var_manager.get_variable("user_accounts_cloudTrader_4")
@@ -512,11 +499,7 @@ class TestcloudTrader_managerlevel(APITestBase):
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                params=params
             )
         with allure.step("2. 对数据进行校验"):
             follow_close = db_data[0]["follow_close"]

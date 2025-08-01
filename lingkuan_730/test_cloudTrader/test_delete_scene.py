@@ -84,9 +84,7 @@ class TestDelete_cloudTrader(APITestBase):
                     self.wait_for_database_deletion(
                         db_transaction=db_transaction,
                         sql=sql,
-                        params=params,
-                        timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                        poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                        params=params
                     )
                     allure.attach(f"云策略跟单账号 {traderList_cloudTrader} 已成功从数据库删除", "验证结果")
                 except TimeoutError as e:

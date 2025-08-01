@@ -28,34 +28,33 @@ def run_tests(env: str = "test"):
         f"--env={env}",  # 指定环境
         f"--alluredir={report_dir}",  # allure结果目录
         "--clean-alluredir",  # 清理旧结果
-        "test_vps/test_create.py",  # 测试用例目录
-        "test_vps/test_vps_Leakage_level.py",  # 测试用例目录
-        "test_vps/test_vps_Leakage_open.py",  # 测试用例目录
-        "test_vps/test_masOrderSend.py",  # 测试用例目录
-        "test_vps/test_vps_ordersend.py",  # 测试用例目录
-        # "test_vps/test_lianxi.py",  # 测试用例目录
-        # "test_vps/test_lianxi2.py",  # 测试用例目录
-        "test_vps/test_create_scene.py",  # 测试用例目录
-        "test_vps/test_vps_scene.py",  # 测试用例目录
-        "test_vps/test_vps_money.py",  # 测试用例目录
-        "test_vps/test_delete.py",  # 测试用例目录
-        "test_vps/test_delete_scene.py",  # 测试用例目录
+        "test_vps/test_create.py",
+        # "test_vps/test_vps_Leakage_level.py",
+        # "test_vps/test_vps_Leakage_open.py", 
+        # "test_vps/test_masOrderSend.py", 
+        # "test_vps/test_vps_ordersend.py", 
+        # "test_vps/test_lianxi.py", 
+        # "test_vps/test_lianxi2.py", 
+        "test_vps/test_create_scene.py",
+        # "test_vps/test_vps_scene.py", 
+        # "test_vps/test_vps_money.py", 
+        "test_vps/test_delete.py",
+        "test_vps/test_delete_scene.py",
 
-        # "test_cloudTrader/test_create.py",  # 测试用例目录
-        # "test_cloudTrader/test_lianxi.py",  # 测试用例目录
-        # "test_cloudTrader/test_lianxi2.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudOrderSend_allocation.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudOrderSend_copy.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudOrderSend_manageropen.py",  # 测试用例目录
-        # "test_cloudTrader/test_masOrderSend_cloudcopy.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudOrderSend_managerlevel.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudOrderSend_open.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudOrderSend_level.py",  # 测试用例目录
-        # "test_cloudTrader/test_create_scene.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudtrader_scene.py",  # 测试用例目录
-        # "test_cloudTrader/test_cloudtrader_money.py",  # 测试用例目录
-        # "test_cloudTrader/test_delete_scene.py",  # 测试用例目录
-        # "test_cloudTrader/test_delete.py",  # 测试用例目录
+        # "test_cloudTrader/test_create.py",
+        # "test_cloudTrader/test_lianxi.py",
+        # "test_cloudTrader/test_lianxi2.py", 
+        # "test_cloudTrader/test_cloudOrderSend.py",
+        # "test_cloudTrader/test_masOrderSend.py",
+        # "test_cloudTrader/test_cloudOrderSend_manageropen.py",
+        # "test_cloudTrader/test_cloudOrderSend_managerlevel.py",
+        # "test_cloudTrader/test_cloudOrderSend_open.py", 
+        # "test_cloudTrader/test_cloudOrderSend_level.py", 
+        # "test_cloudTrader/test_create_scene.py",
+        # "test_cloudTrader/test_cloudtrader_scene.py", 
+        # "test_cloudTrader/test_cloudtrader_money.py", 
+        # "test_cloudTrader/test_delete_scene.py",
+        # "test_cloudTrader/test_delete.py",
 
         "--log-file=./Logs/pytest.log",
         "--log-file-level=info",
@@ -71,32 +70,18 @@ def run_tests(env: str = "test"):
         "--output-dir", report_dir
     ]
 
-    # 测试前生成环境文件（指定utf-8编码）
-    result = subprocess.run(
-        generate_env_cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        encoding="utf-8"  # 关键修改：指定utf-8编码
-    )
-    print(f"生成环境文件输出: {result.stdout}")
-    if result.stderr:
-        print(f"生成环境文件错误: {result.stderr}")
-
     # 执行pytest测试
     exit_code = pytest.main(args)
 
-    # 测试后再次生成环境文件（指定utf-8编码）
+    # 测试后生成环境文件（指定utf-8编码）
     result = subprocess.run(
         generate_env_cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        encoding="utf-8"  # 关键修改：指定utf-8编码
+        encoding="utf-8"
     )
-    print(f"测试后重新生成环境文件输出: {result.stdout}")
-    if result.stderr:
-        print(f"测试后生成环境文件错误: {result.stderr}")
+    print(f"测试后生成环境文件输出: {result.stderr}")
 
     try:
         if exit_code != 0:

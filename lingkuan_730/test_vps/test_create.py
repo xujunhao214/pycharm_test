@@ -197,7 +197,7 @@ class TestCreate(APITestBase):
     def test_dbquery_vpsgroup(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_vpsgroup = var_manager.get_variable("add_vpsgroup")
-
+            # 执行数据库查询
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_group WHERE name = %s",
@@ -259,14 +259,11 @@ class TestCreate(APITestBase):
             add_variety = var_manager.get_variable("add_variety")
             # 从变量中获取表名和模板名
             template_name = add_variety["templateName"]
-            # 使用f-string正确格式化SQL语句
-            sql = f"SELECT * FROM follow_variety WHERE template_name = %s"
-            params = (template_name,)
-            # 执行带时间范围的查询
+            # 执行数据库查询
             db_data = self.query_database(
                 db_transaction,
-                sql,
-                params,
+                f"SELECT * FROM follow_variety WHERE template_name = %s",
+                (template_name,)
             )
 
             # 提取数据库中的值
@@ -372,15 +369,11 @@ class TestCreate(APITestBase):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_VPS = var_manager.get_variable("add_VPS")
 
-            # 定义数据库查询条件
-            sql = f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s"
-            params = (add_VPS["ipAddress"], add_VPS["deleted"])
-
-            # 调用轮询等待方法（带时间范围过滤）
+            # 执行数据库查询
             db_data = self.query_database(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s",
+                (add_VPS["ipAddress"], add_VPS["deleted"])
             )
 
             # 提取数据库中的值
@@ -453,11 +446,18 @@ class TestCreate(APITestBase):
         data = {
             "account": new_user["account"],
             "password": encrypted_password,
+            "platform": new_user["platform"],
             "remark": new_user["remark"],
-            "followStatus": 1,
-            "templateId": 1,
+            "platformId": new_user["platformId"],
             "type": 0,
-            "platform": new_user["platform"]
+            "templateId": 1,
+            "followStatus": 1,
+            "cfd": "",
+            "forex": "",
+            "followOrderRemark": 1,
+            "fixedComment": new_user["fixedComment"],
+            "commentType": new_user["commentType"],
+            "digits": new_user["digits"]
         }
         response = self.send_post_request(
             logged_session,
@@ -485,11 +485,11 @@ class TestCreate(APITestBase):
     def test_dbquery_trader(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             new_user = var_manager.get_variable("new_user")
-
+            # 执行数据库查询
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_trader WHERE account = %s",
-                (new_user["account"],),
+                (new_user["account"],)
             )
 
             # 提取数据库中的值
@@ -569,11 +569,11 @@ class TestCreate(APITestBase):
     def test_dbquery_addslave(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             user_accounts_1 = var_manager.get_variable("user_accounts_1")
-
+            # 执行数据库查询
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_trader WHERE account = %s",
-                (user_accounts_1,),
+                (user_accounts_1,)
             )
 
             if not db_data:
@@ -604,7 +604,7 @@ class TestCreate(APITestBase):
             db_data2 = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s",
-                (user_accounts_1,),
+                (user_accounts_1,)
             )
 
             if not db_data2:

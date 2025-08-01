@@ -98,11 +98,7 @@ class Testcloudtrader_money(APITestBase):
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                params=params
             )
 
             # 提取数据库中的值
@@ -138,8 +134,7 @@ class Testcloudtrader_money(APITestBase):
         response = self.send_post_request(
             api_session,
             '/bargain/masOrderSend',
-            json_data=data,
-            sleep_seconds=0
+            json_data=data
         )
 
         # 2. 判断云策略复制下单是否成功
@@ -188,12 +183,7 @@ class Testcloudtrader_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 校验数据"):
@@ -248,12 +238,7 @@ class Testcloudtrader_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 校验数据"):
@@ -310,12 +295,7 @@ class Testcloudtrader_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 校验数据"):
@@ -424,12 +404,7 @@ class Testcloudtrader_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 校验数据"):
@@ -484,12 +459,7 @@ class Testcloudtrader_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 校验数据"):
@@ -547,12 +517,7 @@ class Testcloudtrader_money(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="foi.create_time DESC"  # 按创建时间倒序
+                time_field="foi.create_time"
             )
 
         with allure.step("2. 校验数据"):

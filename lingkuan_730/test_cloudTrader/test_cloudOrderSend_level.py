@@ -78,11 +78,7 @@ class TestcloudTrader_level(APITestBase):
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等30秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                params=params
             )
         with allure.step("2. 对数据进行校验"):
             follow_close = db_data[0]["follow_close"]

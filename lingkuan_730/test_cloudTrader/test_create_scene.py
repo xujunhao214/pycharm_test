@@ -25,39 +25,42 @@ class TestCreate_importcloudTrader(APITestBase):
         # 1. 获取账号总数和所有ID
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         account_cloudTrader = var_manager.get_variable("account_cloudTrader", 0)
+        traderList_cloudTrader_3 = var_manager.get_variable("traderList_cloudTrader_3")
+        user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
         if account_cloudTrader < 0:
             pytest.fail("未找到需要新增的账号数量，请检查前置步骤")
         # 2. 循环获取每个账号的ID
         for i in range(4, account_cloudTrader + 1):
-            with allure.step(f"1. 获取第{i}个跟单账号的ID"):
+            with (allure.step(f"1. 获取第{i}个跟单账号的ID")):
                 slave_id = var_manager.get_variable(f"vps_cloudTrader_ids_{i}")
                 if not slave_id:
                     pytest.fail(f"第{i}个跟单账号的ID为空")
                 print(f"获取第{i}个跟单账号的ID:vps_cloudTrader_ids_{i}")
                 # 3. 发送新增跟单云策略请求（接口支持单个ID删除，参数为列表形式）
-                data = {
-                    "traderList": [
-                        slave_id
-                    ],
-                    "remark": "新增云策略跟单账号",
-                    "followDirection": 0,
-                    "followMode": 1,
-                    "remainder": 0,
-                    "followParam": 1,
-                    "placedType": 0,
-                    "templateId": 1,
-                    "followStatus": 1,
-                    "followOpen": 1,
-                    "followClose": 1,
-                    "followRep": 0,
-                    "fixedComment": "ceshi",
-                    "commentType": "",
-                    "digits": 0,
-                    "cfd": "",
-                    "forex": "",
-                    "sort": None,
-                    "cloudId": cloudMaster_id
-                }
+                data = [
+                    {
+                        "traderList": [
+                            slave_id
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": traderList_cloudTrader_3,
+                        "masterAccount": user_accounts_cloudTrader_3,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": 1,
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": "ceshi",
+                        "commentType": "",
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": "100"
+                    }
+                ]
                 response = self.send_post_request(
                     logged_session,
                     '/mascontrol/cloudTrader/cloudBatchAdd',
@@ -99,7 +102,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 db_data = self.query_database(
                     db_transaction,
                     f"SELECT * FROM follow_cloud_trader WHERE account = %s",
-                    (usr_account,),
+                    (usr_account,)
                 )
                 print(f"获取第{i}个跟单账号的account:user_accounts_cloudTrader_{i}")
 
@@ -143,7 +146,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": "",
                 "mode_desc": "固定手数（5倍）"
             },
@@ -151,7 +154,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": template_id,
-                "remark": "云策略跟单账号测试数据",
+                "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"
             },
@@ -159,7 +162,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -167,7 +170,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -175,7 +178,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -183,7 +186,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },
@@ -198,7 +201,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": template["followMode"],
                 "followParam": template["followParam"],
                 "templateId": template["templateId"],
-                "remark": template["remark"],  # 修改备注
+                "fixedComment": template["fixedComment"],  # 修改备注
                 "Cfd": template["Cfd"],  # 修改Cfd参数
                 "traderList": traderList,
             })
@@ -206,33 +209,38 @@ class TestCreate_importcloudTrader(APITestBase):
 
         # 5. 循环执行后6个账号的修改操作
         for param in parametrize_data:
-            with allure.step(f"1. 对数据进行参数化修改"):
+            with (allure.step(f"1. 对数据进行参数化修改")):
                 # 获取基础配置
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                traderList_cloudTrader_3 = var_manager.get_variable("traderList_cloudTrader_3")
+                user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
                 # 构造请求数据
-                data = {
-                    "traderList": [
-                        param["traderList"]
-                    ],
-                    "remark": param["remark"],
-                    "followDirection": 0,
-                    "followMode": param["followMode"],
-                    "remainder": 0,
-                    "followParam": param["followParam"],
-                    "placedType": 0,
-                    "templateId": param["templateId"],
-                    "followStatus": 1,
-                    "followOpen": 1,
-                    "followClose": 1,
-                    "followRep": None,
-                    "fixedComment": "ceshi",
-                    "commentType": None,
-                    "digits": 0,
-                    "cfd": param["Cfd"],
-                    "forex": "",
-                    "sort": 1,
-                    "cloudId": cloudMaster_id
-                }
+                data = [
+                    {
+                        "traderList": [
+                            param["traderList"]
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": traderList_cloudTrader_3,
+                        "masterAccount": user_accounts_cloudTrader_3,
+                        "followDirection": 0,
+                        "followMode": param["followMode"],
+                        "followParam": param["followParam"],
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": param["templateId"],
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": param["fixedComment"],
+                        "commentType": "",
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": "100",
+                        "cfd": param["Cfd"],
+                        "forex": ""
+                    }
+                ]
 
                 # 发送请求并验证
                 response = self.send_post_request(

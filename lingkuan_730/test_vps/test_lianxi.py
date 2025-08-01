@@ -16,115 +16,68 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 @allure.feature("跟单软件看板")
 class TestDeleteFollowSlave(APITestBase):
     # ---------------------------
-    # VPS管理-VPS列表-校验服务器IP是否可用
+    # 出现漏开-redis数据和数据库的数据做比对
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-校验服务器IP是否可用")
-    def test_get_connect(self, api_session, var_manager, logged_session):
-        # 1. 校验服务器IP是否可用
-        add_VPS = var_manager.get_variable("add_VPS")
-        response = self.send_get_request(
-            api_session,
-            '/mascontrol/vps/connect',
-            params={'ipAddress': add_VPS["ipAddress"]}
-        )
+    @allure.title("出现漏开-redis数据和数据库的数据做比对")
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            new_user = var_manager.get_variable("new_user")
+            symbol = trader_ordersend["symbol"]
 
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "服务器IP不可用"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    # ---------------------------
-    # VPS管理-VPS列表-获取可见用户信息
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-获取可见用户信息")
-    def test_get_user(self, api_session, var_manager, logged_session):
-        # 1. 请求可见用户列表接口
-        response = self.send_get_request(
-            api_session,
-            '/sys/role/role'
-        )
-
-        # 2. 获取可见用户信息
-        user_data = response.extract_jsonpath("$.data")
-        logging.info(f"获取的可见用户信息：{user_data}")
-        var_manager.set_runtime_variable("user_data", user_data)
-
-    # ---------------------------
-    # VPS管理-VPS列表-新增vps
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-新增vps")
-    def test_create_vps(self, api_session, var_manager, logged_session):
-        # 1. 发送新增vps请求
-        add_VPS = var_manager.get_variable("add_VPS")
-        user_data = var_manager.get_variable("user_data")
-        group_id = var_manager.get_variable("group_id")
-        data = {
-            "ipAddress": add_VPS["ipAddress"],
-            "name": "测试",
-            "expiryDate": DATETIME_ENDTIME,
-            "remark": "测试VPS",
-            "isOpen": 1,
-            "isActive": 1,
-            "roleList": user_data,
-            "isSelectAccount": 1,
-            "isMonitorRepair": 1,
-            "isSpecializedRepair": 1,
-            "isAutoRepair": 1,
-            "groupId": f"{group_id}",
-            "sort": 1000
-        }
-        response = self.send_post_request(
-            api_session,
-            '/mascontrol/vps',
-            json_data=data,
-
-        )
-
-        # 2. 判断是否添加成功
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    # ---------------------------
-    # 数据库校验-VPS列表-新增vps
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-VPS列表-新增vps")
-    def test_dbquery_vps(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否新增成功"):
-            add_VPS = var_manager.get_variable("add_VPS")
-
-            # 定义数据库查询条件
-            sql = f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s"
-            params = (add_VPS["ipAddress"], add_VPS["deleted"])
-
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.query_database(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params
+            sql = f"""
+                   SELECT * 
+                   FROM follow_order_detail 
+                   WHERE symbol LIKE %s 
+                     AND source_user = %s
+                     AND account = %s
+                """
+            params = (
+                f"%{symbol}%",
+                new_user["account"],
+                new_user["account"],
             )
 
-            # 提取数据库中的值
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_range=MYSQL_TIME
+            )
 
-            vps_list_id = db_data[0]["id"]
-            logging.info(f"新增vps的id: {vps_list_id}")
-            var_manager.set_runtime_variable("vps_list_id", vps_list_id)
+        with allure.step("2. 转换Redis数据为可比较格式"):
+            if not redis_order_data_send:
+                pytest.fail("Redis中未查询到订单数据")
+
+            # 转换Redis数据为与数据库一致的格式
+            redis_comparable_list = convert_redis_orders_to_comparable_list(redis_order_data_send)
+            logging.info(f"转换后的Redis数据: {redis_comparable_list}")
+
+            # 将转换后的数据存入变量管理器
+            var_manager.set_runtime_variable("redis_comparable_list", redis_comparable_list)
+
+        with allure.step("5. 比较Redis与数据库数据"):
+            # 假设db_data是之前从数据库查询的结果
+            if not db_data:
+                pytest.fail("数据库中未查询到订单数据")
+
+            # 提取数据库中的关键字段（根据实际数据库表结构调整）
+            db_comparable_list = [
+                {
+                    "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
+                    "magical": record["magical"],  # 数据库magical → 统一字段magical
+                    "size": float(record["size"]),  # 数据库size → 统一字段size
+                    "open_price": float(record["open_price"]),
+                    "symbol": record["symbol"]
+                }
+                for record in db_data
+            ]
+            logging.info(f"数据库转换后: {db_comparable_list}")
+            # 比较两个列表（可根据需要调整比较逻辑）
+            self.assert_data_lists_equal(
+                actual=redis_comparable_list,
+                expected=db_comparable_list,
+                fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                tolerance=1e-6  # 浮点数比较容差
+            )
