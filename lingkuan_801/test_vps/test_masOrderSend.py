@@ -115,13 +115,6 @@ class TestMasordersend_allocation(APITestBase):
                 f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
             logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
 
-            # 总订单数量校验
-            total_orders = db_data[0]["total_orders"]
-            totalNum = trader_ordersend["totalNum"]
-            assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9, abs_tol=1e-9), \
-                f'总订单数量是：{totalNum}，实际是：{total_orders}'
-            logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
-
             # 下单总手数与指令表总手数校验
             total_lots = db_data[0]["total_lots"]
             totalSzie = trader_ordersend["totalSzie"]

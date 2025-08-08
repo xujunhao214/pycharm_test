@@ -14,141 +14,87 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 @allure.feature("跟单软件看板")
 class TestDeleteFollowSlave(APITestBase):
-    # ---------------------------
-    # VPS管理-VPS列表列表-清空VPS数据
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表列表-清空VPS数据")
-    def test_closeVps(self, api_session, var_manager, logged_session):
-        vps_list_id = var_manager.get_variable("vps_list_id")
-        # 定义白名单（不可清空数据的ID列表）
-        WHITE_LIST_IDS = WHITE_LIST
-        if vps_list_id in WHITE_LIST_IDS:
-            logging.warning(f"VPS ID {vps_list_id} 在白名单中，跳过清空数据操作。")
-            assert False, f"VPS ID {vps_list_id} 在白名单中，不能清空数据。"
+    @allure.title("数据库校验-VPS数据-批量新增跟单账号")
+    def test_dbimport_addSlave(self, var_manager, db_transaction):
+        # 1. 校验总用户数（需至少7个，才能取后6个）
+        user_count = var_manager.get_variable("user_count", 0)
+        if user_count < 7:
+            pytest.fail(f"用户总数需至少为7，当前为{user_count}，无法提取后6个数据进行校验")
 
-        # 1. 发送清空VPS数据请求
-        params = {"vpsId": f"{vps_list_id}"}
-        response = self.send_get_request(
-            api_session,
-            '/mascontrol/vps/deleteVps',
-            params=params
-        )
+        # 2. 提取后6个账号（对应user_accounts_2到user_accounts_7）
+        all_accounts = []
+        for i in range(2, 8):  # 直接指定取第2到第7个账号（共6个）
+            account = var_manager.get_variable(f"user_accounts_{i}")
+            if not account:
+                pytest.fail(f"未找到第{i}个账号（变量：user_accounts_{i}）")
+            all_accounts.append(account)
+        print(f"将校验的后6个账号：{all_accounts}")
 
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "清空VPS数据失败"
-        )
+        # 3. 初始化ID列表和计数器
+        all_ids = []
+        addslave_count = 0
 
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
+        # 4. 逐个校验后6个账号的数据库记录
+        for idx, account in enumerate(all_accounts, 1):  # idx从1开始（1-6，对应6个账号）
+            with allure.step(f"验证第{idx}个账号（{account}）的数据库记录"):
+                sql = f"SELECT * FROM follow_trader WHERE account = %s"
+                params = (account,)
 
-    # ---------------------------
-    # VPS管理-VPS列表列表-删除VPS数据
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表列表-删除VPS数据")
-    def test_delete_Vps(self, api_session, var_manager, logged_session):
-        vps_list_id = var_manager.get_variable("vps_list_id")
-        # 定义白名单（不可删除数据的ID列表）
-        WHITE_LIST_IDS = WHITE_LIST
-        if vps_list_id in WHITE_LIST_IDS:
-            logging.warning(f"VPS ID {vps_list_id} 在白名单中，跳过删除数据操作。")
-            assert False, f"VPS ID {vps_list_id} 在白名单中，不能删除数据。"
-
-        # 1. 发送删除VPS数据请求
-        response = self.send_delete_request(
-            api_session,
-            '/mascontrol/vps',
-            json_data=[vps_list_id]
-        )
-
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "删除VPS数据失败"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-        time.sleep(15)
-
-    # ---------------------------
-    # VPS管理-VPS列表列表-强制删除VPS
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表列表-强制删除VPS")
-    def test_deleteVPS_forceDelete(self, api_session, var_manager, logged_session):
-        vps_list_id = var_manager.get_variable("vps_list_id")
-        # 定义白名单（不可删除数据的ID列表）
-        WHITE_LIST_IDS = WHITE_LIST
-        if vps_list_id in WHITE_LIST_IDS:
-            logging.warning(f"VPS ID {vps_list_id} 在白名单中，跳过删除数据操作。")
-            assert False, f"VPS ID {vps_list_id} 在白名单中，不能删除数据。"
-
-        params = {
-            "idList": [
-                vps_list_id
-            ],
-            "ignoreStop": 1
-        }
-
-        # 1. 发送强制删除VPS数据请求
-        response = self.send_post_request(
-            api_session,
-            '/mascontrol/vps/forceDelete',
-            json_data=params
-        )
-
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "删除VPS数据失败"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-        time.sleep(15)
-
-    # ---------------------------
-    # 数据库校验-VPS列表列表-删除VPS
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-VPS列表列表-删除VPS")
-    def test_dbdelete_vps(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否删除成功"):
-            add_VPS = var_manager.get_variable("add_VPS")
-            logging.info(f"查询条件: ipAddress={add_VPS['ipAddress']}, deleted={add_VPS['deleted']}")
-
-            sql = f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s"
-            params = (add_VPS["ipAddress"], add_VPS["deleted"])
-
-            db_data = self.query_database(db_transaction, sql, params)
-
-            if db_data:
-                assert db_data[0]["deleted"] == 1, (
-                    f"删除标记错误，应为1实际为{db_data[0]['deleted']}\n"
-                    f"查询结果: {db_data}"
+                # 调用轮询等待方法（带时间范围过滤）
+                db_data = self.wait_for_database_record(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params
                 )
-                logging.info(f"逻辑删除成功，deleted标记已更新为1")
-            else:
-                logging.info("物理删除成功，记录已不存在")
+
+                if not db_data:
+                    pytest.fail(f"账号 {account} 在主表中未找到记录，请检查新增是否成功")
+
+                # 提取当前账号的ID并保存到变量管理器
+                vps_addslave_id = db_data[0]["id"]
+                all_ids.append(vps_addslave_id)
+                var_manager.set_runtime_variable(f"vps_addslave_ids_{idx}", vps_addslave_id)
+                print(f"账号 {account} 的ID为：{vps_addslave_id}，已保存到变量 vps_addslave_ids_{idx}")
+
+                # 校验账号状态和净值（核心业务规则）
+                def verify_core_fields():
+                    # 校验状态（0为正常）
+                    status = db_data[0]["status"]
+                    if status != 0:
+                        pytest.fail(f"账号 {account} 状态异常：预期status=0（正常），实际={status}")
+                    # 校验净值（非零）
+                    euqit = db_data[0]["euqit"]
+                    if euqit == 0:
+                        pytest.fail(f"账号 {account} 净值异常：预期euqit≠0，实际={euqit}")
+
+                # 执行核心校验并记录结果
+                try:
+                    verify_core_fields()
+                    allure.attach(f"账号 {account} 主表字段校验通过", "校验结果", allure.attachment_type.TEXT)
+                except AssertionError as e:
+                    allure.attach(str(e), f"账号 {account} 主表字段校验失败", allure.attachment_type.TEXT)
+                    raise
+
+                # 校验订阅表记录（从表关联）
+                sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
+                params = (account,)
+                # 调用轮询等待方法（带时间范围过滤）
+                db_sub_data = self.wait_for_database_record(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params
+                )
+
+                if not db_sub_data:
+                    pytest.fail(f"账号 {account} 在订阅表中未找到关联记录")
+                # 校验订阅表中的账号与当前账号一致
+                slave_account = db_sub_data[0]["slave_account"]
+                if slave_account != account:
+                    pytest.fail(f"订阅表账号不匹配：预期={account}，实际={slave_account}")
+                allure.attach(f"账号 {account} 订阅表关联校验通过", "校验结果", allure.attachment_type.TEXT)
+
+        # 5. 保存总数量（供后续步骤使用）
+        addslave_count = len(all_ids)
+        var_manager.set_runtime_variable("all_ids", all_ids)
+        var_manager.set_runtime_variable("addslave_count", addslave_count)
+        print(f"后6个账号数据库校验完成，共提取{addslave_count}个ID，已保存到变量 addslave_count")

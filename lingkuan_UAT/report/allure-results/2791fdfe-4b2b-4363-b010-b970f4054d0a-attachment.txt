@@ -1,0 +1,103 @@
+INFO     lingkuan_UAT.commons.variable_manager:variable_manager.py:39 [2025-08-07 10:34] 成功加载静态变量: VAR\test_data.json
+INFO     lingkuan_UAT.commons.variable_manager:variable_manager.py:55 [2025-08-07 10:34] 成功加载运行时变量: VAR\runtime_vars.json
+INFO     requests.session:session.py:58 [2025-08-07 10:34] 初始化环境会话: test | Base URL: https://uat.atcp.top/api
+INFO     requests.session:session.py:63 [2025-08-07 10:34] 切换到Base URL: https://uat.atcp.top/api
+INFO     lingkuan_UAT.conftest:conftest.py:65 [2025-08-07 10:34] 用例 test_vps/test_create.py::TestCreate::test_create_user 使用默认URL登录: https://uat.atcp.top/api
+INFO     lingkuan_UAT.conftest:conftest.py:75 登录尝试 1/3，生成MFA验证码: 494311
+INFO     requests.session:session.py:101 [2025-08-07 10:34] 构建相对URL: https://uat.atcp.top/api + /sys/auth/login -> https://uat.atcp.top/api/sys/auth/login
+INFO     requests.session:session.py:114 [2025-08-07 10:34:30.157] POST 请求开始: https://uat.atcp.top/api/sys/auth/login
+INFO     requests.session:session.py:115 [2025-08-07 10:34:30.157] 请求参数: args=(), kwargs_keys=['data', 'json']
+INFO     requests.session:session.py:123 [2025-08-07 10:34:30.157] JSON请求体: {'username': 'xujunhao', 'password': '04ab152ebbde10be0fb30a66e25d72b9730c20eb7c6bf0215c16a58286baf80911433932c3f6185c890748b28d8bdbe4037cfadbfff8a310feef9f1c125cc24ba6178a3fa91914a26266be288daa985c8768f1c1a2e1c9198cb68b4a9e06f9ef89b364e70255a1', 'captcha': '', 'key': '', 'secretKey': '', 'code': 494311, 'isMfaVerified': 1, 'isStartMfaVerify': 1}
+ERROR    requests.session:session.py:159 [2025-08-07 10:34:30.157] 网络连接异常（可能包含DNS解析失败）: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory'))) | URL: https://uat.atcp.top/api/sys/auth/login
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_UAT\commons\session.py", line 127, in request
+    response = super().request(method, full_url, *args, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 694, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+WARNING  lingkuan_UAT.conftest:conftest.py:109 第1次登录失败: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+INFO     lingkuan_UAT.conftest:conftest.py:111 等待 15 秒后重试...
+INFO     lingkuan_UAT.conftest:conftest.py:75 登录尝试 2/3，生成MFA验证码: 494311
+INFO     requests.session:session.py:101 [2025-08-07 10:34] 构建相对URL: https://uat.atcp.top/api + /sys/auth/login -> https://uat.atcp.top/api/sys/auth/login
+INFO     requests.session:session.py:114 [2025-08-07 10:34:45.194] POST 请求开始: https://uat.atcp.top/api/sys/auth/login
+INFO     requests.session:session.py:115 [2025-08-07 10:34:45.194] 请求参数: args=(), kwargs_keys=['data', 'json']
+INFO     requests.session:session.py:123 [2025-08-07 10:34:45.194] JSON请求体: {'username': 'xujunhao', 'password': '04ab152ebbde10be0fb30a66e25d72b9730c20eb7c6bf0215c16a58286baf80911433932c3f6185c890748b28d8bdbe4037cfadbfff8a310feef9f1c125cc24ba6178a3fa91914a26266be288daa985c8768f1c1a2e1c9198cb68b4a9e06f9ef89b364e70255a1', 'captcha': '', 'key': '', 'secretKey': '', 'code': 494311, 'isMfaVerified': 1, 'isStartMfaVerify': 1}
+ERROR    requests.session:session.py:159 [2025-08-07 10:34:45.194] 网络连接异常（可能包含DNS解析失败）: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory'))) | URL: https://uat.atcp.top/api/sys/auth/login
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_UAT\commons\session.py", line 127, in request
+    response = super().request(method, full_url, *args, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 694, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+WARNING  lingkuan_UAT.conftest:conftest.py:109 第2次登录失败: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+INFO     lingkuan_UAT.conftest:conftest.py:111 等待 15 秒后重试...
+INFO     lingkuan_UAT.conftest:conftest.py:75 登录尝试 3/3，生成MFA验证码: 299883
+INFO     requests.session:session.py:101 [2025-08-07 10:34] 构建相对URL: https://uat.atcp.top/api + /sys/auth/login -> https://uat.atcp.top/api/sys/auth/login
+INFO     requests.session:session.py:114 [2025-08-07 10:35:00.216] POST 请求开始: https://uat.atcp.top/api/sys/auth/login
+INFO     requests.session:session.py:115 [2025-08-07 10:35:00.216] 请求参数: args=(), kwargs_keys=['data', 'json']
+INFO     requests.session:session.py:123 [2025-08-07 10:35:00.216] JSON请求体: {'username': 'xujunhao', 'password': '04ab152ebbde10be0fb30a66e25d72b9730c20eb7c6bf0215c16a58286baf80911433932c3f6185c890748b28d8bdbe4037cfadbfff8a310feef9f1c125cc24ba6178a3fa91914a26266be288daa985c8768f1c1a2e1c9198cb68b4a9e06f9ef89b364e70255a1', 'captcha': '', 'key': '', 'secretKey': '', 'code': 299883, 'isMfaVerified': 1, 'isStartMfaVerify': 1}
+ERROR    requests.session:session.py:159 [2025-08-07 10:35:00.216] 网络连接异常（可能包含DNS解析失败）: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory'))) | URL: https://uat.atcp.top/api/sys/auth/login
+urllib3.exceptions.ProxyError: ('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_UAT\commons\session.py", line 127, in request
+    response = super().request(method, full_url, *args, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 694, in send
+    raise ProxyError(e, request=request)
+requests.exceptions.ProxyError: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
+WARNING  lingkuan_UAT.conftest:conftest.py:109 第3次登录失败: HTTPSConnectionPool(host='uat.atcp.top', port=443): Max retries exceeded with url: /api/sys/auth/login (Caused by ProxyError('Unable to connect to proxy', FileNotFoundError(2, 'No such file or directory')))
