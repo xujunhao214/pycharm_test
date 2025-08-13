@@ -94,10 +94,10 @@ class TestCreate_cloudTrader(APITestBase):
             print(f"共提取{len(user_ids_cloudTrader)}个用户数据")
 
     # ---------------------------
-    # 跟单软件看板-VPS数据-获取VPSID
+    # 数据库查询-获取VPSID
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("跟单软件看板-VPS数据-获取VPSID")
+    @allure.title("数据库查询-获取VPSID")
     def test_get_vpsID(self, var_manager, logged_session):
         # 初始化 JSONPath 工具类
         json_utils = JsonPathUtils()

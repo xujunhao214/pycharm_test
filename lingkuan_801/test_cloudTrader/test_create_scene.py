@@ -138,7 +138,7 @@ class TestCreate_importcloudTrader(APITestBase):
             all_ids.append(addslave_id)
         print(f"已提取后6个账号id：{all_ids}")
 
-        template_id = var_manager.get_variable("template_id")
+        template_id2 = var_manager.get_variable("template_id2")
 
         # 3. 定义6个模板（与账号一一对应）
         templates: List[Dict[str, Any]] = [
@@ -153,7 +153,7 @@ class TestCreate_importcloudTrader(APITestBase):
             {
                 "followMode": 1,
                 "followParam": "1",
-                "templateId": template_id,
+                "templateId": template_id2,
                 "fixedComment": "yunceluegendanzhanghaoceshishuju",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"

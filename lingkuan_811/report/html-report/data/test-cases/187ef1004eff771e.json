@@ -1,0 +1,220 @@
+{
+  "uid" : "187ef1004eff771e",
+  "name" : "数据库校验-VPS数据-批量新增跟单账号",
+  "fullName" : "test_vps.test_create_scene.TestCreate_Scene#test_dbimport_addSlave",
+  "historyId" : "5b943886b5c4f05887f323b30339137a",
+  "time" : {
+    "start" : 1755071283175,
+    "stop" : 1755071314783,
+    "duration" : 31608
+  },
+  "status" : "broken",
+  "statusMessage" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: SELECT * FROM follow_trader WHERE account = %s\n参数: ('300153',)",
+  "statusTrace" : "self = <lingkuan_811.test_vps.test_create_scene.TestCreate_Scene object at 0x00000199BB3500A0>\nvar_manager = <lingkuan_730.commons.variable_manager.VariableManager object at 0x00000199BB5FB340>\ndb_transaction = <pymysql.connections.Connection object at 0x00000199BB1AAD90>\n\n    @allure.title(\"数据库校验-VPS数据-批量新增跟单账号\")\n    def test_dbimport_addSlave(self, var_manager, db_transaction):\n        # 1. 校验总用户数（需至少7个，才能取后6个）\n        vps_user_count = var_manager.get_variable(\"vps_user_count\", 0)\n        if vps_user_count < 7:\n            pytest.fail(f\"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据进行校验\")\n    \n        # 2. 提取后6个账号（对应vps_user_accounts_2到vps_user_accounts_7）\n        all_accounts = []\n        for i in range(2, 8):  # 直接指定取第2到第7个账号（共6个）\n            account = var_manager.get_variable(f\"vps_user_accounts_{i}\")\n            if not account:\n                pytest.fail(f\"未找到第{i}个账号（变量：vps_user_accounts_{i}）\")\n            all_accounts.append(account)\n        print(f\"将校验的后6个账号：{all_accounts}\")\n    \n        # 3. 初始化ID列表和计数器\n        all_ids = []\n        vps_addslave_count = 0\n    \n        # 4. 逐个校验后6个账号的数据库记录\n        for idx, account in enumerate(all_accounts, 1):  # idx从1开始（1-6，对应6个账号）\n            with allure.step(f\"验证第{idx}个账号（{account}）的数据库记录\"):\n                sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n                params = (account,)\n    \n                # 调用轮询等待方法（带时间范围过滤）\n>               db_data = self.wait_for_database_record(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    order_by=\"account ASC\"\n                )\n\ntest_vps\\test_create_scene.py:175: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_811.test_vps.test_create_scene.TestCreate_Scene object at 0x00000199BB3500A0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000199BB1AAD90>\nsql = 'SELECT * FROM follow_trader WHERE account = %s', params = ('300153',)\ntime_field = None, time_range = 1, order_by = 'account ASC', timeout = 30\npoll_interval = 2, stable_period = 3\n\n    def wait_for_database_record(\n            self,\n            db_transaction: pymysql.connections.Connection,\n            sql: str,\n            params: tuple = (),\n            time_field: Optional[str] = None,\n            time_range: int = MYSQL_TIME,\n            order_by: str = \"create_time DESC\",\n            timeout: int = WAIT_TIMEOUT,\n            poll_interval: int = POLL_INTERVAL,\n            stable_period: int = STBLE_PERIOD\n    ) -> List[Dict[str, Any]]:\n        \"\"\"\n        轮询等待数据库记录出现（等待数据稳定）\n        \"\"\"\n        import time\n        start_time = time.time()\n        last_result = None\n        stable_start_time = None\n        has_data = False  # 标记是否查询到过数据\n    \n        logger.info(\n            f\"[{DATETIME_NOW}] 开始等待数据库记录稳定 | \"\n            f\"SQL: {sql[:200]} | \"\n            f\"超时: {timeout}秒 | \"\n            f\"稳定期: {stable_period}秒\"\n        )\n    \n        while time.time() - start_time < timeout:\n            try:\n                db_transaction.commit()  # 刷新事务\n                result = self._execute_query(\n                    db_transaction, sql, params, time_field, order_by, time_range\n                )\n    \n                # 检查是否有数据\n                if len(result) > 0:\n                    has_data = True\n                    # 判断结果是否稳定（数量和内容都不变）\n                    if self._is_result_stable(result, last_result):\n                        if stable_start_time is None:\n                            stable_start_time = time.time()\n                            logger.debug(f\"[{DATETIME_NOW}] 数据首次稳定，开始计时\")\n                        elif time.time() - stable_start_time >= stable_period:\n                            logger.info(\n                                f\"[{DATETIME_NOW}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| \"\n                                f\"结果数: {len(result)}\"\n                            )\n                            return result\n                    else:\n                        stable_start_time = None  # 结果变化，重置稳定计时器\n                        logger.debug(f\"[{DATETIME_NOW}] 数据仍在变化，重置稳定计时器\")\n                else:\n                    # 结果为空，重置稳定计时器\n                    stable_start_time = None\n                    has_data = False\n                    logger.debug(f\"[{DATETIME_NOW}] 查询结果为空，继续等待\")\n    \n                last_result = result\n                elapsed = time.time() - start_time\n                logger.debug(\n                    f\"[{DATETIME_NOW}] 等待数据稳定（已等待{elapsed:.1f}秒）| \"\n                    f\"当前结果数: {len(result)} | \"\n                    f\"稳定时间: {time.time() - stable_start_time if stable_start_time else 0:.1f}/{stable_period}秒\"\n                )\n                time.sleep(poll_interval)\n    \n            except Exception as e:\n                logger.warning(f\"[{DATETIME_NOW}] 轮询查询异常: {str(e)} | 继续等待...\")\n                time.sleep(poll_interval)\n    \n        # 超时处理\n        final_result = self._execute_query(\n            db_transaction, sql, params, time_field, order_by, time_range\n        )\n    \n        if len(final_result) == 0:\n>           raise TimeoutError(\n                f\"等待超时（{timeout}秒），未查询到任何数据。\\n\"\n                f\"SQL: {sql}\\n\"\n                f\"参数: {params}\"\n            )\nE           TimeoutError: 等待超时（30秒），未查询到任何数据。\nE           SQL: SELECT * FROM follow_trader WHERE account = %s\nE           参数: ('300153',)\n\n..\\lingkuan_730\\commons\\api_base.py:531: TimeoutError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1755070740597,
+      "stop" : 1755070741006,
+      "duration" : 409
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755070736575,
+      "stop" : 1755070736575,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755071250544,
+      "stop" : 1755071250545,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755071283127,
+      "stop" : 1755071283174,
+      "duration" : 47
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755070740597,
+      "stop" : 1755070740597,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "broken",
+    "statusMessage" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: SELECT * FROM follow_trader WHERE account = %s\n参数: ('300153',)",
+    "statusTrace" : "self = <lingkuan_811.test_vps.test_create_scene.TestCreate_Scene object at 0x00000199BB3500A0>\nvar_manager = <lingkuan_730.commons.variable_manager.VariableManager object at 0x00000199BB5FB340>\ndb_transaction = <pymysql.connections.Connection object at 0x00000199BB1AAD90>\n\n    @allure.title(\"数据库校验-VPS数据-批量新增跟单账号\")\n    def test_dbimport_addSlave(self, var_manager, db_transaction):\n        # 1. 校验总用户数（需至少7个，才能取后6个）\n        vps_user_count = var_manager.get_variable(\"vps_user_count\", 0)\n        if vps_user_count < 7:\n            pytest.fail(f\"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据进行校验\")\n    \n        # 2. 提取后6个账号（对应vps_user_accounts_2到vps_user_accounts_7）\n        all_accounts = []\n        for i in range(2, 8):  # 直接指定取第2到第7个账号（共6个）\n            account = var_manager.get_variable(f\"vps_user_accounts_{i}\")\n            if not account:\n                pytest.fail(f\"未找到第{i}个账号（变量：vps_user_accounts_{i}）\")\n            all_accounts.append(account)\n        print(f\"将校验的后6个账号：{all_accounts}\")\n    \n        # 3. 初始化ID列表和计数器\n        all_ids = []\n        vps_addslave_count = 0\n    \n        # 4. 逐个校验后6个账号的数据库记录\n        for idx, account in enumerate(all_accounts, 1):  # idx从1开始（1-6，对应6个账号）\n            with allure.step(f\"验证第{idx}个账号（{account}）的数据库记录\"):\n                sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n                params = (account,)\n    \n                # 调用轮询等待方法（带时间范围过滤）\n>               db_data = self.wait_for_database_record(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    order_by=\"account ASC\"\n                )\n\ntest_vps\\test_create_scene.py:175: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_811.test_vps.test_create_scene.TestCreate_Scene object at 0x00000199BB3500A0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000199BB1AAD90>\nsql = 'SELECT * FROM follow_trader WHERE account = %s', params = ('300153',)\ntime_field = None, time_range = 1, order_by = 'account ASC', timeout = 30\npoll_interval = 2, stable_period = 3\n\n    def wait_for_database_record(\n            self,\n            db_transaction: pymysql.connections.Connection,\n            sql: str,\n            params: tuple = (),\n            time_field: Optional[str] = None,\n            time_range: int = MYSQL_TIME,\n            order_by: str = \"create_time DESC\",\n            timeout: int = WAIT_TIMEOUT,\n            poll_interval: int = POLL_INTERVAL,\n            stable_period: int = STBLE_PERIOD\n    ) -> List[Dict[str, Any]]:\n        \"\"\"\n        轮询等待数据库记录出现（等待数据稳定）\n        \"\"\"\n        import time\n        start_time = time.time()\n        last_result = None\n        stable_start_time = None\n        has_data = False  # 标记是否查询到过数据\n    \n        logger.info(\n            f\"[{DATETIME_NOW}] 开始等待数据库记录稳定 | \"\n            f\"SQL: {sql[:200]} | \"\n            f\"超时: {timeout}秒 | \"\n            f\"稳定期: {stable_period}秒\"\n        )\n    \n        while time.time() - start_time < timeout:\n            try:\n                db_transaction.commit()  # 刷新事务\n                result = self._execute_query(\n                    db_transaction, sql, params, time_field, order_by, time_range\n                )\n    \n                # 检查是否有数据\n                if len(result) > 0:\n                    has_data = True\n                    # 判断结果是否稳定（数量和内容都不变）\n                    if self._is_result_stable(result, last_result):\n                        if stable_start_time is None:\n                            stable_start_time = time.time()\n                            logger.debug(f\"[{DATETIME_NOW}] 数据首次稳定，开始计时\")\n                        elif time.time() - stable_start_time >= stable_period:\n                            logger.info(\n                                f\"[{DATETIME_NOW}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| \"\n                                f\"结果数: {len(result)}\"\n                            )\n                            return result\n                    else:\n                        stable_start_time = None  # 结果变化，重置稳定计时器\n                        logger.debug(f\"[{DATETIME_NOW}] 数据仍在变化，重置稳定计时器\")\n                else:\n                    # 结果为空，重置稳定计时器\n                    stable_start_time = None\n                    has_data = False\n                    logger.debug(f\"[{DATETIME_NOW}] 查询结果为空，继续等待\")\n    \n                last_result = result\n                elapsed = time.time() - start_time\n                logger.debug(\n                    f\"[{DATETIME_NOW}] 等待数据稳定（已等待{elapsed:.1f}秒）| \"\n                    f\"当前结果数: {len(result)} | \"\n                    f\"稳定时间: {time.time() - stable_start_time if stable_start_time else 0:.1f}/{stable_period}秒\"\n                )\n                time.sleep(poll_interval)\n    \n            except Exception as e:\n                logger.warning(f\"[{DATETIME_NOW}] 轮询查询异常: {str(e)} | 继续等待...\")\n                time.sleep(poll_interval)\n    \n        # 超时处理\n        final_result = self._execute_query(\n            db_transaction, sql, params, time_field, order_by, time_range\n        )\n    \n        if len(final_result) == 0:\n>           raise TimeoutError(\n                f\"等待超时（{timeout}秒），未查询到任何数据。\\n\"\n                f\"SQL: {sql}\\n\"\n                f\"参数: {params}\"\n            )\nE           TimeoutError: 等待超时（30秒），未查询到任何数据。\nE           SQL: SELECT * FROM follow_trader WHERE account = %s\nE           参数: ('300153',)\n\n..\\lingkuan_730\\commons\\api_base.py:531: TimeoutError",
+    "steps" : [ {
+      "name" : "验证第1个账号（300153）的数据库记录",
+      "time" : {
+        "start" : 1755071283175,
+        "stop" : 1755071314782,
+        "duration" : 31607
+      },
+      "status" : "broken",
+      "statusMessage" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: SELECT * FROM follow_trader WHERE account = %s\n参数: ('300153',)\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_811\\test_vps\\test_create_scene.py\", line 175, in test_dbimport_addSlave\n    db_data = self.wait_for_database_record(\n  File \"D:\\pycharm_test\\lingkuan_730\\commons\\api_base.py\", line 531, in wait_for_database_record\n    raise TimeoutError(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "d8eb5d4b6af292c6",
+      "name" : "log",
+      "source" : "d8eb5d4b6af292c6.txt",
+      "type" : "text/plain",
+      "size" : 7331
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 1,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 1
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755071873791,
+      "stop" : 1755071873791,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755071873786,
+      "stop" : 1755071873786,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755071314798,
+      "stop" : 1755071314845,
+      "duration" : 47
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "账号管理-创建跟单账号"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_create_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_Scene"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "17448-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_create_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "187ef1004eff771e.json",
+  "parameterValues" : [ ]
+}
