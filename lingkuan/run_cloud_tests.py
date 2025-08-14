@@ -22,8 +22,6 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",  # 独立执行时清理自身结果
 
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_lianxi.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_lianxi2.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_masOrderSend.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_open.py",

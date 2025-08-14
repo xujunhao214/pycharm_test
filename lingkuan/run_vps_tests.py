@@ -25,8 +25,6 @@ def run_vps_tests(env: str = "test"):
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_vps_Leakage_open.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_masOrderSend.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_vps_ordersend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_lianxi.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_lianxi2.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_create_scene.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_vps_scene.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_vps/test_vps_money.py",
