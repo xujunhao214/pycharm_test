@@ -1,0 +1,236 @@
+{
+  "uid" : "c05389e816a578c7",
+  "name" : "云策略-云策略列表-新增manager策略账号",
+  "fullName" : "test_cloudTrader.test_create.TestCreate_cloudTrader#test_manager_cloudTrader",
+  "historyId" : "61a92e53ca600481c8ddbd6012a36ad1",
+  "time" : {
+    "start" : 1755149792259,
+    "stop" : 1755149793977,
+    "duration" : 1718
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 响应msg字段应为success\nURL: https://uat.atcp.top/api/mascontrol/cloudTrader\nJSON路径: $.msg\n实际值: 账号无法连接\n期望值: success",
+  "statusTrace" : "self = <lingkuan_814.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x0000025CB9294B50>\nvar_manager = <lingkuan_814.commons.variable_manager.VariableManager object at 0x0000025CB92B8DC0>\nlogged_session = <lingkuan_814.commons.session.EnvironmentSession object at 0x0000025CB94054F0>\n\n    @allure.title(\"云策略-云策略列表-新增manager策略账号\")\n    def test_manager_cloudTrader(self, var_manager, logged_session):\n        # 1. 发送新增策略账号请求\n        cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n        cloudTrader_user_accounts_3 = var_manager.get_variable(\"cloudTrader_user_accounts_3\")\n        new_user = var_manager.get_variable(\"new_user\")\n        manager = var_manager.get_variable(\"manager\")\n        data = {\n            \"cloudId\": cloudMaster_id,\n            \"sourceType\": 1,\n            \"remark\": \"新增manager账号\",\n            \"runningStatus\": 0,\n            \"followOrderRemark\": 1,\n            \"traderId\": \"\",\n            \"managerIp\": manager[\"managerIp\"],\n            \"managerAccount\": manager[\"managerAccount\"],\n            \"managerPassword\": manager[\"managerPassword\"],\n            \"account\": cloudTrader_user_accounts_3,\n            \"platform\": new_user[\"platform\"],\n            \"templateId\": 1,\n            \"fixedComment\": new_user[\"fixedComment\"],\n            \"commentType\": \"\",\n            \"digits\": \"\"\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/mascontrol/cloudTrader',\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n        self.assert_response_status(\n            response,\n            200,\n            \"新增manager策略账号失败\"\n        )\n    \n        # 3. 验证JSON返回内容\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_cloudTrader\\test_create.py:567: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_814.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x0000025CB9294B50>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 响应msg字段应为success\nE           URL: https://uat.atcp.top/api/mascontrol/cloudTrader\nE           JSON路径: $.msg\nE           实际值: 账号无法连接\nE           期望值: success\n\ncommons\\api_base.py:261: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755149645294,
+      "stop" : 1755149645294,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755149645294,
+      "stop" : 1755149645295,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1755149790764,
+      "stop" : 1755149790764,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755149645294,
+      "stop" : 1755149645294,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1755149790764,
+      "stop" : 1755149792259,
+      "duration" : 1495
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 响应msg字段应为success\nURL: https://uat.atcp.top/api/mascontrol/cloudTrader\nJSON路径: $.msg\n实际值: 账号无法连接\n期望值: success",
+    "statusTrace" : "self = <lingkuan_814.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x0000025CB9294B50>\nvar_manager = <lingkuan_814.commons.variable_manager.VariableManager object at 0x0000025CB92B8DC0>\nlogged_session = <lingkuan_814.commons.session.EnvironmentSession object at 0x0000025CB94054F0>\n\n    @allure.title(\"云策略-云策略列表-新增manager策略账号\")\n    def test_manager_cloudTrader(self, var_manager, logged_session):\n        # 1. 发送新增策略账号请求\n        cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n        cloudTrader_user_accounts_3 = var_manager.get_variable(\"cloudTrader_user_accounts_3\")\n        new_user = var_manager.get_variable(\"new_user\")\n        manager = var_manager.get_variable(\"manager\")\n        data = {\n            \"cloudId\": cloudMaster_id,\n            \"sourceType\": 1,\n            \"remark\": \"新增manager账号\",\n            \"runningStatus\": 0,\n            \"followOrderRemark\": 1,\n            \"traderId\": \"\",\n            \"managerIp\": manager[\"managerIp\"],\n            \"managerAccount\": manager[\"managerAccount\"],\n            \"managerPassword\": manager[\"managerPassword\"],\n            \"account\": cloudTrader_user_accounts_3,\n            \"platform\": new_user[\"platform\"],\n            \"templateId\": 1,\n            \"fixedComment\": new_user[\"fixedComment\"],\n            \"commentType\": \"\",\n            \"digits\": \"\"\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/mascontrol/cloudTrader',\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n        self.assert_response_status(\n            response,\n            200,\n            \"新增manager策略账号失败\"\n        )\n    \n        # 3. 验证JSON返回内容\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_cloudTrader\\test_create.py:567: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_814.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x0000025CB9294B50>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 响应msg字段应为success\nE           URL: https://uat.atcp.top/api/mascontrol/cloudTrader\nE           JSON路径: $.msg\nE           实际值: 账号无法连接\nE           期望值: success\n\ncommons\\api_base.py:261: AssertionError",
+    "steps" : [ {
+      "name" : "发送POST请求到 /mascontrol/cloudTrader",
+      "time" : {
+        "start" : 1755149792259,
+        "stop" : 1755149793973,
+        "duration" : 1714
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "90e7e07baa059173",
+        "name" : "请求JSON数据",
+        "source" : "90e7e07baa059173.json",
+        "type" : "application/json",
+        "size" : 380
+      }, {
+        "uid" : "88e5ab42813b124c",
+        "name" : "请求URL",
+        "source" : "88e5ab42813b124c.txt",
+        "type" : "text/plain",
+        "size" : 23
+      }, {
+        "uid" : "90a8a607b0fc3d3e",
+        "name" : "响应结果",
+        "source" : "90a8a607b0fc3d3e.txt",
+        "type" : "text/plain",
+        "size" : 74
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3
+    } ],
+    "attachments" : [ {
+      "uid" : "b064f4056c7f4abe",
+      "name" : "log",
+      "source" : "b064f4056c7f4abe.txt",
+      "type" : "text/plain",
+      "size" : 2686
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 1,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 4
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755149902584,
+      "stop" : 1755149902585,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1755149794090,
+      "stop" : 1755149794091,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1755149794090,
+      "stop" : 1755149794090,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "账号管理-创建账号-为云策略准备"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_cloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "36584-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "c05389e816a578c7.json",
+  "parameterValues" : [ ]
+}

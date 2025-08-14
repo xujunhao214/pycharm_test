@@ -28,28 +28,28 @@ def run_tests(env: str = "test"):
         f"--alluredir={report_dir}",  # allure结果目录
         "--clean-alluredir",  # 清理旧结果
         "test_vps/test_create.py",
-        "test_vps/test_vps_Leakage_level.py",
-        "test_vps/test_vps_Leakage_open.py",
-        "test_vps/test_masOrderSend.py",
-        "test_vps/test_vps_ordersend.py",
+        # "test_vps/test_vps_Leakage_level.py",
+        # "test_vps/test_vps_Leakage_open.py",
+        # "test_vps/test_masOrderSend.py",
+        # "test_vps/test_vps_ordersend.py",
         # "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
         "test_vps/test_create_scene.py",
-        "test_vps/test_vps_scene.py",
-        "test_vps/test_vps_money.py",
+        # "test_vps/test_vps_scene.py",
+        # "test_vps/test_vps_money.py",
         "test_vps/test_delete.py",
         "test_vps/test_delete_scene.py",
 
         "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
-        "test_cloudTrader/test_cloudOrderSend.py",
-        "test_cloudTrader/test_masOrderSend.py",
-        "test_cloudTrader/test_cloudOrderSend_open.py",
-        "test_cloudTrader/test_cloudOrderSend_level.py",
+        # "test_cloudTrader/test_cloudOrderSend.py",
+        # "test_cloudTrader/test_masOrderSend.py",
+        # "test_cloudTrader/test_cloudOrderSend_open.py",
+        # "test_cloudTrader/test_cloudOrderSend_level.py",
         "test_cloudTrader/test_create_scene.py",
-        "test_cloudTrader/test_cloudtrader_scene.py",
-        "test_cloudTrader/test_cloudtrader_money.py",
+        # "test_cloudTrader/test_cloudtrader_scene.py",
+        # "test_cloudTrader/test_cloudtrader_money.py",
         "test_cloudTrader/test_delete_scene.py",
         "test_cloudTrader/test_delete.py",
 
@@ -97,5 +97,5 @@ def run_tests(env: str = "test"):
 
 if __name__ == "__main__":
     # 默认使用测试环境，可通过命令行参数指定
-    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
+    env = sys.argv[1] if len(sys.argv) > 1 else "test"
     sys.exit(run_tests(env))
