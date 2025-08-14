@@ -1,61 +1,116 @@
-# lingkuan_814/tests/test_vps_ordersend.py
-import time
-import math
-
-import allure
-import logging
 import pytest
-from lingkuan_814.VAR.VAR import *
-from lingkuan_814.conftest import var_manager
-from lingkuan_814.commons.api_base import APITestBase  # 导入基础类
-from lingkuan_814.commons.redis_utils import *
-
-logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+import sys
+import os
+import subprocess
 
 
-# ---------------------------
-# 修改模式、品种
-# ---------------------------
-@allure.feature("云策略策略下单-跟单修改模式、品种")
-class TestVPSOrderSend_Scence(APITestBase):
-    # ---------------------------
-    # 数据库查询-获取VPSID
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库查询-获取VPSID")
-    def test_get_vpsID(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库数据"):
-            ip_address = var_manager.get_variable("IP_ADDRESS")
+def run_tests(env: str = "test"):
+    """运行测试并生成报告（支持目录并行+目录内按文件顺序执行）"""
+    report_dir = "/www/python/jenkins/workspace/Documentatio_Test/results"
+    html_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/html"
 
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM follow_vps WHERE ip_address = %s",
-                (ip_address,)
-            )
+    # 定义两个目录的用例文件列表（按期望的执行顺序排列）
+    test_vps_files = [
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_ordersend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_level.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_open.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_masOrderSend_allocation.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_masOrderSend_copy.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_money.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete_scene.py",
+    ]
 
-            # 提取数据库中的值
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+    test_cloudTrader_files = [
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_allocation.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_copy.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_manageropen.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_masOrderSend_cloudcopy.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_managerlevel.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_open.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_level.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudtrader_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudtrader_money.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete.py",
+    ]
 
-            vpsId = db_data[0]["id"]
-            # 存入变量管理器
-            var_manager.set_runtime_variable("vpsId", vpsId)
-            print(f"成功提取 VPS ID: {vpsId}")
+    # 合并用例列表（两个目录的文件会并行执行，但目录内按顺序）
+    all_test_files = test_vps_files + test_cloudTrader_files
 
-    # ---------------------------
-    # VPS管理-VPS列表-获取可见用户信息
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-获取可见用户信息")
-    def test_get_user(self, logged_session, var_manager):
-        # 1. 请求可见用户列表接口
-        response = self.send_get_request(
-            logged_session,
-            '/sys/role/role'
-        )
+    # 构建pytest参数（核心：并行+顺序控制）
+    args = [
+        "-s",  # 显示标准输出
+        "-v",  # 详细输出
+        f"--env={env}",  # 指定环境
+        f"--alluredir={report_dir}",  # allure结果目录
+        "--clean-alluredir",  # 清理旧结果
 
-        # 2. 获取可见用户信息
-        vps_user_data = response.extract_jsonpath("$.data")
-        logging.info(f"获取的可见用户信息：{vps_user_data}")
-        var_manager.set_runtime_variable("vps_user_data", vps_user_data)
+        # 并行执行关键参数
+        "-n", "2",  # 2个进程（分别处理两个目录，实现并行）
+        "--dist=loadfile",  # 按文件分配进程：同一文件的用例在同一进程执行
+        "--order-scope=module",  # 按文件顺序执行（兼容 pytest-order==1.1.0）
+
+        # 传入所有测试文件（按定义的顺序）
+        *all_test_files,
+
+        # 日志配置
+        "--log-file=./Logs/pytest.log",
+        "--log-file-level=info",
+        "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+        "--log-file-date-format=%Y-%m-%d %H:%M:%S",
+        "--log-level=info"
+    ]
+
+    # 生成环境文件（测试前）
+    generate_env_cmd = [
+        "python", "generate_env.py",
+        "--env", env,
+        "--output-dir", report_dir
+    ]
+    result = subprocess.run(
+        generate_env_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8"
+    )
+    print(f"生成环境文件输出: {result.stdout}")
+    if result.stderr:
+        print(f"生成环境文件错误: {result.stderr}")
+
+    # 执行pytest测试
+    exit_code = pytest.main(args)
+
+    # 生成环境文件（测试后）
+    result = subprocess.run(
+        generate_env_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8"
+    )
+    print(f"测试后重新生成环境文件输出: {result.stdout}")
+    if result.stderr:
+        print(f"测试后生成环境文件错误: {result.stderr}")
+
+    # 生成测试报告
+    try:
+        if exit_code != 0:
+            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
+            print(f"测试失败，详细报告: file://{os.path.abspath(html_dir)}/index.html")
+    except Exception as e:
+        print(f"生成报告失败: {str(e)}")
+
+    return exit_code
+
+
+if __name__ == "__main__":
+    # 从命令行参数获取环境（默认test）
+    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    sys.exit(run_tests(env))

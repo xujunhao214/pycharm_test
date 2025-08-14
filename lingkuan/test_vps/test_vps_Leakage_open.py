@@ -1,11 +1,12 @@
-# lingkuan/tests/test_vps_ordersend.py
 import allure
 import logging
 import pytest
 import time
+import math
 from lingkuan.VAR.VAR import *
 from lingkuan.conftest import var_manager
 from lingkuan.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
@@ -21,14 +22,14 @@ class TestLeakageopen(APITestBase):
     def test_update_slave(self, var_manager, logged_session, encrypted_password):
         # 1. 发送修改策略账号请求
         add_Slave = var_manager.get_variable("add_Slave")
-        user_accounts_1 = var_manager.get_variable("user_accounts_1")
+        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         # 开仓给关闭followOpen：0
         data = {
             "traderId": vps_trader_id,
             "platform": add_Slave["platform"],
-            "account": user_accounts_1,
+            "account": vps_user_accounts_1,
             "password": encrypted_password,
             "remark": add_Slave["remark"],
             "followDirection": 0,
@@ -36,7 +37,7 @@ class TestLeakageopen(APITestBase):
             "remainder": 0,
             "followParam": 1,
             "placedType": 0,
-            "templateId": 35,
+            "templateId": 1,
             "followStatus": 1,
             "followOpen": 0,
             "followClose": 1,
@@ -73,19 +74,15 @@ class TestLeakageopen(APITestBase):
     @allure.title("数据库校验-VPS数据-修改跟单账号是否成功")
     def test_dbquery_updateslave(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
-            user_accounts_1 = var_manager.get_variable("user_accounts_1")
+            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
-            params = (user_accounts_1,)
+            params = (vps_user_accounts_1,)
 
             # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
             )
         with allure.step("2. 对数据进行校验"):
             follow_open = db_data[0]["follow_open"]
@@ -94,7 +91,6 @@ class TestLeakageopen(APITestBase):
     # ---------------------------
     # 跟单软件看板-VPS数据-策略开仓-出现漏单
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓-出现漏单")
     def test_trader_orderSend(self, var_manager, logged_session):
@@ -116,8 +112,7 @@ class TestLeakageopen(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderSend',
-            json_data=data,
-            sleep_seconds=3  # 不需要等待，由后续数据库查询处理
+            json_data=data
         )
 
         # 2. 验证响应状态码和内容
@@ -134,124 +129,89 @@ class TestLeakageopen(APITestBase):
         )
 
     # ---------------------------
-    # 数据库校验-策略开仓-策略开仓指令
+    # 数据库校验-策略开仓-主指令及订单详情数据检查
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略开仓-策略开仓指令")
+    @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否有策略开仓指令"):
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            symbol = trader_ordersend["symbol"]
-
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
+            new_user = var_manager.get_variable("new_user")
             sql = f"""
-            SELECT * 
-            FROM follow_order_instruct 
-            WHERE symbol LIKE %s 
-              AND type = %s 
-              AND min_lot_size = %s 
-              AND max_lot_size = %s 
-              AND remark = %s 
-              AND total_lots = %s 
-              AND total_orders = %s 
-              AND trader_id = %s
-            """
+                SELECT 
+                    fod.size,
+                    fod.send_no,
+                    fod.magical,
+                    fod.open_price,
+                    fod.symbol,
+                    fod.order_no,
+                    foi.true_total_lots,
+                    foi.order_no,
+                    foi.operation_type,
+                    foi.create_time,
+                    foi.status,
+                    foi.min_lot_size,
+                    foi.max_lot_size,
+                    foi.total_lots,
+                    foi.total_orders
+                FROM 
+                    follow_order_detail fod
+                INNER JOIN 
+                    follow_order_instruct foi 
+                ON 
+                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s
+                    AND fod.account = %s
+                    """
             params = (
-                f"%{symbol}%",
-                trader_ordersend["type"],
-                trader_ordersend["endSize"],
-                trader_ordersend["startSize"],
-                trader_ordersend["remark"],
-                trader_ordersend["totalSzie"],
-                trader_ordersend["totalNum"],
-                vps_trader_id
+                '0',
+                new_user["account"],
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                time_field="fod.open_time"
             )
-
-        with allure.step("2. 提取数据"):
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
-
-            order_no = db_data[0]["order_no"]
-            logging.info(f"获取策略账号下单的订单号: {order_no}")
-            var_manager.set_runtime_variable("order_no", order_no)
-
-        with allure.step("3. 对数据进行校验"):
-            operation_type = db_data[0]["operation_type"]
-            assert operation_type == 0, f"操作类型operation_type应为0(下单)，实际状态为: {operation_type}"
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
 
-    # ---------------------------
-    # 数据库校验-策略开仓-持仓检查
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略开仓-持仓检查主账号数据")
-    def test_dbquery_order_detail(self, var_manager, db_transaction):
-        with allure.step("1. 根据下单指令仓库的order_no字段获取订单详情"):
-            order_no = var_manager.get_variable("order_no")
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            symbol = trader_ordersend["symbol"]
+            min_lot_size = db_data[0]["min_lot_size"]
+            endsize = trader_ordersend["endSize"]
+            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9), \
+                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
+            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
 
-            sql = f"""
-                SELECT * 
-                FROM follow_order_detail 
-                WHERE symbol LIKE %s 
-                  AND send_no = %s 
-                  AND type = %s 
-                  AND trader_id = %s
-                """
-            params = (
-                f"%{symbol}%",
-                order_no,
-                trader_ordersend["type"],
-                vps_trader_id
-            )
+            max_lot_size = db_data[0]["max_lot_size"]
+            startSize = trader_ordersend["startSize"]
+            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9), \
+                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
+            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
 
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
+            total_orders = db_data[0]["total_orders"]
+            totalNum = trader_ordersend["totalNum"]
+            assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \
+                f'总订单数量是：{totalNum}，实际是：{total_orders}'
+            logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
 
-        with allure.step("2. 提取数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
-
-            order_nos = list(map(lambda x: x["order_no"], db_data))
-            logging.info(f"持仓订单的订单号: {order_nos}")
-            var_manager.set_runtime_variable("order_nos", order_nos)
-
-        with allure.step("3. 校验数据"):
-            import math
-            addsalve_size = [record["size"] for record in db_data]
-            total = sum(addsalve_size)
-            logging.info(f"手数: {addsalve_size}   手数总和: {total}")
+            total_lots = db_data[0]["total_lots"]
             totalSzie = trader_ordersend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
+            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，实际是：{total_lots}'
+            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+
+            totalSzie = trader_ordersend["totalSzie"]
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
+                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
     # ---------------------------
     # 数据库校验-策略开仓-跟单开仓指令
@@ -284,19 +244,80 @@ class TestLeakageopen(APITestBase):
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                params=params
             )
         with allure.step("2. 对订单状态进行校验"):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
             status = db_data[0]["status"]
             assert status == 2, f"跟单失败，跟单状态status应该是2，实际是：{status}"
+
+    # ---------------------------
+    # 出现漏开-redis数据和数据库的数据做比对
+    # ---------------------------
+    @allure.title("出现漏开-redis数据和数据库的数据做比对")
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            new_user = var_manager.get_variable("new_user")
+            symbol = trader_ordersend["symbol"]
+
+            sql = f"""
+                       SELECT * 
+                       FROM follow_order_detail 
+                       WHERE symbol LIKE %s 
+                         AND source_user = %s
+                         AND account = %s
+                       """
+            params = (
+                f"%{symbol}%",
+                new_user["account"],
+                new_user["account"],
+            )
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time"
+            )
+
+        with allure.step("2. 转换Redis数据为可比较格式"):
+            if not redis_order_data_send:
+                pytest.fail("Redis中未查询到订单数据")
+
+            # 转换Redis数据为与数据库一致的格式
+            vps_redis_comparable_list_open = convert_redis_orders_to_comparable_list(redis_order_data_send)
+            logging.info(f"转换后的Redis数据: {vps_redis_comparable_list_open}")
+
+            # 将转换后的数据存入变量管理器
+            var_manager.set_runtime_variable("vps_redis_comparable_list_open", vps_redis_comparable_list_open)
+
+        with allure.step("3. 比较Redis与数据库数据"):
+            # 假设db_data是之前从数据库查询的结果
+            if not db_data:
+                pytest.fail("数据库中未查询到订单数据")
+
+            # 提取数据库中的关键字段（根据实际数据库表结构调整）
+            db_comparable_list = [
+                {
+                    "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
+                    "magical": record["magical"],  # 数据库magical → 统一字段magical
+                    "size": float(record["size"]),  # 数据库size → 统一字段size
+                    "open_price": float(record["open_price"]),
+                    "symbol": record["symbol"]
+                }
+                for record in db_data
+            ]
+            logging.info(f"数据库转换后: {db_comparable_list}")
+            # 比较两个列表（可根据需要调整比较逻辑）
+            self.assert_data_lists_equal(
+                actual=vps_redis_comparable_list_open,
+                expected=db_comparable_list,
+                fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                tolerance=1e-6  # 浮点数比较容差
+            )
 
     # ---------------------------
     # 跟单软件看板-VPS数据-策略开仓-一键补全
@@ -334,14 +355,14 @@ class TestLeakageopen(APITestBase):
     def test_update_slave2(self, var_manager, logged_session, encrypted_password):
         # 1. 发送修改策略账号请求
         add_Slave = var_manager.get_variable("add_Slave")
-        user_accounts_1 = var_manager.get_variable("user_accounts_1")
+        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         # 开仓给开启followOpen：1
         data = {
             "traderId": vps_trader_id,
             "platform": add_Slave["platform"],
-            "account": user_accounts_1,
+            "account": vps_user_accounts_1,
             "password": encrypted_password,
             "remark": add_Slave["remark"],
             "followDirection": 0,
@@ -349,7 +370,7 @@ class TestLeakageopen(APITestBase):
             "remainder": 0,
             "followParam": 1,
             "placedType": 0,
-            "templateId": 35,
+            "templateId": 1,
             "followStatus": 1,
             "followOpen": 1,
             "followClose": 1,
@@ -386,19 +407,15 @@ class TestLeakageopen(APITestBase):
     @allure.title("数据库校验-VPS数据-修改跟单账号是否成功")
     def test_dbquery_updateslave2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
-            user_accounts_1 = var_manager.get_variable("user_accounts_1")
+            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
-            params = (user_accounts_1,)
+            params = (vps_user_accounts_1,)
 
             # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                params=params
             )
 
         with allure.step("2. 对数据进行校验"):
@@ -433,124 +450,76 @@ class TestLeakageopen(APITestBase):
             )
 
     # ---------------------------
-    # 数据库校验-策略开仓-持仓检查跟单账号数据
+    # 数据库校验-策略开仓-跟单指令及订单详情数据检查
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略开仓-补开之后检查数据")
-    def test_dbquery_addsalve_detail(self, var_manager, db_transaction):
+    @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            vps_trader = var_manager.get_variable("vps_trader")
-            user_accounts_1 = var_manager.get_variable("user_accounts_1")
-            symbol = trader_ordersend["symbol"]
-
+            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
-                SELECT * 
-                FROM follow_order_detail 
-                WHERE symbol LIKE %s 
-                  AND source_user = %s
-                  AND account = %s
-                """
+                SELECT 
+                    fod.size,
+                    fod.send_no,
+                    fod.magical,
+                    fod.open_price,
+                    fod.symbol,
+                    fod.order_no,
+                    foi.true_total_lots,
+                    foi.order_no,
+                    foi.operation_type,
+                    foi.create_time,
+                    foi.status,
+                    foi.total_lots,
+                    foi.total_orders
+                FROM 
+                    follow_order_detail fod
+                INNER JOIN 
+                    follow_order_instruct foi 
+                ON 
+                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s
+                    AND fod.account = %s
+                    """
             params = (
-                f"%{symbol}%",
-                vps_trader["account"],
-                user_accounts_1,
+                '0',
+                vps_user_accounts_1,
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                time_field="fod.open_time"
             )
-
-        with allure.step("2. 提取数据"):
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            send_nos = list(map(lambda x: x["send_no"], db_data))
-            logging.info(f"持仓订单的订单号: {send_nos}")
-            var_manager.set_runtime_variable("send_nos", send_nos)
+            status = db_data[0]["status"]
+            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
 
-        with allure.step("3. 校验数据"):
-            import math
-            addsalve_size = [record["size"] for record in db_data]
-            var_manager.set_runtime_variable("addsalve_size", addsalve_size)
-            total = sum(addsalve_size)
-            logging.info(f"手数: {addsalve_size}    手数总和: {total}")
+            total_lots = [record["total_lots"] for record in db_data]
+            total_sumlots = sum(total_lots)
             totalSzie = trader_ordersend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            assert math.isclose(float(totalSzie), float(total_sumlots), rel_tol=1e-9) and \
+                   math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 数据库校验-策略开仓-跟单开仓指令
-    # ---------------------------
-    @allure.title("数据库校验-策略开仓-跟单开仓指令")
-    def test_dbquery_orderSend_addsalve2(self, var_manager, db_transaction):
-        with allure.step("1. 根据订单详情数据库数据，校验跟单指令数据是否正确"):
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            symbol = trader_ordersend["symbol"]
-
-            sql = f"""
-                    SELECT * 
-                    FROM follow_order_instruct 
-                    WHERE symbol LIKE %s 
-                      AND instruction_type = %s
-                      AND if_follow = %s
-                      AND master_order_status = %s 
-                      AND type = %s 
-                      AND trader_id = %s
-                    """
-            params = (
-                f"%{symbol}%",
-                "2",
-                "1",
-                "0",
-                trader_ordersend["type"],
-                vps_trader_id,
-            )
-
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
-
-        with allure.step("2. 验证下单指令的跟单账号数据"):
-            send_nos = var_manager.get_variable("send_nos")
-            order_no = [record["order_no"] for record in db_data]
-            logging.info(f"订单详情的订单号：{send_nos}下单指令的订单号：{order_no}")
             self.assert_list_equal_ignore_order(
-                send_nos,
-                order_no,
-                f"订单详情的订单号：{send_nos}和平仓指令的订单号：{order_no}不一致"
+                size,
+                total_lots,
+                f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
             )
-
-            addsalve_size = var_manager.get_variable("addsalve_size")
-            true_total_lots = [record["true_total_lots"] for record in db_data]
-            logging.info(f"订单详情的下单手数:{addsalve_size} 下单指令的实际下单手数:{true_total_lots}")
-            assert set(true_total_lots) == set(
-                addsalve_size), f"订单详情的下单手数{addsalve_size}和下单指令{true_total_lots}的实际下单手数不一致"
 
     # ---------------------------
     # 跟单软件看板-VPS数据-策略平仓
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
     def test_trader_orderclose(self, var_manager, logged_session, db_transaction):
@@ -566,8 +535,7 @@ class TestLeakageopen(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data=data,
-            sleep_seconds=3
+            json_data=data
         )
 
         # 2. 验证响应
@@ -584,221 +552,132 @@ class TestLeakageopen(APITestBase):
         )
 
     # ---------------------------
-    # 数据库校验-策略平仓-策略平仓主指令
+    # 数据库校验-策略平仓-主指令及订单详情数据检查
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略平仓-策略平仓主指令")
-    def test_dbquery_traderclose(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否有策略平仓指令"):
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            sql = f"""
-                            SELECT * 
-                            FROM follow_order_instruct 
-                            WHERE master_order_status = %s 
-                              AND trader_id = %s
-                              AND if_follow = %s
-                              AND instruction_type = %s
-                            """
-            params = (
-                "0",
-                vps_trader_id,
-                "0",
-                "0"
-            )
-
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
-
-        with allure.step("2. 提取数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
-
-            order_no_detail = db_data[0]["order_no"]
-            logging.info(f"获取策略平仓的订单号: {order_no_detail}")
-            var_manager.set_runtime_variable("order_no_detail", order_no_detail)
-
-    # ---------------------------
-    # 数据库校验-策略平仓-平仓订单详情持仓检查
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略平仓-平仓订单详情持仓检查")
-    def test_dbquery_closed_orderdetail(self, var_manager, db_transaction):
-        with allure.step("1. 检查订单详情界面的数据"):
-            order_no_detail = var_manager.get_variable("order_no_detail")
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            symbol = trader_ordersend["symbol"]
-
-            sql = f"""
-                SELECT * 
-                FROM follow_order_detail 
-                WHERE symbol LIKE %s 
-                  AND close_no = %s 
-                  AND type = %s 
-                  AND trader_id = %s
-                """
-            params = (
-                f"%{symbol}%",
-                order_no_detail,
-                trader_ordersend["type"],
-                vps_trader_id
-            )
-
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
-
-        with allure.step("2. 提取数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
-
-            order_nos = list(map(lambda x: x["order_no"], db_data))
-            logging.info(f"持仓订单的订单号: {order_nos}")
-            var_manager.set_runtime_variable("order_nos", order_nos)
-
-        with allure.step("3. 校验数据"):
-            import math
-            addsalve_size = [record["size"] for record in db_data]
-            total = sum(addsalve_size)
-            logging.info(f"手数: {addsalve_size} 手数总和: {total}")
-            totalSzie = trader_ordersend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
-
-    # ---------------------------
-    # 数据库校验-策略平仓-持仓检查跟单账号数据
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略平仓-持仓检查跟单账号数据")
-    def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
+    @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
+    def test_dbquery_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            vps_trader = var_manager.get_variable("vps_trader")
-            user_accounts_1 = var_manager.get_variable("user_accounts_1")
-            symbol = trader_ordersend["symbol"]
-
+            new_user = var_manager.get_variable("new_user")
             sql = f"""
-                SELECT * 
-                FROM follow_order_detail 
-                WHERE symbol LIKE %s 
-                  AND source_user = %s
-                  AND account = %s
-                  AND close_status = %s
-                """
-            params = (
-                f"%{symbol}%",
-                vps_trader["account"],
-                user_accounts_1,
-                "1",
-            )
-
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
-            )
-        with (allure.step("2. 提取数据")):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
-
-            close_send_nos = [record["close_no"] for record in db_data]
-            logging.info(f"平仓之后的跟单账号持仓订单号: {close_send_nos}")
-            var_manager.set_runtime_variable("close_send_nos", close_send_nos)
-        with allure.step("3. 校验数据"):
-            import math
-            close_addsalve_size = [record["size"] for record in db_data]
-            var_manager.set_runtime_variable("close_addsalve_size", close_addsalve_size)
-            total = sum(close_addsalve_size)
-            logging.info(f"手数: {close_addsalve_size} 手数总和: {total}")
-            totalSzie = trader_ordersend["totalSzie"]
-            assert math.isclose(float(total), float(totalSzie), rel_tol=1e-9,
-                                abs_tol=1e-9), f"跟单总手数和下单的手数不相等 (实际: {total}, 预期: {totalSzie})"
-            logging.info(f"跟单总手数和下单的手数相等(实际: {total}, 预期: {totalSzie})")
-
-    # ---------------------------
-    # 数据库校验-策略平仓-跟单平仓指令
-    # ---------------------------
-    @allure.title("数据库校验-策略平仓-跟单平仓指令")
-    def test_dbquery_close_addsalve(self, var_manager, db_transaction):
-        with allure.step("1. 根据订单详情数据库数据，校验跟单指令数据是否正确"):
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            symbol = trader_ordersend["symbol"]
-
-            sql = f"""
-                    SELECT * 
-                    FROM follow_order_instruct 
-                    WHERE symbol LIKE %s 
-                      AND instruction_type = %s
-                      AND if_follow = %s
-                      AND master_order_status = %s 
-                      AND type = %s 
-                      AND trader_id = %s
-                      AND operation_type = %s
+                SELECT 
+                    fod.size,
+                    fod.close_no,
+                    fod.magical,
+                    fod.open_price,
+                    fod.symbol,
+                    fod.order_no,
+                    foi.true_total_lots,
+                    foi.order_no,
+                    foi.operation_type,
+                    foi.create_time,
+                    foi.status
+                FROM 
+                    follow_order_detail fod
+                INNER JOIN 
+                    follow_order_instruct foi 
+                ON 
+                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s
+                    AND fod.account = %s
                     """
             params = (
-                f"%{symbol}%",
-                "2",
-                "1",
-                "1",
-                trader_ordersend["type"],
-                vps_trader_id,
-                "1",
+                '1',
+                new_user["account"],
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="create_time",  # 按创建时间过滤
-                time_range=MYSQL_TIME,  # 只查前后2分钟的数据
-                timeout=WAIT_TIMEOUT,  # 最多等36秒
-                poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                stable_period=STBLE_PERIOD,  # 新增：数据连续3秒不变则认为加载完成
-                order_by="create_time DESC"  # 按创建时间倒序
+                time_field="fod.close_time"
+            )
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            status = db_data[0]["status"]
+            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+
+            totalSzie = trader_ordersend["totalSzie"]
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+
+    # ---------------------------
+    # 数据库校验-策略平仓-跟单指令及订单详情数据检查
+    # ---------------------------
+    @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
+    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
+            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+            sql = f"""
+                SELECT 
+                    fod.size,
+                    fod.close_no,
+                    fod.magical,
+                    fod.open_price,
+                    fod.symbol,
+                    fod.order_no,
+                    foi.true_total_lots,
+                    foi.order_no,
+                    foi.operation_type,
+                    foi.create_time,
+                    foi.status,
+                    foi.min_lot_size,
+                    foi.max_lot_size,
+                    foi.total_lots,
+                    foi.master_order,
+                    foi.total_orders
+                FROM 
+                    follow_order_detail fod
+                INNER JOIN 
+                    follow_order_instruct foi 
+                ON 
+                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s
+                    AND fod.account = %s
+                    AND fod.trader_id = %s
+                    """
+            params = (
+                '1',
+                vps_user_accounts_1,
+                vps_addslave_id,
             )
 
-        with allure.step("2. 验证下单指令的跟单账号数据"):
-            close_send_nos = var_manager.get_variable("close_send_nos")
-            order_no_close = [record["order_no"] for record in db_data]
-            logging.info(f"订单详情的订单号：{close_send_nos} 平仓指令的订单号：{order_no_close}")
-            var_manager.set_runtime_variable("order_no_close", order_no_close)
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record_with_timezone(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="fod.close_time"
+            )
+        with allure.step("2. 数据校验"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            status = db_data[0]["status"]
+            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+
+            totalSzie = trader_ordersend["totalSzie"]
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
+                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
+            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+            total_lots = [record["total_lots"] for record in db_data]
             self.assert_list_equal_ignore_order(
-                close_send_nos,
-                order_no_close,
-                f"订单详情的订单号：{close_send_nos}和平仓指令的订单号：{order_no_close}不一致"
+                size,
+                total_lots,
+                f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
             )
+            logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-            close_addsalve_size = var_manager.get_variable("close_addsalve_size")
-            true_total_lots = [record["true_total_lots"] for record in db_data]
-            logging.info(f"订单详情的平仓手数:{close_addsalve_size} 平仓指令的实际平仓手数:{true_total_lots}")
-            assert set(true_total_lots) == set(
-                close_addsalve_size), f"订单详情的平仓手数{close_addsalve_size}和平仓指令{true_total_lots}的实际平仓手数不一致"
-
-            time.sleep(45)
+        time.sleep(25)

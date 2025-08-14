@@ -21,8 +21,7 @@ class TestCreate_cloudTrader(APITestBase):
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
-    def test_create_importuser(self, api_session, var_manager, logged_session, db_transaction):
-        """验证数据库"""
+    def test_create_importuser(self, logged_session, var_manager):
         add_cloudTrader = var_manager.get_variable("add_cloudTrader")
         with open(add_cloudTrader["csv_user_path"], 'rb') as f:
             csv_file = f.read()
@@ -34,7 +33,7 @@ class TestCreate_cloudTrader(APITestBase):
 
         # 1. 发送创建用户请求
         response = self.send_post_request(
-            api_session,
+            logged_session,
             "/mascontrol/user/import",
             files=files
         )
@@ -68,30 +67,55 @@ class TestCreate_cloudTrader(APITestBase):
                 db_transaction,
                 f"SELECT * FROM follow_trader_user WHERE remark = %s",
                 (add_cloudTrader["remarkimport"],),
+                order_by="account ASC"
             )
 
             # 验证查询结果
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            # 提取user_ids_cloudTrader和user_accounts_cloudTrader（保持原有列表形式，用于后续判断）
-            user_ids_cloudTrader = [item["id"] for item in db_data]
-            user_accounts_cloudTrader = [item["account"] for item in db_data]
+            # 提取cloudTrader_user_ids和cloudTrader_user_accounts（保持原有列表形式，用于后续判断）
+            cloudTrader_user_ids = [item["id"] for item in db_data]
+            cloudTrader_user_accounts = [item["account"] for item in db_data]
 
-            print(f"提取到用户ID列表: {user_ids_cloudTrader}")
-            print(f"提取到用户账号列表: {user_accounts_cloudTrader}")
+            print(f"提取到用户ID列表: {cloudTrader_user_ids}")
+            print(f"提取到用户账号列表: {cloudTrader_user_accounts}")
 
             # 将列表拆分为单独的变量
-            for i, (user_id_cloudTrader, account_cloudTrader) in enumerate(
-                    zip(user_ids_cloudTrader, user_accounts_cloudTrader), 1):
-                var_manager.set_runtime_variable(f"user_ids_cloudTrader_{i}", user_id_cloudTrader)
-                var_manager.set_runtime_variable(f"user_accounts_cloudTrader_{i}", account_cloudTrader)
+            for i, (user_id_cloudTrader, cloudTrader_account) in enumerate(
+                    zip(cloudTrader_user_ids, cloudTrader_user_accounts), 1):
+                var_manager.set_runtime_variable(f"cloudTrader_user_ids_{i}", user_id_cloudTrader)
+                var_manager.set_runtime_variable(f"cloudTrader_user_accounts_{i}", cloudTrader_account)
                 print(
-                    f"已设置变量: user_ids_cloudTrader_{i}={user_id_cloudTrader}, user_accounts_cloudTrader_{i}={account_cloudTrader}")
+                    f"已设置变量: cloudTrader_user_ids_{i}={user_id_cloudTrader}, cloudTrader_user_accounts_{i}={cloudTrader_account}")
 
             # 保存总数，便于后续参数化使用
-            var_manager.set_runtime_variable("user_count_cloudTrader", len(user_ids_cloudTrader))
-            print(f"共提取{len(user_ids_cloudTrader)}个用户数据")
+            var_manager.set_runtime_variable("cloudTrader_user_count", len(cloudTrader_user_ids))
+            print(f"共提取{len(cloudTrader_user_ids)}个用户数据")
+
+    # ---------------------------
+    # 数据库查询-获取VPSID
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取VPSID")
+    def test_get_vpsID(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库数据"):
+            ip_address = var_manager.get_variable("IP_ADDRESS")
+
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address = %s",
+                (ip_address,)
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            vpsId = db_data[0]["id"]
+            # 存入变量管理器
+            var_manager.set_runtime_variable("vpsId", vpsId)
+            print(f"成功提取 VPS ID: {vpsId}")
 
     # ---------------------------
     # 跟单软件看板-VPS数据-新增策略账号-为云策略准备
@@ -99,18 +123,25 @@ class TestCreate_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
-    def test_add_trader(self, var_manager, logged_session, db_transaction, encrypted_password):
+    def test_add_trader(self, var_manager, logged_session, encrypted_password):
         # 1. 发送新增策略账号请求
-        vps_cloudTrade = var_manager.get_variable("vps_cloudTrade")
-        user_accounts_cloudTrader_1 = var_manager.get_variable("user_accounts_cloudTrader_1")
+        new_user = var_manager.get_variable("new_user")
+        cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
         data = {
-            "account": user_accounts_cloudTrader_1,
+            "account": cloudTrader_user_accounts_1,
             "password": encrypted_password,
-            "remark": vps_cloudTrade["remark"],
+            "remark": new_user["remark"],
             "followStatus": 1,
             "templateId": 1,
             "type": 0,
-            "platform": vps_cloudTrade["platform"]
+            "cfd": "",
+            "forex": "",
+            "followOrderRemark": 1,
+            "fixedComment": new_user["fixedComment"],
+            "commentType": new_user["commentType"],
+            "digits": new_user["digits"],
+            "platformId": new_user["platformId"],
+            "platform": new_user["platform"]
         }
         response = self.send_post_request(
             logged_session,
@@ -137,66 +168,59 @@ class TestCreate_cloudTrader(APITestBase):
     @allure.title("数据库校验-VPS数据-新增策略账号")
     def test_dbquery_trader(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
-            user_accounts_cloudTrader_1 = var_manager.get_variable("user_accounts_cloudTrader_1")
+            cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
 
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_trader WHERE account = %s",
-                (user_accounts_cloudTrader_1,),
+                (cloudTrader_user_accounts_1,),
             )
 
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            vps_id_cloudTrader = db_data[0]["id"]
-            logging.info(f"新增策略账号ID: {vps_id_cloudTrader}")
-            print(f"新增策略账号ID: {vps_id_cloudTrader}")
-            var_manager.set_runtime_variable("vps_id_cloudTrader", vps_id_cloudTrader)
+            cloudTrader_vps_id = db_data[0]["id"]
+            logging.info(f"新增策略账号ID: {cloudTrader_vps_id}")
+            print(f"新增策略账号ID: {cloudTrader_vps_id}")
+            var_manager.set_runtime_variable("cloudTrader_vps_id", cloudTrader_vps_id)
 
-            # 定义验证函数
-            def verify_order_status():
-                status = db_data[0]["status"]
-                if status != 0:
-                    pytest.fail(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
-                euqit = db_data[0]["euqit"]
-                if euqit == 0:
-                    pytest.fail(f"账号净值euqit有钱，实际金额为: {euqit}")
+        # 定义验证函数
+        with allure.step("2. 数据校验"):
+            status = db_data[0]["status"]
+            assert status == 0, f"新增策略账号状态status应为0（正常），实际状态为: {status}"
+            logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
 
-            # 执行验证
-            try:
-                verify_order_status()
-                allure.attach("账号基础信息校验通过", "成功详情", allure.attachment_type.TEXT)
-            except AssertionError as e:
-                allure.attach(str(e.args[0]), "账号基础信息校验失败", allure.attachment_type.TEXT)
-                raise
+            euqit = db_data[0]["euqit"]
+            assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
     # ---------------------------
     # 账号管理-账号列表-批量挂靠VPS
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("账号管理-账号列表-批量挂靠VPS（后9个账号）")
-    def test_user_hangVps(self, var_manager, logged_session, db_transaction):
+    @allure.title("账号管理-账号列表-批量挂靠VPS跟单（后9个账号）")
+    def test_user_hangVps(self, var_manager, logged_session):
         # 1. 获取后9个账号的ID（使用range直接循环索引1-9，对应第2到第10个账号）
-        user_count_cloudTrader = var_manager.get_variable("user_count_cloudTrader")
-        user_ids_later9 = []
-        for i in range(2, user_count_cloudTrader + 1):  # 循环索引1-9（共9次）
-            user_id_var_name = f"user_ids_cloudTrader_{i}"
+        cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count")
+        cloudTrader_user_ids_later9 = []
+        for i in range(2, cloudTrader_user_count + 1):  # 循环索引1-9（共9次）
+            user_id_var_name = f"cloudTrader_user_ids_{i}"
             user_id = var_manager.get_variable(user_id_var_name)
             if not user_id:
                 pytest.fail(f"未找到第{i}个账号ID（变量：{user_id_var_name}）")
-            user_ids_later9.append(user_id)
+            cloudTrader_user_ids_later9.append(user_id)
 
-        var_manager.set_runtime_variable("user_ids_later9", user_ids_later9)  # 保存后9个账号ID
-        print(f"将批量挂靠的后9个账号ID：{user_ids_later9}")
+        var_manager.set_runtime_variable("cloudTrader_user_ids_later9", cloudTrader_user_ids_later9)  # 保存后9个账号ID
+        print(f"将批量挂靠的后9个账号ID：{cloudTrader_user_ids_later9}")
 
-        # 2. 发送批量挂靠VPS请求（后续代码与之前一致）
-        vps_id_cloudTrader = var_manager.get_variable("vps_id_cloudTrader")
+        # 2. 发送批量挂靠VPS跟单请求（后续代码与之前一致）
+        cloudTrader_vps_id = var_manager.get_variable("cloudTrader_vps_id")
         vpsId = var_manager.get_variable("vpsId")
         data = {
             "accountType": 1,
             "vpsId": vpsId,
-            "traderId": vps_id_cloudTrader,
+            "traderId": cloudTrader_vps_id,
             "followDirection": 0,
             "followMode": 1,
             "followParam": 1,
@@ -209,8 +233,9 @@ class TestCreate_cloudTrader(APITestBase):
             "fixedComment": "",
             "commentType": "",
             "digits": 0,
-            "traderUserIds": user_ids_later9  # 传入后9个账号ID
+            "traderUserIds": cloudTrader_user_ids_later9  # 传入后9个账号ID
         }
+
         response = self.send_post_request(
             logged_session,
             '/mascontrol/user/hangVps',
@@ -218,121 +243,128 @@ class TestCreate_cloudTrader(APITestBase):
         )
 
         # 3. 验证响应（后续代码与之前一致）
-        self.assert_response_status(response, 200, "批量挂靠VPS（后9个账号）失败")
-        self.assert_json_value(response, "$.msg", "success", "响应msg字段应为success")
+        self.assert_response_status(
+            response,
+            200,
+            "批量挂靠VPS（后9个账号）失败")
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success")
 
     # ---------------------------
-    # 账号管理-账号列表-数据库校验-批量挂靠VPS
+    # 数据库校验-批量挂靠VPS跟单（后9个账号）
     # ---------------------------
-    @allure.title("数据库校验-批量挂靠VPS（后9个账号）")
+    @allure.title("数据库校验-批量挂靠VPS跟单（后9个账号）")
     def test_dbimport_addSlave(self, var_manager, db_transaction):
         # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）
         all_accounts_cloudTrader = []
-        user_count_cloudTrader = var_manager.get_variable("user_count_cloudTrader")
-        for i in range(2, user_count_cloudTrader + 1):  # 循环索引1-9（共9次）
-            account_var_name = f"user_accounts_cloudTrader_{i}"
-            account_cloudTrader = var_manager.get_variable(account_var_name)
-            if not account_cloudTrader:
-                pytest.fail(f"未找到第{i}个账号（变量：{account_var_name}）")
-            all_accounts_cloudTrader.append(account_cloudTrader)
+        cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count")
+        for i in range(2, cloudTrader_user_count + 1):  # 循环索引1-9（共9次）
+            cloudTrader_account_var_name = f"cloudTrader_user_accounts_{i}"
+            cloudTrader_account = var_manager.get_variable(cloudTrader_account_var_name)
+            if not cloudTrader_account:
+                pytest.fail(f"未找到第{i}个账号（变量：{cloudTrader_account_var_name}）")
+            all_accounts_cloudTrader.append(cloudTrader_account)
         print(f"将校验的后9个账号：{all_accounts_cloudTrader}")
 
         # 2. 逐个校验后9个账号的数据库记录（后续代码与之前一致）
         all_ids_cloudTrader = []
-        for idx, account_cloudTrader in enumerate(all_accounts_cloudTrader, 1):  # idx从1到9
-            with allure.step(f"验证第{idx}个账号（{account_cloudTrader}）的数据库记录"):
+        for idx, cloudTrader_account in enumerate(all_accounts_cloudTrader, 1):  # idx从1到9
+            with allure.step(f"验证第{idx}个账号（{cloudTrader_account}）的数据库记录"):
                 # 数据库查询和校验逻辑与之前一致
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
-                params = (account_cloudTrader,)
+                params = (cloudTrader_account,)
 
                 db_data = self.wait_for_database_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,
-                    poll_interval=POLL_INTERVAL,
-                    order_by="create_time DESC"
+                    order_by="account ASC"
+
                 )
-                print(f"验证第{idx}个账号（{account_cloudTrader}）的数据库记录")
+                print(f"验证第{idx}个账号（{cloudTrader_account}）的数据库记录")
 
                 if not db_data:
-                    pytest.fail(f"账号 {account_cloudTrader} 在主表中未找到记录")
+                    pytest.fail(f"账号 {cloudTrader_account} 在主表中未找到记录")
 
                 # 保存账号ID并校验状态/净值/订阅表（代码与之前一致）
-                vps_cloudTrader_id = db_data[0]["id"]
-                all_ids_cloudTrader.append(vps_cloudTrader_id)
-                var_manager.set_runtime_variable(f"vps_cloudTrader_ids_{idx}", vps_cloudTrader_id)
+                cloudTrader_vps_id = db_data[0]["id"]
+                all_ids_cloudTrader.append(cloudTrader_vps_id)
+                var_manager.set_runtime_variable(f"cloudTrader_vps_ids_{idx}", cloudTrader_vps_id)
                 print(
-                    f"账号 {account_cloudTrader} 的ID为：{vps_cloudTrader_id}，已保存到变量 vps_cloudTrader_ids_{idx}")
+                    f"账号 {cloudTrader_account} 的ID为：{cloudTrader_vps_id}，已保存到变量 cloudTrader_vps_ids_{idx}")
 
                 # 校验账号状态和净值
                 def verify_core_fields():
                     status = db_data[0]["status"]
                     if status != 0:
-                        pytest.fail(f"账号 {account_cloudTrader} 状态异常：预期status=0，实际={status}")
+                        pytest.fail(f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}")
                     euqit = db_data[0]["euqit"]
                     if euqit == 0:
-                        pytest.fail(f"账号 {account_cloudTrader} 净值异常：预期euqit≠0，实际={euqit}")
+                        pytest.fail(f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}")
 
                 # 执行校验（代码与之前一致）
                 try:
                     verify_core_fields()
-                    allure.attach(f"账号 {account_cloudTrader} 主表字段校验通过", "校验结果",
+                    allure.attach(f"账号 {cloudTrader_account} 主表字段校验通过", "校验结果",
                                   allure.attachment_type.TEXT)
                 except AssertionError as e:
-                    allure.attach(str(e), f"账号 {account_cloudTrader} 主表字段校验失败",
+                    allure.attach(str(e), f"账号 {cloudTrader_account} 主表字段校验失败",
                                   allure.attachment_type.TEXT)
                     raise
 
                 # 校验订阅表记录（代码与之前一致）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
-                params = (account_cloudTrader,)
+                params = (cloudTrader_account,)
                 db_sub_data = self.wait_for_database_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,
-                    poll_interval=POLL_INTERVAL,
-                    order_by="create_time DESC"
+                    order_by="slave_account ASC"
                 )
 
                 if not db_sub_data:
-                    pytest.fail(f"账号 {account_cloudTrader} 在订阅表中未找到关联记录")
-                slave_account_cloudTrader = db_sub_data[0]["slave_account"]
-                if slave_account_cloudTrader != account_cloudTrader:
-                    pytest.fail(f"订阅表账号不匹配：预期={account_cloudTrader}，实际={slave_account_cloudTrader}")
-                allure.attach(f"账号 {account_cloudTrader} 订阅表关联校验通过", "校验结果",
+                    pytest.fail(f"账号 {cloudTrader_account} 在订阅表中未找到关联记录")
+                slave_cloudTrader_account = db_sub_data[0]["slave_account"]
+                if slave_cloudTrader_account != cloudTrader_account:
+                    pytest.fail(f"订阅表账号不匹配：预期={cloudTrader_account}，实际={slave_cloudTrader_account}")
+                allure.attach(f"账号 {cloudTrader_account} 订阅表关联校验通过", "校验结果",
                               allure.attachment_type.TEXT)
 
         # 3. 保存总数量和ID列表（代码与之前一致）
         account_count = len(all_ids_cloudTrader)
-        var_manager.set_runtime_variable("account_cloudTrader", account_count)
-        var_manager.set_runtime_variable("all_vps_cloudTrader_ids", all_ids_cloudTrader)
+        var_manager.set_runtime_variable("cloudTrader_account", account_count)
+        var_manager.set_runtime_variable("cloudTrader_all_vps_ids", all_ids_cloudTrader)
         print(f"后9个账号数据库校验完成，共提取{account_count}个ID")
 
     # ---------------------------
-    # 云策略-云策略列表-获取云策略ID
+    # 账号管理-组别列表-新增云策略组别
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("云策略-云策略列表-获取云策略ID")
-    def test_cloudMaster_list(self, var_manager, logged_session):
-        cloudMaster_name = var_manager.get_variable("cloudMaster_name")
-        # 1. 发送获取云策略ID请求
-        params = {
-            "name": cloudMaster_name,
-            "groupId": "",
+    @allure.title("账号管理-组别列表-新增云策略组别")
+    def test_create_cloudgroup(self, logged_session, var_manager):
+        add_cloudgroup = var_manager.get_variable("add_cloudgroup")
+        data = {
+            "name": add_cloudgroup["name"],
+            "color": add_cloudgroup["color"],
+            "sort": add_cloudgroup["sort"],
+            "type": add_cloudgroup["type"]
         }
-        response = self.send_get_request(
+
+        # 1. 发送新增VPS组别请求
+        response = self.send_post_request(
             logged_session,
-            '/mascontrol/cloudMaster/list',
-            params=params
+            "/mascontrol/group",
+            json_data=data
         )
 
         # 2. 验证响应状态码
         self.assert_response_status(
             response,
             200,
-            "获取云策略ID失败"
+            "新增云策略组别失败"
         )
 
         # 3. 验证JSON返回内容
@@ -342,31 +374,109 @@ class TestCreate_cloudTrader(APITestBase):
             "success",
             "响应msg字段应为success"
         )
-        cloudMaster_id = response.extract_jsonpath("$.data.masterVOS[0].id")
-        var_manager.set_runtime_variable("cloudMaster_id", cloudMaster_id)
-        logging.info(f"云策略ID: {cloudMaster_id}")
+
+    # ---------------------------
+    # 数据库校验-组别列表-新增云策略组别
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-组别列表-新增云策略组别")
+    def test_dbquery_cloudgroup(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            add_cloudgroup = var_manager.get_variable("add_cloudgroup")
+
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_group WHERE name = %s",
+                (add_cloudgroup["name"],),
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            cloudTrader_group_id = db_data[0]["id"]
+            print(f"输出：{cloudTrader_group_id}")
+            logging.info(f"新增云策略组别ID: {cloudTrader_group_id}")
+            var_manager.set_runtime_variable("cloudTrader_group_id", cloudTrader_group_id)
+
+    # ---------------------------
+    # 云策略-云策略列表-新增云策略
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("云策略-云策略列表-新增云策略")
+    def test_create_cloudMaster(self, var_manager, logged_session):
+        cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
+        with allure.step("1. 发送新增云策略的请求接口"):
+            data = {
+                "name": "自动化测试",
+                "type": 0,
+                "remark": "",
+                "status": 0,
+                "groupId": cloudTrader_group_id,
+                "sort": 100,
+                "isMonitorRepair": 1
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/mascontrol/cloudMaster',
+                json_data=data
+            )
+
+        with allure.step("2. 校验接口请求是否正确"):
+            # 使用工具类的 assert_value 方法验证响应状态
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-云策略列表-新增云策略")
+    def test_dbcreate_cloudTrader(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_cloud_master WHERE name = %s",
+                ("自动化测试",),
+            )
+        with allure.step("2. 校验数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增云策略账号失败")
+
+        with allure.step("3. 提取数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增云策略账号失败")
+
+            cloudMaster_id = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudMaster_id", cloudMaster_id)
+            logging.info(f"新增云策略账号id是：{cloudMaster_id}")
 
     # ---------------------------
     # 云策略-云策略列表-新增策略账号
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增策略账号")
-    def test_mascontrol_cloudTrader(self, var_manager, logged_session, db_transaction):
+    def test_mascontrol_cloudTrader(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-        vps_cloudTrader_ids_1 = var_manager.get_variable("vps_cloudTrader_ids_1")
+        cloudTrader_vps_ids_1 = var_manager.get_variable("cloudTrader_vps_ids_1")
         data = {
             "cloudId": cloudMaster_id,
             "sourceType": 0,
             "remark": "新增云策略账号",
             "runningStatus": 0,
-            "traderId": vps_cloudTrader_ids_1,
+            "followOrderRemark": 1,
+            "traderId": cloudTrader_vps_ids_1,
             "managerIp": "",
             "managerAccount": "",
             "managerPassword": "",
             "account": "",
             "platform": "",
-            "templateId": ""
+            "templateId": "",
+            "fixedComment": "ceshi",
+            "commentType": "",
+            "digits": ""
         }
         response = self.send_post_request(
             logged_session,
@@ -393,12 +503,12 @@ class TestCreate_cloudTrader(APITestBase):
     @allure.title("数据库校验-云策略列表-新增策略账号")
     def test_dbmascontrol_cloudTrader(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
-            user_accounts_cloudTrader_2 = var_manager.get_variable("user_accounts_cloudTrader_2")
+            cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_cloud_trader WHERE account = %s",
-                (user_accounts_cloudTrader_2,),
+                (cloudTrader_user_accounts_2,),
             )
         with allure.step("2. 校验数据"):
             if not db_data:
@@ -408,9 +518,9 @@ class TestCreate_cloudTrader(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
-            traderList_cloudTrader_2 = db_data[0]['id']
-            var_manager.set_runtime_variable("traderList_cloudTrader_2", traderList_cloudTrader_2)
-            logging.info(f"新增策略账号id是：{traderList_cloudTrader_2}")
+            cloudTrader_traderList_2 = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_traderList_2", cloudTrader_traderList_2)
+            logging.info(f"新增策略账号id是：{cloudTrader_traderList_2}")
 
     # ---------------------------
     # 云策略-云策略列表-新增manager策略账号
@@ -420,20 +530,25 @@ class TestCreate_cloudTrader(APITestBase):
     def test_manager_cloudTrader(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-        user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
+        cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
+        new_user = var_manager.get_variable("new_user")
         manager = var_manager.get_variable("manager")
         data = {
             "cloudId": cloudMaster_id,
             "sourceType": 1,
             "remark": "新增manager账号",
             "runningStatus": 0,
+            "followOrderRemark": 1,
             "traderId": "",
             "managerIp": manager["managerIp"],
             "managerAccount": manager["managerAccount"],
             "managerPassword": manager["managerPassword"],
-            "account": user_accounts_cloudTrader_3,
-            "platform": "FXAdamantStone-Demo",
-            "templateId": 1
+            "account": cloudTrader_user_accounts_3,
+            "platform": new_user["platform"],
+            "templateId": 1,
+            "fixedComment": new_user["fixedComment"],
+            "commentType": "",
+            "digits": ""
         }
         response = self.send_post_request(
             logged_session,
@@ -460,12 +575,12 @@ class TestCreate_cloudTrader(APITestBase):
     @allure.title("数据库校验-云策略列表-新增manager账号")
     def test_dbmanager_trader(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
-            user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
+            cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
 
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_cloud_trader WHERE account = %s",
-                (user_accounts_cloudTrader_3,),
+                (cloudTrader_user_accounts_3,)
             )
 
         with allure.step("2. 验证数据库数据"):
@@ -479,9 +594,9 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增manager账号服务器是：{managerdb} 应该是：{manager['managerIp']}")
 
         with allure.step("3. 提取数据"):
-            traderList_cloudTrader_3 = db_data[0]['id']
-            var_manager.set_runtime_variable("traderList_cloudTrader_3", traderList_cloudTrader_3)
-            logging.info(f"新增manager账号id是：{traderList_cloudTrader_3}")
+            cloudTrader_traderList_3 = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_traderList_3", cloudTrader_traderList_3)
+            logging.info(f"新增manager账号id是：{cloudTrader_traderList_3}")
 
     # ---------------------------
     # 云策略-云策略列表-新增云策略跟单账号
@@ -491,30 +606,33 @@ class TestCreate_cloudTrader(APITestBase):
     def test_cloudTrader_cloudBatchAdd(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-        vps_cloudTrader_ids_3 = var_manager.get_variable("vps_cloudTrader_ids_3")
-        data = {
-            "traderList": [
-                vps_cloudTrader_ids_3
-            ],
-            "remark": "新增云策略跟单账号",
-            "followDirection": 0,
-            "followMode": 1,
-            "remainder": 0,
-            "followParam": 1,
-            "placedType": 0,
-            "templateId": 1,
-            "followStatus": 1,
-            "followOpen": 1,
-            "followClose": 1,
-            "followRep": 0,
-            "fixedComment": "ceshi",
-            "commentType": "",
-            "digits": 0,
-            "cfd": "",
-            "forex": "",
-            "sort": None,
-            "cloudId": cloudMaster_id
-        }
+        cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
+        cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+        cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+        data = [
+            {
+                "traderList": [
+                    cloudTrader_vps_ids_3
+                ],
+                "cloudId": cloudMaster_id,
+                "masterId": cloudTrader_traderList_2,
+                "masterAccount": cloudTrader_user_accounts_2,
+                "followDirection": 0,
+                "followMode": 1,
+                "followParam": 1,
+                "remainder": 0,
+                "placedType": 0,
+                "templateId": 1,
+                "followStatus": 1,
+                "followOpen": 1,
+                "followClose": 1,
+                "fixedComment": "ceshi",
+                "commentType": "",
+                "digits": 0,
+                "followTraderIds": [],
+                "sort": "100"
+            }
+        ]
         response = self.send_post_request(
             logged_session,
             '/mascontrol/cloudTrader/cloudBatchAdd',
@@ -540,28 +658,28 @@ class TestCreate_cloudTrader(APITestBase):
     @allure.title("数据库校验-云策略列表-新增云策略跟单账号")
     def test_dbcloudTrader_cloudBatchAdd(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
-            user_accounts_cloudTrader_4 = var_manager.get_variable("user_accounts_cloudTrader_4")
+            cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
 
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_cloud_trader WHERE account = %s",
-                (user_accounts_cloudTrader_4,),
+                (cloudTrader_user_accounts_4,)
             )
 
         with allure.step("2. 提取数据"):
             if not db_data:
                 pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
-            traderList_cloudTrader_4 = db_data[0]['id']
-            var_manager.set_runtime_variable("traderList_cloudTrader_4", traderList_cloudTrader_4)
-            logging.info(f"新增云策略跟单账号id是：{traderList_cloudTrader_4}")
+            cloudTrader_traderList_4 = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_traderList_4", cloudTrader_traderList_4)
+            logging.info(f"新增云策略跟单账号id是：{cloudTrader_traderList_4}")
 
     # ---------------------------
     # 平台管理-品种管理-添加品种
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种")
-    def test_create_variety(self, api_session, var_manager, logged_session):
+    def test_create_variety(self, logged_session, var_manager):
         # 1. 读取CSV文件
         add_variety = var_manager.get_variable("add_variety")
         with open(add_variety["csv_variety_path"], 'rb') as f:
@@ -578,7 +696,7 @@ class TestCreate_cloudTrader(APITestBase):
 
         # 1. 添加品种
         response = self.send_post_request(
-            api_session,
+            logged_session,
             '/mascontrol/variety/addTemplate',
             data=data,
             files=files
@@ -606,16 +724,12 @@ class TestCreate_cloudTrader(APITestBase):
             sql = f"SELECT * FROM follow_variety WHERE template_name = %s"
             params = (template_name,)
             # 执行带时间范围的查询
-            db_data = self.query_database(
-                db_transaction,
-                sql,
-                params,
-            )
+            db_data = self.query_database(db_transaction, sql, params)
 
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            template_id2 = db_data[0]["template_id"]
-            logging.info(f"新增品种id: {template_id2}")
-            var_manager.set_runtime_variable("template_id2", template_id2)
+            cloudTrader_template_id2 = db_data[0]["template_id"]
+            logging.info(f"新增品种id: {cloudTrader_template_id2}")
+            var_manager.set_runtime_variable("cloudTrader_template_id2", cloudTrader_template_id2)

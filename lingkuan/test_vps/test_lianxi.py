@@ -1,55 +1,61 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time    : 2025/2/13 16:43
-# @Author  : Cyj
-# @File    : mfa_key.py
-# @Software: PyCharm
-# @synopsis: 获取MFA验证码
+# lingkuan/tests/test_vps_ordersend.py
+import time
+import math
 
-import base64
-import hashlib
-import hmac
+import allure
 import logging
-import time as sys_time
+import pytest
+from lingkuan.VAR.VAR import *
+from lingkuan.conftest import var_manager
+from lingkuan.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.commons.redis_utils import *
+
+logger = logging.getLogger(__name__)
+SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-def add_padding(secret):
-    """自动为Base32密钥添加填充符"""
-    padding = '=' * (8 - len(secret) % 8) if len(secret) % 8 != 0 else ''
-    return secret + padding
+# ---------------------------
+# 修改模式、品种
+# ---------------------------
+@allure.feature("云策略策略下单-跟单修改模式、品种")
+class TestVPSOrderSend_Scence(APITestBase):
+    # ---------------------------
+    # 数据库查询-获取VPSID
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取VPSID")
+    def test_get_vpsID(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库数据"):
+            ip_address = var_manager.get_variable("IP_ADDRESS")
 
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address = %s",
+                (ip_address,)
+            )
 
-def generate_code(secret):
-    """根据已有密钥生成当前时间的验证码"""
-    secret = add_padding(secret)  # 自动添加填充符
-    decoded_key = base64.b32decode(secret)  # 解码密钥
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
 
-    # 获取当前时间，单位为秒，按30秒为周期
-    t = int(sys_time.time() // 30)
+            vpsId = db_data[0]["id"]
+            # 存入变量管理器
+            var_manager.set_runtime_variable("vpsId", vpsId)
+            print(f"成功提取 VPS ID: {vpsId}")
 
-    # 将时间戳转换为8字节数组
-    data = bytearray(8)
-    for i in range(8):
-        data[7 - i] = (t >> (i * 8)) & 0xff
+    # ---------------------------
+    # VPS管理-VPS列表-获取可见用户信息
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-获取可见用户信息")
+    def test_get_user(self, logged_session, var_manager):
+        # 1. 请求可见用户列表接口
+        response = self.send_get_request(
+            logged_session,
+            '/sys/role/role'
+        )
 
-    # 使用 HMAC-SHA1 生成哈希值
-    mac = hmac.new(decoded_key, data, hashlib.sha1)
-    hash_bytes = mac.digest()
-
-    # 动态截断
-    offset = hash_bytes[19] & 0x0f
-    truncated_hash = 0
-    for i in range(4):
-        truncated_hash = (truncated_hash << 8) | (hash_bytes[offset + i] & 0xff)
-
-    truncated_hash = truncated_hash & 0x7fffffff  # 取低31位
-    truncated_hash = truncated_hash % 1000000  # 生成6位验证码
-
-    return truncated_hash
-
-
-if __name__ == '__main__':
-    # 使用提供的密钥
-    secret_key = '5TT6BNORG52XBQLH5XQE5UHELYHRGQWMULEDPRRQ67YSMO3MYXBA'
-    code = generate_code(secret_key)
-    logging.info(f"{code}")
+        # 2. 获取可见用户信息
+        vps_user_data = response.extract_jsonpath("$.data")
+        logging.info(f"获取的可见用户信息：{vps_user_data}")
+        var_manager.set_runtime_variable("vps_user_data", vps_user_data)

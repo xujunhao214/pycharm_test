@@ -1,15 +1,35 @@
 from jsonpath_ng import parse
+from typing import Optional, Any, List, Dict, Union
+
 
 class JsonPathUtils:
     """JSONPath工具类，用于从JSON响应中提取数据"""
 
-    def extract(self, data: dict, expression: str) -> any:
-        """使用JSONPath表达式从数据中提取值"""
-        jsonpath_expr = parse(expression)
-        result = [match.value for match in jsonpath_expr.find(data)]
-        if result:
-            return result[0] if len(result) == 1 else result
-        return None
+    def extract(self, data: dict, expression: str, default: Any = None, multi_match: bool = False) -> Any:
+        """
+        使用JSONPath表达式从数据中提取值
+        :param data: JSON数据
+        :param expression: JSONPath表达式
+        :param default: 未找到匹配时的默认值
+        :param multi_match: 是否允许多匹配结果
+        :return: 单个匹配值、多匹配列表或默认值
+        """
+        try:
+            jsonpath_expr = parse(expression)
+            matches = jsonpath_expr.find(data)
+
+            if not matches:
+                return default
+
+            if multi_match:
+                return [match.value for match in matches]
+            else:
+                return matches[0].value if matches else default
+
+        except Exception as e:
+            # 处理无效表达式等异常
+            print(f"JSONPath解析错误: {e}")
+            return default
 
     def assert_value(self, data: dict, expression: str, expected: any) -> None:
         """断言JSONPath表达式提取的值与预期值相等"""

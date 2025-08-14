@@ -1,71 +1,88 @@
+# lingkuan/tests/test_vps_ordersend.py
 import time
+import math
 
-import pytest
-import logging
 import allure
-from typing import Dict, Any, List
+import logging
+import pytest
 from lingkuan.VAR.VAR import *
 from lingkuan.conftest import var_manager
 from lingkuan.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-@allure.feature("跟单软件看板")
-class TestDeleteFollowSlave(APITestBase):
+# ---------------------------
+# 修改模式、品种
+# ---------------------------
+@allure.feature("云策略策略下单-跟单修改模式、品种")
+class TestVPSOrderSend_Scence(APITestBase):
     # ---------------------------
-    # 账号管理-账号列表-删除账号
+    # 出现漏开-redis数据和数据库的数据做比对
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("账号管理-账号列表-删除账号")
-    def test_delete_user(self, api_session, var_manager, logged_session, db_transaction):
-        """测试删除用户接口"""
-        # 1. 发送删除用户请求
-        trader_user_id = var_manager.get_variable("trader_user_id")
-        response = self.send_delete_request(
-            api_session,
-            "/mascontrol/user",
-            json_data=[trader_user_id]
-        )
-
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "删除用户失败"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    # ---------------------------
-    # 数据库校验-账号列表-删除账号
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-账号列表-删除账号")
-    def test_dbdelete_user(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否删除成功"):
+    @allure.title("出现漏开-redis数据和数据库的数据做比对")
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
+        with allure.step("1. 获取订单详情界面跟单账号数据"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
-            logging.info(f"查询条件: table=FOLLOW_TRADER_USER, name={new_user['account']}")
+            symbol = trader_ordersend["symbol"]
 
-            # 定义数据库查询
-            sql = f"SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s"
-            params = (new_user["account"],)
-            try:
-                self.wait_for_database_deletion(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
-                )
-                allure.attach(f"账号 {new_user['account']} 已成功从数据库删除", "验证结果")
-            except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
-                pytest.fail(f"删除失败: {str(e)}")
+            sql = f"""
+                          SELECT * 
+                          FROM follow_order_detail 
+                          WHERE symbol LIKE %s 
+                            AND source_user = %s
+                            AND account = %s
+                          """
+            params = (
+                f"%{symbol}%",
+                new_user["account"],
+                new_user["account"],
+            )
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",
+                time_range=5
+            )
+
+        with allure.step("2. 转换Redis数据为可比较格式"):
+            if not redis_order_data_send:
+                pytest.fail("Redis中未查询到订单数据")
+
+            # 转换Redis数据为与数据库一致的格式
+            vps_redis_comparable_list_open = convert_redis_orders_to_comparable_list(redis_order_data_send)
+            logging.info(f"转换后的Redis数据: {vps_redis_comparable_list_open}")
+
+            # 将转换后的数据存入变量管理器
+            var_manager.set_runtime_variable("vps_redis_comparable_list_open", vps_redis_comparable_list_open)
+
+        with allure.step("3. 比较Redis与数据库数据"):
+            # 假设db_data是之前从数据库查询的结果
+            if not db_data:
+                pytest.fail("数据库中未查询到订单数据")
+
+            # 提取数据库中的关键字段（根据实际数据库表结构调整）
+            db_comparable_list = [
+                {
+                    "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
+                    "magical": record["magical"],  # 数据库magical → 统一字段magical
+                    "size": float(record["size"]),  # 数据库size → 统一字段size
+                    "open_price": float(record["open_price"]),
+                    "symbol": record["symbol"]
+                }
+                for record in db_data
+            ]
+            logging.info(f"数据库转换后: {db_comparable_list}")
+            # 比较两个列表（可根据需要调整比较逻辑）
+            self.assert_data_lists_equal(
+                actual=vps_redis_comparable_list_open,
+                expected=db_comparable_list,
+                fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                tolerance=1e-6  # 浮点数比较容差
+            )

@@ -19,14 +19,13 @@ class TestDeleteUser(APITestBase):
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-删除VPS组别")
-    def test_delete_group(self, api_session, var_manager, logged_session, db_transaction):
-        """测试删除用户接口"""
+    def test_delete_group(self, logged_session, var_manager):
         # 1. 发送删除VPS组别请求
-        group_id = var_manager.get_variable("group_id")
+        vps_group_id = var_manager.get_variable("vps_group_id")
         response = self.send_delete_request(
-            api_session,
+            logged_session,
             "/mascontrol/group",
-            json_data=[group_id]
+            json_data=[vps_group_id]
         )
 
         # 2. 验证响应状态码
@@ -58,9 +57,7 @@ class TestDeleteUser(APITestBase):
                 self.wait_for_database_deletion(
                     db_transaction=db_transaction,
                     sql=sql,
-                    params=params,
-                    timeout=DELETE_WAIT_TIMEOUT,  # 设置5秒超时时间
-                    poll_interval=POLL_INTERVAL  # 每2秒查询一次
+                    params=params
                 )
                 allure.attach(f"VPS组别 {add_vpsgroup['name']} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
@@ -70,12 +67,12 @@ class TestDeleteUser(APITestBase):
     # ---------------------------
     # VPS管理-VPS列表列表-清空VPS数据
     # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-清空VPS数据")
-    def test_closeVps(self, api_session, var_manager, logged_session, db_transaction):
+    def test_closeVps(self, logged_session, var_manager):
         vps_list_id = var_manager.get_variable("vps_list_id")
         # 定义白名单（不可清空数据的ID列表）
-        WHITE_LIST_IDS = ["6", "91", "22", "49"]
+        WHITE_LIST_IDS = var_manager.get_variable("WHITE_LIST")
         if vps_list_id in WHITE_LIST_IDS:
             logging.warning(f"VPS ID {vps_list_id} 在白名单中，跳过清空数据操作。")
             assert False, f"VPS ID {vps_list_id} 在白名单中，不能清空数据。"
@@ -83,7 +80,7 @@ class TestDeleteUser(APITestBase):
         # 1. 发送清空VPS数据请求
         params = {"vpsId": f"{vps_list_id}"}
         response = self.send_get_request(
-            api_session,
+            logged_session,
             '/mascontrol/vps/deleteVps',
             params=params
         )
@@ -108,19 +105,62 @@ class TestDeleteUser(APITestBase):
     # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-删除VPS数据")
-    def test_delete_Vps(self, api_session, var_manager, logged_session, db_transaction):
+    def test_delete_Vps(self, logged_session, var_manager):
         vps_list_id = var_manager.get_variable("vps_list_id")
         # 定义白名单（不可删除数据的ID列表）
-        WHITE_LIST_IDS = ["6", "91", "22", "49"]
+        WHITE_LIST_IDS = var_manager.get_variable("WHITE_LIST")
         if vps_list_id in WHITE_LIST_IDS:
             logging.warning(f"VPS ID {vps_list_id} 在白名单中，跳过删除数据操作。")
             assert False, f"VPS ID {vps_list_id} 在白名单中，不能删除数据。"
 
         # 1. 发送删除VPS数据请求
         response = self.send_delete_request(
-            api_session,
+            logged_session,
             '/mascontrol/vps',
             json_data=[vps_list_id]
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "删除VPS数据失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+        time.sleep(15)
+
+    # ---------------------------
+    # VPS管理-VPS列表列表-强制删除VPS
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表列表-强制删除VPS")
+    def test_deleteVPS_forceDelete(self, logged_session, var_manager):
+        vps_list_id = var_manager.get_variable("vps_list_id")
+        # 定义白名单（不可删除数据的ID列表）
+        WHITE_LIST_IDS = var_manager.get_variable("WHITE_LIST")
+        if vps_list_id in WHITE_LIST_IDS:
+            logging.warning(f"VPS ID {vps_list_id} 在白名单中，跳过删除数据操作。")
+            assert False, f"VPS ID {vps_list_id} 在白名单中，不能删除数据。"
+
+        params = {
+            "idList": [
+                vps_list_id
+            ],
+            "ignoreStop": 1
+        }
+
+        # 1. 发送强制删除VPS数据请求
+        response = self.send_post_request(
+            logged_session,
+            '/mascontrol/vps/forceDelete',
+            json_data=params
         )
 
         # 2. 验证响应状态码

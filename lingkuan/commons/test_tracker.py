@@ -44,7 +44,7 @@ class TestResultTracker:
             self.skipped += 1
             self.skipped_test_names.append(report.nodeid)
             # 提取跳过原因
-            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "未指定原因")
+            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该功能暂不需要")
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
@@ -55,7 +55,8 @@ class TestResultTracker:
         end = datetime.datetime.strptime(self.end_time, "%Y-%m-%d %H:%M:%S")
         self.duration = f"{(end - start).total_seconds():.2f}秒"
         logger.info(f"[{DATETIME_NOW}] 测试会话结束，总耗时: {self.duration}")
-        logger.info(f"[{DATETIME_NOW}] 最终统计: 总={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
+        logger.info(
+            f"[{DATETIME_NOW}] 最终统计: 总={self.total}, 通过={self.passed}, 失败={self.failed}, 跳过={self.skipped}")
 
         # 发送飞书通知
         try:
