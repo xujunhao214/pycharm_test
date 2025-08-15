@@ -9,14 +9,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("云策略-分配下单")
 class TestMasordersend_allocation(APITestBase):
-    # ---------------------------
-    # 云策略-云策略列表-分配下单
-    # ---------------------------
     @allure.title("云策略-云策略列表-分配下单")
     def test_cloudTrader_cloudOrderSend(self, logged_session, var_manager):
         # 1. 发送云策略分配下单请求
@@ -130,9 +127,6 @@ class TestMasordersend_allocation(APITestBase):
                 f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 云策略-云策略列表-平仓
-    # ---------------------------
     @allure.title("云策略-云策略列表-平仓")
     def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -160,9 +154,6 @@ class TestMasordersend_allocation(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易平仓-持仓检查跟单账号数据
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
@@ -232,9 +223,6 @@ class TestMasordersend_allocation(APITestBase):
 
 @allure.feature("云策略-复制下单")
 class TestMasordersend_copy(APITestBase):
-    # ---------------------------
-    # 云策略-云策略列表-复制下单
-    # ---------------------------
     @allure.title("云策略-云策略列表-复制下单")
     def test_cloudTrader_cloudOrderSend(self, logged_session, var_manager):
         # 1. 发送云策略复制下单请求
@@ -357,9 +345,6 @@ class TestMasordersend_copy(APITestBase):
                 f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 云策略-云策略列表-平仓
-    # ---------------------------
     @allure.title("云策略-云策略列表-平仓")
     def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -387,9 +372,6 @@ class TestMasordersend_copy(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易平仓-指令及订单详情数据检查
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):

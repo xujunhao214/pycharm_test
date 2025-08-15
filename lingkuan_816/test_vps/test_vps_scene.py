@@ -10,17 +10,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
-# ---------------------------
-# 修改模式、品种
-# ---------------------------
 @allure.feature("VPS策略下单-跟单修改模式、品种")
 class TestVPSOrderSend_Scence(APITestBase):
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略开仓
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -59,11 +53,8 @@ class TestVPSOrderSend_Scence(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略开仓-持仓检查跟单账号数据-固定手数5
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-策略开仓-跟单账号固定手数")
+    @allure.title("数据库校验-策略开仓-跟单账号固定手数5")
     def test_dbdetail_followParam5(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -101,9 +92,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
             logging.info(f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)")
 
-    # ---------------------------
-    # 数据库校验-策略开仓-跟单账号修改品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-跟单账号修改品种")
     def test_dbdetail_templateId3(self, var_manager, db_transaction):
@@ -145,9 +133,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             assert math.isclose(float(total), 3, rel_tol=1e-9), f"修改下单品种之后下单手数之和应该是3，实际是：{total}"
             logging.info(f"修改下单品种之后下单手数之和应该是3，实际是：{total}")
 
-    # ---------------------------
-    # 数据库-获取主账号净值
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库-获取主账号净值")
     def test_vps_dbtrader_euqit(self, var_manager, db_transaction):
@@ -176,9 +161,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             var_manager.set_runtime_variable("vps_dbtrader_euqit", vps_dbtrader_euqit)
             logging.info(f"主账号净值：{vps_dbtrader_euqit}")
 
-    # ---------------------------
-    # 数据库-获取跟单账号净值
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库-获取跟单账号净值")
     def test_dbvps_addsalve_euqit(self, var_manager, db_transaction):
@@ -205,8 +187,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             var_manager.set_runtime_variable("vps_addsalve_euqit", vps_addsalve_euqit)
             logging.info(f"跟单账号净值：{vps_addsalve_euqit}")
 
-    # 数据库校验-策略开仓-修改净值
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改净值")
     def test_vps_dbtrader_euqit2(self, var_manager, db_transaction):
@@ -256,9 +236,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             assert abs(total - true_size) < 3, f"size总和与预期比例偏差过大：预期{true_size}，实际{total}，误差超过3"
             logging.info(f"预期: {true_size} 实际: {total}")
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略平仓
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -291,9 +268,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略开仓-持仓检查跟单账号数据-固定手数5
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-跟单账号固定手数")
     def test_dbclose_followParam5(self, var_manager, db_transaction):
@@ -335,9 +309,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
             logging.info(f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)")
 
-    # ---------------------------
-    # 数据库校验-策略平仓-跟单账号修改品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-跟单账号修改品种")
     def test_dbclose_templateId3(self, var_manager, db_transaction):
@@ -380,9 +351,6 @@ class TestVPSOrderSend_Scence(APITestBase):
             assert math.isclose(float(total), 3, rel_tol=1e-9), f"修改下单品种之后下单手数之和应该是3，实际是：{total}"
             logging.info(f"修改下单品种之后平仓手数之和应该是3，实际是：{total}")
 
-    # ---------------------------
-    # 数据库校验-策略平仓-修改净值
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改净值")
     def test_dbclose_euqit(self, var_manager, db_transaction):

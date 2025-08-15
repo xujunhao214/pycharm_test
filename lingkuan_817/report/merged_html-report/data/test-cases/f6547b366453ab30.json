@@ -1,0 +1,250 @@
+{
+  "uid" : "f6547b366453ab30",
+  "name" : "数据库校验-交易开仓-指令及订单详情数据检查",
+  "fullName" : "test_cloudTrader.test_masOrderSend.TestbargainmasOrderSend_copy#test_dbquery_orderSend",
+  "historyId" : "153b94fecc42d625487d3a7fe13c29ee",
+  "time" : {
+    "start" : 1755246926177,
+    "stop" : 1755246938140,
+    "duration" : 11963
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 下单总手数是：1.00,订单详情总手数是：2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n +    and   2.0 = float(2.0)",
+  "statusTrace" : "self = <lingkuan_817.test_cloudTrader.test_masOrderSend.TestbargainmasOrderSend_copy object at 0x000001DCDB9F2BB0>\nvar_manager = <lingkuan_817.commons.variable_manager.VariableManager object at 0x000001DCDBAE0C70>\ndb_transaction = <pymysql.connections.Connection object at 0x000001DCDB8DDE20>\n\n    @allure.title(\"数据库校验-交易开仓-指令及订单详情数据检查\")\n    def test_dbquery_orderSend(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            cloudTrader_user_accounts_3 = var_manager.get_variable(\"cloudTrader_user_accounts_3\")\n            sql = f\"\"\"\n                SELECT\n                    fod.size,\n                    fod.send_no,\n                    fod.magical,\n                    fod.open_price,\n                    fod.symbol,\n                    fod.order_no,\n                    foi.true_total_lots,\n                    foi.order_no,\n                    foi.operation_type,\n                    foi.create_time,\n                    foi.status,\n                    foi.min_lot_size,\n                    foi.max_lot_size,\n                    foi.total_lots,\n                    foi.total_orders\n                FROM\n                    follow_order_detail fod\n                INNER JOIN\n                    follow_order_instruct foi\n                ON\n                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                WHERE foi.operation_type = %s\n                    AND fod.account = %s\n                    \"\"\"\n            params = (\n                '0',\n                cloudTrader_user_accounts_3,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.open_time\"\n            )\n    \n        with allure.step(\"2. 数据校验\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            status = db_data[0][\"status\"]\n            assert status in (0, 1), f\"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}\"\n            logging.info(f\"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}\")\n    \n            # 手数范围：结束手数校验\n            min_lot_size = db_data[0][\"min_lot_size\"]\n            endsize = trader_ordersend[\"endSize\"]\n            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'\n            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')\n    \n            # 手数范围：开始手数校验\n            max_lot_size = db_data[0][\"max_lot_size\"]\n            startSize = trader_ordersend[\"startSize\"]\n            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'\n            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')\n    \n            total_orders = db_data[0][\"total_orders\"]\n            totalNum = trader_ordersend[\"totalNum\"]\n            assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \\\n                f'总订单数量是：{totalNum}，实际是：{total_orders}'\n            logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')\n    \n            # 下单总手数与指令表总手数校验\n            total_lots = db_data[0][\"total_lots\"]\n            totalSzie = trader_ordersend[\"totalSzie\"]\n            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'下单总手数是：{totalSzie}，实际是：{total_lots}'\n            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')\n    \n            # 下单总手数与订单详情总手数校验\n            totalSzie = trader_ordersend[\"totalSzie\"]\n            size = [record[\"size\"] for record in db_data]\n            total = sum(size)\n>           assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'\nE           AssertionError: 下单总手数是：1.00,订单详情总手数是：2.0\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\nE            +    and   2.0 = float(2.0)\n\ntest_cloudTrader\\test_masOrderSend.py:338: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755246574419,
+      "stop" : 1755246574419,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755246898674,
+      "stop" : 1755246898675,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755246926127,
+      "stop" : 1755246926177,
+      "duration" : 50
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755246574419,
+      "stop" : 1755246574419,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755246577943,
+      "stop" : 1755246578410,
+      "duration" : 467
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755246577943,
+      "stop" : 1755246577943,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 下单总手数是：1.00,订单详情总手数是：2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n +    and   2.0 = float(2.0)",
+    "statusTrace" : "self = <lingkuan_817.test_cloudTrader.test_masOrderSend.TestbargainmasOrderSend_copy object at 0x000001DCDB9F2BB0>\nvar_manager = <lingkuan_817.commons.variable_manager.VariableManager object at 0x000001DCDBAE0C70>\ndb_transaction = <pymysql.connections.Connection object at 0x000001DCDB8DDE20>\n\n    @allure.title(\"数据库校验-交易开仓-指令及订单详情数据检查\")\n    def test_dbquery_orderSend(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            cloudTrader_user_accounts_3 = var_manager.get_variable(\"cloudTrader_user_accounts_3\")\n            sql = f\"\"\"\n                SELECT\n                    fod.size,\n                    fod.send_no,\n                    fod.magical,\n                    fod.open_price,\n                    fod.symbol,\n                    fod.order_no,\n                    foi.true_total_lots,\n                    foi.order_no,\n                    foi.operation_type,\n                    foi.create_time,\n                    foi.status,\n                    foi.min_lot_size,\n                    foi.max_lot_size,\n                    foi.total_lots,\n                    foi.total_orders\n                FROM\n                    follow_order_detail fod\n                INNER JOIN\n                    follow_order_instruct foi\n                ON\n                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                WHERE foi.operation_type = %s\n                    AND fod.account = %s\n                    \"\"\"\n            params = (\n                '0',\n                cloudTrader_user_accounts_3,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.open_time\"\n            )\n    \n        with allure.step(\"2. 数据校验\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            status = db_data[0][\"status\"]\n            assert status in (0, 1), f\"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}\"\n            logging.info(f\"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}\")\n    \n            # 手数范围：结束手数校验\n            min_lot_size = db_data[0][\"min_lot_size\"]\n            endsize = trader_ordersend[\"endSize\"]\n            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'\n            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')\n    \n            # 手数范围：开始手数校验\n            max_lot_size = db_data[0][\"max_lot_size\"]\n            startSize = trader_ordersend[\"startSize\"]\n            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'\n            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')\n    \n            total_orders = db_data[0][\"total_orders\"]\n            totalNum = trader_ordersend[\"totalNum\"]\n            assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \\\n                f'总订单数量是：{totalNum}，实际是：{total_orders}'\n            logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')\n    \n            # 下单总手数与指令表总手数校验\n            total_lots = db_data[0][\"total_lots\"]\n            totalSzie = trader_ordersend[\"totalSzie\"]\n            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'下单总手数是：{totalSzie}，实际是：{total_lots}'\n            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')\n    \n            # 下单总手数与订单详情总手数校验\n            totalSzie = trader_ordersend[\"totalSzie\"]\n            size = [record[\"size\"] for record in db_data]\n            total = sum(size)\n>           assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'\nE           AssertionError: 下单总手数是：1.00,订单详情总手数是：2.0\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\nE            +    and   2.0 = float(2.0)\n\ntest_cloudTrader\\test_masOrderSend.py:338: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1755246926177,
+        "stop" : 1755246938139,
+        "duration" : 11962
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : false,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 数据校验",
+      "time" : {
+        "start" : 1755246938139,
+        "stop" : 1755246938139,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 下单总手数是：1.00,订单详情总手数是：2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n +    and   2.0 = float(2.0)\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_817\\test_cloudTrader\\test_masOrderSend.py\", line 338, in test_dbquery_orderSend\n    assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \\\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "2a1a63ca1c090737",
+      "name" : "log",
+      "source" : "2a1a63ca1c090737.txt",
+      "type" : "text/plain",
+      "size" : 13110
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 2,
+    "attachmentsCount" : 1,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755248271257,
+      "stop" : 1755248271257,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755246938145,
+      "stop" : 1755246938196,
+      "duration" : 51
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755248271259,
+      "stop" : 1755248271259,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "交易下单-云策略manager策略账号复制下单"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_masOrderSend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestbargainmasOrderSend_copy"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "34324-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_masOrderSend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "f6547b366453ab30.json",
+  "parameterValues" : [ ]
+}

@@ -10,14 +10,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("账号管理-创建跟单账号")
 class TestCreate_Scene(APITestBase):
-    # ---------------------------
-    # 新增跟单账号-参数化测试（仅使用后6个数据）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("新增跟单账号（仅使用后6个数据与模板匹配）")
@@ -232,9 +229,6 @@ class TestCreate_Scene(APITestBase):
         var_manager.set_runtime_variable("vps_addslave_count", vps_addslave_count)
         print(f"后6个账号数据库校验完成，共提取{vps_addslave_count}个ID，已保存到变量 vps_addslave_count")
 
-    # ---------------------------
-    # 修改跟单账号-参数化测试（仅使用后6个数据）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")

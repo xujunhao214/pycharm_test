@@ -10,17 +10,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
-# ---------------------------
-# 修改币种
-# ---------------------------
 @allure.feature("VPS策略下单-跟单修改币种")
 class TestVPSOrderSend_money(APITestBase):
-    # ---------------------------
-    # 账号管理-账号列表-修改用户
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("账号管理-账号列表-修改用户")
@@ -61,9 +55,6 @@ class TestVPSOrderSend_money(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-账号列表-修改用户是否成功
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-修改用户是否成功")
     def test_dbupdate_user(self, var_manager, db_transaction):
@@ -86,9 +77,6 @@ class TestVPSOrderSend_money(APITestBase):
             # 允许为 None 或空字符串（去除空格后）
             assert cfd_value is None or cfd_value.strip() == "", f"修改个人信息失败（cfd字段应为空，实际值：{cfd_value}）"
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略开仓
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -127,9 +115,6 @@ class TestVPSOrderSend_money(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略开仓-修改币种@
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种@")
     def test_dbtrader_cfda(self, var_manager, db_transaction):
@@ -171,9 +156,6 @@ class TestVPSOrderSend_money(APITestBase):
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD@" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
 
-    # ---------------------------
-    # 数据库校验-策略开仓-修改币种p
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种p")
     def test_dbtrader_cfdp(self, var_manager, db_transaction):
@@ -218,8 +200,6 @@ class TestVPSOrderSend_money(APITestBase):
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
 
-    # 数据库校验-策略开仓-修改币种min
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种min")
     def test_dbtrader_cfdmin(self, var_manager, db_transaction):
@@ -263,9 +243,6 @@ class TestVPSOrderSend_money(APITestBase):
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略平仓
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -298,9 +275,6 @@ class TestVPSOrderSend_money(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略平仓-修改币种@
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改币种@")
     def test_dbclose_cfda(self, var_manager, db_transaction):
@@ -344,9 +318,6 @@ class TestVPSOrderSend_money(APITestBase):
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD@" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
 
-    # ---------------------------
-    # 数据库校验-策略平仓-修改币种p
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改币种p")
     def test_dbclose_cfdp(self, var_manager, db_transaction):
@@ -393,9 +364,6 @@ class TestVPSOrderSend_money(APITestBase):
             symbol = db_data[0]["symbol"]
             assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
 
-    # ---------------------------
-    # 数据库校验-策略平仓-修改币种min
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改币种min")
     def test_dbclose_cfdmin(self, var_manager, db_transaction):

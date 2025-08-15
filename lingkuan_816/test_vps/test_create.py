@@ -10,14 +10,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("账号管理-创建基本信息")
 class TestCreate(APITestBase):
-    # ---------------------------
-    # 账号管理-账号列表-新增单个用户
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-新增单个用户")
     def test_create_user(self, logged_session, var_manager, encrypted_password):
@@ -54,9 +51,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-账号列表-新增用户
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-新增用户")
     def test_dbquery_user(self, var_manager, db_transaction):
@@ -79,9 +73,26 @@ class TestCreate(APITestBase):
             logging.info(f"新增用户ID: {vps_trader_user_id}")
             var_manager.set_runtime_variable("vps_trader_user_id", vps_trader_user_id)
 
-    # ---------------------------
-    # 账号管理-账号列表-批量新增用户
-    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-提取数据库平台ID数据")
+    def test_dbquery_platform(self, var_manager, db_transaction):
+        with allure.step("1. 提取数据库平台ID数据"):
+            new_user = var_manager.get_variable("new_user")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_platform WHERE server = %s",
+                (new_user["platform"],)
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            platformId = db_data[0]["id"]
+            logging.info(f"平台ID: {platformId}")
+            var_manager.set_runtime_variable("platformId", platformId)
+
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, logged_session, var_manager):
@@ -116,9 +127,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-账号列表-批量新增用户
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
     def test_dbquery__importuser(self, var_manager, db_transaction):
@@ -154,9 +162,6 @@ class TestCreate(APITestBase):
             var_manager.set_runtime_variable("vps_user_count", len(vps_user_ids))
             print(f"共提取{len(vps_user_ids)}个用户数据")
 
-    # ---------------------------
-    # 账号管理-组别列表-新增VPS组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-新增VPS组别")
     def test_create_vpsgroup(self, logged_session, var_manager):
@@ -190,9 +195,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-组别列表-新增VPS组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-组别列表-新增VPS组别")
     def test_dbquery_vpsgroup(self, var_manager, db_transaction):
@@ -214,9 +216,6 @@ class TestCreate(APITestBase):
             logging.info(f"新增VPS组别ID: {vps_group_id}")
             var_manager.set_runtime_variable("vps_group_id", vps_group_id)
 
-    # ---------------------------
-    # 平台管理-品种管理-添加品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种")
     def test_create_variety(self, logged_session, var_manager):
@@ -250,9 +249,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-品种管理-添加品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-添加品种")
     def test_dbquery_variety(self, var_manager, db_transaction):
@@ -275,9 +271,6 @@ class TestCreate(APITestBase):
             logging.info(f"新增品种id: {vps_template_id}")
             var_manager.set_runtime_variable("vps_template_id", vps_template_id)
 
-    # ---------------------------
-    # VPS管理-VPS列表-校验服务器IP是否可用
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-校验服务器IP是否可用")
     def test_get_connect(self, logged_session, var_manager):
@@ -304,9 +297,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # VPS管理-VPS列表-获取可见用户信息
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-获取可见用户信息")
     def test_get_user(self, logged_session, var_manager):
@@ -321,9 +311,6 @@ class TestCreate(APITestBase):
         logging.info(f"获取的可见用户信息：{vps_user_data}")
         var_manager.set_runtime_variable("vps_user_data", vps_user_data)
 
-    # ---------------------------
-    # VPS管理-VPS列表-新增vps
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-新增vps")
     def test_create_vps(self, logged_session, var_manager):
@@ -361,9 +348,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-VPS列表-新增vps
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS列表-新增vps")
     def test_dbquery_vps(self, var_manager, db_transaction):
@@ -385,9 +369,6 @@ class TestCreate(APITestBase):
             logging.info(f"新增vps的id: {vps_list_id}")
             var_manager.set_runtime_variable("vps_list_id", vps_list_id)
 
-    # ---------------------------
-    # VPS管理-VPS列表-获取要复制的VPS的ID
-    # ---------------------------
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-获取要复制的VPS的ID")
     def test_get_vps_pageid(self, logged_session, var_manager):
@@ -404,9 +385,6 @@ class TestCreate(APITestBase):
         logging.info(f"获取vps的id：{vps_page_id}")
         var_manager.set_runtime_variable("vps_page_id", vps_page_id)
 
-    # ---------------------------
-    # VPS管理-VPS列表-复制默认节点
-    # ---------------------------
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-复制默认节点")
     def test_vps_copyDefaultNode(self, logged_session, var_manager):
@@ -435,9 +413,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-新增策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
@@ -510,9 +485,6 @@ class TestCreate(APITestBase):
             assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
             logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-新增跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增跟单账号")
@@ -537,8 +509,8 @@ class TestCreate(APITestBase):
             "followOpen": 1,
             "followClose": 1,
             "followRep": 0,
-            "fixedComment": new_user["fixedComment"],
-            "commentType": 2,
+            "fixedComment": "",
+            "commentType": "",
             "digits": 0,
             "cfd": "",
             "forex": "",

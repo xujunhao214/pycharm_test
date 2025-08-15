@@ -25,15 +25,21 @@ def run_cloud_tests(env: str = "test"):
         "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
-        # "test_cloudTrader/test_cloudOrderSend.py",
-        # "test_cloudTrader/test_masOrderSend.py",
-        # "test_cloudTrader/test_cloudOrderSend_open.py",
-        # "test_cloudTrader/test_cloudOrderSend_level.py",
+        "test_cloudTrader/test_cloudOrderSend.py",
+        "test_cloudTrader/test_masOrderSend.py",
+        "test_cloudTrader/test_cloudOrderSend_open.py",
+        "test_cloudTrader/test_cloudOrderSend_level.py",
+        "test_cloudTrader/test_cloudstartegy_addstatus.py",
+        "test_cloudTrader/test_cloudstartegy_status.py",
+        "test_cloudTrader/test_cloudfixed_annotations .py",
         "test_cloudTrader/test_create_scene.py",
-        # "test_cloudTrader/test_cloudtrader_scene.py",
-        # "test_cloudTrader/test_cloudtrader_money.py",
+        "test_cloudTrader/test_cloudtrader_scene.py",
+        "test_cloudTrader/test_cloudtrader_money.py",
         "test_cloudTrader/test_delete_scene.py",
         "test_cloudTrader/test_delete.py",
+
+        "--reruns", "3",  # 重试次数
+        "--reruns-delay", "10",  # 重试间隔
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
@@ -75,6 +81,6 @@ def run_cloud_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)

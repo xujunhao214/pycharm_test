@@ -11,16 +11,13 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
-@allure.feature("云策略-云策略列表-批量新增云策略跟单账号")
+@allure.feature("云策略-云策略列表-批量新增云跟单账号")
 class TestCreate_importcloudTrader(APITestBase):
-    # ---------------------------
-    # 云策略-云策略列表-批量新增挂靠账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("云策略-云策略列表-批量新增云策略跟单账号")
+    @allure.title("云策略-云策略列表-批量新增云跟单账号")
     def test_create_importcloudBatchAdd(self, var_manager, logged_session):
         # 1. 获取账号总数和所有ID
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -72,7 +69,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 self.assert_response_status(
                     response,
                     200,
-                    "新增云策略跟单账号失败"
+                    "新增云跟单账号失败"
                 )
 
                 # 3. 验证JSON返回内容
@@ -84,7 +81,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-云策略列表-批量新增云策略跟单账号")
+    @allure.title("数据库校验-云策略列表-批量新增云跟单账号")
     def test_dbquery_cloudBatchAdd(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有账号信息
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
@@ -109,21 +106,18 @@ class TestCreate_importcloudTrader(APITestBase):
                 print(f"获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}")
 
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，新增云策略跟单账号失败")
+                    pytest.fail("数据库查询结果为空，新增云跟单账号失败")
 
                 usr_account_id = db_data[0]['id']
                 cloudTrader_all_count_ids.append(usr_account_id)
                 var_manager.set_runtime_variable(f"cloudTrader_traderList_{i}", usr_account_id)
-                logging.info(f"新增云策略跟单账号id是：cloudTrader_traderList_{i}")
+                logging.info(f"新增云跟单账号id是：cloudTrader_traderList_{i}")
         # 4.保存总数量（供后续步骤使用）
         cloudTrader_add_count = len(cloudTrader_all_count_ids)
         var_manager.set_runtime_variable("cloudTrader_add_count", cloudTrader_add_count)
         var_manager.set_runtime_variable("cloudTrader_all_count_ids", cloudTrader_all_count_ids)
         print(f"后6个账号数据库校验完成，共提取{cloudTrader_add_count}个ID，已保存到变量 cloudTrader_all_count_ids")
 
-    # ---------------------------
-    # 修改跟单账号-参数化测试（仅使用后6个数据）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
     def test_update_addSlave(self, var_manager, logged_session):
@@ -148,7 +142,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "remark": "云跟单账号测试数据",
                 "Cfd": "",
                 "mode_desc": "固定手数（5倍）"
             },
@@ -156,7 +150,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": cloudTrader_template_id2,
-                "remark": "云策略跟单账号测试数据",
+                "remark": "云跟单账号测试数据",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"
             },
@@ -164,7 +158,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "remark": "云跟单账号测试数据",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -172,7 +166,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "remark": "云跟单账号测试数据",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -180,7 +174,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "remark": "云跟单账号测试数据",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -188,7 +182,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云策略跟单账号测试数据",
+                "remark": "云跟单账号测试数据",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },
@@ -249,7 +243,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 response = self.send_post_request(
                     logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data
                 )
-                print(f"修改云策略跟单账号数据：{param['traderList']}")
+                print(f"修改云跟单账号数据：{param['traderList']}")
 
                 self.assert_response_status(
                     response, 200,

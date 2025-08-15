@@ -9,18 +9,15 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("删除基本账号-云策略账号")
 class TestDelete_cloudTrader(APITestBase):
-    # ---------------------------
-    # 云策略-云策略列表-删除云策略跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("云策略-云策略列表-删除云策略跟单账号")
+    @allure.title("云策略-云策略列表-删除云跟单账号")
     def test_delete_cloudBatchDelete(self, logged_session, var_manager):
-        # 1. 发送删除删除云策略跟单账号请求
+        # 1. 发送删除删除云跟单账号请求
         cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
         if cloudTrader_traderList_4 is None:
             pytest.skip("云策略账号不存在")
@@ -39,7 +36,7 @@ class TestDelete_cloudTrader(APITestBase):
         self.assert_response_status(
             response,
             200,
-            "删除云策略跟单账号失败"
+            "删除云跟单账号失败"
         )
 
         # 3. 验证JSON返回内容
@@ -50,11 +47,8 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-云策略列表-删除云策略跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-云策略列表-删除云策略跟单账号")
+    @allure.title("数据库校验-云策略列表-删除云跟单账号")
     def test_dbdelete_cloudBatchDelete(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
@@ -68,14 +62,63 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略跟单账号 {cloudTrader_traderList_4} 已成功从数据库删除", "验证结果")
+                allure.attach(f"云跟单账号 {cloudTrader_traderList_4} 已成功从数据库删除", "验证结果")
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 云策略-云策略列表-删除云策略manager账号
-    # ---------------------------
+    @allure.title("云策略-云策略列表-删除云跟单账号-手动下单")
+    def test_delete_handcloudBatchAdd(self, logged_session, var_manager):
+        # 1. 发送删除删除云跟单账号请求
+        cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
+        if cloudTrader_traderList_handid is None:
+            pytest.skip("云跟单账号不存在")
+        data = {
+            "traderList": [
+                cloudTrader_traderList_handid
+            ]
+        }
+        response = self.send_post_request(
+            logged_session,
+            "/mascontrol/cloudTrader/cloudBatchDelete",
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "删除云跟单账号失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-云策略列表-删除云跟单账号-手动下单")
+    def test_dbdelete_handcloudBatchAdd(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否删除成功"):
+            cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
+            logging.info(f"查询条件: table=follow_cloud_trader, id={cloudTrader_traderList_handid}")
+
+            sql = f"SELECT * FROM follow_cloud_trader WHERE id = %s"
+            params = (cloudTrader_traderList_handid,)
+            try:
+                self.wait_for_database_deletion(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params
+                )
+                allure.attach(f"云跟单账号 {cloudTrader_traderList_handid} 已成功从数据库删除", "验证结果")
+            except TimeoutError as e:
+                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                pytest.fail(f"删除失败: {str(e)}")
+
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云策略manager账号")
     def test_delete_managercloudTrader(self, logged_session, var_manager):
@@ -108,9 +151,6 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-云策略列表-删除云策略跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-删除云策略manager账号")
     def test_dbdelete_managercloudTrader(self, var_manager, db_transaction):
@@ -131,9 +171,6 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 云策略-云策略列表-删除云策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云策略账号")
     def test_delete_cloudTrader(self, logged_session, var_manager):
@@ -166,9 +203,6 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-云策略列表-删除云策略跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-删除云策略账号")
     def test_dbdelete_cloudTrader(self, var_manager, db_transaction):
@@ -189,9 +223,6 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 账号管理-账号列表-批量下架VPS
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量下架VPS（后9个账号）")
     def test_user_belowVps(self, var_manager, logged_session):
@@ -224,9 +255,6 @@ class TestDelete_cloudTrader(APITestBase):
         self.assert_response_status(response, 200, "批量下架VPS（后9个账号）失败")
         self.assert_json_value(response, "$.msg", "success", "响应msg字段应为success")
 
-    # ---------------------------
-    # 数据库校验-VPS数据-验证账号是否下架成功
-    # ---------------------------
     @allure.title("数据库校验-VPS数据-验证账号是否下架成功（后9个账号）")
     def test_dbdelete_belowVps(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有账号信息
@@ -266,9 +294,6 @@ class TestDelete_cloudTrader(APITestBase):
                     f"残留数据：{db_data_sub}"
                 )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-删除策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-删除策略账号")
@@ -296,9 +321,6 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-VPS数据-删除策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-删除策略账号")
     def test_dbdelete_vpstrader(self, var_manager, db_transaction):
@@ -319,9 +341,6 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 账号管理-账号列表-批量删除账号（参数化）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量删除账号")
     def test_delete_userlist(self, logged_session, var_manager):
@@ -364,9 +383,6 @@ class TestDelete_cloudTrader(APITestBase):
                 logging.info(f"第{i}个账号（ID: {user_id}）删除接口调用成功")
                 print(f"第{i}个账号（ID: {user_id}）删除接口调用成功")
 
-    # ---------------------------
-    # 数据库校验-批量删除账号（参数化）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量删除账号")
     def test_dbdelete_userlist(self, var_manager, db_transaction):
@@ -399,9 +415,6 @@ class TestDelete_cloudTrader(APITestBase):
                     allure.attach(f"删除超时: {str(e)}", "验证结果")
                     pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 平台管理-品种管理-删除品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种")
     def test_deleteTemplate(self, logged_session, var_manager):
@@ -429,9 +442,6 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-品种管理-删除品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-删除品种")
     def test_dbdelete_template(self, var_manager, db_transaction):
@@ -452,9 +462,6 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 云策略-云策略列表-删除云策略
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云策略")
     def test_delete_cloudMaster(self, logged_session, var_manager):
@@ -482,9 +489,6 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-云策略列表-删除云策略
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-删除云策略")
     def test_dbdelete_cloudMaster(self, var_manager, db_transaction):
@@ -505,9 +509,52 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 账号管理-组别列表-删除云策略组别
-    # ---------------------------
+    @allure.title("云策略-云策略列表-删除云策略-手动下单")
+    def test_delete_cloudMaster_hand(self, logged_session, var_manager):
+        # 1. 发送删除云策略请求
+        cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
+
+        response = self.send_delete_request(
+            logged_session,
+            "/mascontrol/cloudMaster",
+            json_data=[cloudMaster_id_hand]
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "删除云策略失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-云策略列表-删除云策略-手动下单")
+    def test_dbdelete_cloudMaster_hand(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否删除成功"):
+            cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
+            logging.info(f"查询条件: table=follow_cloud_master, id={cloudMaster_id_hand}")
+
+            sql = f"SELECT * FROM follow_cloud_master WHERE id = %s"
+            params = (cloudMaster_id_hand,)
+            try:
+                self.wait_for_database_deletion(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params
+                )
+                allure.attach(f"云策略 {cloudMaster_id_hand} 已成功从数据库删除", "验证结果")
+            except TimeoutError as e:
+                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                pytest.fail(f"删除失败: {str(e)}")
+
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-删除云策略组别")
     def test_deletecloudgroup(self, logged_session, var_manager):
@@ -534,9 +581,6 @@ class TestDelete_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-组别列表-删除云策略组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-组别列表-删除云策略组别")
     def test_dbdelete_cloudgroup(self, var_manager, db_transaction):

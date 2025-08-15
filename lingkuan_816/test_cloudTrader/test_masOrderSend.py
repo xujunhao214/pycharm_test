@@ -9,14 +9,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("交易下单-云策略manager策略账号分配下单")
 class TestbargainmasOrderSend_allocation(APITestBase):
-    # ---------------------------
-    # 账号管理-交易下单-云策略账号复制下单
-    # ---------------------------
     @allure.title("账号管理-交易下单-云策略manager策略账号分配下单")
     def test_bargain_masOrderSend(self, logged_session, var_manager):
         # 1. 发送云策略分配下单请求
@@ -49,9 +46,6 @@ class TestbargainmasOrderSend_allocation(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易开仓-指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-交易开仓-指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -133,9 +127,6 @@ class TestbargainmasOrderSend_allocation(APITestBase):
                 f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 账号管理-交易下单-平仓
-    # ---------------------------
     @allure.title("跟账号管理-交易下单-平仓")
     def test_bargain_masOrderClose(self, logged_session, var_manager):
         cloudTrader_user_ids_3 = var_manager.get_variable("cloudTrader_user_ids_3")
@@ -159,9 +150,6 @@ class TestbargainmasOrderSend_allocation(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易平仓-指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -230,9 +218,6 @@ class TestbargainmasOrderSend_allocation(APITestBase):
 
 @allure.feature("交易下单-云策略manager策略账号复制下单")
 class TestbargainmasOrderSend_copy(APITestBase):
-    # ---------------------------
-    # 账号管理-交易下单-云策略账号复制下单
-    # ---------------------------
     @allure.title("账号管理-交易下单-云策略manager策略账号复制下单")
     def test_bargain_masOrderSend(self, logged_session, var_manager):
         # 1. 发送云策略复制下单请求
@@ -267,9 +252,6 @@ class TestbargainmasOrderSend_copy(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易开仓-指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-交易开仓-指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -357,9 +339,6 @@ class TestbargainmasOrderSend_copy(APITestBase):
                 f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 账号管理-交易下单-平仓
-    # ---------------------------
     @allure.title("跟账号管理-交易下单-平仓")
     def test_bargain_masOrderClose(self, logged_session, var_manager):
         cloudTrader_user_ids_3 = var_manager.get_variable("cloudTrader_user_ids_3")
@@ -383,9 +362,6 @@ class TestbargainmasOrderSend_copy(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易平仓-指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):

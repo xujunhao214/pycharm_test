@@ -8,14 +8,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("VPS策略下单-正常开仓平仓")
 class TestVPSOrderSend(APITestBase):
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略开仓
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
     def test_trader_orderSend(self, var_manager, logged_session):
@@ -53,9 +50,6 @@ class TestVPSOrderSend(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略开仓-主指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -138,9 +132,6 @@ class TestVPSOrderSend(APITestBase):
                 f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 数据库校验-策略开仓-跟单指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -206,9 +197,6 @@ class TestVPSOrderSend(APITestBase):
                 f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
             )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略平仓
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
     def test_trader_orderclose(self, var_manager, logged_session):
@@ -240,9 +228,6 @@ class TestVPSOrderSend(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-跟单平仓
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
@@ -275,9 +260,6 @@ class TestVPSOrderSend(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略平仓-主指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
     def test_dbquery_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -332,9 +314,6 @@ class TestVPSOrderSend(APITestBase):
                 f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 数据库校验-策略平仓-跟单指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):

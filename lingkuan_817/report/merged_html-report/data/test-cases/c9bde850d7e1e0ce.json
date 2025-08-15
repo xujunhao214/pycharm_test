@@ -1,0 +1,236 @@
+{
+  "uid" : "c9bde850d7e1e0ce",
+  "name" : "云策略-云策略列表-平仓",
+  "fullName" : "test_cloudTrader.test_cloudtrader_scene.Testcloudtrader_Scence#test_cloudTrader_cloudOrderClose",
+  "historyId" : "261eba02077bbd34bce3526c04d8c3ef",
+  "time" : {
+    "start" : 1755247871430,
+    "stop" : 1755247872998,
+    "duration" : 1568
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 响应msg字段应为success\nURL: https://uat.atcp.top/api/mascontrol/cloudTrader/cloudOrderClose\nJSON路径: $.msg\n实际值: 服务器异常，请稍后再试\n期望值: success",
+  "statusTrace" : "self = <lingkuan_817.test_cloudTrader.test_cloudtrader_scene.Testcloudtrader_Scence object at 0x000001DCDB9FC9D0>\nlogged_session = <lingkuan_817.commons.session.EnvironmentSession object at 0x000001DCDBC43A90>\nvar_manager = <lingkuan_817.commons.variable_manager.VariableManager object at 0x000001DCDBA25940>\n\n    @allure.title(\"云策略-云策略列表-平仓\")\n    def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):\n        cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n        # 1. 发送平仓请求\n        data = {\n            \"isCloseAll\": 1,\n            \"intervalTime\": 100,\n            \"id\": f\"{cloudMaster_id}\",\n            \"cloudTraderId\": []\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/mascontrol/cloudTrader/cloudOrderClose',\n            json_data=data\n        )\n    \n        # 2. 判断是否平仓成功\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_cloudTrader\\test_cloudtrader_scene.py:298: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_817.test_cloudTrader.test_cloudtrader_scene.Testcloudtrader_Scence object at 0x000001DCDB9FC9D0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 响应msg字段应为success\nE           URL: https://uat.atcp.top/api/mascontrol/cloudTrader/cloudOrderClose\nE           JSON路径: $.msg\nE           实际值: 服务器异常，请稍后再试\nE           期望值: success\n\ncommons\\api_base.py:261: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755247765114,
+      "stop" : 1755247765115,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1755247869968,
+      "stop" : 1755247869968,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1755247869968,
+      "stop" : 1755247871430,
+      "duration" : 1462
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755246574419,
+      "stop" : 1755246574419,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755246574419,
+      "stop" : 1755246574419,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 响应msg字段应为success\nURL: https://uat.atcp.top/api/mascontrol/cloudTrader/cloudOrderClose\nJSON路径: $.msg\n实际值: 服务器异常，请稍后再试\n期望值: success",
+    "statusTrace" : "self = <lingkuan_817.test_cloudTrader.test_cloudtrader_scene.Testcloudtrader_Scence object at 0x000001DCDB9FC9D0>\nlogged_session = <lingkuan_817.commons.session.EnvironmentSession object at 0x000001DCDBC43A90>\nvar_manager = <lingkuan_817.commons.variable_manager.VariableManager object at 0x000001DCDBA25940>\n\n    @allure.title(\"云策略-云策略列表-平仓\")\n    def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):\n        cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n        # 1. 发送平仓请求\n        data = {\n            \"isCloseAll\": 1,\n            \"intervalTime\": 100,\n            \"id\": f\"{cloudMaster_id}\",\n            \"cloudTraderId\": []\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/mascontrol/cloudTrader/cloudOrderClose',\n            json_data=data\n        )\n    \n        # 2. 判断是否平仓成功\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_cloudTrader\\test_cloudtrader_scene.py:298: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_817.test_cloudTrader.test_cloudtrader_scene.Testcloudtrader_Scence object at 0x000001DCDB9FC9D0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg):\n        \"\"\"断言JSON路径对应的值（增强错误处理）\"\"\"\n        try:\n            actual_value = response.extract_jsonpath(json_path)\n>           assert actual_value == expected_value, (\n                f\"{error_msg}\\n\"\n                f\"URL: {response.url}\\n\"\n                f\"JSON路径: {json_path}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"期望值: {expected_value}\"\n            )\nE           AssertionError: 响应msg字段应为success\nE           URL: https://uat.atcp.top/api/mascontrol/cloudTrader/cloudOrderClose\nE           JSON路径: $.msg\nE           实际值: 服务器异常，请稍后再试\nE           期望值: success\n\ncommons\\api_base.py:261: AssertionError",
+    "steps" : [ {
+      "name" : "发送POST请求到 /mascontrol/cloudTrader/cloudOrderClose",
+      "time" : {
+        "start" : 1755247871430,
+        "stop" : 1755247872994,
+        "duration" : 1564
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "66cade1bfc47a657",
+        "name" : "请求JSON数据",
+        "source" : "66cade1bfc47a657.json",
+        "type" : "application/json",
+        "size" : 71
+      }, {
+        "uid" : "d5d10c0c01f6afbe",
+        "name" : "请求URL",
+        "source" : "d5d10c0c01f6afbe.txt",
+        "type" : "text/plain",
+        "size" : 39
+      }, {
+        "uid" : "1429c718f3a2ae2f",
+        "name" : "响应结果",
+        "source" : "1429c718f3a2ae2f.txt",
+        "type" : "text/plain",
+        "size" : 89
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "5a4bf1d07e0ecc6b",
+      "name" : "log",
+      "source" : "5a4bf1d07e0ecc6b.txt",
+      "type" : "text/plain",
+      "size" : 2487
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 1,
+    "attachmentsCount" : 4,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755248271248,
+      "stop" : 1755248271249,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1755247873010,
+      "stop" : 1755247873010,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1755247873009,
+      "stop" : 1755247873009,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略策略下单-跟单修改模式、品种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudtrader_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "Testcloudtrader_Scence"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "34324-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudtrader_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "c9bde850d7e1e0ce.json",
+  "parameterValues" : [ ]
+}

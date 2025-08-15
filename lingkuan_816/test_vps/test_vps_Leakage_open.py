@@ -9,14 +9,11 @@ from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 from lingkuan_816.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("VPS策略下单-漏开")
 class TestLeakageopen(APITestBase):
-    # ---------------------------
-    # 跟单软件看板-VPS数据-修改跟单账号
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
     def test_update_slave(self, var_manager, logged_session, encrypted_password):
@@ -88,9 +85,6 @@ class TestLeakageopen(APITestBase):
             follow_open = db_data[0]["follow_open"]
             assert follow_open == 0, f"follow_open的状态应该是0，实际是：{follow_open}"
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略开仓-出现漏单
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓-出现漏单")
     def test_trader_orderSend(self, var_manager, logged_session):
@@ -128,9 +122,6 @@ class TestLeakageopen(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略开仓-主指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -213,9 +204,6 @@ class TestLeakageopen(APITestBase):
                 f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 数据库校验-策略开仓-跟单开仓指令
-    # ---------------------------
     @allure.title("数据库校验-策略开仓-跟单开仓指令-根据status状态发现有漏单")
     def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
@@ -252,9 +240,6 @@ class TestLeakageopen(APITestBase):
             status = db_data[0]["status"]
             assert status == 2, f"跟单失败，跟单状态status应该是2，实际是：{status}"
 
-    # ---------------------------
-    # 出现漏开-redis数据和数据库的数据做比对
-    # ---------------------------
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -319,9 +304,6 @@ class TestLeakageopen(APITestBase):
                 tolerance=1e-6  # 浮点数比较容差
             )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略开仓-一键补全
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-开仓补全")
     def test_follow_repairSend(self, var_manager, logged_session):
@@ -347,9 +329,6 @@ class TestLeakageopen(APITestBase):
                 "响应msg字段应为'请开启补仓开关'"
             )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-修改跟单账号
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-修改跟单账号")
     def test_update_slave2(self, var_manager, logged_session, encrypted_password):
@@ -449,9 +428,6 @@ class TestLeakageopen(APITestBase):
                 "响应msg字段应为success"
             )
 
-    # ---------------------------
-    # 数据库校验-策略开仓-跟单指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -517,9 +493,6 @@ class TestLeakageopen(APITestBase):
                 f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
             )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-策略平仓
-    # ---------------------------
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
     def test_trader_orderclose(self, var_manager, logged_session, db_transaction):
@@ -551,9 +524,6 @@ class TestLeakageopen(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略平仓-主指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
     def test_dbquery_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):
@@ -608,9 +578,6 @@ class TestLeakageopen(APITestBase):
                 f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
             logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
 
-    # ---------------------------
-    # 数据库校验-策略平仓-跟单指令及订单详情数据检查
-    # ---------------------------
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情界面跟单账号数据"):

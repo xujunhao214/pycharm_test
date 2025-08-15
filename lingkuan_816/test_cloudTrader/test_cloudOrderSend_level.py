@@ -10,15 +10,12 @@ from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 from lingkuan_816.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("交易下单-云策略复制下单-漏开")
 class TestcloudTrader_level(APITestBase):
-    # ---------------------------
-    # 云策略-云策略列表-修改云策略跟单
-    # ---------------------------
-    @allure.title("云策略-云策略列表-修改云策略跟单")
+    @allure.title("云策略-云策略列表-修改云跟单")
     def test_cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):
         with allure.step("1. 发送修改跟单策略账号请求，将followClose改为0，关闭平仓"):
             cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
@@ -74,7 +71,7 @@ class TestcloudTrader_level(APITestBase):
                 "响应msg字段应为success"
             )
 
-    @allure.title("数据库校验-云策略列表-修改云策略跟单账号是否成功")
+    @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
     def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -91,9 +88,6 @@ class TestcloudTrader_level(APITestBase):
             follow_close = db_data[0]["follow_close"]
             assert follow_close == 0, f"follow_close的状态应该是0，实际是：{follow_close}"
 
-    # ---------------------------
-    # 账号管理-交易下单-云策略账号复制下单
-    # ---------------------------
     @allure.title("账号管理-交易下单-云策略账号复制下单")
     def test_bargain_masOrderSend(self, logged_session, var_manager):
         # 1. 发送云策略复制下单请求
@@ -190,9 +184,6 @@ class TestcloudTrader_level(APITestBase):
             self.assert_list_equal_ignore_order(total_lots, size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
             logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
 
-    # ---------------------------
-    # 账号管理-交易下单-平仓-出现漏平
-    # ---------------------------
     @allure.title("账号管理-交易下单-平仓-出现漏平")
     def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
         cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -218,9 +209,6 @@ class TestcloudTrader_level(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-策略平仓-检查平仓订单是否出现漏平
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
     def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
@@ -279,9 +267,6 @@ class TestcloudTrader_level(APITestBase):
             cloudTrader_master_order_level = [record["master_order"] for record in db_data]
             var_manager.set_runtime_variable("cloudTrader_master_order_level", cloudTrader_master_order_level)
 
-    # ---------------------------
-    # 出现漏平-redis数据和数据库的数据做比对
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("出现漏平-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_close):
@@ -349,10 +334,7 @@ class TestcloudTrader_level(APITestBase):
                 tolerance=1e-6  # 浮点数比较容差
             )
 
-    # ---------------------------
-    # 云策略-云策略列表-修改云策略跟单
-    # ---------------------------
-    @allure.title("云策略-云策略列表-修改云策略跟单")
+    @allure.title("云策略-云策略列表-修改云跟单")
     def test_cloudTrader_cloudBatchUpdate2(self, var_manager, logged_session):
         with allure.step("1. 发送修改跟单策略账号请求，将followClose改为1，开启平仓"):
             cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
@@ -408,7 +390,7 @@ class TestcloudTrader_level(APITestBase):
                 "响应msg字段应为success"
             )
 
-    @allure.title("数据库校验-云策略列表-修改云策略跟单账号是否成功")
+    @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
     def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -457,10 +439,7 @@ class TestcloudTrader_level(APITestBase):
                     "响应msg字段应为success"
                 )
 
-    # ---------------------------
-    # 云策略-云策略列表-云策略跟单账号自己平仓
-    # ---------------------------
-    @allure.title("云策略-云策略列表-云策略跟单账号自己平仓")
+    @allure.title("云策略-云策略列表-云跟单账号自己平仓")
     def test_cloudTrader_cloudOrderClose2(self, logged_session, var_manager):
         cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
         # 1. 发送平仓请求
@@ -485,9 +464,6 @@ class TestcloudTrader_level(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-交易平仓-指令及订单详情数据检查
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
@@ -530,7 +506,8 @@ class TestcloudTrader_level(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time"
+                time_field="foi.create_time",
+                time_range=2
             )
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")

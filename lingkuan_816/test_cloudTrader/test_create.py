@@ -11,14 +11,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("账号管理-创建账号-为云策略准备")
 class TestCreate_cloudTrader(APITestBase):
-    # ---------------------------
-    # 账号管理-账号列表-批量新增用户-为云策略准备
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, logged_session, var_manager):
@@ -53,9 +50,6 @@ class TestCreate_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-账号列表-批量新增用户
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
     def test_dbquery__importuser(self, var_manager, db_transaction):
@@ -93,9 +87,6 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("cloudTrader_user_count", len(cloudTrader_user_ids))
             print(f"共提取{len(cloudTrader_user_ids)}个用户数据")
 
-    # ---------------------------
-    # 数据库查询-获取VPSID
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库查询-获取VPSID")
     def test_get_vpsID(self, var_manager, db_transaction):
@@ -117,9 +108,6 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("vpsId", vpsId)
             print(f"成功提取 VPS ID: {vpsId}")
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-新增策略账号-为云策略准备
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
@@ -195,9 +183,6 @@ class TestCreate_cloudTrader(APITestBase):
             assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
             logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
-    # ---------------------------
-    # 账号管理-账号列表-批量挂靠VPS
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量挂靠VPS跟单（后9个账号）")
     def test_user_hangVps(self, var_manager, logged_session):
@@ -253,9 +238,6 @@ class TestCreate_cloudTrader(APITestBase):
             "success",
             "响应msg字段应为success")
 
-    # ---------------------------
-    # 数据库校验-批量挂靠VPS跟单（后9个账号）
-    # ---------------------------
     @allure.title("数据库校验-批量挂靠VPS跟单（后9个账号）")
     def test_dbimport_addSlave(self, var_manager, db_transaction):
         # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）
@@ -339,9 +321,6 @@ class TestCreate_cloudTrader(APITestBase):
         var_manager.set_runtime_variable("cloudTrader_all_vps_ids", all_ids_cloudTrader)
         print(f"后9个账号数据库校验完成，共提取{account_count}个ID")
 
-    # ---------------------------
-    # 账号管理-组别列表-新增云策略组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-新增云策略组别")
     def test_create_cloudgroup(self, logged_session, var_manager):
@@ -375,9 +354,6 @@ class TestCreate_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-组别列表-新增云策略组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-组别列表-新增云策略组别")
     def test_dbquery_cloudgroup(self, var_manager, db_transaction):
@@ -399,9 +375,6 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增云策略组别ID: {cloudTrader_group_id}")
             var_manager.set_runtime_variable("cloudTrader_group_id", cloudTrader_group_id)
 
-    # ---------------------------
-    # 云策略-云策略列表-新增云策略
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增云策略")
     def test_create_cloudMaster(self, var_manager, logged_session):
@@ -452,9 +425,6 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("cloudMaster_id", cloudMaster_id)
             logging.info(f"新增云策略账号id是：{cloudMaster_id}")
 
-    # ---------------------------
-    # 云策略-云策略列表-新增策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增策略账号")
     def test_mascontrol_cloudTrader(self, var_manager, logged_session):
@@ -522,9 +492,6 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("cloudTrader_traderList_2", cloudTrader_traderList_2)
             logging.info(f"新增策略账号id是：{cloudTrader_traderList_2}")
 
-    # ---------------------------
-    # 云策略-云策略列表-新增manager策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增manager策略账号")
     def test_manager_cloudTrader(self, var_manager, logged_session):
@@ -598,11 +565,8 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("cloudTrader_traderList_3", cloudTrader_traderList_3)
             logging.info(f"新增manager账号id是：{cloudTrader_traderList_3}")
 
-    # ---------------------------
-    # 云策略-云策略列表-新增云策略跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("云策略-云策略列表-新增云策略跟单账号")
+    @allure.title("云策略-云策略列表-新增云跟单账号")
     def test_cloudTrader_cloudBatchAdd(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -643,7 +607,7 @@ class TestCreate_cloudTrader(APITestBase):
         self.assert_response_status(
             response,
             200,
-            "新增云策略跟单账号失败"
+            "新增云跟单账号失败"
         )
 
         # 3. 验证JSON返回内容
@@ -655,28 +619,26 @@ class TestCreate_cloudTrader(APITestBase):
         )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-云策略列表-新增云策略跟单账号")
+    @allure.title("数据库校验-云策略列表-新增云跟单账号")
     def test_dbcloudTrader_cloudBatchAdd(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+            cloudMaster_id = var_manager.get_variable("cloudMaster_id")
 
             db_data = self.query_database(
                 db_transaction,
-                f"SELECT * FROM follow_cloud_trader WHERE account = %s",
-                (cloudTrader_user_accounts_4,)
+                f"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s",
+                (cloudTrader_user_accounts_4, cloudMaster_id,)
             )
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，新增云策略账号失败")
+                pytest.fail("数据库查询结果为空，新增跟单账号失败")
 
             cloudTrader_traderList_4 = db_data[0]['id']
             var_manager.set_runtime_variable("cloudTrader_traderList_4", cloudTrader_traderList_4)
-            logging.info(f"新增云策略跟单账号id是：{cloudTrader_traderList_4}")
+            logging.info(f"新增云跟单账号id是：{cloudTrader_traderList_4}")
 
-    # ---------------------------
-    # 平台管理-品种管理-添加品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种")
     def test_create_variety(self, logged_session, var_manager):
@@ -710,9 +672,6 @@ class TestCreate_cloudTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-品种管理-添加品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-添加品种")
     def test_dbquery_variety(self, var_manager, db_transaction):
@@ -733,3 +692,117 @@ class TestCreate_cloudTrader(APITestBase):
             cloudTrader_template_id2 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {cloudTrader_template_id2}")
             var_manager.set_runtime_variable("cloudTrader_template_id2", cloudTrader_template_id2)
+
+    @allure.title("云策略-云策略列表-新增云策略-手动下单")
+    def test_create_handcloudMaster(self, var_manager, logged_session):
+        cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
+        with allure.step("1. 发送新增云策略的请求接口"):
+            data = {
+                "name": "自动化测试_手动下单",
+                "type": 1,
+                "remark": "",
+                "status": 0,
+                "groupId": cloudTrader_group_id,
+                "sort": 100,
+                "isMonitorRepair": 1,
+                "isAutoRepair": 1
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/mascontrol/cloudMaster',
+                json_data=data
+            )
+
+        with allure.step("2. 校验接口请求是否正确"):
+            # 使用工具类的 assert_value 方法验证响应状态
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-云策略列表-新增云策略-手动下单")
+    def test_dbcreate_handcloudMaster(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_cloud_master WHERE name = %s",
+                ("自动化测试_手动下单",),
+            )
+        with allure.step("2. 校验数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增云策略账号失败")
+
+        with allure.step("3. 提取数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增云策略账号失败")
+
+            cloudMaster_id_hand = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudMaster_id_hand", cloudMaster_id_hand)
+            logging.info(f"新增云策略账号id是：{cloudMaster_id_hand}")
+
+    @allure.title("云策略-云策略列表-新增云跟单-手动下单")
+    def test_create_handcloudBatchAdd(self, var_manager, logged_session):
+        cloudTrader_vps_ids_2 = var_manager.get_variable("cloudTrader_vps_ids_2")
+        cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
+        with allure.step("1. 发送新增云跟单的请求接口"):
+            data = [
+                {
+                    "traderList": [
+                        cloudTrader_vps_ids_2
+                    ],
+                    "cloudId": cloudMaster_id_hand,
+                    "masterId": "",
+                    "masterAccount": "",
+                    "followDirection": 0,
+                    "followMode": 1,
+                    "followParam": 1,
+                    "remainder": 0,
+                    "placedType": 0,
+                    "templateId": 1,
+                    "followStatus": 1,
+                    "followOpen": 1,
+                    "followClose": 1,
+                    "fixedComment": "",
+                    "commentType": "",
+                    "digits": 0,
+                    "followTraderIds": [],
+                    "sort": "100",
+                    "remark": "测试手动下单"
+                }
+            ]
+            response = self.send_post_request(
+                logged_session,
+                '/mascontrol/cloudTrader/cloudBatchAdd',
+                json_data=data
+            )
+
+        with allure.step("2. 校验接口请求是否正确"):
+            # 使用工具类的 assert_value 方法验证响应状态
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-云策略列表-新增云跟单-手动下单")
+    def test_dbcreate_handcloudBatchAdd(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
+            cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s",
+                (cloudTrader_user_accounts_3, cloudMaster_id_hand,),
+            )
+        with allure.step("2. 校验数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增云跟单账号失败")
+
+            cloudTrader_traderList_handid = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_traderList_handid", cloudTrader_traderList_handid)
+            logging.info(f"新增云跟单账号id是：{cloudTrader_traderList_handid}")

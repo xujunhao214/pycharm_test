@@ -9,14 +9,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("删除基本账号")
 class TestDeleteUser(APITestBase):
-    # ---------------------------
-    # 账号管理-组别列表-删除VPS组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-删除VPS组别")
     def test_delete_group(self, logged_session, var_manager):
@@ -43,9 +40,6 @@ class TestDeleteUser(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-组别列表-删除VPS组别
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-组别列表-删除VPS组别")
     def test_dbdelete_group(self, var_manager, db_transaction):
@@ -64,9 +58,6 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # VPS管理-VPS列表列表-清空VPS数据
-    # ---------------------------
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-清空VPS数据")
     def test_closeVps(self, logged_session, var_manager):
@@ -100,9 +91,6 @@ class TestDeleteUser(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # VPS管理-VPS列表列表-删除VPS数据
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-删除VPS数据")
     def test_delete_Vps(self, logged_session, var_manager):
@@ -136,9 +124,6 @@ class TestDeleteUser(APITestBase):
         )
         time.sleep(15)
 
-    # ---------------------------
-    # VPS管理-VPS列表列表-强制删除VPS
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-强制删除VPS")
     def test_deleteVPS_forceDelete(self, logged_session, var_manager):
@@ -179,9 +164,6 @@ class TestDeleteUser(APITestBase):
         )
         time.sleep(15)
 
-    # ---------------------------
-    # 数据库校验-VPS列表列表-删除VPS
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS列表列表-删除VPS")
     def test_dbdelete_vps(self, var_manager, db_transaction):

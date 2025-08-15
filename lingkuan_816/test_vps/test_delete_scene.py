@@ -9,14 +9,11 @@ from lingkuan_816.conftest import var_manager
 from lingkuan_816.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("删除跟单账号和策略账号")
 class TestDeleteTrader(APITestBase):
-    # ---------------------------
-    # 跟单软件看板-VPS数据-删除跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-删除跟单账号")
@@ -44,9 +41,6 @@ class TestDeleteTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-VPS数据-删除跟单账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-删除跟单账号")
     def test_dbdelete_addsalve(self, var_manager, db_transaction):
@@ -75,9 +69,6 @@ class TestDeleteTrader(APITestBase):
                 slave_account = db_data2[0]["slave_account"]
                 assert slave_account is None, f"账号删除失败，表里还存在数据:{slave_account}"
 
-    # ---------------------------
-    # 批量删除跟单账号（循环删除）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-批量删除跟单账号")
@@ -117,9 +108,6 @@ class TestDeleteTrader(APITestBase):
                 )
                 logger.info(f"[{DATETIME_NOW}] 第{i}个跟单账号（ID: {slave_id}）删除成功")
 
-    # ---------------------------
-    # 数据库校验：批量验证删除结果
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量删除跟单账号")
     def test_dbdelete_addsalvelist(self, var_manager, db_transaction):
@@ -158,9 +146,6 @@ class TestDeleteTrader(APITestBase):
                     f"残留数据：{db_data_sub}"
                 )
 
-    # ---------------------------
-    # 跟单软件看板-VPS数据-删除策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-删除策略账号")
@@ -188,9 +173,6 @@ class TestDeleteTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-VPS数据-删除策略账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-删除策略账号")
     def test_dbdelete_vpstrader(self, var_manager, db_transaction):
@@ -211,9 +193,6 @@ class TestDeleteTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 平台管理-品种管理-删除品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种")
     def test_deleteTemplate(self, logged_session, var_manager):
@@ -241,9 +220,6 @@ class TestDeleteTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-品种管理-删除品种
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-删除品种")
     def test_dbdelete_template(self, var_manager, db_transaction):
@@ -264,9 +240,6 @@ class TestDeleteTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 账号管理-账号列表-删除账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-删除账号")
     def test_delete_user(self, logged_session, var_manager):
@@ -294,9 +267,6 @@ class TestDeleteTrader(APITestBase):
             "响应msg字段应为success"
         )
 
-    # ---------------------------
-    # 数据库校验-账号列表-删除账号
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-删除账号")
     def test_dbdelete_user(self, var_manager, db_transaction):
@@ -318,9 +288,6 @@ class TestDeleteTrader(APITestBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # ---------------------------
-    # 账号管理-账号列表-批量删除账号（参数化）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量删除账号")
     def test_delete_userlist(self, logged_session, var_manager):
@@ -362,9 +329,6 @@ class TestDeleteTrader(APITestBase):
 
                 logging.info(f"第{i}个账号（ID: {user_id}）删除接口调用成功")
 
-    # ---------------------------
-    # 数据库校验-批量删除账号（参数化）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量删除账号")
     def test_dbdelete_userlist(self, var_manager, db_transaction):
