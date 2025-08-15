@@ -31,7 +31,7 @@ def run_cloud_tests(env: str = "test"):
         "test_cloudTrader/test_cloudOrderSend_level.py",
         "test_cloudTrader/test_cloudstartegy_addstatus.py",
         "test_cloudTrader/test_cloudstartegy_status.py",
-        "test_cloudTrader/test_cloudfixed_annotations .py",
+        "test_cloudTrader/test_cloudfixed_annotations.py",
         "test_cloudTrader/test_create_scene.py",
         "test_cloudTrader/test_cloudtrader_scene.py",
         "test_cloudTrader/test_cloudtrader_money.py",
