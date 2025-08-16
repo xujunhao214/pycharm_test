@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"
 
 
-@allure.feature("交易下单-云策略复制下单")
+@allure.feature("交易下单-云策略复制下单-云策略-策略状态关闭")
 @allure.description("""
 ### 用例说明
 - 前置条件：有云策略和云跟单

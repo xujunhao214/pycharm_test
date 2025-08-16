@@ -186,24 +186,14 @@ class TestCreate_Scene(APITestBase):
                 var_manager.set_runtime_variable(f"vps_addslave_ids_{idx}", vps_addslave_id)
                 print(f"账号 {account} 的ID为：{vps_addslave_id}，已保存到变量 vps_addslave_ids_{idx}")
 
-                # 校验账号状态和净值（核心业务规则）
-                def verify_core_fields():
-                    # 校验状态（0为正常）
-                    status = db_data[0]["status"]
-                    if status != 0:
-                        pytest.fail(f"账号 {account} 状态异常：预期status=0（正常），实际={status}")
-                    # 校验净值（非零）
-                    euqit = db_data[0]["euqit"]
-                    if euqit == 0:
-                        pytest.fail(f"账号 {account} 净值异常：预期euqit≠0，实际={euqit}")
+            with allure.step("校验账号状态和净值（核心业务规则）"):
+                status = db_data[0]["status"]
+                assert status == 0, f"新增跟单账号状态status应为0（正常），实际状态为: {status}"
+                logging.info(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
 
-                # 执行核心校验并记录结果
-                try:
-                    verify_core_fields()
-                    allure.attach(f"账号 {account} 主表字段校验通过", "校验结果", allure.attachment_type.TEXT)
-                except AssertionError as e:
-                    allure.attach(str(e), f"账号 {account} 主表字段校验失败", allure.attachment_type.TEXT)
-                    raise
+                euqit = db_data[0]["euqit"]
+                assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+                logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
                 # 校验订阅表记录（从表关联）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -220,9 +210,8 @@ class TestCreate_Scene(APITestBase):
                     pytest.fail(f"账号 {account} 在订阅表中未找到关联记录")
                 # 校验订阅表中的账号与当前账号一致
                 slave_account = db_sub_data[0]["slave_account"]
-                if slave_account != account:
-                    pytest.fail(f"订阅表账号不匹配：预期={account}，实际={slave_account}")
-                allure.attach(f"账号 {account} 订阅表关联校验通过", "校验结果", allure.attachment_type.TEXT)
+                assert slave_account == account, f"订阅表账号不匹配：预期={account}，实际={slave_account}"
+                logging.info(f"订阅表账号与当前账号一致：{slave_account}")
 
         # 5. 保存总数量（供后续步骤使用）
         vps_addslave_count = len(all_ids)

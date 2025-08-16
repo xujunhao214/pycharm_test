@@ -2,25 +2,35 @@ import allure
 import logging
 import pytest
 import time
-import math  # 导入math模块用于浮点数精确比较
+import math
 from lingkuan_818.VAR.VAR import *
 from lingkuan_818.conftest import var_manager
-from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_818.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"
 
 
-@allure.feature("VPS交易下单-分配下单")
-class TestMasordersend_allocation(APITestBase):
-    @allure.title("跟账号管理-交易下单-VPS分配下单")
-    def test_bargain_masOrderSend(self, logged_session, var_manager):
-        # 1. 发送VPS分配下单请求
-        global vps_user_ids_1
+@allure.feature("VPS交易下单（分配与复制）")
+@allure.description("""
+### 测试说明
+包含两种VPS交易下单模式的测试：
+1. 分配下单：按指定手数范围分配订单
+2. 复制下单：按复制模式生成订单
+每种模式均包含下单、数据校验和平仓流程
+""")
+class TestVPStradingOrders(APITestBase):
+    """整合VPS分配下单和复制下单的测试类"""
+
+    # -------------------------- 分配下单测试 --------------------------
+    @allure.story("模式一：分配下单")
+    @allure.title("VPS分配下单请求")
+    def test_allocation_order_send(self, logged_session, var_manager):
+        # 发送VPS分配下单请求
         masOrderSend = var_manager.get_variable("masOrderSend")
-        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")
+        self.vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
         data = {
-            "traderList": [vps_user_ids_1],
+            "traderList": [self.vps_user_ids_1],
             "type": 0,
             "tradeType": 0,
             "symbol": masOrderSend["symbol"],
@@ -36,7 +46,7 @@ class TestMasordersend_allocation(APITestBase):
             sleep_seconds=0
         )
 
-        # 2. 判断VPS分配下单是否成功
+        # 验证下单成功
         self.assert_json_value(
             response,
             "$.msg",
@@ -44,27 +54,17 @@ class TestMasordersend_allocation(APITestBase):
             "响应msg字段应为success"
         )
 
-    @allure.title("数据库校验-交易开仓-指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+    @allure.story("模式一：分配下单")
+    @allure.title("数据库校验-分配下单开仓数据")
+    def test_allocation_open_verify(self, var_manager, db_transaction):
+        with allure.step("获取开仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            sql = f"""
+            sql = """
                 SELECT 
-                    fod.size,
-                    fod.send_no,
-                    fod.magical,
-                    fod.open_price,
-                    fod.symbol,
-                    fod.order_no,
-                    foi.true_total_lots,
-                    foi.order_no,
-                    foi.operation_type,
-                    foi.create_time,
-                    foi.status,
-                    foi.min_lot_size,
-                    foi.max_lot_size,
-                    foi.total_lots,
-                    foi.total_orders
+                    fod.size, fod.send_no, fod.magical, fod.open_price, 
+                    fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,
+                    foi.operation_type, foi.create_time, foi.status,
+                    foi.min_lot_size, foi.max_lot_size, foi.total_lots, foi.total_orders
                 FROM 
                     follow_order_detail fod
                 INNER JOIN 
@@ -73,64 +73,64 @@ class TestMasordersend_allocation(APITestBase):
                     foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                 WHERE foi.operation_type = %s
                     AND fod.account = %s
-                    """
-            params = (
-                '0',
-                vps_user_accounts_1,
-            )
+            """
+            params = ('0', vps_user_accounts_1)
 
-            # 调用轮询等待方法（带时间范围过滤）
+            # 轮询等待数据
             db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
                 time_field="fod.open_time"
             )
-        with allure.step("2. 数据校验"):
+
+        with allure.step("验证开仓数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
+            # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            logger.info(f"订单状态验证通过: {status}")
 
-            # 手数范围：结束手数校验（使用math.isclose替换直接比较）
-            min_lot_size = db_data[0]["min_lot_size"]
-            endsize = trader_ordersend["endSize"]
-            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
-            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+            # 手数范围校验
+            assert math.isclose(
+                float(trader_ordersend["endSize"]),
+                float(db_data[0]["min_lot_size"]),
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'结束手数不匹配: 预期{trader_ordersend["endSize"]}, 实际{db_data[0]["min_lot_size"]}'
 
-            # 手数范围：开始手数校验
-            max_lot_size = db_data[0]["max_lot_size"]
-            startSize = trader_ordersend["startSize"]
-            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
-            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+            assert math.isclose(
+                float(trader_ordersend["startSize"]),
+                float(db_data[0]["max_lot_size"]),
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'开始手数不匹配: 预期{trader_ordersend["startSize"]}, 实际{db_data[0]["max_lot_size"]}'
 
-            # 下单总手数与指令表总手数校验
+            # 总手数校验
             total_lots = db_data[0]["total_lots"]
-            totalSzie = trader_ordersend["totalSzie"]
-            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，实际是：{total_lots}'
-            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+            assert math.isclose(
+                float(trader_ordersend["totalSzie"]),
+                float(total_lots),
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'总手数不匹配: 预期{trader_ordersend["totalSzie"]}, 实际{total_lots}'
 
-            # 下单总手数与订单详情总手数校验
-            totalSzie = trader_ordersend["totalSzie"]
-            size = [record["size"] for record in db_data]
-            total = sum(size)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+            # 订单详情总手数校验
+            total_size = sum(float(record["size"]) for record in db_data)
+            assert math.isclose(
+                float(trader_ordersend["totalSzie"]),
+                total_size,
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'订单详情总手数不匹配: 预期{trader_ordersend["totalSzie"]}, 实际{total_size}'
 
-    @allure.title("跟账号管理-交易下单-平仓")
-    def test_bargain_masOrderClose(self, logged_session, var_manager):
-        # 1. 发送平仓请求
+    @allure.story("模式一：分配下单")
+    @allure.title("VPS分配下单平仓")
+    def test_allocation_order_close(self, logged_session):
+        # 发送平仓请求
         data = {
             "isCloseAll": 1,
             "intervalTime": 100,
-            "traderList": [vps_user_ids_1]
+            "traderList": [self.vps_user_ids_1]
         }
         response = self.send_post_request(
             logged_session,
@@ -138,7 +138,7 @@ class TestMasordersend_allocation(APITestBase):
             json_data=data
         )
 
-        # 2. 判断是否平仓成功
+        # 验证平仓成功
         self.assert_json_value(
             response,
             "$.msg",
@@ -146,29 +146,19 @@ class TestMasordersend_allocation(APITestBase):
             "响应msg字段应为success"
         )
 
-    @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+    @allure.story("模式一：分配下单")
+    @allure.title("数据库校验-分配下单平仓数据")
+    def test_allocation_close_verify(self, var_manager, db_transaction):
+        with allure.step("获取平仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            sql = f"""
+            sql = """
                 SELECT 
-                    fod.size,
-                    fod.close_no,
-                    fod.magical,
-                    fod.open_price,
-                    fod.symbol,
-                    fod.order_no,
-                    foi.true_total_lots,
-                    foi.order_no,
-                    foi.operation_type,
-                    foi.create_time,
-                    foi.status,
-                    foi.min_lot_size,
-                    foi.max_lot_size,
-                    foi.total_lots,
-                    foi.master_order,
-                    foi.total_orders
+                    fod.size, fod.close_no, fod.magical, fod.open_price,
+                    fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,
+                    foi.operation_type, foi.create_time, foi.status,
+                    foi.min_lot_size, foi.max_lot_size, foi.total_lots,
+                    foi.master_order, foi.total_orders
                 FROM 
                     follow_order_detail fod
                 INNER JOIN 
@@ -178,50 +168,46 @@ class TestMasordersend_allocation(APITestBase):
                 WHERE foi.operation_type = %s
                     AND fod.account = %s
                     AND fod.trader_id = %s
-                    """
-            params = (
-                '1',
-                vps_user_accounts_1,
-                vps_addslave_id,
-            )
+            """
+            params = ('1', vps_user_accounts_1, vps_addslave_id)
 
-            # 调用轮询等待方法（带时间范围过滤）
+            # 轮询等待数据
             db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
                 time_field="fod.close_time"
             )
-        with allure.step("2. 数据校验"):
+
+        with allure.step("验证平仓数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
+            # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            logger.info(f"平仓订单状态验证通过: {status}")
 
             # 平仓总手数校验
-            totalSzie = trader_ordersend["totalSzie"]
-            size = [record["size"] for record in db_data]
-            total = sum(size)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+            total_size = sum(float(record["size"]) for record in db_data)
+            assert math.isclose(
+                float(trader_ordersend["totalSzie"]),
+                total_size,
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'平仓总手数不匹配: 预期{trader_ordersend["totalSzie"]}, 实际{total_size}'
 
         time.sleep(60)
 
-
-@allure.feature("VPS交易下单-复制下单")
-class TestMasordersend_copy(APITestBase):
-    @allure.title("跟账号管理-交易下单-VPS复制下单")
-    def test_bargain_masOrderSend(self, logged_session, var_manager):
-        # 1. 发送VPS复制下单请求
-        global vps_user_ids_1
+    # -------------------------- 复制下单测试 --------------------------
+    @allure.story("模式二：复制下单")
+    @allure.title("VPS复制下单请求")
+    def test_copy_order_send(self, logged_session, var_manager):
+        # 发送VPS复制下单请求
         masOrderSend = var_manager.get_variable("masOrderSend")
-        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")
+        self.vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
         data = {
-            "traderList": [vps_user_ids_1],
+            "traderList": [self.vps_user_ids_1],
             "type": 0,
             "tradeType": 1,
             "intervalTime": 100,
@@ -240,7 +226,7 @@ class TestMasordersend_copy(APITestBase):
             sleep_seconds=0
         )
 
-        # 2. 判断VPS复制下单是否成功
+        # 验证下单成功
         self.assert_json_value(
             response,
             "$.msg",
@@ -248,27 +234,17 @@ class TestMasordersend_copy(APITestBase):
             "响应msg字段应为success"
         )
 
-    @allure.title("数据库校验-交易开仓-指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+    @allure.story("模式二：复制下单")
+    @allure.title("数据库校验-复制下单开仓数据")
+    def test_copy_open_verify(self, var_manager, db_transaction):
+        with allure.step("获取开仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            sql = f"""
+            sql = """
                 SELECT 
-                    fod.size,
-                    fod.send_no,
-                    fod.magical,
-                    fod.open_price,
-                    fod.symbol,
-                    fod.order_no,
-                    foi.true_total_lots,
-                    foi.order_no,
-                    foi.operation_type,
-                    foi.create_time,
-                    foi.status,
-                    foi.min_lot_size,
-                    foi.max_lot_size,
-                    foi.total_lots,
-                    foi.total_orders
+                    fod.size, fod.send_no, fod.magical, fod.open_price,
+                    fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,
+                    foi.operation_type, foi.create_time, foi.status,
+                    foi.min_lot_size, foi.max_lot_size, foi.total_lots, foi.total_orders
                 FROM 
                     follow_order_detail fod
                 INNER JOIN 
@@ -277,13 +253,10 @@ class TestMasordersend_copy(APITestBase):
                     foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                 WHERE foi.operation_type = %s
                     AND fod.account = %s
-                    """
-            params = (
-                '0',
-                vps_user_accounts_1,
-            )
+            """
+            params = ('0', vps_user_accounts_1)
 
-            # 调用轮询等待方法（带时间范围过滤）
+            # 轮询等待数据
             db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -291,51 +264,53 @@ class TestMasordersend_copy(APITestBase):
                 time_field="fod.open_time"
             )
 
-        with allure.step("2. 数据校验"):
+        with allure.step("验证开仓数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
+            # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            logger.info(f"订单状态验证通过: {status}")
 
-            # 手数范围：结束手数校验
-            min_lot_size = db_data[0]["min_lot_size"]
-            endsize = trader_ordersend["endSize"]
-            assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
-            logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+            # 手数范围校验
+            assert math.isclose(
+                float(trader_ordersend["endSize"]),
+                float(db_data[0]["min_lot_size"]),
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'结束手数不匹配: 预期{trader_ordersend["endSize"]}, 实际{db_data[0]["min_lot_size"]}'
 
-            # 手数范围：开始手数校验
-            max_lot_size = db_data[0]["max_lot_size"]
-            startSize = trader_ordersend["startSize"]
-            assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
-            logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+            assert math.isclose(
+                float(trader_ordersend["startSize"]),
+                float(db_data[0]["max_lot_size"]),
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'开始手数不匹配: 预期{trader_ordersend["startSize"]}, 实际{db_data[0]["max_lot_size"]}'
 
-            # 下单总手数与指令表总手数校验
+            # 总手数校验
             total_lots = db_data[0]["total_lots"]
-            totalSzie = trader_ordersend["totalSzie"]
-            assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，实际是：{total_lots}'
-            logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+            assert math.isclose(
+                float(trader_ordersend["totalSzie"]),
+                float(total_lots),
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'总手数不匹配: 预期{trader_ordersend["totalSzie"]}, 实际{total_lots}'
 
-            # 下单总手数与订单详情总手数校验
-            totalSzie = trader_ordersend["totalSzie"]
-            size = [record["size"] for record in db_data]
-            total = sum(size)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+            # 订单详情总手数校验
+            total_size = sum(float(record["size"]) for record in db_data)
+            assert math.isclose(
+                float(trader_ordersend["totalSzie"]),
+                total_size,
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'订单详情总手数不匹配: 预期{trader_ordersend["totalSzie"]}, 实际{total_size}'
 
-    @allure.title("跟账号管理-交易下单-平仓")
-    def test_bargain_masOrderClose(self, logged_session, var_manager):
-        # 1. 发送平仓请求
+    @allure.story("模式二：复制下单")
+    @allure.title("VPS复制下单平仓")
+    def test_copy_order_close(self, logged_session):
+        # 发送平仓请求
         data = {
             "isCloseAll": 1,
             "intervalTime": 100,
-            "traderList": [vps_user_ids_1]
+            "traderList": [self.vps_user_ids_1]
         }
         response = self.send_post_request(
             logged_session,
@@ -343,7 +318,7 @@ class TestMasordersend_copy(APITestBase):
             json_data=data
         )
 
-        # 2. 判断是否平仓成功
+        # 验证平仓成功
         self.assert_json_value(
             response,
             "$.msg",
@@ -351,29 +326,19 @@ class TestMasordersend_copy(APITestBase):
             "响应msg字段应为success"
         )
 
-    @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+    @allure.story("模式二：复制下单")
+    @allure.title("数据库校验-复制下单平仓数据")
+    def test_copy_close_verify(self, var_manager, db_transaction):
+        with allure.step("获取平仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            sql = f"""
+            sql = """
                 SELECT 
-                    fod.size,
-                    fod.close_no,
-                    fod.magical,
-                    fod.open_price,
-                    fod.symbol,
-                    fod.order_no,
-                    foi.true_total_lots,
-                    foi.order_no,
-                    foi.operation_type,
-                    foi.create_time,
-                    foi.status,
-                    foi.min_lot_size,
-                    foi.max_lot_size,
-                    foi.total_lots,
-                    foi.master_order,
-                    foi.total_orders
+                    fod.size, fod.close_no, fod.magical, fod.open_price,
+                    fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,
+                    foi.operation_type, foi.create_time, foi.status,
+                    foi.min_lot_size, foi.max_lot_size, foi.total_lots,
+                    foi.master_order, foi.total_orders
                 FROM 
                     follow_order_detail fod
                 INNER JOIN 
@@ -383,35 +348,33 @@ class TestMasordersend_copy(APITestBase):
                 WHERE foi.operation_type = %s
                     AND fod.account = %s
                     AND fod.trader_id = %s
-                    """
-            params = (
-                '1',
-                vps_user_accounts_1,
-                vps_addslave_id,
-            )
+            """
+            params = ('1', vps_user_accounts_1, vps_addslave_id)
 
-            # 调用轮询等待方法（带时间范围过滤）
+            # 轮询等待数据
             db_data = self.wait_for_database_record_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
                 time_field="fod.close_time"
             )
-        with allure.step("2. 数据校验"):
+
+        with allure.step("验证平仓数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
+            # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            logger.info(f"平仓订单状态验证通过: {status}")
 
             # 平仓总手数校验
-            totalSzie = trader_ordersend["totalSzie"]
-            size = [record["size"] for record in db_data]
-            total = sum(size)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+            total_size = sum(float(record["size"]) for record in db_data)
+            assert math.isclose(
+                float(trader_ordersend["totalSzie"]),
+                total_size,
+                rel_tol=1e-9, abs_tol=1e-9
+            ), f'平仓总手数不匹配: 预期{trader_ordersend["totalSzie"]}, 实际{total_size}'
 
         time.sleep(25)

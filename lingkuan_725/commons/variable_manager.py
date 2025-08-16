@@ -1,4 +1,3 @@
-# commons/variable_manager.py
 import os
 import json
 import logging
@@ -9,16 +8,18 @@ logger = logging.getLogger(__name__)
 
 
 class VariableManager:
-    def __init__(self, env: str = "test", data_dir: str = "VAR"):
+    def __init__(self, env: str = "test", data_dir: str = "VAR", test_group: str = ""):
         """
-        初始化变量管理器
+        初始化变量管理器（支持测试组隔离）
 
         Args:
-            env: 环境标识，可选"test"或"prod"
+            env: 环境标识，可选"test"或"uat"
             data_dir: 数据目录，默认"VAR"
+            test_group: 测试组标识（如"vps"或"cloud"），用于隔离并行任务
         """
         self.env = env
         self.data_dir = data_dir
+        self.test_group = test_group  # 新增：测试组标识，实现并行隔离
         self.static_vars = {}
         self.runtime_vars = {}
         self.load_static_variables()
@@ -28,7 +29,7 @@ class VariableManager:
         """加载对应环境的静态变量文件"""
         static_files = {
             "test": os.path.join(self.data_dir, "test_data.json"),
-            "prod": os.path.join(self.data_dir, "prod_data.json")
+            "uat": os.path.join(self.data_dir, "uat_data.json")
         }
         file_path = static_files.get(self.env, os.path.join(self.data_dir, "test_data.json"))
 
@@ -45,8 +46,13 @@ class VariableManager:
             self.static_vars = {}
 
     def load_runtime_variables(self):
-        """加载运行时动态变量文件"""
-        file_path = os.path.join(self.data_dir, "runtime_vars.json")
+        """加载运行时动态变量文件（根据测试组隔离）"""
+        # 新增：根据test_group生成独立的变量文件名
+        if self.test_group:
+            file_name = f"runtime_vars_{self.test_group}.json"
+        else:
+            file_name = "runtime_vars.json"  # 兼容旧模式
+        file_path = os.path.join(self.data_dir, file_name)
 
         if os.path.exists(file_path):
             try:
@@ -66,17 +72,7 @@ class VariableManager:
             from_runtime: bool = False,
             default: Optional[Any] = None
     ) -> Any:
-        """
-        获取变量
-
-        Args:
-            name: 变量名，支持点号分隔的嵌套路径
-            from_runtime: 是否从运行时变量获取，默认False（从静态变量获取）
-            default: 变量不存在时的默认值
-
-        Returns:
-            变量值或默认值
-        """
+        """获取变量（逻辑不变）"""
         if from_runtime:
             return self._get_nested_variable(self.runtime_vars, name, default)
         else:
@@ -88,27 +84,35 @@ class VariableManager:
             return self._get_nested_variable(self.static_vars, name, default)
 
     def set_runtime_variable(self, name: str, value: Any) -> None:
-        """设置运行时变量并保存到文件"""
+        """设置运行时变量并保存到文件（逻辑不变）"""
         self._set_nested_variable(self.runtime_vars, name, value)
         self.save_runtime_variables()
 
     def save_runtime_variables(self) -> None:
-        """保存运行时变量到文件"""
-        file_path = os.path.abspath("VAR/runtime_vars.json")
+        """保存运行时变量到文件（根据测试组隔离）"""
+        # 新增：根据test_group生成独立的变量文件名
+        if self.test_group:
+            file_name = f"runtime_vars_{self.test_group}.json"
+        else:
+            file_name = "runtime_vars.json"
+        file_path = os.path.abspath(os.path.join(self.data_dir, file_name))
+
         try:
+            # 确保目录存在
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(self.runtime_vars, f, ensure_ascii=False, indent=2)
-            logger.info(f"[{DATETIME_NOW}] 运行时变量已保存")
+            logger.info(f"[{DATETIME_NOW}] 运行时变量已保存到: {file_path}")
         except Exception as e:
             logger.error(f"[{DATETIME_NOW}] 保存运行时变量失败: {str(e)}")
 
+    # 以下方法（_get_nested_variable、_set_nested_variable等）保持不变
     def _get_nested_variable(
             self,
             data: Dict[str, Any],
             name: str,
             default: Optional[Any]
     ) -> Any:
-        """获取嵌套变量（支持点号分隔路径）"""
         parts = name.split(".")
         current = data
 
@@ -121,7 +125,6 @@ class VariableManager:
         return current
 
     def _set_nested_variable(self, data: Dict[str, Any], name: str, value: Any) -> None:
-        """设置嵌套变量"""
         parts = name.split(".")
         current = data
 
@@ -133,76 +136,35 @@ class VariableManager:
         current[parts[-1]] = value
 
     def append_to_list(self, var_name: str, value: Any) -> None:
-        """
-        向列表变量追加值
-
-        Args:
-            var_name: 变量名，支持点号分隔的嵌套路径
-            value: 要追加的值
-        """
-        # 获取当前变量值
         current_value = self.get_variable(var_name, from_runtime=True, default=[])
-
-        # 确保变量是列表类型
         if not isinstance(current_value, list):
             logger.warning(f"[{DATETIME_NOW}] 变量 {var_name} 不是列表类型，将重置为列表")
             current_value = []
-
-        # 追加新值
         current_value.append(value)
-
-        # 更新变量
         self.set_runtime_variable(var_name, current_value)
         logger.info(f"[{DATETIME_NOW}] 向列表 {var_name} 追加值: {value}")
 
     def get_variable_list(self, name: str, default: List[Any] = None) -> List[Any]:
-        """
-        获取列表类型的变量（自动转换非列表类型为列表）
-
-        Args:
-            name: 变量名，支持点号分隔的嵌套路径
-            default: 变量不存在或非列表时的默认值，默认为空列表
-
-        Returns:
-            列表类型的变量值
-        """
         default = default or []
         value = self.get_variable(name, from_runtime=True, default=default)
-
-        # 确保返回值为列表类型
         if not isinstance(value, list):
             logger.warning(f"[{DATETIME_NOW}] 变量 {name} 不是列表类型，强制转换为列表（原值: {value}）")
             return default
         return value
 
     def set_batch_variables(self, var_dict: Dict[str, Any]) -> None:
-        """
-        批量设置运行时变量
-
-        Args:
-            var_dict: 变量字典，格式为 {变量名: 值, ...}
-        """
         for var_name, value in var_dict.items():
             self.set_runtime_variable(var_name, value)
         self.save_runtime_variables()
         logger.info(f"[{DATETIME_NOW}] 批量设置 {len(var_dict)} 个运行时变量")
 
     def delete_variable(self, name: str) -> None:
-        """
-        删除运行时变量
-
-        Args:
-            name: 要删除的变量名
-        """
         parts = name.split(".")
         current = self.runtime_vars
 
         try:
-            # 导航到嵌套变量的父级
             for part in parts[:-1]:
                 current = current[part]
-
-            # 删除目标变量
             del current[parts[-1]]
             self.save_runtime_variables()
             logger.info(f"[{DATETIME_NOW}] 删除运行时变量: {name}")

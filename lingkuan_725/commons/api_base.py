@@ -2,14 +2,16 @@ import allure
 import logging
 import time
 import json
+from typing import List, Dict, Any, Optional, Tuple
+import datetime
+from decimal import Decimal  # 确保import json
 import pymysql
-from datetime import datetime as dt
-from decimal import Decimal
-from typing import Dict, Any, List, Optional, Union
+import requests
 from requests.exceptions import (
     RequestException, ConnectionError, Timeout,
     HTTPError, SSLError
 )
+from jsonpath_ng import parse  # 新增JSONPath解析库
 
 from lingkuan_725.VAR.VAR import *
 from lingkuan_725.commons.wait_utils import wait_for_condition
@@ -19,31 +21,30 @@ logger.setLevel(logging.INFO)
 
 
 class APITestBase:
-    """API测试基础类，封装通用测试方法（增强版）"""
+    """API测试基础类，封装通用测试方法（增强Allure报告版）"""
 
     def convert_decimal_to_float(self, data: Any) -> Any:
-        """
-        递归转换Decimal类型为float，同时处理datetime类型为字符串
-        解决JSON序列化问题
-        """
+        """递归转换Decimal类型为float，处理datetime/date为字符串"""
         if isinstance(data, Decimal):
             return float(data)
-        # 关键修复：使用完整的类型路径（dt 对应 datetime.datetime）
-        elif isinstance(data, dt):  # 这里的 dt 明确指向 datetime.datetime 类
-            return data.isoformat()  # 转换为ISO格式字符串
+        elif isinstance(data, datetime.datetime):
+            return data.strftime("%Y-%m-%d %H:%M:%S")
+        elif isinstance(data, datetime.date):
+            return data.strftime("%Y-%m-%d")
         elif isinstance(data, list):
             return [self.convert_decimal_to_float(item) for item in data]
         elif isinstance(data, dict):
             return {key: self.convert_decimal_to_float(value) for key, value in data.items()}
         elif isinstance(data, (tuple, set)):
             return type(data)(self.convert_decimal_to_float(item) for item in data)
-        return data
+        else:
+            return data
 
     def serialize_data(self, data: Any) -> str:
         """序列化数据为JSON（包含datetime处理）"""
         converted_data = self.convert_decimal_to_float(data)
         try:
-            return json.dumps(converted_data, ensure_ascii=False)
+            return json.dumps(converted_data, ensure_ascii=False, indent=2)
         except json.JSONDecodeError as e:
             logger.error(f"[{DATETIME_NOW}] 数据序列化失败: {str(e)} | 原始数据: {converted_data}")
             raise ValueError(f"数据序列化失败: {str(e)}") from e
@@ -56,25 +57,88 @@ class APITestBase:
             logger.error(f"[{DATETIME_NOW}] JSON反序列化失败: {str(e)} | 原始字符串: {json_str[:500]}")
             raise ValueError(f"JSON反序列化失败: {str(e)}") from e
 
-    def send_post_request(self, logged_session, url, json_data=None, data=None, files=None, sleep_seconds=3):
-        """发送POST请求（增强异常捕获）"""
-        with allure.step(f"发送POST请求到 {url}"):
+    def _attach_request_details(
+            self,
+            method: str,
+            url: str,
+            headers: Dict[str, str],
+            body: Optional[Any],
+            is_json: bool = True,
+    ) -> None:
+        """统一附加请求详情到Allure报告"""
+        with allure.step("请求详情"):
+            allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+            allure.attach(
+                json.dumps(dict(headers), ensure_ascii=False, indent=2),
+                "请求头",
+                allure.attachment_type.JSON,
+            )
+            if body is not None:
+                body_type = "请求体（JSON）" if is_json else "请求体（表单/文件）"
+                allure.attach(
+                    self.serialize_data(body) if is_json else str(body),
+                    body_type,
+                    allure.attachment_type.JSON if is_json else allure.attachment_type.TEXT,
+                )
+
+    def _attach_response_details(
+            self,
+            response: requests.Response,
+    ) -> None:
+        """统一附加响应详情到Allure报告"""
+        with allure.step("响应详情"):
+            allure.attach(
+                str(response.status_code),
+                "响应状态码",
+                allure.attachment_type.TEXT,
+            )
+            allure.attach(
+                json.dumps(dict(response.headers), ensure_ascii=False, indent=2),
+                "响应头",
+                allure.attachment_type.JSON,
+            )
             try:
+                response_json = response.json()
+                allure.attach(
+                    json.dumps(response_json, ensure_ascii=False, indent=2),
+                    "响应体（JSON）",
+                    allure.attachment_type.JSON,
+                )
+            except json.JSONDecodeError:
+                allure.attach(
+                    response.text,
+                    "响应体（文本）",
+                    allure.attachment_type.TEXT,
+                )
+
+    def send_post_request(self, logged_session, url, json_data=None, data=None, files=None,
+                          sleep_seconds=SLEEP_SECONDS):
+        """发送POST请求（增强Allure报告）"""
+        method = "POST"
+        with allure.step(f"发送 {method} 请求到 {url}"):
+            try:
+                # 附加请求前的基础信息
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=json_data if json_data else data,
+                    is_json=bool(json_data),
+                )
+
+                # 发送请求
                 if files:
                     response = logged_session.post(url, data=data, files=files)
-                    allure.attach(str(data), "请求表单数据", allure.attachment_type.JSON)
                     logger.info(f"[{DATETIME_NOW}] POST请求（带文件）: {url} | 表单数据: {data}")
                 elif json_data:
                     response = logged_session.post(url, json=json_data)
-                    allure.attach(str(json_data), "请求JSON数据", allure.attachment_type.JSON)
                     logger.info(f"[{DATETIME_NOW}] POST请求（JSON）: {url} | 数据: {json_data}")
                 else:
                     response = logged_session.post(url, data=data)
-                    allure.attach(str(data), "请求表单数据", allure.attachment_type.JSON)
                     logger.info(f"[{DATETIME_NOW}] POST请求（表单）: {url} | 数据: {data}")
 
-                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
-                self._log_response(response)
+                # 附加响应详情
+                self._attach_response_details(response)
 
                 if sleep_seconds > 0:
                     logger.info(f"[{DATETIME_NOW}] 请求后等待 {sleep_seconds} 秒")
@@ -82,126 +146,149 @@ class APITestBase:
 
                 return response
 
-            except ConnectionError as e:
-                error_msg = f"{DATETIME_NOW}] POST请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except Timeout as e:
-                error_msg = f"[{DATETIME_NOW}] POST请求超时: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except SSLError as e:
-                error_msg = f"{DATETIME_NOW}] POST请求SSL验证失败: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except RequestException as e:
-                error_msg = f"{DATETIME_NOW}] POST请求异常: {str(e)} | URL: {url}"
+            except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # 异常时附加请求上下文
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=json_data if json_data else data,
+                    is_json=bool(json_data),
+                )
+                error_msg = (
+                    f"[{DATETIME_NOW}] {method} 请求异常: {str(e)} | URL: {url}\n"
+                    f"请求头: {logged_session.headers}\n"
+                    f"请求体: {json_data if json_data else data}"
+                )
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
 
-    def send_get_request(self, logged_session, url, params=None, sleep_seconds=3):
-        """发送GET请求（增强异常捕获）"""
-        with allure.step(f"发送GET请求到 {url}"):
+    def send_get_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
+        """发送GET请求（增强Allure报告）"""
+        method = "GET"
+        with allure.step(f"发送 {method} 请求到 {url}"):
             try:
-                logger.info(f"[{DATETIME_NOW}] GET请求: {url} | 参数: {params}")
+                # 附加请求前的基础信息
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=params,
+                    is_json=False,  # GET参数通常是表单格式
+                )
+
+                # 发送请求
                 response = logged_session.get(url, params=params)
-                allure.attach(str(params), "请求参数", allure.attachment_type.JSON)
-                self._log_response(response)
+                logger.info(f"[{DATETIME_NOW}] GET请求: {url} | 参数: {params}")
+
+                # 附加响应详情
+                self._attach_response_details(response)
 
                 if sleep_seconds > 0:
-                    logger.info(f"[{DATETIME_NOW}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
                 return response
 
-            except ConnectionError as e:
-                error_msg = f"{DATETIME_NOW}] GET请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except Timeout as e:
-                error_msg = f"{DATETIME_NOW}] GET请求超时: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except SSLError as e:
-                error_msg = f"{DATETIME_NOW}] GET请求SSL验证失败: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except RequestException as e:
-                error_msg = f"{DATETIME_NOW}] GET请求异常: {str(e)} | URL: {url}"
+            except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # 异常时附加请求上下文
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=params,
+                    is_json=False,
+                )
+                error_msg = (
+                    f"[{DATETIME_NOW}] {method} 请求异常: {str(e)} | URL: {url}\n"
+                    f"请求头: {logged_session.headers}\n"
+                    f"请求参数: {params}"
+                )
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
 
-    def send_delete_request(self, logged_session, url, json_data=None, sleep_seconds=3):
-        """发送DELETE请求（增强异常捕获）"""
-        with allure.step(f"发送DELETE请求到 {url}"):
+    def send_delete_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
+        """发送DELETE请求（增强Allure报告）"""
+        method = "DELETE"
+        with allure.step(f"发送 {method} 请求到 {url}"):
             try:
-                logger.info(f"[{DATETIME_NOW}] DELETE请求: {url} | 数据: {json_data}")
+                # 附加请求前的基础信息
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=json_data,
+                    is_json=True,
+                )
+
+                # 发送请求
                 response = logged_session.delete(url, json=json_data)
-                allure.attach(str(json_data), "请求参数", allure.attachment_type.JSON)
-                self._log_response(response)
+                logger.info(f"[{DATETIME_NOW}] DELETE请求: {url} | 数据: {json_data}")
+
+                # 附加响应详情
+                self._attach_response_details(response)
 
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
 
-            except ConnectionError as e:
-                error_msg = f"{DATETIME_NOW}] DELETE请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except Timeout as e:
-                error_msg = f"{DATETIME_NOW}] DELETE请求超时: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except SSLError as e:
-                error_msg = f"{DATETIME_NOW}] DELETE请求SSL验证失败: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except RequestException as e:
-                error_msg = f"{DATETIME_NOW}] DELETE请求异常: {str(e)} | URL: {url}"
+            except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # 异常时附加请求上下文
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=json_data,
+                    is_json=True,
+                )
+                error_msg = (
+                    f"[{DATETIME_NOW}] {method} 请求异常: {str(e)} | URL: {url}\n"
+                    f"请求头: {logged_session.headers}\n"
+                    f"请求体: {json_data}"
+                )
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
 
-    def send_put_request(self, logged_session, url, json_data=None, sleep_seconds=3):
-        """发送PUT请求（增强异常捕获）"""
-        with allure.step(f"发送PUT请求到 {url}"):
+    def send_put_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
+        """发送PUT请求（增强Allure报告）"""
+        method = "PUT"
+        with allure.step(f"发送 {method} 请求到 {url}"):
             try:
-                logger.info(f"[{DATETIME_NOW}] PUT请求: {url} | 数据: {json_data}")
+                # 附加请求前的基础信息
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=json_data,
+                    is_json=True,
+                )
+
+                # 发送请求
                 response = logged_session.put(url, json=json_data)
-                allure.attach(str(json_data), "请求参数", allure.attachment_type.JSON)
-                self._log_response(response)
+                logger.info(f"[{DATETIME_NOW}] PUT请求: {url} | 数据: {json_data}")
+
+                # 附加响应详情
+                self._attach_response_details(response)
 
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
 
-            except ConnectionError as e:
-                error_msg = f"{DATETIME_NOW}] PUT请求连接异常（可能包含DNS解析失败）: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except Timeout as e:
-                error_msg = f"{DATETIME_NOW}] PUT请求超时: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except SSLError as e:
-                error_msg = f"{DATETIME_NOW}] PUT请求SSL验证失败: {str(e)} | URL: {url}"
-                logger.error(error_msg, exc_info=True)
-                allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
-                raise
-            except RequestException as e:
-                error_msg = f"{DATETIME_NOW}] PUT请求异常: {str(e)} | URL: {url}"
+            except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # 异常时附加请求上下文
+                self._attach_request_details(
+                    method=method,
+                    url=url,
+                    headers=logged_session.headers,
+                    body=json_data,
+                    is_json=True,
+                )
+                error_msg = (
+                    f"[{DATETIME_NOW}] {method} 请求异常: {str(e)} | URL: {url}\n"
+                    f"请求头: {logged_session.headers}\n"
+                    f"请求体: {json_data}"
+                )
                 logger.error(error_msg, exc_info=True)
                 allure.attach(error_msg, "请求异常", allure.attachment_type.TEXT)
                 raise
@@ -210,11 +297,6 @@ class APITestBase:
         """记录响应日志（分级日志）"""
         logger.info(f"[{DATETIME_NOW}] 响应状态码: {response.status_code} | URL: {response.url}")
         logger.info(f"[{DATETIME_NOW}] 响应详情: 头信息={response.headers} | 内容={response.text[:1000]}")
-        allure.attach(
-            f"状态码: {response.status_code}\n内容: {response.text}",
-            "响应结果",
-            allure.attachment_type.TEXT
-        )
 
     def assert_response_status(self, response, expected_status, error_msg):
         """断言响应状态码（增强错误信息）"""
@@ -238,10 +320,25 @@ class APITestBase:
             f"期望值: {expected_value}"
         )
 
+    def extract_jsonpath(self, response: requests.Response, json_path: str) -> Any:
+        """使用jsonpath-ng解析JSON路径"""
+        try:
+            json_data = response.json()
+            jsonpath_expr = parse(json_path)
+            matches = jsonpath_expr.find(json_data)
+            return [match.value for match in matches] if matches else None
+        except Exception as e:
+            logger.error(f"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}")
+            raise
+
     def assert_json_value(self, response, json_path, expected_value, error_msg):
         """断言JSON路径对应的值（增强错误处理）"""
         try:
-            actual_value = response.extract_jsonpath(json_path)
+            actual_value = self.extract_jsonpath(response, json_path)
+            # 处理列表结果（如果只有一个元素则取单个值）
+            if isinstance(actual_value, list) and len(actual_value) == 1:
+                actual_value = actual_value[0]
+
             assert actual_value == expected_value, (
                 f"{error_msg}\n"
                 f"URL: {response.url}\n"
@@ -256,9 +353,12 @@ class APITestBase:
     def query_database(self, db_transaction: pymysql.connections.Connection,
                        sql: str,
                        params: tuple = (),
-                       order_by: str = "",
-                       convert_decimal: bool = True) -> List[Dict[str, Any]]:
-        """基础数据库查询（增强异常处理）"""
+                       order_by: str = "create_time DESC",
+                       convert_decimal: bool = True,
+                       dictionary_cursor: bool = True) -> List[Dict[str, Any]]:
+        """
+        基础数据库查询（增强异常处理和类型转换）
+        """
         sql_upper = sql.upper()
         final_sql = sql
 
@@ -269,35 +369,68 @@ class APITestBase:
             logger.warning(f"[{DATETIME_NOW}] SQL已包含ORDER BY，忽略传入的排序: {order_by}")
 
         try:
-            with db_transaction.cursor() as cursor:
+            # 使用字典格式的游标
+            cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
+            with db_transaction.cursor(cursor_type) as cursor:
                 logger.info(f"[{DATETIME_NOW}] 执行SQL: {final_sql} | 参数: {params}")
                 cursor.execute(final_sql, params)
                 result = cursor.fetchall()
                 logger.info(f"[{DATETIME_NOW}] 查询成功，结果数量: {len(result)} | SQL: {final_sql[:200]}")
 
-                # 转换Decimal和datetime类型
-                if convert_decimal and result:
-                    result = self.convert_decimal_to_float(result)
+                # 处理数据类型转换
+                if result:
+                    # 转换Decimal类型（如果需要）
+                    if convert_decimal:
+                        result = self.convert_decimal_to_float(result)
 
-                logger.info(f"[{DATETIME_NOW}] 查询结果: {json.dumps(result, ensure_ascii=False)[:1000]}")
+                    # 转换日期类型
+                    result = self._convert_date_types(result)
+
+                # 安全地记录查询结果（限制长度）
+                try:
+                    result_preview = json.dumps(result, ensure_ascii=False)[:1000]
+                except Exception as e:
+                    result_preview = f"无法序列化完整结果: {str(e)}"
+                logger.info(f"[{DATETIME_NOW}] 查询结果: {result_preview}")
+
+                # 附加数据库查询结果到Allure报告
+                with allure.step("数据库查询结果"):
+                    allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                    allure.attach(
+                        self.serialize_data(result[:5]),  # 只展示前5条避免过长
+                        "查询结果（前5条）",
+                        allure.attachment_type.JSON
+                    )
+
                 return result
 
-        except pymysql.OperationalError as e:
-            error_msg = f"[{DATETIME_NOW}] 数据库连接错误: {str(e)} | SQL: {final_sql[:200]}"
+        except pymysql.Error as e:
+            error_msg = (
+                f"[{DATETIME_NOW}] 数据库错误 (错误码: {e.args[0]}): {str(e)} | "
+                f"SQL: {final_sql[:200]} | 参数: {params}"
+            )
             logger.error(error_msg, exc_info=True)
+            allure.attach(error_msg, "数据库异常", allure.attachment_type.TEXT)
             raise
-        except pymysql.ProgrammingError as e:
-            error_msg = f"[{DATETIME_NOW}] SQL语法错误: {str(e)} | SQL: {final_sql} | 参数: {params}"
-            logger.error(error_msg, exc_info=True)
-            raise
-        except pymysql.IntegrityError as e:
-            error_msg = f"[{DATETIME_NOW}] 数据库完整性错误: {str(e)} | SQL: {final_sql[:200]}"
-            logger.error(error_msg, exc_info=True)
-            raise
+
         except Exception as e:
-            error_msg = f"[{DATETIME_NOW}] 数据库查询异常: {str(e)} | SQL: {final_sql[:200]}"
+            error_msg = f"[{DATETIME_NOW}] 未知异常: {str(e)} | SQL: {final_sql[:200]}"
             logger.error(error_msg, exc_info=True)
+            allure.attach(error_msg, "数据库异常", allure.attachment_type.TEXT)
             raise
+
+    def _convert_date_types(self, result: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """将结果中的日期和时间类型转换为字符串"""
+
+        def convert_value(value):
+            if isinstance(value, datetime.datetime):
+                return value.strftime("%Y-%m-%d %H:%M:%S")
+            elif isinstance(value, datetime.date):
+                return value.strftime("%Y-%m-%d")
+            return value
+
+        return [{k: convert_value(v) for k, v in row.items()} for row in result]
 
     def query_database_with_time(self, db_transaction: pymysql.connections.Connection,
                                  sql: str,
@@ -336,14 +469,16 @@ class APITestBase:
                                    sql: str,
                                    params: tuple = (),
                                    time_field: Optional[str] = None,
-                                   time_range: int = 1,
+                                   time_range: int = MYSQL_TIME,
                                    order_by: str = "create_time DESC",
-                                   timeout: int = 60,
-                                   poll_interval: int = 2) -> None:
+                                   timeout: int = DELETE_WAIT_TIMEOUT,
+                                   poll_interval: int = POLL_INTERVAL) -> None:
         """轮询等待数据库记录删除（增强日志）"""
         import time
         start_time = time.time()
         logger.info(f"[{DATETIME_NOW}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒")
+        with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
+            pass
 
         while time.time() - start_time < timeout:
             try:
@@ -368,6 +503,11 @@ class APITestBase:
 
                 if not result:
                     logger.info(f"[{DATETIME_NOW}] 删除成功（耗时{time.time() - start_time:.1f}秒）| SQL: {sql[:200]}")
+                    allure.attach(
+                        f"删除成功（耗时{time.time() - start_time:.1f}秒）",
+                        "等待结果",
+                        allure.attachment_type.TEXT
+                    )
                     return
 
                 elapsed = time.time() - start_time
@@ -395,12 +535,14 @@ class APITestBase:
             order_by=order_by
         )
 
-        raise TimeoutError(
+        error_msg = (
             f"等待超时（{timeout}秒），记录仍然存在。\n"
             f"SQL: {sql}\n"
             f"参数: {params}\n"
             f"最终结果数: {len(final_result)}"
         )
+        allure.attach(error_msg, "等待超时", allure.attachment_type.TEXT)
+        raise TimeoutError(error_msg)
 
     def wait_for_database_record(
             self,
@@ -408,11 +550,11 @@ class APITestBase:
             sql: str,
             params: tuple = (),
             time_field: Optional[str] = None,
-            time_range: int = 1,
+            time_range: int = MYSQL_TIME,
             order_by: str = "create_time DESC",
-            timeout: int = 60,
-            poll_interval: int = 2,
-            stable_period: int = 5  # 稳定期（秒）：数据连续N秒不变则认为加载完成
+            timeout: int = WAIT_TIMEOUT,
+            poll_interval: int = POLL_INTERVAL,
+            stable_period: int = STBLE_PERIOD
     ) -> List[Dict[str, Any]]:
         """
         轮询等待数据库记录出现（等待数据稳定）
@@ -429,6 +571,8 @@ class APITestBase:
             f"超时: {timeout}秒 | "
             f"稳定期: {stable_period}秒"
         )
+        with allure.step(f"等待数据库记录稳定（超时: {timeout}秒，稳定期: {stable_period}秒）"):
+            pass  # 保持空块，仅用于显示步骤
 
         while time.time() - start_time < timeout:
             try:
@@ -449,6 +593,11 @@ class APITestBase:
                             logger.info(
                                 f"[{DATETIME_NOW}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| "
                                 f"结果数: {len(result)}"
+                            )
+                            allure.attach(
+                                f"数据已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）",
+                                "等待结果",
+                                allure.attachment_type.TEXT
                             )
                             return result
                     else:
@@ -479,19 +628,22 @@ class APITestBase:
         )
 
         if len(final_result) == 0:
-            raise TimeoutError(
+            error_msg = (
                 f"等待超时（{timeout}秒），未查询到任何数据。\n"
                 f"SQL: {sql}\n"
                 f"参数: {params}"
             )
         else:
-            raise TimeoutError(
+            error_msg = (
                 f"等待超时（{timeout}秒），数据未在{stable_period}秒内保持稳定。\n"
                 f"SQL: {sql}\n"
                 f"参数: {params}\n"
                 f"最终结果数: {len(final_result)}\n"
                 f"最终结果: {json.dumps(self._simplify_result(final_result[:3]), ensure_ascii=False)}..."
             )
+
+        allure.attach(error_msg, "等待超时", allure.attachment_type.TEXT)
+        raise TimeoutError(error_msg)
 
     def _execute_query(
             self,
@@ -520,6 +672,158 @@ class APITestBase:
                 order_by=order_by
             )
 
+    def wait_for_database_record_with_timezone(
+            self,
+            db_transaction: pymysql.connections.Connection,
+            sql: str,
+            params: tuple = (),
+            time_field: Optional[str] = None,
+            time_range: int = MYSQL_TIME,
+            order_by: str = "create_time DESC",
+            timeout: int = WAIT_TIMEOUT,
+            poll_interval: int = POLL_INTERVAL,
+            stable_period: int = STBLE_PERIOD,
+            timezone_offset: int = TIMEZONE_OFFSET
+    ) -> List[Dict[str, Any]]:
+        """
+        轮询等待数据库记录出现（等待数据稳定），支持时区转换
+        """
+        import time
+        start_time = time.time()
+        last_result = None
+        stable_start_time = None
+        has_data = False  # 标记是否查询到过数据
+
+        # 生成时区偏移字符串（如 "+08:00"）
+        offset_str = f"{timezone_offset:+03d}:00"
+
+        logger.info(
+            f"[{DATETIME_NOW}] 开始等待数据库记录稳定（时区偏移: {offset_str}）| "
+            f"SQL: {sql[:200]} | "
+            f"超时: {timeout}秒 | "
+            f"稳定期: {stable_period}秒"
+        )
+        with allure.step(f"等待数据库记录稳定（时区: {offset_str}，超时: {timeout}秒）"):
+            pass
+
+        while time.time() - start_time < timeout:
+            try:
+                db_transaction.commit()  # 刷新事务
+                result = self._execute_query_with_timezone(  # 调用带时区的执行方法
+                    db_transaction, sql, params, time_field, order_by, time_range, offset_str
+                )
+
+                # 检查是否有数据
+                if len(result) > 0:
+                    has_data = True
+                    # 判断结果是否稳定（数量和内容都不变）
+                    if self._is_result_stable(result, last_result):
+                        if stable_start_time is None:
+                            stable_start_time = time.time()
+                            logger.debug(f"[{DATETIME_NOW}] 数据首次稳定，开始计时")
+                        elif time.time() - stable_start_time >= stable_period:
+                            logger.info(
+                                f"[{DATETIME_NOW}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| "
+                                f"结果数: {len(result)}"
+                            )
+                            allure.attach(
+                                f"数据已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）",
+                                "等待结果",
+                                allure.attachment_type.TEXT
+                            )
+                            return result
+                    else:
+                        stable_start_time = None  # 结果变化，重置稳定计时器
+                        logger.debug(f"[{DATETIME_NOW}] 数据仍在变化，重置稳定计时器")
+                else:
+                    # 结果为空，重置稳定计时器
+                    stable_start_time = None
+                    has_data = False
+                    logger.debug(f"[{DATETIME_NOW}] 查询结果为空，继续等待")
+
+                last_result = result
+                elapsed = time.time() - start_time
+                logger.debug(
+                    f"[{DATETIME_NOW}] 等待数据稳定（已等待{elapsed:.1f}秒）| "
+                    f"当前结果数: {len(result)} | "
+                    f"稳定时间: {time.time() - stable_start_time if stable_start_time else 0:.1f}/{stable_period}秒"
+                )
+                time.sleep(poll_interval)
+
+            except Exception as e:
+                logger.warning(f"[{DATETIME_NOW}] 轮询查询异常: {str(e)} | 继续等待...")
+                time.sleep(poll_interval)
+
+        # 超时处理
+        final_result = self._execute_query_with_timezone(  # 调用带时区的执行方法
+            db_transaction, sql, params, time_field, order_by, time_range, offset_str
+        )
+
+        if len(final_result) == 0:
+            error_msg = (
+                f"等待超时（{timeout}秒），未查询到任何数据。\n"
+                f"SQL: {sql}\n"
+                f"参数: {params}"
+            )
+        else:
+            error_msg = (
+                f"等待超时（{timeout}秒），数据未在{stable_period}秒内保持稳定。\n"
+                f"SQL: {sql}\n"
+                f"参数: {params}\n"
+                f"最终结果数: {len(final_result)}\n"
+                f"最终结果: {json.dumps(self._simplify_result(final_result[:3]), ensure_ascii=False)}..."
+            )
+
+        allure.attach(error_msg, "等待超时", allure.attachment_type.TEXT)
+        raise TimeoutError(error_msg)
+
+    def _execute_query_with_timezone(
+            self,
+            db_transaction: pymysql.connections.Connection,
+            sql: str,
+            params: tuple,
+            time_field: Optional[str],
+            order_by: str,
+            time_range: int,
+            timezone_offset: str  # 时区偏移字符串（如 "+08:00"）
+    ) -> List[Dict[str, Any]]:
+        """执行数据库查询的辅助方法（带时区转换）"""
+        if time_field:
+            # 对时间字段进行时区转换（假设数据库存储的是UTC时间）
+            converted_time_field = f"CONVERT_TZ({time_field}, '+00:00', '{timezone_offset}')"
+
+            # 复用原有的带时间范围查询逻辑，但使用转换后的时间字段
+            sql_upper = sql.upper()
+            final_sql = sql
+            final_params = list(params)
+
+            # 拼接时间条件（使用转换后的时间字段）
+            time_condition = (
+                f" {converted_time_field} BETWEEN NOW() - INTERVAL %s MINUTE "
+                f"AND NOW() + INTERVAL %s MINUTE "
+            )
+
+            if "WHERE" in sql_upper:
+                final_sql += f" AND {time_condition}"
+            else:
+                final_sql += f" WHERE {time_condition}"
+            final_params.extend([time_range, time_range])
+
+            return self.query_database(
+                db_transaction=db_transaction,
+                sql=final_sql,
+                params=tuple(final_params),
+                order_by=order_by
+            )
+        else:
+            # 无时间字段时直接查询
+            return self.query_database(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                order_by=order_by
+            )
+
     def _is_result_stable(self, current: List[Dict], previous: List[Dict]) -> bool:
         """判断两次查询结果是否稳定（数量和内容都不变）"""
         if previous is None:
@@ -530,7 +834,6 @@ class APITestBase:
             return False
 
         # 2. 检查每条记录的关键内容是否相同
-        # 注意：这里假设结果有唯一标识字段"id"，根据实际情况调整
         current_map = {item.get('id'): item for item in current}
         previous_map = {item.get('id'): item for item in previous}
 
@@ -538,11 +841,11 @@ class APITestBase:
         if set(current_map.keys()) != set(previous_map.keys()):
             return False
 
-        # 检查每条记录的关键字段是否相同（这里检查所有字段，可优化为只检查关键字段）
+        # 检查每条记录的关键字段是否相同
         for id, curr_item in current_map.items():
             prev_item = previous_map[id]
             for key in curr_item:
-                # 跳过可能变化的字段（如时间戳），根据实际情况调整
+                # 跳过可能变化的字段（如时间戳）
                 if key in {'create_time', 'update_time', 'response_time'}:
                     continue
                 if curr_item[key] != prev_item[key]:
@@ -557,7 +860,7 @@ class APITestBase:
 
         # 获取第一条记录的字段名，确定哪些是关键字段
         sample = results[0]
-        # 保留ID和其他可能的关键字段（根据实际情况调整）
+        # 保留ID和其他可能的关键字段
         key_fields = ['id', 'account', 'symbol', 'size', 'create_time']
         key_fields = [f for f in key_fields if f in sample]
 
@@ -568,7 +871,7 @@ class APITestBase:
         return [{k: v for k, v in item.items() if k in key_fields} for item in results]
 
     def wait_for_api_condition(self, logged_session, method, url, params=None, json_data=None,
-                               expected_condition=None, timeout=30, poll_interval=2):
+                               expected_condition=None, timeout=WAIT_TIMEOUT, poll_interval=POLL_INTERVAL):
         """等待API响应满足特定条件（增强异常处理）"""
         if expected_condition is None:
             raise ValueError("必须提供expected_condition函数")
@@ -625,7 +928,7 @@ class APITestBase:
         return data_list[index]
 
     def assert_data_lists_equal(self, actual, expected, fields_to_compare, tolerance=1e-9):
-        # 按统一字段order_no排序（替换原来的ticket）
+        # 按统一字段order_no排序
         actual_sorted = sorted(actual, key=lambda x: x["order_no"])
         expected_sorted = sorted(expected, key=lambda x: x["order_no"])
 

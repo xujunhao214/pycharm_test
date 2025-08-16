@@ -14,6 +14,17 @@ SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("VPS策略下单-跟单修改币种")
+@allure.description("""
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 操作步骤：
+  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+  2. 进行开仓
+  3. 判断三个账号的币种手数是否正确
+  4. 进行平仓
+  5. 判断三个账号的币种手数是否正确
+- 预期结果：三个账号的币种手数正确
+""")
 class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")

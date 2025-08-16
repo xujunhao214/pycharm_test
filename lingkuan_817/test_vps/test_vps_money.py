@@ -70,6 +70,7 @@ class TestVPSOrderSend_money(APITestBase):
                 params=params
             )
 
+        with allure.step("2. 校验数据"):
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")

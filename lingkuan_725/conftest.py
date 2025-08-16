@@ -5,8 +5,10 @@ import allure
 import logging
 import datetime
 import os
+import time
 import xml.etree.ElementTree as ET
 from pytest import Config
+from lingkuan_725.commons.mfa_key import generate_code
 from lingkuan_725.commons.Encryption_and_decryption import aes_encrypt_str
 from lingkuan_725.commons.session import EnvironmentSession
 from lingkuan_725.commons.variable_manager import VariableManager
@@ -18,12 +20,11 @@ from lingkuan_725.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
-import os
 
 logger = logging.getLogger(__name__)
 
-# 获取项目根目录并添加到Python路径
-PROJECT_ROOT = str(Path(__file__).parent.resolve())
+# 获取当前工作目录（即执行python命令时的目录）
+PROJECT_ROOT = str(Path.cwd())
 sys.path.insert(0, PROJECT_ROOT)
 
 # 打印路径用于调试
@@ -51,42 +52,121 @@ def api_session(environment) -> EnvironmentSession:
     session.close()
 
 
-# conftest.py
 @pytest.fixture(scope="function")
-def logged_session(api_session, var_manager, request):
+def logged_session(api_session, var_manager, request, environment):  # 新增environment参数
+    """根据环境自动切换登录逻辑（test无需验证码，uat需要MFA验证码）"""
     # 1. 始终使用base_url进行登录
-    api_session.use_base_url()  # 强制使用base_url
-    logger.info(f"[{DATETIME_NOW}] 用例 {request.node.nodeid} 使用默认URL进行登录: {api_session.base_url}")
+    api_session.use_base_url()
+    logger.info(f"[{DATETIME_NOW}] 用例 {request.node.nodeid} 使用默认URL登录: {api_session.base_url}")
 
-    # 执行登录
+    # 2. 获取登录基础数据
     login_data = var_manager.get_variable("login")
-    response = api_session.post("/sys/auth/login", json=login_data)
-    assert response.status_code == 200, f"登录失败: {response.text}"
-    response_json = response.json()
+    access_token = None
 
-    # 设置token
-    access_token = response_json["data"]["access_token"]
+    # 3. 根据环境执行不同登录逻辑
+    if environment.value == "test":
+        # 测试环境：无需验证码
+        response = api_session.post("/sys/auth/login", json=login_data)
+        assert response.status_code == 200, f"测试环境登录失败: {response.text}"
+        response_json = response.json()
+        access_token = response_json["data"]["access_token"]
+        logger.info("测试环境登录成功（无需验证码）")
+
+    elif environment.value == "uat":
+        # UAT环境：需要MFA验证码+重试机制
+        max_retries = 5
+        retry_interval = 15
+        for attempt in range(max_retries):
+            try:
+                mfa_code = generate_code(MFA_SECRET_KEY)
+                logger.info(f"UAT登录尝试 {attempt + 1}/{max_retries}，MFA验证码: {mfa_code}")
+
+                # 构建带验证码的登录数据
+                json_data = {
+                    "username": login_data["username"],
+                    "password": login_data["password"],
+                    "captcha": "",
+                    "key": "",
+                    "secretKey": "",
+                    "code": mfa_code,
+                    "isMfaVerified": 1,
+                    "isStartMfaVerify": 1
+                }
+
+                response = api_session.post("/sys/auth/login", json=json_data)
+                response.raise_for_status()
+                response_json = response.json()
+
+                if response_json.get("code") != 0:
+                    raise ValueError(f"登录失败: {response_json.get('msg')}")
+
+                access_token = response_json["data"]["access_token"]
+                if not access_token:
+                    raise ValueError("未返回access_token")
+
+                logger.info(f"UAT登录成功（第{attempt + 1}次尝试）")
+                break
+
+            except Exception as e:
+                logger.warning(f"第{attempt + 1}次登录失败: {str(e)}")
+                if attempt < max_retries - 1:
+                    time.sleep(retry_interval)
+
+        if not access_token:
+            pytest.fail(f"UAT经过{max_retries}次重试仍登录失败")
+
+    else:
+        pytest.fail(f"不支持的环境: {environment}")
+
+    # 4. 设置token到会话
     var_manager.set_runtime_variable("access_token", access_token)
     api_session.headers.update({
         "Authorization": f"{access_token}",
         "x-sign": "417B110F1E71BD20FE96366E67849B0B"
     })
 
-    # 2. 登录后再根据标记切换URL（如果需要）
+    # 5. 登录后切换URL（保持原有逻辑）
     url_marker = next(request.node.iter_markers(name="url"), None)
     if url_marker and url_marker.args[0] == "vps":
         api_session.use_vps_url()
-        logger.info(f"[{DATETIME_NOW}] 登录后切换到VPS URL: {api_session.vps_url}")
+        logger.info(f"切换到VPS URL: {api_session.vps_url}")
 
     yield api_session
 
 
-@pytest.fixture(scope="session")
-def var_manager(environment):
-    """变量管理器，会话结束时自动保存动态变量"""
-    manager = VariableManager(environment.value, data_dir="VAR")
+@pytest.fixture(scope="session")  # 会话级：整个测试会话只初始化一次
+def var_manager(environment, test_group):
+    """变量管理器夹具（会话级，与test_group作用域一致）"""
+    manager = VariableManager(
+        env=environment.value,
+        data_dir="VAR",
+        test_group=test_group
+    )
     yield manager
     manager.save_runtime_variables()
+
+
+@pytest.fixture(scope="session")  # 关键修改：提升为会话级
+def test_group(request):
+    """
+    根据测试文件所在目录自动判断测试组（会话级）
+    - 优先通过命令行参数指定，其次自动识别目录
+    """
+    # 支持通过命令行参数手动指定test_group（优先级最高）
+    test_group = request.config.getoption("--test-group")
+    if test_group:
+        return test_group
+
+    # 自动识别：根据第一个测试模块的路径判断
+    if request.session.testscollected > 0:
+        first_test_path = request.session.testscollected[0].parent.fspath.strpath
+        if "test_vps" in first_test_path:
+            return "vps"
+        elif "test_cloudTrader" in first_test_path:
+            return "cloud"
+
+    # 默认值（无隔离）
+    return ""
 
 
 # 数据库相关夹具
@@ -161,7 +241,7 @@ class TestResultTracker:
         elif report.outcome == "skipped":
             self.skipped += 1
             self.skipped_test_names.append(report.nodeid)
-            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "未指定原因")
+            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该功能暂不需要")
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
@@ -209,8 +289,19 @@ def pytest_addoption(parser):
         "--env",
         action="store",
         default="test",
-        choices=["test", "prod"],
+        choices=["test", "uat"],
         help="设置测试环境"
+    )
+
+    parser.addoption(
+        "--test-group",
+        action="store",
+        default=None,
+        help="指定测试组（vps/cloud），用于变量文件隔离"
+    )
+
+    parser.addoption(
+        "--no-rerun", action="store_true", help="禁用全局重试"
     )
 
 
@@ -230,6 +321,40 @@ def pytest_configure(config):
     env_value = config.getoption("--env").lower()
     config.environment = env_value
     logger.info(f"[{DATETIME_NOW}] 测试环境设置为: {config.environment}")
+
+    """自动标记所有用例（除非显式排除）"""
+    if not config.getoption("--no-rerun"):
+        # 给所有用例自动添加 rerun 标记
+        config.addinivalue_line(
+            "markers", "rerun: 全局重试标记（由conftest自动添加）"
+        )
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """自定义重试条件：某些用例不重试"""
+    outcome = yield
+    result = outcome.get_result()
+
+    # 示例：标记包含 "skip-rerun" 的用例不重试
+    if "skip-rerun" in item.keywords:
+        item.config.option.reruns = 0  # 强制关闭重试
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
+
+    # 示例：名称包含 "test_db" 的用例不重试
+    elif "test_db" in item.name:
+        item.config.option.reruns = 0  # 数据库查询关闭重试
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
+
+    # 示例：属于 "test_delete_scene.py" 模块的用例不重试
+    elif item.module.__name__ == "test_delete":
+        item.config.option.reruns = 0
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
+
+    # 示例：属于 TestCloudTrader 类的用例重试0次
+    elif item.parent.__class__.__name__ == "TestCloudTrader":
+        item.config.option.reruns = 0
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
 
 
 def pytest_unconfigure(config):
@@ -260,19 +385,20 @@ def redis_client(environment) -> RedisClient:
     client.close()  # 用例结束后关闭连接
 
 
-SERVER = SERVER
-NODE = NODE
+# NODE = NODE
 
 
-# redis的数据是开仓漏单
+# redis的数据是开仓漏单(vps看板)
 @pytest.fixture(scope="function")
 def redis_order_data_send(redis_client, var_manager) -> List[Dict[str, Any]]:
     """获取Redis中的订单数据（可直接在测试用例中使用）"""
     # 从变量管理器中获取Redis键（也可硬编码或通过参数传入）
-    user_accounts_1 = var_manager.get_variable("user_accounts_1")
+    vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
     new_user = var_manager.get_variable("new_user")
+    IP_ADDRESS = var_manager.get_variable("IP_ADDRESS")
+    NODE = new_user["platform"]
     redis_key = var_manager.get_variable("redis_order_key",
-                                         default=f"follow:repair:send:{SERVER}#{NODE}#{NODE}#{user_accounts_1}#{new_user['account']}")
+                                         default=f"follow:repair:send:{IP_ADDRESS}#{NODE}#{NODE}#{vps_user_accounts_1}#{new_user['account']}")
     hash_data = redis_client.get_hash_data(redis_key)
 
     # 解析订单数据（复用原parse_redis_data逻辑）
@@ -291,15 +417,73 @@ def redis_order_data_send(redis_client, var_manager) -> List[Dict[str, Any]]:
     return orders
 
 
-# redis的数据是平仓漏单
+# redis的数据是平仓漏单(vps看板)
 @pytest.fixture(scope="function")
 def redis_order_data_close(redis_client, var_manager) -> List[Dict[str, Any]]:
     """获取Redis中的订单数据（可直接在测试用例中使用）"""
-    user_accounts_1 = var_manager.get_variable("user_accounts_1")
+    vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
     new_user = var_manager.get_variable("new_user")
+    NODE = new_user["platform"]
+    IP_ADDRESS = var_manager.get_variable("IP_ADDRESS")
     # 从变量管理器中获取Redis键（也可硬编码或通过参数传入）
     redis_key = var_manager.get_variable("redis_order_key",
-                                         default=f"follow:repair:close:{SERVER}#{NODE}#{NODE}#{user_accounts_1}#{new_user['account']}")
+                                         default=f"follow:repair:close:{IP_ADDRESS}#{NODE}#{NODE}#{vps_user_accounts_1}#{new_user['account']}")
+    hash_data = redis_client.get_hash_data(redis_key)
+
+    # 解析订单数据（复用原parse_redis_data逻辑）
+    orders = []
+    for key, value in hash_data.items():
+        if isinstance(value, list) and len(value) >= 2 and value[0] == 'net.maku.followcom.pojo.EaOrderInfo':
+            order_data = value[1]
+            if isinstance(order_data, dict):
+                orders.append({
+                    'ticket': order_data.get('ticket'),
+                    'magic': order_data.get('magic'),
+                    'lots': order_data.get('lots'),
+                    'openPrice': order_data.get('openPrice'),
+                    'symbol': order_data.get('symbol')
+                })
+    return orders
+
+
+# redis的数据是开仓漏单(云策略的策略账号)
+@pytest.fixture(scope="function")
+def redis_cloudTrader_data_send(redis_client, var_manager) -> List[Dict[str, Any]]:
+    """获取Redis中的订单数据（可直接在测试用例中使用）"""
+    cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+    cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+    cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+    # 从变量管理器中获取Redis键（也可硬编码或通过参数传入）
+    redis_key = var_manager.get_variable("redis_order_key",
+                                         default=f"followcloud:repair:send:{cloudMaster_id}#{cloudTrader_traderList_4}#{cloudTrader_traderList_2}")
+    hash_data = redis_client.get_hash_data(redis_key)
+
+    # 解析订单数据（复用原parse_redis_data逻辑）
+    orders = []
+    for key, value in hash_data.items():
+        if isinstance(value, list) and len(value) >= 2 and value[0] == 'net.maku.followcom.pojo.EaOrderInfo':
+            order_data = value[1]
+            if isinstance(order_data, dict):
+                orders.append({
+                    'ticket': order_data.get('ticket'),
+                    'magic': order_data.get('magic'),
+                    'lots': order_data.get('lots'),
+                    'openPrice': order_data.get('openPrice'),
+                    'symbol': order_data.get('symbol')
+                })
+    return orders
+
+
+# redis的数据是平仓漏单(云策略的策略账号)
+@pytest.fixture(scope="function")
+def redis_cloudTrader_data_close(redis_client, var_manager) -> List[Dict[str, Any]]:
+    """获取Redis中的订单数据（可直接在测试用例中使用）"""
+    cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+    cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+    cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+    # 从变量管理器中获取Redis键（也可硬编码或通过参数传入）
+    redis_key = var_manager.get_variable("redis_order_key",
+                                         default=f"followcloud:repair:close:{cloudMaster_id}#{cloudTrader_traderList_4}#{cloudTrader_traderList_2}")
     hash_data = redis_client.get_hash_data(redis_key)
 
     # 解析订单数据（复用原parse_redis_data逻辑）

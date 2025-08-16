@@ -32,7 +32,7 @@ def send_feishu_notification(
 
     Args:
         statistics: 测试统计数据
-        environment: 测试环境（如"test"、"prod"）
+        environment: 测试环境（如"test"、"uat"）
         failed_cases: 失败用例列表
         skipped_cases: 跳过用例列表
     """
@@ -53,7 +53,7 @@ def send_feishu_notification(
     # 计算百分比，处理除零错误
     passed_percent = f"{(passed / total * 100):.1f}%" if total > 0 else "0.0%"
     failed_percent = f"{(failed / total * 100):.1f}%" if total > 0 else "0.0%"
-    skipped_percent = f"{(skipped / total * 100):.1f}%" if total > 0 else "0.0%"
+    # skipped_percent = f"{(skipped / total * 100):.1f}%" if total > 0 else "0.0%"
 
     # 构建Markdown内容
     markdown_content = f"""
@@ -67,7 +67,7 @@ def send_feishu_notification(
 - 📊 **总用例数**: {total}
 - ✅ **通过数**: {passed} ({passed_percent})
 - ❌ **失败数**: {failed} ({failed_percent})
-- ⏩ **跳过数**: {skipped} ({skipped_percent})
+- ⏩ **跳过数**: {skipped}
 - 🌟 **成功率**: {success_rate}
 
 **查看报告**:
@@ -89,7 +89,7 @@ def send_feishu_notification(
         markdown_content += "\n**跳过用例列表**:\n"
         skipped_reasons = statistics.get("skipped_reasons", {})
         for case in skipped_cases:
-            reason = skipped_reasons.get(case, "未指定原因")
+            reason = skipped_reasons.get(case, "该功能暂不需要")
             markdown_content += f"- {case} (原因: {reason})\n"
 
     # 发送飞书消息前

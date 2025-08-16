@@ -68,9 +68,9 @@ def convert_redis_orders_to_comparable_list(redis_orders: List[Dict]) -> List[Di
     comparable_list = []
     for order in redis_orders:
         comparable_list.append({
-            "order_no": order["ticket"],    # Redis ticket → 统一字段order_no
-            "magical": order["magic"],      # Redis magic → 统一字段magical
-            "size": order["lots"],          # Redis lots → 统一字段size
+            "order_no": order["ticket"],  # Redis ticket → 统一字段order_no
+            "magical": order["magic"],  # Redis magic → 统一字段magical
+            "size": order["lots"],  # Redis lots → 统一字段size
             "open_price": order["openPrice"],
             "symbol": order["symbol"]
         })

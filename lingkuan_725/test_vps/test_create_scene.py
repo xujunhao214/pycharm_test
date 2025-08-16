@@ -1,4 +1,4 @@
-# lingkuan_725/tests/test_create.py
+# lingkuan_730/tests/test_create.py
 import time
 
 import pytest
@@ -10,32 +10,29 @@ from lingkuan_725.conftest import var_manager
 from lingkuan_725.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("账号管理-创建跟单账号")
 class TestCreate_Scene(APITestBase):
-    # ---------------------------
-    # 新增跟单账号-参数化测试（仅使用后6个数据）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("新增跟单账号（仅使用后6个数据与模板匹配）")
     def test_import_addSlave(self, var_manager, logged_session, encrypted_password):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
-        user_count = var_manager.get_variable("user_count", 0)
-        if user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{user_count}，无法提取后6个数据")
+        vps_user_count = var_manager.get_variable("vps_user_count", 0)
+        if vps_user_count < 7:
+            pytest.fail(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据")
 
-        # 2. 仅提取后6个账号（索引1~6，对应user_accounts_2~user_accounts_7）
+        # 2. 仅提取后6个账号（索引1~6，对应vps_user_accounts_2~vps_user_accounts_7）
         all_accounts = []
         for i in range(2, 8):  # 直接指定取2~7共6个账号
-            account = var_manager.get_variable(f"user_accounts_{i}")
+            account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"未找到第{i}个账号（变量：user_accounts_{i}）")
+                pytest.fail(f"未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"已提取后6个账号：{all_accounts}")
-        template_id = var_manager.get_variable("template_id")
+        vps_template_id = var_manager.get_variable("vps_template_id")
 
         # 3. 定义6个模板（与账号一一对应）
         templates: List[Dict[str, Any]] = [
@@ -49,7 +46,7 @@ class TestCreate_Scene(APITestBase):
             {
                 "followMode": 1,
                 "followParam": "1",
-                "templateId": template_id,
+                "templateId": vps_template_id,
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"
             },
@@ -143,27 +140,28 @@ class TestCreate_Scene(APITestBase):
                     response, "$.msg", "success",
                     f"账号{param['account']}响应异常（模板：{param['desc']}）"
                 )
+                print(f"账号{param['account']}创建成功（模板：{param['desc']}）")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量新增跟单账号")
     def test_dbimport_addSlave(self, var_manager, db_transaction):
         # 1. 校验总用户数（需至少7个，才能取后6个）
-        user_count = var_manager.get_variable("user_count", 0)
-        if user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{user_count}，无法提取后6个数据进行校验")
+        vps_user_count = var_manager.get_variable("vps_user_count", 0)
+        if vps_user_count < 7:
+            pytest.fail(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据进行校验")
 
-        # 2. 提取后6个账号（对应user_accounts_2到user_accounts_7）
+        # 2. 提取后6个账号（对应vps_user_accounts_2到vps_user_accounts_7）
         all_accounts = []
         for i in range(2, 8):  # 直接指定取第2到第7个账号（共6个）
-            account = var_manager.get_variable(f"user_accounts_{i}")
+            account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"未找到第{i}个账号（变量：user_accounts_{i}）")
+                pytest.fail(f"未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"将校验的后6个账号：{all_accounts}")
 
         # 3. 初始化ID列表和计数器
         all_ids = []
-        addslave_count = 0
+        vps_addslave_count = 0
 
         # 4. 逐个校验后6个账号的数据库记录
         for idx, account in enumerate(all_accounts, 1):  # idx从1开始（1-6，对应6个账号）
@@ -176,9 +174,7 @@ class TestCreate_Scene(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 最多等36秒
-                    poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                    order_by="create_time DESC"  # 按创建时间倒序
+                    order_by="account ASC"
                 )
 
                 if not db_data:
@@ -190,24 +186,14 @@ class TestCreate_Scene(APITestBase):
                 var_manager.set_runtime_variable(f"vps_addslave_ids_{idx}", vps_addslave_id)
                 print(f"账号 {account} 的ID为：{vps_addslave_id}，已保存到变量 vps_addslave_ids_{idx}")
 
-                # 校验账号状态和净值（核心业务规则）
-                def verify_core_fields():
-                    # 校验状态（0为正常）
-                    status = db_data[0]["status"]
-                    if status != 0:
-                        pytest.fail(f"账号 {account} 状态异常：预期status=0（正常），实际={status}")
-                    # 校验净值（非零）
-                    euqit = db_data[0]["euqit"]
-                    if euqit == 0:
-                        pytest.fail(f"账号 {account} 净值异常：预期euqit≠0，实际={euqit}")
+            with allure.step("校验账号状态和净值（核心业务规则）"):
+                status = db_data[0]["status"]
+                assert status == 0, f"新增跟单账号状态status应为0（正常），实际状态为: {status}"
+                logging.info(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
 
-                # 执行核心校验并记录结果
-                try:
-                    verify_core_fields()
-                    allure.attach(f"账号 {account} 主表字段校验通过", "校验结果", allure.attachment_type.TEXT)
-                except AssertionError as e:
-                    allure.attach(str(e), f"账号 {account} 主表字段校验失败", allure.attachment_type.TEXT)
-                    raise
+                euqit = db_data[0]["euqit"]
+                assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+                logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
                 # 校验订阅表记录（从表关联）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -217,42 +203,36 @@ class TestCreate_Scene(APITestBase):
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    timeout=WAIT_TIMEOUT,  # 最多等36秒
-                    poll_interval=POLL_INTERVAL,  # 每2秒查一次
-                    order_by="create_time DESC"  # 按创建时间倒序
+                    order_by="slave_account ASC"
                 )
 
                 if not db_sub_data:
                     pytest.fail(f"账号 {account} 在订阅表中未找到关联记录")
                 # 校验订阅表中的账号与当前账号一致
                 slave_account = db_sub_data[0]["slave_account"]
-                if slave_account != account:
-                    pytest.fail(f"订阅表账号不匹配：预期={account}，实际={slave_account}")
-                allure.attach(f"账号 {account} 订阅表关联校验通过", "校验结果", allure.attachment_type.TEXT)
+                assert slave_account == account, f"订阅表账号不匹配：预期={account}，实际={slave_account}"
+                logging.info(f"订阅表账号与当前账号一致：{slave_account}")
 
         # 5. 保存总数量（供后续步骤使用）
-        addslave_count = len(all_ids)
-        var_manager.set_runtime_variable("addslave_count", addslave_count)
-        print(f"后6个账号数据库校验完成，共提取{addslave_count}个ID，已保存到变量 addslave_count")
+        vps_addslave_count = len(all_ids)
+        var_manager.set_runtime_variable("vps_addslave_count", vps_addslave_count)
+        print(f"后6个账号数据库校验完成，共提取{vps_addslave_count}个ID，已保存到变量 vps_addslave_count")
 
-    # ---------------------------
-    # 修改跟单账号-参数化测试（仅使用后6个数据）
-    # ---------------------------
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
     def test_update_addSlave(self, var_manager, logged_session, encrypted_password):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
-        user_count = var_manager.get_variable("user_count", 0)
-        if user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{user_count}，无法提取后6个数据")
+        vps_user_count = var_manager.get_variable("vps_user_count", 0)
+        if vps_user_count < 7:
+            pytest.fail(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据")
 
-        # 2. 仅提取后6个账号（索引1~6，对应user_accounts_2~user_accounts_7）
+        # 2. 仅提取后6个账号（索引1~6，对应vps_user_accounts_2~vps_user_accounts_7）
         all_accounts = []
         for i in range(2, 8):  # 直接指定取2~7共6个账号
-            account = var_manager.get_variable(f"user_accounts_{i}")
+            account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"未找到第{i}个账号（变量：user_accounts_{i}）")
+                pytest.fail(f"未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"已提取后6个账号：{all_accounts}")
 
@@ -264,7 +244,7 @@ class TestCreate_Scene(APITestBase):
             all_ids.append(addslave_id)
         print(f"已提取后6个账号id：{all_ids}")
 
-        template_id = var_manager.get_variable("template_id")
+        vps_template_id = var_manager.get_variable("vps_template_id")
 
         # 3. 定义6个模板（与账号一一对应）
         templates: List[Dict[str, Any]] = [
@@ -279,7 +259,7 @@ class TestCreate_Scene(APITestBase):
             {
                 "followMode": 1,
                 "followParam": "1",
-                "templateId": template_id,
+                "templateId": vps_template_id,
                 "remark": "测试数据",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"

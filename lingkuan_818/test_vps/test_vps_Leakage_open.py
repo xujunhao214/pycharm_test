@@ -13,6 +13,17 @@ SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("VPS策略下单-漏开")
+@allure.description("""
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 操作步骤：
+  1. 修改vps跟单账号平仓-关闭
+  2. 进行开仓
+  3. 进行平仓
+  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+  5. 修改vps跟单账号平仓-开启
+- 预期结果：vps跟单账号开仓-关闭，有漏单数据
+""")
 class TestLeakageopen(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")

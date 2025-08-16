@@ -64,6 +64,7 @@ class TestCreate_cloudTrader(APITestBase):
                 order_by="account ASC"
             )
 
+        with allure.step("2. 提取数据库数据"):
             # 验证查询结果
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
@@ -99,6 +100,7 @@ class TestCreate_cloudTrader(APITestBase):
                 (ip_address,)
             )
 
+        with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
@@ -164,6 +166,7 @@ class TestCreate_cloudTrader(APITestBase):
                 (cloudTrader_user_accounts_1,),
             )
 
+        with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
@@ -278,24 +281,14 @@ class TestCreate_cloudTrader(APITestBase):
                 print(
                     f"账号 {cloudTrader_account} 的ID为：{cloudTrader_vps_id}，已保存到变量 cloudTrader_vps_ids_{idx}")
 
-                # 校验账号状态和净值
-                def verify_core_fields():
-                    status = db_data[0]["status"]
-                    if status != 0:
-                        pytest.fail(f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}")
-                    euqit = db_data[0]["euqit"]
-                    if euqit == 0:
-                        pytest.fail(f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}")
+            with allure.step("校验账号状态和净值"):
+                status = db_data[0]["status"]
+                assert status == 0, f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}"
+                logging.info(f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}")
 
-                # 执行校验（代码与之前一致）
-                try:
-                    verify_core_fields()
-                    allure.attach(f"账号 {cloudTrader_account} 主表字段校验通过", "校验结果",
-                                  allure.attachment_type.TEXT)
-                except AssertionError as e:
-                    allure.attach(str(e), f"账号 {cloudTrader_account} 主表字段校验失败",
-                                  allure.attachment_type.TEXT)
-                    raise
+                euqit = db_data[0]["euqit"]
+                assert euqit > 0, f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}"
+                logging.info(f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}")
 
                 # 校验订阅表记录（代码与之前一致）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -310,10 +303,8 @@ class TestCreate_cloudTrader(APITestBase):
                 if not db_sub_data:
                     pytest.fail(f"账号 {cloudTrader_account} 在订阅表中未找到关联记录")
                 slave_cloudTrader_account = db_sub_data[0]["slave_account"]
-                if slave_cloudTrader_account != cloudTrader_account:
-                    pytest.fail(f"订阅表账号不匹配：预期={cloudTrader_account}，实际={slave_cloudTrader_account}")
-                allure.attach(f"账号 {cloudTrader_account} 订阅表关联校验通过", "校验结果",
-                              allure.attachment_type.TEXT)
+                assert slave_cloudTrader_account == cloudTrader_account, f"账号 {cloudTrader_account} 在订阅表中的关联账号异常"
+                logging.info(f"账号 {cloudTrader_account} 订阅表关联校验通过")
 
         # 3. 保存总数量和ID列表（代码与之前一致）
         account_count = len(all_ids_cloudTrader)
@@ -366,6 +357,7 @@ class TestCreate_cloudTrader(APITestBase):
                 (add_cloudgroup["name"],),
             )
 
+        with allure.step("2. 提取数据库中的值"):
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
@@ -413,11 +405,8 @@ class TestCreate_cloudTrader(APITestBase):
                 f"SELECT * FROM follow_cloud_master WHERE name = %s",
                 ("自动化测试",),
             )
-        with allure.step("2. 校验数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
-        with allure.step("3. 提取数据"):
+        with allure.step("2. 提取数据"):
             if not db_data:
                 pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
@@ -480,11 +469,8 @@ class TestCreate_cloudTrader(APITestBase):
                 f"SELECT * FROM follow_cloud_trader WHERE account = %s",
                 (cloudTrader_user_accounts_2,),
             )
-        with allure.step("2. 校验数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
-        with allure.step("3. 提取数据"):
+        with allure.step("2. 提取数据"):
             if not db_data:
                 pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
@@ -685,6 +671,7 @@ class TestCreate_cloudTrader(APITestBase):
             # 执行带时间范围的查询
             db_data = self.query_database(db_transaction, sql, params)
 
+        with allure.step("2. 提取数据"):
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
@@ -731,11 +718,8 @@ class TestCreate_cloudTrader(APITestBase):
                 f"SELECT * FROM follow_cloud_master WHERE name = %s",
                 ("自动化测试_手动下单",),
             )
-        with allure.step("2. 校验数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，新增云策略账号失败")
 
-        with allure.step("3. 提取数据"):
+        with allure.step("2. 提取数据"):
             if not db_data:
                 pytest.fail("数据库查询结果为空，新增云策略账号失败")
 

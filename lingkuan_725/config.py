@@ -27,14 +27,14 @@ ENV_CONFIG = {
         },
         "data_source_dir": "lingkuan_725/VAR"
     },
-    Environment.PROD: {
-        "base_url": "http://39.99.136.49:9000",
-        "vps_url": "http://39.99.136.49:9001",
+    Environment.UAT: {
+        "base_url": "https://uat.atcp.top/api",
+        "vps_url": "https://39.99.145.155/vps",
         "db_config": {
-            "host": "39.99.136.49",
+            "host": "39.99.241.16",
             "port": 3306,
             "user": "root",
-            "password": "xizcJWmXFkB5f4fm",
+            "password": "5v07DqL!F7333",
             "database": "follow-order-cp",
             "charset": "utf8mb4",
             "cursorclass": pymysql.cursors.DictCursor,
@@ -43,7 +43,7 @@ ENV_CONFIG = {
         "redis_config": {
             "host": "r-8vb1a249o1w1q605bppd.redis.zhangbei.rds.aliyuncs.com",
             "port": 6379,
-            "db": 1,
+            "db": 2,
             "password": "diVMn9bMpACrXh79QyYY"
         },
         "data_source_dir": "lingkuan_725/VAR"

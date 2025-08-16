@@ -5,31 +5,32 @@ import argparse
 import logging
 from enum import Enum
 
+
 # ------------------------------
 # 这个文件是配置allure报告里面的环境信息
 # ------------------------------
 # 环境枚举
 class Environment(Enum):
     TEST = "test"
-    PROD = "prod"
+    UAT = "uat"
 
 
 # 环境配置映射（使用有序字典确保配置内部顺序）
 ENV_CONFIG = {
     Environment.TEST.value: {
         "test_environment": "测试环境",
-        "browser_version": "自研跟单1.4.0",
+        "browser_version": "自研跟单1.4.2",
         "base_url": "http://39.99.136.49:9000",
         "vps_url": "http://39.99.136.49:9001",
         "db_host": "39.99.136.49",
         "db_port": 3306,
     },
-    Environment.PROD.value: {
-        "test_environment": "生产环境",
-        "browser_version": "自研跟单1.4.0",
-        "base_url": "http://39.99.136.49:9000",
-        "vps_url": "http://39.99.136.49:9001",
-        "db_host": "39.99.136.49",
+    Environment.UAT.value: {
+        "test_environment": "UAT环境",
+        "browser_version": "自研跟单1.4.2",
+        "base_url": "https://uat.atcp.top/api",
+        "vps_url": "https://39.99.145.155/vps",
+        "db_host": "39.99.241.16",
         "db_port": 3306,
     }
 }

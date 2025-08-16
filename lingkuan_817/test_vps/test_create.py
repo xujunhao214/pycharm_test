@@ -556,23 +556,14 @@ class TestCreate(APITestBase):
             logging.info(f"新增跟单账号ID: {vps_addslave_id}")
             var_manager.set_runtime_variable("vps_addslave_id", vps_addslave_id)
 
-            # 定义验证函数
-            def verify_order_status():
-                status = db_data[0]["status"]
-                if status != 0:
-                    pytest.fail(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
-                euqit = db_data[0]["euqit"]
-                if euqit == 0:
-                    pytest.fail(f"账号净值euqit有钱，实际金额为: {euqit}")
-                logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
+        with allure.step("2. 校验账号状态和净值"):
+            status = db_data[0]["status"]
+            assert status == 0, f"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}"
+            logging.info(f"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}")
 
-            # 执行验证
-            try:
-                verify_order_status()
-                allure.attach("账号基础信息校验通过", "成功详情", allure.attachment_type.TEXT)
-            except AssertionError as e:
-                allure.attach(str(e.args[0]), "账号基础信息校验失败", allure.attachment_type.TEXT)
-                raise
+            euqit = db_data[0]["euqit"]
+            assert euqit > 0, f"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}"
+            logging.info(f"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}")
 
             db_data2 = self.query_database(
                 db_transaction,
@@ -584,5 +575,5 @@ class TestCreate(APITestBase):
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
             slave_account = db_data2[0]["slave_account"]
-            if slave_account != vps_user_accounts_1:
-                pytest.fail(f"账号新增失败，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}")
+            assert slave_account == vps_user_accounts_1, f"账号新增失败，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}"
+            logging.info(f"账号新增成功，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}")

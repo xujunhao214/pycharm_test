@@ -14,6 +14,17 @@ SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("云策略策略下单-跟单修改模式、品种")
+@allure.description("""
+### 用例说明
+- 前置条件：有云策略和云跟单
+- 操作步骤：
+  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+  2. 进行开仓
+  3. 判断三个账号的手数是否正确
+  4. 进行平仓
+  5. 判断三个账号的手数是否正确
+- 预期结果：三个账号的手数正确
+""")
 class Testcloudtrader_Scence(APITestBase):
     @allure.title("账号管理-交易下单-云策略账号复制下单")
     def test_bargain_masOrderSend(self, logged_session, var_manager):

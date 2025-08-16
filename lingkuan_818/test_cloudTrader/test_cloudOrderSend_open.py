@@ -14,6 +14,17 @@ SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("交易下单-云策略复制下单-漏开")
+@allure.description("""
+### 用例说明
+- 前置条件：有云策略和云跟单
+- 操作步骤：
+  1. 修改云跟单账号平仓-关闭
+  2. 进行开仓
+  3. 进行平仓
+  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+  5. 修改云跟单账号平仓-开启
+- 预期结果：云跟单账号开仓-关闭，有漏单数据
+""")
 class TestcloudTrader_open(APITestBase):
     @allure.title("云策略-云策略列表-修改云跟单")
     def test_cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):

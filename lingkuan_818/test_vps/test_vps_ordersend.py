@@ -12,6 +12,16 @@ SKIP_REASON = "该功能暂不需要"
 
 
 @allure.feature("VPS策略下单-正常开仓平仓")
+@allure.description("""
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 操作步骤：
+  1. 进行开仓
+  2. 检验喊单账号和跟单账号的数据是否正确
+  3. 进行平仓
+  4. 检验喊单账号和跟单账号的数据是否正确
+- 预期结果：检验喊单账号和跟单账号的数据正确
+""")
 class TestVPSOrderSend(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
