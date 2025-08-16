@@ -336,12 +336,25 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     result = outcome.get_result()
 
-    # 示例：包含 "skip-rerun" 的用例不重试
+    # 示例：标记包含 "skip-rerun" 的用例不重试
     if "skip-rerun" in item.keywords:
         item.config.option.reruns = 0  # 强制关闭重试
-    # 其他条件：比如根据用例名称、标记判断是否重试
-    elif "db_check" in item.name:
-        item.config.option.reruns = 5  # 数据库用例重试5次
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
+
+    # 示例：名称包含 "test_db" 的用例不重试
+    elif "test_db" in item.name:
+        item.config.option.reruns = 0  # 数据库查询关闭重试
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
+
+    # 示例：属于 "test_delete_scene.py" 模块的用例不重试
+    elif item.module.__name__ == "test_delete_scene":
+        item.config.option.reruns = 0
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
+
+    # 示例：属于 TestCloudTrader 类的用例重试0次
+    elif item.parent.__class__.__name__ == "TestCloudTrader":
+        item.config.option.reruns = 0
+        item.config.option.reruns_delay = 5  # 间隔5秒重试
 
 
 def pytest_unconfigure(config):

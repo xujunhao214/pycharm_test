@@ -506,8 +506,7 @@ class TestcloudTrader_level(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time",
-                time_range=2
+                time_field="foi.create_time"
             )
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
