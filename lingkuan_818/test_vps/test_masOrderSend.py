@@ -28,9 +28,9 @@ class TestVPStradingOrders(APITestBase):
     def test_allocation_order_send(self, logged_session, var_manager):
         # 发送VPS分配下单请求
         masOrderSend = var_manager.get_variable("masOrderSend")
-        self.vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
+        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
         data = {
-            "traderList": [self.vps_user_ids_1],
+            "traderList": [vps_user_ids_1],
             "type": 0,
             "tradeType": 0,
             "symbol": masOrderSend["symbol"],
@@ -125,12 +125,13 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式一：分配下单")
     @allure.title("VPS分配下单平仓")
-    def test_allocation_order_close(self, logged_session):
+    def test_allocation_order_close(self, var_manager, logged_session):
+        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")
         # 发送平仓请求
         data = {
             "isCloseAll": 1,
             "intervalTime": 100,
-            "traderList": [self.vps_user_ids_1]
+            "traderList": [vps_user_ids_1]
         }
         response = self.send_post_request(
             logged_session,
@@ -205,9 +206,9 @@ class TestVPStradingOrders(APITestBase):
     def test_copy_order_send(self, logged_session, var_manager):
         # 发送VPS复制下单请求
         masOrderSend = var_manager.get_variable("masOrderSend")
-        self.vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
+        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
         data = {
-            "traderList": [self.vps_user_ids_1],
+            "traderList": [vps_user_ids_1],
             "type": 0,
             "tradeType": 1,
             "intervalTime": 100,
@@ -305,12 +306,13 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式二：复制下单")
     @allure.title("VPS复制下单平仓")
-    def test_copy_order_close(self, logged_session):
+    def test_copy_order_close(self, var_manager, logged_session):
+        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")
         # 发送平仓请求
         data = {
             "isCloseAll": 1,
             "intervalTime": 100,
-            "traderList": [self.vps_user_ids_1]
+            "traderList": [vps_user_ids_1]
         }
         response = self.send_post_request(
             logged_session,

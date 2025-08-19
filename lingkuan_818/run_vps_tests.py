@@ -21,23 +21,21 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "test_vps/test_create.py",
+        # "test_vps/test_create.py",
         # "test_vps/test_masOrderSend.py",
         # "test_vps/test_vps_ordersend.py",
+        # "test_vps/test_vps_orderclose.py",
         # "test_vps/test_vps_Leakage_level.py",
         # "test_vps/test_vps_Leakage_open.py",
         # "test_vps/test_strategy_addstatus.py",
         # "test_vps/test_vpsfixed_annotations.py",
         # "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
-        "test_vps/test_create_scene.py",
+        # "test_vps/test_create_scene.py",
         # "test_vps/test_vps_scene.py",
         # "test_vps/test_vps_money.py",
         "test_vps/test_delete.py",
         "test_vps/test_delete_scene.py",
-
-        "--reruns", "3",  # 重试次数
-        "--reruns-delay", "10",  # 重试间隔
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",

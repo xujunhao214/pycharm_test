@@ -115,7 +115,7 @@ def send_feishu_notification(
             "header": {
                 "title": {
                     "tag": "plain_text",
-                    "content": f"【{env}】接口自动化测试报告"
+                    "content": f"【{PROJECT_NAME}】接口自动化测试报告"
                 },
                 "template": "red" if failed > 0 else "blue"
             }

@@ -358,7 +358,7 @@ class TestCreate(APITestBase):
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s",
-                (add_VPS["ipAddress"], add_VPS["deleted"])
+                (add_VPS["ipAddress"], add_VPS["deleted"],)
             )
 
             # 提取数据库中的值

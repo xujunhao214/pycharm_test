@@ -4,6 +4,7 @@ from lingkuan_818.VAR.VAR import *
 import allure
 import logging
 import datetime
+from pymysql import err
 import os
 import time
 import xml.etree.ElementTree as ET
@@ -176,31 +177,54 @@ def db_config(environment) -> dict:
     return ENV_CONFIG[environment]["db_config"]
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")  # 保持function级别，每个用例独立连接
 def db(db_config) -> pymysql.connections.Connection:
-    """数据库连接夹具"""
+    """数据库连接夹具（每个用例创建新连接，带有重试功能）"""
     # 解析cursorclass字符串为实际类
     if isinstance(db_config["cursorclass"], str):
         module_name, class_name = db_config["cursorclass"].rsplit('.', 1)
         module = __import__(module_name, fromlist=[class_name])
         db_config["cursorclass"] = getattr(module, class_name)
-    conn = pymysql.connect(**db_config)
-    yield conn
-    conn.close()
+
+    # 重试配置
+    max_retries = 3  # 最大重试次数
+    retry_delay = 5  # 重试间隔时间（秒）
+    conn = None
+
+    # 带重试的连接逻辑
+    for attempt in range(max_retries):
+        try:
+            conn = pymysql.connect(**db_config)
+            # 连接成功，退出重试循环
+            break
+        except err.OperationalError as e:
+            # 如果是最后一次尝试，直接抛出异常
+            if attempt == max_retries - 1:
+                raise
+            # 打印重试信息
+            print(f"数据库连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
+            print(f"{retry_delay}秒后进行下一次尝试...")
+            time.sleep(retry_delay)
+        except Exception as e:
+            # 非连接性错误，直接抛出
+            raise
+
+    yield conn  # 用例执行期间使用该连接
+
+    # 用例结束后关闭连接
+    if conn and conn.open:
+        try:
+            conn.close()
+        except Exception as e:
+            print(f"关闭数据库连接时发生错误: {str(e)}")
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")  # 每个用例独立事务
 def db_transaction(db):
-    """数据库事务管理，自动提交以获取最新数据"""
-    try:
-        db.begin()
-        yield db
-    except Exception as e:
-        db.rollback()
-        raise
-    finally:
-        # 关键：每次查询后提交事务，刷新数据可见性
-        db.commit()  # 替代 rollback()，确保看到其他会话的新数据
+    """数据库事务管理（每个用例独立）"""
+    # 不需要手动begin()，pymysql默认自动提交模式
+    yield db
+    # 用例结束后无需commit/rollback，因为每个用例使用独立连接，且执行完即关闭
 
 
 # ------------------------------
@@ -300,10 +324,6 @@ def pytest_addoption(parser):
         help="指定测试组（vps/cloud），用于变量文件隔离"
     )
 
-    parser.addoption(
-        "--no-rerun", action="store_true", help="禁用全局重试"
-    )
-
 
 def pytest_configure(config):
     """注册测试结果追踪器、设置环境并注册自定义标记"""
@@ -322,39 +342,25 @@ def pytest_configure(config):
     config.environment = env_value
     logger.info(f"[{DATETIME_NOW}] 测试环境设置为: {config.environment}")
 
-    """自动标记所有用例（除非显式排除）"""
-    if not config.getoption("--no-rerun"):
-        # 给所有用例自动添加 rerun 标记
-        config.addinivalue_line(
-            "markers", "rerun: 全局重试标记（由conftest自动添加）"
-        )
+    config.addinivalue_line(
+        "markers",
+        "retry(n: int, delay: int): 用例失败后重试n次，每次间隔delay秒"
+    )
 
 
-@pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    """自定义重试条件：某些用例不重试"""
-    outcome = yield
-    result = outcome.get_result()
+# 处理retry标记，关联到插件配置
+def pytest_collection_modifyitems(items):
+    for item in items:
+        # 获取用例上的retry标记
+        retry_mark = item.get_closest_marker("retry")
+        if retry_mark:
+            # 从标记中提取参数（默认值可根据需求调整）
+            reruns = retry_mark.kwargs.get("n", 1)  # 重试次数
+            reruns_delay = retry_mark.kwargs.get("delay", 1)  # 间隔秒数
 
-    # 示例：标记包含 "skip-rerun" 的用例不重试
-    if "skip-rerun" in item.keywords:
-        item.config.option.reruns = 0  # 强制关闭重试
-        item.config.option.reruns_delay = 5  # 间隔5秒重试
-
-    # 示例：名称包含 "test_db" 的用例不重试
-    elif "test_db" in item.name:
-        item.config.option.reruns = 0  # 数据库查询关闭重试
-        item.config.option.reruns_delay = 5  # 间隔5秒重试
-
-    # 示例：属于 "test_delete_scene.py" 模块的用例不重试
-    elif item.module.__name__ == "test_delete":
-        item.config.option.reruns = 0
-        item.config.option.reruns_delay = 5  # 间隔5秒重试
-
-    # 示例：属于 TestCloudTrader 类的用例重试0次
-    elif item.parent.__class__.__name__ == "TestCloudTrader":
-        item.config.option.reruns = 0
-        item.config.option.reruns_delay = 5  # 间隔5秒重试
+            # 动态设置当前用例的重试参数
+            item.config.option.reruns = reruns
+            item.config.option.reruns_delay = reruns_delay
 
 
 def pytest_unconfigure(config):

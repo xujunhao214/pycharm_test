@@ -139,7 +139,8 @@ class TestCloudStrategyOrderRemark(APITestBase):
         with allure.step("查询订单备注信息"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = """
-                SELECT fod.comment 
+                SELECT 
+                fod.comment 
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -151,7 +152,8 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time"
+                time_field="foi.create_time",
+                order_by="fod.comment DESC"
             )
 
         with allure.step("验证备注信息"):
@@ -167,13 +169,14 @@ class TestCloudStrategyOrderRemark(APITestBase):
     @allure.title("策略和平仓操作")
     def test_scenario1_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
+            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderClose',
                 json_data={
                     "isCloseAll": 1,
                     "intervalTime": 100,
-                    "traderList": [self.cloudTrader_user_ids_2]
+                    "traderList": [cloudTrader_user_ids_2]
                 }
             )
             self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
@@ -320,7 +323,8 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time"
+                time_field="foi.create_time",
+                order_by="fod.comment DESC"
             )
 
         with allure.step("验证备注信息"):
@@ -336,13 +340,14 @@ class TestCloudStrategyOrderRemark(APITestBase):
     @allure.title("策略和平仓操作")
     def test_scenario2_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
+            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderClose',
                 json_data={
                     "isCloseAll": 1,
                     "intervalTime": 100,
-                    "traderList": [self.cloudTrader_user_ids_2]
+                    "traderList": [cloudTrader_user_ids_2]
                 }
             )
             self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
@@ -489,7 +494,8 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
-                time_field="foi.create_time"
+                time_field="foi.create_time",
+                order_by="fod.comment DESC"
             )
 
         with allure.step("验证备注信息"):
@@ -502,16 +508,17 @@ class TestCloudStrategyOrderRemark(APITestBase):
             logger.info(f"场景三备注验证通过: {comment}")
 
     @allure.story("场景三：策略开启订单备注，跟单无固定注释")
-    @allure.title("策略和跟单账号平仓操作")
+    @allure.title("策略和平仓操作")
     def test_scenario3_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
+            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderClose',
                 json_data={
                     "isCloseAll": 1,
                     "intervalTime": 100,
-                    "traderList": [self.cloudTrader_user_ids_2]
+                    "traderList": [cloudTrader_user_ids_2]
                 }
             )
             self.assert_json_value(response, "$.msg", "success", "策略平仓失败")

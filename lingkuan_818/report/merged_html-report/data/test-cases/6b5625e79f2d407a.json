@@ -1,0 +1,310 @@
+{
+  "uid" : "6b5625e79f2d407a",
+  "name" : "数据库校验-跟单指令平仓数据（场景一）",
+  "fullName" : "test_vps.test_vps_ordersend.TestVPSOrderSend_AllScenarios#test_scenario1_dbquery_slave_close",
+  "historyId" : "bbc5ada3c67ae93fd164014763447a71",
+  "time" : {
+    "start" : 1755512227928,
+    "stop" : 1755512234342,
+    "duration" : 6414
+  },
+  "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单\n- 包含五种开仓场景，验证不同参数组合下的订单数据正确性\n- 场景一：手数范围0.1-1，总订单3，总手数1\n- 场景二：手数范围0.01-0.01，总手数0.01\n- 场景三：场景三：手数范围0.1-1，总手数5\n- 场景四：场景四：手数范围0.01-1，总订单10\n- 场景五：场景五：手数范围0.1-1，总手数1（停止功能）\n",
+  "descriptionHtml" : "<h3>用例说明</h3>\n<ul>\n<li>前置条件：有vps策略和vps跟单</li>\n<li>包含五种开仓场景，验证不同参数组合下的订单数据正确性</li>\n<li>场景一：手数范围0.1-1，总订单3，总手数1</li>\n<li>场景二：手数范围0.01-0.01，总手数0.01</li>\n<li>场景三：场景三：手数范围0.1-1，总手数5</li>\n<li>场景四：场景四：手数范围0.01-1，总订单10</li>\n<li>场景五：场景五：手数范围0.1-1，总手数1（停止功能）</li>\n</ul>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]",
+  "statusTrace" : "self = <lingkuan_818.test_vps.test_vps_ordersend.TestVPSOrderSend_AllScenarios object at 0x000001DFD466CA30>\nvar_manager = <lingkuan_818.commons.variable_manager.VariableManager object at 0x000001DFD4923670>\ndb_transaction = <pymysql.connections.Connection object at 0x000001DFD4712040>\n\n    @allure.story(\"场景一：手数范围0.1-1，总订单3，总手数1\")\n    @allure.title(\"数据库校验-跟单指令平仓数据（场景一）\")\n    def test_scenario1_dbquery_slave_close(self, var_manager, db_transaction):\n        test_params = {\n            \"totalNum\": \"3\",\n            \"totalSzie\": \"1\",\n            \"startSize\": \"0.1\",\n            \"endSize\": \"1\",\n            \"intervalTime\": \"100\"\n        }\n>       self._verify_close_order_slave(var_manager, db_transaction, test_params)\n\ntest_vps\\test_vps_ordersend.py:488: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntest_vps\\test_vps_ordersend.py:392: in _verify_close_order_slave\n    self.assert_list_equal_ignore_order(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_818.test_vps.test_vps_ordersend.TestVPSOrderSend_AllScenarios object at 0x000001DFD466CA30>\nlist1 = [0.82, 1.0, 0.18, 0.6, 0.4], list2 = [0.0, 0.0, 0.0, 0.6, 0.4]\nerror_msg = '手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]'\n\n    def assert_list_equal_ignore_order(self, list1, list2, error_msg=\"列表元素不相等（忽略顺序）\"):\n        \"\"\"断言两个列表元素相同（忽略顺序）\"\"\"\n        from collections import Counter\n>       assert Counter(list1) == Counter(list2), error_msg\nE       AssertionError: 手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]\n\ncommons\\api_base.py:981: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755512053135,
+      "stop" : 1755512053135,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755512188721,
+      "stop" : 1755512188721,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755512053135,
+      "stop" : 1755512053546,
+      "duration" : 411
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755512227884,
+      "stop" : 1755512227928,
+      "duration" : 44
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单\n- 包含五种开仓场景，验证不同参数组合下的订单数据正确性\n- 场景一：手数范围0.1-1，总订单3，总手数1\n- 场景二：手数范围0.01-0.01，总手数0.01\n- 场景三：场景三：手数范围0.1-1，总手数5\n- 场景四：场景四：手数范围0.01-1，总订单10\n- 场景五：场景五：手数范围0.1-1，总手数1（停止功能）\n",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]",
+    "statusTrace" : "self = <lingkuan_818.test_vps.test_vps_ordersend.TestVPSOrderSend_AllScenarios object at 0x000001DFD466CA30>\nvar_manager = <lingkuan_818.commons.variable_manager.VariableManager object at 0x000001DFD4923670>\ndb_transaction = <pymysql.connections.Connection object at 0x000001DFD4712040>\n\n    @allure.story(\"场景一：手数范围0.1-1，总订单3，总手数1\")\n    @allure.title(\"数据库校验-跟单指令平仓数据（场景一）\")\n    def test_scenario1_dbquery_slave_close(self, var_manager, db_transaction):\n        test_params = {\n            \"totalNum\": \"3\",\n            \"totalSzie\": \"1\",\n            \"startSize\": \"0.1\",\n            \"endSize\": \"1\",\n            \"intervalTime\": \"100\"\n        }\n>       self._verify_close_order_slave(var_manager, db_transaction, test_params)\n\ntest_vps\\test_vps_ordersend.py:488: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntest_vps\\test_vps_ordersend.py:392: in _verify_close_order_slave\n    self.assert_list_equal_ignore_order(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_818.test_vps.test_vps_ordersend.TestVPSOrderSend_AllScenarios object at 0x000001DFD466CA30>\nlist1 = [0.82, 1.0, 0.18, 0.6, 0.4], list2 = [0.0, 0.0, 0.0, 0.6, 0.4]\nerror_msg = '手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]'\n\n    def assert_list_equal_ignore_order(self, list1, list2, error_msg=\"列表元素不相等（忽略顺序）\"):\n        \"\"\"断言两个列表元素相同（忽略顺序）\"\"\"\n        from collections import Counter\n>       assert Counter(list1) == Counter(list2), error_msg\nE       AssertionError: 手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]\n\ncommons\\api_base.py:981: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取跟单指令平仓数据",
+      "time" : {
+        "start" : 1755512227928,
+        "stop" : 1755512234341,
+        "duration" : 6413
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录稳定（时区: +05:00，超时: 30秒）",
+        "time" : {
+          "start" : 1755512227928,
+          "stop" : 1755512227928,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : false,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 0
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1755512234340,
+          "stop" : 1755512234341,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "948d74e037e1e78c",
+          "name" : "执行SQL",
+          "source" : "948d74e037e1e78c.txt",
+          "type" : "text/plain",
+          "size" : 973
+        }, {
+          "uid" : "d926c58800cef862",
+          "name" : "SQL参数",
+          "source" : "d926c58800cef862.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "cb743b5902acf77f",
+          "name" : "查询结果（共5条，显示前5条）",
+          "source" : "cb743b5902acf77f.json",
+          "type" : "application/json",
+          "size" : 2140
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ {
+        "uid" : "8767a8f48653c1d5",
+        "name" : "等待结果",
+        "source" : "8767a8f48653c1d5.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 4
+    }, {
+      "name" : "2. 验证跟单指令平仓数据",
+      "time" : {
+        "start" : 1755512234341,
+        "stop" : 1755512234341,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 手数不一致: 详情[0.82, 1.0, 0.18, 0.6, 0.4], 指令[0.0, 0.0, 0.0, 0.6, 0.4]\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_818\\test_vps\\test_vps_ordersend.py\", line 392, in _verify_close_order_slave\n    self.assert_list_equal_ignore_order(\n  File \"D:\\pycharm_test\\lingkuan_818\\commons\\api_base.py\", line 981, in assert_list_equal_ignore_order\n    assert Counter(list1) == Counter(list2), error_msg\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "abc496674653dec",
+      "name" : "log",
+      "source" : "abc496674653dec.txt",
+      "type" : "text/plain",
+      "size" : 11222
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 4,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 5
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755565029963,
+      "stop" : 1755565029964,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755565029966,
+      "stop" : 1755565029966,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755512234358,
+      "stop" : 1755512234405,
+      "duration" : 47
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景一：手数范围0.1-1，总订单3，总手数1"
+  }, {
+    "name" : "feature",
+    "value" : "VPS策略下单-正常开仓平仓（多场景汇总）"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_ordersend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_AllScenarios"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "6824-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vps_ordersend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "6b5625e79f2d407a.json",
+  "parameterValues" : [ ]
+}

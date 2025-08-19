@@ -300,10 +300,6 @@ def pytest_addoption(parser):
         help="指定测试组（vps/cloud），用于变量文件隔离"
     )
 
-    parser.addoption(
-        "--no-rerun", action="store_true", help="禁用全局重试"
-    )
-
 
 def pytest_configure(config):
     """注册测试结果追踪器、设置环境并注册自定义标记"""
@@ -321,27 +317,6 @@ def pytest_configure(config):
     env_value = config.getoption("--env").lower()
     config.environment = env_value
     logger.info(f"[{DATETIME_NOW}] 测试环境设置为: {config.environment}")
-
-    """自动标记所有用例（除非显式排除）"""
-    if not config.getoption("--no-rerun"):
-        # 给所有用例自动添加 rerun 标记
-        config.addinivalue_line(
-            "markers", "rerun: 全局重试标记（由conftest自动添加）"
-        )
-
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    """自定义重试条件：某些用例不重试"""
-    outcome = yield
-    result = outcome.get_result()
-
-    # 示例：包含 "skip-rerun" 的用例不重试
-    if "skip-rerun" in item.keywords:
-        item.config.option.reruns = 0  # 强制关闭重试
-    # 其他条件：比如根据用例名称、标记判断是否重试
-    elif "db_check" in item.name:
-        item.config.option.reruns = 5  # 数据库用例重试5次
 
 
 def pytest_unconfigure(config):
