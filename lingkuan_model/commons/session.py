@@ -2,7 +2,7 @@ import os
 import datetime
 import requests
 import json
-from lingkuan_model.VAR.VAR import *
+from lingkuan.VAR.VAR import *
 from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
@@ -10,9 +10,9 @@ from requests.exceptions import (
     RequestException, ConnectionError, Timeout,
     HTTPError, SSLError
 )
-from lingkuan_model.commons.jsonpath_utils import JsonPathUtils
-from lingkuan_model.commons.enums import Environment
-from lingkuan_model.conftest import *
+from lingkuan.commons.jsonpath_utils import JsonPathUtils
+from lingkuan.commons.enums import Environment
+from lingkuan.conftest import *
 
 # 自动创建日志目录
 log_dir = Path(__file__).parent.parent / "logs"

@@ -220,11 +220,14 @@ class TestResultTracker:
         self.skipped_test_names = []
         self.skipped_reasons = {}
         self.duration = "未知"
+        self.test_group = None  # 新增：存储测试组信息
 
     def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}")
+        # 新增：获取 --test-group 参数
+        self.test_group = session.config.getoption("--test-group", "未指定")
+        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}, 测试组: {self.test_group}")
 
     def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果"""
@@ -259,6 +262,7 @@ class TestResultTracker:
             send_feishu_notification(
                 statistics=statistics,
                 environment=environment,
+                test_group=self.test_group,  # 传入测试组
                 failed_cases=self.failed_test_names,
                 skipped_cases=self.skipped_test_names
             )
@@ -279,7 +283,8 @@ class TestResultTracker:
             "start_time": self.start_time,
             "end_time": self.end_time,
             "duration": self.duration,
-            "skipped_reasons": self.skipped_reasons
+            "skipped_reasons": self.skipped_reasons,
+            "test_group": self.test_group  # 可选：将测试组加入统计数据
         }
 
 

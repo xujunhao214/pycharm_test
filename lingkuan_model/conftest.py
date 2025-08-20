@@ -1,6 +1,6 @@
 import pytest
 import pymysql
-from lingkuan_model.VAR.VAR import *
+from lingkuan.VAR.VAR import *
 import allure
 import logging
 import datetime
@@ -8,15 +8,15 @@ import os
 import time
 import xml.etree.ElementTree as ET
 from pytest import Config
-from lingkuan_model.commons.mfa_key import generate_code
-from lingkuan_model.commons.Encryption_and_decryption import aes_encrypt_str
-from lingkuan_model.commons.session import EnvironmentSession
-from lingkuan_model.commons.variable_manager import VariableManager
-from lingkuan_model.commons.test_tracker import TestResultTracker
-from lingkuan_model.commons.feishu_notification import send_feishu_notification
-from lingkuan_model.commons.enums import Environment
-from lingkuan_model.config import ENV_CONFIG  # 仅导入配置数据
-from lingkuan_model.commons.redis_utils import RedisClient, get_redis_client
+from lingkuan.commons.mfa_key import generate_code
+from lingkuan.commons.Encryption_and_decryption import aes_encrypt_str
+from lingkuan.commons.session import EnvironmentSession
+from lingkuan.commons.variable_manager import VariableManager
+from lingkuan.commons.test_tracker import TestResultTracker
+from lingkuan.commons.feishu_notification import send_feishu_notification
+from lingkuan.commons.enums import Environment
+from lingkuan.config import ENV_CONFIG  # 仅导入配置数据
+from lingkuan.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
@@ -220,11 +220,14 @@ class TestResultTracker:
         self.skipped_test_names = []
         self.skipped_reasons = {}
         self.duration = "未知"
+        self.test_group = None  # 新增：存储测试组信息
 
     def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}")
+        # 新增：获取 --test-group 参数
+        self.test_group = session.config.getoption("--test-group", "未指定")
+        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}, 测试组: {self.test_group}")
 
     def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果"""
@@ -259,6 +262,7 @@ class TestResultTracker:
             send_feishu_notification(
                 statistics=statistics,
                 environment=environment,
+                test_group=self.test_group,  # 传入测试组
                 failed_cases=self.failed_test_names,
                 skipped_cases=self.skipped_test_names
             )
@@ -279,7 +283,8 @@ class TestResultTracker:
             "start_time": self.start_time,
             "end_time": self.end_time,
             "duration": self.duration,
-            "skipped_reasons": self.skipped_reasons
+            "skipped_reasons": self.skipped_reasons,
+            "test_group": self.test_group  # 可选：将测试组加入统计数据
         }
 
 
@@ -300,10 +305,6 @@ def pytest_addoption(parser):
         help="指定测试组（vps/cloud），用于变量文件隔离"
     )
 
-    parser.addoption(
-        "--no-rerun", action="store_true", help="禁用全局重试"
-    )
-
 
 def pytest_configure(config):
     """注册测试结果追踪器、设置环境并注册自定义标记"""
@@ -321,27 +322,6 @@ def pytest_configure(config):
     env_value = config.getoption("--env").lower()
     config.environment = env_value
     logger.info(f"[{DATETIME_NOW}] 测试环境设置为: {config.environment}")
-
-    """自动标记所有用例（除非显式排除）"""
-    if not config.getoption("--no-rerun"):
-        # 给所有用例自动添加 rerun 标记
-        config.addinivalue_line(
-            "markers", "rerun: 全局重试标记（由conftest自动添加）"
-        )
-
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    """自定义重试条件：某些用例不重试"""
-    outcome = yield
-    result = outcome.get_result()
-
-    # 示例：包含 "skip-rerun" 的用例不重试
-    if "skip-rerun" in item.keywords:
-        item.config.option.reruns = 0  # 强制关闭重试
-    # 其他条件：比如根据用例名称、标记判断是否重试
-    elif "db_check" in item.name:
-        item.config.option.reruns = 5  # 数据库用例重试5次
 
 
 def pytest_unconfigure(config):

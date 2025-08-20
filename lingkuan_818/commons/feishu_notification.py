@@ -18,6 +18,7 @@ JENKINS_CREDENTIALS = os.getenv("JENKINS_CREDENTIALS", f"{JENKINS_USERNAME}:{JEN
 def send_feishu_notification(
         statistics: Dict[str, any],
         environment: str,  # 新增环境参数
+        test_group: str,  # 新增测试组参数
         failed_cases: List[str] = None,
         skipped_cases: List[str] = None,
 ):
@@ -58,7 +59,8 @@ def send_feishu_notification(
     # 构建Markdown内容
     markdown_content = f"""
 **测试信息**:
-- **环境**: {env}
+- **环境**: {env or "未指定"}
+- **测试组**: {test_group or "未指定"}
 - **开始时间**: {statistics.get("start_time", "未记录")}
 - **结束时间**: {statistics.get("end_time", "未记录")}
 - **执行耗时**: {duration}
