@@ -38,15 +38,15 @@ class VariableManager:
                 with open(file_path, "r", encoding="utf-8") as f:
                     self.static_vars = json.load(f)
                 logger.info(f"[{DATETIME_NOW}] 成功加载静态变量: {file_path}")
-                print(f"[{DATETIME_NOW}] 成功加载静态变量: {file_path}")
+                # print(f"[{DATETIME_NOW}] 成功加载静态变量: {file_path}")
             except Exception as e:
                 logger.error(f"[{DATETIME_NOW}] 静态变量加载失败: {str(e)}")
                 self.static_vars = {}
-                print(f"[{DATETIME_NOW}] 静态变量加载失败: {str(e)}")
+                # print(f"[{DATETIME_NOW}] 静态变量加载失败: {str(e)}")
         else:
             logger.warning(f"[{DATETIME_NOW}] 静态变量文件不存在: {file_path}")
             self.static_vars = {}
-            print(f"[{DATETIME_NOW}] 静态变量文件不存在: {file_path}")
+            # print(f"[{DATETIME_NOW}] 静态变量文件不存在: {file_path}")
 
     def load_runtime_variables(self):
         """加载运行时动态变量文件（根据测试组隔离）"""
@@ -62,15 +62,15 @@ class VariableManager:
                 with open(file_path, "r", encoding="utf-8") as f:
                     self.runtime_vars = json.load(f)
                 logger.info(f"[{DATETIME_NOW}] 成功加载运行时变量: {file_path}")
-                print(f"[{DATETIME_NOW}] 成功加载运行时变量: {file_path}")
+                # print(f"[{DATETIME_NOW}] 成功加载运行时变量: {file_path}")
             except Exception as e:
                 logger.error(f"[{DATETIME_NOW}] 运行时变量加载失败: {str(e)}")
                 self.runtime_vars = {}
-                print(f"[{DATETIME_NOW}] 运行时变量加载失败: {str(e)}")
+                # print(f"[{DATETIME_NOW}] 运行时变量加载失败: {str(e)}")
         else:
             logger.warning(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
             self.runtime_vars = {}
-            print(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
+            # print(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
 
     def get_variable(
             self,

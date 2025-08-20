@@ -75,8 +75,8 @@ def logged_session(api_session, var_manager, request, environment):  # 新增env
 
     elif environment.value == "uat":
         # UAT环境：需要MFA验证码+重试机制
-        max_retries = 5
-        retry_interval = 15
+        max_retries = 3
+        retry_interval = 10
         for attempt in range(max_retries):
             try:
                 mfa_code = generate_code(MFA_SECRET_KEY)
@@ -244,11 +244,14 @@ class TestResultTracker:
         self.skipped_test_names = []
         self.skipped_reasons = {}
         self.duration = "未知"
+        self.test_group = None  # 新增：存储测试组信息
 
     def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}")
+        # 新增：获取 --test-group 参数
+        self.test_group = session.config.getoption("--test-group", "未指定")
+        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}, 测试组: {self.test_group}")
 
     def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果"""
@@ -265,7 +268,7 @@ class TestResultTracker:
         elif report.outcome == "skipped":
             self.skipped += 1
             self.skipped_test_names.append(report.nodeid)
-            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该功能暂不需要")
+            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该用例暂时跳过")
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
@@ -283,6 +286,7 @@ class TestResultTracker:
             send_feishu_notification(
                 statistics=statistics,
                 environment=environment,
+                test_group=self.test_group,  # 传入测试组
                 failed_cases=self.failed_test_names,
                 skipped_cases=self.skipped_test_names
             )
@@ -303,7 +307,8 @@ class TestResultTracker:
             "start_time": self.start_time,
             "end_time": self.end_time,
             "duration": self.duration,
-            "skipped_reasons": self.skipped_reasons
+            "skipped_reasons": self.skipped_reasons,
+            "test_group": self.test_group  # 可选：将测试组加入统计数据
         }
 
 
@@ -355,8 +360,8 @@ def pytest_collection_modifyitems(items):
         retry_mark = item.get_closest_marker("retry")
         if retry_mark:
             # 从标记中提取参数（默认值可根据需求调整）
-            reruns = retry_mark.kwargs.get("n", 1)  # 重试次数
-            reruns_delay = retry_mark.kwargs.get("delay", 1)  # 间隔秒数
+            reruns = retry_mark.kwargs.get("n", 3)  # 重试次数
+            reruns_delay = retry_mark.kwargs.get("delay", 5)  # 间隔秒数
 
             # 动态设置当前用例的重试参数
             item.config.option.reruns = reruns
@@ -389,6 +394,9 @@ def redis_client(environment) -> RedisClient:
     client = get_redis_client(environment)
     yield client
     client.close()  # 用例结束后关闭连接
+
+
+# NODE = NODE
 
 
 # redis的数据是开仓漏单(vps看板)

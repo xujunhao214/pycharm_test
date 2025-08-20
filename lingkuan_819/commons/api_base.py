@@ -418,7 +418,7 @@ class APITestBase:
                         allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         allure.attach(
                             self.serialize_data(result[:display_count]),
-                            f"查询结果（共{len(result)}条，显示前{display_count}条）",
+                            f"查询结果（共{len(result)}条，显示前50条）",
                             allure.attachment_type.JSON
                         )
 
@@ -455,7 +455,7 @@ class APITestBase:
                                  sql: str,
                                  params: tuple = (),
                                  time_field: str = "create_time",
-                                 time_range_minutes: int = 5,
+                                 time_range_minutes: int = MYSQL_TIME,
                                  order_by: str = "create_time DESC",
                                  convert_decimal: bool = True,
                                  attach_to_allure: bool = True) -> List[Dict[str, Any]]:
@@ -570,7 +570,7 @@ class APITestBase:
             f"等待超时（{timeout}秒），记录仍然存在。\n"
             f"SQL: {sql}\n"
             f"参数: {params}\n"
-            f"最终结果数: {len(final_result)}（显示前{display_count}条）\n"
+            f"最终结果数: {len(final_result)}（显示前50条）\n"
             f"最终结果: {json.dumps(self._simplify_result(final_result[:display_count]), ensure_ascii=False)}..."
         )
         allure.attach(error_msg, "等待超时", allure.attachment_type.TEXT)
@@ -670,7 +670,7 @@ class APITestBase:
             allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
             allure.attach(
                 self.serialize_data(final_result[:display_count]),
-                f"查询结果（共{len(final_result)}条，显示前{display_count}条）",
+                f"查询结果（共{len(final_result)}条，显示前50条）",
                 allure.attachment_type.JSON
             )
 
@@ -687,7 +687,7 @@ class APITestBase:
                 f"等待超时（{timeout}秒），数据未在{stable_period}秒内保持稳定。\n"
                 f"SQL: {sql}\n"
                 f"参数: {params}\n"
-                f"最终结果数: {len(final_result)}（显示前{display_count}条）\n"
+                f"最终结果数: {len(final_result)}（显示前50条）\n"
             )
             raise TimeoutError(error_msg)
 
@@ -821,7 +821,7 @@ class APITestBase:
             allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
             allure.attach(
                 self.serialize_data(final_result[:display_count]),
-                f"查询结果（共{len(final_result)}条，显示前{display_count}条）",
+                f"查询结果（共{len(final_result)}条，显示前50条）",
                 allure.attachment_type.JSON
             )
 
@@ -838,7 +838,7 @@ class APITestBase:
                 f"等待超时（{timeout}秒），数据未在{stable_period}秒内保持稳定。\n"
                 f"SQL: {sql}\n"
                 f"参数: {params}\n"
-                f"最终结果数: {len(final_result)}（显示前{display_count}条）\n"
+                f"最终结果数: {len(final_result)}（显示前50条）\n"
             )
             raise TimeoutError(error_msg)
 

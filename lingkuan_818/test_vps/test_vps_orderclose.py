@@ -10,12 +10,12 @@ import requests
 from lingkuan_818.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"
+SKIP_REASON = "该用例暂时跳过"
 
 
-# -------------------------
+# ------------------------------------
 # 大模块1：VPS策略下单-停止平仓功能验证
-# -------------------------
+# ------------------------------------
 @allure.feature("VPS策略下单-平仓的功能校验")
 @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCoreFunctionality:
@@ -343,6 +343,44 @@ class TestVPSFollowDirection:
                 "success",
                 "响应msg字段应为success"
             )
+
+        @pytest.mark.url("vps")
+        @allure.title("跟单账号平仓（币种错误）")
+        def test_trader_symbol(self, var_manager, logged_session):
+            with allure.step("1. 发送跟单账号平仓请求（币种错误）"):
+                global new_user
+                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+                new_user = var_manager.get_variable("new_user")
+                data = {
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "",
+                    "closeType": 2,
+                    "remark": "",
+                    "symbol": "XAGEUR",
+                    "type": 0,
+                    "traderId": vps_addslave_id,
+                    "account": vps_user_accounts_1
+                }
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data,
+                )
+            with allure.step("2. 验证响应"):
+                self.assert_response_status(
+                    response,
+                    200,
+                    "平仓失败"
+                )
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    f"{vps_user_accounts_1}无此品种订单",
+                    f"{vps_user_accounts_1}无此品种订单"
+                )
+                logging.info(f"{vps_user_accounts_1}无此品种订单")
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓（buy方向，预期失败）")
@@ -811,9 +849,9 @@ class TestVPSFollowDirection:
                 )
 
 
-# -------------------------
-# 大模块3：VPS策略下单-订单数量控制
-# -------------------------
+# ------------------------------------
+# 大模块3：VPS策略下单-平仓的订单数量功能验证
+# ------------------------------------
 @allure.feature("VPS策略下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSOrderQuantityControl:

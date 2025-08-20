@@ -1,0 +1,307 @@
+{
+  "uid" : "101064c4e539c592",
+  "name" : "数据库校验-复制下单平仓数据",
+  "fullName" : "test_vps.test_masOrderSend.TestVPSOrderSend#test_copy_close_verify",
+  "historyId" : "7fcb9d746a927f58763db2e7b78a80d5",
+  "time" : {
+    "start" : 1755682913442,
+    "stop" : 1755682919893,
+    "duration" : 6451
+  },
+  "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单\n  1. 开仓手数范围0.1-1，总订单3，总手数1\n  2. 检验喊单和跟单账号数据是否正确\n  3. 进行平仓\n  4. 检验喊单和跟单账号数据是否正确\n- 预期结果：检验喊单和跟单账号数据正确\n- 场景一：手数范围0.1-1，总订单3，总手数1\n- 场景二：手数范围0.01-0.01，总手数0.01\n- 场景三：手数范围0.1-1，总手数5\n- 场景四：手数范围0.01-1，总订单10\n- 场景五：手数范围0.1-1，总手数1（停止功能）\n",
+  "descriptionHtml" : "<h3>用例说明</h3>\n<ul>\n<li>前置条件：有vps策略和vps跟单\n<ol>\n<li>开仓手数范围0.1-1，总订单3，总手数1</li>\n<li>检验喊单和跟单账号数据是否正确</li>\n<li>进行平仓</li>\n<li>检验喊单和跟单账号数据是否正确</li>\n</ol>\n</li>\n<li>预期结果：检验喊单和跟单账号数据正确</li>\n<li>场景一：手数范围0.1-1，总订单3，总手数1</li>\n<li>场景二：手数范围0.01-0.01，总手数0.01</li>\n<li>场景三：手数范围0.1-1，总手数5</li>\n<li>场景四：手数范围0.01-1，总订单10</li>\n<li>场景五：手数范围0.1-1，总手数1（停止功能）</li>\n</ul>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 平仓总手数不匹配: 预期1.00, 实际6.48\nassert False\n +  where False = <built-in function isclose>(1.0, 6.48, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')",
+  "statusTrace" : "self = <lingkuan_819.test_vps.test_masOrderSend.TestVPSOrderSend object at 0x000002952CCF1D60>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x000002952CCF1F70>\ndb_transaction = <pymysql.connections.Connection object at 0x000002952CE43130>\n\n    @allure.title(\"数据库校验-复制下单平仓数据\")\n    def test_copy_close_verify(self, var_manager, db_transaction):\n        with allure.step(\"获取平仓订单数据\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n            sql = \"\"\"\n                    SELECT\n                        fod.size, fod.close_no, fod.magical, fod.open_price,\n                        fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,\n                        foi.operation_type, foi.create_time, foi.status,\n                        foi.min_lot_size, foi.max_lot_size, foi.total_lots,\n                        foi.master_order, foi.total_orders\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type = %s\n                        AND fod.account = %s\n                        AND fod.trader_id = %s\n                \"\"\"\n            params = ('1', vps_user_accounts_1, vps_addslave_id)\n    \n            # 轮询等待数据\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n    \n        with allure.step(\"验证平仓数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            # 订单状态校验\n            status = db_data[0][\"status\"]\n            assert status in (0, 1), f\"订单状态应为0或1，实际为: {status}\"\n            logger.info(f\"平仓订单状态验证通过: {status}\")\n    \n            # 平仓总手数校验\n            total_size = sum(float(record[\"size\"]) for record in db_data)\n>           assert math.isclose(\n                float(trader_ordersend[\"totalSzie\"]),\n                total_size,\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'平仓总手数不匹配: 预期{trader_ordersend[\"totalSzie\"]}, 实际{total_size}'\nE           AssertionError: 平仓总手数不匹配: 预期1.00, 实际6.48\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 6.48, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\n\ntest_vps\\test_masOrderSend.py:200: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755682895009,
+      "stop" : 1755682895009,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755682913442,
+      "stop" : 1755682913442,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755682895009,
+      "stop" : 1755682895009,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755682895008,
+      "stop" : 1755682895008,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755682896847,
+      "stop" : 1755682896847,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755682912970,
+      "stop" : 1755682913442,
+      "duration" : 472
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单\n  1. 开仓手数范围0.1-1，总订单3，总手数1\n  2. 检验喊单和跟单账号数据是否正确\n  3. 进行平仓\n  4. 检验喊单和跟单账号数据是否正确\n- 预期结果：检验喊单和跟单账号数据正确\n- 场景一：手数范围0.1-1，总订单3，总手数1\n- 场景二：手数范围0.01-0.01，总手数0.01\n- 场景三：手数范围0.1-1，总手数5\n- 场景四：手数范围0.01-1，总订单10\n- 场景五：手数范围0.1-1，总手数1（停止功能）\n",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 平仓总手数不匹配: 预期1.00, 实际6.48\nassert False\n +  where False = <built-in function isclose>(1.0, 6.48, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')",
+    "statusTrace" : "self = <lingkuan_819.test_vps.test_masOrderSend.TestVPSOrderSend object at 0x000002952CCF1D60>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x000002952CCF1F70>\ndb_transaction = <pymysql.connections.Connection object at 0x000002952CE43130>\n\n    @allure.title(\"数据库校验-复制下单平仓数据\")\n    def test_copy_close_verify(self, var_manager, db_transaction):\n        with allure.step(\"获取平仓订单数据\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n            sql = \"\"\"\n                    SELECT\n                        fod.size, fod.close_no, fod.magical, fod.open_price,\n                        fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,\n                        foi.operation_type, foi.create_time, foi.status,\n                        foi.min_lot_size, foi.max_lot_size, foi.total_lots,\n                        foi.master_order, foi.total_orders\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type = %s\n                        AND fod.account = %s\n                        AND fod.trader_id = %s\n                \"\"\"\n            params = ('1', vps_user_accounts_1, vps_addslave_id)\n    \n            # 轮询等待数据\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n    \n        with allure.step(\"验证平仓数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            # 订单状态校验\n            status = db_data[0][\"status\"]\n            assert status in (0, 1), f\"订单状态应为0或1，实际为: {status}\"\n            logger.info(f\"平仓订单状态验证通过: {status}\")\n    \n            # 平仓总手数校验\n            total_size = sum(float(record[\"size\"]) for record in db_data)\n>           assert math.isclose(\n                float(trader_ordersend[\"totalSzie\"]),\n                total_size,\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'平仓总手数不匹配: 预期{trader_ordersend[\"totalSzie\"]}, 实际{total_size}'\nE           AssertionError: 平仓总手数不匹配: 预期1.00, 实际6.48\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 6.48, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\n\ntest_vps\\test_masOrderSend.py:200: AssertionError",
+    "steps" : [ {
+      "name" : "获取平仓订单数据",
+      "time" : {
+        "start" : 1755682913442,
+        "stop" : 1755682919892,
+        "duration" : 6450
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录稳定（时区: +05:00，超时: 30秒）",
+        "time" : {
+          "start" : 1755682913442,
+          "stop" : 1755682913442,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 0
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1755682919891,
+          "stop" : 1755682919892,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "7801470c6db9c100",
+          "name" : "执行SQL",
+          "source" : "7801470c6db9c100.txt",
+          "type" : "text/plain",
+          "size" : 817
+        }, {
+          "uid" : "8654960df02f5b2a",
+          "name" : "SQL参数",
+          "source" : "8654960df02f5b2a.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "8819cc7fe29ed317",
+          "name" : "查询结果（共12条，显示前50条）",
+          "source" : "8819cc7fe29ed317.json",
+          "type" : "application/json",
+          "size" : 5146
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ {
+        "uid" : "48e9d240f4d05f48",
+        "name" : "等待结果",
+        "source" : "48e9d240f4d05f48.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 4
+    }, {
+      "name" : "验证平仓数据",
+      "time" : {
+        "start" : 1755682919892,
+        "stop" : 1755682919892,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 平仓总手数不匹配: 预期1.00, 实际6.48\nassert False\n +  where False = <built-in function isclose>(1.0, 6.48, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_819\\test_vps\\test_masOrderSend.py\", line 200, in test_copy_close_verify\n    assert math.isclose(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "2bf37821b4bc3e11",
+      "name" : "log",
+      "source" : "2bf37821b4bc3e11.txt",
+      "type" : "text/plain",
+      "size" : 10781
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 4,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 5
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755682920000,
+      "stop" : 1755682920001,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755682919998,
+      "stop" : 1755682919998,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755682919999,
+      "stop" : 1755682919999,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略账号交易下单-正常开仓平仓（多场景汇总）"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_masOrderSend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "41016-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_masOrderSend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "101064c4e539c592.json",
+  "parameterValues" : [ ]
+}

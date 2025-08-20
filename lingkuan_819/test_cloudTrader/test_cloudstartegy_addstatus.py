@@ -10,7 +10,7 @@ from lingkuan_819.commons.api_base import APITestBase  # 导入基础类
 from lingkuan_819.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"
+SKIP_REASON = "该用例暂时跳过"
 
 
 @allure.feature("交易下单-云策略复制下单-策略账号-策略状态关闭")

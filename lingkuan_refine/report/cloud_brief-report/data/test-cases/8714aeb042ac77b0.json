@@ -1,0 +1,232 @@
+{
+  "uid" : "8714aeb042ac77b0",
+  "name" : "数据库校验-复制下单平仓数据-数据校验",
+  "fullName" : "test_cloudTrader.test_cloudOrderClose.TestMasOrderSend7#test_copy_verify_close_db2",
+  "historyId" : "fd1272c5babbd0ea24411f7a93b956ff",
+  "time" : {
+    "start" : 1755680726707,
+    "stop" : 1755680733142,
+    "duration" : 6435
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围0.1-1，总订单数量2\n      2. 平仓-平仓订单数量-1，订单类型-外部订单\n      3. 校验数据库是否有未平仓订单-应该没有\n      4. 平仓-平仓订单数量-1，订单类型-全部订单\n      5. 校验订单数据是否正确\n    - 预期结果：平仓的订单类型功能正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有云策略和云跟单\n  1. 进行开仓，手数范围0.1-1，总订单数量2\n  2. 平仓-平仓订单数量-1，订单类型-外部订单\n  3. 校验数据库是否有未平仓订单-应该没有\n  4. 平仓-平仓订单数量-1，订单类型-全部订单\n  5. 校验订单数据是否正确\n- 预期结果：平仓的订单类型功能正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 数据库中没有2个处理的平仓订单，不符合预期\nassert 3 == 2\n +  where 3 = len([{'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 67863, ...}, {'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 75004, ...}, {'close_no': '4996215714421', 'create_time': '2025-08-20 17:04:36', 'foi.order_no': '4996215714421', 'magical': 0, ...}])",
+  "statusTrace" : "self = <lingkuan_refine.test_cloudTrader.test_cloudOrderClose.TestCloudOrderType.TestMasOrderSend7 object at 0x000001EC515881F0>\nvar_manager = <lingkuan_refine.commons.variable_manager.VariableManager object at 0x000001EC51651FA0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001EC517BCD30>\n\n    @allure.title(\"数据库校验-复制下单平仓数据-数据校验\")\n    def test_copy_verify_close_db2(self, var_manager, db_transaction):\n        \"\"\"验证复制下单平仓后数据库中的订单数据正确性\"\"\"\n        with allure.step(\"查询复制平仓订单数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n    \n            sql = \"\"\"\n                       SELECT\n                           fod.size,\n                           fod.close_no,\n                           fod.magical,\n                           fod.open_price,\n                           fod.symbol,\n                           fod.order_no,\n                           foi.true_total_lots,\n                           foi.order_no,\n                           foi.operation_type,\n                           foi.create_time,\n                           foi.status,\n                           foi.min_lot_size,\n                           foi.max_lot_size,\n                           foi.total_lots,\n                           foi.master_order,\n                           foi.total_orders\n                       FROM\n                           follow_order_detail fod\n                       INNER JOIN\n                           follow_order_instruct foi\n                       ON\n                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                       WHERE foi.operation_type = %s\n                           AND fod.account = %s\n                           AND fod.trader_id = %s\n                   \"\"\"\n            params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)\n    \n            # 轮询等待数据库记录\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n    \n        with allure.step(\"执行复制平仓数据校验-2个订单\"):\n>           assert len(db_data) == 2, \"数据库中没有2个处理的平仓订单，不符合预期\"\nE           AssertionError: 数据库中没有2个处理的平仓订单，不符合预期\nE           assert 3 == 2\nE            +  where 3 = len([{'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 67863, ...}, {'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 75004, ...}, {'close_no': '4996215714421', 'create_time': '2025-08-20 17:04:36', 'foi.order_no': '4996215714421', 'magical': 0, ...}])\n\ntest_cloudTrader\\test_cloudOrderClose.py:1613: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1755680726135,
+      "stop" : 1755680726706,
+      "duration" : 571
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755680726706,
+      "stop" : 1755680726706,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围0.1-1，总订单数量2\n      2. 平仓-平仓订单数量-1，订单类型-外部订单\n      3. 校验数据库是否有未平仓订单-应该没有\n      4. 平仓-平仓订单数量-1，订单类型-全部订单\n      5. 校验订单数据是否正确\n    - 预期结果：平仓的订单类型功能正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 数据库中没有2个处理的平仓订单，不符合预期\nassert 3 == 2\n +  where 3 = len([{'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 67863, ...}, {'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 75004, ...}, {'close_no': '4996215714421', 'create_time': '2025-08-20 17:04:36', 'foi.order_no': '4996215714421', 'magical': 0, ...}])",
+    "statusTrace" : "self = <lingkuan_refine.test_cloudTrader.test_cloudOrderClose.TestCloudOrderType.TestMasOrderSend7 object at 0x000001EC515881F0>\nvar_manager = <lingkuan_refine.commons.variable_manager.VariableManager object at 0x000001EC51651FA0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001EC517BCD30>\n\n    @allure.title(\"数据库校验-复制下单平仓数据-数据校验\")\n    def test_copy_verify_close_db2(self, var_manager, db_transaction):\n        \"\"\"验证复制下单平仓后数据库中的订单数据正确性\"\"\"\n        with allure.step(\"查询复制平仓订单数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n    \n            sql = \"\"\"\n                       SELECT\n                           fod.size,\n                           fod.close_no,\n                           fod.magical,\n                           fod.open_price,\n                           fod.symbol,\n                           fod.order_no,\n                           foi.true_total_lots,\n                           foi.order_no,\n                           foi.operation_type,\n                           foi.create_time,\n                           foi.status,\n                           foi.min_lot_size,\n                           foi.max_lot_size,\n                           foi.total_lots,\n                           foi.master_order,\n                           foi.total_orders\n                       FROM\n                           follow_order_detail fod\n                       INNER JOIN\n                           follow_order_instruct foi\n                       ON\n                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                       WHERE foi.operation_type = %s\n                           AND fod.account = %s\n                           AND fod.trader_id = %s\n                   \"\"\"\n            params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)\n    \n            # 轮询等待数据库记录\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n    \n        with allure.step(\"执行复制平仓数据校验-2个订单\"):\n>           assert len(db_data) == 2, \"数据库中没有2个处理的平仓订单，不符合预期\"\nE           AssertionError: 数据库中没有2个处理的平仓订单，不符合预期\nE           assert 3 == 2\nE            +  where 3 = len([{'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 67863, ...}, {'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 75004, ...}, {'close_no': '4996215714421', 'create_time': '2025-08-20 17:04:36', 'foi.order_no': '4996215714421', 'magical': 0, ...}])\n\ntest_cloudTrader\\test_cloudOrderClose.py:1613: AssertionError",
+    "steps" : [ {
+      "name" : "查询复制平仓订单数据",
+      "time" : {
+        "start" : 1755680726707,
+        "stop" : 1755680733142,
+        "duration" : 6435
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录稳定（时区: +05:00，超时: 30秒）",
+        "time" : {
+          "start" : 1755680726707,
+          "stop" : 1755680726707,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 0,
+        "hasContent" : false,
+        "stepsCount" : 0
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1755680733141,
+          "stop" : 1755680733142,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "59d09b551fe2f6ea",
+          "name" : "执行SQL",
+          "source" : "59d09b551fe2f6ea.txt",
+          "type" : "text/plain",
+          "size" : 1270
+        }, {
+          "uid" : "380a2286ce3c4834",
+          "name" : "SQL参数",
+          "source" : "380a2286ce3c4834.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "1c0ba2288d478862",
+          "name" : "查询结果（共3条，显示前50条）",
+          "source" : "1c0ba2288d478862.json",
+          "type" : "application/json",
+          "size" : 1280
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ {
+        "uid" : "69a891aec859d842",
+        "name" : "等待结果",
+        "source" : "69a891aec859d842.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 4,
+      "hasContent" : true,
+      "stepsCount" : 2
+    }, {
+      "name" : "执行复制平仓数据校验-2个订单",
+      "time" : {
+        "start" : 1755680733142,
+        "stop" : 1755680733142,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 数据库中没有2个处理的平仓订单，不符合预期\nassert 3 == 2\n +  where 3 = len([{'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 67863, ...}, {'close_no': '7563642234105', 'create_time': '2025-08-20 17:05:24', 'foi.order_no': '7563642234105', 'magical': 75004, ...}, {'close_no': '4996215714421', 'create_time': '2025-08-20 17:04:36', 'foi.order_no': '4996215714421', 'magical': 0, ...}])\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_refine\\test_cloudTrader\\test_cloudOrderClose.py\", line 1613, in test_copy_verify_close_db2\n    assert len(db_data) == 2, \"数据库中没有2个处理的平仓订单，不符合预期\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0,
+      "hasContent" : true,
+      "stepsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "1e4cfbc835fda1ca",
+      "name" : "log",
+      "source" : "1e4cfbc835fda1ca.txt",
+      "type" : "text/plain",
+      "size" : 12306
+    } ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 5,
+    "hasContent" : true,
+    "stepsCount" : 4
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755680733155,
+      "stop" : 1755680733155,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755680733154,
+      "stop" : 1755680733154,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景7：平仓的订单类型功能校验-全部订单"
+  }, {
+    "name" : "feature",
+    "value" : "云策略复制下单-平仓的功能校验"
+  }, {
+    "name" : "tag",
+    "value" : "retry(n=3, delay=5)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudOrderClose"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCloudOrderType"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "39532-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudOrderClose"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "retry(n=3, delay=5)" ]
+  },
+  "source" : "8714aeb042ac77b0.json",
+  "parameterValues" : [ ]
+}

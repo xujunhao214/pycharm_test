@@ -1,0 +1,298 @@
+{
+  "uid" : "9b4dc99c6b9d153a",
+  "name" : "数据库校验-账号列表-批量删除账号",
+  "fullName" : "test_cloudTrader.test_delete.TestDelete_cloudTrader#test_dbdelete_userlist",
+  "historyId" : "fcf84e56826b2a65418def55caec879c",
+  "time" : {
+    "start" : 1755681096596,
+    "stop" : 1755681103016,
+    "duration" : 6420
+  },
+  "description" : "数据库校验批量删除结果",
+  "descriptionHtml" : "<p>数据库校验批量删除结果</p>\n",
+  "status" : "failed",
+  "statusMessage" : "Failed: 删除失败: 等待超时（5秒），记录仍然存在。\nSQL: SELECT * FROM follow_trader_user WHERE account = %s\n参数: ('300159',)\n最终结果数: 1（显示前50条）\n最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...",
+  "statusTrace" : "self = <lingkuan_819.test_cloudTrader.test_delete.TestDelete_cloudTrader object at 0x0000013DA8EEB280>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x0000013DA8FC5310>\ndb_transaction = <pymysql.connections.Connection object at 0x0000013DA92DD550>\n\n    @allure.title(\"数据库校验-账号列表-批量删除账号\")\n    def test_dbdelete_userlist(self, var_manager, db_transaction):\n        \"\"\"数据库校验批量删除结果\"\"\"\n        # 1. 获取账号总数和数据库查询配置\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count <= 0:\n            pytest.fail(\"未找到需要验证的账号总数，请检查前置步骤\")\n    \n        # 2. 循环验证每个账号的删除状态\n        for i in range(1, cloudTrader_user_count + 1):\n            with allure.step(f\"验证第{i}个账号的删除状态\"):\n                # 获取当前账号的ID和账号名（用于数据库查询）\n                account = var_manager.get_variable(f\"cloudTrader_user_accounts_{i}\")\n                if not account:\n                    pytest.fail(f\"未找到第{i}个账号的账号名（变量名：cloudTrader_user_accounts_{i}）\")\n    \n                # 3. 执行数据库查询（按账号名查询，更直观）\n                sql = f\"SELECT * FROM follow_trader_user WHERE account = %s\"\n                params = (account,)\n    \n                try:\n>                   self.wait_for_database_deletion(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params\n                    )\n\ntest_cloudTrader\\test_delete.py:408: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_819.test_cloudTrader.test_delete.TestDelete_cloudTrader object at 0x0000013DA8EEB280>\ndb_transaction = <pymysql.connections.Connection object at 0x0000013DA92DD550>\nsql = 'SELECT * FROM follow_trader_user WHERE account = %s'\nparams = ('300159',), time_field = None, time_range = 1\norder_by = 'create_time DESC', timeout = 5, poll_interval = 2\n\n    def wait_for_database_deletion(self, db_transaction: pymysql.connections.Connection,\n                                   sql: str,\n                                   params: tuple = (),\n                                   time_field: Optional[str] = None,\n                                   time_range: int = MYSQL_TIME,\n                                   order_by: str = \"create_time DESC\",\n                                   timeout: int = DELETE_WAIT_TIMEOUT,\n                                   poll_interval: int = POLL_INTERVAL) -> None:\n        \"\"\"轮询等待数据库记录删除（增强日志）\"\"\"\n        import time\n        start_time = time.time()\n        logger.info(f\"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒\")\n        with allure.step(f\"等待数据库记录删除（超时: {timeout}秒）\"):\n            pass\n    \n        while time.time() - start_time < timeout:\n            try:\n                db_transaction.commit()  # 刷新事务\n    \n                if time_field:\n                    # 轮询过程中不附加到报告\n                    result = self.query_database_with_time(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params,\n                        time_field=time_field,\n                        time_range_minutes=time_range,\n                        order_by=order_by,\n                        attach_to_allure=False\n                    )\n                else:\n                    # 轮询过程中不附加到报告\n                    result = self.query_database(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params,\n                        order_by=order_by,\n                        attach_to_allure=False\n                    )\n    \n                if not result:\n                    logger.info(\n                        f\"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）| SQL: {sql[:200]}\")\n                    allure.attach(\n                        f\"删除成功（耗时{time.time() - start_time:.1f}秒）\",\n                        \"等待结果\",\n                        allure.attachment_type.TEXT\n                    )\n                    return\n    \n                elapsed = time.time() - start_time\n                logger.info(\n                    f\"[{self._get_current_time()}] 记录仍存在（已等待{elapsed:.1f}秒）| 剩余时间: {timeout - elapsed:.1f}秒 | 结果数: {len(result)}\")\n                time.sleep(poll_interval)\n    \n            except Exception as e:\n                logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                time.sleep(poll_interval)\n    \n        # 超时处理 - 最后一次查询附加到报告\n        db_transaction.commit()\n        if time_field:\n            final_result = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=time_field,\n                time_range_minutes=time_range,\n                order_by=order_by\n            )\n        else:\n            final_result = self.query_database(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                order_by=order_by\n            )\n    \n        # 动态截取最多50条结果用于错误信息\n        display_count = min(len(final_result), 50)\n        error_msg = (\n            f\"等待超时（{timeout}秒），记录仍然存在。\\n\"\n            f\"SQL: {sql}\\n\"\n            f\"参数: {params}\\n\"\n            f\"最终结果数: {len(final_result)}（显示前50条）\\n\"\n            f\"最终结果: {json.dumps(self._simplify_result(final_result[:display_count]), ensure_ascii=False)}...\"\n        )\n        allure.attach(error_msg, \"等待超时\", allure.attachment_type.TEXT)\n>       raise TimeoutError(error_msg)\nE       TimeoutError: 等待超时（5秒），记录仍然存在。\nE       SQL: SELECT * FROM follow_trader_user WHERE account = %s\nE       参数: ('300159',)\nE       最终结果数: 1（显示前50条）\nE       最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...\n\ncommons\\api_base.py:577: TimeoutError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <lingkuan_819.test_cloudTrader.test_delete.TestDelete_cloudTrader object at 0x0000013DA8EEB280>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x0000013DA8FC5310>\ndb_transaction = <pymysql.connections.Connection object at 0x0000013DA92DD550>\n\n    @allure.title(\"数据库校验-账号列表-批量删除账号\")\n    def test_dbdelete_userlist(self, var_manager, db_transaction):\n        \"\"\"数据库校验批量删除结果\"\"\"\n        # 1. 获取账号总数和数据库查询配置\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count <= 0:\n            pytest.fail(\"未找到需要验证的账号总数，请检查前置步骤\")\n    \n        # 2. 循环验证每个账号的删除状态\n        for i in range(1, cloudTrader_user_count + 1):\n            with allure.step(f\"验证第{i}个账号的删除状态\"):\n                # 获取当前账号的ID和账号名（用于数据库查询）\n                account = var_manager.get_variable(f\"cloudTrader_user_accounts_{i}\")\n                if not account:\n                    pytest.fail(f\"未找到第{i}个账号的账号名（变量名：cloudTrader_user_accounts_{i}）\")\n    \n                # 3. 执行数据库查询（按账号名查询，更直观）\n                sql = f\"SELECT * FROM follow_trader_user WHERE account = %s\"\n                params = (account,)\n    \n                try:\n                    self.wait_for_database_deletion(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params\n                    )\n                    allure.attach(f\"账号 {account} 已成功从数据库删除\", \"验证结果\")\n                except TimeoutError as e:\n                    allure.attach(f\"删除超时: {str(e)}\", \"验证结果\")\n>                   pytest.fail(f\"删除失败: {str(e)}\")\nE                   Failed: 删除失败: 等待超时（5秒），记录仍然存在。\nE                   SQL: SELECT * FROM follow_trader_user WHERE account = %s\nE                   参数: ('300159',)\nE                   最终结果数: 1（显示前50条）\nE                   最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...\n\ntest_cloudTrader\\test_delete.py:416: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755681096596,
+      "stop" : 1755681096596,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755681096178,
+      "stop" : 1755681096595,
+      "duration" : 417
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755681042948,
+      "stop" : 1755681042948,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755681040693,
+      "stop" : 1755681040693,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755681040693,
+      "stop" : 1755681040693,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755681042519,
+      "stop" : 1755681042519,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "数据库校验批量删除结果",
+    "status" : "failed",
+    "statusMessage" : "Failed: 删除失败: 等待超时（5秒），记录仍然存在。\nSQL: SELECT * FROM follow_trader_user WHERE account = %s\n参数: ('300159',)\n最终结果数: 1（显示前50条）\n最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...",
+    "statusTrace" : "self = <lingkuan_819.test_cloudTrader.test_delete.TestDelete_cloudTrader object at 0x0000013DA8EEB280>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x0000013DA8FC5310>\ndb_transaction = <pymysql.connections.Connection object at 0x0000013DA92DD550>\n\n    @allure.title(\"数据库校验-账号列表-批量删除账号\")\n    def test_dbdelete_userlist(self, var_manager, db_transaction):\n        \"\"\"数据库校验批量删除结果\"\"\"\n        # 1. 获取账号总数和数据库查询配置\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count <= 0:\n            pytest.fail(\"未找到需要验证的账号总数，请检查前置步骤\")\n    \n        # 2. 循环验证每个账号的删除状态\n        for i in range(1, cloudTrader_user_count + 1):\n            with allure.step(f\"验证第{i}个账号的删除状态\"):\n                # 获取当前账号的ID和账号名（用于数据库查询）\n                account = var_manager.get_variable(f\"cloudTrader_user_accounts_{i}\")\n                if not account:\n                    pytest.fail(f\"未找到第{i}个账号的账号名（变量名：cloudTrader_user_accounts_{i}）\")\n    \n                # 3. 执行数据库查询（按账号名查询，更直观）\n                sql = f\"SELECT * FROM follow_trader_user WHERE account = %s\"\n                params = (account,)\n    \n                try:\n>                   self.wait_for_database_deletion(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params\n                    )\n\ntest_cloudTrader\\test_delete.py:408: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_819.test_cloudTrader.test_delete.TestDelete_cloudTrader object at 0x0000013DA8EEB280>\ndb_transaction = <pymysql.connections.Connection object at 0x0000013DA92DD550>\nsql = 'SELECT * FROM follow_trader_user WHERE account = %s'\nparams = ('300159',), time_field = None, time_range = 1\norder_by = 'create_time DESC', timeout = 5, poll_interval = 2\n\n    def wait_for_database_deletion(self, db_transaction: pymysql.connections.Connection,\n                                   sql: str,\n                                   params: tuple = (),\n                                   time_field: Optional[str] = None,\n                                   time_range: int = MYSQL_TIME,\n                                   order_by: str = \"create_time DESC\",\n                                   timeout: int = DELETE_WAIT_TIMEOUT,\n                                   poll_interval: int = POLL_INTERVAL) -> None:\n        \"\"\"轮询等待数据库记录删除（增强日志）\"\"\"\n        import time\n        start_time = time.time()\n        logger.info(f\"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒\")\n        with allure.step(f\"等待数据库记录删除（超时: {timeout}秒）\"):\n            pass\n    \n        while time.time() - start_time < timeout:\n            try:\n                db_transaction.commit()  # 刷新事务\n    \n                if time_field:\n                    # 轮询过程中不附加到报告\n                    result = self.query_database_with_time(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params,\n                        time_field=time_field,\n                        time_range_minutes=time_range,\n                        order_by=order_by,\n                        attach_to_allure=False\n                    )\n                else:\n                    # 轮询过程中不附加到报告\n                    result = self.query_database(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params,\n                        order_by=order_by,\n                        attach_to_allure=False\n                    )\n    \n                if not result:\n                    logger.info(\n                        f\"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）| SQL: {sql[:200]}\")\n                    allure.attach(\n                        f\"删除成功（耗时{time.time() - start_time:.1f}秒）\",\n                        \"等待结果\",\n                        allure.attachment_type.TEXT\n                    )\n                    return\n    \n                elapsed = time.time() - start_time\n                logger.info(\n                    f\"[{self._get_current_time()}] 记录仍存在（已等待{elapsed:.1f}秒）| 剩余时间: {timeout - elapsed:.1f}秒 | 结果数: {len(result)}\")\n                time.sleep(poll_interval)\n    \n            except Exception as e:\n                logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                time.sleep(poll_interval)\n    \n        # 超时处理 - 最后一次查询附加到报告\n        db_transaction.commit()\n        if time_field:\n            final_result = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=time_field,\n                time_range_minutes=time_range,\n                order_by=order_by\n            )\n        else:\n            final_result = self.query_database(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                order_by=order_by\n            )\n    \n        # 动态截取最多50条结果用于错误信息\n        display_count = min(len(final_result), 50)\n        error_msg = (\n            f\"等待超时（{timeout}秒），记录仍然存在。\\n\"\n            f\"SQL: {sql}\\n\"\n            f\"参数: {params}\\n\"\n            f\"最终结果数: {len(final_result)}（显示前50条）\\n\"\n            f\"最终结果: {json.dumps(self._simplify_result(final_result[:display_count]), ensure_ascii=False)}...\"\n        )\n        allure.attach(error_msg, \"等待超时\", allure.attachment_type.TEXT)\n>       raise TimeoutError(error_msg)\nE       TimeoutError: 等待超时（5秒），记录仍然存在。\nE       SQL: SELECT * FROM follow_trader_user WHERE account = %s\nE       参数: ('300159',)\nE       最终结果数: 1（显示前50条）\nE       最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...\n\ncommons\\api_base.py:577: TimeoutError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <lingkuan_819.test_cloudTrader.test_delete.TestDelete_cloudTrader object at 0x0000013DA8EEB280>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x0000013DA8FC5310>\ndb_transaction = <pymysql.connections.Connection object at 0x0000013DA92DD550>\n\n    @allure.title(\"数据库校验-账号列表-批量删除账号\")\n    def test_dbdelete_userlist(self, var_manager, db_transaction):\n        \"\"\"数据库校验批量删除结果\"\"\"\n        # 1. 获取账号总数和数据库查询配置\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count <= 0:\n            pytest.fail(\"未找到需要验证的账号总数，请检查前置步骤\")\n    \n        # 2. 循环验证每个账号的删除状态\n        for i in range(1, cloudTrader_user_count + 1):\n            with allure.step(f\"验证第{i}个账号的删除状态\"):\n                # 获取当前账号的ID和账号名（用于数据库查询）\n                account = var_manager.get_variable(f\"cloudTrader_user_accounts_{i}\")\n                if not account:\n                    pytest.fail(f\"未找到第{i}个账号的账号名（变量名：cloudTrader_user_accounts_{i}）\")\n    \n                # 3. 执行数据库查询（按账号名查询，更直观）\n                sql = f\"SELECT * FROM follow_trader_user WHERE account = %s\"\n                params = (account,)\n    \n                try:\n                    self.wait_for_database_deletion(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params\n                    )\n                    allure.attach(f\"账号 {account} 已成功从数据库删除\", \"验证结果\")\n                except TimeoutError as e:\n                    allure.attach(f\"删除超时: {str(e)}\", \"验证结果\")\n>                   pytest.fail(f\"删除失败: {str(e)}\")\nE                   Failed: 删除失败: 等待超时（5秒），记录仍然存在。\nE                   SQL: SELECT * FROM follow_trader_user WHERE account = %s\nE                   参数: ('300159',)\nE                   最终结果数: 1（显示前50条）\nE                   最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...\n\ntest_cloudTrader\\test_delete.py:416: Failed",
+    "steps" : [ {
+      "name" : "验证第1个账号的删除状态",
+      "time" : {
+        "start" : 1755681096596,
+        "stop" : 1755681103016,
+        "duration" : 6420
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 删除失败: 等待超时（5秒），记录仍然存在。\nSQL: SELECT * FROM follow_trader_user WHERE account = %s\n参数: ('300159',)\n最终结果数: 1（显示前50条）\n最终结果: [{\"id\": 5919, \"account\": \"300159\", \"create_time\": \"2025-08-20 09:27:50\"}]...\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_819\\test_cloudTrader\\test_delete.py\", line 416, in test_dbdelete_userlist\n    pytest.fail(f\"删除失败: {str(e)}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "等待数据库记录删除（超时: 5秒）",
+        "time" : {
+          "start" : 1755681096596,
+          "stop" : 1755681096596,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果",
+        "time" : {
+          "start" : 1755681103013,
+          "stop" : 1755681103015,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "3fcb4ad670b051a1",
+          "name" : "执行SQL",
+          "source" : "3fcb4ad670b051a1.txt",
+          "type" : "text/plain",
+          "size" : 77
+        }, {
+          "uid" : "93cbfbeda27997b4",
+          "name" : "SQL参数",
+          "source" : "93cbfbeda27997b4.txt",
+          "type" : "text/plain",
+          "size" : 11
+        }, {
+          "uid" : "ad3840fcd759b4d6",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "ad3840fcd759b4d6.json",
+          "type" : "application/json",
+          "size" : 522
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "3cd1e47aa707368b",
+        "name" : "等待超时",
+        "source" : "3cd1e47aa707368b.txt",
+        "type" : "text/plain",
+        "size" : 253
+      }, {
+        "uid" : "c74306975ac4486b",
+        "name" : "验证结果",
+        "source" : "c74306975ac4486b.attach",
+        "type" : "text/plain",
+        "size" : 267
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 5,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "847148c81ebef159",
+      "name" : "log",
+      "source" : "847148c81ebef159.txt",
+      "type" : "text/plain",
+      "size" : 4297
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 3,
+    "attachmentsCount" : 6,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755681103053,
+      "stop" : 1755681103053,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755681103054,
+      "stop" : 1755681103055,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755681117751,
+      "stop" : 1755681117751,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "删除基本账号-云策略账号"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestDelete_cloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "48516-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "9b4dc99c6b9d153a.json",
+  "parameterValues" : [ ]
+}

@@ -9,7 +9,7 @@ from lingkuan_819.conftest import var_manager
 from lingkuan_819.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"
+SKIP_REASON = "该用例暂时跳过"
 
 
 @allure.feature("删除跟单账号和策略账号")

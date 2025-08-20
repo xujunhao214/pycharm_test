@@ -11,7 +11,7 @@ from lingkuan_819.conftest import var_manager
 from lingkuan_819.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"
+SKIP_REASON = "该用例暂时跳过"
 
 
 @allure.feature("账号管理-创建账号-为云策略准备")
@@ -730,13 +730,13 @@ class TestCreate_cloudTrader(APITestBase):
 
     @allure.title("云策略-云策略列表-新增云跟单-手动下单")
     def test_create_handcloudBatchAdd(self, var_manager, logged_session):
-        cloudTrader_vps_ids_2 = var_manager.get_variable("cloudTrader_vps_ids_2")
+        cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
         cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
         with allure.step("1. 发送新增云跟单的请求接口"):
             data = [
                 {
                     "traderList": [
-                        cloudTrader_vps_ids_2
+                        cloudTrader_vps_ids_3
                     ],
                     "cloudId": cloudMaster_id_hand,
                     "masterId": "",
@@ -777,12 +777,12 @@ class TestCreate_cloudTrader(APITestBase):
     @allure.title("数据库校验-云策略列表-新增云跟单-手动下单")
     def test_dbcreate_handcloudBatchAdd(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
-            cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
+            cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
             db_data = self.query_database(
                 db_transaction,
                 f"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s",
-                (cloudTrader_user_accounts_3, cloudMaster_id_hand,),
+                (cloudTrader_user_accounts_4, cloudMaster_id_hand,),
             )
         with allure.step("2. 校验数据"):
             if not db_data:

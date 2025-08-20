@@ -75,8 +75,8 @@ def logged_session(api_session, var_manager, request, environment):  # 新增env
 
     elif environment.value == "uat":
         # UAT环境：需要MFA验证码+重试机制
-        max_retries = 5
-        retry_interval = 15
+        max_retries = 3
+        retry_interval = 10
         for attempt in range(max_retries):
             try:
                 mfa_code = generate_code(MFA_SECRET_KEY)
@@ -268,7 +268,7 @@ class TestResultTracker:
         elif report.outcome == "skipped":
             self.skipped += 1
             self.skipped_test_names.append(report.nodeid)
-            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该功能暂不需要")
+            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该用例暂时跳过")
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
@@ -360,8 +360,8 @@ def pytest_collection_modifyitems(items):
         retry_mark = item.get_closest_marker("retry")
         if retry_mark:
             # 从标记中提取参数（默认值可根据需求调整）
-            reruns = retry_mark.kwargs.get("n", 1)  # 重试次数
-            reruns_delay = retry_mark.kwargs.get("delay", 1)  # 间隔秒数
+            reruns = retry_mark.kwargs.get("n", 3)  # 重试次数
+            reruns_delay = retry_mark.kwargs.get("delay", 5)  # 间隔秒数
 
             # 动态设置当前用例的重试参数
             item.config.option.reruns = reruns

@@ -29,7 +29,7 @@ def run_vps_tests(env: str = "test"):
         # "test_vps/test_vps_Leakage_open.py",
         # "test_vps/test_strategy_addstatus.py",
         # "test_vps/test_vpsfixed_annotations.py",
-        # "test_vps/test_lianxi.py",
+        "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
         # "test_vps/test_create_scene.py",
         # "test_vps/test_vps_scene.py",

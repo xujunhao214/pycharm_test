@@ -1,231 +1,61 @@
+# lingkuan_815/tests/test_vps_ordersend.py
 import time
-
-import pytest
-import logging
-import allure
 import math
-from typing import Dict, Any, List
+
+import allure
+import logging
+import pytest
 from lingkuan_818.VAR.VAR import *
 from lingkuan_818.conftest import var_manager
 from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_818.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"
+SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-@allure.feature("跟单软件看板")
-class TestDeleteFollowSlave(APITestBase):
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景2：手数0.01-0.01，总手数0.01")
-    @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.01-0.01，总手数0.01
-          2. 校验账号的数据是否正确
-          3. 进行平仓
-          4. 校验账号的数据是否正确
-        - 预期结果：账号的数据正确
-        """)
-    class TestMasOrderSend2(APITestBase):
-        @allure.title("云策略-复制下单操作")
-        def test_copy_place_order(self, logged_session, var_manager):
-            """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
-                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+# ---------------------------
+# 修改模式、品种
+# ---------------------------
+@allure.feature("云策略策略下单-跟单修改模式、品种")
+class TestVPSOrderSend_Scence(APITestBase):
+    # ---------------------------
+    # 数据库查询-获取VPSID
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取VPSID")
+    def test_get_vpsID(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库数据"):
+            ip_address = var_manager.get_variable("IP_ADDRESS")
 
-                request_data = {
-                    "id": cloudMaster_id,
-                    "type": 0,
-                    "tradeType": 1,
-                    "intervalTime": 100,
-                    "cloudTraderId": [cloudTrader_traderList_4],
-                    "symbol": "XAUUSD",
-                    "placedType": 0,
-                    "startSize": "0.01",
-                    "endSize": "0.01",
-                    "totalNum": "",
-                    "totalSzie": "0.01",
-                    "remark": ""
-                }
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address = %s",
+                (ip_address,)
+            )
 
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/cloudOrderSend',
-                    json_data=request_data
-                )
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
 
-            with allure.step("验证复制下单响应结果"):
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "success",
-                    "复制下单响应msg字段应为success"
-                )
+            vpsId = db_data[0]["id"]
+            # 存入变量管理器
+            var_manager.set_runtime_variable("vpsId", vpsId)
+            print(f"成功提取 VPS ID: {vpsId}")
 
-        @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
-            """验证复制下单后数据库中的订单数据正确性"""
-            with allure.step("查询复制订单详情数据"):
-                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
-                sql = """
-                        SELECT 
-                            fod.size,
-                            fod.send_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                    """
-                params = ('0', cloudTrader_user_accounts_4)
+    # ---------------------------
+    # VPS管理-VPS列表-获取可见用户信息
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-获取可见用户信息")
+    def test_get_user(self, logged_session, var_manager):
+        # 1. 请求可见用户列表接口
+        response = self.send_get_request(
+            logged_session,
+            '/sys/role/role'
+        )
 
-                # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="fod.open_time"
-                )
-
-            with allure.step("执行复制下单数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
-
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}")
-
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                assert math.isclose(float(0.01), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: 0.01, 实际: {min_lot_size}'
-                logger.info(f'结束手数预期: 0.01, 实际: {min_lot_size}')
-
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                assert math.isclose(float(0.01), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: 0.01, 实际: {max_lot_size}'
-                logger.info(f'开始手数预期: 0.01, 实际: {max_lot_size}')
-
-                # 总手数与指令表校验
-                total_lots = db_data[0]["total_lots"]
-                assert math.isclose(float(0.01), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数不匹配，预期: 0.01, 实际: {total_lots}'
-                logger.info(f'总手数预期: 0.01, 实际: {total_lots}')
-
-                # 总手数与订单详情校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(0.01), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数与订单详情不匹配，预期: {0.01}, 实际: {size_sum}'
-                logger.info(f'订单详情总手数预期: {0.01}, 实际: {size_sum}')
-
-        @allure.title("云策略-复制下单平仓操作")
-        def test_copy_close_order(self, logged_session, var_manager):
-            """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
-                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-
-                request_data = {
-                    "isCloseAll": 1,
-                    "intervalTime": 100,
-                    "id": f"{cloudMaster_id}",
-                    "cloudTraderId": [cloudTrader_traderList_4]
-                }
-
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/cloudOrderClose',
-                    json_data=request_data
-                )
-
-            with allure.step("验证复制平仓响应结果"):
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "success",
-                    "复制平仓响应msg字段应为success"
-                )
-
-        @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
-            """验证复制下单平仓后数据库中的订单数据正确性"""
-            with allure.step("查询复制平仓订单数据"):
-                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
-                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
-
-                sql = """
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
-
-                # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="fod.close_time"
-                )
-
-            with allure.step("执行复制平仓数据校验"):
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
-
-                # 平仓状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"平仓状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"复制平仓状态校验通过: {status}")
-
-                # 平仓总手数校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(0.01), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'复制平仓总手数不匹配，预期: 0.01, 实际: {size_sum}'
-                logger.info(f'复制平仓总手数匹配，预期: 0.01, 实际: {size_sum}')
-
-            time.sleep(25)
+        # 2. 获取可见用户信息
+        vps_user_data = response.extract_jsonpath("$.data")
+        logging.info(f"获取的可见用户信息：{vps_user_data}")
+        var_manager.set_runtime_variable("vps_user_data", vps_user_data)

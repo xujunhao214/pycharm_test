@@ -11,7 +11,7 @@ from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
 from lingkuan_818.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+SKIP_REASON = "该用例暂时跳过"  # 统一跳过原因
 
 
 # ---------------------------

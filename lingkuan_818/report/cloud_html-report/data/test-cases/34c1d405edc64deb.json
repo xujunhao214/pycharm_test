@@ -1,0 +1,232 @@
+{
+  "uid" : "34c1d405edc64deb",
+  "name" : "数据库校验-复制下单平仓数据-数据校验",
+  "fullName" : "test_cloudTrader.test_cloudOrderClose.TestMasOrderSend3#test_copy_verify_close_db2",
+  "historyId" : "63ead32e25f6f37275c8189550ac3b61",
+  "time" : {
+    "start" : 1755682123085,
+    "stop" : 1755682129807,
+    "duration" : 6722
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围0.1-1，总订单3，总手数1\n      2. 平仓-订单方向-sell，平仓失败\n      3. 校验数据库是否有未平仓订单-应该没有\n      4. 平仓-订单方向-buy sell，平仓成功\n      5. 校验订单数据是否正确\n    - 预期结果：平仓的订单方向功能正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有云策略和云跟单\n  1. 进行开仓，手数范围0.1-1，总订单3，总手数1\n  2. 平仓-订单方向-sell，平仓失败\n  3. 校验数据库是否有未平仓订单-应该没有\n  4. 平仓-订单方向-buy sell，平仓成功\n  5. 校验订单数据是否正确\n- 预期结果：平仓的订单方向功能正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 复制平仓总手数不匹配，预期: 1.00, 实际: 2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n +    and   2.0 = float(2.0)",
+  "statusTrace" : "self = <lingkuan_818.test_cloudTrader.test_cloudOrderClose.TestCloudFollowDirection.TestMasOrderSend3 object at 0x00000203D3F607F0>\nvar_manager = <lingkuan_818.commons.variable_manager.VariableManager object at 0x00000203D3FDC760>\ndb_transaction = <pymysql.connections.Connection object at 0x00000203D441AD30>\n\n    @allure.title(\"数据库校验-复制下单平仓数据-数据校验\")\n    def test_copy_verify_close_db2(self, var_manager, db_transaction):\n        \"\"\"验证复制下单平仓后数据库中的订单数据正确性\"\"\"\n        with allure.step(\"查询复制平仓订单数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n    \n            sql = \"\"\"\n                       SELECT\n                           fod.size,\n                           fod.close_no,\n                           fod.magical,\n                           fod.open_price,\n                           fod.symbol,\n                           fod.order_no,\n                           foi.true_total_lots,\n                           foi.order_no,\n                           foi.operation_type,\n                           foi.create_time,\n                           foi.status,\n                           foi.min_lot_size,\n                           foi.max_lot_size,\n                           foi.total_lots,\n                           foi.master_order,\n                           foi.total_orders\n                       FROM\n                           follow_order_detail fod\n                       INNER JOIN\n                           follow_order_instruct foi\n                       ON\n                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                       WHERE foi.operation_type = %s\n                           AND fod.account = %s\n                           AND fod.trader_id = %s\n                   \"\"\"\n            params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)\n    \n            # 轮询等待数据库记录\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n    \n        with allure.step(\"执行复制平仓数据校验-有订单\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法进行复制平仓校验\")\n    \n            # 平仓总手数校验\n            totalSzie = trader_ordersend[\"totalSzie\"]\n            size_sum = sum(record[\"size\"] for record in db_data)\n>           assert math.isclose(float(totalSzie), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'复制平仓总手数不匹配，预期: {totalSzie}, 实际: {size_sum}'\nE           AssertionError: 复制平仓总手数不匹配，预期: 1.00, 实际: 2.0\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\nE            +    and   2.0 = float(2.0)\n\ntest_cloudTrader\\test_cloudOrderClose.py:741: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755682123085,
+      "stop" : 1755682123085,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755682122415,
+      "stop" : 1755682123085,
+      "duration" : 670
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围0.1-1，总订单3，总手数1\n      2. 平仓-订单方向-sell，平仓失败\n      3. 校验数据库是否有未平仓订单-应该没有\n      4. 平仓-订单方向-buy sell，平仓成功\n      5. 校验订单数据是否正确\n    - 预期结果：平仓的订单方向功能正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 复制平仓总手数不匹配，预期: 1.00, 实际: 2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n +    and   2.0 = float(2.0)",
+    "statusTrace" : "self = <lingkuan_818.test_cloudTrader.test_cloudOrderClose.TestCloudFollowDirection.TestMasOrderSend3 object at 0x00000203D3F607F0>\nvar_manager = <lingkuan_818.commons.variable_manager.VariableManager object at 0x00000203D3FDC760>\ndb_transaction = <pymysql.connections.Connection object at 0x00000203D441AD30>\n\n    @allure.title(\"数据库校验-复制下单平仓数据-数据校验\")\n    def test_copy_verify_close_db2(self, var_manager, db_transaction):\n        \"\"\"验证复制下单平仓后数据库中的订单数据正确性\"\"\"\n        with allure.step(\"查询复制平仓订单数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n    \n            sql = \"\"\"\n                       SELECT\n                           fod.size,\n                           fod.close_no,\n                           fod.magical,\n                           fod.open_price,\n                           fod.symbol,\n                           fod.order_no,\n                           foi.true_total_lots,\n                           foi.order_no,\n                           foi.operation_type,\n                           foi.create_time,\n                           foi.status,\n                           foi.min_lot_size,\n                           foi.max_lot_size,\n                           foi.total_lots,\n                           foi.master_order,\n                           foi.total_orders\n                       FROM\n                           follow_order_detail fod\n                       INNER JOIN\n                           follow_order_instruct foi\n                       ON\n                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                       WHERE foi.operation_type = %s\n                           AND fod.account = %s\n                           AND fod.trader_id = %s\n                   \"\"\"\n            params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)\n    \n            # 轮询等待数据库记录\n            db_data = self.wait_for_database_record_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n    \n        with allure.step(\"执行复制平仓数据校验-有订单\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法进行复制平仓校验\")\n    \n            # 平仓总手数校验\n            totalSzie = trader_ordersend[\"totalSzie\"]\n            size_sum = sum(record[\"size\"] for record in db_data)\n>           assert math.isclose(float(totalSzie), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \\\n                f'复制平仓总手数不匹配，预期: {totalSzie}, 实际: {size_sum}'\nE           AssertionError: 复制平仓总手数不匹配，预期: 1.00, 实际: 2.0\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\nE            +    and   2.0 = float(2.0)\n\ntest_cloudTrader\\test_cloudOrderClose.py:741: AssertionError",
+    "steps" : [ {
+      "name" : "查询复制平仓订单数据",
+      "time" : {
+        "start" : 1755682123085,
+        "stop" : 1755682129807,
+        "duration" : 6722
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录稳定（时区: +05:00，超时: 30秒）",
+        "time" : {
+          "start" : 1755682123085,
+          "stop" : 1755682123085,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 0,
+        "hasContent" : false,
+        "stepsCount" : 0
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1755682129806,
+          "stop" : 1755682129807,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "36371e5d96b5dcb",
+          "name" : "执行SQL",
+          "source" : "36371e5d96b5dcb.txt",
+          "type" : "text/plain",
+          "size" : 1270
+        }, {
+          "uid" : "64b48c466cf1d778",
+          "name" : "SQL参数",
+          "source" : "64b48c466cf1d778.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "8891959361eb6842",
+          "name" : "查询结果（共6条，显示前50条）",
+          "source" : "8891959361eb6842.json",
+          "type" : "application/json",
+          "size" : 2559
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ {
+        "uid" : "84f6956490ccabd9",
+        "name" : "等待结果",
+        "source" : "84f6956490ccabd9.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 4,
+      "hasContent" : true,
+      "stepsCount" : 2
+    }, {
+      "name" : "执行复制平仓数据校验-有订单",
+      "time" : {
+        "start" : 1755682129807,
+        "stop" : 1755682129807,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 复制平仓总手数不匹配，预期: 1.00, 实际: 2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n +    and   2.0 = float(2.0)\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_818\\test_cloudTrader\\test_cloudOrderClose.py\", line 741, in test_copy_verify_close_db2\n    assert math.isclose(float(totalSzie), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \\\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0,
+      "hasContent" : true,
+      "stepsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "3d1cf10d48d5c7b3",
+      "name" : "log",
+      "source" : "3d1cf10d48d5c7b3.txt",
+      "type" : "text/plain",
+      "size" : 24613
+    } ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 5,
+    "hasContent" : true,
+    "stepsCount" : 4
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755682129829,
+      "stop" : 1755682129829,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755682129829,
+      "stop" : 1755682129829,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略复制下单-平仓的功能校验"
+  }, {
+    "name" : "story",
+    "value" : "场景3：平仓的订单方向功能校验-buy sell"
+  }, {
+    "name" : "tag",
+    "value" : "retry(n=3, delay=5)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudOrderClose"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCloudFollowDirection"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "46924-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudOrderClose"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "retry(n=3, delay=5)" ]
+  },
+  "source" : "34c1d405edc64deb.json",
+  "parameterValues" : [ ]
+}
