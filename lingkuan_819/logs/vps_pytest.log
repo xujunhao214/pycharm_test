@@ -1,160 +1,187 @@
-INFO     2025-08-21 17:39:20 [lingkuan_819.conftest;254]  : [2025-08-21 17:39] 测试会话开始: 2025-08-21 17:39:20, 测试组: vps
-INFO     2025-08-21 17:39:45 [lingkuan_819.commons.variable_manager;40]  : [2025-08-21 17:39] 成功加载静态变量: VAR\uat_data.json
-INFO     2025-08-21 17:39:45 [lingkuan_819.commons.variable_manager;64]  : [2025-08-21 17:39] 成功加载运行时变量: VAR\runtime_vars_vps.json
-INFO     2025-08-21 17:39:45 [lingkuan_819.conftest;61]  : [2025-08-21 17:39] 用例 test_vps/test_lianxi.py::TestVPStradingOrders2::test_copy_order_send 使用默认URL登录: https://uat.atcp.top/api
-INFO     2025-08-21 17:39:45 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 300143
-INFO     2025-08-21 17:39:46 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
-INFO     2025-08-21 17:39:46 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 17:39] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
-INFO     2025-08-21 17:39:47 [lingkuan_819.commons.api_base;137]  : [2025-08-21 17:39:47] POST请求（JSON）: /bargain/masOrderSend | 数据: {'traderList': [6402], 'type': 0, 'tradeType': 1, 'intervalTime': 100, 'symbol': 'XAUUSD', 'placedType': 0, 'startSize': '0.10', 'endSize': '1.00', 'totalNum': '2', 'totalSzie': '', 'remark': ''}
-INFO     2025-08-21 17:39:47 [lingkuan_819.commons.api_base;145]  : [2025-08-21 17:39:47] 请求后等待 1 秒
-INFO     2025-08-21 17:39:48 [lingkuan_819.conftest;61]  : [2025-08-21 17:39] 用例 test_vps/test_lianxi.py::TestVPStradingOrders2::test_copy_order_close 使用默认URL登录: https://uat.atcp.top/api
-INFO     2025-08-21 17:39:48 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 300143
-INFO     2025-08-21 17:39:49 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
-INFO     2025-08-21 17:39:49 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 17:39] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
-INFO     2025-08-21 17:39:50 [lingkuan_819.commons.api_base;137]  : [2025-08-21 17:39:50] POST请求（JSON）: /bargain/masOrderClose | 数据: {'flag': 0, 'intervalTime': 0, 'traderList': [6402], 'closeType': 0, 'remark': '', 'symbol': 'XAGEUR', 'type': 0}
-INFO     2025-08-21 17:39:50 [lingkuan_819.commons.api_base;145]  : [2025-08-21 17:39:50] 请求后等待 1 秒
-INFO     2025-08-21 17:39:51 [lingkuan_819.commons.api_base;397]  : [2025-08-21 17:39:51] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.close_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                         AND  fod.close_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300151', 1, 1)
-INFO     2025-08-21 17:39:52 [lingkuan_819.commons.api_base;400]  : [2025-08-21 17:39:52] 查询成功，结果数量: 0 | SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.close_no,
-                        fod.magical,
-                        fod.open_price,
-                      
-INFO     2025-08-21 17:39:52 [lingkuan_819.commons.api_base;411]  : [2025-08-21 17:39:52] 查询结果: []
-INFO     2025-08-21 17:39:53 [lingkuan_819.commons.api_base;397]  : [2025-08-21 17:39:53] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.close_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.master_order,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.trader_id = %s
-                         AND  fod.close_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300152', 6601, 1, 1)
-INFO     2025-08-21 17:39:53 [lingkuan_819.commons.api_base;400]  : [2025-08-21 17:39:53] 查询成功，结果数量: 0 | SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.close_no,
-                        fod.magical,
-                        fod.open_price,
-                      
-INFO     2025-08-21 17:39:53 [lingkuan_819.commons.api_base;411]  : [2025-08-21 17:39:53] 查询结果: []
-INFO     2025-08-21 17:39:53 [lingkuan_819.conftest;61]  : [2025-08-21 17:39] 用例 test_vps/test_lianxi.py::TestVPStradingOrders2::test_copy_order_close2 使用默认URL登录: https://uat.atcp.top/api
-INFO     2025-08-21 17:39:53 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 300143
-INFO     2025-08-21 17:39:54 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
-INFO     2025-08-21 17:39:54 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 17:39] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
-INFO     2025-08-21 17:39:55 [lingkuan_819.commons.api_base;137]  : [2025-08-21 17:39:55] POST请求（JSON）: /bargain/masOrderClose | 数据: {'flag': 0, 'intervalTime': 0, 'traderList': [6402], 'closeType': 0, 'remark': '', 'symbol': 'XAUUSD', 'type': 0}
-INFO     2025-08-21 17:39:55 [lingkuan_819.commons.api_base;145]  : [2025-08-21 17:39:55] 请求后等待 1 秒
-INFO     2025-08-21 17:39:56 [lingkuan_819.commons.api_base;397]  : [2025-08-21 17:39:56] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300151', 1, 1)
-INFO     2025-08-21 17:39:57 [lingkuan_819.commons.api_base;400]  : [2025-08-21 17:39:57] 查询成功，结果数量: 2 | SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-  
-INFO     2025-08-21 17:39:57 [lingkuan_819.commons.api_base;411]  : [2025-08-21 17:39:57] 查询结果: [{"size": 0.29, "close_no": "3318993535776", "magical": 66062, "open_price": 3339.45, "symbol": "XAUUSD", "order_no": 353965, "true_total_lots": 1.19, "foi.order_no": "3318993535776", "operation_type": 1, "create_time": "2025-08-21 17:39:55", "status": 1}, {"size": 0.9, "close_no": "3318993535776", "magical": 20963, "open_price": 3339.45, "symbol": "XAUUSD", "order_no": 353966, "true_total_lots": 1.19, "foi.order_no": "3318993535776", "operation_type": 1, "create_time": "2025-08-21 17:39:55", "status": 1}]
-INFO     2025-08-21 17:39:57 [lingkuan_819.commons.api_base;397]  : [2025-08-21 17:39:57] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300152', 6601, 1, 1)
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.api_base;400]  : [2025-08-21 17:39:58] 查询成功，结果数量: 2 | SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-  
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.api_base;411]  : [2025-08-21 17:39:58] 查询结果: [{"size": 0.29, "close_no": "3845368796539", "magical": 353965, "open_price": 3339.45, "symbol": "XAUUSD", "order_no": 353967, "true_total_lots": 0.29, "foi.order_no": "3845368796539", "operation_type": 1, "create_time": "2025-08-21 17:39:55", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.29, "master_order": 353965, "total_orders": 1}, {"size": 0.9, "close_no": "2048006071325", "magical": 353966, "open_price": 3339.45, "symbol": "XAUUSD", "order_no": 353968, "true_total_lots": 0.9, "foi.order_no": "2048006071325", "operation_type": 1, "create_time": "2025-08-21 17:39:55", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.9, "master_order": 353966, "total_orders": 1}]
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 17:39] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
-INFO     2025-08-21 17:39:58 [lingkuan_819.conftest;281]  : [2025-08-21 17:39] 测试会话结束，总耗时: 38.00秒
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.feishu_notification;131]  : [2025-08-21 17:39] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.feishu_notification;139]  : [2025-08-21 17:39] 飞书响应状态码: 200
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.feishu_notification;140]  : [2025-08-21 17:39] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
-INFO     2025-08-21 17:39:58 [lingkuan_819.commons.feishu_notification;145]  : [2025-08-21 17:39] [FEISHU] 消息发送成功
-INFO     2025-08-21 17:39:58 [lingkuan_819.conftest;293]  : [2025-08-21 17:39] 飞书通知发送成功
+INFO     2025-08-21 18:06:45 [lingkuan_819.conftest;254]  : [2025-08-21 18:06] 测试会话开始: 2025-08-21 18:06:45, 测试组: vps
+INFO     2025-08-21 18:06:45 [lingkuan_819.commons.variable_manager;40]  : [2025-08-21 18:06] 成功加载静态变量: VAR\uat_data.json
+INFO     2025-08-21 18:06:45 [lingkuan_819.commons.variable_manager;64]  : [2025-08-21 18:06] 成功加载运行时变量: VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:06:45 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:06:45 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 150228
+INFO     2025-08-21 18:06:46 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:06:46 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:06:47 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:47] DELETE请求: /mascontrol/group | 数据: [323]
+INFO     2025-08-21 18:06:48 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:06:48] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_group WHERE name = %s | 超时: 5秒
+INFO     2025-08-21 18:06:48 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:06:48] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC | 参数: ('测试vps',)
+INFO     2025-08-21 18:06:48 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:06:48] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:06:48 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:06:48] 查询结果: []
+INFO     2025-08-21 18:06:48 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:06:48] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_group WHERE name = %s
+INFO     2025-08-21 18:06:48 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:06:48 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 150228
+INFO     2025-08-21 18:06:50 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:06:50 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:06:50 [lingkuan_819.conftest;133]  : 切换到VPS URL: https://39.99.145.155/vps
+INFO     2025-08-21 18:06:50 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:50] DELETE请求: /subcontrol/trader | 数据: [6601]
+INFO     2025-08-21 18:06:52 [root;220]  : 查询条件: table=follow_trader, account=300152
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:06:52] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:06:52] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300152',)
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:06:52] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:06:52] 查询结果: []
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:06:52] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:06:52] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300152',)
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:06:52] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:06:52 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:06:52] 查询结果: []
+INFO     2025-08-21 18:06:52 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:06:52 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 150228
+INFO     2025-08-21 18:06:53 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:06:53 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:06:53 [lingkuan_819.conftest;133]  : 切换到VPS URL: https://39.99.145.155/vps
+INFO     2025-08-21 18:06:53 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:53] DELETE请求: /subcontrol/trader | 数据: [6468]
+INFO     2025-08-21 18:06:54 [lingkuan_819.test_vps.test_delete;280]  : [2025-08-21 18:06] 第1个跟单账号（ID: 6468）删除成功
+INFO     2025-08-21 18:06:54 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:54] DELETE请求: /subcontrol/trader | 数据: [6469]
+INFO     2025-08-21 18:06:56 [lingkuan_819.test_vps.test_delete;280]  : [2025-08-21 18:06] 第2个跟单账号（ID: 6469）删除成功
+INFO     2025-08-21 18:06:56 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:56] DELETE请求: /subcontrol/trader | 数据: [6470]
+INFO     2025-08-21 18:06:57 [lingkuan_819.test_vps.test_delete;280]  : [2025-08-21 18:06] 第3个跟单账号（ID: 6470）删除成功
+INFO     2025-08-21 18:06:57 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:57] DELETE请求: /subcontrol/trader | 数据: [6471]
+INFO     2025-08-21 18:06:58 [lingkuan_819.test_vps.test_delete;280]  : [2025-08-21 18:06] 第4个跟单账号（ID: 6471）删除成功
+INFO     2025-08-21 18:06:58 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:58] DELETE请求: /subcontrol/trader | 数据: [6472]
+INFO     2025-08-21 18:06:59 [lingkuan_819.test_vps.test_delete;280]  : [2025-08-21 18:06] 第5个跟单账号（ID: 6472）删除成功
+INFO     2025-08-21 18:06:59 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:06:59] DELETE请求: /subcontrol/trader | 数据: [6473]
+INFO     2025-08-21 18:07:00 [lingkuan_819.test_vps.test_delete;280]  : [2025-08-21 18:06] 第6个跟单账号（ID: 6473）删除成功
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:00] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:00] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300152',)
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:00] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:00] 查询结果: []
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:00] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:00] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300152',)
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:00] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:00] 查询结果: []
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:00] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:00 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:00] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300153',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:01] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300153',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:01] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300154',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:01] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300154',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:01] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300155',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:01] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300155',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:01] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300156',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:01] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300156',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:01] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300157',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:01] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:01] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC | 参数: ('300157',)
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:01] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:01 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:01] 查询结果: []
+INFO     2025-08-21 18:07:01 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:07:01 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 421947
+INFO     2025-08-21 18:07:03 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:07:03 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:07:03 [lingkuan_819.conftest;133]  : 切换到VPS URL: https://39.99.145.155/vps
+INFO     2025-08-21 18:07:03 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:03] DELETE请求: /subcontrol/trader | 数据: [6600]
+INFO     2025-08-21 18:07:04 [root;352]  : 查询条件: table=follow_trader, account=300151
+INFO     2025-08-21 18:07:04 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:04] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:04 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:04] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC | 参数: ('300151',)
+INFO     2025-08-21 18:07:04 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:04] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:04 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:04] 查询结果: []
+INFO     2025-08-21 18:07:04 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:04] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-21 18:07:04 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:07:04 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 421947
+INFO     2025-08-21 18:07:06 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:07:06 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:07:08 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:08] DELETE请求: /mascontrol/variety/deleteTemplate | 数据: [31]
+INFO     2025-08-21 18:07:09 [root;399]  : 查询条件: table=follow_variety, templateName2=测试模版1
+INFO     2025-08-21 18:07:09 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:09] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_variety WHERE template_name = %s | 超时: 5秒
+INFO     2025-08-21 18:07:09 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:09] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC | 参数: ('测试模版1',)
+INFO     2025-08-21 18:07:09 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:09] 查询成功，结果数量: 0 | SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:09 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:09] 查询结果: []
+INFO     2025-08-21 18:07:09 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:09] 删除成功（耗时0.2秒）| SQL: SELECT * FROM follow_variety WHERE template_name = %s
+INFO     2025-08-21 18:07:09 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:07:09 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 421947
+INFO     2025-08-21 18:07:11 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:07:11 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:07:11 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:11] DELETE请求: /mascontrol/user | 数据: [6402]
+INFO     2025-08-21 18:07:13 [root;446]  : 查询条件: table=FOLLOW_TRADER_USER, name=300151
+INFO     2025-08-21 18:07:13 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:13] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:13 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:13] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300151',)
+INFO     2025-08-21 18:07:13 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:13] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:13 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:13] 查询结果: []
+INFO     2025-08-21 18:07:13 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:13] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:13 [lingkuan_819.conftest;61]  : [2025-08-21 18:06] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 使用默认URL登录: https://uat.atcp.top/api
+INFO     2025-08-21 18:07:13 [lingkuan_819.conftest;83]  : UAT登录尝试 1/3，MFA验证码: 421947
+INFO     2025-08-21 18:07:15 [lingkuan_819.conftest;108]  : UAT登录成功（第1次尝试）
+INFO     2025-08-21 18:07:15 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:07:16 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:16] DELETE请求: /mascontrol/user | 数据: [6407]
+INFO     2025-08-21 18:07:17 [root;501]  : 第1个账号（ID: 6407）删除接口调用成功
+INFO     2025-08-21 18:07:17 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:17] DELETE请求: /mascontrol/user | 数据: [6404]
+INFO     2025-08-21 18:07:18 [root;501]  : 第2个账号（ID: 6404）删除接口调用成功
+INFO     2025-08-21 18:07:19 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:19] DELETE请求: /mascontrol/user | 数据: [6409]
+INFO     2025-08-21 18:07:20 [root;501]  : 第3个账号（ID: 6409）删除接口调用成功
+INFO     2025-08-21 18:07:20 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:20] DELETE请求: /mascontrol/user | 数据: [6403]
+INFO     2025-08-21 18:07:21 [root;501]  : 第4个账号（ID: 6403）删除接口调用成功
+INFO     2025-08-21 18:07:22 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:22] DELETE请求: /mascontrol/user | 数据: [6406]
+INFO     2025-08-21 18:07:23 [root;501]  : 第5个账号（ID: 6406）删除接口调用成功
+INFO     2025-08-21 18:07:23 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:23] DELETE请求: /mascontrol/user | 数据: [6408]
+INFO     2025-08-21 18:07:24 [root;501]  : 第6个账号（ID: 6408）删除接口调用成功
+INFO     2025-08-21 18:07:25 [lingkuan_819.commons.api_base;220]  : [2025-08-21 18:07:25] DELETE请求: /mascontrol/user | 数据: [6405]
+INFO     2025-08-21 18:07:26 [root;501]  : 第7个账号（ID: 6405）删除接口调用成功
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:26] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300152',)
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:26] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:26] 查询结果: []
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:26] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300153',)
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:26] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:26] 查询结果: []
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:26 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300154',)
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:27] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:27] 查询结果: []
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:27] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300155',)
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:27] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:27] 查询结果: []
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:27] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300156',)
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:27] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:27] 查询结果: []
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:27] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300157',)
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:27] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:27] 查询结果: []
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;500]  : [2025-08-21 18:07:27] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;397]  : [2025-08-21 18:07:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC | 参数: ('300158',)
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;400]  : [2025-08-21 18:07:27] 查询成功，结果数量: 0 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;411]  : [2025-08-21 18:07:27] 查询结果: []
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.api_base;530]  : [2025-08-21 18:07:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.variable_manager;111]  : [2025-08-21 18:06] 运行时变量已保存到: D:\pycharm_test\lingkuan_819\VAR\runtime_vars_vps.json
+INFO     2025-08-21 18:07:27 [lingkuan_819.conftest;281]  : [2025-08-21 18:06] 测试会话结束，总耗时: 42.00秒
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.feishu_notification;131]  : [2025-08-21 18:06] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.feishu_notification;139]  : [2025-08-21 18:06] 飞书响应状态码: 200
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.feishu_notification;140]  : [2025-08-21 18:06] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     2025-08-21 18:07:27 [lingkuan_819.commons.feishu_notification;145]  : [2025-08-21 18:06] [FEISHU] 消息发送成功
+INFO     2025-08-21 18:07:27 [lingkuan_819.conftest;293]  : [2025-08-21 18:06] 飞书通知发送成功

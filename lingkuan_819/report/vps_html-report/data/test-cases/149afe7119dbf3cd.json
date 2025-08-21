@@ -1,0 +1,286 @@
+{
+  "uid" : "149afe7119dbf3cd",
+  "name" : "数据库校验-交易平仓-主指令及订单详情数据检查-有订单",
+  "fullName" : "test_vps.test_lianxi.TestVPStradingOrders2#test_dbquery_orderSendclose2",
+  "historyId" : "8ba0c445ad578833780e43f8fd8c2d04",
+  "time" : {
+    "start" : 1755770709577,
+    "stop" : 1755770710483,
+    "duration" : 906
+  },
+  "description" : "\n### 测试说明\n- 前置条件：有vps策略和vps跟单\n  1. 进行开仓，手数范围0.1-1，总订单4\n  2. 进行平仓\n  3. 发送停止请求\n  4. 校验平仓的订单数，应该不等于开仓总订单数\n  4. 进行平仓-正常平仓\n  5. 校验平仓的订单数\n- 预期结果：平仓的停止功能正确\n",
+  "descriptionHtml" : "<h3>测试说明</h3>\n<ul>\n<li>前置条件：有vps策略和vps跟单\n<ol>\n<li>进行开仓，手数范围0.1-1，总订单4</li>\n<li>进行平仓</li>\n<li>发送停止请求</li>\n<li>校验平仓的订单数，应该不等于开仓总订单数</li>\n<li>进行平仓-正常平仓</li>\n<li>校验平仓的订单数</li>\n</ol>\n</li>\n<li>预期结果：平仓的停止功能正确</li>\n</ul>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 正常平仓，应该有4个平仓订单，不符合预期结果\nassert 1 == 4\n +  where 1 = len([{'close_no': '4807251880144', 'create_time': '2025-08-21 18:05:07', 'foi.order_no': '4807251880144', 'magical': 56385, ...}])",
+  "statusTrace" : "self = <lingkuan_819.test_vps.test_lianxi.TestVPStradingOrders2 object at 0x0000022F369291C0>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x0000022F368EE4F0>\ndb_transaction = <pymysql.connections.Connection object at 0x0000022F369FD580>\n\n    @allure.title(\"数据库校验-交易平仓-主指令及订单详情数据检查-有订单\")\n    def test_dbquery_orderSendclose2(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            sql = f\"\"\"\n                        SELECT\n                            fod.size,\n                            fod.close_no,\n                            fod.magical,\n                            fod.open_price,\n                            fod.symbol,\n                            fod.order_no,\n                            foi.true_total_lots,\n                            foi.order_no,\n                            foi.operation_type,\n                            foi.create_time,\n                            foi.status\n                        FROM\n                            follow_order_detail fod\n                        INNER JOIN\n                            follow_order_instruct foi\n                        ON\n                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                        WHERE foi.operation_type = %s\n                            AND fod.account = %s\n                            \"\"\"\n            params = (\n                '1',\n                new_user[\"account\"],\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n>           assert len(db_data) == 4, \"正常平仓，应该有4个平仓订单，不符合预期结果\"\nE           AssertionError: 正常平仓，应该有4个平仓订单，不符合预期结果\nE           assert 1 == 4\nE            +  where 1 = len([{'close_no': '4807251880144', 'create_time': '2025-08-21 18:05:07', 'foi.order_no': '4807251880144', 'magical': 56385, ...}])\n\ntest_vps\\test_lianxi.py:235: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755770709577,
+      "stop" : 1755770709577,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755770695547,
+      "stop" : 1755770695547,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755770695547,
+      "stop" : 1755770695547,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755770698588,
+      "stop" : 1755770698588,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755770709138,
+      "stop" : 1755770709577,
+      "duration" : 439
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755770695547,
+      "stop" : 1755770695547,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n### 测试说明\n- 前置条件：有vps策略和vps跟单\n  1. 进行开仓，手数范围0.1-1，总订单4\n  2. 进行平仓\n  3. 发送停止请求\n  4. 校验平仓的订单数，应该不等于开仓总订单数\n  4. 进行平仓-正常平仓\n  5. 校验平仓的订单数\n- 预期结果：平仓的停止功能正确\n",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 正常平仓，应该有4个平仓订单，不符合预期结果\nassert 1 == 4\n +  where 1 = len([{'close_no': '4807251880144', 'create_time': '2025-08-21 18:05:07', 'foi.order_no': '4807251880144', 'magical': 56385, ...}])",
+    "statusTrace" : "self = <lingkuan_819.test_vps.test_lianxi.TestVPStradingOrders2 object at 0x0000022F369291C0>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x0000022F368EE4F0>\ndb_transaction = <pymysql.connections.Connection object at 0x0000022F369FD580>\n\n    @allure.title(\"数据库校验-交易平仓-主指令及订单详情数据检查-有订单\")\n    def test_dbquery_orderSendclose2(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            sql = f\"\"\"\n                        SELECT\n                            fod.size,\n                            fod.close_no,\n                            fod.magical,\n                            fod.open_price,\n                            fod.symbol,\n                            fod.order_no,\n                            foi.true_total_lots,\n                            foi.order_no,\n                            foi.operation_type,\n                            foi.create_time,\n                            foi.status\n                        FROM\n                            follow_order_detail fod\n                        INNER JOIN\n                            follow_order_instruct foi\n                        ON\n                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                        WHERE foi.operation_type = %s\n                            AND fod.account = %s\n                            \"\"\"\n            params = (\n                '1',\n                new_user[\"account\"],\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n>           assert len(db_data) == 4, \"正常平仓，应该有4个平仓订单，不符合预期结果\"\nE           AssertionError: 正常平仓，应该有4个平仓订单，不符合预期结果\nE           assert 1 == 4\nE            +  where 1 = len([{'close_no': '4807251880144', 'create_time': '2025-08-21 18:05:07', 'foi.order_no': '4807251880144', 'magical': 56385, ...}])\n\ntest_vps\\test_lianxi.py:235: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1755770709577,
+        "stop" : 1755770710483,
+        "duration" : 906
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "数据库查询结果",
+        "time" : {
+          "start" : 1755770710481,
+          "stop" : 1755770710483,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "de6b29fa52d155e2",
+          "name" : "执行SQL",
+          "source" : "de6b29fa52d155e2.txt",
+          "type" : "text/plain",
+          "size" : 1032
+        }, {
+          "uid" : "6c4fabce01c5366",
+          "name" : "SQL参数",
+          "source" : "6c4fabce01c5366.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "331dbbbbb9d8dc33",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "331dbbbbb9d8dc33.json",
+          "type" : "application/json",
+          "size" : 307
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 1,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 数据校验",
+      "time" : {
+        "start" : 1755770710483,
+        "stop" : 1755770710483,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 正常平仓，应该有4个平仓订单，不符合预期结果\nassert 1 == 4\n +  where 1 = len([{'close_no': '4807251880144', 'create_time': '2025-08-21 18:05:07', 'foi.order_no': '4807251880144', 'magical': 56385, ...}])\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_819\\test_vps\\test_lianxi.py\", line 235, in test_dbquery_orderSendclose2\n    assert len(db_data) == 4, \"正常平仓，应该有4个平仓订单，不符合预期结果\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "f8f6d073bcb48b29",
+      "name" : "log",
+      "source" : "f8f6d073bcb48b29.txt",
+      "type" : "text/plain",
+      "size" : 1815
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 3,
+    "attachmentsCount" : 4,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755770710586,
+      "stop" : 1755770710586,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755770711079,
+      "stop" : 1755770711080,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755770710587,
+      "stop" : 1755770710588,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景1：平仓的停止功能校验"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_lianxi"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPStradingOrders2"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "7460-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_lianxi"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "149afe7119dbf3cd.json",
+  "parameterValues" : [ ]
+}
