@@ -32,9 +32,6 @@ def run_cloud_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete_scene.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete.py",
 
-        "--reruns", "3",  # 重试次数
-        "--reruns-delay", "10",  # 重试间隔
-
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
