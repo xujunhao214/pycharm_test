@@ -58,7 +58,7 @@ def run_cloud_tests(env: str = "test"):
         text=True,
         encoding="utf-8"
     )
-    print(f"Cloud测试环境文件生成输出: {result.stderr}")
+    print(f"Cloud文件生成输出: {result.stderr}")
 
     # 生成独立HTML报告（沿用原有稳定逻辑）
     try:
