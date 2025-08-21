@@ -86,8 +86,9 @@ class TestcloudTrader_open(APITestBase):
     def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
-            sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
-            params = (cloudTrader_user_accounts_4,)
+            cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+            sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s"
+            params = (cloudTrader_user_accounts_4, cloudMaster_id,)
 
             # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(
@@ -312,8 +313,9 @@ class TestcloudTrader_open(APITestBase):
     def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
-            sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
-            params = (cloudTrader_user_accounts_4,)
+            cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+            sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s"
+            params = (cloudTrader_user_accounts_4, cloudMaster_id,)
 
             # 调用轮询等待方法（带时间范围过滤）
             db_data = self.wait_for_database_record(

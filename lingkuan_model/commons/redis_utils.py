@@ -1,9 +1,9 @@
-# lingkuan/commons/redis_utils.py
+# lingkuan_model/commons/redis_utils.py
 import redis
 import json
 from typing import Dict, Any, List
-from lingkuan.config import ENV_CONFIG  # 导入配置数据
-from lingkuan.commons.enums import Environment  # 导入现有枚举
+from lingkuan_model.config import ENV_CONFIG  # 导入配置数据
+from lingkuan_model.commons.enums import Environment  # 导入现有枚举
 
 
 class RedisClient:

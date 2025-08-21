@@ -11,8 +11,8 @@ from requests.exceptions import (
     HTTPError, SSLError
 )
 
-from lingkuan.VAR.VAR import *
-from lingkuan.commons.wait_utils import wait_for_condition
+from lingkuan_model.VAR.VAR import *
+from lingkuan_model.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

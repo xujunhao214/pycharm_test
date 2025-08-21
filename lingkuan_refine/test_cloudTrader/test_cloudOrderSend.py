@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("云策略复制下单-正常开仓平仓（多场景汇总）")
+@allure.feature("云策略复制下单-开仓的场景校验（多场景汇总）")
 class TestCloudStrategyOrder:
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景1：手数0.1-1，总订单3，总手数1")
+    @allure.story("场景一：手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -241,7 +241,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景2：手数0.01-0.01，总手数0.01")
+    @allure.story("场景二：手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -457,7 +457,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景3：手数0.01-1，总订单10")
+    @allure.story("场景三：手数0.01-1，总订单10")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -661,7 +661,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景4：手数0.1-1，总手数5")
+    @allure.story("场景四：手数0.1-1，总手数5")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -880,7 +880,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景5：手数0.1-1，总订单5（停止功能）")
+    @allure.story("场景五：手数0.1-1，总订单5（停止功能）")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单

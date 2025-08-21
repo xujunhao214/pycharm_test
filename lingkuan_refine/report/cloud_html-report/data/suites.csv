@@ -1,1765 +1,496 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Aug 20 17:43:14 CST 2025","Wed Aug 20 17:43:51 CST 2025","37459","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","数据库校验-交易平仓-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:21:30 CST 2025","Wed Aug 20 17:21:32 CST 2025","1600","test_cloudTrader","test_create","TestCreate_cloudTrader","","","云策略-云策略列表-新增策略账号",""
-"passed","Wed Aug 20 17:53:06 CST 2025","Wed Aug 20 17:53:08 CST 2025","1511","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","账号管理-交易下单-云策略账号复制下单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:50:12 CST 2025","Wed Aug 20 17:50:12 CST 2025","551","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","云策略账号复制下单","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:55:32 CST 2025","Wed Aug 20 17:55:33 CST 2025","984","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-账号列表-批量删除账号","数据库校验批量删除结果"
-"passed","Wed Aug 20 17:21:34 CST 2025","Wed Aug 20 17:21:38 CST 2025","3952","test_cloudTrader","test_create","TestCreate_cloudTrader","","","云策略-云策略列表-新增manager策略账号",""
-"passed","Wed Aug 20 17:42:06 CST 2025","Wed Aug 20 17:42:21 CST 2025","15068","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","数据库校验-账号管理-交易下单-根据remark发现有漏单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:52:11 CST 2025","Wed Aug 20 17:52:20 CST 2025","9042","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库校验-云跟单账号策略平仓-跟单账号修改品种","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:36:12 CST 2025","Wed Aug 20 17:36:14 CST 2025","1490","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:54:32 CST 2025","Thu Aug 21 09:55:10 CST 2025","37676","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-交易平仓-指令及订单详情数据检查","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:53:30 CST 2025","Wed Aug 20 17:53:39 CST 2025","9162","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-云跟单账号策略开仓-修改币种min","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:24:39 CST 2025","Wed Aug 20 17:24:41 CST 2025","2554","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:50:27 CST 2025","Thu Aug 21 09:50:29 CST 2025","1559","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-云跟单账号自己平仓","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数5
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:49:33 CST 2025","Thu Aug 21 09:49:46 CST 2025","12385","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:52:59 CST 2025","Thu Aug 21 09:53:00 CST 2025","519","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-云策略账号复制下单-出现漏开","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:48:42 CST 2025","Thu Aug 21 09:48:43 CST 2025","1563","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-平仓","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:43:12 CST 2025","Wed Aug 20 17:43:13 CST 2025","1572","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","账号管理-交易下单-平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:24:58 CST 2025","Wed Aug 20 17:25:00 CST 2025","1528","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单平仓操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:49:58 CST 2025","Thu Aug 21 09:50:10 CST 2025","12819","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","出现漏平-redis数据和数据库的数据做比对","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数5
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:47:46 CST 2025","Thu Aug 21 09:48:01 CST 2025","15244","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-根据remark发现有漏单","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:31:23 CST 2025","Wed Aug 20 17:31:56 CST 2025","32820","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","登录MT4账号获取token","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:54 CST 2025","Thu Aug 21 09:51:57 CST 2025","3024","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改完之后进行开仓补全","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-外部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:48:23 CST 2025","Wed Aug 20 17:48:35 CST 2025","12174","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","出现漏开-redis数据和数据库的数据做比对","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:23:11 CST 2025","Wed Aug 20 17:23:43 CST 2025","31445","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单平仓数据","
-    ### 测试说明
+"passed","Thu Aug 21 09:48:02 CST 2025","Thu Aug 21 09:48:15 CST 2025","12811","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","出现漏开-redis数据和数据库的数据做比对","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-0.01，总手数0.01
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:51:45 CST 2025","Wed Aug 20 17:51:45 CST 2025","57","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库-获取跟单账号净值","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:30:35 CST 2025","Wed Aug 20 17:31:23 CST 2025","48103","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:04 CST 2025","Thu Aug 21 09:51:10 CST 2025","6442","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改策略账号是否成功","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-内部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:28:21 CST 2025","Wed Aug 20 17:28:23 CST 2025","1526","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","云策略-复制下单操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:14 CST 2025","Thu Aug 21 09:51:29 CST 2025","15446","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-根据remark发现有漏单","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy sell，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:50:02 CST 2025","Wed Aug 20 17:50:05 CST 2025","3059","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","策略和平仓操作","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:21:50 CST 2025","Wed Aug 20 17:21:50 CST 2025","85","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-云策略列表-新增云策略-手动下单",""
-"passed","Wed Aug 20 17:19:08 CST 2025","Wed Aug 20 17:19:14 CST 2025","6334","test_cloudTrader","test_create","TestCreate_cloudTrader","","","跟单软件看板-VPS数据-新增策略账号",""
-"passed","Wed Aug 20 17:50:26 CST 2025","Wed Aug 20 17:50:29 CST 2025","3155","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","策略和平仓操作","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:46:34 CST 2025","Wed Aug 20 17:46:47 CST 2025","12372","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","出现漏开-redis数据和数据库的数据做比对","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:37:16 CST 2025","Wed Aug 20 17:37:18 CST 2025","1507","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-全平策略","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:45:29 CST 2025","Wed Aug 20 17:45:32 CST 2025","3038","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","云策略-云策略列表-修改完之后进行平仓补全","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:23:45 CST 2025","Wed Aug 20 17:23:46 CST 2025","1538","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:57 CST 2025","Thu Aug 21 09:52:07 CST 2025","9548","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-1，总订单10
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:48:44 CST 2025","Thu Aug 21 09:49:21 CST 2025","37685","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-交易平仓-指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:45:19 CST 2025","Wed Aug 20 17:45:20 CST 2025","1548","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","云策略-云策略列表-修改云跟单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:30:30 CST 2025","Wed Aug 20 17:30:30 CST 2025","76","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:02 CST 2025","Thu Aug 21 09:51:04 CST 2025","1511","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改策略账号信息","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-内部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:55:01 CST 2025","Wed Aug 20 17:55:01 CST 2025","98","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-云策略列表-删除云策略manager账号",""
-"passed","Wed Aug 20 17:54:41 CST 2025","Wed Aug 20 17:54:50 CST 2025","9482","test_cloudTrader","test_delete_scene","TestDelete_cloudTrader","","","云策略-云策略列表-批量删除云跟单账号",""
-"passed","Wed Aug 20 17:35:16 CST 2025","Wed Aug 20 17:35:18 CST 2025","1556","test_cloudTrader","test_cloudOrderClose","TestCloudCloseRemark","","","云策略-复制下单平仓操作-平仓备注-xxxxxxxxxx","
-    ### 测试说明
+"passed","Thu Aug 21 09:53:41 CST 2025","Thu Aug 21 09:53:43 CST 2025","1546","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改策略账号信息","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2，备注是：ceshipingcangbeizhu
-      2. 平仓-平仓备注是：xxxxxxxx
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓备注是：ceshipingcangbeizhu
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单备注功能正确
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:54:52 CST 2025","Wed Aug 20 17:54:54 CST 2025","1529","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","云策略-云策略列表-删除云跟单账号",""
-"passed","Wed Aug 20 17:28:24 CST 2025","Wed Aug 20 17:28:26 CST 2025","1559","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","云策略-复制下单平仓操作-sell-平仓失败","
-    ### 测试说明
+"passed","Thu Aug 21 09:52:10 CST 2025","Thu Aug 21 09:52:48 CST 2025","37686","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-交易平仓-指令及订单详情数据检查","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy sell，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:27:46 CST 2025","Wed Aug 20 17:27:47 CST 2025","1540","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","云策略-复制下单操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:54:30 CST 2025","Thu Aug 21 09:54:31 CST 2025","1585","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-平仓","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:49:02 CST 2025","Wed Aug 20 17:49:40 CST 2025","37532","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","数据库校验-交易平仓-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:55:11 CST 2025","Wed Aug 20 17:55:12 CST 2025","1271","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","跟单软件看板-VPS数据-删除策略账号",""
-"passed","Wed Aug 20 17:45:35 CST 2025","Wed Aug 20 17:46:06 CST 2025","31479","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","数据库校验-交易平仓-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:50:37 CST 2025","Wed Aug 20 17:50:49 CST 2025","11546","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","数据库校验-开仓备注生效","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:55:06 CST 2025","Wed Aug 20 17:55:08 CST 2025","1841","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","账号管理-账号列表-批量下架VPS（后9个账号）",""
-"passed","Wed Aug 20 17:49:48 CST 2025","Wed Aug 20 17:49:59 CST 2025","11573","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","数据库校验-策略备注生效","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"broken","Wed Aug 20 17:33:53 CST 2025","Wed Aug 20 17:34:25 CST 2025","31859","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
+"passed","Thu Aug 21 09:50:14 CST 2025","Thu Aug 21 09:50:20 CST 2025","6423","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改云跟单账号是否成功","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-外部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:27:52 CST 2025","Wed Aug 20 17:27:54 CST 2025","1503","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","云策略-复制下单平仓操作-buy-平仓成功","
-    ### 测试说明
+"passed","Thu Aug 21 09:52:49 CST 2025","Thu Aug 21 09:52:51 CST 2025","1533","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改策略账号信息","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:51:23 CST 2025","Wed Aug 20 17:51:34 CST 2025","11655","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库校验-云跟单账号策略开仓-跟单账号固定手数","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"failed","Wed Aug 20 17:44:31 CST 2025","Wed Aug 20 17:44:38 CST 2025","6417","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","数据库校验-云策略列表-修改云跟单账号是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:29:39 CST 2025","Wed Aug 20 17:29:40 CST 2025","1590","test_cloudTrader","test_cloudOrderClose","TestCloudOrderQuantityControl","","","云策略-复制下单平仓操作-平仓两个订单","
-    ### 测试说明
+"passed","Thu Aug 21 09:50:29 CST 2025","Thu Aug 21 09:51:01 CST 2025","31480","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-交易平仓-指令及订单详情数据检查","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量4
-      2. 平仓-平仓订单数量-2
-      3. 校验数据库是否有2个平仓订单
-      4. 平仓-平仓订单数量-2
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单数量功能正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:31:56 CST 2025","Wed Aug 20 17:31:57 CST 2025","1182","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","MT4平台开仓操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:49:47 CST 2025","Thu Aug 21 09:49:48 CST 2025","1504","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-平仓-出现漏平","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-外部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:46:58 CST 2025","Wed Aug 20 17:47:01 CST 2025","3042","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","云策略-云策略列表-修改完之后进行开仓补全","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:25:52 CST 2025","Wed Aug 20 17:26:02 CST 2025","9526","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单数据","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:44 CST 2025","Thu Aug 21 09:51:46 CST 2025","1533","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改策略账号信息","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单5（停止功能）
-      2. 点击停止
-      2. 校验账号的下单总手数和数据库的手数，应该不相等
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:47:37 CST 2025","Thu Aug 21 09:47:43 CST 2025","6433","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改云跟单账号是否成功","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：云策略下单的停止功能正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:21:32 CST 2025","Wed Aug 20 17:21:32 CST 2025","55","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-云策略列表-新增策略账号",""
-"passed","Wed Aug 20 17:23:47 CST 2025","Wed Aug 20 17:23:59 CST 2025","12487","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单数据","
-    ### 测试说明
+"passed","Thu Aug 21 09:48:30 CST 2025","Thu Aug 21 09:48:40 CST 2025","9544","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-1，总订单10
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:46:19 CST 2025","Wed Aug 20 17:46:34 CST 2025","15074","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","数据库校验-账号管理-交易下单-根据remark发现有漏单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:46:50 CST 2025","Wed Aug 20 17:46:57 CST 2025","6424","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","数据库校验-云策略列表-修改策略账号是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:51:35 CST 2025","Wed Aug 20 17:51:44 CST 2025","8899","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库校验-云跟单账号策略开仓-跟单账号修改品种","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:55:46 CST 2025","Wed Aug 20 17:55:48 CST 2025","1526","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","账号管理-组别列表-删除云策略组别",""
-"passed","Wed Aug 20 17:34:32 CST 2025","Wed Aug 20 17:34:32 CST 2025","60","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
+"passed","Thu Aug 21 09:49:25 CST 2025","Thu Aug 21 09:49:31 CST 2025","6422","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改云跟单账号是否成功","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-全部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:22:58 CST 2025","Wed Aug 20 17:23:07 CST 2025","9635","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单数据","
-    ### 测试说明
+"passed","Thu Aug 21 09:48:18 CST 2025","Thu Aug 21 09:48:24 CST 2025","6437","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改云跟单账号是否成功","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-0.01，总手数0.01
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:37:22 CST 2025","Wed Aug 20 17:37:22 CST 2025","52","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:21:52 CST 2025","Wed Aug 20 17:21:53 CST 2025","1650","test_cloudTrader","test_create","TestCreate_cloudTrader","","","云策略-云策略列表-新增云跟单-手动下单",""
-"passed","Wed Aug 20 17:21:57 CST 2025","Wed Aug 20 17:22:04 CST 2025","6842","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单数据","
-    ### 测试说明
+"passed","Thu Aug 21 09:52:08 CST 2025","Thu Aug 21 09:52:10 CST 2025","1522","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-平仓","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:47:45 CST 2025","Thu Aug 21 09:47:45 CST 2025","528","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-云策略账号复制下单-出现漏开","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:22:41 CST 2025","Wed Aug 20 17:22:42 CST 2025","1531","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单操作","
-    ### 测试说明
+"broken","Thu Aug 21 09:53:56 CST 2025","Thu Aug 21 09:54:28 CST 2025","32603","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-0.01，总手数0.01
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:53:51 CST 2025","Thu Aug 21 09:53:55 CST 2025","4452","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改完之后进行开仓补全","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:53:00 CST 2025","Thu Aug 21 09:53:15 CST 2025","15219","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-账号管理-交易下单-根据remark发现有漏单","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:48:26 CST 2025","Thu Aug 21 09:48:30 CST 2025","3982","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改完之后进行开仓补全","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:42:45 CST 2025","Wed Aug 20 17:42:50 CST 2025","4648","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","云策略-云策略列表-修改完之后进行开仓补全","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:24:42 CST 2025","Wed Aug 20 17:24:57 CST 2025","15316","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单数据","
-    ### 测试说明
+"passed","Thu Aug 21 09:51:30 CST 2025","Thu Aug 21 09:51:43 CST 2025","12801","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","出现漏开-redis数据和数据库的数据做比对","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数5
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:48:16 CST 2025","Thu Aug 21 09:48:18 CST 2025","1574","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改云跟单","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:21:42 CST 2025","Wed Aug 20 17:21:42 CST 2025","51","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-云策略列表-新增云跟单账号",""
-"passed","Wed Aug 20 17:42:35 CST 2025","Wed Aug 20 17:42:37 CST 2025","1530","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","云策略-云策略列表-修改云跟单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:40:28 CST 2025","Wed Aug 20 17:40:40 CST 2025","12410","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","数据库校验-复制下单开仓数据","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:24:01 CST 2025","Wed Aug 20 17:24:02 CST 2025","1523","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单平仓操作","
-    ### 测试说明
+"passed","Thu Aug 21 09:49:32 CST 2025","Thu Aug 21 09:49:33 CST 2025","500","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-云策略账号复制下单","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-1，总订单10
-      2. 校验账号的数据是否正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:51:12 CST 2025","Thu Aug 21 09:51:13 CST 2025","1235","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","账号管理-交易下单-云策略账号复制下单-出现漏开","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:51:46 CST 2025","Thu Aug 21 09:51:53 CST 2025","6425","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改策略账号是否成功","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略账号 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:50:21 CST 2025","Thu Aug 21 09:50:26 CST 2025","4464","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改完之后进行平仓补全","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:53:16 CST 2025","Thu Aug 21 09:53:29 CST 2025","12775","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","出现漏开-redis数据和数据库的数据做比对","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:53:43 CST 2025","Thu Aug 21 09:53:49 CST 2025","6420","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改云策略是否成功","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:49:49 CST 2025","Thu Aug 21 09:49:57 CST 2025","7839","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-策略平仓-检查平仓订单是否出现漏平","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:50:12 CST 2025","Thu Aug 21 09:50:13 CST 2025","1551","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改云跟单","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:52:51 CST 2025","Thu Aug 21 09:52:58 CST 2025","6422","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","数据库校验-云策略列表-修改云策略是否成功","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云策略 策略状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云策略 策略状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云策略 策略状态为关闭，有漏单数据
+    "
+"passed","Thu Aug 21 09:47:35 CST 2025","Thu Aug 21 09:47:36 CST 2025","1550","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改云跟单","
+    ### 用例说明
+    - 前置条件：有云策略和云跟单
+    - 操作步骤：
+      1. 修改云跟单账号平仓-关闭
+      2. 进行开仓
       3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改云跟单账号平仓-开启
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:36:17 CST 2025","Wed Aug 20 17:36:17 CST 2025","60","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
+"passed","Thu Aug 21 09:49:23 CST 2025","Thu Aug 21 09:49:24 CST 2025","1536","test_cloudTrader","test_cloudOrder_open_level","TestcloudTrader_openandlevel","","","云策略-云策略列表-修改云跟单","
+    ### 用例说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
+    - 操作步骤：
+      1. 修改云跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改云跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：云跟单账号开仓-关闭，有漏单数据
     "
-"passed","Wed Aug 20 17:44:55 CST 2025","Wed Aug 20 17:44:56 CST 2025","1550","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","账号管理-交易下单-平仓-出现漏平","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:36:21 CST 2025","Wed Aug 20 17:36:21 CST 2025","54","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
-    "
-"passed","Wed Aug 20 17:53:55 CST 2025","Wed Aug 20 17:54:04 CST 2025","9231","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-云跟单账号策略平仓-修改币种p","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:53:08 CST 2025","Wed Aug 20 17:53:20 CST 2025","11914","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-云跟单账号策略开仓-修改币种@","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:21:45 CST 2025","Wed Aug 20 17:21:46 CST 2025","640","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-品种管理-添加品种",""
-"passed","Wed Aug 20 17:42:50 CST 2025","Wed Aug 20 17:43:00 CST 2025","9443","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:35:32 CST 2025","Wed Aug 20 17:36:11 CST 2025","38519","test_cloudTrader","test_cloudOrderClose","TestCloudCloseRemark","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2，备注是：ceshipingcangbeizhu
-      2. 平仓-平仓备注是：xxxxxxxx
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓备注是：ceshipingcangbeizhu
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单备注功能正确
-    "
-"passed","Wed Aug 20 17:26:03 CST 2025","Wed Aug 20 17:26:30 CST 2025","26516","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单平仓操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单5（停止功能）
-      2. 点击停止
-      2. 校验账号的下单总手数和数据库的手数，应该不相等
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：云策略下单的停止功能正确
-    "
-"passed","Wed Aug 20 17:34:33 CST 2025","Wed Aug 20 17:34:35 CST 2025","1540","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单平仓操作-订单类型-全部订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-全部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:22:08 CST 2025","Wed Aug 20 17:22:39 CST 2025","31643","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单平仓数据","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 校验账号的数据是否正确
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
-    "
-"passed","Wed Aug 20 17:50:50 CST 2025","Wed Aug 20 17:50:53 CST 2025","3073","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","策略和平仓操作","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:35:29 CST 2025","Wed Aug 20 17:35:29 CST 2025","55","test_cloudTrader","test_cloudOrderClose","TestCloudCloseRemark","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2，备注是：ceshipingcangbeizhu
-      2. 平仓-平仓备注是：xxxxxxxx
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓备注是：ceshipingcangbeizhu
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单备注功能正确
-    "
-"passed","Wed Aug 20 17:55:48 CST 2025","Wed Aug 20 17:55:48 CST 2025","116","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-组别列表-删除云策略组别",""
-"passed","Wed Aug 20 17:51:45 CST 2025","Wed Aug 20 17:51:54 CST 2025","8908","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库校验-云跟单账号策略开仓-修改净值","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:24:03 CST 2025","Wed Aug 20 17:24:34 CST 2025","31477","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单平仓数据","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-1，总订单10
-      2. 校验账号的数据是否正确
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
-    "
-"passed","Wed Aug 20 17:45:05 CST 2025","Wed Aug 20 17:45:17 CST 2025","12166","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","出现漏平-redis数据和数据库的数据做比对","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:27:49 CST 2025","Wed Aug 20 17:27:50 CST 2025","1566","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","云策略-复制下单平仓操作-sell-平仓失败","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
-    "
-"passed","Wed Aug 20 17:37:23 CST 2025","Wed Aug 20 17:37:25 CST 2025","1554","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-全平订单","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:21:55 CST 2025","Wed Aug 20 17:21:57 CST 2025","1562","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 校验账号的数据是否正确
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
-    "
-"passed","Wed Aug 20 17:49:41 CST 2025","Wed Aug 20 17:49:42 CST 2025","1509","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","修改云策略信息（关闭跟单备注）","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:25:35 CST 2025","Wed Aug 20 17:25:37 CST 2025","1549","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单5（停止功能）
-      2. 点击停止
-      2. 校验账号的下单总手数和数据库的手数，应该不相等
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：云策略下单的停止功能正确
-    "
-"passed","Wed Aug 20 17:55:14 CST 2025","Wed Aug 20 17:55:32 CST 2025","17692","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","账号管理-账号列表-批量删除账号","测试批量删除用户接口"
-"passed","Wed Aug 20 17:25:37 CST 2025","Wed Aug 20 17:25:48 CST 2025","10719","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单数据","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单5（停止功能）
-      2. 点击停止
-      2. 校验账号的下单总手数和数据库的手数，应该不相等
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：云策略下单的停止功能正确
-    "
-"passed","Wed Aug 20 17:42:05 CST 2025","Wed Aug 20 17:42:05 CST 2025","515","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","账号管理-交易下单-云策略账号复制下单-出现漏开","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:37:20 CST 2025","Wed Aug 20 17:37:21 CST 2025","1520","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-平仓1个","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:48:46 CST 2025","Wed Aug 20 17:48:49 CST 2025","3037","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","云策略-云策略列表-修改完之后进行开仓补全","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:23:09 CST 2025","Wed Aug 20 17:23:11 CST 2025","1558","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单平仓操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-0.01，总手数0.01
-      2. 校验账号的数据是否正确
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
-    "
-"passed","Wed Aug 20 17:29:45 CST 2025","Wed Aug 20 17:30:21 CST 2025","36652","test_cloudTrader","test_cloudOrderClose","TestCloudOrderQuantityControl","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量4
-      2. 平仓-平仓订单数量-2
-      3. 校验数据库是否有2个平仓订单
-      4. 平仓-平仓订单数量-2
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单数量功能正确
-    "
-"passed","Wed Aug 20 17:46:08 CST 2025","Wed Aug 20 17:46:09 CST 2025","1540","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","云策略-云策略列表-修改策略账号信息","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:44:57 CST 2025","Wed Aug 20 17:45:04 CST 2025","7816","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","数据库校验-策略平仓-检查平仓订单是否出现漏平","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:34:30 CST 2025","Wed Aug 20 17:34:31 CST 2025","1576","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单平仓操作-订单类型-外部订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-全部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:54:05 CST 2025","Wed Aug 20 17:54:39 CST 2025","34147","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-云跟单账号策略平仓-修改币种min","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:25:50 CST 2025","Wed Aug 20 17:25:52 CST 2025","1528","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单5（停止功能）
-      2. 点击停止
-      2. 校验账号的下单总手数和数据库的手数，应该不相等
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：云策略下单的停止功能正确
-    "
-"passed","Wed Aug 20 17:37:18 CST 2025","Wed Aug 20 17:37:18 CST 2025","61","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:55:37 CST 2025","Wed Aug 20 17:55:37 CST 2025","171","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-品种管理-删除品种",""
-"passed","Wed Aug 20 17:29:41 CST 2025","Wed Aug 20 17:29:41 CST 2025","101","test_cloudTrader","test_cloudOrderClose","TestCloudOrderQuantityControl","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量4
-      2. 平仓-平仓订单数量-2
-      3. 校验数据库是否有2个平仓订单
-      4. 平仓-平仓订单数量-2
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单数量功能正确
-    "
-"passed","Wed Aug 20 17:42:37 CST 2025","Wed Aug 20 17:42:44 CST 2025","6418","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","数据库校验-云策略列表-修改云跟单账号是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:39:04 CST 2025","Wed Aug 20 17:39:16 CST 2025","12498","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","数据库校验-分配下单开仓数据","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:48:36 CST 2025","Wed Aug 20 17:48:38 CST 2025","1553","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","云策略-云策略列表-修改策略账号信息","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:27:13 CST 2025","Wed Aug 20 17:27:44 CST 2025","31571","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","云策略-复制下单平仓操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:51:06 CST 2025","Wed Aug 20 17:51:07 CST 2025","303","test_cloudTrader","test_create_scene","TestCreate_importcloudTrader","","","数据库校验-云策略列表-批量新增云跟单账号",""
-"passed","Wed Aug 20 17:49:44 CST 2025","Wed Aug 20 17:49:45 CST 2025","1563","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","修改跟单账号（无固定注释）","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:40:27 CST 2025","Wed Aug 20 17:40:28 CST 2025","495","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","云策略manager策略账号-复制下单操作","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:45:21 CST 2025","Wed Aug 20 17:45:27 CST 2025","6398","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","数据库校验-云策略列表-修改云跟单账号是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:30:27 CST 2025","Wed Aug 20 17:30:29 CST 2025","1691","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单平仓操作-订单类型-外部订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-内部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:21:25 CST 2025","Wed Aug 20 17:21:25 CST 2025","62","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-组别列表-新增云策略组别",""
-"passed","Wed Aug 20 17:26:36 CST 2025","Wed Aug 20 17:26:38 CST 2025","1525","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","云策略-复制下单平仓操作-币种错误","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:47:01 CST 2025","Wed Aug 20 17:47:11 CST 2025","9389","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:37:25 CST 2025","Wed Aug 20 17:38:01 CST 2025","36422","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:38:04 CST 2025","Wed Aug 20 17:38:05 CST 2025","1521","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单操作","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-全平策略
-          3. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:27:51 CST 2025","Wed Aug 20 17:27:51 CST 2025","118","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
-    "
-"passed","Wed Aug 20 17:45:33 CST 2025","Wed Aug 20 17:45:35 CST 2025","1551","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","云策略-云策略列表-云跟单账号自己平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:55:42 CST 2025","Wed Aug 20 17:55:43 CST 2025","1543","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","云策略-云策略列表-删除云策略-手动下单",""
-"passed","Wed Aug 20 17:39:03 CST 2025","Wed Aug 20 17:39:03 CST 2025","516","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","云策略manager策略账号-分配下单操作","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:35:30 CST 2025","Wed Aug 20 17:35:32 CST 2025","1525","test_cloudTrader","test_cloudOrderClose","TestCloudCloseRemark","","","云策略-复制下单平仓操作-订单备注-ceshipingcangbeizhu","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2，备注是：ceshipingcangbeizhu
-      2. 平仓-平仓备注是：xxxxxxxx
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓备注是：ceshipingcangbeizhu
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单备注功能正确
-    "
-"passed","Wed Aug 20 17:21:43 CST 2025","Wed Aug 20 17:21:45 CST 2025","1590","test_cloudTrader","test_create","TestCreate_cloudTrader","","","平台管理-品种管理-添加品种",""
-"passed","Wed Aug 20 17:55:13 CST 2025","Wed Aug 20 17:55:13 CST 2025","106","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-VPS数据-删除策略账号",""
-"passed","Wed Aug 20 17:54:54 CST 2025","Wed Aug 20 17:54:54 CST 2025","93","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-云策略列表-删除云跟单账号",""
-"passed","Wed Aug 20 17:52:56 CST 2025","Wed Aug 20 17:52:58 CST 2025","1528","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","账号管理-账号列表-修改用户","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:36:19 CST 2025","Wed Aug 20 17:36:20 CST 2025","1539","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-平仓1个","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
-    "
-"passed","Wed Aug 20 17:50:30 CST 2025","Wed Aug 20 17:50:32 CST 2025","1540","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","修改云策略信息（开启跟单备注）","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:42:22 CST 2025","Wed Aug 20 17:42:34 CST 2025","12264","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","出现漏开-redis数据和数据库的数据做比对","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:47:14 CST 2025","Wed Aug 20 17:47:52 CST 2025","37522","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","数据库校验-交易平仓-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:53:41 CST 2025","Wed Aug 20 17:53:42 CST 2025","1509","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","账号管理-交易下单-云策略平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:52:02 CST 2025","Wed Aug 20 17:52:11 CST 2025","9044","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库校验-云跟单账号策略平仓-跟单账号固定手数","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:38:07 CST 2025","Wed Aug 20 17:38:08 CST 2025","1546","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-全平策略","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-全平策略
-          3. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:51:56 CST 2025","Wed Aug 20 17:51:58 CST 2025","1575","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","账号管理-交易下单-云策略平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:19:15 CST 2025","Wed Aug 20 17:19:15 CST 2025","106","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-VPS数据-新增策略账号",""
-"passed","Wed Aug 20 17:53:44 CST 2025","Wed Aug 20 17:53:45 CST 2025","1570","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","云策略-云策略列表-平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:55:02 CST 2025","Wed Aug 20 17:55:04 CST 2025","1559","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","云策略-云策略列表-删除云策略账号",""
-"passed","Wed Aug 20 17:39:17 CST 2025","Wed Aug 20 17:39:19 CST 2025","1529","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","云策略manager策略账号-分配下单平仓操作","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:53:21 CST 2025","Wed Aug 20 17:53:30 CST 2025","9071","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-云跟单账号策略开仓-修改币种p","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:50:06 CST 2025","Wed Aug 20 17:50:07 CST 2025","1500","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","修改云策略信息（关闭跟单备注）","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:36:22 CST 2025","Wed Aug 20 17:36:23 CST 2025","1517","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-平仓1个","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
-    "
-"passed","Wed Aug 20 17:52:58 CST 2025","Wed Aug 20 17:53:05 CST 2025","6588","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-账号列表-修改用户是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:55:40 CST 2025","Wed Aug 20 17:55:40 CST 2025","103","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-云策略列表-删除云策略",""
-"passed","Wed Aug 20 17:21:23 CST 2025","Wed Aug 20 17:21:25 CST 2025","1534","test_cloudTrader","test_create","TestCreate_cloudTrader","","","账号管理-组别列表-新增云策略组别",""
-"passed","Wed Aug 20 17:32:02 CST 2025","Wed Aug 20 17:32:04 CST 2025","1555","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单平仓操作-订单类型-外部订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-外部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:54:55 CST 2025","Wed Aug 20 17:54:57 CST 2025","1505","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","云策略-云策略列表-删除云跟单账号-手动下单",""
-"passed","Wed Aug 20 17:52:00 CST 2025","Wed Aug 20 17:52:01 CST 2025","1555","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","云策略-云策略列表-平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:34:35 CST 2025","Wed Aug 20 17:35:11 CST 2025","36431","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-全部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:28:28 CST 2025","Wed Aug 20 17:28:30 CST 2025","1551","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","云策略-复制下单平仓操作-buy sell-平仓成功","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy sell，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
-    "
-"passed","Wed Aug 20 17:40:45 CST 2025","Wed Aug 20 17:41:16 CST 2025","31434","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","数据库校验-复制下单平仓数据","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:54:59 CST 2025","Wed Aug 20 17:55:00 CST 2025","1524","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","云策略-云策略列表-删除云策略manager账号",""
-"passed","Wed Aug 20 17:19:06 CST 2025","Wed Aug 20 17:19:06 CST 2025","51","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库查询-获取VPSID",""
-"passed","Wed Aug 20 17:21:29 CST 2025","Wed Aug 20 17:21:29 CST 2025","50","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-云策略列表-新增云策略",""
-"passed","Wed Aug 20 17:26:40 CST 2025","Wed Aug 20 17:26:43 CST 2025","2389","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","云策略-复制下单平仓操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:21:38 CST 2025","Wed Aug 20 17:21:38 CST 2025","62","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-云策略列表-新增manager账号",""
-"passed","Wed Aug 20 17:47:53 CST 2025","Wed Aug 20 17:47:55 CST 2025","1571","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","云策略-云策略列表-修改策略账号信息","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:44:41 CST 2025","Wed Aug 20 17:44:53 CST 2025","12245","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:55:44 CST 2025","Wed Aug 20 17:55:44 CST 2025","104","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-云策略列表-删除云策略-手动下单",""
-"passed","Wed Aug 20 17:29:33 CST 2025","Wed Aug 20 17:29:35 CST 2025","1562","test_cloudTrader","test_cloudOrderClose","TestCloudOrderQuantityControl","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量4
-      2. 平仓-平仓订单数量-2
-      3. 校验数据库是否有2个平仓订单
-      4. 平仓-平仓订单数量-2
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单数量功能正确
-    "
-"passed","Wed Aug 20 17:27:04 CST 2025","Wed Aug 20 17:27:11 CST 2025","6431","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","数据库校验-复制下单平仓数据","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:25:00 CST 2025","Wed Aug 20 17:25:34 CST 2025","33561","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","数据库校验-复制下单平仓数据","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数5
-      2. 校验账号的数据是否正确
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
-    "
-"passed","Wed Aug 20 17:21:54 CST 2025","Wed Aug 20 17:21:54 CST 2025","71","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-云策略列表-新增云跟单-手动下单",""
-"failed","Wed Aug 20 17:41:56 CST 2025","Wed Aug 20 17:42:03 CST 2025","6399","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","数据库校验-云策略列表-修改云跟单账号是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:36:36 CST 2025","Wed Aug 20 17:37:12 CST 2025","36456","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
-    "
-"passed","Wed Aug 20 17:31:58 CST 2025","Wed Aug 20 17:32:00 CST 2025","1529","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单平仓操作-订单类型-内部订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-外部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:48:49 CST 2025","Wed Aug 20 17:48:59 CST 2025","9406","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","数据库校验-账号管理-交易下单-指令及订单详情数据检查","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:50:13 CST 2025","Wed Aug 20 17:50:24 CST 2025","11571","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","数据库校验-跟单备注生效","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:49:00 CST 2025","Wed Aug 20 17:49:02 CST 2025","1527","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","账号管理-交易下单-平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:19:02 CST 2025","Wed Aug 20 17:19:05 CST 2025","2100","test_cloudTrader","test_create","TestCreate_cloudTrader","","","账号管理-账号列表-批量新增用户",""
-"passed","Wed Aug 20 17:55:38 CST 2025","Wed Aug 20 17:55:40 CST 2025","1528","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","云策略-云策略列表-删除云策略",""
-"passed","Wed Aug 20 17:36:15 CST 2025","Wed Aug 20 17:36:17 CST 2025","1541","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单平仓操作-全平策略","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-换个云策略进行平仓-平仓1个
-      5. 校验订单数据是否正确
-      6. 平仓-云策略进行平仓-平仓1个
-      7. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平策略功能正确
-    "
-"passed","Wed Aug 20 17:52:20 CST 2025","Wed Aug 20 17:52:55 CST 2025","34511","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库校验-云跟单账号策略平仓-修改净值","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:51:21 CST 2025","Wed Aug 20 17:51:22 CST 2025","1536","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","账号管理-交易下单-云策略账号复制下单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:54:57 CST 2025","Wed Aug 20 17:54:57 CST 2025","100","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-云策略列表-删除云跟单账号-手动下单",""
-"passed","Wed Aug 20 17:51:44 CST 2025","Wed Aug 20 17:51:44 CST 2025","52","test_cloudTrader","test_cloudtrader_scene","Testcloudtrader_Scence","","","数据库-获取主账号净值","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
-  2. 进行开仓
-  3. 判断三个账号的手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的手数是否正确
-- 预期结果：三个账号的手数正确
-"
-"passed","Wed Aug 20 17:30:23 CST 2025","Wed Aug 20 17:30:25 CST 2025","2748","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-内部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:34:27 CST 2025","Wed Aug 20 17:34:28 CST 2025","1561","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-全部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:28:07 CST 2025","Wed Aug 20 17:28:20 CST 2025","13234","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
-    "
-"passed","Wed Aug 20 17:50:33 CST 2025","Wed Aug 20 17:50:35 CST 2025","1549","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","修改跟单账号（无固定注释）","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:50:09 CST 2025","Wed Aug 20 17:50:10 CST 2025","1524","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","修改跟单账号（有固定注释）","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:21:27 CST 2025","Wed Aug 20 17:21:28 CST 2025","1535","test_cloudTrader","test_create","TestCreate_cloudTrader","","","云策略-云策略列表-新增云策略",""
-"passed","Wed Aug 20 17:32:00 CST 2025","Wed Aug 20 17:32:01 CST 2025","98","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-外部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:53:46 CST 2025","Wed Aug 20 17:53:55 CST 2025","9170","test_cloudTrader","test_cloudtrader_money","Testcloudtrader_money","","","数据库校验-云跟单账号策略平仓-修改币种@","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 有三个账号，分别修改三个账号的后缀.@ .p .min
-  2. 进行开仓
-  3. 判断三个账号的币种手数是否正确
-  4. 进行平仓
-  5. 判断三个账号的币种手数是否正确
-- 预期结果：三个账号的币种手数正确
-"
-"passed","Wed Aug 20 17:43:53 CST 2025","Wed Aug 20 17:43:55 CST 2025","2663","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","云策略-云策略列表-修改云跟单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:55:04 CST 2025","Wed Aug 20 17:55:04 CST 2025","107","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-云策略列表-删除云策略账号",""
-"passed","Wed Aug 20 17:30:33 CST 2025","Wed Aug 20 17:30:34 CST 2025","1591","test_cloudTrader","test_cloudOrderClose","TestCloudOrderType","","","云策略-复制下单平仓操作-订单类型-内部订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2
-      2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓订单数量-1，订单类型-内部订单
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单类型功能正确
-    "
-"passed","Wed Aug 20 17:37:14 CST 2025","Wed Aug 20 17:37:15 CST 2025","1503","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","云策略-复制下单操作","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:51:09 CST 2025","Wed Aug 20 17:51:19 CST 2025","10090","test_cloudTrader","test_create_scene","TestCreate_importcloudTrader","","","修改跟单账号（仅使用后6个数据与模板匹配）",""
-"passed","Wed Aug 20 17:26:32 CST 2025","Wed Aug 20 17:26:34 CST 2025","1502","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:19:18 CST 2025","Wed Aug 20 17:21:21 CST 2025","123039","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-批量挂靠VPS跟单（后9个账号）",""
-"passed","Wed Aug 20 17:48:38 CST 2025","Wed Aug 20 17:48:44 CST 2025","6388","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","数据库校验-云策略列表-修改云策略是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:28:26 CST 2025","Wed Aug 20 17:28:26 CST 2025","67","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy sell，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
-    "
-"passed","Wed Aug 20 17:19:05 CST 2025","Wed Aug 20 17:19:05 CST 2025","68","test_cloudTrader","test_create","TestCreate_cloudTrader","","","数据库校验-账号列表-批量新增用户",""
-"passed","Wed Aug 20 17:44:39 CST 2025","Wed Aug 20 17:44:40 CST 2025","1383","test_cloudTrader","test_cloudOrderSend_level","TestcloudTrader_level","","","账号管理-交易下单-云策略账号复制下单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号开仓-关闭
-  2. 进行开仓
-  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云跟单账号开仓-开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:38:21 CST 2025","Wed Aug 20 17:39:01 CST 2025","40677","test_cloudTrader","test_cloudOrderClose","TestCloudClose","","","数据库校验-复制下单平仓数据-数据校验","
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-全平策略
-          3. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        "
-"passed","Wed Aug 20 17:29:42 CST 2025","Wed Aug 20 17:29:44 CST 2025","1544","test_cloudTrader","test_cloudOrderClose","TestCloudOrderQuantityControl","","","云策略-复制下单平仓操作-再次平仓两个订单","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量4
-      2. 平仓-平仓订单数量-2
-      3. 校验数据库是否有2个平仓订单
-      4. 平仓-平仓订单数量-2
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单数量功能正确
-    "
-"passed","Wed Aug 20 17:46:48 CST 2025","Wed Aug 20 17:46:50 CST 2025","1507","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","云策略-云策略列表-修改策略账号信息","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:21:40 CST 2025","Wed Aug 20 17:21:41 CST 2025","1683","test_cloudTrader","test_create","TestCreate_cloudTrader","","","云策略-云策略列表-新增云跟单账号",""
-"passed","Wed Aug 20 17:26:44 CST 2025","Wed Aug 20 17:26:46 CST 2025","1514","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","云策略-复制下单平仓-停止操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:40:43 CST 2025","Wed Aug 20 17:40:45 CST 2025","1576","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","云策略manager策略账号-复制下单平仓操作","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:47:55 CST 2025","Wed Aug 20 17:48:02 CST 2025","6458","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","数据库校验-云策略列表-修改云策略是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:19:16 CST 2025","Wed Aug 20 17:19:18 CST 2025","1523","test_cloudTrader","test_create","TestCreate_cloudTrader","","","账号管理-账号列表-批量挂靠VPS跟单（后9个账号）",""
-"passed","Wed Aug 20 17:35:13 CST 2025","Wed Aug 20 17:35:15 CST 2025","1546","test_cloudTrader","test_cloudOrderClose","TestCloudCloseRemark","","","云策略-复制下单操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单数量2，备注是：ceshipingcangbeizhu
-      2. 平仓-平仓备注是：xxxxxxxx
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-平仓备注是：ceshipingcangbeizhu
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单备注功能正确
-    "
-"passed","Wed Aug 20 17:55:34 CST 2025","Wed Aug 20 17:55:36 CST 2025","1789","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","平台管理-品种管理-删除品种","测试删除用户接口"
-"passed","Wed Aug 20 17:49:47 CST 2025","Wed Aug 20 17:49:47 CST 2025","542","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","云策略账号复制下单","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:46:10 CST 2025","Wed Aug 20 17:46:16 CST 2025","6426","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","数据库校验-云策略列表-修改策略账号是否成功","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:21:48 CST 2025","Wed Aug 20 17:21:50 CST 2025","1592","test_cloudTrader","test_create","TestCreate_cloudTrader","","","云策略-云策略列表-新增云策略-手动下单",""
-"passed","Wed Aug 20 17:22:06 CST 2025","Wed Aug 20 17:22:07 CST 2025","1578","test_cloudTrader","test_cloudOrderSend","TestCloudStrategyOrder","","","云策略-复制下单平仓操作","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 校验账号的数据是否正确
-      3. 进行平仓
-      4. 校验账号的数据是否正确
-    - 预期结果：账号的数据正确
-    "
-"passed","Wed Aug 20 17:39:19 CST 2025","Wed Aug 20 17:40:26 CST 2025","66450","test_cloudTrader","test_masOrderSend","TestCloudStrategyOrderSend","","","数据库校验-分配下单平仓数据","
-### 测试说明
-包含两种云策略 manager策略账号交易下单模式的测试：
-1. 分配下单：按指定手数范围分配订单
-2. 复制下单：按复制模式生成订单
-每种模式均包含下单、数据校验和平仓流程
-"
-"passed","Wed Aug 20 17:50:56 CST 2025","Wed Aug 20 17:51:06 CST 2025","10184","test_cloudTrader","test_create_scene","TestCreate_importcloudTrader","","","云策略-云策略列表-批量新增云跟单账号",""
-"passed","Wed Aug 20 17:54:50 CST 2025","Wed Aug 20 17:54:51 CST 2025","619","test_cloudTrader","test_delete_scene","TestDelete_cloudTrader","","","数据库校验-云策略列表-批量删除云跟单账号",""
-"passed","Wed Aug 20 17:28:55 CST 2025","Wed Aug 20 17:29:31 CST 2025","36654","test_cloudTrader","test_cloudOrderClose","TestCloudFollowDirection","","","数据库校验-复制下单平仓数据-数据校验","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-      2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
-      4. 平仓-订单方向-buy sell，平仓成功
-      5. 校验订单数据是否正确
-    - 预期结果：平仓的订单方向功能正确
-    "
-"passed","Wed Aug 20 17:26:38 CST 2025","Wed Aug 20 17:26:38 CST 2025","55","test_cloudTrader","test_cloudOrderClose","TestCloudCoreFunctionality","","","数据库校验-复制下单平仓数据","
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
-      2. 进行平仓，校验币种，币种错误应该没有开仓订单
-      3. 进行平仓，点击停止
-      4. 校验平仓的订单数，应该不等于开仓总订单
-      5. 进行平仓
-    - 预期结果：平仓的停止功能正确
-    "
-"passed","Wed Aug 20 17:41:18 CST 2025","Wed Aug 20 17:41:20 CST 2025","2411","test_cloudTrader","test_cloudOrderSend_open","TestcloudTrader_open","","","云策略-云策略列表-修改云跟单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云跟单账号平仓-关闭
-  2. 进行开仓
-  3. 进行平仓
-  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-  5. 修改云跟单账号平仓-开启
-- 预期结果：云跟单账号开仓-关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:48:06 CST 2025","Wed Aug 20 17:48:22 CST 2025","15136","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","数据库校验-账号管理-交易下单-根据remark发现有漏单","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:47:12 CST 2025","Wed Aug 20 17:47:14 CST 2025","1525","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","账号管理-交易下单-平仓","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:46:18 CST 2025","Wed Aug 20 17:46:18 CST 2025","508","test_cloudTrader","test_cloudstartegy_addstatus","Testcloudstargy_addstatus","","","账号管理-交易下单-云策略账号复制下单-出现漏开","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略账号 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"
-"passed","Wed Aug 20 17:55:08 CST 2025","Wed Aug 20 17:55:10 CST 2025","1717","test_cloudTrader","test_delete","TestDelete_cloudTrader","","","数据库校验-VPS数据-验证账号是否下架成功（后9个账号）",""
-"passed","Wed Aug 20 17:50:36 CST 2025","Wed Aug 20 17:50:37 CST 2025","498","test_cloudTrader","test_cloudfixed_annotations","TestCloudStrategyOrderRemark","","","云策略账号复制下单","
-### 测试说明
-包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
-"
-"passed","Wed Aug 20 17:48:05 CST 2025","Wed Aug 20 17:48:06 CST 2025","867","test_cloudTrader","test_cloudstartegy_status","Testcloudstargy_status","","","账号管理-交易下单-云策略账号复制下单-出现漏开","
-### 用例说明
-- 前置条件：有云策略和云跟单
-- 操作步骤：
-  1. 修改云策略 策略状态为关闭
-  2. 进行开仓
-  3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
-  4. 修改云策略 策略状态为开启
-  5. 进行补单操作，然后平仓
-- 预期结果：云策略 策略状态为关闭，有漏单数据
-"

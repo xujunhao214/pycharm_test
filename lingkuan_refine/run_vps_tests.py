@@ -20,19 +20,15 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_masOrderSend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_ordersend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_orderclose.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_level.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_open.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_strategy_addstatus.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vpsfixed_annotations.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_money.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_masOrderSend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_ordersend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_orderclose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsOrder_open_level.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsfixed_annotations.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsMasOrder_money_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_delete.py",
 
         "--reruns", "3",  # 重试次数
         "--reruns-delay", "10",  # 重试间隔

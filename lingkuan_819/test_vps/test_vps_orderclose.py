@@ -16,7 +16,7 @@ SKIP_REASON = "该用例暂时跳过"
 # ------------------------------------
 # 大模块1：VPS策略下单-停止平仓功能验证
 # ------------------------------------
-@allure.feature("VPS策略下单-平仓的功能校验")
+@allure.feature("VPS策略下单-平仓的功能校验（多场景汇总）")
 @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCoreFunctionality:
     @allure.story("场景1：平仓的停止功能验证")
@@ -1049,6 +1049,7 @@ class TestVPSOrderType:
             response = requests.request("GET", url, headers=headers, data=payload)
             token_mt4 = response.text
             print(token_mt4)
+            logging.info(token_mt4)
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
@@ -1060,6 +1061,7 @@ class TestVPSOrderType:
             self.response = self.response.json()  # 解析JSON响应
             ticket = self.json_utils.extract(self.response, "$.ticket")
             print(ticket)
+            logging.info(ticket)
 
         @pytest.mark.url("vps")
         @allure.title("自研平台平仓（内部订单，预期失败）")

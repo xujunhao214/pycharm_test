@@ -1,13 +1,13 @@
-# lingkuan/tests/test_create.py
+# lingkuan_model/tests/test_create.py
 import time
 
 import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan.VAR.VAR import *
-from lingkuan.conftest import var_manager
-from lingkuan.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_model.VAR.VAR import *
+from lingkuan_model.conftest import var_manager
+from lingkuan_model.commons.api_base import APITestBase  # 导入基础类
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因

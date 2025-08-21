@@ -1,0 +1,187 @@
+{
+  "uid" : "48003873ad78f99f",
+  "name" : "数据库校验-云策略列表-删除云策略账号",
+  "fullName" : "test_cloudTrader.test_delete.TestDelete_cloudTrader#test_dbdelete_cloudTrader",
+  "historyId" : "13bb43bf5a7e600e7981bc01d607f52e",
+  "time" : {
+    "start" : 1755564974033,
+    "stop" : 1755564974033,
+    "duration" : 0
+  },
+  "status" : "broken",
+  "statusMessage" : "pymysql.err.InterfaceError: (0, '')",
+  "statusTrace" : "db = <pymysql.connections.Connection object at 0x000001FC6D364BB0>\n\n    @pytest.fixture\n    def db_transaction(db):\n        \"\"\"数据库事务管理，自动提交以获取最新数据\"\"\"\n        try:\n>           db.begin()\n\nconftest.py:196: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n..\\venv\\lib\\site-packages\\pymysql\\connections.py:472: in begin\n    self._execute_command(COMMAND.COM_QUERY, \"BEGIN\")\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pymysql.connections.Connection object at 0x000001FC6D364BB0>\ncommand = 3, sql = 'BEGIN'\n\n    def _execute_command(self, command, sql):\n        \"\"\"\n        :raise InterfaceError: If the connection is closed.\n        :raise ValueError: If no username was specified.\n        \"\"\"\n        if not self._sock:\n>           raise err.InterfaceError(0, \"\")\nE           pymysql.err.InterfaceError: (0, '')\n\n..\\venv\\lib\\site-packages\\pymysql\\connections.py:843: InterfaceError\n\nDuring handling of the above exception, another exception occurred:\n\ndb = <pymysql.connections.Connection object at 0x000001FC6D364BB0>\n\n    @pytest.fixture\n    def db_transaction(db):\n        \"\"\"数据库事务管理，自动提交以获取最新数据\"\"\"\n        try:\n            db.begin()\n            yield db\n        except Exception as e:\n>           db.rollback()\n\nconftest.py:199: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n..\\venv\\lib\\site-packages\\pymysql\\connections.py:492: in rollback\n    self._execute_command(COMMAND.COM_QUERY, \"ROLLBACK\")\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pymysql.connections.Connection object at 0x000001FC6D364BB0>\ncommand = 3, sql = 'ROLLBACK'\n\n    def _execute_command(self, command, sql):\n        \"\"\"\n        :raise InterfaceError: If the connection is closed.\n        :raise ValueError: If no username was specified.\n        \"\"\"\n        if not self._sock:\n>           raise err.InterfaceError(0, \"\")\nE           pymysql.err.InterfaceError: (0, '')\n\n..\\venv\\lib\\site-packages\\pymysql\\connections.py:843: InterfaceError\n\nDuring handling of the above exception, another exception occurred:\n\ndb = <pymysql.connections.Connection object at 0x000001FC6D364BB0>\n\n    @pytest.fixture\n    def db_transaction(db):\n        \"\"\"数据库事务管理，自动提交以获取最新数据\"\"\"\n        try:\n            db.begin()\n            yield db\n        except Exception as e:\n            db.rollback()\n            raise\n        finally:\n            # 关键：每次查询后提交事务，刷新数据可见性\n>           db.commit()  # 替代 rollback()，确保看到其他会话的新数据\n\nconftest.py:203: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n..\\venv\\lib\\site-packages\\pymysql\\connections.py:482: in commit\n    self._execute_command(COMMAND.COM_QUERY, \"COMMIT\")\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pymysql.connections.Connection object at 0x000001FC6D364BB0>\ncommand = 3, sql = 'COMMIT'\n\n    def _execute_command(self, command, sql):\n        \"\"\"\n        :raise InterfaceError: If the connection is closed.\n        :raise ValueError: If no username was specified.\n        \"\"\"\n        if not self._sock:\n>           raise err.InterfaceError(0, \"\")\nE           pymysql.err.InterfaceError: (0, '')\n\n..\\venv\\lib\\site-packages\\pymysql\\connections.py:843: InterfaceError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755512050295,
+      "stop" : 1755512050295,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755512053639,
+      "stop" : 1755512053639,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755564974033,
+      "stop" : 1755564974033,
+      "duration" : 0
+    },
+    "status" : "broken",
+    "statusMessage" : "pymysql.err.InterfaceError: (0, '')\n",
+    "statusTrace" : "  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pluggy\\_callers.py\", line 167, in _multicall\n    teardown.throw(outcome._exception)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\setuponly.py\", line 36, in pytest_fixture_setup\n    return (yield)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pluggy\\_callers.py\", line 103, in _multicall\n    res = hook_impl.function(*args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\fixtures.py\", line 1140, in pytest_fixture_setup\n    result = call_fixture_func(fixturefunc, request, kwargs)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\fixtures.py\", line 891, in call_fixture_func\n    fixture_result = next(generator)\n  File \"D:\\pycharm_test\\lingkuan_refine_model\\conftest.py\", line 203, in db_transaction\n    db.commit()  # 替代 rollback()，确保看到其他会话的新数据\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\connections.py\", line 482, in commit\n    self._execute_command(COMMAND.COM_QUERY, \"COMMIT\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\connections.py\", line 843, in _execute_command\n    raise err.InterfaceError(0, \"\")\n",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755512053639,
+      "stop" : 1755512054053,
+      "duration" : 414
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755512050295,
+      "stop" : 1755512050295,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755564962943,
+      "stop" : 1755564962943,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755565008475,
+      "stop" : 1755565008475,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755565008461,
+      "stop" : 1755565008462,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "删除基本账号-云策略账号"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestDelete_cloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "20452-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "48003873ad78f99f.json",
+  "parameterValues" : [ ]
+}

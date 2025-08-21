@@ -1,6 +1,6 @@
 import pytest
 import pymysql
-from lingkuan.VAR.VAR import *
+from lingkuan_model.VAR.VAR import *
 import allure
 import logging
 import datetime
@@ -8,15 +8,15 @@ import os
 import time
 import xml.etree.ElementTree as ET
 from pytest import Config
-from lingkuan.commons.mfa_key import generate_code
-from lingkuan.commons.Encryption_and_decryption import aes_encrypt_str
-from lingkuan.commons.session import EnvironmentSession
-from lingkuan.commons.variable_manager import VariableManager
-from lingkuan.commons.test_tracker import TestResultTracker
-from lingkuan.commons.feishu_notification import send_feishu_notification
-from lingkuan.commons.enums import Environment
-from lingkuan.config import ENV_CONFIG  # 仅导入配置数据
-from lingkuan.commons.redis_utils import RedisClient, get_redis_client
+from lingkuan_model.commons.mfa_key import generate_code
+from lingkuan_model.commons.Encryption_and_decryption import aes_encrypt_str
+from lingkuan_model.commons.session import EnvironmentSession
+from lingkuan_model.commons.variable_manager import VariableManager
+from lingkuan_model.commons.test_tracker import TestResultTracker
+from lingkuan_model.commons.feishu_notification import send_feishu_notification
+from lingkuan_model.commons.enums import Environment
+from lingkuan_model.config import ENV_CONFIG  # 仅导入配置数据
+from lingkuan_model.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys

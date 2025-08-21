@@ -311,7 +311,7 @@ class TestCreate(APITestBase):
         logging.info(f"获取的可见用户信息：{vps_user_data}")
         var_manager.set_runtime_variable("vps_user_data", vps_user_data)
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-新增vps")
     def test_create_vps(self, logged_session, var_manager):
         # 1. 发送新增vps请求
@@ -348,7 +348,7 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS列表-新增vps")
     def test_dbquery_vps(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):

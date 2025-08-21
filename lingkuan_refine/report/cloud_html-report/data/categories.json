@@ -4,61 +4,23 @@
   "children" : [ {
     "name" : "Test defects",
     "children" : [ {
-      "name" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: \n                           SELECT \n                               fod.size,\n                               fod.close_no,\n                               fod.magical,\n                               fod.open_price,\n                               fod.symbol,\n                               fod.order_no,\n                               foi.true_total_lots,\n                               foi.order_no,\n                               foi.operation_type,\n                               foi.create_time,\n                               foi.status,\n                               foi.min_lot_size,\n                               foi.max_lot_size,\n                               foi.total_lots,\n                               foi.master_order,\n                               foi.total_orders\n                           FROM \n                               follow_order_detail fod\n                           INNER JOIN \n                               follow_order_instruct foi \n                           ON \n                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                           WHERE foi.operation_type = %s\n                               AND fod.account = %s\n                               AND fod.trader_id = %s\n                       \n参数: ('1', '300162', 6348)",
+      "name" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: \n                        SELECT \n                            fod.size,\n                            fod.send_no,\n                            fod.magical,\n                            fod.open_price,\n                            fod.symbol,\n                            fod.order_no,\n                            foi.true_total_lots,\n                            foi.order_no,\n                            foi.operation_type,\n                            foi.create_time,\n                            foi.status,\n                            foi.min_lot_size,\n                            foi.max_lot_size,\n                            foi.total_lots,\n                            foi.total_orders\n                        FROM \n                            follow_order_detail fod\n                        INNER JOIN \n                            follow_order_instruct foi \n                        ON \n                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                        WHERE foi.operation_type = %s\n                            AND fod.account = %s\n                            \n参数: ('0', '300162')",
       "children" : [ {
-        "name" : "数据库校验-复制下单平仓数据-数据校验",
-        "uid" : "a8852a19d74ba6ac",
-        "parentUid" : "fde1b1c2a5d3dc50cc600606815a2508",
+        "name" : "数据库校验-账号管理-交易下单-指令及订单详情数据检查",
+        "uid" : "eaec44480783187c",
+        "parentUid" : "75a4a2de3987d4013c47dad04abf8298",
         "status" : "broken",
         "time" : {
-          "start" : 1755682433700,
-          "stop" : 1755682465559,
-          "duration" : 31859
+          "start" : 1755741236018,
+          "stop" : 1755741268621,
+          "duration" : 32603
         },
         "flaky" : false,
         "newFailed" : false,
         "parameters" : [ ]
       } ],
-      "uid" : "fde1b1c2a5d3dc50cc600606815a2508"
+      "uid" : "75a4a2de3987d4013c47dad04abf8298"
     } ],
     "uid" : "bdbf199525818fae7a8651db9eafe741"
-  }, {
-    "name" : "Product defects",
-    "children" : [ {
-      "name" : "AssertionError: follow_open的状态应该是0，实际是：1\nassert 1 == 0",
-      "children" : [ {
-        "name" : "数据库校验-云策略列表-修改云跟单账号是否成功",
-        "uid" : "366875f1c5ec8759",
-        "parentUid" : "7879791203cd8ff360d2b2946ef35039",
-        "status" : "failed",
-        "time" : {
-          "start" : 1755682916923,
-          "stop" : 1755682923322,
-          "duration" : 6399
-        },
-        "flaky" : false,
-        "newFailed" : false,
-        "parameters" : [ ]
-      } ],
-      "uid" : "7879791203cd8ff360d2b2946ef35039"
-    }, {
-      "name" : "AssertionError: follow_close的状态应该是0，实际是：1\nassert 1 == 0",
-      "children" : [ {
-        "name" : "数据库校验-云策略列表-修改云跟单账号是否成功",
-        "uid" : "475f3b8c33836cf4",
-        "parentUid" : "062a62d987f7da6abd073035e80de81b",
-        "status" : "failed",
-        "time" : {
-          "start" : 1755683071771,
-          "stop" : 1755683078188,
-          "duration" : 6417
-        },
-        "flaky" : false,
-        "newFailed" : false,
-        "parameters" : [ ]
-      } ],
-      "uid" : "062a62d987f7da6abd073035e80de81b"
-    } ],
-    "uid" : "8fb3a91ba5aaf9de24cc8a92edc82b5d"
   } ]
 }
