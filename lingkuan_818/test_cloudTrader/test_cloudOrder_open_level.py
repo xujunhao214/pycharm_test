@@ -15,7 +15,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("交易下单-云策略复制下单-漏单场景")
 class TestcloudTrader_openandlevel:
-    @allure.story("场景一：交易下单-云策略复制下单-漏开")
+    @allure.story("场景1：交易下单-云策略复制下单-漏开")
     @allure.description("""
     ### 用例说明
     - 前置条件：有云策略和云跟单
@@ -510,7 +510,7 @@ class TestcloudTrader_openandlevel:
 
                 time.sleep(25)
 
-    @allure.story("场景二：交易下单-云策略复制下单-漏平")
+    @allure.story("场景2：交易下单-云策略复制下单-漏平")
     @allure.description("""
     ### 用例说明
     - 前置条件：有云策略和云跟单
@@ -1040,7 +1040,7 @@ class TestcloudTrader_openandlevel:
 
                 time.sleep(25)
 
-    @allure.story("场景三：交易下单-云策略复制下单-策略账号-策略状态关闭")
+    @allure.story("场景3：交易下单-云策略复制下单-策略账号-策略状态关闭")
     @allure.description("""
     ### 用例说明
     - 前置条件：有云策略和云跟单
@@ -1513,7 +1513,7 @@ class TestcloudTrader_openandlevel:
 
                 time.sleep(25)
 
-    @allure.story("场景四：交易下单-云策略复制下单-云策略-策略状态关闭")
+    @allure.story("场景4：交易下单-云策略复制下单-云策略-策略状态关闭")
     @allure.description("""
     ### 用例说明
     - 前置条件：有云策略和云跟单

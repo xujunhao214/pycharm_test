@@ -22,9 +22,9 @@ def run_vps_tests(env: str = "test"):
         "--clean-alluredir",
 
         # "test_vps/test_create.py",
-        "test_vps/test_lianxi.py",
+        # "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
-        # "test_vps/test_vps_masOrderSend.py",
+        "test_vps/test_vps_masOrderSend.py",
         # "test_vps/test_vps_ordersend.py",
         # "test_vps/test_vps_orderclose.py",
         # "test_vps/test_vpsOrder_open_level.py",

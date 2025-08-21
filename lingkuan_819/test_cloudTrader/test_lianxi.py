@@ -16,7 +16,7 @@ SKIP_REASON = "该用例暂时跳过"
 # ------------------------------------
 # 大模块6：云策略复制下单-平仓的全平策略功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验")
+@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCloseRemark:
     @allure.story("场景11：平仓的功能校验-全平订单")

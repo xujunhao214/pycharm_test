@@ -20,7 +20,7 @@ SKIP_REASON = "该用例暂时跳过"
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudCoreFunctionality:
-    @allure.story("场景一：平仓的停止功能校验")
+    @allure.story("场景1：平仓的停止功能校验")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -75,12 +75,11 @@ class TestCloudCoreFunctionality:
             with allure.step("发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                new_user = var_manager.get_variable("new_user")
 
                 request_data = {
                     "id": cloudMaster_id,
                     "flag": 0,
-                    "intervalTime": 10000,
+                    "intervalTime": 0,
                     "closeType": 0,
                     "remark": "",
                     "cloudTraderId": [cloudTrader_traderList_4],
@@ -101,7 +100,7 @@ class TestCloudCoreFunctionality:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @allure.title("数据库校验-复制下单平仓数据")
+        @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_dbsymbol(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
@@ -206,7 +205,7 @@ class TestCloudCoreFunctionality:
                     "停止平仓响应msg字段应为success"
                 )
 
-        @allure.title("数据库校验-复制下单平仓数据")
+        @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_db(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
@@ -295,17 +294,17 @@ class TestCloudCoreFunctionality:
 # ------------------------------------
 # 大模块2：云策略复制下单-平仓的订单方向验证
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验")
+@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudFollowDirection:
-    @allure.story("场景二：平仓的订单方向功能校验-sell")
+    @allure.story("场景2：平仓的订单方向功能校验-sell")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单3，总手数1
       2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-订单方向-buy，平仓成功
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
@@ -522,13 +521,13 @@ class TestCloudFollowDirection:
         time.sleep(30)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景三：平仓的订单方向功能校验-buy sell")
+    @allure.story("场景3：平仓的订单方向功能校验-buy sell")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单3，总手数1
       2. 平仓-订单方向-sell，平仓失败
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-订单方向-buy sell，平仓成功
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
@@ -748,11 +747,11 @@ class TestCloudFollowDirection:
 # ------------------------------------
 # 大模块3：云策略复制下单-平仓的订单数量功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验")
+@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudOrderQuantityControl:
-    @allure.story("场景四：平仓的订单数量功能校验")
+    @allure.story("场景4：平仓的订单数量功能校验")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -970,17 +969,17 @@ class TestCloudOrderQuantityControl:
 # ------------------------------------
 # 大模块4：云策略复制下单-平仓的订单类型功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验")
+@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudOrderType:
-    @allure.story("场景五：平仓的订单类型功能校验-内部订单")
+    @allure.story("场景5：平仓的订单类型功能校验-内部订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单数量2
       2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-平仓订单数量-1，订单类型-内部订单
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
@@ -1189,13 +1188,13 @@ class TestCloudOrderType:
             time.sleep(30)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景六：平仓的订单类型功能校验-外部订单")
+    @allure.story("场景6：平仓的订单类型功能校验-外部订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单数量2
       2. 平仓-平仓订单数量-1，订单类型-内部订单
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-平仓订单数量-1，订单类型-外部订单
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
@@ -1400,13 +1399,13 @@ class TestCloudOrderType:
             time.sleep(30)
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景七：平仓的订单类型功能校验-全部订单")
+    @allure.story("场景7：平仓的订单类型功能校验-全部订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单数量2
       2. 平仓-平仓订单数量-1，订单类型-外部订单
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-平仓订单数量-1，订单类型-全部订单
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
@@ -1618,17 +1617,17 @@ class TestCloudOrderType:
 # ------------------------------------
 # 大模块5：云策略复制下单-平仓的订单备注功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验")
+@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudCloseRemark:
-    @allure.story("场景八：平仓的订单备注功能校验")
+    @allure.story("场景8：平仓的订单备注功能校验")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单数量2，备注是：ceshipingcangbeizhu
       2. 平仓-平仓备注是：xxxxxxxx
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-平仓备注是：ceshipingcangbeizhu
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单备注功能正确
@@ -1840,17 +1839,17 @@ class TestCloudCloseRemark:
 # ------------------------------------
 # 大模块6：云策略复制下单-平仓的全平策略功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验")
+@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudClose:
-    @allure.story("场景九：平仓的功能校验-全平策略")
+    @allure.story("场景9：平仓的功能校验-全平策略")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单数量2
       2. 平仓-换个云策略进行平仓-全平策略
-      3. 校验数据库是否有未平仓订单-应该没有
+      3. 校验数据库是否有平仓订单-应该没有
       4. 平仓-换个云策略进行平仓-平仓1个
       5. 校验订单数据是否正确
       6. 平仓-云策略进行平仓-平仓1个
@@ -2135,19 +2134,19 @@ class TestCloudClose:
 
             time.sleep(30)
 
-    @allure.story("场景十：平仓的功能校验-全平订单")
+    @allure.story("场景10：平仓的功能校验-全平订单")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-换个云策略进行平仓-全平策略
-          3. 校验数据库是否有未平仓订单-应该没有
-          4. 平仓-换个云策略进行平仓-平仓1个
-          5. 校验订单数据是否正确
-          6. 平仓-云策略进行平仓-全平订单
-          7. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.1-1，总订单数量2
+      2. 平仓-换个云策略进行平仓-全平策略
+      3. 校验数据库是否有平仓订单-应该没有
+      4. 平仓-换个云策略进行平仓-平仓1个
+      5. 校验订单数据是否正确
+      6. 平仓-云策略进行平仓-全平订单
+      7. 校验订单数据是否正确
+    - 预期结果：平仓的功能校验-全平订单功能正确
+    """)
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend10(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -2421,7 +2420,7 @@ class TestCloudClose:
 
             time.sleep(30)
 
-    @allure.story("场景十一：平仓的功能校验-全平订单")
+    @allure.story("场景11：平仓的功能校验-全平订单")
     @allure.description("""
         ### 测试说明
         - 前置条件：有云策略和云跟单

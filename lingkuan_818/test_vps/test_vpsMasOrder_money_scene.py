@@ -15,7 +15,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("跟单软件看板-vps数据-修改跟单账号（六种情况汇总）")
 class TestVPSMasOrder_money_scene:
-    @allure.story("场景一：VPS策略下单-跟单修改币种")
+    @allure.story("场景1：VPS策略下单-跟单修改币种")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单
@@ -425,7 +425,7 @@ class TestVPSMasOrder_money_scene:
 
             time.sleep(25)
 
-    @allure.story("场景二：VPS策略下单-跟单修改模式、品种")
+    @allure.story("场景2：VPS策略下单-跟单修改模式、品种")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单

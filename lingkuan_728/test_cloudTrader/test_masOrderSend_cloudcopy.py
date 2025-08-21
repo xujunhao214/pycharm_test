@@ -38,8 +38,7 @@ class TestbargainmasOrderSend(APITestBase):
         response = self.send_post_request(
             api_session,
             '/bargain/masOrderSend',
-            json_data=data,
-            sleep_seconds=0
+            json_data=data
         )
 
         # 2. 判断云策略复制下单是否成功

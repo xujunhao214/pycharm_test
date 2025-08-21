@@ -35,8 +35,7 @@ class TestMasordersend_allocation(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/bargain/masOrderSend',
-            json_data=data,
-            sleep_seconds=0
+            json_data=data
         )
 
         # 2. 判断VPS分配下单是否成功
@@ -251,8 +250,7 @@ class TestMasordersend_copy(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/bargain/masOrderSend',
-            json_data=data,
-            sleep_seconds=0
+            json_data=data
         )
 
         # 2. 判断VPS复制下单是否成功

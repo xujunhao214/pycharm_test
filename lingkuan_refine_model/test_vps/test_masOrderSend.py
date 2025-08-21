@@ -42,8 +42,7 @@ class TestVPStradingOrders(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/bargain/masOrderSend',
-            json_data=data,
-            sleep_seconds=0
+            json_data=data
         )
 
         # 验证下单成功
@@ -223,8 +222,7 @@ class TestVPStradingOrders(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/bargain/masOrderSend',
-            json_data=data,
-            sleep_seconds=0
+            json_data=data
         )
 
         # 验证下单成功

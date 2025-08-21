@@ -44,8 +44,7 @@ class TestCloudStrategyOrderSend(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/bargain/masOrderSend',
-            json_data=request_data,
-            sleep_seconds=0
+            json_data=request_data
         )
 
         self.assert_json_value(
@@ -241,8 +240,7 @@ class TestCloudStrategyOrderSend(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/bargain/masOrderSend',
-            json_data=request_data,
-            sleep_seconds=0
+            json_data=request_data
         )
 
         self.assert_json_value(

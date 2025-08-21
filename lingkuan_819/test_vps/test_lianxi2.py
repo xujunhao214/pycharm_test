@@ -19,43 +19,37 @@ SKIP_REASON = "该用例暂时跳过"  # 统一跳过原因
 # ---------------------------
 @allure.feature("云策略策略下单-跟单修改模式、品种")
 class TestVPSOrderSend_Scence(APITestBase):
-    # ---------------------------
-    # 数据库查询-获取VPSID
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库查询-获取VPSID")
-    def test_get_vpsID(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库数据"):
-            ip_address = var_manager.get_variable("IP_ADDRESS")
+    @allure.title("数据库查询-获取停止的order_no")
+    def test_copy_verify_db(self, var_manager, db_transaction):
+        """验证复制下单后数据库中的订单数据正确性"""
+        with allure.step("查询复制订单详情数据"):
+            global order_no
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
+            sql = """
+                            SELECT 
+                                order_no
+                            FROM 
+                                follow_order_instruct
+                            WHERE instruction_type = %s
+                                AND cloud_type = %s
+                                AND min_lot_size = %s
+                                AND max_lot_size = %s
+                                AND trader_id = %s
+                        """
+            params = ("1", "0", "1.00", "0.10", vps_trader_id)
 
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM follow_vps WHERE ip_address = %s",
-                (ip_address,)
+            # 轮询等待数据库记录
+            db_data = self.wait_for_database_record(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time"
             )
 
-            # 提取数据库中的值
+        with allure.step("执行复制下单数据校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-            vpsId = db_data[0]["id"]
-            # 存入变量管理器
-            var_manager.set_runtime_variable("vpsId", vpsId)
-            print(f"成功提取 VPS ID: {vpsId}")
-
-    # ---------------------------
-    # VPS管理-VPS列表-获取可见用户信息
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-获取可见用户信息")
-    def test_get_user(self, logged_session, var_manager):
-        # 1. 请求可见用户列表接口
-        response = self.send_get_request(
-            logged_session,
-            '/sys/role/role'
-        )
-
-        # 2. 获取可见用户信息
-        vps_user_data = response.extract_jsonpath("$.data")
-        logging.info(f"获取的可见用户信息：{vps_user_data}")
-        var_manager.set_runtime_variable("vps_user_data", vps_user_data)
+            # 订单状态校验
+            order_no = db_data[0]["order_no"]
+            print("order_no:", order_no)

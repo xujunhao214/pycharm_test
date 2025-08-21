@@ -15,15 +15,15 @@ SKIP_REASON = "该用例暂时跳过"
 @allure.description("""
 ### 测试说明
 包含三种云策略订单备注场景的完整测试流程：
-1. 场景一：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景二：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景三：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
+1. 场景1：策略有固定注释，跟单无固定注释 → 预期取策略备注
+2. 场景2：策略有固定注释，跟单有固定注释 → 预期取跟单备注
+3. 场景3：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
 """)
 class TestCloudStrategyOrderRemark(APITestBase):
     """整合云策略三种备注场景的测试类"""
 
-    # -------------------------- 场景一：策略有备注，跟单无备注 --------------------------
-    @allure.story("场景一：策略有固定注释，跟单无固定注释")
+    # -------------------------- 场景1：策略有备注，跟单无备注 --------------------------
+    @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("修改云策略信息（关闭跟单备注）")
     def test_scenario1_update_strategy(self, var_manager, logged_session):
         with allure.step("发送修改云策略请求"):
@@ -61,7 +61,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "修改云策略请求失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景一：策略有固定注释，跟单无固定注释")
+    @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("修改跟单账号（无固定注释）")
     def test_scenario1_update_follower(self, var_manager, logged_session):
         with allure.step("发送修改跟单账号请求"):
@@ -104,7 +104,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "修改跟单账号请求失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景一：策略有固定注释，跟单无固定注释")
+    @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("云策略账号复制下单")
     def test_scenario1_place_order(self, logged_session, var_manager):
         with allure.step("发送开仓请求"):
@@ -133,7 +133,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
         with allure.step("验证开仓结果"):
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景一：策略有固定注释，跟单无固定注释")
+    @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("数据库校验-策略备注生效")
     def test_scenario1_verify_remark(self, var_manager, db_transaction):
         with allure.step("查询订单备注信息"):
@@ -162,10 +162,10 @@ class TestCloudStrategyOrderRemark(APITestBase):
 
             comment = db_data[0]["comment"]
             assert comment == "ceshiceluebeizhu", \
-                f"场景一备注错误，预期: ceshiceluebeizhu, 实际: {comment}"
-            logger.info(f"场景一备注验证通过: {comment}")
+                f"场景1备注错误，预期: ceshiceluebeizhu, 实际: {comment}"
+            logger.info(f"场景1备注验证通过: {comment}")
 
-    @allure.story("场景一：策略有固定注释，跟单无固定注释")
+    @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("策略和平仓操作")
     def test_scenario1_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
@@ -194,8 +194,8 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "跟单平仓失败")
             self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
-    # -------------------------- 场景二：策略有备注，跟单有备注 --------------------------
-    @allure.story("场景二：策略有固定注释，跟单有固定注释")
+    # -------------------------- 场景2：策略有备注，跟单有备注 --------------------------
+    @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("修改云策略信息（关闭跟单备注）")
     def test_scenario2_update_strategy(self, var_manager, logged_session):
         with allure.step("发送修改云策略请求"):
@@ -233,7 +233,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "修改云策略请求失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景二：策略有固定注释，跟单有固定注释")
+    @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("修改跟单账号（有固定注释）")
     def test_scenario2_update_follower(self, var_manager, logged_session):
         with allure.step("发送修改跟单账号请求"):
@@ -276,7 +276,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "修改跟单账号请求失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景二：策略有固定注释，跟单有固定注释")
+    @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("云策略账号复制下单")
     def test_scenario2_place_order(self, logged_session, var_manager):
         with allure.step("发送开仓请求"):
@@ -305,7 +305,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
         with allure.step("验证开仓结果"):
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景二：策略有固定注释，跟单有固定注释")
+    @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("数据库校验-跟单备注生效")
     def test_scenario2_verify_remark(self, var_manager, db_transaction):
         with allure.step("查询订单备注信息"):
@@ -333,10 +333,10 @@ class TestCloudStrategyOrderRemark(APITestBase):
 
             comment = db_data[0]["comment"]
             assert comment == "ceshigendanbeizhu", \
-                f"场景二备注错误，预期: ceshigendanbeizhu, 实际: {comment}"
-            logger.info(f"场景二备注验证通过: {comment}")
+                f"场景2备注错误，预期: ceshigendanbeizhu, 实际: {comment}"
+            logger.info(f"场景2备注验证通过: {comment}")
 
-    @allure.story("场景二：策略有固定注释，跟单有固定注释")
+    @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("策略和平仓操作")
     def test_scenario2_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
@@ -365,8 +365,8 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "跟单平仓失败")
             self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
-    # -------------------------- 场景三：策略开启订单备注，跟单无备注 --------------------------
-    @allure.story("场景三：策略开启订单备注，跟单无固定注释")
+    # -------------------------- 场景3：策略开启订单备注，跟单无备注 --------------------------
+    @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("修改云策略信息（开启跟单备注）")
     def test_scenario3_update_strategy(self, var_manager, logged_session):
         with allure.step("发送修改云策略请求"):
@@ -404,7 +404,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "修改云策略请求失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景三：策略开启订单备注，跟单无固定注释")
+    @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("修改跟单账号（无固定注释）")
     def test_scenario3_update_follower(self, var_manager, logged_session):
         with allure.step("发送修改跟单账号请求"):
@@ -447,7 +447,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             self.assert_response_status(response, 200, "修改跟单账号请求失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景三：策略开启订单备注，跟单无固定注释")
+    @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("云策略账号复制下单")
     def test_scenario3_place_order(self, logged_session, var_manager):
         with allure.step("发送开仓请求"):
@@ -476,7 +476,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
         with allure.step("验证开仓结果"):
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-    @allure.story("场景三：策略开启订单备注，跟单无固定注释")
+    @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("数据库校验-开仓备注生效")
     def test_scenario3_verify_remark(self, var_manager, db_transaction):
         with allure.step("查询订单备注信息"):
@@ -504,10 +504,10 @@ class TestCloudStrategyOrderRemark(APITestBase):
 
             comment = db_data[0]["comment"]
             assert comment == "ceshikaicangbeizhu", \
-                f"场景三备注错误，预期: ceshikaicangbeizhu, 实际: {comment}"
-            logger.info(f"场景三备注验证通过: {comment}")
+                f"场景3备注错误，预期: ceshikaicangbeizhu, 实际: {comment}"
+            logger.info(f"场景3备注验证通过: {comment}")
 
-    @allure.story("场景三：策略开启订单备注，跟单无固定注释")
+    @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("策略和平仓操作")
     def test_scenario3_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):

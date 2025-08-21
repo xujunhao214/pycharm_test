@@ -15,7 +15,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("云策略-云策略列表-修改跟单账号（六种情况汇总）")
 class Testcloudtrader_moneyandscene:
-    @allure.story("场景一：云策略-云策略列表-云跟单账号修改币种")
+    @allure.story("场景1：云策略-云策略列表-云跟单账号修改币种")
     @allure.description("""
     ### 用例说明
     - 前置条件：有云策略和云跟单
@@ -522,7 +522,7 @@ class Testcloudtrader_moneyandscene:
 
             time.sleep(25)
 
-    @allure.story("场景二：云策略策略下单-跟单修改模式、品种")
+    @allure.story("场景2：云策略策略下单-跟单修改模式、品种")
     @allure.description("""
     ### 用例说明
     - 前置条件：有云策略和云跟单
