@@ -827,4 +827,4 @@ class TestVPSMasOrder_money_scene:
                 assert abs(total - true_size) < 3, f"size总和与预期比例偏差过大：预期{true_size}，实际{total}，误差超过3"
                 logging.info(f"预期:{true_size}实际:{total}")
 
-            time.sleep(25)
+            time.sleep(40)

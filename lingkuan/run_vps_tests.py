@@ -53,7 +53,7 @@ def run_vps_tests(env: str = "test"):
         text=True,
         encoding="utf-8"
     )
-    print(f"VPS测试环境文件生成输出: {result.stderr}")
+    print(f"VPS文件生成输出: {result.stderr}")
 
     # 生成独立HTML报告
     try:

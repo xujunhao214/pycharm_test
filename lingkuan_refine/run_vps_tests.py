@@ -20,16 +20,16 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_masOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_ordersend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_orderclose.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsOrder_open_level.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsfixed_annotations.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsMasOrder_money_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_delete.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_lianxi.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_create.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_masOrderSend.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_vps_ordersend.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_vps_orderclose.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_vpsOrder_open_level.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_vpsfixed_annotations.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_create_scene.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_vpsMasOrder_money_scene.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_delete.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_lianxi.py",
 
         "--reruns", "3",  # 重试次数
         "--reruns-delay", "10",  # 重试间隔
@@ -56,7 +56,7 @@ def run_vps_tests(env: str = "test"):
         text=True,
         encoding="utf-8"
     )
-    print(f"VPS测试环境文件生成输出: {result.stderr}")
+    print(f"VPS文件生成输出: {result.stderr}")
 
     # 生成独立HTML报告
     try:
