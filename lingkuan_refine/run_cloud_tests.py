@@ -24,6 +24,7 @@ def run_cloud_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_create.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderSend.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderClose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloud_masOrderMG.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloud_masOrderSend.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrder_open_level.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudfixed_annotations.py",
@@ -32,8 +33,8 @@ def run_cloud_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_delete.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_lianxi.py",
 
-        "--reruns", "3",  # 重试次数
-        "--reruns-delay", "10",  # 重试间隔
+        "--reruns", "3",
+        "--reruns-delay", "10",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",

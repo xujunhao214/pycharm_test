@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("账号管理-创建账号-为云策略准备")
+@allure.feature("数据管理-创建数据-为云策略准备")
 class TestCreate_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")

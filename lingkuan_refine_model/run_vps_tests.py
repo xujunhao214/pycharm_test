@@ -31,8 +31,8 @@ def run_vps_tests(env: str = "test"):
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_delete.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine_model/test_vps/test_lianxi.py",
 
-        "--reruns", "3",  # 重试次数
-        "--reruns-delay", "10",  # 重试间隔
+        "--reruns", "3",
+        "--reruns-delay", "10",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("VPS策略账号交易下单-开仓的场景校验（多场景汇总）")
+@allure.feature("VPS策略账号交易下单-开仓的场景校验")
 class TestVPSMasOrdersend:
     @allure.story("场景1：分配下单-手数0.1-1，总手数1")
     @allure.description("""
@@ -28,7 +28,7 @@ class TestVPSMasOrdersend:
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  # 使用实例变量存储
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  
             data = {
                 "traderList": [vps_trader_user_id],
                 "type": 0,
@@ -358,7 +358,7 @@ class TestVPSMasOrdersend:
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  # 使用实例变量存储
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  
             data = {
                 "traderList": [vps_trader_user_id],
                 "type": 0,
@@ -697,7 +697,7 @@ class TestVPSMasOrdersend:
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  # 使用实例变量存储
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  
             data = {
                 "traderList": [vps_trader_user_id],
                 "type": 0,
@@ -1025,7 +1025,7 @@ class TestVPSMasOrdersend:
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  # 使用实例变量存储
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  
             data = {
                 "traderList": [vps_trader_user_id],
                 "type": 0,
@@ -1125,7 +1125,7 @@ class TestVPSMasOrdersend:
                     f'总订单数量不匹配，预期: 10, 实际: {total_orders}'
                 logger.info(f"总订单数量校验通过: {total_orders}")
 
-                assert len(db_data) == 10, "应该有10个开仓订单，不符合预期结果"
+                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -1169,7 +1169,7 @@ class TestVPSMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 10, "应该有10个开仓订单，不符合预期结果"
+                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS复制下单平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1240,7 +1240,7 @@ class TestVPSMasOrdersend:
                 assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
                 logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
 
-                assert len(db_data) == 10, "应该有10个平仓订单，不符合预期结果"
+                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1305,7 +1305,7 @@ class TestVPSMasOrdersend:
                 )
                 logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-                assert len(db_data) == 10, "应该有10个平仓订单，不符合预期结果"
+                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
 
             time.sleep(25)
 
@@ -1324,7 +1324,7 @@ class TestVPSMasOrdersend:
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  # 使用实例变量存储
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  
             data = {
                 "traderList": [vps_trader_user_id],
                 "type": 0,
@@ -1653,7 +1653,7 @@ class TestVPSMasOrdersend:
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  # 使用实例变量存储
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")  
             data = {
                 "traderList": [vps_trader_user_id],
                 "type": 0,
@@ -1785,7 +1785,7 @@ class TestVPSMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-            assert len(db_data) != 5, "开仓的订单的数量应该不等于5，不符合预期"
+            assert len(db_data) != 5, f"开仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -1829,7 +1829,7 @@ class TestVPSMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 5, "开仓的订单的数量应该不等于5，不符合预期"
+                assert len(db_data) != 5, f"开仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
 
         @allure.title("VPS复制下单平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1893,7 +1893,7 @@ class TestVPSMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 5, "平仓的订单的数量应该不等于5，不符合预期"
+                assert len(db_data) != 5, f"平仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1951,6 +1951,6 @@ class TestVPSMasOrdersend:
                 )
                 logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-                assert len(db_data) != 5, "平仓的订单的数量应该不等于5，不符合预期"
+                assert len(db_data) != 5, f"平仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
 
             time.sleep(25)

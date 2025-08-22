@@ -1,0 +1,208 @@
+{
+  "uid" : "f73593e74aa72b2e",
+  "name" : "数据库校验-交易平仓-主指令及订单详情数据检查-有1个订单",
+  "fullName" : "test_vps.test_vps_masOrderClose.TestVPStradingOrders9#test_dbquery_orderSendclose",
+  "historyId" : "76d577e0acd5c6a2d35d603695781b4a",
+  "time" : {
+    "start" : 1755854144341,
+    "stop" : 1755854145275,
+    "duration" : 934
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有vps策略和vps跟单\n      1. MT4登录，然后进行开仓\n      2. 进行平仓-订单类型-内部订单\n      3. 校验平仓的订单数，应该没有平仓订单\n      4. 进行平仓-订单类型-外部订单\n      5. 校验平仓的订单数,等于1\n    - 预期结果：平仓的订单类型功能正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有vps策略和vps跟单\n  1. MT4登录，然后进行开仓\n  2. 进行平仓-订单类型-内部订单\n  3. 校验平仓的订单数，应该没有平仓订单\n  4. 进行平仓-订单类型-外部订单\n  5. 校验平仓的订单数,等于1\n- 预期结果：平仓的订单类型功能正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\nassert 8 == 1\n +  where 8 = len([{'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 77100, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 70825, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 16275, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 13410, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 69740, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 85376, ...}, ...])",
+  "statusTrace" : "self = <lingkuan_819.test_vps.test_vps_masOrderClose.TestVPSMasOrderclose.TestVPStradingOrders9 object at 0x000001A7B6FB72B0>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x000001A7B6FBDE50>\ndb_transaction = <pymysql.connections.Connection object at 0x000001A7B70874F0>\n\n    @allure.title(\"数据库校验-交易平仓-主指令及订单详情数据检查-有1个订单\")\n    def test_dbquery_orderSendclose(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.magical,\n                        fod.open_price,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type = %s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '1',\n                new_user[\"account\"],\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n>           assert len(db_data) == 1, \"平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\"\nE           AssertionError: 平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\nE           assert 8 == 1\nE            +  where 8 = len([{'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 77100, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 70825, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 16275, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 13410, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 69740, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 85376, ...}, ...])\n\ntest_vps\\test_vps_masOrderClose.py:2533: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1755854143911,
+      "stop" : 1755854144341,
+      "duration" : 430
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755854144341,
+      "stop" : 1755854144341,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有vps策略和vps跟单\n      1. MT4登录，然后进行开仓\n      2. 进行平仓-订单类型-内部订单\n      3. 校验平仓的订单数，应该没有平仓订单\n      4. 进行平仓-订单类型-外部订单\n      5. 校验平仓的订单数,等于1\n    - 预期结果：平仓的订单类型功能正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\nassert 8 == 1\n +  where 8 = len([{'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 77100, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 70825, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 16275, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 13410, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 69740, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 85376, ...}, ...])",
+    "statusTrace" : "self = <lingkuan_819.test_vps.test_vps_masOrderClose.TestVPSMasOrderclose.TestVPStradingOrders9 object at 0x000001A7B6FB72B0>\nvar_manager = <lingkuan_819.commons.variable_manager.VariableManager object at 0x000001A7B6FBDE50>\ndb_transaction = <pymysql.connections.Connection object at 0x000001A7B70874F0>\n\n    @allure.title(\"数据库校验-交易平仓-主指令及订单详情数据检查-有1个订单\")\n    def test_dbquery_orderSendclose(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.magical,\n                        fod.open_price,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type = %s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '1',\n                new_user[\"account\"],\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n>           assert len(db_data) == 1, \"平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\"\nE           AssertionError: 平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\nE           assert 8 == 1\nE            +  where 8 = len([{'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 77100, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 70825, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 16275, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 13410, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 69740, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 85376, ...}, ...])\n\ntest_vps\\test_vps_masOrderClose.py:2533: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1755854144341,
+        "stop" : 1755854145275,
+        "duration" : 934
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "数据库查询结果",
+        "time" : {
+          "start" : 1755854145273,
+          "stop" : 1755854145275,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "6d4c0156c5ca2d60",
+          "name" : "执行SQL",
+          "source" : "6d4c0156c5ca2d60.txt",
+          "type" : "text/plain",
+          "size" : 1032
+        }, {
+          "uid" : "951294c66e5ac597",
+          "name" : "SQL参数",
+          "source" : "951294c66e5ac597.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "375aa7f138822a2b",
+          "name" : "查询结果（共8条，显示前50条）",
+          "source" : "375aa7f138822a2b.json",
+          "type" : "application/json",
+          "size" : 2449
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3
+    }, {
+      "name" : "2. 数据校验",
+      "time" : {
+        "start" : 1755854145275,
+        "stop" : 1755854145275,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\nassert 8 == 1\n +  where 8 = len([{'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 77100, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 70825, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 16275, ...}, {'close_no': '7041796537992', 'create_time': '2025-08-22 17:15:12', 'foi.order_no': '7041796537992', 'magical': 13410, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 69740, ...}, {'close_no': '8641151023469', 'create_time': '2025-08-22 17:14:44', 'foi.order_no': '8641151023469', 'magical': 85376, ...}, ...])\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_819\\test_vps\\test_vps_masOrderClose.py\", line 2533, in test_dbquery_orderSendclose\n    assert len(db_data) == 1, \"平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "8e31a681a19d2cc2",
+      "name" : "log",
+      "source" : "8e31a681a19d2cc2.txt",
+      "type" : "text/plain",
+      "size" : 5119
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 3,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 4
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755854145287,
+      "stop" : 1755854145287,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755854145286,
+      "stop" : 1755854145286,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景9：平仓的订单类型功能校验-外部订单"
+  }, {
+    "name" : "feature",
+    "value" : "VPS策略账号交易下单-平仓的功能校验"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_masOrderClose"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSMasOrderclose"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "32068-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vps_masOrderClose"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "f73593e74aa72b2e.json",
+  "parameterValues" : [ ]
+}

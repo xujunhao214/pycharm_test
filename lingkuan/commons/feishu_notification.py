@@ -54,7 +54,7 @@ def send_feishu_notification(
     # 计算百分比，处理除零错误
     passed_percent = f"{(passed / total * 100):.1f}%" if total > 0 else "0.0%"
     failed_percent = f"{(failed / total * 100):.1f}%" if total > 0 else "0.0%"
-    # skipped_percent = f"{(skipped / total * 100):.1f}%" if total > 0 else "0.0%"
+    skipped_percent = f"{(skipped / total * 100):.1f}%" if total > 0 else "0.0%"
 
     # 构建Markdown内容
     markdown_content = f"""
@@ -69,7 +69,7 @@ def send_feishu_notification(
 - 📊 **总用例数**: {total}
 - ✅ **通过数**: {passed} ({passed_percent})
 - ❌ **失败数**: {failed} ({failed_percent})
-- ⏩ **跳过数**: {skipped}
+- ⏩ **跳过数**: {skipped} ({skipped_percent})
 - 🌟 **成功率**: {success_rate}
 
 **查看报告**:

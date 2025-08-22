@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("VPS策略账号交易下单-平仓的功能校验（多场景汇总）")
+@allure.feature("VPS策略账号交易下单-平仓的功能校验")
 class TestVPSMasOrderclose:
     @allure.story("场景1：平仓的品种功能校验")
     @allure.description("""
@@ -92,17 +92,23 @@ class TestVPSMasOrderclose:
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
                         SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -118,14 +124,14 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的币种错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -140,6 +146,7 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
@@ -174,7 +181,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的币种错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-正常平仓")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -216,11 +223,13 @@ class TestVPSMasOrderclose:
                                 fod.open_price,
                                 fod.symbol,
                                 fod.order_no,
+                                fod.close_time,
                                 foi.true_total_lots,
                                 foi.order_no,
                                 foi.operation_type,
                                 foi.create_time,
-                                foi.status
+                                foi.status,
+                                foi.total_orders
                             FROM 
                                 follow_order_detail fod
                             INNER JOIN 
@@ -236,17 +245,17 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 2, "正常平仓，应该有两个平仓订单，不符合预期结果"
+                assert len(db_data) == 2, f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -261,6 +270,7 @@ class TestVPSMasOrderclose:
                                 fod.open_price,
                                 fod.symbol,
                                 fod.order_no,
+                                fod.close_time,
                                 foi.true_total_lots,
                                 foi.order_no,
                                 foi.operation_type,
@@ -298,9 +308,9 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 2, "正常平仓，应该有两个平仓订单，不符合预期结果"
+                assert len(db_data) == 2, f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景2：平仓的停止功能校验")
     @allure.description("""
@@ -446,6 +456,7 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
@@ -477,7 +488,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, "平仓的过程中点击停止，应该没有4个平仓订单，不符合预期结果"
+                assert len(db_data) != 4, f"平仓的过程中点击停止，应该没有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -492,6 +503,7 @@ class TestVPSMasOrderclose:
                     fod.open_price,
                     fod.symbol,
                     fod.order_no,
+                    fod.close_time,
                     foi.true_total_lots,
                     foi.order_no,
                     foi.operation_type,
@@ -526,7 +538,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, "平仓的过程中点击停止，应该没有4个平仓订单，不符合预期结果"
+                assert len(db_data) != 4, f"平仓的过程中点击停止，应该没有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-正常平仓")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -567,11 +579,13 @@ class TestVPSMasOrderclose:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.close_time,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
                         foi.create_time,
-                        foi.status
+                        foi.status,
+                        foi.total_orders
                     FROM 
                         follow_order_detail fod
                     INNER JOIN 
@@ -587,17 +601,17 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, "正常平仓，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -612,6 +626,7 @@ class TestVPSMasOrderclose:
                                 fod.open_price,
                                 fod.symbol,
                                 fod.order_no,
+                                fod.close_time,
                                 foi.true_total_lots,
                                 foi.order_no,
                                 foi.operation_type,
@@ -649,9 +664,9 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, "正常平仓，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景3：平仓的订单方向功能校验-sell")
     @allure.description("""
@@ -787,6 +802,7 @@ class TestVPSMasOrderclose:
                        fod.open_price,
                        fod.symbol,
                        fod.order_no,
+                       fod.close_time,
                        foi.true_total_lots,
                        foi.order_no,
                        foi.operation_type,
@@ -821,7 +837,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, "平仓的订单方向错误，应该没有4个平仓订单，不符合预期结果"
+                assert len(db_data) != 4, f"平仓的订单方向错误，应该没有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-跟单账号平仓-sell")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -864,6 +880,7 @@ class TestVPSMasOrderclose:
                           fod.open_price,
                           fod.symbol,
                           fod.order_no,
+                          fod.close_time,
                           foi.true_total_lots,
                           foi.order_no,
                           foi.operation_type,
@@ -898,7 +915,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单方向正确，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-正常平仓")
         def test_copy_order_close3(self, var_manager, logged_session):
@@ -939,11 +956,13 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
-                            foi.status
+                            foi.status,
+                            foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -959,19 +978,19 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, "正常平仓，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景4：平仓的订单方向功能校验-buy sell")
     @allure.description("""
@@ -1094,54 +1113,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                        SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, "平仓的订单方向错误，应该没有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-跟单账号平仓-buy sell")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -1184,6 +1201,7 @@ class TestVPSMasOrderclose:
                           fod.open_price,
                           fod.symbol,
                           fod.order_no,
+                          fod.close_time,
                           foi.true_total_lots,
                           foi.order_no,
                           foi.operation_type,
@@ -1218,7 +1236,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单方向正确，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-正常平仓")
         def test_copy_order_close3(self, var_manager, logged_session):
@@ -1259,11 +1277,13 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
-                            foi.status
+                            foi.status,
+                            foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -1279,19 +1299,19 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, "正常平仓，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景5：平仓的订单方向功能校验-buy")
     @allure.description("""
@@ -1414,54 +1434,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                        SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, "平仓的订单方向错误，应该没有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-跟单账号平仓-buy")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -1504,6 +1522,7 @@ class TestVPSMasOrderclose:
                           fod.open_price,
                           fod.symbol,
                           fod.order_no,
+                          fod.close_time,
                           foi.true_total_lots,
                           foi.order_no,
                           foi.operation_type,
@@ -1538,7 +1557,7 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单方向正确，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-正常平仓")
         def test_copy_order_close3(self, var_manager, logged_session):
@@ -1579,11 +1598,13 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
-                            foi.status
+                            foi.status,
+                            foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -1599,19 +1620,19 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, "正常平仓，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景6：平仓的订单数量功能校验-4")
     @allure.description("""
@@ -1700,6 +1721,7 @@ class TestVPSMasOrderclose:
                        fod.open_price,
                        fod.symbol,
                        fod.order_no,
+                       fod.close_time,
                        foi.true_total_lots,
                        foi.order_no,
                        foi.operation_type,
@@ -1776,11 +1798,13 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
-                            foi.status
+                            foi.status,
+                            foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -1796,14 +1820,14 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -1818,6 +1842,7 @@ class TestVPSMasOrderclose:
                              fod.open_price,
                              fod.symbol,
                              fod.order_no,
+                             fod.close_time,
                              foi.true_total_lots,
                              foi.order_no,
                              foi.operation_type,
@@ -1852,9 +1877,9 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景7：平仓的订单数量功能校验-0/8")
     @allure.description("""
@@ -1930,54 +1955,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为：总单数最少一单"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                       SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的订单数量功能错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-平仓订单数8")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2019,11 +2042,13 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
-                            foi.status
+                            foi.status,
+                            foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -2039,14 +2064,14 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2061,6 +2086,7 @@ class TestVPSMasOrderclose:
                              fod.open_price,
                              fod.symbol,
                              fod.order_no,
+                             fod.close_time,
                              foi.true_total_lots,
                              foi.order_no,
                              foi.operation_type,
@@ -2095,9 +2121,9 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景8：平仓的订单类型功能校验-内部订单")
     @allure.description("""
@@ -2173,54 +2199,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                        SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的订单数量功能错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-订单类型-内部订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2262,11 +2286,13 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
-                            foi.status
+                            foi.status,
+                            foi.total_orders
                         FROM 
                             follow_order_detail fod
                         INNER JOIN 
@@ -2282,14 +2308,14 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2304,6 +2330,7 @@ class TestVPSMasOrderclose:
                              fod.open_price,
                              fod.symbol,
                              fod.order_no,
+                             fod.close_time,
                              foi.true_total_lots,
                              foi.order_no,
                              foi.operation_type,
@@ -2338,9 +2365,9 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景9：平仓的订单类型功能校验-外部订单")
     @allure.description("""
@@ -2416,54 +2443,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                    SELECT 
+                         fod.size,
+                         fod.close_no,
+                         fod.magical,
+                         fod.open_price,
+                         fod.symbol,
+                         fod.order_no,
+                         fod.close_time,
+                         foi.true_total_lots,
+                         foi.order_no,
+                         foi.operation_type,
+                         foi.create_time,
+                         foi.status,
+                         foi.min_lot_size,
+                         foi.max_lot_size,
+                         foi.total_lots,
+                         foi.master_order,
+                         foi.total_orders
+                    FROM 
+                        follow_order_detail fod
+                    INNER JOIN 
+                        follow_order_instruct foi 
+                    ON 
+                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                    WHERE foi.operation_type = %s
+                        AND fod.account = %s
+                        """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的订单数量功能错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-订单类型-外部订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2505,6 +2530,7 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
@@ -2525,11 +2551,11 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 assert len(db_data) == 1, "平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果"
@@ -2547,6 +2573,7 @@ class TestVPSMasOrderclose:
                              fod.open_price,
                              fod.symbol,
                              fod.order_no,
+                             fod.close_time,
                              foi.true_total_lots,
                              foi.order_no,
                              foi.operation_type,
@@ -2583,7 +2610,7 @@ class TestVPSMasOrderclose:
             with allure.step("2. 数据校验"):
                 assert len(db_data) == 1, "平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景10：平仓的订单类型功能校验-全部订单")
     @allure.description("""
@@ -2659,54 +2686,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                        SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的订单数量功能错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-订单类型-内部订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2748,6 +2773,7 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
@@ -2768,14 +2794,14 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2790,6 +2816,7 @@ class TestVPSMasOrderclose:
                              fod.open_price,
                              fod.symbol,
                              fod.order_no,
+                             fod.close_time,
                              foi.true_total_lots,
                              foi.order_no,
                              foi.operation_type,
@@ -2824,9 +2851,9 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)
 
     @allure.story("场景11：平仓的订单备注功能校验")
     @allure.description("""
@@ -2839,7 +2866,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单备注功能正确
     """)
-    class TestVPStradingOrders10(APITestBase):
+    class TestVPStradingOrders11(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
@@ -2902,54 +2929,52 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+                new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                    SELECT 
+                         fod.size,
+                         fod.close_no,
+                         fod.magical,
+                         fod.open_price,
+                         fod.symbol,
+                         fod.order_no,
+                         fod.close_time,
+                         foi.true_total_lots,
+                         foi.order_no,
+                         foi.operation_type,
+                         foi.create_time,
+                         foi.status,
+                         foi.min_lot_size,
+                         foi.max_lot_size,
+                         foi.total_lots,
+                         foi.master_order,
+                         foi.total_orders
+                    FROM 
+                        follow_order_detail fod
+                    INNER JOIN 
+                        follow_order_instruct foi 
+                    ON 
+                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                    WHERE foi.operation_type = %s
+                        AND fod.account = %s
+                        """
                 params = (
                     '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
+                    new_user["account"],
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, "平仓的订单数量功能错误，应该没有平仓订单，不符合预期结果"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("VPS交易下单-交易平仓-订单备注：ceshipingcangbeizhu")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2991,6 +3016,7 @@ class TestVPSMasOrderclose:
                             fod.open_price,
                             fod.symbol,
                             fod.order_no,
+                            fod.close_time,
                             foi.true_total_lots,
                             foi.order_no,
                             foi.operation_type,
@@ -3011,14 +3037,14 @@ class TestVPSMasOrderclose:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_record_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -3033,6 +3059,7 @@ class TestVPSMasOrderclose:
                              fod.open_price,
                              fod.symbol,
                              fod.order_no,
+                             fod.close_time,
                              foi.true_total_lots,
                              foi.order_no,
                              foi.operation_type,
@@ -3067,6 +3094,6 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, "平仓的订单数量功能错误，应该有4个平仓订单，不符合预期结果"
+                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
 
-        time.sleep(35)
+        time.sleep(30)

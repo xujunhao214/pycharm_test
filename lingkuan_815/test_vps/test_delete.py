@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-@allure.feature("删除基本账号")
+@allure.feature("数据管理-删除VPS测试数据")
 class TestDeleteUser(APITestBase):
     # ---------------------------
     # 账号管理-组别列表-删除VPS组别

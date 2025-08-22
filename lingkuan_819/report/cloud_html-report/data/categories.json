@@ -4,22 +4,22 @@
   "children" : [ {
     "name" : "Test defects",
     "children" : [ {
-      "name" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: \n                        SELECT \n                            fod.size,\n                            fod.send_no,\n                            fod.magical,\n                            fod.open_price,\n                            fod.symbol,\n                            fod.order_no,\n                            foi.true_total_lots,\n                            foi.order_no,\n                            foi.operation_type,\n                            foi.create_time,\n                            foi.status,\n                            foi.min_lot_size,\n                            foi.max_lot_size,\n                            foi.total_lots,\n                            foi.total_orders\n                        FROM \n                            follow_order_detail fod\n                        INNER JOIN \n                            follow_order_instruct foi \n                        ON \n                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                        WHERE foi.operation_type = %s\n                            AND fod.account = %s\n                            \n参数: ('0', '300162')",
+      "name" : "TimeoutError: 等待超时（30秒），未查询到任何数据。\nSQL: \n                        SELECT \n                            fod.size,\n                            fod.close_no,\n                            fod.magical,\n                            fod.open_price,\n                            fod.symbol,\n                            fod.order_no,\n                            foi.true_total_lots,\n                            foi.order_no,\n                            foi.operation_type,\n                            foi.create_time,\n                            foi.status,\n                            foi.min_lot_size,\n                            foi.max_lot_size,\n                            foi.total_lots,\n                            foi.master_order,\n                            foi.total_orders\n                        FROM \n                            follow_order_detail fod\n                        INNER JOIN \n                            follow_order_instruct foi \n                        ON \n                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                        WHERE foi.operation_type = %s\n                            AND fod.account = %s\n                            AND fod.trader_id = %s\n                            \n参数: ('1', '300162', 6678)",
       "children" : [ {
-        "name" : "数据库校验-账号管理-交易下单-指令及订单详情数据检查",
-        "uid" : "eaec44480783187c",
-        "parentUid" : "75a4a2de3987d4013c47dad04abf8298",
+        "name" : "数据库校验-交易平仓-跟单指令及订单详情数据检查",
+        "uid" : "aa0c07f93306c94d",
+        "parentUid" : "c756caf6583c6c1a17cd79cddb29e2c9",
         "status" : "broken",
         "time" : {
-          "start" : 1755741236018,
-          "stop" : 1755741268621,
-          "duration" : 32603
+          "start" : 1755854728313,
+          "stop" : 1755854759342,
+          "duration" : 31029
         },
         "flaky" : false,
         "newFailed" : false,
         "parameters" : [ ]
       } ],
-      "uid" : "75a4a2de3987d4013c47dad04abf8298"
+      "uid" : "c756caf6583c6c1a17cd79cddb29e2c9"
     } ],
     "uid" : "bdbf199525818fae7a8651db9eafe741"
   } ]

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("账号管理-创建跟单账号")
+@allure.feature("跟单软件看板-VPS数据-批量新增VPS跟单")
 class TestCreate_Scene(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")

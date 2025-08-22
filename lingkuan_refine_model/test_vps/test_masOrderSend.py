@@ -28,7 +28,7 @@ class TestVPStradingOrders(APITestBase):
     def test_allocation_order_send(self, logged_session, var_manager):
         # 发送VPS分配下单请求
         masOrderSend = var_manager.get_variable("masOrderSend")
-        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
+        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  
         data = {
             "traderList": [vps_user_ids_1],
             "type": 0,
@@ -205,7 +205,7 @@ class TestVPStradingOrders(APITestBase):
     def test_copy_order_send(self, logged_session, var_manager):
         # 发送VPS复制下单请求
         masOrderSend = var_manager.get_variable("masOrderSend")
-        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  # 使用实例变量存储
+        vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")  
         data = {
             "traderList": [vps_user_ids_1],
             "type": 0,

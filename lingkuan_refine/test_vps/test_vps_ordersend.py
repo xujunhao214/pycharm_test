@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("VPS策略下单-开仓的场景校验（多场景汇总）")
+@allure.feature("VPS策略下单-开仓的场景校验")
 @allure.description("""
 ### 用例说明
 - 前置条件：有vps策略和vps跟单

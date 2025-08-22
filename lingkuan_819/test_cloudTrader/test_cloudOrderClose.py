@@ -16,7 +16,7 @@ SKIP_REASON = "该用例暂时跳过"
 # ------------------------------------
 # 大模块1：云策略复制下单-平仓的停止功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
+@allure.feature("云策略复制下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudCoreFunctionality:
@@ -146,7 +146,7 @@ class TestCloudCoreFunctionality:
                 )
 
             with allure.step("执行复制平仓数据校验-订单不等于开仓总订单数量"):
-                assert len(db_data) == 0, "数据库中存在处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):
@@ -254,7 +254,7 @@ class TestCloudCoreFunctionality:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                assert len(db_data) != 4, "复制平仓数据应该不等于开仓总订单数量"
+                assert len(db_data) != 4, f"平仓的订单数量应该不是4，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -294,7 +294,7 @@ class TestCloudCoreFunctionality:
 # ------------------------------------
 # 大模块2：云策略复制下单-平仓的订单方向验证
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
+@allure.feature("云策略复制下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudFollowDirection:
@@ -426,7 +426,7 @@ class TestCloudFollowDirection:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) == 0, "数据库中存在处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-buy-平仓成功")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -649,7 +649,7 @@ class TestCloudFollowDirection:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) == 0, "数据库中存在处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-buy sell-平仓成功")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -747,7 +747,7 @@ class TestCloudFollowDirection:
 # ------------------------------------
 # 大模块3：云策略复制下单-平仓的订单数量功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
+@allure.feature("云策略复制下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudOrderQuantityControl:
@@ -879,7 +879,7 @@ class TestCloudOrderQuantityControl:
                 )
 
             with allure.step("执行复制平仓数据校验-有两个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-再次平仓两个订单")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -961,7 +961,7 @@ class TestCloudOrderQuantityControl:
                 )
 
             with allure.step("执行复制平仓数据校验-有四个订单"):
-                assert len(db_data) == 4, "数据库中没有4个处理的平仓订单，不符合预期"
+                assert len(db_data) == 4, f"平仓的订单数量应该是4，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -969,7 +969,7 @@ class TestCloudOrderQuantityControl:
 # ------------------------------------
 # 大模块4：云策略复制下单-平仓的订单类型功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
+@allure.feature("云策略复制下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudOrderType:
@@ -1101,7 +1101,7 @@ class TestCloudOrderType:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) != 2, "数据库中存在2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓的订单数量应该是0，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-订单类型-内部订单")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -1183,7 +1183,7 @@ class TestCloudOrderType:
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -1312,7 +1312,7 @@ class TestCloudOrderType:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) != 1, "数据库中存在1个处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓的订单数量应该是0，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -1394,7 +1394,7 @@ class TestCloudOrderType:
                 )
 
             with allure.step("执行复制平仓数据校验-有订单"):
-                assert len(db_data) == 1, "数据库中没有处理的平仓订单，不符合预期"
+                assert len(db_data) == 1, f"平仓的订单数量应该是1，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -1527,7 +1527,7 @@ class TestCloudOrderType:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) != 2, "数据库中存在2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓的订单数量应该是0，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-订单类型-全部订单")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -1609,7 +1609,7 @@ class TestCloudOrderType:
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -1617,7 +1617,7 @@ class TestCloudOrderType:
 # ------------------------------------
 # 大模块5：云策略复制下单-平仓的订单备注功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
+@allure.feature("云策略复制下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudCloseRemark:
@@ -1749,7 +1749,7 @@ class TestCloudCloseRemark:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) != 2, "数据库中存在2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓的订单数量应该是0，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-订单备注-ceshipingcangbeizhu")
         def test_copy_close_order2(self, logged_session, var_manager):
@@ -1831,7 +1831,7 @@ class TestCloudCloseRemark:
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -1839,7 +1839,7 @@ class TestCloudCloseRemark:
 # ------------------------------------
 # 大模块6：云策略复制下单-平仓的全平策略功能校验
 # ------------------------------------
-@allure.feature("云策略复制下单-平仓的功能校验（多场景汇总）")
+@allure.feature("云策略复制下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudClose:
@@ -1966,7 +1966,7 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) != 2, "数据库中存在2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓的订单数量应该是0，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-平仓1个")
         def test_copy_close_order(self, logged_session, var_manager):
@@ -2048,7 +2048,7 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-有订单"):
-                assert len(db_data) == 1, "数据库中没有1个处理的平仓订单，不符合预期"
+                assert len(db_data) == 1, f"平仓的订单数量应该是1，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-平仓1个")
         def test_copy_close_order3(self, logged_session, var_manager):
@@ -2130,7 +2130,7 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -2258,7 +2258,7 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
-                assert len(db_data) != 2, "数据库中存在2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 0, f"平仓的订单数量应该是0，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-平仓1个")
         def test_copy_close_order(self, logged_session, var_manager):
@@ -2340,7 +2340,7 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-有订单"):
-                assert len(db_data) == 1, "数据库中没有1个处理的平仓订单，不符合预期"
+                assert len(db_data) == 1, f"平仓的订单数量应该是1，结果有{len(db_data)}个订单"
 
         @allure.title("云策略-复制下单平仓操作-全平订单")
         def test_copy_close_order3(self, logged_session, var_manager):
@@ -2416,7 +2416,7 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
             time.sleep(30)
 
@@ -2540,6 +2540,6 @@ class TestCloudClose:
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
-                assert len(db_data) == 2, "数据库中没有2个处理的平仓订单，不符合预期"
+                assert len(db_data) == 2, f"平仓的订单数量应该是2，结果有{len(db_data)}个订单"
 
             time.sleep(30)

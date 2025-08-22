@@ -1,0 +1,30 @@
+INFO     lingkuan_819.commons.api_base:api_base.py:397 [2025-08-22 17:10:16] 执行SQL: 
+                            SELECT 
+                                fod.size,
+                                fod.close_no,
+                                fod.magical,
+                                fod.open_price,
+                                fod.symbol,
+                                fod.order_no,
+                                foi.true_total_lots,
+                                foi.order_no,
+                                foi.operation_type,
+                                foi.create_time,
+                                foi.status,
+                                foi.total_orders
+                            FROM 
+                                follow_order_detail fod
+                            INNER JOIN 
+                                follow_order_instruct foi 
+                            ON 
+                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                            WHERE foi.operation_type = %s
+                                AND fod.account = %s
+                                 AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300151', 1, 1)
+INFO     lingkuan_819.commons.api_base:api_base.py:400 [2025-08-22 17:10:17] 查询成功，结果数量: 2 | SQL: 
+                            SELECT 
+                                fod.size,
+                                fod.close_no,
+                                fod.magical,
+                              
+INFO     lingkuan_819.commons.api_base:api_base.py:411 [2025-08-22 17:10:17] 查询结果: [{"size": 0.53, "close_no": "9124488879741", "magical": 38437, "open_price": 3330.57, "symbol": "XAUUSD", "order_no": 360459, "true_total_lots": 1.0, "foi.order_no": "9124488879741", "operation_type": 1, "create_time": "2025-08-22 17:10:14", "status": 1, "total_orders": 0}, {"size": 0.47, "close_no": "9124488879741", "magical": 39119, "open_price": 3330.57, "symbol": "XAUUSD", "order_no": 360460, "true_total_lots": 1.0, "foi.order_no": "9124488879741", "operation_type": 1, "create_time": "2025-08-22 17:10:14", "status": 1, "total_orders": 0}]

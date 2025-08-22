@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"
 
 
-@allure.feature("账号管理-创建基本信息")
+@allure.feature("数据管理-创建数据-为VPS测试准备")
 class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-新增单个用户")

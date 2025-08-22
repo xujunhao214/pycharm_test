@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("云策略-云策略列表-修改跟单账号（多场景汇总）")
+@allure.feature("云策略-云策略列表-修改跟单账号")
 class Testcloudtrader_moneyandscene:
     @allure.story("场景1：云策略-云策略列表-云跟单账号修改币种")
     @allure.description("""

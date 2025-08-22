@@ -36,8 +36,8 @@ def run_vps_tests(env: str = "test"):
         "test_vps/test_delete.py",
         "test_vps/test_delete_scene.py",
 
-        "--reruns", "3",  # 重试次数
-        "--reruns-delay", "10",  # 重试间隔
+        "--reruns", "3",
+        "--reruns-delay", "10",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("云策略复制下单-开仓的场景校验（多场景汇总）")
+@allure.feature("云策略复制下单-开仓的场景校验")
 class TestCloudStrategyOrder:
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景1：手数0.1-1，总订单3，总手数1")
@@ -1050,7 +1050,7 @@ class TestCloudStrategyOrder:
                 logger.info(f"复制下单开始手数校验通过: {startSize}")
 
                 # 校验订单数和下单总订单数
-                assert len(db_data) != 5, "订单数和下单总订单数不匹配"
+                assert len(db_data) != 5, f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单"
 
         # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
         @allure.title("云策略-复制下单平仓操作")

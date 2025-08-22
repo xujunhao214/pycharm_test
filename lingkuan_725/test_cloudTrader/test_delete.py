@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"
 
 
-@allure.feature("删除基本账号-云策略账号")
+@allure.feature("数据管理-删除VPS测试数据-云策略账号")
 class TestDelete_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云跟单账号")
