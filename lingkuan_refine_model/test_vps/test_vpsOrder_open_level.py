@@ -14,7 +14,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("VPS策略下单-漏单场景")
 class TestLeakageopen_level:
-    @allure.story("场景一：VPS策略下单-漏开")
+    @allure.story("场景1：VPS策略下单-漏开")
     @allure.description("""
         ### 用例说明
         - 前置条件：有vps策略和vps跟单
@@ -660,7 +660,7 @@ class TestLeakageopen_level:
 
             time.sleep(25)
 
-    @allure.story("场景二：VPS策略下单-漏平")
+    @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
         ### 用例说明
         - 前置条件：有vps策略和vps跟单
@@ -1315,7 +1315,7 @@ class TestLeakageopen_level:
 
             time.sleep(25)
 
-    @allure.story("场景三：VPS策略下单-关闭策略跟单状态")
+    @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单

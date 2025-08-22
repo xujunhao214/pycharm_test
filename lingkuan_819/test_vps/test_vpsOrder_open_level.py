@@ -1315,7 +1315,7 @@ class TestLeakageopen_level:
 
             time.sleep(25)
 
-    @allure.story("场景三：VPS策略下单-关闭策略跟单状态")
+    @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单

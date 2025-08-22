@@ -20,7 +20,7 @@ SKIP_REASON = "该用例暂时跳过"
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudCoreFunctionality:
-    @allure.story("场景一：平仓的停止功能校验")
+    @allure.story("场景1：平仓的停止功能校验")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -299,7 +299,7 @@ class TestCloudCoreFunctionality:
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudFollowDirection:
-    @allure.story("场景二：平仓的订单方向功能校验-sell")
+    @allure.story("场景2：平仓的订单方向功能校验-sell")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -522,7 +522,7 @@ class TestCloudFollowDirection:
         time.sleep(30)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景三：平仓的订单方向功能校验-buy sell")
+    @allure.story("场景3：平仓的订单方向功能校验-buy sell")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -752,7 +752,7 @@ class TestCloudFollowDirection:
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudOrderQuantityControl:
-    @allure.story("场景四：平仓的订单数量功能校验")
+    @allure.story("场景4：平仓的订单数量功能校验")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -974,7 +974,7 @@ class TestCloudOrderQuantityControl:
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudOrderType:
-    @allure.story("场景五：平仓的订单类型功能校验-内部订单")
+    @allure.story("场景5：平仓的订单类型功能校验-内部订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -1189,7 +1189,7 @@ class TestCloudOrderType:
             time.sleep(30)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景六：平仓的订单类型功能校验-外部订单")
+    @allure.story("场景6：平仓的订单类型功能校验-外部订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -1400,7 +1400,7 @@ class TestCloudOrderType:
             time.sleep(30)
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景七：平仓的订单类型功能校验-全部订单")
+    @allure.story("场景7：平仓的订单类型功能校验-全部订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -1622,7 +1622,7 @@ class TestCloudOrderType:
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudCloseRemark:
-    @allure.story("场景八：平仓的订单备注功能校验")
+    @allure.story("场景8：平仓的订单备注功能校验")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -1844,7 +1844,7 @@ class TestCloudCloseRemark:
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 @pytest.mark.retry(n=3, delay=5)
 class TestCloudClose:
-    @allure.story("场景九：平仓的功能校验-全平策略")
+    @allure.story("场景9：平仓的功能校验-全平策略")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -2135,7 +2135,7 @@ class TestCloudClose:
 
             time.sleep(30)
 
-    @allure.story("场景十：平仓的功能校验-全平订单")
+    @allure.story("场景10：平仓的功能校验-全平订单")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -2421,7 +2421,7 @@ class TestCloudClose:
 
             time.sleep(30)
 
-    @allure.story("场景十一：平仓的功能校验-全平订单")
+    @allure.story("场景11：平仓的功能校验-全平订单")
     @allure.description("""
         ### 测试说明
         - 前置条件：有云策略和云跟单

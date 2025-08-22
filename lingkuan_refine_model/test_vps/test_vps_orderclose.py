@@ -19,7 +19,7 @@ SKIP_REASON = "该用例暂时跳过"
 @allure.feature("VPS策略下单-平仓的功能校验（多场景汇总）")
 @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCoreFunctionality:
-    @allure.story("场景一：平仓的停止功能验证")
+    @allure.story("场景1：平仓的停止功能验证")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单
@@ -248,10 +248,10 @@ class TestVPSCoreFunctionality:
 # ------------------------------------
 # 大模块2：VPS策略下单-平仓的订单方向验证
 # ------------------------------------
-@allure.feature("VPS策略下单-平仓的功能校验")
+@allure.feature("VPS策略下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSFollowDirection:
-    @allure.story("场景二：平仓的订单方向功能验证-跟单是sell")
+    @allure.story("场景2：平仓的订单方向功能验证-跟单是sell")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单
@@ -490,7 +490,7 @@ class TestVPSFollowDirection:
                     "响应msg字段应为success"
                 )
 
-    @allure.story("场景三：平仓的订单方向功能验证-跟单是buy")
+    @allure.story("场景3：平仓的订单方向功能验证-跟单是buy")
     @allure.description("""
         ### 用例说明
         - 前置条件：有vps策略和vps跟单
@@ -691,7 +691,7 @@ class TestVPSFollowDirection:
                     "响应msg字段应为success"
                 )
 
-    @allure.story("场景四：平仓的订单方向功能验证-平仓buy sell")
+    @allure.story("场景4：平仓的订单方向功能验证-平仓buy sell")
     @allure.description("""
             ### 用例说明
             - 前置条件：有vps策略和vps跟单
@@ -852,10 +852,10 @@ class TestVPSFollowDirection:
 # ------------------------------------
 # 大模块3：VPS策略下单-平仓的订单数量功能验证
 # ------------------------------------
-@allure.feature("VPS策略下单-平仓的功能校验")
+@allure.feature("VPS策略下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSOrderQuantityControl:
-    @allure.story("场景五：平仓的订单数量功能验证")
+    @allure.story("场景5：平仓的订单数量功能验证")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单
@@ -1014,10 +1014,10 @@ class TestVPSOrderQuantityControl:
 # ------------------------------------
 # 大模块4：VPS策略下单-平仓的订单类型功能验证
 # ------------------------------------
-@allure.feature("VPS策略下单-平仓的功能校验")
+@allure.feature("VPS策略下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSOrderType:
-    @allure.story("场景六：平仓的订单类型功能验证（MT4外部订单）")
+    @allure.story("场景6：平仓的订单类型功能验证-MT4外部订单")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单
@@ -1118,7 +1118,7 @@ class TestVPSOrderType:
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSInternalOrderType:
-        @allure.story("场景七：平仓的订单类型功能验证（内部订单）")
+        @allure.story("场景7：平仓的订单类型功能验证-内部订单")
         @allure.description("""
         ### 用例说明
         - 前置条件：有vps策略和vps跟单
@@ -1239,7 +1239,7 @@ class TestVPSOrderType:
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSAllOrderType:
-        @allure.story("场景八：平仓的订单类型功能验证（全部订单）")
+        @allure.story("场景8：平仓的订单类型功能验证-全部订单")
         @allure.description("""
         ### 用例说明
         - 前置条件：有vps策略和vps跟单
@@ -1362,10 +1362,10 @@ class TestVPSOrderType:
 # ------------------------------------
 # 大模块5：VPS策略下单-平仓的备注功能验证
 # ------------------------------------
-@allure.feature("VPS策略下单-平仓的功能校验")
+@allure.feature("VPS策略下单-平仓的功能校验（多场景汇总）")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCloseRemark:
-    @allure.story("场景九：平仓的备注功能验证")
+    @allure.story("场景9：平仓的备注功能验证")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单

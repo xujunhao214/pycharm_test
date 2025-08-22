@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("云策略交易下单-跟随策略账号订单备注（三种情况汇总）")
+@allure.feature("云策略交易下单-跟随策略账号订单备注（多场景汇总）")
 @allure.description("""
 ### 测试说明
 包含三种云策略订单备注场景的完整测试流程：
