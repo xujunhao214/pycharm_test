@@ -20,7 +20,7 @@ def run_cloud_tests(env: str = "test"):
         f"--env={env}",
         f"--test-group=cloud",
         f"--alluredir={report_dir}",
-        "--clean-alluredir",  # 独立执行时清理自身结果
+        "--clean-alluredir",
 
         # "test_cloudTrader/test_create.py",
         "test_cloudTrader/test_lianxi.py",

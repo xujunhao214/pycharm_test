@@ -19,7 +19,7 @@ def run_cloud_tests(env: str = "test"):
         f"--env={env}",
         f"--test-group=cloud",
         f"--alluredir={report_dir}",
-        "--clean-alluredir",  # 独立执行时清理自身结果
+        "--clean-alluredir",
 
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend.py",
