@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -126,7 +126,7 @@ class VPSOrderTestBase(APITestBase):
             """
             params = ('0', new_user["account"])
 
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -226,7 +226,7 @@ class VPSOrderTestBase(APITestBase):
             """
             params = ('0', vps_user_accounts_1)
 
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -300,7 +300,7 @@ class VPSOrderTestBase(APITestBase):
             """
             params = ('1', new_user["account"])
 
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -367,7 +367,7 @@ class VPSOrderTestBase(APITestBase):
             """
             params = ('1', vps_user_accounts_1, vps_addslave_id)
 
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -745,7 +745,7 @@ class TestVPSOrderSend5(VPSOrderTestBase):
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,

@@ -1,8 +1,8 @@
 # commons/wait_utils.py
 import time
 import allure
-from allure_commons.model2 import Status  # 保留原有导入
-from allure_commons.reporter import AllureReporter  # 替换 StepResult 导入
+from allure_commons.model2 import Status
+from allure_commons.reporter import AllureReporter
 from allure_commons._allure import StepContext
 from typing import Callable, Any, Optional
 

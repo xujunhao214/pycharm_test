@@ -1,0 +1,532 @@
+INFO     lingkuan_refine.commons.api_base:api_base.py:599 [2025-08-18 18:28:53] 开始等待数据库记录稳定 | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 超时: 30秒 | 稳定期: 3秒
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:28:53] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:28:53] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:28:53] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:28:55] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:28:55] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:28:55] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:28:57] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:28:57] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:28:57] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:28:59] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:28:59] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:28:59] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:01] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:01] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:01] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:03] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:03] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:03] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:05] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:06] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:06] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:08] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:08] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:08] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:10] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:10] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:10] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:12] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:12] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:12] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:14] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:14] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:14] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:16] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:16] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:16] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:18] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:18] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:18] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:20] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:20] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:20] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:22] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:22] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")
+WARNING  lingkuan_refine.commons.api_base:api_base.py:656 [2025-08-18 18:29:22] 轮询查询异常: (1052, "Column 'create_time' in order clause is ambiguous") | 继续等待...
+INFO     lingkuan_refine.commons.api_base:api_base.py:397 [2025-08-18 18:29:24] 执行SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                WHERE foi.operation_type = %s AND fod.account = %s
+             AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('0', '300162', 1, 1)
+ERROR    lingkuan_refine.commons.api_base:api_base.py:432 [2025-08-18 18:29:24] 数据库错误 (错误码: 1052): (1052, "Column 'create_time' in order clause is ambiguous") | SQL:
+                SELECT fod.comment 
+                FROM follow_order_detail fod
+                INNER JOIN follow_order_instruct foi 
+                    ON foi.order_no = fod.send_no COLLATE utf8mb | 参数: ('0', '300162', 1, 1)
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_refine\commons\api_base.py", line 398, in query_database
+    cursor.execute(final_sql, params)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 563, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 825, in _read_query_result
+    result.read()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 1199, in read
+    first_packet = self.connection._read_packet()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\connections.py", line 775, in _read_packet
+    packet.raise_for_error()
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\pycharm_test\venv\lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1052, "Column 'create_time' in order clause is ambiguous")

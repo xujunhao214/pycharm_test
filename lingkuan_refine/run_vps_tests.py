@@ -24,15 +24,13 @@ def run_vps_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_ordersend.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_orderclose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_masOrderSend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_masOrderClose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsOrder_open_level.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsfixed_annotations.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create_scene.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsMasOrder_money_scene.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_delete.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_lianxi.py",
-
-        "--reruns", "3",
-        "--reruns-delay", "10",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",

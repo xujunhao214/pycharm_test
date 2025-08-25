@@ -1,12 +1,11 @@
 import time
-
 import pytest
 import logging
 import allure
 from typing import Dict, Any, List
 from lingkuan_729.VAR.VAR import *
 from lingkuan_729.conftest import var_manager
-from lingkuan_729.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_729.commons.api_base import APITestBase
 from lingkuan_729.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)

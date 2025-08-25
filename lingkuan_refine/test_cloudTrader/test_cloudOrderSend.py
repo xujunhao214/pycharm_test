@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -14,7 +14,7 @@ SKIP_REASON = "该用例暂时跳过"
 @allure.feature("云策略复制下单-开仓的场景校验")
 class TestCloudStrategyOrder:
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景1：手数0.1-1，总订单3，总手数1")
+    @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -95,7 +95,7 @@ class TestCloudStrategyOrder:
                 params = ('0', cloudTrader_user_accounts_4)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -213,7 +213,7 @@ class TestCloudStrategyOrder:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -241,7 +241,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景2：手数0.01-0.01，总手数0.01")
+    @allure.story("场景2：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -323,7 +323,7 @@ class TestCloudStrategyOrder:
                 params = ('0', cloudTrader_user_accounts_4)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -331,7 +331,6 @@ class TestCloudStrategyOrder:
                 )
 
             with allure.step("执行复制下单数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
@@ -431,7 +430,7 @@ class TestCloudStrategyOrder:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -457,7 +456,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景3：手数0.01-1，总订单10")
+    @allure.story("场景3：复制下单-手数0.01-1，总订单10")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -538,7 +537,7 @@ class TestCloudStrategyOrder:
                 params = ('0', cloudTrader_user_accounts_4)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -641,7 +640,7 @@ class TestCloudStrategyOrder:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -661,7 +660,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景4：手数0.1-1，总手数5")
+    @allure.story("场景4：复制下单-手数0.1-1，总手数5")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -742,7 +741,7 @@ class TestCloudStrategyOrder:
                 params = ('0', cloudTrader_user_accounts_4)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -854,7 +853,7 @@ class TestCloudStrategyOrder:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -880,7 +879,7 @@ class TestCloudStrategyOrder:
             time.sleep(25)
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景5：手数0.1-1，总订单5-停止功能")
+    @allure.story("场景5：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -928,7 +927,7 @@ class TestCloudStrategyOrder:
                     "复制下单响应msg字段应为success"
                 )
 
-        @allure.title("数据库校验-复制下单数据")
+        @allure.title("数据库查询-获取停止的order_no")
         def test_copy_verify_db(self, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
@@ -949,7 +948,7 @@ class TestCloudStrategyOrder:
                 params = ("1", "0", cloudMaster_id, "自动化测试", "1.00", "0.10")
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -963,10 +962,10 @@ class TestCloudStrategyOrder:
                 # 订单状态校验
                 order_no = db_data[0]["order_no"]
 
-        @allure.title("云策略-复制下单操作")
+        @allure.title("云策略-停止操作")
         def test_cloudTrader_cloudStopOrder(self, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("发送停止操作请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
 
                 params = {
@@ -981,7 +980,7 @@ class TestCloudStrategyOrder:
                     params=params
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("验证停止操作响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1023,7 +1022,7 @@ class TestCloudStrategyOrder:
                 params = ('0', cloudTrader_user_accounts_4)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1085,14 +1084,14 @@ class TestCloudStrategyOrder:
 
     @allure.story("场景6：分配下单-手数0.1-1，总手数1")
     @allure.description("""
-            ### 测试说明
-            - 前置条件：有云策略和云跟单
-              1. 进行开仓，手数范围0.1-1，总手数1
-              2. 校验账号的数据是否正确
-              3. 进行平仓
-              4. 校验账号的数据是否正确
-            - 预期结果：云策略分配下单功能正确
-            """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：云策略分配下单功能正确
+    """)
     class TestMasOrderSend6(APITestBase):
         @allure.title("云策略-分配下单操作")
         def test_allocation_place_order(self, logged_session, var_manager):
@@ -1134,35 +1133,35 @@ class TestCloudStrategyOrder:
             with allure.step("查询订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                            SELECT 
-                                fod.size,
-                                fod.send_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.symbol,
-                                fod.order_no,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.min_lot_size,
-                                foi.max_lot_size,
-                                foi.total_lots,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                        """
+                        SELECT 
+                            fod.size,
+                            fod.send_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                    """
                 params = ('0', cloudTrader_user_accounts_4)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1243,37 +1242,37 @@ class TestCloudStrategyOrder:
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = """
-                            SELECT 
-                                fod.size,
-                                fod.close_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.symbol,
-                                fod.order_no,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.min_lot_size,
-                                foi.max_lot_size,
-                                foi.total_lots,
-                                foi.master_order,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                                AND fod.trader_id = %s
-                        """
+                        SELECT 
+                            fod.size,
+                            fod.close_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.master_order,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.trader_id = %s
+                    """
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,

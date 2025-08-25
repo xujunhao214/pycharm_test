@@ -1,5 +1,4 @@
 import logging
-
 from jsonpath_ng import parse
 from typing import Optional, Any, List, Dict, Union
 

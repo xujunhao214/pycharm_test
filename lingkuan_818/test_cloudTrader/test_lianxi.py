@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_818.VAR.VAR import *
 from lingkuan_818.conftest import var_manager
-from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_818.commons.api_base import APITestBase
 import requests
 from lingkuan_818.commons.jsonpath_utils import JsonPathUtils
 

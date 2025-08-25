@@ -1,13 +1,12 @@
 # lingkuan_812/tests/test_vps_ordersend.py
 import time
 import math
-
 import allure
 import logging
 import pytest
 from lingkuan_812.VAR.VAR import *
 from lingkuan_812.conftest import var_manager
-from lingkuan_812.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_812.commons.api_base import APITestBase
 from lingkuan_812.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)

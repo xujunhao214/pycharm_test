@@ -5,7 +5,7 @@ import time
 import math  # 导入math模块用于浮点数精确比较
 from lingkuan_728.VAR.VAR import *
 from lingkuan_728.conftest import var_manager
-from lingkuan_728.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_728.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因

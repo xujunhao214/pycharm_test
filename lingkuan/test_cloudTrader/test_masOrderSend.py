@@ -6,7 +6,7 @@ import time
 import math
 from lingkuan.VAR.VAR import *
 from lingkuan.conftest import var_manager
-from lingkuan.commons.api_base import APITestBase  # 导入基础类
+from lingkuan.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因

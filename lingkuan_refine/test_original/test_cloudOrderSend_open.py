@@ -6,7 +6,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 from lingkuan_refine.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
@@ -91,7 +91,7 @@ class TestcloudTrader_open(APITestBase):
             params = (cloudTrader_user_accounts_4, cloudMaster_id,)
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params
@@ -170,7 +170,7 @@ class TestcloudTrader_open(APITestBase):
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -208,7 +208,7 @@ class TestcloudTrader_open(APITestBase):
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -317,7 +317,7 @@ class TestcloudTrader_open(APITestBase):
             params = (cloudTrader_user_accounts_4, cloudMaster_id,)
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params
@@ -393,7 +393,7 @@ class TestcloudTrader_open(APITestBase):
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -480,7 +480,7 @@ class TestcloudTrader_open(APITestBase):
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,

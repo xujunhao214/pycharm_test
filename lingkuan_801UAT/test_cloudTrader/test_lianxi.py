@@ -1,6 +1,5 @@
 # lingkuan_801UAT/tests/test_create.py
 import time
-
 import pytest
 import logging
 import allure
@@ -8,7 +7,7 @@ from typing import Dict, Any, List
 from lingkuan_801UAT.VAR.VAR import *
 from lingkuan_801UAT.commons.jsonpath_utils import *
 from lingkuan_801UAT.conftest import var_manager
-from lingkuan_801UAT.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_801UAT.commons.api_base import APITestBase
 
 
 logger = logging.getLogger(__name__)

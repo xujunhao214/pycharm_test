@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_818.VAR.VAR import *
 from lingkuan_818.conftest import var_manager
-from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_818.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"

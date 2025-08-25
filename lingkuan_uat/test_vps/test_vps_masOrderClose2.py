@@ -2373,8 +2373,8 @@ class TestVPSMasOrderclose:
 
             response = requests.request("GET", url, headers=headers, data=payload)
             token_mt4 = response.text
-            print(token_mt4)
-            logging.info(token_mt4)
+            print(f"登录MT4账号获取token:{token_mt4}")
+            logging.info(f"登录MT4账号获取token:{token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):

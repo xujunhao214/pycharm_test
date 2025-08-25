@@ -1,0 +1,115 @@
+INFO     lingkuan_820.commons.api_base:api_base.py:499 [2025-08-25 16:55:13] 开始轮询等待数据稳定 | SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_pric | 超时: 30秒 | 稳定期: 2秒
+INFO     lingkuan_820.commons.api_base:api_base.py:416 [2025-08-25 16:55:13] 执行SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                         FROM 
+                             follow_order_detail fod
+                         INNER JOIN 
+                             follow_order_instruct foi 
+                         ON 
+                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                         WHERE foi.operation_type = %s
+                             AND fod.account = %s
+                             AND fod.trader_id = %s
+                              AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300152', 6721, 1, 1)
+INFO     lingkuan_820.commons.api_base:api_base.py:419 [2025-08-25 16:55:13] 查询成功，结果数量: 4 | SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_pric
+INFO     lingkuan_820.commons.api_base:api_base.py:430 [2025-08-25 16:55:13] 查询结果: [{"size": 0.77, "close_no": "4688441094540", "magical": 362770, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362774, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.77, "foi.order_no": "4688441094540", "operation_type": 1, "create_time": "2025-08-25 16:55:04", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.77, "master_order": 362770, "total_orders": 1}, {"size": 0.55, "close_no": "7573064887728", "magical": 362771, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362775, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.55, "foi.order_no": "7573064887728", "operation_type": 1, "create_time": "2025-08-25 16:55:04", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.55, "master_order": 362771, "total_orders": 1}, {"size": 0.62, "close_no": "1692706059431", "magical": 362772, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362777, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.62, "foi.order_no
+INFO     lingkuan_820.commons.api_base:api_base.py:416 [2025-08-25 16:55:15] 执行SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                         FROM 
+                             follow_order_detail fod
+                         INNER JOIN 
+                             follow_order_instruct foi 
+                         ON 
+                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                         WHERE foi.operation_type = %s
+                             AND fod.account = %s
+                             AND fod.trader_id = %s
+                              AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300152', 6721, 1, 1)
+INFO     lingkuan_820.commons.api_base:api_base.py:419 [2025-08-25 16:55:15] 查询成功，结果数量: 4 | SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_pric
+INFO     lingkuan_820.commons.api_base:api_base.py:430 [2025-08-25 16:55:15] 查询结果: [{"size": 0.77, "close_no": "4688441094540", "magical": 362770, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362774, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.77, "foi.order_no": "4688441094540", "operation_type": 1, "create_time": "2025-08-25 16:55:04", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.77, "master_order": 362770, "total_orders": 1}, {"size": 0.55, "close_no": "7573064887728", "magical": 362771, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362775, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.55, "foi.order_no": "7573064887728", "operation_type": 1, "create_time": "2025-08-25 16:55:04", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.55, "master_order": 362771, "total_orders": 1}, {"size": 0.62, "close_no": "1692706059431", "magical": 362772, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362777, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.62, "foi.order_no
+INFO     lingkuan_820.commons.api_base:api_base.py:416 [2025-08-25 16:55:17] 执行SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                         FROM 
+                             follow_order_detail fod
+                         INNER JOIN 
+                             follow_order_instruct foi 
+                         ON 
+                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                         WHERE foi.operation_type = %s
+                             AND fod.account = %s
+                             AND fod.trader_id = %s
+                              AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC | 参数: ('1', '300152', 6721, 1, 1)
+INFO     lingkuan_820.commons.api_base:api_base.py:419 [2025-08-25 16:55:17] 查询成功，结果数量: 4 | SQL: 
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_pric
+INFO     lingkuan_820.commons.api_base:api_base.py:430 [2025-08-25 16:55:17] 查询结果: [{"size": 0.77, "close_no": "4688441094540", "magical": 362770, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362774, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.77, "foi.order_no": "4688441094540", "operation_type": 1, "create_time": "2025-08-25 16:55:04", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.77, "master_order": 362770, "total_orders": 1}, {"size": 0.55, "close_no": "7573064887728", "magical": 362771, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362775, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.55, "foi.order_no": "7573064887728", "operation_type": 1, "create_time": "2025-08-25 16:55:04", "status": 1, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 0.55, "master_order": 362771, "total_orders": 1}, {"size": 0.62, "close_no": "1692706059431", "magical": 362772, "open_price": 3364.69, "symbol": "XAUUSD", "order_no": 362777, "close_time": "2025-08-25 11:55:04", "true_total_lots": 0.62, "foi.order_no
+INFO     lingkuan_820.commons.api_base:api_base.py:530 [2025-08-25 16:55:17] 数据已稳定2秒（耗时4.3秒）| 结果数: 4

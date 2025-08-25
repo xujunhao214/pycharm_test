@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 import requests
 from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 
@@ -75,12 +75,11 @@ class TestCloudCoreFunctionality:
             with allure.step("发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                new_user = var_manager.get_variable("new_user")
 
                 request_data = {
                     "id": cloudMaster_id,
                     "flag": 0,
-                    "intervalTime": 10000,
+                    "intervalTime": 0,
                     "closeType": 0,
                     "remark": "",
                     "cloudTraderId": [cloudTrader_traderList_4],
@@ -101,7 +100,7 @@ class TestCloudCoreFunctionality:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @allure.title("数据库校验-复制下单平仓数据")
+        @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_dbsymbol(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
@@ -139,11 +138,11 @@ class TestCloudCoreFunctionality:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-订单不等于开仓总订单数量"):
@@ -206,7 +205,7 @@ class TestCloudCoreFunctionality:
                     "停止平仓响应msg字段应为success"
                 )
 
-        @allure.title("数据库校验-复制下单平仓数据")
+        @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_db(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
@@ -244,7 +243,7 @@ class TestCloudCoreFunctionality:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -419,11 +418,11 @@ class TestCloudFollowDirection:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "3")
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -500,7 +499,7 @@ class TestCloudFollowDirection:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -642,11 +641,11 @@ class TestCloudFollowDirection:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "4")
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -723,7 +722,7 @@ class TestCloudFollowDirection:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -954,7 +953,7 @@ class TestCloudOrderQuantityControl:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1094,11 +1093,11 @@ class TestCloudOrderType:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -1176,7 +1175,7 @@ class TestCloudOrderType:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1220,7 +1219,8 @@ class TestCloudOrderType:
 
             response = requests.request("GET", url, headers=headers, data=payload)
             token_mt4 = response.text
-            print(token_mt4)
+            print(f"登录MT4账号获取token:{token_mt4}")
+            logging.info(f"登录MT4账号获取token:{token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
@@ -1305,11 +1305,11 @@ class TestCloudOrderType:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -1387,7 +1387,7 @@ class TestCloudOrderType:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1520,11 +1520,11 @@ class TestCloudOrderType:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -1602,7 +1602,7 @@ class TestCloudOrderType:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1742,11 +1742,11 @@ class TestCloudCloseRemark:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -1824,7 +1824,7 @@ class TestCloudCloseRemark:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1959,11 +1959,11 @@ class TestCloudClose:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -2123,7 +2123,7 @@ class TestCloudClose:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -2251,11 +2251,11 @@ class TestCloudClose:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.wait_for_database_no_record(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.create_time"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("执行复制平仓数据校验-没有订单"):
@@ -2409,7 +2409,7 @@ class TestCloudClose:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -2533,7 +2533,7 @@ class TestCloudClose:
                 params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,

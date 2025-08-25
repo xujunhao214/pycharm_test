@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_818.VAR.VAR import *
 from lingkuan_818.conftest import var_manager
-from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_818.commons.api_base import APITestBase
 import requests
 from lingkuan_818.commons.jsonpath_utils import JsonPathUtils
 
@@ -1220,7 +1220,8 @@ class TestCloudOrderType:
 
             response = requests.request("GET", url, headers=headers, data=payload)
             token_mt4 = response.text
-            print(token_mt4)
+            print(f"登录MT4账号获取token:{token_mt4}")
+            logging.info(f"登录MT4账号获取token:{token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):

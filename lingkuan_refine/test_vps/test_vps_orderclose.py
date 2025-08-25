@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 import requests
 from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 
@@ -17,14 +17,14 @@ SKIP_REASON = "该用例暂时跳过"
 # 大模块1：VPS策略下单-停止平仓功能验证
 # ------------------------------------
 @allure.feature("VPS策略下单-平仓的功能校验")
-@pytest.mark.skipif(True, reason=SKIP_REASON)
+# @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCoreFunctionality:
     @allure.story("场景1：平仓的停止功能验证")
     @allure.description("""
     ### 用例说明
     - 前置条件：有vps策略和vps跟单
     - 操作步骤：
-      1. 进行开仓
+      1. 进行开仓，手数：0.01-1，总订单数量5
       2. 进行平仓，平仓时间修改为30秒
       3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
       4. 再次进行平仓
@@ -43,8 +43,8 @@ class TestVPSCoreFunctionality:
                 "remark": trader_ordersend["remark"],
                 "intervalTime": 100,
                 "type": 0,
-                "totalNum": "10",
-                "totalSzie": "1",
+                "totalNum": "5",
+                "totalSzie": "",
                 "startSize": "0.01",
                 "endSize": "1",
                 "traderId": vps_trader_id
@@ -69,14 +69,14 @@ class TestVPSCoreFunctionality:
             )
 
         @pytest.mark.url("vps")
-        @allure.title("策略账号30秒平仓操作")
+        @allure.title("策略账号平仓-时间间隔30秒")
         def test_trader_orderclose(self, var_manager, logged_session):
             with allure.step("1. 发送全平订单平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
                 data = {
                     "flag": 0,
-                    "intervalTime": 30000,
+                    "intervalTime": 10000,
                     "closeType": 2,
                     "remark": "",
                     "symbol": "XAUUSD",
@@ -109,7 +109,7 @@ class TestVPSCoreFunctionality:
             with allure.step("1. 发送停止平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 params = {
-                    "type": "0",
+                    "type": "1",
                     "traderId": vps_trader_id
                 }
                 response = self.send_get_request(
@@ -129,9 +129,8 @@ class TestVPSCoreFunctionality:
                     "success",
                     "响应msg字段应为success"
                 )
-            time.sleep(20)
 
-        @allure.title("数据库校验-停止平仓后订单数量不相等")
+        @allure.title("数据库校验-停止平仓-平仓手数不等于开仓手数")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -163,7 +162,7 @@ class TestVPSCoreFunctionality:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -173,11 +172,8 @@ class TestVPSCoreFunctionality:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert not math.isclose(float(1), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：1，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：1，订单详情总手数是：{total} 不相等')
+                assert len(db_data) != 4, f"平仓的订单数量应该不是4，结果有{len(db_data)}个订单"
+                logging.info(f"平仓的订单数量应该不是4，结果有{len(db_data)}个订单")
 
         @pytest.mark.url("vps")
         @allure.title("策略账号再次平仓操作")
@@ -1048,8 +1044,8 @@ class TestVPSOrderType:
 
             response = requests.request("GET", url, headers=headers, data=payload)
             token_mt4 = response.text
-            print(token_mt4)
-            logging.info(token_mt4)
+            print(f"登录MT4账号获取token:{token_mt4}")
+            logging.info(f"登录MT4账号获取token:{token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):

@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_818.VAR.VAR import *
 from lingkuan_818.conftest import var_manager
-from lingkuan_818.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_818.commons.api_base import APITestBase
 import requests
 from lingkuan_818.commons.jsonpath_utils import JsonPathUtils
 
@@ -129,9 +129,9 @@ class TestVPSCoreFunctionality:
                     "success",
                     "响应msg字段应为success"
                 )
-            time.sleep(20)
+            
 
-        @allure.title("数据库校验-停止平仓后订单数量不相等")
+        @allure.title("数据库校验-停止平仓-平仓数量不等于开仓数量")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -1048,8 +1048,8 @@ class TestVPSOrderType:
 
             response = requests.request("GET", url, headers=headers, data=payload)
             token_mt4 = response.text
-            print(token_mt4)
-            logging.info(token_mt4)
+            print(f"登录MT4账号获取token:{token_mt4}")
+            logging.info(f"登录MT4账号获取token:{token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):

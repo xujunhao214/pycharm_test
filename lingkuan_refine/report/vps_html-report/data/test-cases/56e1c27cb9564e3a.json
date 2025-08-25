@@ -1,0 +1,274 @@
+{
+  "uid" : "56e1c27cb9564e3a",
+  "name" : "数据库校验-交易平仓-跟单指令及订单详情数据检查-有1个订单",
+  "fullName" : "test_vps.test_vps_masOrderClose.TestVPStradingOrders9#test_dbquery_addsalve_orderSendclose2",
+  "historyId" : "b31a55f0454a727b68493f9e25803a85",
+  "time" : {
+    "start" : 1756112496556,
+    "stop" : 1756112528336,
+    "duration" : 31780
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有vps策略和vps跟单\n      1. MT4登录，然后进行开仓\n      2. 进行平仓-订单类型-内部订单\n      3. 校验平仓的订单数，应该没有平仓订单\n      4. 进行平仓-订单类型-外部订单\n      5. 校验平仓的订单数,等于1\n    - 预期结果：平仓的订单类型功能正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有vps策略和vps跟单\n  1. MT4登录，然后进行开仓\n  2. 进行平仓-订单类型-内部订单\n  3. 校验平仓的订单数，应该没有平仓订单\n  4. 进行平仓-订单类型-外部订单\n  5. 校验平仓的订单数,等于1\n- 预期结果：平仓的订单类型功能正确\n</code></pre>\n",
+  "status" : "broken",
+  "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+  "statusTrace" : "self = <lingkuan_refine.test_vps.test_vps_masOrderClose.TestVPSMasOrderclose.TestVPStradingOrders9 object at 0x0000014712FC7670>\nvar_manager = <lingkuan_refine.commons.variable_manager.VariableManager object at 0x0000014712FE88B0>\ndb_transaction = <pymysql.connections.Connection object at 0x0000014712F550A0>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查-有1个订单\")\n    def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n            sql = f\"\"\"\n                     SELECT\n                         fod.size,\n                         fod.close_no,\n                         fod.magical,\n                         fod.open_price,\n                         fod.symbol,\n                         fod.order_no,\n                         fod.close_time,\n                         foi.true_total_lots,\n                         foi.order_no,\n                         foi.operation_type,\n                         foi.create_time,\n                         foi.status,\n                         foi.min_lot_size,\n                         foi.max_lot_size,\n                         foi.total_lots,\n                         foi.master_order,\n                         foi.total_orders\n                     FROM\n                         follow_order_detail fod\n                     INNER JOIN\n                         follow_order_instruct foi\n                     ON\n                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                     WHERE foi.operation_type = %s\n                         AND fod.account = %s\n                         AND fod.trader_id = %s\n                         \"\"\"\n            params = (\n                '1',\n                vps_user_accounts_1,\n                vps_addslave_id,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n\ntest_vps\\test_vps_masOrderClose.py:2604: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_refine.test_vps.test_vps_masOrderClose.TestVPSMasOrderclose.TestVPStradingOrders9 object at 0x0000014712FC7670>\ndb_transaction = <pymysql.connections.Connection object at 0x0000014712F550A0>\nsql = '\\n                         SELECT \\n                             fod.size,\\n                             fod.close_no...              AND fod.account = %s\\n                             AND fod.trader_id = %s\\n                             '\nparams = ('1', '300152', 6721), time_field = 'foi.create_time', time_range = 1\norder_by = 'create_time DESC', timeout = 30, poll_interval = 2\nstable_period = 2, attach_to_allure = True\n\n    def query_database_with_time(\n            self,\n            db_transaction: pymysql.connections.Connection,\n            sql: str,\n            params: tuple = (),\n            time_field: Optional[str] = None,\n            time_range: int = MYSQL_TIME,\n            order_by: str = \"create_time DESC\",\n            timeout: int = WAIT_TIMEOUT,\n            poll_interval: int = POLL_INTERVAL,\n            stable_period: int = STBLE_PERIOD,\n            attach_to_allure: bool = True\n    ) -> List[Dict[str, Any]]:\n        \"\"\"轮询等待数据库记录稳定（仅保留此版本）\"\"\"\n        start_time = time.time()\n        last_result = None\n        stable_start_time = None\n        final_result = None\n        has_data = False\n    \n        logger.info(\n            f\"[{self._get_current_time()}] 开始轮询等待数据稳定 | \"\n            f\"SQL: {sql[:200]} | 超时: {timeout}秒 | 稳定期: {stable_period}秒\"\n        )\n        with allure.step(f\"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）\"):\n            pass\n    \n        while time.time() - start_time < timeout:\n            try:\n                db_transaction.commit()  # 刷新事务\n    \n                # 执行单次查询（带时间范围或不带）\n                result = self._execute_query(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    time_field=time_field,\n                    order_by=order_by,\n                    time_range=time_range,\n                    attach_to_allure=False  # 轮询过程中不附加报告\n                )\n    \n                # 检查数据是否稳定\n                if len(result) > 0:\n                    has_data = True\n                    if self._is_result_stable(result, last_result):\n                        if stable_start_time is None:\n                            stable_start_time = time.time()\n                            logger.debug(f\"[{self._get_current_time()}] 数据首次稳定，开始计时\")\n                        elif time.time() - stable_start_time >= stable_period:\n                            final_result = result\n                            logger.info(\n                                f\"[{self._get_current_time()}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| \"\n                                f\"结果数: {len(result)}\"\n                            )\n                            allure.attach(\n                                f\"数据已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）\",\n                                \"等待结果\",\n                                allure.attachment_type.TEXT\n                            )\n                            break\n                    else:\n                        stable_start_time = None  # 数据变化，重置计时器\n                        logger.debug(f\"[{self._get_current_time()}] 数据仍在变化，重置稳定计时器\")\n                else:\n                    stable_start_time = None\n                    has_data = False\n                    logger.debug(f\"[{self._get_current_time()}] 查询结果为空，继续等待\")\n    \n                last_result = result\n                time.sleep(poll_interval)\n    \n            except Exception as e:\n                logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                time.sleep(poll_interval)\n    \n        # 超时处理：获取最终结果\n        if final_result is None:\n            final_result = self._execute_query(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=time_field,\n                order_by=order_by,\n                time_range=time_range,\n                attach_to_allure=attach_to_allure\n            )\n    \n        # 附加最终结果到报告\n        if attach_to_allure:\n            display_count = min(len(final_result), 50)\n            with allure.step(\"数据库查询结果（最终稳定结果）\"):\n                allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                allure.attach(\n                    self.serialize_data(final_result[:display_count]),\n                    f\"查询结果（共{len(final_result)}条，显示前50条）\",\n                    allure.attachment_type.JSON\n                )\n    \n        # 判断超时场景\n        if len(final_result) == 0:\n            error_msg = f\"Failed: 等待记录出现超时（{timeout}秒）\"\n>           raise TimeoutError(error_msg)\nE           TimeoutError: Failed: 等待记录出现超时（30秒）\n\ncommons\\api_base.py:582: TimeoutError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1756112496145,
+      "stop" : 1756112496555,
+      "duration" : 410
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1756112496555,
+      "stop" : 1756112496555,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有vps策略和vps跟单\n      1. MT4登录，然后进行开仓\n      2. 进行平仓-订单类型-内部订单\n      3. 校验平仓的订单数，应该没有平仓订单\n      4. 进行平仓-订单类型-外部订单\n      5. 校验平仓的订单数,等于1\n    - 预期结果：平仓的订单类型功能正确\n    ",
+    "status" : "broken",
+    "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+    "statusTrace" : "self = <lingkuan_refine.test_vps.test_vps_masOrderClose.TestVPSMasOrderclose.TestVPStradingOrders9 object at 0x0000014712FC7670>\nvar_manager = <lingkuan_refine.commons.variable_manager.VariableManager object at 0x0000014712FE88B0>\ndb_transaction = <pymysql.connections.Connection object at 0x0000014712F550A0>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查-有1个订单\")\n    def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情界面跟单账号数据\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n            sql = f\"\"\"\n                     SELECT\n                         fod.size,\n                         fod.close_no,\n                         fod.magical,\n                         fod.open_price,\n                         fod.symbol,\n                         fod.order_no,\n                         fod.close_time,\n                         foi.true_total_lots,\n                         foi.order_no,\n                         foi.operation_type,\n                         foi.create_time,\n                         foi.status,\n                         foi.min_lot_size,\n                         foi.max_lot_size,\n                         foi.total_lots,\n                         foi.master_order,\n                         foi.total_orders\n                     FROM\n                         follow_order_detail fod\n                     INNER JOIN\n                         follow_order_instruct foi\n                     ON\n                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                     WHERE foi.operation_type = %s\n                         AND fod.account = %s\n                         AND fod.trader_id = %s\n                         \"\"\"\n            params = (\n                '1',\n                vps_user_accounts_1,\n                vps_addslave_id,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n\ntest_vps\\test_vps_masOrderClose.py:2604: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_refine.test_vps.test_vps_masOrderClose.TestVPSMasOrderclose.TestVPStradingOrders9 object at 0x0000014712FC7670>\ndb_transaction = <pymysql.connections.Connection object at 0x0000014712F550A0>\nsql = '\\n                         SELECT \\n                             fod.size,\\n                             fod.close_no...              AND fod.account = %s\\n                             AND fod.trader_id = %s\\n                             '\nparams = ('1', '300152', 6721), time_field = 'foi.create_time', time_range = 1\norder_by = 'create_time DESC', timeout = 30, poll_interval = 2\nstable_period = 2, attach_to_allure = True\n\n    def query_database_with_time(\n            self,\n            db_transaction: pymysql.connections.Connection,\n            sql: str,\n            params: tuple = (),\n            time_field: Optional[str] = None,\n            time_range: int = MYSQL_TIME,\n            order_by: str = \"create_time DESC\",\n            timeout: int = WAIT_TIMEOUT,\n            poll_interval: int = POLL_INTERVAL,\n            stable_period: int = STBLE_PERIOD,\n            attach_to_allure: bool = True\n    ) -> List[Dict[str, Any]]:\n        \"\"\"轮询等待数据库记录稳定（仅保留此版本）\"\"\"\n        start_time = time.time()\n        last_result = None\n        stable_start_time = None\n        final_result = None\n        has_data = False\n    \n        logger.info(\n            f\"[{self._get_current_time()}] 开始轮询等待数据稳定 | \"\n            f\"SQL: {sql[:200]} | 超时: {timeout}秒 | 稳定期: {stable_period}秒\"\n        )\n        with allure.step(f\"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）\"):\n            pass\n    \n        while time.time() - start_time < timeout:\n            try:\n                db_transaction.commit()  # 刷新事务\n    \n                # 执行单次查询（带时间范围或不带）\n                result = self._execute_query(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    time_field=time_field,\n                    order_by=order_by,\n                    time_range=time_range,\n                    attach_to_allure=False  # 轮询过程中不附加报告\n                )\n    \n                # 检查数据是否稳定\n                if len(result) > 0:\n                    has_data = True\n                    if self._is_result_stable(result, last_result):\n                        if stable_start_time is None:\n                            stable_start_time = time.time()\n                            logger.debug(f\"[{self._get_current_time()}] 数据首次稳定，开始计时\")\n                        elif time.time() - stable_start_time >= stable_period:\n                            final_result = result\n                            logger.info(\n                                f\"[{self._get_current_time()}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| \"\n                                f\"结果数: {len(result)}\"\n                            )\n                            allure.attach(\n                                f\"数据已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）\",\n                                \"等待结果\",\n                                allure.attachment_type.TEXT\n                            )\n                            break\n                    else:\n                        stable_start_time = None  # 数据变化，重置计时器\n                        logger.debug(f\"[{self._get_current_time()}] 数据仍在变化，重置稳定计时器\")\n                else:\n                    stable_start_time = None\n                    has_data = False\n                    logger.debug(f\"[{self._get_current_time()}] 查询结果为空，继续等待\")\n    \n                last_result = result\n                time.sleep(poll_interval)\n    \n            except Exception as e:\n                logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                time.sleep(poll_interval)\n    \n        # 超时处理：获取最终结果\n        if final_result is None:\n            final_result = self._execute_query(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=time_field,\n                order_by=order_by,\n                time_range=time_range,\n                attach_to_allure=attach_to_allure\n            )\n    \n        # 附加最终结果到报告\n        if attach_to_allure:\n            display_count = min(len(final_result), 50)\n            with allure.step(\"数据库查询结果（最终稳定结果）\"):\n                allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                allure.attach(\n                    self.serialize_data(final_result[:display_count]),\n                    f\"查询结果（共{len(final_result)}条，显示前50条）\",\n                    allure.attachment_type.JSON\n                )\n    \n        # 判断超时场景\n        if len(final_result) == 0:\n            error_msg = f\"Failed: 等待记录出现超时（{timeout}秒）\"\n>           raise TimeoutError(error_msg)\nE           TimeoutError: Failed: 等待记录出现超时（30秒）\n\ncommons\\api_base.py:582: TimeoutError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情界面跟单账号数据",
+      "time" : {
+        "start" : 1756112496556,
+        "stop" : 1756112528336,
+        "duration" : 31780
+      },
+      "status" : "broken",
+      "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_refine\\test_vps\\test_vps_masOrderClose.py\", line 2604, in test_dbquery_addsalve_orderSendclose2\n    db_data = self.query_database_with_time(\n  File \"D:\\pycharm_test\\lingkuan_refine\\commons\\api_base.py\", line 582, in query_database_with_time\n    raise TimeoutError(error_msg)\n",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756112496556,
+          "stop" : 1756112496556,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果",
+        "time" : {
+          "start" : 1756112528333,
+          "stop" : 1756112528335,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "86fac84f93ab7bf6",
+          "name" : "执行SQL",
+          "source" : "86fac84f93ab7bf6.txt",
+          "type" : "text/plain",
+          "size" : 1383
+        }, {
+          "uid" : "ea5df0b88fa61dd3",
+          "name" : "SQL参数",
+          "source" : "ea5df0b88fa61dd3.txt",
+          "type" : "text/plain",
+          "size" : 27
+        }, {
+          "uid" : "817b7153f586732e",
+          "name" : "查询结果（共0条，显示前50条）",
+          "source" : "817b7153f586732e.json",
+          "type" : "application/json",
+          "size" : 2
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1756112528335,
+          "stop" : 1756112528335,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "9e1a03d0a265c9a0",
+          "name" : "执行SQL",
+          "source" : "9e1a03d0a265c9a0.txt",
+          "type" : "text/plain",
+          "size" : 1269
+        }, {
+          "uid" : "fc11d31014312717",
+          "name" : "SQL参数",
+          "source" : "fc11d31014312717.txt",
+          "type" : "text/plain",
+          "size" : 21
+        }, {
+          "uid" : "b0967225d27d5ab7",
+          "name" : "查询结果（共0条，显示前50条）",
+          "source" : "b0967225d27d5ab7.json",
+          "type" : "application/json",
+          "size" : 2
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 3,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "7a88e4086635aa26",
+      "name" : "log",
+      "source" : "7a88e4086635aa26.txt",
+      "type" : "text/plain",
+      "size" : 122359
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 4,
+    "attachmentsCount" : 7,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1756112528366,
+      "stop" : 1756112528366,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1756112528365,
+      "stop" : 1756112528365,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略账号交易下单-平仓的功能校验"
+  }, {
+    "name" : "story",
+    "value" : "场景9：平仓的订单类型功能校验-外部订单"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_masOrderClose"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSMasOrderclose"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "32884-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vps_masOrderClose"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ {
+      "uid" : "72fa976104415d23",
+      "status" : "broken",
+      "statusDetails" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+      "time" : {
+        "start" : 1756112459339,
+        "stop" : 1756112491106,
+        "duration" : 31767
+      }
+    }, {
+      "uid" : "66863e20bdea4b28",
+      "status" : "broken",
+      "statusDetails" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+      "time" : {
+        "start" : 1756112422105,
+        "stop" : 1756112453869,
+        "duration" : 31764
+      }
+    }, {
+      "uid" : "2f1a2a7b85be7f8a",
+      "status" : "broken",
+      "statusDetails" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+      "time" : {
+        "start" : 1756112386280,
+        "stop" : 1756112416628,
+        "duration" : 30348
+      }
+    } ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "56e1c27cb9564e3a.json",
+  "parameterValues" : [ ]
+}

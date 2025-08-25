@@ -1,6 +1,5 @@
 # lingkuan_refine/tests/test_create.py
 import time
-
 import pytest
 import logging
 import allure
@@ -8,7 +7,7 @@ from typing import Dict, Any, List
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.commons.jsonpath_utils import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -262,7 +261,7 @@ class TestCreate_cloudTrader(APITestBase):
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
                 params = (cloudTrader_account,)
 
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -293,7 +292,7 @@ class TestCreate_cloudTrader(APITestBase):
                 # 校验订阅表记录（代码与之前一致）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
                 params = (cloudTrader_account,)
-                db_sub_data = self.wait_for_database_record(
+                db_sub_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,

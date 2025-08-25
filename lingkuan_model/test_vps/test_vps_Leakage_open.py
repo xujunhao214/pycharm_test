@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_model.VAR.VAR import *
 from lingkuan_model.conftest import var_manager
-from lingkuan_model.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_model.commons.api_base import APITestBase
 from lingkuan_model.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)

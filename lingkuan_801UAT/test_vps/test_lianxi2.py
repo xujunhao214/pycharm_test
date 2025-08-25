@@ -6,7 +6,7 @@ import time
 import math
 from lingkuan_801UAT.VAR.VAR import *
 from lingkuan_801UAT.conftest import var_manager
-from lingkuan_801UAT.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_801UAT.commons.api_base import APITestBase
 from lingkuan_801UAT.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)

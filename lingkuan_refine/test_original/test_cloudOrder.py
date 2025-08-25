@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -93,7 +93,7 @@ class TestMasOrderSend(APITestBase):
             params = ('0', cloudTrader_user_accounts_4)
 
             # 轮询等待数据库记录
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -206,7 +206,7 @@ class TestMasOrderSend(APITestBase):
             params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
             # 轮询等待数据库记录
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -306,7 +306,7 @@ class TestMasOrderSend(APITestBase):
             params = ('0', cloudTrader_user_accounts_4)
 
             # 轮询等待数据库记录
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -426,7 +426,7 @@ class TestMasOrderSend(APITestBase):
             params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
 
             # 轮询等待数据库记录
-            db_data = self.wait_for_database_record_with_timezone(
+            db_data = self.query_database_with_time_with_timezone(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,

@@ -89,7 +89,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -163,7 +163,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -250,7 +250,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -312,7 +312,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -422,7 +422,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -502,7 +502,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -589,7 +589,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -651,7 +651,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -761,7 +761,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -835,7 +835,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -921,7 +921,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -981,7 +981,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1089,7 +1089,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1161,7 +1161,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1226,7 +1226,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1282,7 +1282,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1388,7 +1388,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1465,7 +1465,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1540,7 +1540,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1606,7 +1606,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1701,7 +1701,7 @@ class TestCloudMasOrdersend:
                 params = ("1", "0", "1.00", "0.10", cloudTrader_vps_ids_1)
 
                 # 轮询等待数据库记录
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1775,7 +1775,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1821,7 +1821,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1886,7 +1886,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -1935,7 +1935,7 @@ class TestCloudMasOrdersend:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record_with_timezone(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,

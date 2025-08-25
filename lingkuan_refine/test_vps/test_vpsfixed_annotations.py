@@ -3,9 +3,9 @@ import math
 import allure
 import logging
 import pytest
-from lingkuan_819.VAR.VAR import *
-from lingkuan_819.conftest import var_manager
-from lingkuan_819.commons.api_base import APITestBase
+from lingkuan_refine.VAR.VAR import *
+from lingkuan_refine.conftest import var_manager
+from lingkuan_refine.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -135,7 +135,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             WHERE foi.operation_type = %s AND fod.account = %s
         """
         params = ('0', vps_user_accounts_1)
-        db_data = self.wait_for_database_record(
+        db_data = self.query_database_with_time(
             db_transaction=db_transaction,
             sql=sql,
             params=params,
@@ -278,7 +278,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             WHERE foi.operation_type = %s AND fod.account = %s
         """
         params = ('0', vps_user_accounts_1)
-        db_data = self.wait_for_database_record(
+        db_data = self.query_database_with_time(
             db_transaction=db_transaction,
             sql=sql,
             params=params,
@@ -422,7 +422,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             WHERE foi.operation_type = %s AND fod.account = %s
         """
         params = ('0', vps_user_accounts_1)
-        db_data = self.wait_for_database_record(
+        db_data = self.query_database_with_time(
             db_transaction=db_transaction,
             sql=sql,
             params=params,

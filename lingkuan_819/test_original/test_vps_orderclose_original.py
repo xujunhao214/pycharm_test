@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_819.VAR.VAR import *
 from lingkuan_819.conftest import var_manager
-from lingkuan_819.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_819.commons.api_base import APITestBase
 import requests
 from lingkuan_819.commons.jsonpath_utils import JsonPathUtils
 
@@ -126,7 +126,7 @@ class TestVPSOrderSend1(APITestBase):
                 "success",
                 "响应msg字段应为success"
             )
-        time.sleep(20)
+        
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查（不相等）")
     def test_dbquery_orderSendclose(self, var_manager, db_transaction):
@@ -858,7 +858,8 @@ class TestVPSOrderSend5(APITestBase):
 
         response = requests.request("GET", url, headers=headers, data=payload)
         token_mt4 = response.text
-        print(token_mt4)
+        print(f"登录MT4账号获取token:{token_mt4}")
+            logging.info(f"登录MT4账号获取token:{token_mt4}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.title("MT4开仓")

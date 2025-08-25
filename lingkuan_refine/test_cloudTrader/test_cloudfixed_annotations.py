@@ -148,7 +148,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             """
             params = ('0', cloudTrader_user_accounts_4)
 
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -319,7 +319,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             """
             params = ('0', cloudTrader_user_accounts_4)
 
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,
@@ -490,7 +490,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             """
             params = ('0', cloudTrader_user_accounts_4)
 
-            db_data = self.wait_for_database_record(
+            db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
                 params=params,

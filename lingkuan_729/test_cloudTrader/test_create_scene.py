@@ -1,6 +1,5 @@
 # lingkuan_729/tests/test_create.py
 import time
-
 import pytest
 import logging
 import allure
@@ -8,7 +7,7 @@ from typing import Dict, Any, List
 from lingkuan_729.VAR.VAR import *
 from lingkuan_729.commons.jsonpath_utils import *
 from lingkuan_729.conftest import var_manager
-from lingkuan_729.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_729.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因

@@ -1,13 +1,12 @@
 # lingkuan_refine/tests/test_vps_ordersend.py
 import time
 import math
-
 import allure
 import logging
 import pytest
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -77,7 +76,7 @@ class TestVPSMasOrder_money_scene:
                 params = (new_user["account"],)
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params
@@ -148,7 +147,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -189,7 +188,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -233,7 +232,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -310,7 +309,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -353,7 +352,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -399,7 +398,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -499,7 +498,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -538,7 +537,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -634,7 +633,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -717,7 +716,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -758,7 +757,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
@@ -801,7 +800,7 @@ class TestVPSMasOrder_money_scene:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_record(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,

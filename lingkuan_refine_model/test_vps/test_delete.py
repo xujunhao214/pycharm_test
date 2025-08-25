@@ -1,12 +1,11 @@
 import time
-
 import pytest
 import logging
 import allure
 from typing import Dict, Any, List
 from lingkuan_refine_model.VAR.VAR import *
 from lingkuan_refine_model.conftest import var_manager
-from lingkuan_refine_model.commons.api_base import APITestBase  # 导入基础类
+from lingkuan_refine_model.commons.api_base import APITestBase
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
