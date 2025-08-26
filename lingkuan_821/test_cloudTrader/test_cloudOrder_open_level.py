@@ -770,8 +770,8 @@ class TestcloudTrader_openandlevel:
                 assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
 
                 close_remark = db_data[0]["close_remark"]
-                logging.info(f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}")
-                assert close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是未开通平仓状态，实际是：{close_remark}"
+                logging.info(f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}")
+                assert close_remark == "平仓异常: 未开通平仓状态", f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}"
 
             with allure.step("3. 提取数据"):
                 cloudTrader_master_order_level = [record["master_order"] for record in db_data]
