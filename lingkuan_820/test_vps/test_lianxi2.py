@@ -1,258 +1,180 @@
-# lingkuan_815/tests/test_vps_ordersend.py
+# lingkuan_820/tests/test_create.py
 import time
-import math
-import allure
-import logging
 import pytest
-import requests
-from lingkuan_820.commons.jsonpath_utils import JsonPathUtils
+import logging
+import allure
+from typing import Dict, Any, List
 from lingkuan_820.VAR.VAR import *
 from lingkuan_820.conftest import var_manager
 from lingkuan_820.commons.api_base import APITestBase
-from lingkuan_820.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"  # 统一跳过原因
 
 
-class TestVPSCoreFunctionality:
-    @allure.story("场景11：平仓的订单备注功能校验")
-    @allure.description("""
-        ### 测试说明
-        - 前置条件：有vps策略和vps跟单
-          1. 进行开仓，手数范围：0.1-1，总订单数量4,订单备注：ceshipingcangbeizhu
-          2. 进行平仓-订单备注：xxxxxxxxxxx
-          3. 校验平仓的订单数，应该没有平仓订单
-          4. 进行平仓-订单备注：ceshipingcangbeizhu
-          5. 校验平仓的订单数,等于4
-        - 预期结果：平仓的订单备注功能正确
-        """)
-    class TestVPStradingOrders11(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
-            global symbol
-            masOrderSend = var_manager.get_variable("masOrderSend")
-            symbol = masOrderSend["symbol"]
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            data = {
-                "traderList": [vps_trader_user_id],
-                "type": 0,
-                "tradeType": 1,
-                "intervalTime": 0,
-                "symbol": symbol,
-                "placedType": 0,
-                "startSize": "0.10",
-                "endSize": "1.00",
-                "totalNum": "4",
-                "totalSzie": "",
-                "remark": "ceshipingcangbeizhu"
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderSend',
-                json_data=data
+@allure.feature("数据管理-创建数据-为VPS测试准备")
+class TestCreate(APITestBase):
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-新增策略账号")
+    def test_add_trader(self, var_manager, logged_session, encrypted_password):
+        # 1. 发送新增策略账号请求
+        new_user = var_manager.get_variable("new_user")
+        data = {
+            "account": new_user["account"],
+            "password": encrypted_password,
+            "platform": new_user["platform"],
+            "remark": new_user["remark"],
+            "platformId": new_user["platformId"],
+            "type": 0,
+            "templateId": 1,
+            "followStatus": 1,
+            "cfd": "",
+            "forex": "",
+            "followOrderRemark": 1,
+            "fixedComment": new_user["fixedComment"],
+            "commentType": new_user["commentType"],
+            "digits": new_user["digits"]
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader',
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "新增策略账号失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS数据-新增策略账号")
+    def test_dbquery_trader(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            new_user = var_manager.get_variable("new_user")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader WHERE account = %s",
+                (new_user["account"],)
             )
 
-            # 验证下单成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            vps_trader_id = db_data[0]["id"]
+            logging.info(f"新增策略账号ID: {vps_trader_id}")
+            var_manager.set_runtime_variable("vps_trader_id", vps_trader_id)
+
+        with allure.step("2. 数据校验"):
+            status = db_data[0]["status"]
+            assert status == 0, f"新增策略账号状态status应为0（正常），实际状态为: {status}"
+            logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
+
+            euqit = db_data[0]["euqit"]
+            assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @pytest.mark.retry(n=2, delay=3)
+    @allure.title("跟单软件看板-VPS数据-新增跟单账号")
+    def test_create_addSlave(self, var_manager, logged_session, encrypted_password):
+        new_user = var_manager.get_variable("new_user")
+        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+        vps_trader_id = var_manager.get_variable("vps_trader_id")
+        data = {
+            "traderId": vps_trader_id,
+            "platform": new_user["platform"],
+            "account": vps_user_accounts_1,
+            "password": encrypted_password,
+            "remark": new_user["remark"],
+            "followDirection": 0,
+            "followMode": 1,
+            "remainder": 0,
+            "followParam": 1,
+            "placedType": 0,
+            "templateId": 1,
+            "followStatus": 1,
+            "followOpen": 1,
+            "followClose": 1,
+            "followRep": 0,
+            "fixedComment": "",
+            "commentType": "",
+            "digits": 0,
+            "cfd": "",
+            "forex": "",
+            "abRemark": ""
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/follow/addSlave',
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "创建用户失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS数据-新增跟单账号")
+    def test_dbquery_addslave(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader WHERE account = %s",
+                (vps_user_accounts_1,)
             )
 
-        @allure.title("VPS交易下单-交易平仓-订单备注：xxxxxxxxxxx")
-        def test_copy_order_close(self, var_manager, logged_session):
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            # 发送平仓请求
-            data = {
-                "flag": 0,
-                "intervalTime": 0,
-                "num": "",
-                "traderList": [vps_trader_user_id],
-                "closeType": 0,
-                "remark": "xxxxxxxxxxx",
-                "symbol": "XAUUSD",
-                "type": 0
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderClose',
-                json_data=data
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            vps_addslave_id = db_data[0]["id"]
+            logging.info(f"新增跟单账号ID: {vps_addslave_id}")
+            var_manager.set_runtime_variable("vps_addslave_id", vps_addslave_id)
+
+        with allure.step("2. 校验账号状态和净值"):
+            status = db_data[0]["status"]
+            assert status == 0, f"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}"
+            logging.info(f"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}")
+
+            euqit = db_data[0]["euqit"]
+            assert euqit > 0, f"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}"
+            logging.info(f"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}")
+
+            db_data2 = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s",
+                (vps_user_accounts_1,)
             )
 
-            # 验证平仓成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
+            if not db_data2:
+                pytest.fail("数据库查询结果为空，无法提取数据")
 
-        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
-                new_user = var_manager.get_variable("new_user")
-                sql = f"""
-                        SELECT 
-                             fod.size,
-                             fod.close_no,
-                             fod.magical,
-                             fod.open_price,
-                             fod.symbol,
-                             fod.order_no,
-                             fod.close_time,
-                             foi.true_total_lots,
-                             foi.order_no,
-                             foi.operation_type,
-                             foi.create_time,
-                             foi.status,
-                             foi.min_lot_size,
-                             foi.max_lot_size,
-                             foi.total_lots,
-                             foi.master_order,
-                             foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            """
-                params = (
-                    '1',
-                    new_user["account"],
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_no_record(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="foi.create_time"
-                )
-            with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
-
-        @allure.title("VPS交易下单-交易平仓-订单备注：ceshipingcangbeizhu")
-        def test_copy_order_close2(self, var_manager, logged_session):
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            # 发送平仓请求
-            data = {
-                "flag": 0,
-                "intervalTime": 0,
-                "num": "",
-                "traderList": [vps_trader_user_id],
-                "closeType": 0,
-                "remark": "ceshipingcangbeizhu",
-                "symbol": "XAUUSD",
-                "type": 0
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderClose',
-                json_data=data
-            )
-
-            # 验证平仓成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
-        def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
-                new_user = var_manager.get_variable("new_user")
-                sql = f"""
-                            SELECT 
-                                fod.size,
-                                fod.close_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.close_time,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                                """
-                params = (
-                    '1',
-                    new_user["account"],
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time_with_timezone(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="fod.close_time"
-                )
-            with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
-
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
-        def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-                sql = f"""
-                             SELECT 
-                                 fod.size,
-                                 fod.close_no,
-                                 fod.magical,
-                                 fod.open_price,
-                                 fod.symbol,
-                                 fod.order_no,
-                                 fod.close_time,
-                                 foi.true_total_lots,
-                                 foi.order_no,
-                                 foi.operation_type,
-                                 foi.create_time,
-                                 foi.status,
-                                 foi.min_lot_size,
-                                 foi.max_lot_size,
-                                 foi.total_lots,
-                                 foi.master_order,
-                                 foi.total_orders
-                             FROM 
-                                 follow_order_detail fod
-                             INNER JOIN 
-                                 follow_order_instruct foi 
-                             ON 
-                                 foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                             WHERE foi.operation_type = %s
-                                 AND fod.account = %s
-                                 AND fod.trader_id = %s
-                                 """
-                params = (
-                    '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="foi.create_time"
-                )
-            with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+            slave_account = db_data2[0]["slave_account"]
+            assert slave_account == vps_user_accounts_1, f"账号新增失败，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}"
+            logging.info(f"账号新增成功，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}")

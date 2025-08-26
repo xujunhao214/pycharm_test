@@ -1,0 +1,499 @@
+{
+  "uid" : "d8ed686e4a6233a0",
+  "name" : "数据库校验-批量挂靠VPS跟单（后9个账号）",
+  "fullName" : "test_cloudTrader.test_create.TestCreate_cloudTrader#test_dbimport_addSlave",
+  "historyId" : "9096540b4712077bc0bb74ca9894ee36",
+  "time" : {
+    "start" : 1756175533066,
+    "stop" : 1756175569590,
+    "duration" : 36524
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 账号 300162 状态异常：预期status=0，实际=1\nassert 1 == 0",
+  "statusTrace" : "self = <lingkuan_820.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x00000156ED7785B0>\nvar_manager = <lingkuan_820.commons.variable_manager.VariableManager object at 0x00000156ED7866D0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000156EDA48100>\n\n    @allure.title(\"数据库校验-批量挂靠VPS跟单（后9个账号）\")\n    def test_dbimport_addSlave(self, var_manager, db_transaction):\n        # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）\n        all_accounts_cloudTrader = []\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\")\n        for i in range(2, cloudTrader_user_count + 1):  # 循环索引1-9（共9次）\n            cloudTrader_account_var_name = f\"cloudTrader_user_accounts_{i}\"\n            cloudTrader_account = var_manager.get_variable(cloudTrader_account_var_name)\n            if not cloudTrader_account:\n                pytest.fail(f\"未找到第{i}个账号（变量：{cloudTrader_account_var_name}）\")\n            all_accounts_cloudTrader.append(cloudTrader_account)\n        print(f\"将校验的后9个账号：{all_accounts_cloudTrader}\")\n    \n        # 2. 逐个校验后9个账号的数据库记录（后续代码与之前一致）\n        all_ids_cloudTrader = []\n        for idx, cloudTrader_account in enumerate(all_accounts_cloudTrader, 1):  # idx从1到9\n            with allure.step(f\"验证第{idx}个账号（{cloudTrader_account}）的数据库记录\"):\n                # 数据库查询和校验逻辑与之前一致\n                sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n                params = (cloudTrader_account,)\n    \n                db_data = self.query_database_with_time(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    order_by=\"account ASC\"\n    \n                )\n                print(f\"验证第{idx}个账号（{cloudTrader_account}）的数据库记录\")\n    \n                if not db_data:\n                    pytest.fail(f\"账号 {cloudTrader_account} 在主表中未找到记录\")\n    \n                # 保存账号ID并校验状态/净值/订阅表（代码与之前一致）\n                cloudTrader_vps_id = db_data[0][\"id\"]\n                all_ids_cloudTrader.append(cloudTrader_vps_id)\n                var_manager.set_runtime_variable(f\"cloudTrader_vps_ids_{idx}\", cloudTrader_vps_id)\n                print(\n                    f\"账号 {cloudTrader_account} 的ID为：{cloudTrader_vps_id}，已保存到变量 cloudTrader_vps_ids_{idx}\")\n    \n            with allure.step(\"校验账号状态和净值\"):\n                status = db_data[0][\"status\"]\n>               assert status == 0, f\"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}\"\nE               AssertionError: 账号 300162 状态异常：预期status=0，实际=1\nE               assert 1 == 0\n\ntest_cloudTrader\\test_create.py:285: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1756175532823,
+      "stop" : 1756175533066,
+      "duration" : 243
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1756175533066,
+      "stop" : 1756175533066,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 账号 300162 状态异常：预期status=0，实际=1\nassert 1 == 0",
+    "statusTrace" : "self = <lingkuan_820.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x00000156ED7785B0>\nvar_manager = <lingkuan_820.commons.variable_manager.VariableManager object at 0x00000156ED7866D0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000156EDA48100>\n\n    @allure.title(\"数据库校验-批量挂靠VPS跟单（后9个账号）\")\n    def test_dbimport_addSlave(self, var_manager, db_transaction):\n        # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）\n        all_accounts_cloudTrader = []\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\")\n        for i in range(2, cloudTrader_user_count + 1):  # 循环索引1-9（共9次）\n            cloudTrader_account_var_name = f\"cloudTrader_user_accounts_{i}\"\n            cloudTrader_account = var_manager.get_variable(cloudTrader_account_var_name)\n            if not cloudTrader_account:\n                pytest.fail(f\"未找到第{i}个账号（变量：{cloudTrader_account_var_name}）\")\n            all_accounts_cloudTrader.append(cloudTrader_account)\n        print(f\"将校验的后9个账号：{all_accounts_cloudTrader}\")\n    \n        # 2. 逐个校验后9个账号的数据库记录（后续代码与之前一致）\n        all_ids_cloudTrader = []\n        for idx, cloudTrader_account in enumerate(all_accounts_cloudTrader, 1):  # idx从1到9\n            with allure.step(f\"验证第{idx}个账号（{cloudTrader_account}）的数据库记录\"):\n                # 数据库查询和校验逻辑与之前一致\n                sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n                params = (cloudTrader_account,)\n    \n                db_data = self.query_database_with_time(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    order_by=\"account ASC\"\n    \n                )\n                print(f\"验证第{idx}个账号（{cloudTrader_account}）的数据库记录\")\n    \n                if not db_data:\n                    pytest.fail(f\"账号 {cloudTrader_account} 在主表中未找到记录\")\n    \n                # 保存账号ID并校验状态/净值/订阅表（代码与之前一致）\n                cloudTrader_vps_id = db_data[0][\"id\"]\n                all_ids_cloudTrader.append(cloudTrader_vps_id)\n                var_manager.set_runtime_variable(f\"cloudTrader_vps_ids_{idx}\", cloudTrader_vps_id)\n                print(\n                    f\"账号 {cloudTrader_account} 的ID为：{cloudTrader_vps_id}，已保存到变量 cloudTrader_vps_ids_{idx}\")\n    \n            with allure.step(\"校验账号状态和净值\"):\n                status = db_data[0][\"status\"]\n>               assert status == 0, f\"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}\"\nE               AssertionError: 账号 300162 状态异常：预期status=0，实际=1\nE               assert 1 == 0\n\ntest_cloudTrader\\test_create.py:285: AssertionError",
+    "steps" : [ {
+      "name" : "验证第1个账号（300160）的数据库记录",
+      "time" : {
+        "start" : 1756175533066,
+        "stop" : 1756175543723,
+        "duration" : 10657
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756175533066,
+          "stop" : 1756175533066,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1756175543722,
+          "stop" : 1756175543723,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "19836029741d0841",
+          "name" : "执行SQL",
+          "source" : "19836029741d0841.txt",
+          "type" : "text/plain",
+          "size" : 46
+        }, {
+          "uid" : "f448728c501897c8",
+          "name" : "SQL参数",
+          "source" : "f448728c501897c8.txt",
+          "type" : "text/plain",
+          "size" : 11
+        }, {
+          "uid" : "51f273d3186cd667",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "51f273d3186cd667.json",
+          "type" : "application/json",
+          "size" : 1060
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "bb1b1fd00845d105",
+        "name" : "等待结果",
+        "source" : "bb1b1fd00845d105.txt",
+        "type" : "text/plain",
+        "size" : 41
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "校验账号状态和净值",
+      "time" : {
+        "start" : 1756175543723,
+        "stop" : 1756175552414,
+        "duration" : 8691
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756175543724,
+          "stop" : 1756175543724,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1756175552413,
+          "stop" : 1756175552414,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "974df895b8b1d98d",
+          "name" : "执行SQL",
+          "source" : "974df895b8b1d98d.txt",
+          "type" : "text/plain",
+          "size" : 62
+        }, {
+          "uid" : "89aa2d4b6c15cfe1",
+          "name" : "SQL参数",
+          "source" : "89aa2d4b6c15cfe1.txt",
+          "type" : "text/plain",
+          "size" : 11
+        }, {
+          "uid" : "fe0e3869042a6d23",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "fe0e3869042a6d23.json",
+          "type" : "application/json",
+          "size" : 646
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "3ad11fae4dfd955e",
+        "name" : "等待结果",
+        "source" : "3ad11fae4dfd955e.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "验证第2个账号（300161）的数据库记录",
+      "time" : {
+        "start" : 1756175552414,
+        "stop" : 1756175556741,
+        "duration" : 4327
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756175552414,
+          "stop" : 1756175552414,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1756175556739,
+          "stop" : 1756175556740,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "26ca6a616bb9d4bf",
+          "name" : "执行SQL",
+          "source" : "26ca6a616bb9d4bf.txt",
+          "type" : "text/plain",
+          "size" : 46
+        }, {
+          "uid" : "60b6379ced968082",
+          "name" : "SQL参数",
+          "source" : "60b6379ced968082.txt",
+          "type" : "text/plain",
+          "size" : 11
+        }, {
+          "uid" : "377fbb24eb700ec6",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "377fbb24eb700ec6.json",
+          "type" : "application/json",
+          "size" : 1069
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "ac4b6437797cf213",
+        "name" : "等待结果",
+        "source" : "ac4b6437797cf213.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "校验账号状态和净值",
+      "time" : {
+        "start" : 1756175556741,
+        "stop" : 1756175561052,
+        "duration" : 4311
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756175556741,
+          "stop" : 1756175556741,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1756175561050,
+          "stop" : 1756175561052,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "b36f641873ba1999",
+          "name" : "执行SQL",
+          "source" : "b36f641873ba1999.txt",
+          "type" : "text/plain",
+          "size" : 62
+        }, {
+          "uid" : "d8b3c10cce0e9c97",
+          "name" : "SQL参数",
+          "source" : "d8b3c10cce0e9c97.txt",
+          "type" : "text/plain",
+          "size" : 11
+        }, {
+          "uid" : "530a20ecabbe9103",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "530a20ecabbe9103.json",
+          "type" : "application/json",
+          "size" : 646
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "a228b2770d9dd90e",
+        "name" : "等待结果",
+        "source" : "a228b2770d9dd90e.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "验证第3个账号（300162）的数据库记录",
+      "time" : {
+        "start" : 1756175561052,
+        "stop" : 1756175569589,
+        "duration" : 8537
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756175561052,
+          "stop" : 1756175561052,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : false,
+        "stepsCount" : 0,
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1756175569587,
+          "stop" : 1756175569588,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "c832720700117493",
+          "name" : "执行SQL",
+          "source" : "c832720700117493.txt",
+          "type" : "text/plain",
+          "size" : 46
+        }, {
+          "uid" : "1c4fe3c818a2b2ea",
+          "name" : "SQL参数",
+          "source" : "1c4fe3c818a2b2ea.txt",
+          "type" : "text/plain",
+          "size" : 11
+        }, {
+          "uid" : "13bff70273bb572e",
+          "name" : "查询结果（共1条，显示前50条）",
+          "source" : "13bff70273bb572e.json",
+          "type" : "application/json",
+          "size" : 1015
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "19cbacfbae9f40b4",
+        "name" : "等待结果",
+        "source" : "19cbacfbae9f40b4.txt",
+        "type" : "text/plain",
+        "size" : 40
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "校验账号状态和净值",
+      "time" : {
+        "start" : 1756175569589,
+        "stop" : 1756175569589,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 账号 300162 状态异常：预期status=0，实际=1\nassert 1 == 0\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_820\\test_cloudTrader\\test_create.py\", line 285, in test_dbimport_addSlave\n    assert status == 0, f\"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "adc3960f56e93854",
+      "name" : "log",
+      "source" : "adc3960f56e93854.txt",
+      "type" : "text/plain",
+      "size" : 33201
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 16,
+    "attachmentsCount" : 21,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1756175569597,
+      "stop" : 1756175569597,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1756175569596,
+      "stop" : 1756175569596,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-创建数据-为云策略准备"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_cloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "24684-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "d8ed686e4a6233a0.json",
+  "parameterValues" : [ ]
+}

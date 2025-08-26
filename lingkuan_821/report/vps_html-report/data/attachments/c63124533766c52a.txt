@@ -1,0 +1,26 @@
+
+                    SELECT 
+                        fod.size,
+                        fod.send_no,
+                        fod.magical,
+                        fod.open_price,
+                        fod.symbol,
+                        fod.order_no,
+                        foi.true_total_lots,
+                        foi.order_no,
+                        foi.operation_type,
+                        foi.create_time,
+                        foi.status,
+                        foi.min_lot_size,
+                        foi.max_lot_size,
+                        foi.total_lots,
+                        foi.total_orders
+                    FROM 
+                        follow_order_detail fod
+                    INNER JOIN 
+                        follow_order_instruct foi 
+                    ON 
+                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                    WHERE foi.operation_type = %s
+                        AND fod.account = %s
+                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC
