@@ -1,0 +1,154 @@
+{
+  "uid" : "15eeda62da5daa61",
+  "name" : "数据库校验-复制下单平仓数据-数据校验",
+  "fullName" : "test_cloudTrader.test_cloudOrderClose.TestCloudFollowDirection#test_copy_verify_close_db2",
+  "historyId" : "f427dfd4201582dd0c7528bb77c6b66f",
+  "time" : {
+    "start" : 1756286946133,
+    "stop" : 1756286946133,
+    "duration" : 0
+  },
+  "description" : "验证复制下单平仓后数据库中的订单数据正确性",
+  "descriptionHtml" : "<p>验证复制下单平仓后数据库中的订单数据正确性</p>\n",
+  "status" : "broken",
+  "statusMessage" : "AttributeError: 'TestCloudFollowDirection' object has no attribute 'query_database_with_time_with_timezone'",
+  "statusTrace" : "self = <lingkuan_refine.test_cloudTrader.test_cloudOrderClose.TestCloudFollowDirection object at 0x000001A1F5FC3700>\nvar_manager = <lingkuan_refine.commons.variable_manager.VariableManager object at 0x000001A1F5D52E50>\ndb_transaction = <pymysql.connections.Connection object at 0x000001A1F5CEF820>\n\n    @allure.title(\"数据库校验-复制下单平仓数据-数据校验\")\n    def test_copy_verify_close_db2(self, var_manager, db_transaction):\n        \"\"\"验证复制下单平仓后数据库中的订单数据正确性\"\"\"\n        with allure.step(\"查询复制平仓订单数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n    \n            sql = \"\"\"\n                           SELECT\n                               fod.size,\n                               fod.close_no,\n                               fod.magical,\n                               fod.open_price,\n                               fod.symbol,\n                               fod.order_no,\n                               foi.true_total_lots,\n                               foi.order_no,\n                               foi.operation_type,\n                               foi.create_time,\n                               foi.status,\n                               foi.min_lot_size,\n                               foi.max_lot_size,\n                               foi.total_lots,\n                               foi.master_order,\n                               foi.total_orders\n                           FROM\n                               follow_order_detail fod\n                           INNER JOIN\n                               follow_order_instruct foi\n                           ON\n                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                           WHERE foi.operation_type = %s\n                               AND fod.account = %s\n                               AND fod.trader_id = %s\n                       \"\"\"\n            params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)\n    \n            # 轮询等待数据库记录\n>           db_data = self.query_database_with_time_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\nE           AttributeError: 'TestCloudFollowDirection' object has no attribute 'query_database_with_time_with_timezone'\n\ntest_cloudTrader\\test_cloudOrderClose.py:524: AttributeError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1756286946132,
+      "stop" : 1756286946132,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1756286945723,
+      "stop" : 1756286946132,
+      "duration" : 409
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "验证复制下单平仓后数据库中的订单数据正确性",
+    "status" : "broken",
+    "statusMessage" : "AttributeError: 'TestCloudFollowDirection' object has no attribute 'query_database_with_time_with_timezone'",
+    "statusTrace" : "self = <lingkuan_refine.test_cloudTrader.test_cloudOrderClose.TestCloudFollowDirection object at 0x000001A1F5FC3700>\nvar_manager = <lingkuan_refine.commons.variable_manager.VariableManager object at 0x000001A1F5D52E50>\ndb_transaction = <pymysql.connections.Connection object at 0x000001A1F5CEF820>\n\n    @allure.title(\"数据库校验-复制下单平仓数据-数据校验\")\n    def test_copy_verify_close_db2(self, var_manager, db_transaction):\n        \"\"\"验证复制下单平仓后数据库中的订单数据正确性\"\"\"\n        with allure.step(\"查询复制平仓订单数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n    \n            sql = \"\"\"\n                           SELECT\n                               fod.size,\n                               fod.close_no,\n                               fod.magical,\n                               fod.open_price,\n                               fod.symbol,\n                               fod.order_no,\n                               foi.true_total_lots,\n                               foi.order_no,\n                               foi.operation_type,\n                               foi.create_time,\n                               foi.status,\n                               foi.min_lot_size,\n                               foi.max_lot_size,\n                               foi.total_lots,\n                               foi.master_order,\n                               foi.total_orders\n                           FROM\n                               follow_order_detail fod\n                           INNER JOIN\n                               follow_order_instruct foi\n                           ON\n                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                           WHERE foi.operation_type = %s\n                               AND fod.account = %s\n                               AND fod.trader_id = %s\n                       \"\"\"\n            params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)\n    \n            # 轮询等待数据库记录\n>           db_data = self.query_database_with_time_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\nE           AttributeError: 'TestCloudFollowDirection' object has no attribute 'query_database_with_time_with_timezone'\n\ntest_cloudTrader\\test_cloudOrderClose.py:524: AttributeError",
+    "steps" : [ {
+      "name" : "查询复制平仓订单数据",
+      "time" : {
+        "start" : 1756286946133,
+        "stop" : 1756286946133,
+        "duration" : 0
+      },
+      "status" : "broken",
+      "statusMessage" : "AttributeError: 'TestCloudFollowDirection' object has no attribute 'query_database_with_time_with_timezone'\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_refine\\test_cloudTrader\\test_cloudOrderClose.py\", line 524, in test_copy_verify_close_db2\n    db_data = self.query_database_with_time_with_timezone(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 1,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 0
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1756286946145,
+      "stop" : 1756286946145,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1756286946145,
+      "stop" : 1756286946146,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略复制下单-平仓的功能校验"
+  }, {
+    "name" : "tag",
+    "value" : "retry(n=3, delay=5)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudOrderClose"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCloudFollowDirection"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "23096-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudOrderClose"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "retry(n=3, delay=5)" ]
+  },
+  "source" : "15eeda62da5daa61.json",
+  "parameterValues" : [ ]
+}

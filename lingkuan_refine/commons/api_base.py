@@ -2,6 +2,8 @@ import allure
 import logging
 import time
 import json
+import pytest
+import math
 from typing import List, Dict, Any, Optional, Tuple
 import datetime
 from decimal import Decimal
@@ -12,15 +14,28 @@ from requests.exceptions import (
     HTTPError, SSLError
 )
 from jsonpath_ng import parse
-from lingkuan_820.VAR.VAR import *
-from lingkuan_820.commons.wait_utils import wait_for_condition
+from lingkuan_refine.VAR.VAR import *
+from lingkuan_refine.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+from enum import Enum
+
+
+# 定义比较操作枚举，方便调用时清晰表达意图
+class CompareOp(Enum):
+    EQ = "=="  # 相等
+    NE = "!="  # 不相等
+    GT = ">"  # 大于
+    LT = "<"  # 小于
+    GE = ">="  # 大于等于
+    LE = "<="  # 小于等于
+    IN = "in"  # 包含于（实际值在预期值中）
+    NOT_IN = "not in"  # 不包含于
 
 
 class APITestBase:
-    """API测试基础类，封装通用测试方法（Allure分层提示全覆盖：HTTP请求+数据库操作）"""
+    """API测试基础类，封装通用测试方法（Allure分层提示全覆盖：HTTP请求+数据库操作+异常处理）"""
 
     def convert_decimal_to_float(self, data: Any) -> Any:
         """递归转换Decimal类型为float，处理datetime/date为字符串"""
@@ -67,7 +82,7 @@ class APITestBase:
         """获取当前时间字符串（统一日志格式）"""
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # ------------------------------ HTTP请求封装（保持原有分层，与数据库分层风格对齐） ------------------------------
+    # ------------------------------ HTTP请求封装（异常分层优化优化） ------------------------------
     def _attach_request_details(
             self,
             method: str,
@@ -117,7 +132,7 @@ class APITestBase:
 
     def send_post_request(self, logged_session, url, json_data=None, data=None, files=None,
                           sleep_seconds=SLEEP_SECONDS):
-        """发送POST请求（Allure分层提示优化）"""
+        """发送POST请求（异常分层优化）"""
         method = "POST"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -148,25 +163,26 @@ class APITestBase:
                 return response
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
-                self._attach_request_details(
-                    method=method,
-                    url=url,
-                    headers=logged_session.headers,
-                    body=json_data if json_data else data,
-                    is_json=bool(json_data),
-                )
-                error_detail = (
-                    f"请求异常: {str(e)}\n"
-                    f"URL: {url}\n"
-                    f"请求头: {logged_session.headers}\n"
-                    f"请求体: {json_data if json_data else data}"
-                )
-                allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
+                with allure.step(f"{method} 请求异常"):
+                    self._attach_request_details(
+                        method=method,
+                        url=url,
+                        headers=logged_session.headers,
+                        body=json_data if json_data else data,
+                        is_json=bool(json_data),
+                    )
+                    error_detail = (
+                        f"请求异常: {str(e)}\n"
+                        f"URL: {url}\n"
+                        f"请求头: {logged_session.headers}\n"
+                        f"请求体: {json_data if json_data else data}"
+                    )
+                    allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
                 logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_get_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
-        """发送GET请求（Allure分层提示优化）"""
+        """发送GET请求（异常分层优化）"""
         method = "GET"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -188,25 +204,26 @@ class APITestBase:
                 return response
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
-                self._attach_request_details(
-                    method=method,
-                    url=url,
-                    headers=logged_session.headers,
-                    body=params,
-                    is_json=False,
-                )
-                error_detail = (
-                    f"请求异常: {str(e)}\n"
-                    f"URL: {url}\n"
-                    f"请求头: {logged_session.headers}\n"
-                    f"请求参数: {params}"
-                )
-                allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
+                with allure.step(f"{method} 请求异常"):
+                    self._attach_request_details(
+                        method=method,
+                        url=url,
+                        headers=logged_session.headers,
+                        body=params,
+                        is_json=False,
+                    )
+                    error_detail = (
+                        f"请求异常: {str(e)}\n"
+                        f"URL: {url}\n"
+                        f"请求头: {logged_session.headers}\n"
+                        f"请求参数: {params}"
+                    )
+                    allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
                 logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_delete_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
-        """发送DELETE请求（Allure分层提示优化）"""
+        """发送DELETE请求（异常分层优化）"""
         method = "DELETE"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -228,25 +245,26 @@ class APITestBase:
                 return response
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
-                self._attach_request_details(
-                    method=method,
-                    url=url,
-                    headers=logged_session.headers,
-                    body=json_data,
-                    is_json=True,
-                )
-                error_detail = (
-                    f"请求异常: {str(e)}\n"
-                    f"URL: {url}\n"
-                    f"请求头: {logged_session.headers}\n"
-                    f"请求体: {json_data}"
-                )
-                allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
+                with allure.step(f"{method} 请求异常"):
+                    self._attach_request_details(
+                        method=method,
+                        url=url,
+                        headers=logged_session.headers,
+                        body=json_data,
+                        is_json=True,
+                    )
+                    error_detail = (
+                        f"请求异常: {str(e)}\n"
+                        f"URL: {url}\n"
+                        f"请求头: {logged_session.headers}\n"
+                        f"请求体: {json_data}"
+                    )
+                    allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
                 logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_put_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
-        """发送PUT请求（Allure分层提示优化）"""
+        """发送PUT请求（异常分层优化）"""
         method = "PUT"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -268,25 +286,26 @@ class APITestBase:
                 return response
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
-                self._attach_request_details(
-                    method=method,
-                    url=url,
-                    headers=logged_session.headers,
-                    body=json_data,
-                    is_json=True,
-                )
-                error_detail = (
-                    f"请求异常: {str(e)}\n"
-                    f"URL: {url}\n"
-                    f"请求头: {logged_session.headers}\n"
-                    f"请求体: {json_data}"
-                )
-                allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
+                with allure.step(f"{method} 请求异常"):
+                    self._attach_request_details(
+                        method=method,
+                        url=url,
+                        headers=logged_session.headers,
+                        body=json_data,
+                        is_json=True,
+                    )
+                    error_detail = (
+                        f"请求异常: {str(e)}\n"
+                        f"URL: {url}\n"
+                        f"请求头: {logged_session.headers}\n"
+                        f"请求体: {json_data}"
+                    )
+                    allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
                 logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_options_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
-        """发送OPTIONS请求（Allure分层提示优化）"""
+        """发送OPTIONS请求（异常分层优化）"""
         method = "OPTIONS"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -310,20 +329,21 @@ class APITestBase:
                 return response
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
-                self._attach_request_details(
-                    method=method,
-                    url=url,
-                    headers=logged_session.headers,
-                    body=params,
-                    is_json=False,
-                )
-                error_detail = (
-                    f"请求异常: {str(e)}\n"
-                    f"URL: {url}\n"
-                    f"请求头: {logged_session.headers}\n"
-                    f"请求参数: {params}"
-                )
-                allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
+                with allure.step(f"{method} 请求异常"):
+                    self._attach_request_details(
+                        method=method,
+                        url=url,
+                        headers=logged_session.headers,
+                        body=params,
+                        is_json=False,
+                    )
+                    error_detail = (
+                        f"请求异常: {str(e)}\n"
+                        f"URL: {url}\n"
+                        f"请求头: {logged_session.headers}\n"
+                        f"请求参数: {params}"
+                    )
+                    allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
                 logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
@@ -332,28 +352,39 @@ class APITestBase:
         logger.info(f"[{self._get_current_time()}] 响应状态码: {response.status_code} | URL: {response.url}")
         logger.info(f"[{self._get_current_time()}] 响应详情: 头信息={response.headers} | 内容={response.text[:1000]}")
 
-    # ------------------------------ 断言方法（保持原有分层，与数据库操作联动） ------------------------------
+    # ------------------------------ 断言方法（异常分层优化） ------------------------------
     def assert_response_status(self, response, expected_status, error_msg_prefix):
         """断言响应状态码（分层提示优化）"""
         with allure.step("断言响应状态码"):
             actual_status = response.status_code
+            allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
             allure.attach(f"期望值: {expected_status}", "预期状态码", allure.attachment_type.TEXT)
             allure.attach(f"实际值: {actual_status}", "实际状态码", allure.attachment_type.TEXT)
-            allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
             allure.attach(response.text[:500] + "..." if len(response.text) > 500 else response.text,
                           "响应内容", allure.attachment_type.TEXT)
 
-        assert actual_status == expected_status, \
-            f"Failed: {error_msg_prefix}（状态码不匹配）"
+        try:
+            assert actual_status == expected_status, \
+                f"Failed: {error_msg_prefix}（状态码不匹配）"
+        except AssertionError as e:
+            with allure.step("状态码断言失败"):
+                allure.attach(f"预期: {expected_status}, 实际: {actual_status}", "断言结果",
+                              allure.attachment_type.TEXT)
+            raise e
 
     def assert_values_equal(self, actual_value, expected_value, error_msg_prefix):
-        """断言两个值相等（分层提示优化）"""
+        """断言两个值相等（分层分层提示优化）"""
         with allure.step("断言值相等"):
             allure.attach(f"期望值: {self.serialize_data(expected_value)}", "预期值", allure.attachment_type.TEXT)
             allure.attach(f"实际值: {self.serialize_data(actual_value)}", "实际值", allure.attachment_type.TEXT)
 
-        assert actual_value == expected_value, \
-            f"Failed: {error_msg_prefix}（值不匹配）"
+        try:
+            assert actual_value == expected_value, \
+                f"Failed: {error_msg_prefix}（值不匹配）"
+        except AssertionError as e:
+            with allure.step("值相等断言失败"):
+                allure.attach(f"预期: {expected_value}, 实际: {actual_value}", "断言结果", allure.attachment_type.TEXT)
+            raise e
 
     def extract_jsonpath(self, response: requests.Response, json_path: str) -> Any:
         """使用jsonpath-ng解析JSON路径（分层提示优化）"""
@@ -363,7 +394,7 @@ class APITestBase:
             matches = jsonpath_expr.find(json_data)
             return [match.value for match in matches] if matches else None
         except Exception as e:
-            with allure.step("JSONPath解析操作"):
+            with allure.step("JSONPath解析异常"):
                 allure.attach(json_path, "解析路径", allure.attachment_type.TEXT)
                 allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
                 allure.attach(str(e), "解析错误", allure.attachment_type.TEXT)
@@ -378,9 +409,9 @@ class APITestBase:
                 actual_value = actual_value[0]
 
             with allure.step(f"断言JSON路径: {json_path}"):
+                allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
                 allure.attach(f"期望值: {self.serialize_data(expected_value)}", "预期值", allure.attachment_type.TEXT)
                 allure.attach(f"实际值: {self.serialize_data(actual_value)}", "实际值", allure.attachment_type.TEXT)
-                allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
 
             assert actual_value == expected_value, \
                 f"Failed: {error_msg_prefix}（JSON路径值不匹配）"
@@ -393,7 +424,7 @@ class APITestBase:
                 f"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}")
             raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
 
-    # ------------------------------ 数据库操作（Allure分层提示全覆盖） ------------------------------
+    # ------------------------------ 数据库操作（异常分层优化） ------------------------------
     def query_database(self, db_transaction: pymysql.connections.Connection,
                        sql: str,
                        params: tuple = (),
@@ -417,11 +448,11 @@ class APITestBase:
 
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
-                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} | 参数: {params}")
+                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
                     cursor.execute(final_sql, params)
                     result = cursor.fetchall()
                     logger.info(
-                        f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)} | SQL: {final_sql[:200]}")
+                        f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)}")
 
                     if result:
                         if convert_decimal:
@@ -429,7 +460,7 @@ class APITestBase:
                         result = self._convert_date_types(result)
 
                     try:
-                        result_preview = json.dumps(result, ensure_ascii=False)[:1000]
+                        result_preview = json.dumps(result, ensure_ascii=False)
                     except Exception as e:
                         result_preview = f"无法序列化完整结果: {str(e)}"
                     logger.info(f"[{self._get_current_time()}] 查询结果: {result_preview}")
@@ -446,7 +477,7 @@ class APITestBase:
                 return result
 
         except pymysql.Error as e:
-            with allure.step("数据库查询异常"):
+            with allure.step("数据库查询异常（pymysql错误）"):
                 allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
                 allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                 allure.attach(f"错误码: {e.args[0]} | 信息: {str(e)}", "错误详情", allure.attachment_type.TEXT)
@@ -458,7 +489,7 @@ class APITestBase:
             raise pymysql.Error(f"Failed: 数据库查询错误（错误码: {e.args[0]}）") from e
 
         except Exception as e:
-            with allure.step("数据库查询异常"):
+            with allure.step("数据库查询异常（未知错误）"):
                 allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
                 allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                 allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
@@ -478,7 +509,7 @@ class APITestBase:
 
         return [{k: convert_value(v) for k, v in row.items()} for row in result]
 
-    # ------------------------------ 核心：轮询版数据库查询（Allure分层优化） ------------------------------
+    # ------------------------------ 核心：轮询版数据库查询（异常分层优化） ------------------------------
     def query_database_with_time(
             self,
             db_transaction: pymysql.connections.Connection,
@@ -500,9 +531,7 @@ class APITestBase:
         has_data = False
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询等待数据稳定 | "
-            f"SQL: {sql[:200]} | 超时: {timeout}秒 | 稳定期: {stable_period}秒"
-        )
+            f"[{self._get_current_time()}] 开始轮询等待数据稳定 | 超时: {timeout}秒 | 稳定期: {stable_period}秒")
 
         with allure.step(f"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）"):
             allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
@@ -566,10 +595,11 @@ class APITestBase:
                     time.sleep(poll_interval)
 
                 except Exception as e:
+                    with allure.step("轮询查询异常（单次查询失败）"):
+                        allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                        allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                        allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
                     logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...")
-                    with allure.step("轮询异常处理"):
-                        allure.attach(str(e), "异常信息", allure.attachment_type.TEXT)
-                        allure.attach("继续等待下一次轮询", "处理方式", allure.attachment_type.TEXT)
                     time.sleep(poll_interval)
 
             # 超时处理：获取最终结果
@@ -599,9 +629,14 @@ class APITestBase:
 
             # 判断超时场景
             if len(final_result) == 0:
+                with allure.step("轮询超时（无结果）"):
+                    allure.attach(f"等待{timeout}秒后仍无查询结果", "超时详情", allure.attachment_type.TEXT)
                 error_msg = f"Failed: 等待记录出现超时（{timeout}秒）"
                 raise TimeoutError(error_msg)
             elif final_result is None:
+                with allure.step("轮询超时（未稳定）"):
+                    allure.attach(f"数据未在{stable_period}秒内稳定（总超时{timeout}秒）", "超时详情",
+                                  allure.attachment_type.TEXT)
                 error_msg = f"Failed: 数据未在{stable_period}秒内稳定（超时{timeout}秒）"
                 raise TimeoutError(error_msg)
 
@@ -691,7 +726,7 @@ class APITestBase:
             allure.attach("数量和内容均未变化，结果稳定", "判断结果", allure.attachment_type.TEXT)
             return True
 
-    # ------------------------------ 其他数据库工具方法（Allure分层提示） ------------------------------
+    # ------------------------------ 其他数据库工具方法（异常分层优化） ------------------------------
     def wait_for_database_deletion(self, db_transaction: pymysql.connections.Connection,
                                    sql: str,
                                    params: tuple = (),
@@ -750,10 +785,11 @@ class APITestBase:
                     time.sleep(poll_interval)
 
                 except Exception as e:
+                    with allure.step("删除等待异常"):
+                        allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                        allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                        allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
                     logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...")
-                    with allure.step("轮询异常处理"):
-                        allure.attach(str(e), "异常信息", allure.attachment_type.TEXT)
-                        allure.attach("继续等待下一次轮询", "处理方式", allure.attachment_type.TEXT)
                     time.sleep(poll_interval)
 
             # 超时处理
@@ -864,10 +900,11 @@ class APITestBase:
                     time.sleep(poll_interval)
 
                 except Exception as e:
+                    with allure.step("无记录等待异常"):
+                        allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                        allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                        allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
                     logger.warning(f"轮询异常: {str(e)}，继续等待...")
-                    with allure.step("轮询异常处理"):
-                        allure.attach(str(e), "异常信息", allure.attachment_type.TEXT)
-                        allure.attach("继续等待下一次轮询", "处理方式", allure.attachment_type.TEXT)
                     time.sleep(poll_interval)
 
             # 超时处理：返回最终查询结果（无论是否有记录）
@@ -888,7 +925,7 @@ class APITestBase:
 
             return final_result  # 超时后返回实际查询结果（可能非空）
 
-    # ------------------------------ 带时区的轮询查询（兼容原有调用，Allure分层优化） ------------------------------
+    # ------------------------------ 带时区的轮询查询（异常分层优化） ------------------------------
     def query_database_with_time_with_timezone(
             self,
             db_transaction: pymysql.connections.Connection,
@@ -911,8 +948,7 @@ class APITestBase:
         final_result = None
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| "
-            f"SQL: {sql[:200]} | 超时: {timeout}秒"
+            f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒"
         )
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
@@ -964,15 +1000,16 @@ class APITestBase:
                     time.sleep(poll_interval)
 
                 except Exception as e:
+                    with allure.step("时区查询轮询异常"):
+                        allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                        allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                        allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
                     logger.warning(f"[{self._get_current_time()}] 轮询异常: {str(e)} | 继续等待")
-                    with allure.step("轮询异常处理"):
-                        allure.attach(str(e), "异常信息", allure.attachment_type.TEXT)
-                        allure.attach("继续等待下一次轮询", "处理方式", allure.attachment_type.TEXT)
                     time.sleep(poll_interval)
 
             # 超时处理
             if final_result is None:
-                with allure.step("轮询超时处理"):
+                with allure.step("时区查询轮询超时"):
                     allure.attach(f"超过{timeout}秒未达到稳定状态，获取最终结果", "处理说明",
                                   allure.attachment_type.TEXT)
                 final_result = self._execute_query_with_timezone(
@@ -992,6 +1029,8 @@ class APITestBase:
                     allure.attach(self.serialize_data(final_result[:50]), "结果预览", allure.attachment_type.JSON)
 
             if not final_result:
+                with allure.step("时区查询无结果"):
+                    allure.attach(f"轮询{timeout}秒后仍无查询结果", "异常详情", allure.attachment_type.TEXT)
                 raise TimeoutError(f"Failed: 时区查询超时（{timeout}秒）")
             return final_result
 
@@ -1045,11 +1084,13 @@ class APITestBase:
                     attach_to_allure=attach_to_allure
                 )
 
-    # ------------------------------ 其他辅助方法（Allure分层提示） ------------------------------
+    # ------------------------------ 其他辅助方法（异常分层优化） ------------------------------
     def wait_for_api_condition(self, logged_session, method, url, params=None, json_data=None,
                                expected_condition=None, timeout=WAIT_TIMEOUT, poll_interval=POLL_INTERVAL):
         """等待API响应满足特定条件（带Allure分层提示）"""
         if expected_condition is None:
+            with allure.step("参数异常"):
+                allure.attach("expected_condition参数为None", "错误详情", allure.attachment_type.TEXT)
             raise ValueError("必须提供expected_condition函数")
 
         def check_api():
@@ -1063,12 +1104,17 @@ class APITestBase:
                 elif method.upper() == 'DELETE':
                     response = logged_session.delete(url, json=json_data)
                 else:
+                    with allure.step("不支持的HTTP方法"):
+                        allure.attach(f"方法: {method}", "错误详情", allure.attachment_type.TEXT)
                     raise ValueError(f"不支持的HTTP方法: {method}")
 
                 self._log_response(response)
                 return expected_condition(response)
 
             except Exception as e:
+                with allure.step("API条件检查异常"):
+                    allure.attach(f"{method} {url}", "请求地址", allure.attachment_type.TEXT)
+                    allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
                 logger.error(f"[{self._get_current_time()}] API请求异常: {str(e)} | URL: {url}")
                 return False
 
@@ -1093,10 +1139,16 @@ class APITestBase:
         """断言两个列表元素相同（忽略顺序，带Allure分层提示）"""
         from collections import Counter
         with allure.step("断言列表元素相同（忽略顺序）"):
-            allure.attach(self.serialize_data(list1), "实际列表", allure.attachment_type.TEXT)
-            allure.attach(self.serialize_data(list2), "预期列表", allure.attachment_type.TEXT)
+            allure.attach(self.serialize_data(list1), "实际列表", attachment_type="text/plain")
+            allure.attach(self.serialize_data(list2), "预期列表", attachment_type="text/plain")
 
-        assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
+        try:
+            assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
+        except AssertionError as e:
+            with allure.step("列表元素断言失败"):
+                allure.attach(f"实际: {list1[:10]}... | 预期: {list2[:10]}...", "断言结果",
+                              attachment_type="text/plain")
+            raise e
 
     def assert_dict_subset(self, subset_dict, full_dict, error_msg_prefix="子字典不匹配"):
         """断言一个字典是另一个字典的子集（带Allure分层提示）"""
@@ -1104,9 +1156,14 @@ class APITestBase:
             allure.attach(self.serialize_data(subset_dict), "预期子字典", allure.attachment_type.TEXT)
             allure.attach(self.serialize_data(full_dict), "实际完整字典", allure.attachment_type.TEXT)
 
-        for key, value in subset_dict.items():
-            assert key in full_dict, f"Failed: {error_msg_prefix}（键 '{key}' 不存在）"
-            assert full_dict[key] == value, f"Failed: {error_msg_prefix}（键 '{key}' 值不匹配）"
+        try:
+            for key, value in subset_dict.items():
+                assert key in full_dict, f"Failed: {error_msg_prefix}（键 '{key}' 不存在）"
+                assert full_dict[key] == value, f"Failed: {error_msg_prefix}（键 '{key}' 值不匹配）"
+        except AssertionError as e:
+            with allure.step("子字典断言失败"):
+                allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
+            raise e
 
     def get_batch_data_by_index(self, var_manager, var_name, index):
         """从批量数据中获取指定索引的数据（带Allure分层提示）"""
@@ -1141,17 +1198,109 @@ class APITestBase:
             allure.attach(self.serialize_data(actual_sorted), "实际列表", allure.attachment_type.JSON)
             allure.attach(self.serialize_data(expected_sorted), "预期列表", allure.attachment_type.JSON)
 
-        assert len(actual_sorted) == len(expected_sorted), \
-            f"Failed: {error_msg_prefix}（长度不匹配）"
+        try:
+            assert len(actual_sorted) == len(expected_sorted), \
+                f"Failed: {error_msg_prefix}（长度不匹配）"
 
-        for a, e in zip(actual_sorted, expected_sorted):
-            for field in fields_to_compare:
-                actual_val = a[field]
-                expected_val = e[field]
+            for a, e in zip(actual_sorted, expected_sorted):
+                for field in fields_to_compare:
+                    actual_val = a[field]
+                    expected_val = e[field]
 
-                if isinstance(actual_val, float) and isinstance(expected_val, float):
-                    assert abs(actual_val - expected_val) <= tolerance, \
-                        f"Failed: {error_msg_prefix}（字段 {field} 精度不匹配）"
+                    if isinstance(actual_val, float) and isinstance(expected_val, float):
+                        assert abs(actual_val - expected_val) <= tolerance, \
+                            f"Failed: {error_msg_prefix}（字段 {field} 精度不匹配）"
+                    else:
+                        assert actual_val == expected_val, \
+                            f"Failed: {error_msg_prefix}（字段 {field} 值不匹配）"
+        except AssertionError as e:
+            with allure.step("数据列表断言失败"):
+                allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
+            raise e
+
+    def verify_data(
+            self,
+            actual_value,
+            expected_value,
+            op: CompareOp,
+            message: str,
+            attachment_name: str,
+            attachment_type="text/plain",
+            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）
+            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）
+            abs_tol=0.0  # 绝对容差（仅当use_isclose=True时生效）
+    ):
+        """
+        通用数据校验函数，支持浮点容错比较
+        :param actual_value: 实际值
+        :param expected_value: 预期值
+        :param op: 比较操作，CompareOp 枚举
+        :param message: 校验失败时的提示信息
+        :param attachment_name: Allure 附件名称
+        :param attachment_type: Allure 附件类型，默认文本
+        :param use_isclose: 是否使用math.isclose进行浮点容错比较
+        :param rel_tol: 相对容差（默认1e-9）
+        :param abs_tol: 绝对容差（默认0.0）
+        其他参数同前
+        """
+        with allure.step(f"校验: {message}"):
+            result = False
+            try:
+                # 处理浮点容错比较（仅对EQ/NE操作生效）
+                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):
+                    if not (isinstance(actual_value, (int, float)) and
+                            isinstance(expected_value, (int, float))):
+                        # 非数字类型自动禁用isclose，避免报错
+                        use_isclose = False
+                        logging.warning(f"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）")
+
+                    # 计算isclose结果
+                    is_close = math.isclose(
+                        actual_value,
+                        expected_value,
+                        rel_tol=rel_tol,
+                        abs_tol=abs_tol
+                    )
+                    # 根据操作类型取反
+                    result = is_close if op == CompareOp.EQ else not is_close
+
+                # 普通比较逻辑
                 else:
-                    assert actual_val == expected_val, \
-                        f"Failed: {error_msg_prefix}（字段 {field} 值不匹配）"
+                    if op == CompareOp.EQ:
+                        result = actual_value == expected_value
+                    elif op == CompareOp.NE:
+                        result = actual_value != expected_value
+                    elif op == CompareOp.GT:
+                        result = actual_value > expected_value
+                    elif op == CompareOp.LT:
+                        result = actual_value < expected_value
+                    elif op == CompareOp.GE:
+                        result = actual_value >= expected_value
+                    elif op == CompareOp.LE:
+                        result = actual_value <= expected_value
+                    elif op == CompareOp.IN:
+                        result = actual_value in expected_value
+                    elif op == CompareOp.NOT_IN:
+                        result = actual_value not in expected_value
+
+            except TypeError as e:
+                pytest.fail(
+                    f"校验类型错误: {str(e)}\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}")
+
+            # 生成详细提示信息（包含容差参数）
+            detail_msg = (
+                f"\n实际: {actual_value}\n"
+                f"操作: {op.value}\n"
+                f"预期: {expected_value}\n"
+            )
+
+            # 添加allure.attach，将信息写入报告
+            allure.attach(
+                detail_msg,  # 附件内容
+                name=attachment_name,  # 附件名称（来自参数）
+                attachment_type=attachment_type  # 附件类型
+            )
+
+            if not result:
+                pytest.fail(f"校验失败: {message}\n{detail_msg}")
+            logging.info(f"校验通过: {message}\n{detail_msg}")

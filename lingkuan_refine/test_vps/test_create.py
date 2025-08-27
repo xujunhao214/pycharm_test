@@ -6,7 +6,7 @@ import allure
 from typing import Dict, Any, List
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"

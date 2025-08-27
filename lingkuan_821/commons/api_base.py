@@ -3,6 +3,7 @@ import logging
 import time
 import json
 import pytest
+import math
 from typing import List, Dict, Any, Optional, Tuple
 import datetime
 from decimal import Decimal
@@ -447,11 +448,11 @@ class APITestBase:
 
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
-                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} | 参数: {params}")
+                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
                     cursor.execute(final_sql, params)
                     result = cursor.fetchall()
                     logger.info(
-                        f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)} | SQL: {final_sql[:200]}")
+                        f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)}")
 
                     if result:
                         if convert_decimal:
@@ -459,7 +460,7 @@ class APITestBase:
                         result = self._convert_date_types(result)
 
                     try:
-                        result_preview = json.dumps(result, ensure_ascii=False)[:1000]
+                        result_preview = json.dumps(result, ensure_ascii=False)
                     except Exception as e:
                         result_preview = f"无法序列化完整结果: {str(e)}"
                     logger.info(f"[{self._get_current_time()}] 查询结果: {result_preview}")
@@ -530,9 +531,7 @@ class APITestBase:
         has_data = False
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询等待数据稳定 | "
-            f"SQL: {sql[:200]} | 超时: {timeout}秒 | 稳定期: {stable_period}秒"
-        )
+            f"[{self._get_current_time()}] 开始轮询等待数据稳定 | 超时: {timeout}秒 | 稳定期: {stable_period}秒")
 
         with allure.step(f"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）"):
             allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
@@ -949,8 +948,7 @@ class APITestBase:
         final_result = None
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| "
-            f"SQL: {sql[:200]} | 超时: {timeout}秒"
+            f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒"
         )
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
@@ -1141,14 +1139,15 @@ class APITestBase:
         """断言两个列表元素相同（忽略顺序，带Allure分层提示）"""
         from collections import Counter
         with allure.step("断言列表元素相同（忽略顺序）"):
-            allure.attach(self.serialize_data(list1), "实际列表", allure.attachment_type.TEXT)
-            allure.attach(self.serialize_data(list2), "预期列表", allure.attachment_type.TEXT)
+            allure.attach(self.serialize_data(list1), "实际列表", attachment_type="text/plain")
+            allure.attach(self.serialize_data(list2), "预期列表", attachment_type="text/plain")
 
         try:
             assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
         except AssertionError as e:
             with allure.step("列表元素断言失败"):
-                allure.attach(f"实际: {list1[:10]}... | 预期: {list2[:10]}...", "断言结果", allure.attachment_type.TEXT)
+                allure.attach(f"实际: {list1[:10]}... | 预期: {list2[:10]}...", "断言结果",
+                              attachment_type="text/plain")
             raise e
 
     def assert_dict_subset(self, subset_dict, full_dict, error_msg_prefix="子字典不匹配"):
@@ -1226,52 +1225,82 @@ class APITestBase:
             op: CompareOp,
             message: str,
             attachment_name: str,
-            attachment_type=allure.attachment_type.TEXT
+            attachment_type="text/plain",
+            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）
+            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）
+            abs_tol=0.0  # 绝对容差（仅当use_isclose=True时生效）
     ):
         """
-        通用数据校验函数，支持灵活比较并生成 Allure 报告分层步骤
+        通用数据校验函数，支持浮点容错比较
         :param actual_value: 实际值
         :param expected_value: 预期值
         :param op: 比较操作，CompareOp 枚举
         :param message: 校验失败时的提示信息
         :param attachment_name: Allure 附件名称
         :param attachment_type: Allure 附件类型，默认文本
+        :param use_isclose: 是否使用math.isclose进行浮点容错比较
+        :param rel_tol: 相对容差（默认1e-9）
+        :param abs_tol: 绝对容差（默认0.0）
+        其他参数同前
         """
         with allure.step(f"校验: {message}"):
-            # 执行比较操作
             result = False
             try:
-                if op == CompareOp.EQ:
-                    result = actual_value == expected_value
-                elif op == CompareOp.NE:
-                    result = actual_value != expected_value
-                elif op == CompareOp.GT:
-                    result = actual_value > expected_value
-                elif op == CompareOp.LT:
-                    result = actual_value < expected_value
-                elif op == CompareOp.GE:
-                    result = actual_value >= expected_value
-                elif op == CompareOp.LE:
-                    result = actual_value <= expected_value
-                elif op == CompareOp.IN:
-                    # 处理包含关系（实际值在预期值列表/元组中）
-                    result = actual_value in expected_value
-                elif op == CompareOp.NOT_IN:
-                    # 处理不包含关系
-                    result = actual_value not in expected_value
+                # 处理浮点容错比较（仅对EQ/NE操作生效）
+                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):
+                    if not (isinstance(actual_value, (int, float)) and
+                            isinstance(expected_value, (int, float))):
+                        # 非数字类型自动禁用isclose，避免报错
+                        use_isclose = False
+                        logging.warning(f"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）")
+
+                    # 计算isclose结果
+                    is_close = math.isclose(
+                        actual_value,
+                        expected_value,
+                        rel_tol=rel_tol,
+                        abs_tol=abs_tol
+                    )
+                    # 根据操作类型取反
+                    result = is_close if op == CompareOp.EQ else not is_close
+
+                # 普通比较逻辑
+                else:
+                    if op == CompareOp.EQ:
+                        result = actual_value == expected_value
+                    elif op == CompareOp.NE:
+                        result = actual_value != expected_value
+                    elif op == CompareOp.GT:
+                        result = actual_value > expected_value
+                    elif op == CompareOp.LT:
+                        result = actual_value < expected_value
+                    elif op == CompareOp.GE:
+                        result = actual_value >= expected_value
+                    elif op == CompareOp.LE:
+                        result = actual_value <= expected_value
+                    elif op == CompareOp.IN:
+                        result = actual_value in expected_value
+                    elif op == CompareOp.NOT_IN:
+                        result = actual_value not in expected_value
+
             except TypeError as e:
-                # 捕获类型不匹配导致的比较错误（如数字与字符串比较）
                 pytest.fail(
                     f"校验类型错误: {str(e)}\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}")
 
-            # 生成详细提示信息
+            # 生成详细提示信息（包含容差参数）
             detail_msg = (
-                f"预期: {expected_value}\n"
+                f"\n实际: {actual_value}\n"
                 f"操作: {op.value}\n"
-                f"实际: {actual_value}\n"
+                f"预期: {expected_value}\n"
             )
-            allure.attach(detail_msg, attachment_name, attachment_type)
+
+            # 添加allure.attach，将信息写入报告
+            allure.attach(
+                detail_msg,  # 附件内容
+                name=attachment_name,  # 附件名称（来自参数）
+                attachment_type=attachment_type  # 附件类型
+            )
 
             if not result:
                 pytest.fail(f"校验失败: {message}\n{detail_msg}")
-            logging.info(f"校验通过: {message}, {detail_msg}")
+            logging.info(f"校验通过: {message}\n{detail_msg}")

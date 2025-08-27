@@ -22,8 +22,10 @@ def run_vps_tests(env: str = "test"):
 
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_ordersend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_orderclose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_ordersend2.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_orderclose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_masOrderSend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vps_masOrderClose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsOrder_open_level.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_vpsfixed_annotations.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_vps/test_create_scene.py",
@@ -68,6 +70,6 @@ def run_vps_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)

@@ -161,7 +161,7 @@ class TestCloudtradingOrders6(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-        assert len(db_data) != 5, f"开仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+        assert len(db_data) != 5, f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单"
 
     @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -205,7 +205,7 @@ class TestCloudtradingOrders6(APITestBase):
             )
 
         with allure.step("2. 数据校验"):
-            assert len(db_data) != 5, f"开仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+            assert len(db_data) != 5, f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单"
 
     @allure.title("云策略交易下单-交易平仓")
     def test_copy_order_close(self, var_manager, logged_session):
@@ -269,7 +269,7 @@ class TestCloudtradingOrders6(APITestBase):
                 time_field="fod.close_time"
             )
         with allure.step("2. 数据校验"):
-            assert len(db_data) != 5, f"平仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+            assert len(db_data) != 5, f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单"
 
     @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -327,6 +327,6 @@ class TestCloudtradingOrders6(APITestBase):
             )
             logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-            assert len(db_data) != 5, f"平仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+            assert len(db_data) != 5, f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单"
 
         # time.sleep(25)

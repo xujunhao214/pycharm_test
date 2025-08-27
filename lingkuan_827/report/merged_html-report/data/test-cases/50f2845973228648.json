@@ -1,0 +1,305 @@
+{
+  "uid" : "50f2845973228648",
+  "name" : "修改跟单账号（场景1：无固定注释）",
+  "fullName" : "test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios#test_scenario1_follow_updateSlave",
+  "historyId" : "903f1687a4ca1d934eae04fd07d22455",
+  "time" : {
+    "start" : 1755512871113,
+    "stop" : 1755512872636,
+    "duration" : 1523
+  },
+  "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为\n- 三种场景：\n  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注\n  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注\n  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注\n",
+  "descriptionHtml" : "<h3>用例说明</h3>\n<ul>\n<li>前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为</li>\n<li>三种场景：\n<ol>\n<li>策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注</li>\n<li>策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注</li>\n<li>策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注</li>\n</ol>\n</li>\n</ul>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 修改跟单账号失败（场景1）\nURL: https://uat.atcp.top/api/subcontrol/follow/updateSlave\n实际状态码: 404\n响应内容: 404 Not Found: subcontrol/follow/updateSlave",
+  "statusTrace" : "self = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD46DAD60>\nvar_manager = <lingkuan_827.commons.variable_manager.VariableManager object at 0x000001DFD4B93460>\nlogged_session = <lingkuan_827.commons.session.EnvironmentSession object at 0x000001DFD4AAE220>\nencrypted_password = 'fa1af751c83d311f091c9393a364068c'\n\n    @allure.story(\"场景1：策略有固定注释，跟单无固定注释\")\n    @allure.title(\"修改跟单账号（场景1：无固定注释）\")\n    def test_scenario1_follow_updateSlave(self, var_manager, logged_session, encrypted_password):\n        new_user = var_manager.get_variable(\"new_user\")\n        vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n        platformId = var_manager.get_variable(\"platformId\")\n        data = {\n            \"traderId\": vps_trader_id,\n            \"platform\": new_user[\"platform\"],\n            \"account\": vps_user_accounts_1,\n            \"password\": encrypted_password,\n            \"remark\": \"\",\n            \"followDirection\": 0,\n            \"followMode\": 1,\n            \"remainder\": 0,\n            \"followParam\": 1,\n            \"placedType\": 0,\n            \"templateId\": 1,\n            \"followStatus\": 1,\n            \"followOpen\": 1,\n            \"followClose\": 1,\n            \"followRep\": 0,\n            \"fixedComment\": \"\",  # 跟单无固定注释\n            \"commentType\": \"\",\n            \"digits\": 0,\n            \"cfd\": \"\",\n            \"forex\": \"\",\n            \"abRemark\": \"\",\n            \"id\": vps_addslave_id,\n            \"platformId\": platformId\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/subcontrol/follow/updateSlave',\n            json_data=data\n        )\n>       self.assert_response_status(response, 200, \"修改跟单账号失败（场景1）\")\n\ntest_vps\\test_vpsfixed_annotations.py:96: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD46DAD60>\nresponse = <Response [404]>, expected_status = 200, error_msg = '修改跟单账号失败（场景1）'\n\n    def assert_response_status(self, response, expected_status, error_msg):\n        \"\"\"断言响应状态码（增强错误信息）\"\"\"\n>       assert response.status_code == expected_status, (\n            f\"{error_msg}\\n\"\n            f\"URL: {response.url}\\n\"\n            f\"实际状态码: {response.status_code}\\n\"\n            f\"响应内容: {response.text[:500]}\"\n        )\nE       AssertionError: 修改跟单账号失败（场景1）\nE       URL: https://uat.atcp.top/api/subcontrol/follow/updateSlave\nE       实际状态码: 404\nE       响应内容: 404 Not Found: subcontrol/follow/updateSlave\n\ncommons\\api_base.py:333: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "encrypted_password",
+    "time" : {
+      "start" : 1755512871113,
+      "stop" : 1755512871113,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755512866207,
+      "stop" : 1755512866207,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1755512869492,
+      "stop" : 1755512869493,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1755512869493,
+      "stop" : 1755512871112,
+      "duration" : 1619
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为\n- 三种场景：\n  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注\n  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注\n  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注\n",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 修改跟单账号失败（场景1）\nURL: https://uat.atcp.top/api/subcontrol/follow/updateSlave\n实际状态码: 404\n响应内容: 404 Not Found: subcontrol/follow/updateSlave",
+    "statusTrace" : "self = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD46DAD60>\nvar_manager = <lingkuan_827.commons.variable_manager.VariableManager object at 0x000001DFD4B93460>\nlogged_session = <lingkuan_827.commons.session.EnvironmentSession object at 0x000001DFD4AAE220>\nencrypted_password = 'fa1af751c83d311f091c9393a364068c'\n\n    @allure.story(\"场景1：策略有固定注释，跟单无固定注释\")\n    @allure.title(\"修改跟单账号（场景1：无固定注释）\")\n    def test_scenario1_follow_updateSlave(self, var_manager, logged_session, encrypted_password):\n        new_user = var_manager.get_variable(\"new_user\")\n        vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        vps_addslave_id = var_manager.get_variable(\"vps_addslave_id\")\n        platformId = var_manager.get_variable(\"platformId\")\n        data = {\n            \"traderId\": vps_trader_id,\n            \"platform\": new_user[\"platform\"],\n            \"account\": vps_user_accounts_1,\n            \"password\": encrypted_password,\n            \"remark\": \"\",\n            \"followDirection\": 0,\n            \"followMode\": 1,\n            \"remainder\": 0,\n            \"followParam\": 1,\n            \"placedType\": 0,\n            \"templateId\": 1,\n            \"followStatus\": 1,\n            \"followOpen\": 1,\n            \"followClose\": 1,\n            \"followRep\": 0,\n            \"fixedComment\": \"\",  # 跟单无固定注释\n            \"commentType\": \"\",\n            \"digits\": 0,\n            \"cfd\": \"\",\n            \"forex\": \"\",\n            \"abRemark\": \"\",\n            \"id\": vps_addslave_id,\n            \"platformId\": platformId\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/subcontrol/follow/updateSlave',\n            json_data=data\n        )\n>       self.assert_response_status(response, 200, \"修改跟单账号失败（场景1）\")\n\ntest_vps\\test_vpsfixed_annotations.py:96: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD46DAD60>\nresponse = <Response [404]>, expected_status = 200, error_msg = '修改跟单账号失败（场景1）'\n\n    def assert_response_status(self, response, expected_status, error_msg):\n        \"\"\"断言响应状态码（增强错误信息）\"\"\"\n>       assert response.status_code == expected_status, (\n            f\"{error_msg}\\n\"\n            f\"URL: {response.url}\\n\"\n            f\"实际状态码: {response.status_code}\\n\"\n            f\"响应内容: {response.text[:500]}\"\n        )\nE       AssertionError: 修改跟单账号失败（场景1）\nE       URL: https://uat.atcp.top/api/subcontrol/follow/updateSlave\nE       实际状态码: 404\nE       响应内容: 404 Not Found: subcontrol/follow/updateSlave\n\ncommons\\api_base.py:333: AssertionError",
+    "steps" : [ {
+      "name" : "发送 POST 请求到 /subcontrol/follow/updateSlave",
+      "time" : {
+        "start" : 1755512871113,
+        "stop" : 1755512872636,
+        "duration" : 1523
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "请求详情",
+        "time" : {
+          "start" : 1755512871113,
+          "stop" : 1755512871114,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "bdb314bdb11912a8",
+          "name" : "请求URL",
+          "source" : "bdb314bdb11912a8.txt",
+          "type" : "text/plain",
+          "size" : 30
+        }, {
+          "uid" : "e81b61aecb5255d9",
+          "name" : "请求头",
+          "source" : "e81b61aecb5255d9.json",
+          "type" : "application/json",
+          "size" : 234
+        }, {
+          "uid" : "b23df0f5d712ff28",
+          "name" : "请求体（JSON）",
+          "source" : "b23df0f5d712ff28.json",
+          "type" : "application/json",
+          "size" : 484
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      }, {
+        "name" : "响应详情",
+        "time" : {
+          "start" : 1755512871621,
+          "stop" : 1755512871622,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "7408788e37af3759",
+          "name" : "响应状态码",
+          "source" : "7408788e37af3759.txt",
+          "type" : "text/plain",
+          "size" : 3
+        }, {
+          "uid" : "7301cf1e1925468",
+          "name" : "响应头",
+          "source" : "7301cf1e1925468.json",
+          "type" : "application/json",
+          "size" : 904
+        }, {
+          "uid" : "9c337b123bd0e22e",
+          "name" : "响应体（文本）",
+          "source" : "9c337b123bd0e22e.txt",
+          "type" : "text/plain",
+          "size" : 44
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 6
+    } ],
+    "attachments" : [ {
+      "uid" : "403a68901044653f",
+      "name" : "log",
+      "source" : "403a68901044653f.txt",
+      "type" : "text/plain",
+      "size" : 1250
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 3,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 7
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755565029957,
+      "stop" : 1755565029957,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1755512872649,
+      "stop" : 1755512872649,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1755512872649,
+      "stop" : 1755512872649,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟随策略账号订单备注"
+  }, {
+    "name" : "story",
+    "value" : "场景1：策略有固定注释，跟单无固定注释"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vpsfixed_annotations"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_AllRemarkScenarios"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "6824-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vpsfixed_annotations"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "50f2845973228648.json",
+  "parameterValues" : [ ]
+}

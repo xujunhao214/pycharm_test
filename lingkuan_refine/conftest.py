@@ -54,85 +54,107 @@ def api_session(environment) -> EnvironmentSession:
 
 
 @pytest.fixture(scope="function")
-def logged_session(api_session, var_manager, request, environment):  # 新增environment参数
-    """根据环境自动切换登录逻辑（test无需验证码，uat需要MFA验证码）"""
-    # 1. 始终使用base_url进行登录
+def logged_session(api_session, var_manager, request, environment):
+    """登录夹具：任何环境登录失败都直接终止用例执行"""
+    # 1. 初始化登录配置
     api_session.use_base_url()
-    logger.info(f"[{DATETIME_NOW}] 用例 {request.node.nodeid} 使用默认URL登录: {api_session.base_url}")
+    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    logger.info(f"[{current_time}] 用例 {request.node.nodeid} 开始登录，环境: {environment.value}")
+    print(f"环境: {environment.value}")
 
     # 2. 获取登录基础数据
-    login_data = var_manager.get_variable("login")
+    try:
+        login_data = var_manager.get_variable("login")
+    except Exception as e:
+        pytest.fail(f"获取登录数据失败: {str(e)}", pytrace=False)
+
     access_token = None
 
-    # 3. 根据环境执行不同登录逻辑
-    if environment.value == "test":
-        # 测试环境：无需验证码
-        response = api_session.post("/sys/auth/login", json=login_data)
-        assert response.status_code == 200, f"测试环境登录失败: {response.text}"
-        response_json = response.json()
-        access_token = response_json["data"]["access_token"]
-        logger.info("测试环境登录成功（无需验证码）")
+    # 3. 根据环境执行登录逻辑
+    try:
+        if environment.value == "test":
+            # 测试环境登录逻辑
+            response = api_session.post("/sys/auth/login", json=login_data)
+            if response.status_code != 200:
+                pytest.fail(
+                    f"测试环境登录失败 - 状态码: {response.status_code}, 响应: {response.text[:500]}",
+                    pytrace=False
+                )
 
-    elif environment.value == "uat":
-        # UAT环境：需要MFA验证码+重试机制
-        max_retries = 3
-        retry_interval = 10
-        for attempt in range(max_retries):
-            try:
-                mfa_code = generate_code(MFA_SECRET_KEY)
-                logger.info(f"UAT登录尝试 {attempt + 1}/{max_retries}，MFA验证码: {mfa_code}")
+            response_json = response.json()
+            access_token = response_json.get("data", {}).get("access_token")
+            if not access_token:
+                pytest.fail("测试环境登录响应中未找到access_token", pytrace=False)
 
-                # 构建带验证码的登录数据
-                json_data = {
-                    "username": login_data["username"],
-                    "password": login_data["password"],
-                    "captcha": "",
-                    "key": "",
-                    "secretKey": "",
-                    "code": mfa_code,
-                    "isMfaVerified": 1,
-                    "isStartMfaVerify": 1
-                }
+            logger.info("测试环境登录成功")
 
-                response = api_session.post("/sys/auth/login", json=json_data)
-                response.raise_for_status()
-                response_json = response.json()
+        elif environment.value == "uat":
+            # UAT环境登录逻辑（带重试）
+            max_retries = 3
+            retry_interval = 10
+            access_token = None
 
-                if response_json.get("code") != 0:
-                    raise ValueError(f"登录失败: {response_json.get('msg')}")
+            for attempt in range(max_retries):
+                try:
+                    mfa_code = generate_code(MFA_SECRET_KEY)
+                    logger.info(f"UAT登录尝试 {attempt + 1}/{max_retries}，MFA验证码: {mfa_code}")
 
-                access_token = response_json["data"]["access_token"]
-                if not access_token:
-                    raise ValueError("未返回access_token")
+                    login_payload = {
+                        "username": login_data["username"],
+                        "password": login_data["password"],
+                        "captcha": "",
+                        "key": "",
+                        "secretKey": "",
+                        "code": mfa_code,
+                        "isMfaVerified": 1,
+                        "isStartMfaVerify": 1
+                    }
 
-                logger.info(f"UAT登录成功（第{attempt + 1}次尝试）")
-                break
+                    response = api_session.post("/sys/auth/login", json=login_payload)
+                    response.raise_for_status()  # 触发HTTP错误异常
+                    response_json = response.json()
 
-            except Exception as e:
-                logger.warning(f"第{attempt + 1}次登录失败: {str(e)}")
-                if attempt < max_retries - 1:
+                    if response_json.get("code") != 0:
+                        raise ValueError(f"登录失败: {response_json.get('msg')}")
+
+                    access_token = response_json["data"]["access_token"]
+                    if not access_token:
+                        raise ValueError("未返回access_token")
+
+                    logger.info(f"UAT登录成功（第{attempt + 1}次尝试）")
+                    break
+
+                except Exception as e:
+                    error_msg = f"第{attempt + 1}次登录失败: {str(e)}"
+                    logger.error(error_msg)
+                    if attempt == max_retries - 1:  # 最后一次尝试失败
+                        pytest.fail(f"UAT登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
                     time.sleep(retry_interval)
 
-        if not access_token:
-            pytest.fail(f"UAT经过{max_retries}次重试仍登录失败")
+        else:
+            pytest.fail(f"不支持的环境类型: {environment.value}", pytrace=False)
 
-    else:
-        pytest.fail(f"不支持的环境: {environment}")
+    except Exception as e:
+        # 捕获所有登录过程中的异常并终止
+        pytest.fail(f"登录过程发生未预期错误: {str(e)}", pytrace=False)
 
-    # 4. 设置token到会话
+    # 4. 设置认证信息
     var_manager.set_runtime_variable("access_token", access_token)
     api_session.headers.update({
         "Authorization": f"{access_token}",
         "x-sign": "417B110F1E71BD20FE96366E67849B0B"
     })
 
-    # 5. 登录后切换URL（保持原有逻辑）
+    # 5. 处理URL切换
     url_marker = next(request.node.iter_markers(name="url"), None)
     if url_marker and url_marker.args[0] == "vps":
         api_session.use_vps_url()
         logger.info(f"切换到VPS URL: {api_session.vps_url}")
 
     yield api_session
+
+    # 6. 可选：会话清理逻辑（仅在登录成功时执行）
+    logger.info(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 用例 {request.node.nodeid} 执行完毕")
 
 
 @pytest.fixture(scope="session")  # 会话级：整个测试会话只初始化一次

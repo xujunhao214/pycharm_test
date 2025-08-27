@@ -6,7 +6,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 from lingkuan_refine.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
@@ -496,9 +496,16 @@ class TestcloudTrader_openandlevel:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 # 平仓总手数校验
                 totalSzie = trader_ordersend["totalSzie"]
@@ -506,7 +513,7 @@ class TestcloudTrader_openandlevel:
                 total = sum(size)
                 assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
                     f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                logging.info(f'订单详情总手数是：{total}')
 
                 time.sleep(25)
 
@@ -770,8 +777,8 @@ class TestcloudTrader_openandlevel:
                 assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
 
                 close_remark = db_data[0]["close_remark"]
-                logging.info(f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}")
-                assert close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是未开通平仓状态，实际是：{close_remark}"
+                logging.info(f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}")
+                assert close_remark == "平仓异常: 未开通平仓状态", f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}"
 
             with allure.step("3. 提取数据"):
                 cloudTrader_master_order_level = [record["master_order"] for record in db_data]
@@ -1030,7 +1037,7 @@ class TestcloudTrader_openandlevel:
                 total = sum(size)
                 assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
                     f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                logging.info(f'订单详情总手数是：{total}')
 
                 # 下单手数与指令表手数校验
                 total_lots = [record["total_lots"] for record in db_data]
@@ -1499,9 +1506,16 @@ class TestcloudTrader_openandlevel:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 # 平仓总手数校验
                 totalSzie = trader_ordersend["totalSzie"]
@@ -1509,7 +1523,7 @@ class TestcloudTrader_openandlevel:
                 total = sum(size)
                 assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
                     f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                logging.info(f'订单详情总手数是：{total}')
 
                 time.sleep(25)
 
@@ -1952,9 +1966,16 @@ class TestcloudTrader_openandlevel:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 # 平仓总手数校验
                 totalSzie = trader_ordersend["totalSzie"]
@@ -1962,6 +1983,6 @@ class TestcloudTrader_openandlevel:
                 total = sum(size)
                 assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
                     f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                logging.info(f'订单详情总手数是：{total}')
 
                 time.sleep(25)

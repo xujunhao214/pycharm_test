@@ -25,7 +25,8 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
-        "test_cloudTrader/test_cloudOrderSend.py",
+        # "test_cloudTrader/test_cloudOrderSend.py",
+        "test_cloudTrader/test_cloudOrderSend2.py",
         # "test_cloudTrader/test_cloudOrderClose.py",
         # "test_cloudTrader/test_cloud_masOrderSend.py",
         # "test_cloudTrader/test_cloud_masOrderClose.py",
@@ -75,6 +76,6 @@ def run_cloud_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)

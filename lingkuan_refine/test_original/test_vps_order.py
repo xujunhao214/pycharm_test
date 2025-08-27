@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -313,7 +313,7 @@ class TestVPSOrderSend(APITestBase):
             total = sum(size)
             assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
                 f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+            logging.info(f'订单详情总手数是：{total}')
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -375,7 +375,7 @@ class TestVPSOrderSend(APITestBase):
             total = sum(size)
             assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
                 f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+            logging.info(f'订单详情总手数是：{total}')
             total_lots = [record["total_lots"] for record in db_data]
             self.assert_list_equal_ignore_order(
                 size,

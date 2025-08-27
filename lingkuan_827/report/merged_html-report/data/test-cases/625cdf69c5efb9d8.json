@@ -1,0 +1,305 @@
+{
+  "uid" : "625cdf69c5efb9d8",
+  "name" : "修改策略账号信息（场景2）",
+  "fullName" : "test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios#test_scenario2_subcontrol_trader",
+  "historyId" : "0ae17a08244d0128bc9c9a30198924f8",
+  "time" : {
+    "start" : 1755512880101,
+    "stop" : 1755512881645,
+    "duration" : 1544
+  },
+  "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为\n- 三种场景：\n  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注\n  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注\n  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注\n",
+  "descriptionHtml" : "<h3>用例说明</h3>\n<ul>\n<li>前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为</li>\n<li>三种场景：\n<ol>\n<li>策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注</li>\n<li>策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注</li>\n<li>策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注</li>\n</ol>\n</li>\n</ul>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 修改vps策略信息失败（场景2）\nURL: https://uat.atcp.top/api/subcontrol/trader\n实际状态码: 404\n响应内容: 404 Not Found: subcontrol/trader",
+  "statusTrace" : "self = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD4803A60>\nvar_manager = <lingkuan_827.commons.variable_manager.VariableManager object at 0x000001DFD4B93460>\nlogged_session = <lingkuan_827.commons.session.EnvironmentSession object at 0x000001DFD4AFADC0>\nencrypted_password = 'fa1af751c83d311f091c9393a364068c'\n\n    @allure.story(\"场景2：策略有固定注释，跟单有固定注释\")\n    @allure.title(\"修改策略账号信息（场景2）\")\n    def test_scenario2_subcontrol_trader(self, var_manager, logged_session, encrypted_password):\n        new_user = var_manager.get_variable(\"new_user\")\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        platformId = var_manager.get_variable(\"platformId\")\n        json_data = {\n            \"id\": vps_trader_id,\n            \"type\": 0,\n            \"account\": new_user[\"account\"],\n            \"password\": encrypted_password,\n            \"platform\": new_user[\"platform\"],\n            \"remark\": \"测试数据\",\n            \"platformId\": platformId,\n            \"templateId\": 1,\n            \"followStatus\": 1,\n            \"cfd\": \"\",\n            \"forex\": \"\",\n            \"followOrderRemark\": 0,\n            \"fixedComment\": \"ceshiceluebeizhu\",  # 策略有固定注释\n            \"commentType\": None,\n            \"digits\": 0\n        }\n        response = self.send_put_request(logged_session, '/subcontrol/trader', json_data=json_data)\n>       self.assert_response_status(response, 200, \"修改vps策略信息失败（场景2）\")\n\ntest_vps\\test_vpsfixed_annotations.py:195: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD4803A60>\nresponse = <Response [404]>, expected_status = 200\nerror_msg = '修改vps策略信息失败（场景2）'\n\n    def assert_response_status(self, response, expected_status, error_msg):\n        \"\"\"断言响应状态码（增强错误信息）\"\"\"\n>       assert response.status_code == expected_status, (\n            f\"{error_msg}\\n\"\n            f\"URL: {response.url}\\n\"\n            f\"实际状态码: {response.status_code}\\n\"\n            f\"响应内容: {response.text[:500]}\"\n        )\nE       AssertionError: 修改vps策略信息失败（场景2）\nE       URL: https://uat.atcp.top/api/subcontrol/trader\nE       实际状态码: 404\nE       响应内容: 404 Not Found: subcontrol/trader\n\ncommons\\api_base.py:333: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1755512878675,
+      "stop" : 1755512880100,
+      "duration" : 1425
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755512866207,
+      "stop" : 1755512866207,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1755512878674,
+      "stop" : 1755512878675,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "encrypted_password",
+    "time" : {
+      "start" : 1755512880101,
+      "stop" : 1755512880101,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n### 用例说明\n- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为\n- 三种场景：\n  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注\n  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注\n  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注\n",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 修改vps策略信息失败（场景2）\nURL: https://uat.atcp.top/api/subcontrol/trader\n实际状态码: 404\n响应内容: 404 Not Found: subcontrol/trader",
+    "statusTrace" : "self = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD4803A60>\nvar_manager = <lingkuan_827.commons.variable_manager.VariableManager object at 0x000001DFD4B93460>\nlogged_session = <lingkuan_827.commons.session.EnvironmentSession object at 0x000001DFD4AFADC0>\nencrypted_password = 'fa1af751c83d311f091c9393a364068c'\n\n    @allure.story(\"场景2：策略有固定注释，跟单有固定注释\")\n    @allure.title(\"修改策略账号信息（场景2）\")\n    def test_scenario2_subcontrol_trader(self, var_manager, logged_session, encrypted_password):\n        new_user = var_manager.get_variable(\"new_user\")\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        platformId = var_manager.get_variable(\"platformId\")\n        json_data = {\n            \"id\": vps_trader_id,\n            \"type\": 0,\n            \"account\": new_user[\"account\"],\n            \"password\": encrypted_password,\n            \"platform\": new_user[\"platform\"],\n            \"remark\": \"测试数据\",\n            \"platformId\": platformId,\n            \"templateId\": 1,\n            \"followStatus\": 1,\n            \"cfd\": \"\",\n            \"forex\": \"\",\n            \"followOrderRemark\": 0,\n            \"fixedComment\": \"ceshiceluebeizhu\",  # 策略有固定注释\n            \"commentType\": None,\n            \"digits\": 0\n        }\n        response = self.send_put_request(logged_session, '/subcontrol/trader', json_data=json_data)\n>       self.assert_response_status(response, 200, \"修改vps策略信息失败（场景2）\")\n\ntest_vps\\test_vpsfixed_annotations.py:195: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_827.test_vps.test_vpsfixed_annotations.TestVPSOrderSend_AllRemarkScenarios object at 0x000001DFD4803A60>\nresponse = <Response [404]>, expected_status = 200\nerror_msg = '修改vps策略信息失败（场景2）'\n\n    def assert_response_status(self, response, expected_status, error_msg):\n        \"\"\"断言响应状态码（增强错误信息）\"\"\"\n>       assert response.status_code == expected_status, (\n            f\"{error_msg}\\n\"\n            f\"URL: {response.url}\\n\"\n            f\"实际状态码: {response.status_code}\\n\"\n            f\"响应内容: {response.text[:500]}\"\n        )\nE       AssertionError: 修改vps策略信息失败（场景2）\nE       URL: https://uat.atcp.top/api/subcontrol/trader\nE       实际状态码: 404\nE       响应内容: 404 Not Found: subcontrol/trader\n\ncommons\\api_base.py:333: AssertionError",
+    "steps" : [ {
+      "name" : "发送 PUT 请求到 /subcontrol/trader",
+      "time" : {
+        "start" : 1755512880101,
+        "stop" : 1755512881645,
+        "duration" : 1544
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "请求详情",
+        "time" : {
+          "start" : 1755512880101,
+          "stop" : 1755512880102,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "d4bced0a2fe46e12",
+          "name" : "请求URL",
+          "source" : "d4bced0a2fe46e12.txt",
+          "type" : "text/plain",
+          "size" : 18
+        }, {
+          "uid" : "fedc3c24497f5c5f",
+          "name" : "请求头",
+          "source" : "fedc3c24497f5c5f.json",
+          "type" : "application/json",
+          "size" : 234
+        }, {
+          "uid" : "634d28aed38ef185",
+          "name" : "请求体（JSON）",
+          "source" : "634d28aed38ef185.json",
+          "type" : "application/json",
+          "size" : 358
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      }, {
+        "name" : "响应详情",
+        "time" : {
+          "start" : 1755512880632,
+          "stop" : 1755512880633,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "8d2192a27db0fbe3",
+          "name" : "响应状态码",
+          "source" : "8d2192a27db0fbe3.txt",
+          "type" : "text/plain",
+          "size" : 3
+        }, {
+          "uid" : "401da6990c57e5c9",
+          "name" : "响应头",
+          "source" : "401da6990c57e5c9.json",
+          "type" : "application/json",
+          "size" : 908
+        }, {
+          "uid" : "5477c34b6e62d4b4",
+          "name" : "响应体（文本）",
+          "source" : "5477c34b6e62d4b4.txt",
+          "type" : "text/plain",
+          "size" : 32
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 6
+    } ],
+    "attachments" : [ {
+      "uid" : "b60044c9e354d46b",
+      "name" : "log",
+      "source" : "b60044c9e354d46b.txt",
+      "type" : "text/plain",
+      "size" : 1017
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 3,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 7
+  },
+  "afterStages" : [ {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1755512881659,
+      "stop" : 1755512881659,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755565029957,
+      "stop" : 1755565029957,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1755512881659,
+      "stop" : 1755512881659,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景2：策略有固定注释，跟单有固定注释"
+  }, {
+    "name" : "feature",
+    "value" : "VPS策略下单-跟随策略账号订单备注"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vpsfixed_annotations"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrderSend_AllRemarkScenarios"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "6824-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vpsfixed_annotations"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "625cdf69c5efb9d8.json",
+  "parameterValues" : [ ]
+}

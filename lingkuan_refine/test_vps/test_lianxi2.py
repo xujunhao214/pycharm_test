@@ -1,60 +1,66 @@
-# lingkuan_815/tests/test_vps_ordersend.py
 import time
 import math
 import allure
 import logging
 import pytest
-import requests
-from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
-from lingkuan_refine.commons.redis_utils import *
+from lingkuan_refine.commons.api_base import *
+import requests
+from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"  # 统一跳过原因
+SKIP_REASON = "该用例暂时跳过"
 
 
+# ------------------------------------
+# 大模块1：VPS策略下单-停止平仓功能验证
+# ------------------------------------
+@allure.feature("VPS策略下单-平仓的功能校验")
+# @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCoreFunctionality:
-    @allure.story("场景11：平仓的订单备注功能校验")
+    @allure.story("场景1：平仓的停止功能验证")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有vps策略和vps跟单
-          1. 进行开仓，手数范围：0.1-1，总订单数量4,订单备注：ceshipingcangbeizhu
-          2. 进行平仓-订单备注：xxxxxxxxxxx
-          3. 校验平仓的订单数，应该没有平仓订单
-          4. 进行平仓-订单备注：ceshipingcangbeizhu
-          5. 校验平仓的订单数,等于4
-        - 预期结果：平仓的订单备注功能正确
-        """)
-    class TestVPStradingOrders11(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
-            global symbol
-            masOrderSend = var_manager.get_variable("masOrderSend")
-            symbol = masOrderSend["symbol"]
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    """)
+    class TestStopCloseFunctionality(APITestBase):
+        @pytest.mark.url("vps")
+        @allure.title("策略账号开仓操作")
+        def test_trader_orderSend(self, var_manager, logged_session):
+            # 1. 发送策略开仓请求
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
-                "traderList": [vps_trader_user_id],
-                "type": 0,
-                "tradeType": 1,
-                "intervalTime": 0,
-                "symbol": symbol,
+                "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "startSize": "0.10",
-                "endSize": "1.00",
-                "totalNum": "4",
+                "remark": trader_ordersend["remark"],
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": "5",
                 "totalSzie": "",
-                "remark": "ceshipingcangbeizhu"
+                "startSize": "0.01",
+                "endSize": "1",
+                "traderId": vps_trader_id
             }
             response = self.send_post_request(
                 logged_session,
-                '/bargain/masOrderSend',
-                json_data=data
+                '/subcontrol/trader/orderSend',
+                json_data=data,
             )
 
-            # 验证下单成功
+            # 2. 验证响应状态码和内容
+            self.assert_response_status(
+                response,
+                200,
+                "策略开仓失败"
+            )
             self.assert_json_value(
                 response,
                 "$.msg",
@@ -62,136 +68,95 @@ class TestVPSCoreFunctionality:
                 "响应msg字段应为success"
             )
 
-        @allure.title("VPS交易下单-交易平仓-订单备注：xxxxxxxxxxx")
-        def test_copy_order_close(self, var_manager, logged_session):
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            # 发送平仓请求
-            data = {
-                "flag": 0,
-                "intervalTime": 0,
-                "num": "",
-                "traderList": [vps_trader_user_id],
-                "closeType": 0,
-                "remark": "xxxxxxxxxxx",
-                "symbol": "XAUUSD",
-                "type": 0
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderClose',
-                json_data=data
-            )
+        @pytest.mark.url("vps")
+        @allure.title("策略账号平仓-时间间隔30秒")
+        def test_trader_orderclose(self, var_manager, logged_session):
+            with allure.step("1. 发送全平订单平仓请求"):
+                vps_trader_id = var_manager.get_variable("vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
+                data = {
+                    "flag": 0,
+                    "intervalTime": 10000,
+                    "closeType": 2,
+                    "remark": "",
+                    "symbol": "XAUUSD",
+                    "type": 2,
+                    "traderId": vps_trader_id,
+                    "account": new_user["account"]
+                }
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data,
+                )
+            with allure.step("2. 验证响应"):
+                self.assert_response_status(
+                    response,
+                    200,
+                    "平仓失败"
+                )
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
 
-            # 验证平仓成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
+        @pytest.mark.url("vps")
+        @pytest.mark.retry(n=3, delay=5)
+        @allure.title("平仓停止功能验证")
+        def test_trader_stopOrder(self, var_manager, logged_session):
+            with allure.step("1. 发送停止平仓请求"):
+                vps_trader_id = var_manager.get_variable("vps_trader_id")
+                params = {
+                    "type": "1",
+                    "traderId": vps_trader_id
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/subcontrol/trader/stopOrder',
+                    params=params,
+                )
+            with allure.step("2. 验证响应"):
+                self.assert_response_status(
+                    response,
+                    200,
+                    "停止平仓失败"
+                )
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
 
-        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
+        @allure.title("数据库校验-停止平仓-平仓手数不等于开仓手数")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
-                        SELECT 
-                             fod.size,
-                             fod.close_no,
-                             fod.magical,
-                             fod.open_price,
-                             fod.symbol,
-                             fod.order_no,
-                             fod.close_time,
-                             foi.true_total_lots,
-                             foi.order_no,
-                             foi.operation_type,
-                             foi.create_time,
-                             foi.status,
-                             foi.min_lot_size,
-                             foi.max_lot_size,
-                             foi.total_lots,
-                             foi.master_order,
-                             foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            """
-                params = (
-                    '1',
-                    new_user["account"],
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.wait_for_database_no_record(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="foi.create_time"
-                )
-            with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
-
-        @allure.title("VPS交易下单-交易平仓-订单备注：ceshipingcangbeizhu")
-        def test_copy_order_close2(self, var_manager, logged_session):
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            # 发送平仓请求
-            data = {
-                "flag": 0,
-                "intervalTime": 0,
-                "num": "",
-                "traderList": [vps_trader_user_id],
-                "closeType": 0,
-                "remark": "ceshipingcangbeizhu",
-                "symbol": "XAUUSD",
-                "type": 0
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderClose',
-                json_data=data
-            )
-
-            # 验证平仓成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
-        def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
-                new_user = var_manager.get_variable("new_user")
-                sql = f"""
-                            SELECT 
-                                fod.size,
-                                fod.close_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.close_time,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                                """
+                    SELECT 
+                        fod.size,
+                        fod.close_no,
+                        fod.magical,
+                        fod.open_price,
+                        fod.symbol,
+                        fod.order_no,
+                        foi.true_total_lots,
+                        foi.order_no,
+                        foi.operation_type,
+                        foi.create_time,
+                        foi.total_orders,
+                        foi.status
+                    FROM 
+                        follow_order_detail fod
+                    INNER JOIN 
+                        follow_order_instruct foi 
+                    ON 
+                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                    WHERE foi.operation_type = %s
+                        AND fod.account = %s
+                        """
                 params = (
                     '1',
                     new_user["account"],
@@ -205,54 +170,15 @@ class TestVPSCoreFunctionality:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法提取数据")
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
-        def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-                sql = f"""
-                             SELECT 
-                                 fod.size,
-                                 fod.close_no,
-                                 fod.magical,
-                                 fod.open_price,
-                                 fod.symbol,
-                                 fod.order_no,
-                                 fod.close_time,
-                                 foi.true_total_lots,
-                                 foi.order_no,
-                                 foi.operation_type,
-                                 foi.create_time,
-                                 foi.status,
-                                 foi.min_lot_size,
-                                 foi.max_lot_size,
-                                 foi.total_lots,
-                                 foi.master_order,
-                                 foi.total_orders
-                             FROM 
-                                 follow_order_detail fod
-                             INNER JOIN 
-                                 follow_order_instruct foi 
-                             ON 
-                                 foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                             WHERE foi.operation_type = %s
-                                 AND fod.account = %s
-                                 AND fod.trader_id = %s
-                                 """
-                params = (
-                    '1',
-                    vps_user_accounts_1,
-                    vps_addslave_id,
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="foi.create_time"
-                )
-            with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"平仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")

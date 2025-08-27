@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 import requests
 from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 

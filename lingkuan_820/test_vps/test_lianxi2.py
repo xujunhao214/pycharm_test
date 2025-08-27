@@ -88,7 +88,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
-    @pytest.mark.retry(n=2, delay=3)
+    @pytest.mark.retry(n=3, delay=5)
     @allure.title("跟单软件看板-VPS数据-新增跟单账号")
     def test_create_addSlave(self, var_manager, logged_session, encrypted_password):
         new_user = var_manager.get_variable("new_user")

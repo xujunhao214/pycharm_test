@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 import requests
 from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 
@@ -172,8 +172,15 @@ class TestVPSCoreFunctionality:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) != 4, f"平仓的订单数量应该不是4，结果有{len(db_data)}个订单"
-                logging.info(f"平仓的订单数量应该不是4，结果有{len(db_data)}个订单")
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"平仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @pytest.mark.url("vps")
         @allure.title("策略账号再次平仓操作")

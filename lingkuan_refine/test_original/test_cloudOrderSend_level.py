@@ -6,7 +6,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 from lingkuan_refine.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
@@ -531,7 +531,7 @@ class TestcloudTrader_level(APITestBase):
             total = sum(size)
             assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
                 f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+            logging.info(f'订单详情总手数是：{total}')
 
             # 下单手数与指令表手数校验
             total_lots = [record["total_lots"] for record in db_data]

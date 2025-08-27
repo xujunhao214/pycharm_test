@@ -23,8 +23,10 @@ def run_cloud_tests(env: str = "test"):
 
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_create.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderClose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderSend2.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderClose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloud_masOrderSend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloud_masOrderClose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrder_open_level.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudfixed_annotations.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_create_scene.py",
@@ -69,6 +71,6 @@ def run_cloud_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)

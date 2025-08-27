@@ -1,0 +1,310 @@
+{
+  "uid" : "1080a9228f8f6a98",
+  "name" : "数据库校验-复制下单开仓数据",
+  "fullName" : "test_vps.test_masOrderSend.TestVPStradingOrders#test_copy_open_verify",
+  "historyId" : "0b05c4c6c50f66022ef28da0dfdd0231",
+  "time" : {
+    "start" : 1755512142461,
+    "stop" : 1755512154532,
+    "duration" : 12071
+  },
+  "description" : "\n### 测试说明\n包含两种VPS交易下单模式的测试：\n1. 分配下单：按指定手数范围分配订单\n2. 复制下单：按复制模式生成订单\n每种模式均包含下单、数据校验和平仓流程\n",
+  "descriptionHtml" : "<h3>测试说明</h3>\n<p>包含两种VPS交易下单模式的测试：</p>\n<ol>\n<li>分配下单：按指定手数范围分配订单</li>\n<li>复制下单：按复制模式生成订单\n每种模式均包含下单、数据校验和平仓流程</li>\n</ol>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 订单详情总手数不匹配: 预期1.00, 实际2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')",
+  "statusTrace" : "self = <lingkuan_827.test_vps.test_masOrderSend.TestVPStradingOrders object at 0x000001DFD462A6A0>\nvar_manager = <lingkuan_827.commons.variable_manager.VariableManager object at 0x000001DFD46C6F10>\ndb_transaction = <pymysql.connections.Connection object at 0x000001DFD4712040>\n\n    @allure.story(\"模式二：复制下单\")\n    @allure.title(\"数据库校验-复制下单开仓数据\")\n    def test_copy_open_verify(self, var_manager, db_transaction):\n        with allure.step(\"获取开仓订单数据\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            sql = \"\"\"\n                SELECT\n                    fod.size, fod.send_no, fod.magical, fod.open_price,\n                    fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,\n                    foi.operation_type, foi.create_time, foi.status,\n                    foi.min_lot_size, foi.max_lot_size, foi.total_lots, foi.total_orders\n                FROM\n                    follow_order_detail fod\n                INNER JOIN\n                    follow_order_instruct foi\n                ON\n                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                WHERE foi.operation_type = %s\n                    AND fod.account = %s\n            \"\"\"\n            params = ('0', vps_user_accounts_1)\n    \n            # 轮询等待数据\n            db_data = self.query_database_with_time_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.open_time\"\n            )\n    \n        with allure.step(\"验证开仓数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            # 订单状态校验\n            status = db_data[0][\"status\"]\n            assert status in (0, 1), f\"订单状态应为0或1，实际为: {status}\"\n            logger.info(f\"订单状态验证通过: {status}\")\n    \n            # 手数范围校验\n            assert math.isclose(\n                float(trader_ordersend[\"endSize\"]),\n                float(db_data[0][\"min_lot_size\"]),\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'结束手数不匹配: 预期{trader_ordersend[\"endSize\"]}, 实际{db_data[0][\"min_lot_size\"]}'\n    \n            assert math.isclose(\n                float(trader_ordersend[\"startSize\"]),\n                float(db_data[0][\"max_lot_size\"]),\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'开始手数不匹配: 预期{trader_ordersend[\"startSize\"]}, 实际{db_data[0][\"max_lot_size\"]}'\n    \n            # 总手数校验\n            total_lots = db_data[0][\"total_lots\"]\n            assert math.isclose(\n                float(trader_ordersend[\"totalSzie\"]),\n                float(total_lots),\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'总手数不匹配: 预期{trader_ordersend[\"totalSzie\"]}, 实际{total_lots}'\n    \n            # 订单详情总手数校验\n            total_size = sum(float(record[\"size\"]) for record in db_data)\n>           assert math.isclose(\n                float(trader_ordersend[\"totalSzie\"]),\n                total_size,\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'订单详情总手数不匹配: 预期{trader_ordersend[\"totalSzie\"]}, 实际{total_size}'\nE           AssertionError: 订单详情总手数不匹配: 预期1.00, 实际2.0\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\n\ntest_vps\\test_masOrderSend.py:300: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1755512053135,
+      "stop" : 1755512053135,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1755512091531,
+      "stop" : 1755512091533,
+      "duration" : 2
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1755512142416,
+      "stop" : 1755512142461,
+      "duration" : 45
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1755512050142,
+      "stop" : 1755512050142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1755512053135,
+      "stop" : 1755512053546,
+      "duration" : 411
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n### 测试说明\n包含两种VPS交易下单模式的测试：\n1. 分配下单：按指定手数范围分配订单\n2. 复制下单：按复制模式生成订单\n每种模式均包含下单、数据校验和平仓流程\n",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 订单详情总手数不匹配: 预期1.00, 实际2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')",
+    "statusTrace" : "self = <lingkuan_827.test_vps.test_masOrderSend.TestVPStradingOrders object at 0x000001DFD462A6A0>\nvar_manager = <lingkuan_827.commons.variable_manager.VariableManager object at 0x000001DFD46C6F10>\ndb_transaction = <pymysql.connections.Connection object at 0x000001DFD4712040>\n\n    @allure.story(\"模式二：复制下单\")\n    @allure.title(\"数据库校验-复制下单开仓数据\")\n    def test_copy_open_verify(self, var_manager, db_transaction):\n        with allure.step(\"获取开仓订单数据\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            sql = \"\"\"\n                SELECT\n                    fod.size, fod.send_no, fod.magical, fod.open_price,\n                    fod.symbol, fod.order_no, foi.true_total_lots, foi.order_no,\n                    foi.operation_type, foi.create_time, foi.status,\n                    foi.min_lot_size, foi.max_lot_size, foi.total_lots, foi.total_orders\n                FROM\n                    follow_order_detail fod\n                INNER JOIN\n                    follow_order_instruct foi\n                ON\n                    foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci\n                WHERE foi.operation_type = %s\n                    AND fod.account = %s\n            \"\"\"\n            params = ('0', vps_user_accounts_1)\n    \n            # 轮询等待数据\n            db_data = self.query_database_with_time_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.open_time\"\n            )\n    \n        with allure.step(\"验证开仓数据\"):\n            trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            # 订单状态校验\n            status = db_data[0][\"status\"]\n            assert status in (0, 1), f\"订单状态应为0或1，实际为: {status}\"\n            logger.info(f\"订单状态验证通过: {status}\")\n    \n            # 手数范围校验\n            assert math.isclose(\n                float(trader_ordersend[\"endSize\"]),\n                float(db_data[0][\"min_lot_size\"]),\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'结束手数不匹配: 预期{trader_ordersend[\"endSize\"]}, 实际{db_data[0][\"min_lot_size\"]}'\n    \n            assert math.isclose(\n                float(trader_ordersend[\"startSize\"]),\n                float(db_data[0][\"max_lot_size\"]),\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'开始手数不匹配: 预期{trader_ordersend[\"startSize\"]}, 实际{db_data[0][\"max_lot_size\"]}'\n    \n            # 总手数校验\n            total_lots = db_data[0][\"total_lots\"]\n            assert math.isclose(\n                float(trader_ordersend[\"totalSzie\"]),\n                float(total_lots),\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'总手数不匹配: 预期{trader_ordersend[\"totalSzie\"]}, 实际{total_lots}'\n    \n            # 订单详情总手数校验\n            total_size = sum(float(record[\"size\"]) for record in db_data)\n>           assert math.isclose(\n                float(trader_ordersend[\"totalSzie\"]),\n                total_size,\n                rel_tol=1e-9, abs_tol=1e-9\n            ), f'订单详情总手数不匹配: 预期{trader_ordersend[\"totalSzie\"]}, 实际{total_size}'\nE           AssertionError: 订单详情总手数不匹配: 预期1.00, 实际2.0\nE           assert False\nE            +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +    and   1.0 = float('1.00')\n\ntest_vps\\test_masOrderSend.py:300: AssertionError",
+    "steps" : [ {
+      "name" : "获取开仓订单数据",
+      "time" : {
+        "start" : 1755512142461,
+        "stop" : 1755512154531,
+        "duration" : 12070
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "等待数据库记录稳定（时区: +05:00，超时: 30秒）",
+        "time" : {
+          "start" : 1755512142462,
+          "stop" : 1755512142462,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : false,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 0
+      }, {
+        "name" : "数据库查询结果（最终稳定结果）",
+        "time" : {
+          "start" : 1755512154530,
+          "stop" : 1755512154531,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "60e79756a2cbfdf3",
+          "name" : "执行SQL",
+          "source" : "60e79756a2cbfdf3.txt",
+          "type" : "text/plain",
+          "size" : 670
+        }, {
+          "uid" : "4a0352c3c5c0745e",
+          "name" : "SQL参数",
+          "source" : "4a0352c3c5c0745e.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "bf8f8215a07768fd",
+          "name" : "查询结果（共3条，显示前3条）",
+          "source" : "bf8f8215a07768fd.json",
+          "type" : "application/json",
+          "size" : 1201
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ {
+        "uid" : "bd2be00692dcd32",
+        "name" : "等待结果",
+        "source" : "bd2be00692dcd32.txt",
+        "type" : "text/plain",
+        "size" : 41
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 4
+    }, {
+      "name" : "验证开仓数据",
+      "time" : {
+        "start" : 1755512154531,
+        "stop" : 1755512154531,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 订单详情总手数不匹配: 预期1.00, 实际2.0\nassert False\n +  where False = <built-in function isclose>(1.0, 2.0, rel_tol=1e-09, abs_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +    and   1.0 = float('1.00')\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_827\\test_vps\\test_masOrderSend.py\", line 300, in test_copy_open_verify\n    assert math.isclose(\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "6c1549fc4802f3f4",
+      "name" : "log",
+      "source" : "6c1549fc4802f3f4.txt",
+      "type" : "text/plain",
+      "size" : 11657
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 4,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 5
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1755565029964,
+      "stop" : 1755565029965,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1755512154537,
+      "stop" : 1755512154584,
+      "duration" : 47
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1755565029966,
+      "stop" : 1755565029966,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS交易下单（分配与复制）"
+  }, {
+    "name" : "story",
+    "value" : "模式二：复制下单"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_masOrderSend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPStradingOrders"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "6824-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_masOrderSend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "1080a9228f8f6a98.json",
+  "parameterValues" : [ ]
+}

@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 import requests
 from lingkuan_refine.commons.jsonpath_utils import JsonPathUtils
 
@@ -131,7 +131,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=0,
+                        op=CompareOp.EQ,
+                        message=f"平仓的币种错误，应该没有平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -181,7 +192,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=0,
+                        op=CompareOp.EQ,
+                        message=f"平仓的币种错误，应该没有平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-正常平仓")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -255,7 +277,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 2, f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=2,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有两个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -308,7 +338,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 2, f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=2,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有两个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -316,7 +354,7 @@ class TestVPSMasOrderclose:
     @allure.description("""
            ### 测试说明
            - 前置条件：有云策略和云跟单
-             1. 进行开仓，手数范围0.1-1，总订单4
+             1. 进行开仓，手数范围0.1-1，总订单5
              2. 进行平仓
              3. 发送停止请求
              4. 校验平仓的订单数，应该不等于4
@@ -341,7 +379,7 @@ class TestVPSMasOrderclose:
                 "placedType": 0,
                 "startSize": "0.10",
                 "endSize": "1.00",
-                "totalNum": "4",
+                "totalNum": "5",
                 "totalSzie": "",
                 "remark": ""
             }
@@ -453,7 +491,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, f"平仓的过程中点击停止，应该没有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"平仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -503,7 +552,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 4, f"平仓的过程中点击停止，应该没有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"平仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-正常平仓")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -576,7 +636,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -629,7 +697,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
     time.sleep(30)
 
@@ -802,7 +878,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-跟单账号平仓-sell")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -880,7 +963,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单方向正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-正常平仓")
         def test_copy_order_close3(self, var_manager, logged_session):
@@ -953,7 +1047,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
     time.sleep(30)
 
@@ -1123,7 +1225,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-跟单账号平仓-buy sell")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -1201,7 +1310,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单方向正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-正常平仓")
         def test_copy_order_close3(self, var_manager, logged_session):
@@ -1274,7 +1394,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -1444,7 +1572,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-跟单账号平仓-buy")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -1522,7 +1657,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单方向正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单方向正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-正常平仓")
         def test_copy_order_close3(self, var_manager, logged_session):
@@ -1595,7 +1741,15 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                assert len(db_data) == 4, f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"正常平仓，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -1721,7 +1875,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 2, "平仓的订单数量功能错误，应该有2个平仓订单，不符合预期结果"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=2,
+                    op=CompareOp.EQ,
+                    message=f"平仓的订单数量功能正确，应该有2个平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓的订单数量功能正确，应该有2个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-平仓2个订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -1792,7 +1953,18 @@ class TestVPSMasOrderclose:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -1842,7 +2014,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -1965,7 +2148,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-平仓订单数8")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2036,7 +2226,18 @@ class TestVPSMasOrderclose:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2086,7 +2287,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -2209,7 +2421,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-订单类型-内部订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2280,7 +2499,18 @@ class TestVPSMasOrderclose:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2330,7 +2560,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -2453,7 +2694,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-订单类型-外部订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2523,7 +2771,14 @@ class TestVPSMasOrderclose:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 1, "平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=1,
+                    op=CompareOp.EQ,
+                    message=f"平仓的订单数量应该是1",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓的订单数量应该是1，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有1个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2573,7 +2828,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 1, "平仓的订单数量功能错误，应该有1个平仓订单，不符合预期结果"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=1,
+                    op=CompareOp.EQ,
+                    message=f"平仓的订单数量应该是1",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓的订单数量应该是1，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -2696,7 +2958,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-订单类型-内部订单")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -2766,7 +3035,18 @@ class TestVPSMasOrderclose:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -2816,7 +3096,18 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)
 
@@ -2939,7 +3230,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 0, f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单"
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓失败，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓失败，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-订单备注：ceshipingcangbeizhu")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -3009,7 +3307,18 @@ class TestVPSMasOrderclose:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -3059,6 +3368,17 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 4, f"平仓的订单数量功能错误，应该有4个平仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=4,
+                        op=CompareOp.EQ,
+                        message=f"平仓的订单数量功能正确，应该有4个平仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
         time.sleep(30)

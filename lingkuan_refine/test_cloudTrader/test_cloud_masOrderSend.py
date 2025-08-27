@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -100,9 +100,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 min_lot_size = db_data[0]["min_lot_size"]
                 endsize = trader_ordersend["endSize"]
@@ -175,9 +182,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 total_lots = [record["total_lots"] for record in db_data]
                 total_sumlots = sum(total_lots)
@@ -257,20 +271,31 @@ class TestCloudMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=5,
+                        op=CompareOp.EQ,
+                        message="详情总手数符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f'订单详情总手数是：{total}')
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -319,20 +344,31 @@ class TestCloudMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=5,
+                        op=CompareOp.EQ,
+                        message="详情总手数符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f'订单详情总手数是：{total}')
                 total_lots = [record["total_lots"] for record in db_data]
                 self.assert_list_equal_ignore_order(
                     size,
@@ -433,9 +469,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 min_lot_size = db_data[0]["min_lot_size"]
                 endsize = trader_ordersend["endSize"]
@@ -514,9 +557,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 total_lots = [record["total_lots"] for record in db_data]
                 total_sumlots = sum(total_lots)
@@ -596,20 +646,31 @@ class TestCloudMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=5,
+                        op=CompareOp.EQ,
+                        message="详情总手数符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f'订单详情总手数是：{total}')
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -658,20 +719,31 @@ class TestCloudMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=5,
+                        op=CompareOp.EQ,
+                        message="详情总手数符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f'订单详情总手数是：{total}')
                 total_lots = [record["total_lots"] for record in db_data]
                 self.assert_list_equal_ignore_order(
                     size,
@@ -843,13 +915,19 @@ class TestCloudMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 total_lots = [record["total_lots"] for record in db_data]
                 total_sumlots = sum(total_lots)
@@ -931,9 +1009,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 size = [record["size"] for record in db_data]
                 total = sum(size)
@@ -991,9 +1076,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 size = [record["size"] for record in db_data]
                 total = sum(size)
@@ -1100,18 +1192,27 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"复制订单状态校验通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: {endsize}, 实际: {min_lot_size}'
-                logger.info(f"复制下单结束手数校验通过: {endsize}")
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
                 # 开始手数校验
                 max_lot_size = db_data[0]["max_lot_size"]
@@ -1125,7 +1226,15 @@ class TestCloudMasOrdersend:
                     f'总订单数量不匹配，预期: 10, 实际: {total_orders}'
                 logger.info(f"总订单数量校验通过: {total_orders}")
 
-                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=10,
+                        op=CompareOp.EQ,
+                        message=f"应该有10个开仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -1169,7 +1278,18 @@ class TestCloudMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法提取数据")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=10,
+                        op=CompareOp.EQ,
+                        message=f"应该有10个开仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1236,11 +1356,26 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=10,
+                        op=CompareOp.EQ,
+                        message=f"应该有10个开仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1292,9 +1427,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 size = [record["size"] for record in db_data]
                 total_lots = [record["total_lots"] for record in db_data]
@@ -1305,7 +1447,15 @@ class TestCloudMasOrdersend:
                 )
                 logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-                assert len(db_data) == 10, f"应该有10个开仓订单，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=10,
+                        op=CompareOp.EQ,
+                        message=f"应该有10个开仓订单",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
 
             time.sleep(25)
 
@@ -1399,25 +1549,38 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"复制订单状态校验通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: {endsize}, 实际: {min_lot_size}'
-                logger.info(f"复制下单结束手数校验通过: {endsize}")
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: {startSize}, 实际: {max_lot_size}'
-                logger.info(f"复制下单开始手数校验通过: {startSize}")
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.10),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
 
                 # 总手数与指令表校验
                 total_lots = db_data[0]["total_lots"]
@@ -1550,9 +1713,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 # 总手数与指令表校验
                 true_total_lots = db_data[0]["true_total_lots"]
@@ -1616,9 +1786,16 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                status = db_data[0]["status"]
-                assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-                logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 size = [record["size"] for record in db_data]
                 total_lots = [record["total_lots"] for record in db_data]
@@ -1785,7 +1962,15 @@ class TestCloudMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-            assert len(db_data) != 5, f"开仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+                with allure.step("验证开仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"开仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -1829,7 +2014,18 @@ class TestCloudMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 5, f"开仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证开仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"开仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("云策略交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1893,7 +2089,18 @@ class TestCloudMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                assert len(db_data) != 5, f"平仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
+
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"平仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1951,6 +2158,14 @@ class TestCloudMasOrdersend:
                 )
                 logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-                assert len(db_data) != 5, f"平仓的订单的数量应该不是5，结果有{len(db_data)}个订单"
+                with allure.step("验证平仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"平仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
             time.sleep(25)

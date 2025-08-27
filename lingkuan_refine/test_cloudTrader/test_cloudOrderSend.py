@@ -5,7 +5,7 @@ import time
 import math
 from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
-from lingkuan_refine.commons.api_base import APITestBase
+from lingkuan_refine.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -107,32 +107,50 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"复制订单状态校验通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: {endsize}, 实际: {min_lot_size}'
-                logger.info(f"复制下单结束手数校验通过: {endsize}")
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.10),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
 
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: {startSize}, 实际: {max_lot_size}'
-                logger.info(f"复制下单开始手数校验通过: {startSize}")
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
-                # 总订单数量校验
-                total_orders = db_data[0]["total_orders"]
-                totalNum = trader_ordersend["totalNum"]
-                assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总订单数量不匹配，预期: {totalNum}, 实际: {total_orders}'
-                logger.info(f"总订单数量校验通过: {totalNum}")
+                with allure.step("总订单数量校验"):
+                    total_orders = db_data[0]["total_orders"]
+                    totalNum = trader_ordersend["totalNum"]
+                    self.verify_data(
+                        actual_value=float(total_orders),
+                        expected_value=float(totalNum),
+                        op=CompareOp.EQ,
+                        message="总订单数量应符合预期",
+                        attachment_name="总订单数量详情"
+                    )
+                    logging.info(f"总订单数量验证通过: {total_orders}")
 
                 # 总手数与指令表校验
                 total_lots = db_data[0]["total_lots"]
@@ -549,18 +567,27 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"复制订单状态校验通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: {endsize}, 实际: {min_lot_size}'
-                logger.info(f"复制下单结束手数校验通过: {endsize}")
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
                 # 开始手数校验
                 max_lot_size = db_data[0]["max_lot_size"]
@@ -753,25 +780,38 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"复制订单状态校验通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: {endsize}, 实际: {min_lot_size}'
-                logger.info(f"复制下单结束手数校验通过: {endsize}")
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: {startSize}, 实际: {max_lot_size}'
-                logger.info(f"复制下单开始手数校验通过: {startSize}")
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.10),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
 
                 # 总手数与指令表校验
                 total_lots = db_data[0]["total_lots"]
@@ -1034,22 +1074,38 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: {endsize}, 实际: {min_lot_size}'
-                logger.info(f"复制下单结束手数校验通过: {endsize}")
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: {startSize}, 实际: {max_lot_size}'
-                logger.info(f"复制下单开始手数校验通过: {startSize}")
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.10),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
 
                 # 校验订单数和下单总订单数
-                assert len(db_data) != 5, f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单"
+                with allure.step("验证开仓的订单数量"):
+                    self.verify_data(
+                        actual_value=len(db_data),
+                        expected_value=5,
+                        op=CompareOp.NE,
+                        message=f"开仓的订单数量应该不是5",
+                        attachment_name="订单数量详情"
+                    )
+                    logging.info(f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
         @allure.title("云策略-复制下单平仓操作")
