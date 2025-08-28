@@ -2,8 +2,6 @@ import allure
 import logging
 import pytest
 import time
-import math
-from lingkuan_827.VAR.VAR import *
 from lingkuan_827.conftest import var_manager
 from lingkuan_827.commons.api_base import *
 from lingkuan_827.commons.redis_utils import *
@@ -192,36 +190,73 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9), \
-                    f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
-                logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9), \
-                    f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
-                logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.1),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
-                total_orders = db_data[0]["total_orders"]
-                totalNum = trader_ordersend["totalNum"]
-                assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \
-                    f'总订单数量是：{totalNum}，实际是：{total_orders}'
-                logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {min_lot_size}")
 
-                total_lots = db_data[0]["total_lots"]
-                totalSzie = trader_ordersend["totalSzie"]
-                assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，实际是：{total_lots}'
-                logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @allure.title("数据库校验-策略开仓-跟单开仓指令-根据status状态发现有漏单")
         def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
@@ -502,21 +537,28 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                total_lots = [record["total_lots"] for record in db_data]
-                total_sumlots = sum(total_lots)
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total_sumlots), rel_tol=1e-9) and \
-                       math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -603,16 +645,18 @@ class TestLeakageopen_level:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -676,23 +720,28 @@ class TestLeakageopen_level:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                    logging.info(f"详情总手数验证通过: {total}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)
 
@@ -878,36 +927,53 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9), \
-                    f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
-                logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.1),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9), \
-                    f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
-                logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {min_lot_size}")
 
-                total_orders = db_data[0]["total_orders"]
-                totalNum = trader_ordersend["totalNum"]
-                assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \
-                    f'总订单数量是：{totalNum}，实际是：{total_orders}'
-                logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                total_lots = db_data[0]["total_lots"]
-                totalSzie = trader_ordersend["totalSzie"]
-                assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，实际是：{total_lots}'
-                logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
-
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -951,7 +1017,6 @@ class TestLeakageopen_level:
                     time_field="fod.open_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
@@ -966,21 +1031,29 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                total_lots = [record["total_lots"] for record in db_data]
-                total_sumlots = sum(total_lots)
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total_sumlots), rel_tol=1e-9) and \
-                       math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓-出现漏平")
@@ -1068,16 +1141,18 @@ class TestLeakageopen_level:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
         def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
@@ -1367,23 +1442,28 @@ class TestLeakageopen_level:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                    logging.info(f"详情总手数验证通过: {total}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)
 
@@ -1704,16 +1784,18 @@ class TestLeakageopen_level:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -1808,22 +1890,27 @@ class TestLeakageopen_level:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                    logging.info(f"详情总手数验证通过: {total}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)

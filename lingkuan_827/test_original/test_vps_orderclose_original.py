@@ -859,7 +859,7 @@ class TestVPSOrderSend5(APITestBase):
         response = requests.request("GET", url, headers=headers, data=payload)
         token_mt4 = response.text
         print(f"登录MT4账号获取token:{token_mt4}")
-            logging.info(f"登录MT4账号获取token:{token_mt4}")
+        logging.info(f"登录MT4账号获取token:{token_mt4}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.title("MT4开仓")

@@ -15,9 +15,9 @@ SKIP_REASON = "该用例暂时跳过"
 @allure.description("""
 ### 测试说明
 包含三种云策略订单备注场景的完整测试流程：
-1. 场景1：策略有固定注释，跟单无固定注释 → 预期取策略备注
-2. 场景2：策略有固定注释，跟单有固定注释 → 预期取跟单备注
-3. 场景3：策略开启订单备注，跟单无固定注释 → 预期取开仓备注
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
 """)
 class TestCloudStrategyOrderRemark(APITestBase):
     """整合云策略三种备注场景的测试类"""
@@ -157,12 +157,15 @@ class TestCloudStrategyOrderRemark(APITestBase):
             )
 
         with allure.step("验证备注信息"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空")
-
             comment = db_data[0]["comment"]
-            assert comment == "ceshiceluebeizhu", \
-                f"场景1备注错误，预期: ceshiceluebeizhu, 实际: {comment}"
+            self.verify_data(
+                actual_value=comment,
+                expected_value="ceshiceluebeizhu",
+                op=CompareOp.EQ,
+                use_isclose=False,
+                message=f"预期：跟单取策略备注",
+                attachment_name="备注详情"
+            )
             logger.info(f"场景1备注验证通过: {comment}")
 
     @allure.story("场景1：策略有固定注释，跟单无固定注释")
@@ -328,12 +331,15 @@ class TestCloudStrategyOrderRemark(APITestBase):
             )
 
         with allure.step("验证备注信息"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空")
-
             comment = db_data[0]["comment"]
-            assert comment == "ceshigendanbeizhu", \
-                f"场景2备注错误，预期: ceshigendanbeizhu, 实际: {comment}"
+            self.verify_data(
+                actual_value=comment,
+                expected_value="ceshigendanbeizhu",
+                op=CompareOp.EQ,
+                use_isclose=False,
+                message="预期：跟单取自身备注",
+                attachment_name="备注详情"
+            )
             logger.info(f"场景2备注验证通过: {comment}")
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
@@ -499,12 +505,15 @@ class TestCloudStrategyOrderRemark(APITestBase):
             )
 
         with allure.step("验证备注信息"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空")
-
             comment = db_data[0]["comment"]
-            assert comment == "ceshikaicangbeizhu", \
-                f"场景3备注错误，预期: ceshikaicangbeizhu, 实际: {comment}"
+            self.verify_data(
+                actual_value=comment,
+                expected_value="ceshikaicangbeizhu",
+                op=CompareOp.EQ,
+                use_isclose=False,
+                message="预期：跟单取开仓备注",
+                attachment_name="备注详情"
+            )
             logger.info(f"场景3备注验证通过: {comment}")
 
     @allure.story("场景3：策略开启订单备注，跟单无固定注释")

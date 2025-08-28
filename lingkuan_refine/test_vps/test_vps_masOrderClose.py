@@ -2,8 +2,6 @@ import allure
 import logging
 import pytest
 import time
-import math
-from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
 from lingkuan_refine.commons.api_base import *
 import requests
@@ -135,7 +133,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=0,
@@ -196,7 +194,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=0,
@@ -278,7 +276,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=2,
@@ -339,7 +337,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=2,
@@ -355,12 +353,12 @@ class TestVPSMasOrderclose:
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
-      1. 进行开仓，手数范围0.1-1，总订单4
+      1. 进行开仓，手数范围0.1-1，总订单5
       2. 进行平仓
       3. 发送停止请求
-      4. 校验平仓的订单数，应该不等于4
+      4. 校验平仓的订单数，应该不等于5
       5. 进行平仓-正常平仓
-      6. 校验平仓的订单数,等于4
+      6. 校验平仓的订单数,等于5
     - 预期结果：平仓的停止功能正确
     """)
     class TestVPStradingOrders2(APITestBase):
@@ -526,7 +524,7 @@ class TestVPSMasOrderclose:
                     params=params,
                     time_field="foi.create_time"
                 )
-            with allure.step("验证平仓的订单数量"):
+            with allure.step("验证订单数量"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
@@ -539,7 +537,7 @@ class TestVPSMasOrderclose:
                 )
                 logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
+        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-开仓订单不等于开仓总订单数")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情界面跟单账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -586,7 +584,7 @@ class TestVPSMasOrderclose:
                     params=params,
                     time_field="foi.create_time"
                 )
-            with allure.step("验证平仓的订单数量"):
+            with allure.step("验证订单数量"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
@@ -670,7 +668,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,
@@ -731,7 +729,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,
@@ -1000,7 +998,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -1081,7 +1079,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -1347,7 +1345,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -1428,7 +1426,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -1694,7 +1692,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -1775,7 +1773,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -1990,7 +1988,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -2051,7 +2049,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -2263,7 +2261,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -2324,7 +2322,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -2536,7 +2534,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -2597,7 +2595,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -3072,7 +3070,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -3133,7 +3131,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -3344,7 +3342,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,
@@ -3405,7 +3403,7 @@ class TestVPSMasOrderclose:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=4,

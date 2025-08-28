@@ -1,10 +1,8 @@
 # lingkuan_827/tests/test_vps_ordersend.py
 import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_827.VAR.VAR import *
 from lingkuan_827.conftest import var_manager
 from lingkuan_827.commons.api_base import *
 

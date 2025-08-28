@@ -1,9 +1,7 @@
 import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_827.VAR.VAR import *
 from lingkuan_827.conftest import var_manager
 from lingkuan_827.commons.api_base import *
 import requests
@@ -172,7 +170,7 @@ class TestVPSCoreFunctionality:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,

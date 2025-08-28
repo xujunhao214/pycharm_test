@@ -1,9 +1,7 @@
 import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
 from lingkuan_refine.commons.api_base import *
 
@@ -140,10 +138,16 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            # 验证订单状态
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
-            logger.info(f"订单状态验证通过: {status}")
+            with allure.step("验证订单状态"):
+                status = db_data[0]["status"]
+                self.verify_data(
+                    actual_value=status,
+                    expected_value=(0, 1),
+                    op=CompareOp.IN,
+                    message="订单状态应为0或1",
+                    attachment_name="订单状态详情"
+                )
+                logging.info(f"订单状态验证通过: {status}")
 
             # 验证手数范围
             if test_params["startSize"]:
@@ -240,10 +244,16 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            # 验证订单状态
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
-            logger.info(f"订单状态验证通过: {status}")
+            with allure.step("验证订单状态"):
+                status = db_data[0]["status"]
+                self.verify_data(
+                    actual_value=status,
+                    expected_value=(0, 1),
+                    op=CompareOp.IN,
+                    message="订单状态应为0或1",
+                    attachment_name="订单状态详情"
+                )
+                logging.info(f"订单状态验证通过: {status}")
 
             # 验证手数一致性
             size = [record["size"] for record in db_data]

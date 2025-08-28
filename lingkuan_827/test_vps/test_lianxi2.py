@@ -173,7 +173,7 @@ class TestVPSCoreFunctionality:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,

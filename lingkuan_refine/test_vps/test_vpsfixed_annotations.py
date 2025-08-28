@@ -1,9 +1,7 @@
 import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
 from lingkuan_refine.commons.api_base import *
 
@@ -102,30 +100,30 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("策略开仓及备注校验（场景1）")
     def test_scenario1_trader_orderSend_and_verify(self, var_manager, logged_session, db_transaction):
-        # 1. 开仓请求
-        trader_ordersend = var_manager.get_variable("trader_ordersend")
-        vps_trader_id = var_manager.get_variable("vps_trader_id")
-        data = {
-            "symbol": trader_ordersend["symbol"],
-            "placedType": 0,
-            "remark": "ceshikaicangbeizhu",
-            "intervalTime": 100,
-            "type": 0,
-            "totalNum": trader_ordersend["totalNum"],
-            "totalSzie": trader_ordersend["totalSzie"],
-            "startSize": trader_ordersend["startSize"],
-            "endSize": trader_ordersend["endSize"],
-            "traderId": vps_trader_id
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/subcontrol/trader/orderSend',
-            json_data=data,
-        )
-        self.assert_response_status(response, 200, "策略开仓失败（场景1）")
-        self.assert_json_value(response, "$.msg", "success", "响应msg应为success（场景1）")
+        with allure.step("1. 开仓请求"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
+            data = {
+                "symbol": trader_ordersend["symbol"],
+                "placedType": 0,
+                "remark": "ceshikaicangbeizhu",
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": trader_ordersend["totalNum"],
+                "totalSzie": trader_ordersend["totalSzie"],
+                "startSize": trader_ordersend["startSize"],
+                "endSize": trader_ordersend["endSize"],
+                "traderId": vps_trader_id
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderSend',
+                json_data=data,
+            )
+        with allure.step("2. json校验"):
+            self.assert_response_status(response, 200, "策略开仓失败（场景1）")
+            self.assert_json_value(response, "$.msg", "success", "响应msg应为success（场景1）")
 
-        # 2. 数据库校验
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         sql = """
             SELECT fod.account, fod.comment, foi.operation_type, foi.create_time
@@ -141,10 +139,17 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             params=params,
             time_field="foi.create_time"
         )
-        if not db_data:
-            pytest.fail("数据库查询结果为空（场景1）")
-        comment = db_data[0]["comment"]
-        assert comment == "ceshiceluebeizhu", f"场景1备注错误，实际：{comment}"
+        with allure.step("3. 数据库校验"):
+            comment = db_data[0]["comment"]
+            self.verify_data(
+                actual_value=comment,
+                expected_value="ceshiceluebeizhu",
+                op=CompareOp.EQ,
+                use_isclose=False,
+                message=f"预期：跟单取策略备注",
+                attachment_name="备注详情"
+            )
+            logger.info(f"场景1备注验证通过: {comment}")
 
     @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @pytest.mark.url("vps")
@@ -246,29 +251,29 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("策略开仓及备注校验（场景2）")
     def test_scenario2_trader_orderSend_and_verify(self, var_manager, logged_session, db_transaction):
-        # 1. 开仓请求
-        trader_ordersend = var_manager.get_variable("trader_ordersend")
-        vps_trader_id = var_manager.get_variable("vps_trader_id")
-        data = {
-            "symbol": trader_ordersend["symbol"],
-            "placedType": 0,
-            "remark": "ceshikaicangbeizhu",
-            "intervalTime": 100,
-            "type": 0,
-            "totalNum": trader_ordersend["totalNum"],
-            "totalSzie": trader_ordersend["totalSzie"],
-            "startSize": trader_ordersend["startSize"],
-            "endSize": trader_ordersend["endSize"],
-            "traderId": vps_trader_id
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/subcontrol/trader/orderSend',
-            json_data=data,
-        )
-        self.assert_response_status(response, 200, "策略开仓失败（场景2）")
+        with allure.step("1. 开仓请求"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
+            data = {
+                "symbol": trader_ordersend["symbol"],
+                "placedType": 0,
+                "remark": "ceshikaicangbeizhu",
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": trader_ordersend["totalNum"],
+                "totalSzie": trader_ordersend["totalSzie"],
+                "startSize": trader_ordersend["startSize"],
+                "endSize": trader_ordersend["endSize"],
+                "traderId": vps_trader_id
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderSend',
+                json_data=data,
+            )
+        with allure.step("2. 状态校验"):
+            self.assert_response_status(response, 200, "策略开仓失败（场景2）")
 
-        # 2. 数据库校验
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         sql = """
             SELECT fod.account, fod.comment, foi.operation_type, foi.create_time
@@ -284,10 +289,18 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             params=params,
             time_field="foi.create_time"
         )
-        if not db_data:
-            pytest.fail("数据库查询结果为空（场景2）")
-        comment = db_data[0]["comment"]
-        assert comment == "ceshigendanbeizhu", f"场景2备注错误，实际：{comment}"
+
+        with allure.step("3. 数据库校验"):
+            comment = db_data[0]["comment"]
+            self.verify_data(
+                actual_value=comment,
+                expected_value="ceshigendanbeizhu",
+                op=CompareOp.EQ,
+                use_isclose=False,
+                message="预期：跟单取自身备注",
+                attachment_name="备注详情"
+            )
+            logger.info(f"场景2备注验证通过: {comment}")
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @pytest.mark.url("vps")
@@ -389,30 +402,30 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("策略开仓及备注校验（场景3）")
     def test_scenario3_trader_orderSend_and_verify(self, var_manager, logged_session, db_transaction):
-        # 1. 开仓请求
-        trader_ordersend = var_manager.get_variable("trader_ordersend")
-        vps_trader_id = var_manager.get_variable("vps_trader_id")
-        data = {
-            "symbol": trader_ordersend["symbol"],
-            "placedType": 0,
-            "remark": "ceshikaicangbeizhu",  # 开仓备注
-            "intervalTime": 100,
-            "type": 0,
-            "totalNum": trader_ordersend["totalNum"],
-            "totalSzie": trader_ordersend["totalSzie"],
-            "startSize": trader_ordersend["startSize"],
-            "endSize": trader_ordersend["endSize"],
-            "traderId": vps_trader_id
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/subcontrol/trader/orderSend',
-            json_data=data,
-        )
-        self.assert_response_status(response, 200, "策略开仓失败（场景3）")
-        self.assert_json_value(response, "$.msg", "success", "响应msg应为success（场景3）")
+        with allure.step("1. 开仓请求"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
+            data = {
+                "symbol": trader_ordersend["symbol"],
+                "placedType": 0,
+                "remark": "ceshikaicangbeizhu",  # 开仓备注
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": trader_ordersend["totalNum"],
+                "totalSzie": trader_ordersend["totalSzie"],
+                "startSize": trader_ordersend["startSize"],
+                "endSize": trader_ordersend["endSize"],
+                "traderId": vps_trader_id
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderSend',
+                json_data=data,
+            )
+        with allure.step("2. json校验"):
+            self.assert_response_status(response, 200, "策略开仓失败（场景3）")
+            self.assert_json_value(response, "$.msg", "success", "响应msg应为success（场景3）")
 
-        # 2. 数据库校验（预期取开仓备注）
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         sql = """
             SELECT fod.account, fod.comment, foi.operation_type, foi.create_time
@@ -430,8 +443,18 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         )
         if not db_data:
             pytest.fail("数据库查询结果为空（场景3）")
-        comment = db_data[0]["comment"]
-        assert comment == "ceshikaicangbeizhu", f"场景3备注错误，实际：{comment}"
+
+        with allure.step("3. 数据库校验"):
+            comment = db_data[0]["comment"]
+            self.verify_data(
+                actual_value=comment,
+                expected_value="ceshikaicangbeizhu",
+                op=CompareOp.EQ,
+                use_isclose=False,
+                message="预期：跟单取开仓备注",
+                attachment_name="备注详情"
+            )
+            logger.info(f"场景3备注验证通过: {comment}")
 
     @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @pytest.mark.url("vps")

@@ -90,7 +90,7 @@ def logged_session(api_session, var_manager, request, environment):
 
         elif environment.value == "uat":
             # UAT环境登录逻辑（带重试）
-            max_retries = 3
+            max_retries = 5
             retry_interval = 10
             access_token = None
 

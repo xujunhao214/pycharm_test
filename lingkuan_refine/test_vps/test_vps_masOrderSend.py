@@ -2,8 +2,6 @@ import allure
 import logging
 import pytest
 import time
-import math
-from lingkuan_refine.VAR.VAR import *
 from lingkuan_refine.conftest import var_manager
 from lingkuan_refine.commons.api_base import *
 
@@ -112,30 +110,52 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9), \
-                    f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
-                logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.1),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9), \
-                    f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
-                logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {min_lot_size}")
 
-                total_lots = db_data[0]["total_lots"]
-                totalSzie = trader_ordersend["totalSzie"]
-                assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，实际是：{total_lots}'
-                logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -179,7 +199,6 @@ class TestVPSMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
@@ -194,16 +213,6 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                total_lots = [record["total_lots"] for record in db_data]
-                total_sumlots = sum(total_lots)
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total_sumlots), rel_tol=1e-9) and \
-                       math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}')
-
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
@@ -216,11 +225,15 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f'订单详情总手数是：{total}')
 
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @allure.title("VPS交易下单-分配平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -383,13 +396,16 @@ class TestVPSMasOrdersend:
                         attachment_name="详情总手数"
                     )
                     logging.info(f'订单详情总手数是：{total}')
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)
 
@@ -494,36 +510,62 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                min_lot_size = db_data[0]["min_lot_size"]
-                endsize = trader_ordersend["endSize"]
-                assert math.isclose(float(endsize), float(min_lot_size), rel_tol=1e-9), \
-                    f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}'
-                logging.info(f'手数范围：结束手数是：{endsize}，实际是：{min_lot_size}')
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.1),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
-                max_lot_size = db_data[0]["max_lot_size"]
-                startSize = trader_ordersend["startSize"]
-                assert math.isclose(float(startSize), float(max_lot_size), rel_tol=1e-9), \
-                    f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}'
-                logging.info(f'手数范围：开始手数是：{startSize}，实际是：{max_lot_size}')
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {min_lot_size}")
 
-                total_orders = db_data[0]["total_orders"]
-                totalNum = trader_ordersend["totalNum"]
-                assert math.isclose(float(totalNum), float(total_orders), rel_tol=1e-9), \
-                    f'总订单数量是：{totalNum}，实际是：{total_orders}'
-                logging.info(f'总订单数量是：{totalNum}，实际是：{total_orders}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                total_lots = db_data[0]["total_lots"]
-                totalSzie = trader_ordersend["totalSzie"]
-                assert math.isclose(float(totalSzie), float(total_lots), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，实际是：{total_lots}'
-                logging.info(f'下单总手数是：{totalSzie}，实际是：{total_lots}')
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -582,21 +624,28 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                total_lots = [record["total_lots"] for record in db_data]
-                total_sumlots = sum(total_lots)
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total_sumlots), rel_tol=1e-9) and \
-                       math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie}，指令表总手数是：{total_sumlots},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @allure.title("VPS交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -748,23 +797,28 @@ class TestVPSMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=1,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                    logging.info(f"详情总手数验证通过: {total}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)
 
@@ -857,35 +911,61 @@ class TestVPSMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                # 订单状态校验
-                status = db_data[0]["status"]
-                assert status in (0, 1), \
-                    f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}"
-                logger.info(f"订单状态应为0(处理中)或1(全部成功)，实际为: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # 结束手数校验
-                min_lot_size = db_data[0]["min_lot_size"]
-                assert math.isclose(float(0.01), float(min_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'结束手数不匹配，预期: 0.01, 实际: {min_lot_size}'
-                logger.info(f'结束手数预期: 0.01, 实际: {min_lot_size}')
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                assert math.isclose(float(0.01), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: 0.01, 实际: {max_lot_size}'
-                logger.info(f'开始手数预期: 0.01, 实际: {max_lot_size}')
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {min_lot_size}")
 
-                # 总手数与指令表校验
-                total_lots = db_data[0]["total_lots"]
-                assert math.isclose(float(0.01), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数不匹配，预期: 0.01, 实际: {total_lots}'
-                logger.info(f'总手数预期: 0.01, 实际: {total_lots}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                # 总手数与订单详情校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(0.01), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数与订单详情不匹配，预期: {0.01}, 实际: {size_sum}'
-                logger.info(f'订单详情总手数预期: {0.01}, 实际: {size_sum}')
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -943,20 +1023,17 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                total_lots = [record["total_lots"] for record in db_data]
-                total_sumlots = sum(total_lots)
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(0.01), float(total_sumlots), rel_tol=1e-9) and \
-                       math.isclose(float(0.01), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：0.01，指令表总手数是：{total_sumlots},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：0.01，指令表总手数是：{total_sumlots},订单详情总手数是：{total}')
-
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("VPS交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1034,11 +1111,17 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(0.01), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：0.01，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：0.01，订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1101,18 +1184,27 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(0.01), float(total), rel_tol=1e-9), \
-                    f'下单总手数是：0.01，订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：0.01，订单详情总手数是：{total}')
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)
 
@@ -1228,27 +1320,37 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
 
-                # 开始手数校验
-                max_lot_size = db_data[0]["max_lot_size"]
-                assert math.isclose(float(0.01), float(max_lot_size), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'开始手数不匹配，预期: 0.01, 实际: {max_lot_size}'
-                logger.info(f"复制下单开始手数校验通过: {max_lot_size}")
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.01),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
-                # 总订单数量校验
-                total_orders = db_data[0]["total_orders"]
-                assert math.isclose(float(10), float(total_orders), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总订单数量不匹配，预期: 10, 实际: {total_orders}'
-                logger.info(f"总订单数量校验通过: {total_orders}")
+                with allure.step("验证总订单数量"):
+                    total_orders = db_data[0]["total_orders"]
+                    self.verify_data(
+                        actual_value=float(total_orders),
+                        expected_value=float(10),
+                        op=CompareOp.EQ,
+                        message="总订单数量应符合预期",
+                        attachment_name="总订单数量详情"
+                    )
+                    logging.info(f"开始手数验证通过: {total_orders}")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=10,
                         op=CompareOp.EQ,
-                        message=f"应该有10个开仓订单",
+                        message=f"应该有10个订单",
                         attachment_name="订单数量详情"
                     )
-                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
+                    logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -1295,15 +1397,26 @@ class TestVPSMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=10,
                         op=CompareOp.EQ,
-                        message=f"应该有10个开仓订单",
+                        message=f"应该有10个订单",
                         attachment_name="订单数量详情"
                     )
-                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
+                    logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("VPS交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1381,15 +1494,15 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=10,
                         op=CompareOp.EQ,
-                        message=f"应该有10个开仓订单",
+                        message=f"应该有10个订单",
                         attachment_name="订单数量详情"
                     )
-                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
+                    logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1452,24 +1565,25 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                size = [record["size"] for record in db_data]
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=10,
                         op=CompareOp.EQ,
-                        message=f"应该有10个开仓订单",
+                        message=f"应该有10个订单",
                         attachment_name="订单数量详情"
                     )
-                    logging.info(f"应该有10个开仓订单，结果有{len(db_data)}个订单")
+                    logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
             time.sleep(25)
 
@@ -1596,17 +1710,28 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
 
-                # 总手数与指令表校验
-                total_lots = db_data[0]["total_lots"]
-                assert math.isclose(float(5), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数不匹配，预期: 5, 实际: {total_lots}'
-                logger.info(f"复制下单总手数与指令表校验通过: {total_lots}")
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                # 总手数与订单详情校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(5), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数与订单详情不匹配，预期: 5, 实际: {size_sum}'
-                logger.info(f"复制下单总手数与订单详情校验通过: {size_sum}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -1650,17 +1775,29 @@ class TestVPSMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                # 总手数与指令表校验
-                total_lots = sum(record["total_lots"] for record in db_data)
-                assert math.isclose(float(5), float(total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数不匹配，预期: 5, 实际: {total_lots}'
-                logger.info(f"复制下单总手数与指令表校验通过: {total_lots}")
+                with allure.step("验证指令总手数"):
+                    total_lots = [record["total_lots"] for record in db_data]
+                    total_lotssum = sum(total_lots)
+                    self.verify_data(
+                        actual_value=float(total_lotssum),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lotssum}")
 
-                # 总手数与订单详情校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(5), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数与订单详情不匹配，预期: 5, 实际: {size_sum}'
-                logger.info(f"复制下单总手数与订单详情校验通过: {size_sum}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("VPS交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -1698,6 +1835,7 @@ class TestVPSMasOrdersend:
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
+                            foi.total_lots,
                             foi.order_no,
                             foi.operation_type,
                             foi.create_time,
@@ -1738,17 +1876,28 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                # 总手数与指令表校验
-                true_total_lots = db_data[0]["true_total_lots"]
-                assert math.isclose(float(5), float(true_total_lots), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数不匹配，预期: 5, 实际: {true_total_lots}'
-                logger.info(f"复制下单总手数与指令表校验通过: {true_total_lots}")
+                with allure.step("验证指令总手数"):
+                    true_total_lots = db_data[0]["true_total_lots"]
+                    self.verify_data(
+                        actual_value=float(true_total_lots),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
-                # 总手数与订单详情校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(5), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'总手数与订单详情不匹配，预期: 5, 实际: {size_sum}'
-                logger.info(f"复制下单总手数与订单详情校验通过: {size_sum}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -1811,20 +1960,27 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                size = [record["size"] for record in db_data]
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    total_lots,
-                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-                )
-                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                # 平仓总手数校验
-                size_sum = sum(record["size"] for record in db_data)
-                assert math.isclose(float(5), float(size_sum), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'复制平仓总手数不匹配，预期: 5, 实际: {size_sum}'
-                logger.info(f"复制平仓总手数校验通过: {size_sum}")
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
             time.sleep(25)
 
@@ -1976,7 +2132,7 @@ class TestVPSMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,
@@ -2031,7 +2187,7 @@ class TestVPSMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,
@@ -2106,7 +2262,7 @@ class TestVPSMasOrdersend:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,
@@ -2172,7 +2328,7 @@ class TestVPSMasOrdersend:
                 )
                 logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-                with allure.step("验证平仓的订单数量"):
+                with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
                         expected_value=5,

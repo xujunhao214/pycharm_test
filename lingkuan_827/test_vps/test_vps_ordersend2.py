@@ -1,9 +1,7 @@
 import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_827.VAR.VAR import *
 from lingkuan_827.conftest import var_manager
 from lingkuan_827.commons.api_base import *
 
@@ -130,7 +128,7 @@ class TestVPSOrderSend_newScenarios:
                         message="开始手数应符合预期",
                         attachment_name="开始手数详情"
                     )
-                    logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
+                    logging.info(f"开始手数验证通过: {max_lot_size}")
 
                 with allure.step("验证手数范围-结束手数"):
                     min_lot_size = db_data[0]["min_lot_size"]
@@ -141,7 +139,7 @@ class TestVPSOrderSend_newScenarios:
                         message="结束手数应符合预期",
                         attachment_name="结束手数详情"
                     )
-                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
+                    logging.info(f"结束手数验证通过: {min_lot_size}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(

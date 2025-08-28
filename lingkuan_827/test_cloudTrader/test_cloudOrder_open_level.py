@@ -3,8 +3,6 @@ import allure
 import logging
 import pytest
 import time
-import math
-from lingkuan_827.VAR.VAR import *
 from lingkuan_827.conftest import var_manager
 from lingkuan_827.commons.api_base import *
 from lingkuan_827.commons.redis_utils import *
@@ -404,23 +402,35 @@ class TestcloudTrader_openandlevel:
                     time_field="foi.create_time",
                 )
             with allure.step("2. 数据校验"):
-                cloudOrderSend = var_manager.get_variable("cloudOrderSend")
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # 下单总手数与订单详情总手数校验
-                totalSzie = cloudOrderSend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                # 下单手数与指令表手数校验
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(total_lots,
-                                                    size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
-                logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓")
         def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
@@ -507,13 +517,19 @@ class TestcloudTrader_openandlevel:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                # 平仓总手数校验
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 time.sleep(25)
 
@@ -683,23 +699,35 @@ class TestcloudTrader_openandlevel:
                     time_field="foi.create_time",
                 )
             with allure.step("2. 数据校验"):
-                cloudOrderSend = var_manager.get_variable("cloudOrderSend")
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # 下单总手数与订单详情总手数校验
-                totalSzie = cloudOrderSend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                # 下单手数与指令表手数校验
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(total_lots,
-                                                    size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
-                logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓-出现漏平")
         def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
@@ -777,8 +805,8 @@ class TestcloudTrader_openandlevel:
                 assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
 
                 close_remark = db_data[0]["close_remark"]
-                logging.info(f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}")
-                assert close_remark == "平仓异常: 未开通平仓状态", f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}"
+                logging.info(f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}")
+                assert close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}"
 
             with allure.step("3. 提取数据"):
                 cloudTrader_master_order_level = [record["master_order"] for record in db_data]
@@ -1031,19 +1059,31 @@ class TestcloudTrader_openandlevel:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # 平仓总手数校验
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'订单详情总手数是：{total}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                # 下单手数与指令表手数校验
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(total_lots,
-                                                    size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
-                logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 time.sleep(25)
 
@@ -1414,23 +1454,35 @@ class TestcloudTrader_openandlevel:
                     time_field="foi.create_time",
                 )
             with allure.step("2. 数据校验"):
-                cloudOrderSend = var_manager.get_variable("cloudOrderSend")
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # 下单总手数与订单详情总手数校验
-                totalSzie = cloudOrderSend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
 
-                # 下单手数与指令表手数校验
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(total_lots,
-                                                    size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
-                logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓")
         def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
@@ -1517,13 +1569,19 @@ class TestcloudTrader_openandlevel:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                # 平仓总手数校验
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 time.sleep(25)
 
@@ -1874,23 +1932,32 @@ class TestcloudTrader_openandlevel:
                     time_field="foi.create_time",
                 )
             with allure.step("2. 数据校验"):
-                cloudOrderSend = var_manager.get_variable("cloudOrderSend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # 下单总手数与订单详情总手数校验
-                totalSzie = cloudOrderSend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-                logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                # 下单手数与指令表手数校验
-                total_lots = [record["total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(total_lots,
-                                                    size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
-                logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @allure.title("账号管理-交易下单-平仓")
         def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
@@ -1962,7 +2029,6 @@ class TestcloudTrader_openandlevel:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
@@ -1977,12 +2043,18 @@ class TestcloudTrader_openandlevel:
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
-                # 平仓总手数校验
-                totalSzie = trader_ordersend["totalSzie"]
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                    f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-                logging.info(f'订单详情总手数是：{total}')
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 time.sleep(25)
