@@ -129,7 +129,7 @@ class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种@")
     def test_dbtrader_cfda(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_5 = var_manager.get_variable("vps_user_accounts_5")
             # symbol,order_no,size,trader_id,account
@@ -170,7 +170,7 @@ class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种p")
     def test_dbtrader_cfdp(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_6 = var_manager.get_variable("vps_user_accounts_6")
 
@@ -214,7 +214,7 @@ class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改币种min")
     def test_dbtrader_cfdmin(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_7 = var_manager.get_variable("vps_user_accounts_7")
 
@@ -289,7 +289,7 @@ class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改币种@")
     def test_dbclose_cfda(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_5 = var_manager.get_variable("vps_user_accounts_5")
 
@@ -332,7 +332,7 @@ class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改币种p")
     def test_dbclose_cfdp(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_6 = var_manager.get_variable("vps_user_accounts_6")
 
@@ -378,7 +378,7 @@ class TestVPSOrderSend_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改币种min")
     def test_dbclose_cfdmin(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_7 = var_manager.get_variable("vps_user_accounts_7")
 

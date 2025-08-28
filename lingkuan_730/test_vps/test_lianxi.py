@@ -19,7 +19,7 @@ class TestDeleteFollowSlave(APITestBase):
     # ---------------------------
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             symbol = trader_ordersend["symbol"]

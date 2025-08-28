@@ -65,7 +65,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-跟单账号固定手数")
     def test_dbdetail_followParam5(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_2 = var_manager.get_variable("user_accounts_2")
@@ -111,7 +111,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-跟单账号修改品种")
     def test_dbdetail_templateId3(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_3 = var_manager.get_variable("user_accounts_3")
@@ -218,7 +218,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-修改净值")
     def test_dbtrader_euqit(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_4 = var_manager.get_variable("user_accounts_4")
@@ -310,7 +310,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-跟单账号固定手数")
     def test_dbclose_followParam5(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_2 = var_manager.get_variable("user_accounts_2")
@@ -358,7 +358,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-跟单账号修改品种")
     def test_dbclose_templateId3(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_3 = var_manager.get_variable("user_accounts_3")
@@ -408,7 +408,7 @@ class TestVPSOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-修改净值")
     def test_dbclose_euqit(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_4 = var_manager.get_variable("user_accounts_4")

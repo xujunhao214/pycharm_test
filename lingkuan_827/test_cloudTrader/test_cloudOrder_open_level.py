@@ -190,7 +190,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
         def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
                 symbol = cloudOrderSend["symbol"]
@@ -361,7 +361,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                         SELECT 
@@ -460,7 +460,7 @@ class TestcloudTrader_openandlevel:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                            SELECT 
@@ -658,7 +658,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                             SELECT 
@@ -757,7 +757,7 @@ class TestcloudTrader_openandlevel:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
         def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
                 sql = f"""
@@ -815,7 +815,7 @@ class TestcloudTrader_openandlevel:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("出现漏平-redis数据和数据库的数据做比对")
         def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_close):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
                 symbol = cloudOrderSend["symbol"]
@@ -1013,7 +1013,7 @@ class TestcloudTrader_openandlevel:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                            SELECT 
@@ -1253,7 +1253,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
         def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
                 symbol = cloudOrderSend["symbol"]
@@ -1413,7 +1413,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                         SELECT 
@@ -1512,7 +1512,7 @@ class TestcloudTrader_openandlevel:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                            SELECT 
@@ -1741,7 +1741,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
         def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
                 symbol = cloudOrderSend["symbol"]
@@ -1891,7 +1891,7 @@ class TestcloudTrader_openandlevel:
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                         SELECT 
@@ -1987,7 +1987,7 @@ class TestcloudTrader_openandlevel:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
         def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
                            SELECT 

@@ -187,7 +187,7 @@ class TestMasordersend(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-持仓检查跟单账号数据")
     def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudOrderSend = var_manager.get_variable("cloudOrderSend")
             user_accounts_cloudTrader_4 = var_manager.get_variable("user_accounts_cloudTrader_4")
             follow_order_detail = var_manager.get_variable("follow_order_detail")

@@ -135,7 +135,7 @@ class TestLeakageopen(APITestBase):
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             sql = f"""
                 SELECT 
@@ -253,7 +253,7 @@ class TestLeakageopen(APITestBase):
 
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             symbol = trader_ordersend["symbol"]
@@ -441,7 +441,7 @@ class TestLeakageopen(APITestBase):
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
                 SELECT 
@@ -537,7 +537,7 @@ class TestLeakageopen(APITestBase):
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
     def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             sql = f"""
                 SELECT 
@@ -591,7 +591,7 @@ class TestLeakageopen(APITestBase):
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             sql = f"""
@@ -787,7 +787,7 @@ class TestLeakagelevel(APITestBase):
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             sql = f"""
                 SELECT 
@@ -870,7 +870,7 @@ class TestLeakagelevel(APITestBase):
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
                 SELECT 
@@ -967,7 +967,7 @@ class TestLeakagelevel(APITestBase):
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
     def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             sql = f"""
                 SELECT 
@@ -1022,7 +1022,7 @@ class TestLeakagelevel(APITestBase):
 
     @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
     def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1059,7 +1059,7 @@ class TestLeakagelevel(APITestBase):
 
     @allure.title("出现漏平-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_close):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             symbol = trader_ordersend["symbol"]
@@ -1248,7 +1248,7 @@ class TestLeakagelevel(APITestBase):
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             sql = f"""
@@ -1432,7 +1432,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             symbol = trader_ordersend["symbol"]
@@ -1608,7 +1608,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -1676,7 +1676,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             sql = f"""

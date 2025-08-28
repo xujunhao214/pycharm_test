@@ -88,7 +88,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -135,7 +135,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -213,7 +213,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                             SELECT 
@@ -259,7 +259,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -411,7 +411,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易开仓-主指令及订单详情数据检查-开仓订单不等于开仓总订单数")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                                SELECT 
@@ -457,7 +457,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -534,7 +534,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                            SELECT 
@@ -580,7 +580,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -756,7 +756,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -834,7 +834,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -911,7 +911,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                                 SELECT 
@@ -1080,7 +1080,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -1155,7 +1155,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -1232,7 +1232,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -1401,7 +1401,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -1476,7 +1476,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -1553,7 +1553,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -1675,7 +1675,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -1753,7 +1753,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -1796,7 +1796,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -1922,7 +1922,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                        SELECT 
@@ -1997,7 +1997,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -2040,7 +2040,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -2166,7 +2166,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -2241,7 +2241,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -2284,7 +2284,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -2410,7 +2410,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                     SELECT 
@@ -2485,7 +2485,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有1个订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -2527,7 +2527,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有1个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -2653,7 +2653,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -2728,7 +2728,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -2770,7 +2770,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
@@ -2896,7 +2896,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                     SELECT 
@@ -2971,7 +2971,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-有4个订单")
         def test_dbquery_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
                         SELECT 
@@ -3013,7 +3013,7 @@ class TestVPSMasOrderclose:
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有4个订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""

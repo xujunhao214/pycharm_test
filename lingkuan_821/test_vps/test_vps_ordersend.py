@@ -769,7 +769,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
     @allure.story("场景5：手数范围0.1-1，总手数1-停止功能")
     @allure.title("数据库校验-跟单指令开仓数据")
     def test_scenario5_dbquery_slave_open(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = """
                 SELECT 

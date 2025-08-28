@@ -233,7 +233,7 @@ class TestMasordersendcopy(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-持仓检查跟单账号数据")
     def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             user_accounts_1 = var_manager.get_variable("user_accounts_1")
             close_send_nos = var_manager.get_variable("close_send_nos")

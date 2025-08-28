@@ -11,50 +11,45 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("云策略交易分配-开仓的场景校验")
-class TestCloudStrategyOrder:
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景4：交易分配-手数范围0.1-1，总手数2")
-    @allure.description("""
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数2
-      2. 预期下单失败：下单失败，请检查下单参数
-    - 预期结果：提示正确
-    """)
-    class TestMasOrderSend2(APITestBase):
-        @allure.title("云策略-复制下单操作")
-        def test_copy_place_order(self, logged_session, var_manager):
-            """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
-                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+@allure.feature("云策略策略下单-跟单修改模式、品种")
+class TestVPSOrderSend_Scence(APITestBase):
+    # ---------------------------
+    # 数据库查询-获取VPSID
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取VPSID")
+    def test_get_vpsID(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库数据"):
+            ip_address = var_manager.get_variable("IP_ADDRESS")
 
-                request_data = {
-                    "id": cloudMaster_id,
-                    "type": 0,
-                    "tradeType": 0,
-                    "intervalTime": 100,
-                    "cloudTraderId": [cloudTrader_traderList_4],
-                    "symbol": "XAUUSD",
-                    "placedType": 0,
-                    "startSize": "0.1",
-                    "endSize": "1.00",
-                    "totalNum": "",
-                    "totalSzie": "2",
-                    "remark": "测试数据"
-                }
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address = %s",
+                (ip_address,)
+            )
 
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/cloudOrderSend',
-                    json_data=request_data
-                )
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
 
-            with allure.step("验证复制下单响应结果"):
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "下单失败，请检查下单参数",
-                    "响应msg字段应为：下单失败，请检查下单参数"
-                )
+            vpsId = db_data[0]["id"]
+            # 存入变量管理器
+            var_manager.set_runtime_variable("vpsId", vpsId)
+            print(f"成功提取 VPS ID: {vpsId}")
+
+    # ---------------------------
+    # VPS管理-VPS列表-获取可见用户信息
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-获取可见用户信息")
+    def test_get_user(self, logged_session, var_manager):
+        # 1. 请求可见用户列表接口
+        response = self.send_get_request(
+            logged_session,
+            '/sys/role/role'
+        )
+
+        # 2. 获取可见用户信息
+        vps_user_data = response.extract_jsonpath("$.data")
+        logging.info(f"获取的可见用户信息：{vps_user_data}")
+        var_manager.set_runtime_variable("vps_user_data", vps_user_data)

@@ -154,7 +154,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种@")
         def test_dbtrader_cfda(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_8 = var_manager.get_variable("cloudTrader_user_accounts_8")
                 sql = f"""
                         SELECT 
@@ -206,7 +206,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种p")
         def test_dbtrader_cfdp(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_9 = var_manager.get_variable("cloudTrader_user_accounts_9")
                 sql = f"""
                         SELECT 
@@ -261,7 +261,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种min")
         def test_dbtrader_cfdmin(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_10 = var_manager.get_variable("cloudTrader_user_accounts_10")
                 sql = f"""
                         SELECT 
@@ -361,7 +361,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种@")
         def test_dbclose_cfda(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_8 = var_manager.get_variable("cloudTrader_user_accounts_8")
                 sql = f"""
                         SELECT 
@@ -413,7 +413,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种p")
         def test_dbclose_cfdp(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_9 = var_manager.get_variable("cloudTrader_user_accounts_9")
                 sql = f"""
                         SELECT 
@@ -468,7 +468,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种min")
         def test_dbclose_cfdmin(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_10 = var_manager.get_variable("cloudTrader_user_accounts_10")
                 sql = f"""
                         SELECT 
@@ -572,7 +572,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-跟单账号固定手数")
         def test_dbdetail_followParam5(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_5 = var_manager.get_variable("cloudTrader_user_accounts_5")
                 sql = f"""
                         SELECT 
@@ -617,7 +617,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-跟单账号修改品种")
         def test_dbdetail_templateId3(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_6 = var_manager.get_variable("cloudTrader_user_accounts_6")
 
                 sql = f"""
@@ -722,7 +722,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改净值")
         def test_dbtrader_euqit2(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_7 = var_manager.get_variable("cloudTrader_user_accounts_7")
 
                 sql = f"""
@@ -825,7 +825,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-跟单账号固定手数")
         def test_dbclose_followParam5(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_5 = var_manager.get_variable("cloudTrader_user_accounts_5")
                 sql = f"""
                         SELECT 
@@ -870,7 +870,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-跟单账号修改品种")
         def test_dbclose_templateId3(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_6 = var_manager.get_variable("cloudTrader_user_accounts_6")
 
                 sql = f"""
@@ -918,7 +918,7 @@ class Testcloudtrader_moneyandscene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改净值")
         def test_dbclose_euqit(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_7 = var_manager.get_variable("cloudTrader_user_accounts_7")
 
                 sql = f"""

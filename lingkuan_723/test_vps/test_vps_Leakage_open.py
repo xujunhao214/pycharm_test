@@ -305,7 +305,7 @@ class TestLeakageopen(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             symbol = trader_ordersend["symbol"]
@@ -512,7 +512,7 @@ class TestLeakageopen(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略开仓-补开之后检查数据")
     def test_dbquery_addsalve_detail(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_1 = var_manager.get_variable("user_accounts_1")
@@ -707,7 +707,7 @@ class TestLeakageopen(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-平仓订单详情持仓检查")
     def test_dbquery_closed_orderdetail(self, var_manager, db_transaction):
-        with allure.step("1. 检查订单详情界面的数据"):
+        with allure.step("1. 检查订单详情表的数据"):
             order_no_detail = var_manager.get_variable("order_no_detail")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -763,7 +763,7 @@ class TestLeakageopen(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-策略平仓-持仓检查跟单账号数据")
     def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             user_accounts_1 = var_manager.get_variable("user_accounts_1")

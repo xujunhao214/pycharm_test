@@ -22,6 +22,7 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",
 
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_getAccountDataPage.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderSend.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderSend2.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_cloudOrderClose.py",

@@ -53,7 +53,7 @@ class TestbargainmasOrderSend_allocation(APITestBase):
     # ---------------------------
     @allure.title("数据库校验-交易开仓-指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
             sql = f"""
                 SELECT 
@@ -163,7 +163,7 @@ class TestbargainmasOrderSend_allocation(APITestBase):
     # ---------------------------
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
             vps_cloudTrader_ids_2 = var_manager.get_variable("vps_cloudTrader_ids_2")
             sql = f"""
@@ -270,7 +270,7 @@ class TestbargainmasOrderSend_copy(APITestBase):
     # ---------------------------
     @allure.title("数据库校验-交易开仓-指令及订单详情数据检查")
     def test_dbquery_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
             sql = f"""
                 SELECT 
@@ -386,7 +386,7 @@ class TestbargainmasOrderSend_copy(APITestBase):
     # ---------------------------
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             user_accounts_cloudTrader_3 = var_manager.get_variable("user_accounts_cloudTrader_3")
             vps_cloudTrader_ids_2 = var_manager.get_variable("vps_cloudTrader_ids_2")
             sql = f"""

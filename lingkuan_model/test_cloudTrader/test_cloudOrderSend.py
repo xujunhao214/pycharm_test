@@ -52,7 +52,7 @@ class TestMasordersend_allocation(APITestBase):
 
     @allure.title("数据库校验-云策略列表-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
                 SELECT 
@@ -166,7 +166,7 @@ class TestMasordersend_allocation(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
             sql = f"""
@@ -272,7 +272,7 @@ class TestMasordersend_copy(APITestBase):
 
     @allure.title("数据库校验-云策略列表-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
                 SELECT 
@@ -393,7 +393,7 @@ class TestMasordersend_copy(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
     def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
             sql = f"""

@@ -164,7 +164,7 @@ class TestVPSOrderSend_closeaddremark(APITestBase):
 
     @allure.title("数据库校验-交易下单-指令及订单详情数据检查")
     def test_dbquery_masOrderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
                 SELECT 
@@ -408,7 +408,7 @@ class TestVPSOrderSend_closeaddremark2(APITestBase):
 
     @allure.title("数据库校验-交易下单-指令及订单详情数据检查")
     def test_dbquery_masOrderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
                 SELECT 
@@ -651,7 +651,7 @@ class TestVPSOrderSend_closeaddremark3(APITestBase):
 
     @allure.title("数据库校验-交易下单-指令及订单详情数据检查")
     def test_dbquery_masOrderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情界面跟单账号数据"):
+        with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
                 SELECT 

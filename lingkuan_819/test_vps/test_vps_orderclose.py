@@ -133,7 +133,7 @@ class TestVPSCoreFunctionality:
 
         @allure.title("数据库校验-停止平仓-平仓数量不等于开仓数量")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情界面跟单账号数据"):
+            with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
                     SELECT 
