@@ -314,16 +314,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -387,16 +389,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
@@ -725,16 +729,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -798,16 +804,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
@@ -1764,9 +1772,10 @@ class TestCloudMasOrdersend:
 
             with allure.step("2. 数据校验"):
                 with allure.step("验证指令总手数"):
-                    total_lots = db_data[0]["total_lots"]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    total_lotssum = sum(total_lots)
                     self.verify_data(
-                        actual_value=float(total_lots),
+                        actual_value=float(total_lotssum),
                         expected_value=float(5),
                         op=CompareOp.EQ,
                         message="指令总手数应符合预期",
@@ -1863,15 +1872,15 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证指令总手数"):
-                    total_lots = db_data[0]["total_lots"]
+                    true_total_lots = db_data[0]["true_total_lots"]
                     self.verify_data(
-                        actual_value=float(total_lots),
+                        actual_value=float(true_total_lots),
                         expected_value=float(5),
                         op=CompareOp.EQ,
                         message="指令总手数应符合预期",
                         attachment_name="指令总手数详情"
                     )
-                    logging.info(f"指令总手数验证通过: {total_lots}")
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]

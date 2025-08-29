@@ -21,20 +21,19 @@ def run_cloud_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_masOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend_open.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend_level.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudtrader_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudtrader_money.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_delete_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_delete.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_lianxi.py",
-
-        "--reruns", "3",
-        "--reruns-delay", "10",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_getAccountDataPage.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend2.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderClose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloud_masOrderSend.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloud_masOrderClose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrder_open_level.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudfixed_annotations.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudtrader_money_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_delete.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_lianxi.py",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
@@ -73,6 +72,6 @@ def run_cloud_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)

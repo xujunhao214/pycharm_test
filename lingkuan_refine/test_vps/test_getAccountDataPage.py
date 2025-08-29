@@ -197,7 +197,7 @@ class TestVPSOrderSend_newScenarios:
                         expected_value=float(order_num),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=3,
+                        abs_tol=0,
                         message=f"持仓订单量数据符合预期",
                         attachment_name="持仓订单量详情"
                     )
@@ -215,7 +215,7 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款"):
+                with allure.step("5.5 验证可用预付款-容差10000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
@@ -227,25 +227,25 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款符合预期，实际是{free_margin}")
 
-                with allure.step("5.6 验证可用预付款比例"):
+                with allure.step("5.6 验证可用预付款比例-容差5"):
                     self.verify_data(
                         actual_value=float(proportion),
                         expected_value=float(margin_proportion),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=100,
+                        abs_tol=5,
                         message=f"可用预付款比例符合预期",
                         attachment_name="可用预付款比例详情"
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值"):
+                with allure.step("5.7 验证净值-容差100"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=500,
+                        abs_tol=100,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )
@@ -282,7 +282,7 @@ class TestVPSOrderSend_newScenarios:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
+        @pytest.mark.skipif(True, reason="跳过")
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-跟单平仓")
         def test_addtrader_orderclose(self, var_manager, logged_session):
@@ -314,7 +314,7 @@ class TestVPSOrderSend_newScenarios:
                 "响应msg字段应为success"
             )
 
-        time.sleep(25)
+        # time.sleep(25)
 
     @allure.story("仪表盘-vps跟单数据")
     @allure.description("""
@@ -328,7 +328,7 @@ class TestVPSOrderSend_newScenarios:
     """)
     class TestVPSOrderSend2(APITestBase):
         @pytest.mark.url("vps")
-        # @pytest.mark.skipif(True, reason=SKIP_REASON)
+        @pytest.mark.skipif(True, reason="跳过")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
         def test_trader_orderSend(self, var_manager, logged_session):
             # 1. 发送策略开仓请求

@@ -1,10 +1,8 @@
 # lingkuan_828/tests/test_vps_ordersend.py
 import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_828.VAR.VAR import *
 from lingkuan_828.conftest import var_manager
 from lingkuan_828.commons.api_base import *
 
@@ -193,15 +191,31 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_cfda = [record["size"] for record in db_data]
-                var_manager.set_runtime_variable("addsalve_size_cfda", addsalve_size_cfda)
-                addsalve_size_cfda_total = sum(addsalve_size_cfda)
-                assert math.isclose(addsalve_size_cfda_total, 1.0,
-                                    rel_tol=1e-9), f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}"
-                logging.info(f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}")
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                symbol = db_data[0]["symbol"]
-                assert symbol == "XAUUSD@" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
+                with allure.step("验证币种"):
+                    symbol = db_data[0]["symbol"]
+                    self.verify_data(
+                        actual_value=symbol,
+                        expected_value=("XAUUSD@", "XAUUSD"),
+                        op=CompareOp.IN,
+                        use_isclose=False,
+                        message="币种应符合预期",
+                        attachment_name="币种详情"
+                    )
+                    logging.info(f"币种验证通过: {symbol}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种p")
@@ -245,18 +259,29 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_cfdp = [record["size"] for record in db_data]
-                var_manager.set_runtime_variable("addsalve_size_cfdp", addsalve_size_cfdp)
-                addsalve_size_cfdp_total = sum(addsalve_size_cfdp)
-                assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or
-                        math.isclose(addsalve_size_cfdp_total, 0.03, rel_tol=1e-9) or
-                        math.isclose(addsalve_size_cfdp_total, 1.0,
-                                     rel_tol=1e-9)), f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
-                logging.info(
-                    f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=(0.02, 0.03, 1.0),
+                        op=CompareOp.IN,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                symbol = db_data[0]["symbol"]
-                assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
+                with allure.step("验证币种"):
+                    symbol = db_data[0]["symbol"]
+                    self.verify_data(
+                        actual_value=symbol,
+                        expected_value=("XAUUSD.p", "XAUUSD"),
+                        op=CompareOp.IN,
+                        use_isclose=False,
+                        message="币种应符合预期",
+                        attachment_name="币种详情"
+                    )
+                    logging.info(f"币种验证通过: {symbol}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种min")
@@ -300,17 +325,29 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_cfdmin = [record["size"] for record in db_data]
-                var_manager.set_runtime_variable("addsalve_size_cfdmin", addsalve_size_cfdmin)
-                addsalve_size_cfdmin_total = sum(addsalve_size_cfdmin)
-                assert (math.isclose(addsalve_size_cfdmin_total, 10.0, rel_tol=1e-9) or
-                        math.isclose(addsalve_size_cfdmin_total, 1.0,
-                                     rel_tol=1e-9)), f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
-                logging.info(
-                    f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=(10, 1.0),
+                        op=CompareOp.IN,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                symbol = db_data[0]["symbol"]
-                assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"
+                with allure.step("验证币种"):
+                    symbol = db_data[0]["symbol"]
+                    self.verify_data(
+                        actual_value=symbol,
+                        expected_value=("XAUUSD.min", "XAUUSD"),
+                        op=CompareOp.IN,
+                        use_isclose=False,
+                        message="币种应符合预期",
+                        attachment_name="币种详情"
+                    )
+                    logging.info(f"币种验证通过: {symbol}")
 
         @allure.title("账号管理-交易下单-云策略平仓")
         def test_bargain_masOrderClose(self, logged_session, var_manager):
@@ -400,15 +437,31 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_cfda_close = [record["size"] for record in db_data]
-                var_manager.set_runtime_variable("addsalve_size_cfda_close", addsalve_size_cfda_close)
-                addsalve_size_cfda_total = sum(addsalve_size_cfda_close)
-                assert math.isclose(addsalve_size_cfda_total, 1.0,
-                                    rel_tol=1e-9), f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}"
-                logging.info(f"修改币种下单总手数应该是1，实际是：{addsalve_size_cfda_total}")
+                with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                symbol = db_data[0]["symbol"]
-                assert symbol == "XAUUSD@" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD@ 实际：{symbol}"
+                with allure.step("验证币种"):
+                    symbol = db_data[0]["symbol"]
+                    self.verify_data(
+                        actual_value=symbol,
+                        expected_value=("XAUUSD@", "XAUUSD"),
+                        op=CompareOp.IN,
+                        use_isclose=False,
+                        message="币种应符合预期",
+                        attachment_name="币种详情"
+                    )
+                    logging.info(f"币种验证通过: {symbol}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种p")
@@ -452,18 +505,29 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_cfdp_close = [record["size"] for record in db_data]
-                var_manager.set_runtime_variable("addsalve_size_cfdp_close", addsalve_size_cfdp_close)
-                addsalve_size_cfdp_total = sum(addsalve_size_cfdp_close)
-                assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or
-                        math.isclose(addsalve_size_cfdp_total, 0.03, rel_tol=1e-9) or
-                        math.isclose(addsalve_size_cfdp_total, 1.0,
-                                     rel_tol=1e-9)), f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}"
-                logging.info(
-                    f"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=(0.02, 0.03, 1.0),
+                        op=CompareOp.IN,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                symbol = db_data[0]["symbol"]
-                assert symbol == "XAUUSD.p" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.p，如果这个币种不在交易时间就是XAUUSD 实际：{symbol}"
+                with allure.step("验证币种"):
+                    symbol = db_data[0]["symbol"]
+                    self.verify_data(
+                        actual_value=symbol,
+                        expected_value=("XAUUSD.p", "XAUUSD"),
+                        op=CompareOp.IN,
+                        use_isclose=False,
+                        message="币种应符合预期",
+                        attachment_name="币种详情"
+                    )
+                    logging.info(f"币种验证通过: {symbol}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种min")
@@ -507,17 +571,29 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_cfdmin_close = [record["size"] for record in db_data]
-                var_manager.set_runtime_variable("addsalve_size_cfdmin_close", addsalve_size_cfdmin_close)
-                addsalve_size_cfdmin_total = sum(addsalve_size_cfdmin_close)
-                assert (math.isclose(addsalve_size_cfdmin_total, 10.0, rel_tol=1e-9) or
-                        math.isclose(addsalve_size_cfdmin_total, 1.0,
-                                     rel_tol=1e-9)), f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}"
-                logging.info(
-                    f"修改币种下单总手数应该是10,如果这个币种不在交易时间就是1，实际是：{addsalve_size_cfdmin_total}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=(10, 1.0),
+                        op=CompareOp.IN,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
-                symbol = db_data[0]["symbol"]
-                assert symbol == "XAUUSD.min" or symbol == "XAUUSD", f"下单的币种与预期的不一样，预期：XAUUSD.min，如果这个币种不在交易时间就是XAUUSD，实际：{symbol}"
+                with allure.step("验证币种"):
+                    symbol = db_data[0]["symbol"]
+                    self.verify_data(
+                        actual_value=symbol,
+                        expected_value=("XAUUSD.min", "XAUUSD"),
+                        op=CompareOp.IN,
+                        use_isclose=False,
+                        message="币种应符合预期",
+                        attachment_name="币种详情"
+                    )
+                    logging.info(f"币种验证通过: {symbol}")
 
             time.sleep(25)
 
@@ -610,9 +686,16 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_followParam = db_data[0]["size"]
-                assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
-                logging.info(f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)")
+                with allure.step("验证详情总手数"):
+                    size = db_data[0]["size"]
+                    self.verify_data(
+                        actual_value=float(size),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {size}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-跟单账号修改品种")
@@ -656,12 +739,17 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_templateId3 = [record["size"] for record in db_data]
-                total = sum(addsalve_size_templateId3)
-                # assert float(total) == 3, f"修改下单品种之后下单手数之和应该是3，实际是：{total}"
-                assert math.isclose(float(total), 3,
-                                    rel_tol=1e-9), f"修改下单品种之后下单手数之和应该是3，实际是：{total}"
-                logging.info(f"修改下单品种之后下单手数之和应该是3，实际是：{total}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(3),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库-获取主账号净值")
@@ -769,11 +857,18 @@ class Testcloudtrader_moneyandscene:
                 # 校验除数非零
                 if cloud_euqit == 0:
                     pytest.fail("cloud_euqit为0，无法计算预期比例（避免除零）")
-
                 true_size = cloudTrader_add_euqit / cloud_euqit * 1
-                # 断言（调整误差范围为合理值，如±0.1）
-                assert abs(total - true_size) < 3, f"size总和与预期比例偏差过大：预期{true_size}，实际{total}，误差超过3"
-                logging.info(f"预期: {true_size} 实际: {total}")
+
+                with allure.step("验证详情总手数"):
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(true_size),
+                        op=CompareOp.EQ,
+                        abs_tol=3,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-云策略平仓")
         def test_bargain_masOrderClose(self, logged_session, var_manager):
@@ -863,9 +958,17 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_followParam = db_data[0]["size"]
-                assert addsalve_size_followParam == 5, f"跟单账号实际平仓手数 (实际: {addsalve_size_followParam}, 预期: 5)"
-                logging.info(f"跟单账号实际平仓手数 (实际: {addsalve_size_followParam}, 预期: 5)")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(5),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-跟单账号修改品种")
@@ -909,11 +1012,17 @@ class Testcloudtrader_moneyandscene:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                addsalve_size_templateId3 = [record["size"] for record in db_data]
-                total = sum(addsalve_size_templateId3)
-                assert math.isclose(float(total), 3,
-                                    rel_tol=1e-9), f"修改下单品种之后下单手数之和应该是3，实际是：{total}"
-                logging.info(f"修改下单品种之后平仓手数之和应该是3，实际是：{total}")
+                with allure.step("验证详情总手数"):
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(3),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改净值")
@@ -967,8 +1076,15 @@ class Testcloudtrader_moneyandscene:
                     pytest.fail("cloud_euqit为0，无法计算预期比例（避免除零）")
 
                 true_size = cloudTrader_add_euqit / cloud_euqit * 1
-                # 断言（调整误差范围为合理值，如±0.1）
-                assert abs(total - true_size) < 3, f"size总和与预期比例偏差过大：预期{true_size}，实际{total}，误差超过3"
-                logging.info(f"预期: {true_size} 实际: {total}")
+                with allure.step("验证详情总手数"):
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(true_size),
+                        op=CompareOp.EQ,
+                        abs_tol=3,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
 
             time.sleep(25)

@@ -29,7 +29,7 @@ ENV_CONFIG = {
         "test_environment": "UAT环境",
         "browser_version": "自研跟单1.4.2",
         "base_url": "https://uat.atcp.top/api",
-        "vps_url": "https://39.99.145.155/vps",
+        "vps_url": "https://39.101.181.190/vps",
         "db_host": "39.99.241.16",
         "db_port": 3306,
     }

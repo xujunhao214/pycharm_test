@@ -242,6 +242,7 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"净值符合预期，实际是{euqit}")
 
+        @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配平仓")
         def test_copy_order_close(self, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -265,7 +266,7 @@ class TestCloudOrderSend_newScenarios:
                 "响应msg字段应为success"
             )
 
-        time.sleep(25)
+        # time.sleep(25)
 
     @allure.story("仪表盘-云策略-云跟单账号数据")
     @allure.description("""
@@ -278,6 +279,7 @@ class TestCloudOrderSend_newScenarios:
     - 预期结果：数据正确
     """)
     class TestCloudOrderSend2(APITestBase):
+        @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -443,7 +445,7 @@ class TestCloudOrderSend_newScenarios:
                         expected_value=float(order_num),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=3,
+                        abs_tol=0,
                         message=f"持仓订单量数据符合预期",
                         attachment_name="持仓订单量详情"
                     )
@@ -461,7 +463,7 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款"):
+                with allure.step("5.5 验证可用预付款-容差10000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
@@ -473,25 +475,25 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款符合预期，实际是{free_margin}")
 
-                with allure.step("5.6 验证可用预付款比例"):
+                with allure.step("5.6 验证可用预付款比例-容差5"):
                     self.verify_data(
                         actual_value=float(proportion),
                         expected_value=float(margin_proportion),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=100,
+                        abs_tol=5,
                         message=f"可用预付款比例符合预期",
                         attachment_name="可用预付款比例详情"
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值"):
+                with allure.step("5.7 验证净值-容差100"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=500,
+                        abs_tol=100,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )

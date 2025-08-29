@@ -20,20 +20,19 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_masOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_ordersend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_Leakage_level.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_Leakage_open.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_scene.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_money.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_delete.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_delete_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_lianxi.py",
-
-        "--reruns", "3",
-        "--reruns-delay", "10",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_getAccountDataPage.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_ordersend.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_ordersend2.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_orderclose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_masOrderSend.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_masOrderClose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vpsOrder_open_level.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vpsfixed_annotations.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vpsMasOrder_money_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_delete.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_lianxi.py",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",
@@ -72,6 +71,6 @@ def run_vps_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)

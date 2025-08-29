@@ -1228,7 +1228,7 @@ class APITestBase:
             attachment_type="text/plain",
             use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）
             rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）
-            abs_tol=0.0  # 绝对容差（仅当use_isclose=True时生效）
+            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）
     ):
         """
         通用数据校验函数，支持浮点容错比较
