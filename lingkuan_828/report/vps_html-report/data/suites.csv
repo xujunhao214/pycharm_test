@@ -1,5 +1,124 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Thu Aug 28 18:01:57 CST 2025","Thu Aug 28 18:01:58 CST 2025","1189","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略平仓","
+"passed","Fri Aug 29 09:31:44 CST 2025","Fri Aug 29 09:31:55 CST 2025","10613","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数5
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:34:42 CST 2025","Fri Aug 29 09:34:53 CST 2025","10565","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:42:21 CST 2025","Fri Aug 29 09:42:41 CST 2025","19444","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略平仓-修改币种@","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:37:45 CST 2025","Fri Aug 29 09:37:46 CST 2025","1192","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-开仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:25:44 CST 2025","Fri Aug 29 09:25:45 CST 2025","1310","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-buy sell方向-预期成功","
+            ### 用例说明
+            - 前置条件：有vps策略和vps跟单
+            - 操作步骤：
+              1. 进行开仓
+              2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+              3. 跟单账号buy sell方向进行平仓，平仓成功
+              4. 策略账号buy方向进行平仓
+            - 预期结果：平仓的订单方向功能正确
+            "
+"skipped","Fri Aug 29 09:46:05 CST 2025","Fri Aug 29 09:46:05 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","VPS管理-VPS列表列表-强制删除VPS",""
+"passed","Fri Aug 29 09:46:21 CST 2025","Fri Aug 29 09:46:21 CST 2025","103","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS数据-删除策略账号",""
+"skipped","Fri Aug 29 09:46:05 CST 2025","Fri Aug 29 09:46:05 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","VPS管理-VPS列表列表-清空VPS数据",""
+"passed","Fri Aug 29 09:40:21 CST 2025","Fri Aug 29 09:41:12 CST 2025","51756","test_vps","test_create_scene","TestCreate_Scene","","","数据库校验-VPS数据-批量新增跟单账号",""
+"passed","Fri Aug 29 09:38:54 CST 2025","Fri Aug 29 09:38:55 CST 2025","1200","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","修改跟单账号（场景2：有固定注释）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:15:40 CST 2025","Fri Aug 29 09:15:41 CST 2025","56","test_vps","test_create","TestCreate","","","数据库查询-提取数据库平台ID数据",""
+"passed","Fri Aug 29 09:34:01 CST 2025","Fri Aug 29 09:34:08 CST 2025","7447","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-主指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:15:53 CST 2025","Fri Aug 29 09:15:55 CST 2025","1530","test_vps","test_create","TestCreate","","","VPS管理-VPS列表-校验服务器IP是否可用",""
+"passed","Fri Aug 29 09:37:47 CST 2025","Fri Aug 29 09:37:49 CST 2025","1180","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改策略账号信息","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:37:29 CST 2025","Fri Aug 29 09:37:43 CST 2025","14386","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","出现漏开-redis数据和数据库的数据做比对","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:37:24 CST 2025","Fri Aug 29 09:37:25 CST 2025","1187","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改策略账号信息","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:15:38 CST 2025","Fri Aug 29 09:15:40 CST 2025","1556","test_vps","test_create","TestCreate","","","账号管理-账号列表-新增单个用户",""
+"passed","Fri Aug 29 09:38:36 CST 2025","Fri Aug 29 09:38:37 CST 2025","1196","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","修改跟单账号（场景1：无固定注释）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:16:34 CST 2025","Fri Aug 29 09:16:35 CST 2025","1217","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-跟单平仓","
     ### 测试说明
     - 功能校验，校验仪表盘的数据是否正确
     - 前置条件：有vps策略和vps跟单
@@ -8,7 +127,329 @@
       3. 数据正确
     - 预期结果：数据正确
     "
-"passed","Thu Aug 28 18:01:59 CST 2025","Thu Aug 28 18:02:01 CST 2025","1206","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-跟单平仓","
+"passed","Fri Aug 29 09:36:10 CST 2025","Fri Aug 29 09:36:25 CST 2025","14980","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-检查平仓订单是否出现漏平","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:26:35 CST 2025","Fri Aug 29 09:26:37 CST 2025","1299","test_vps","test_vps_orderclose","TestVPSCloseRemark","","","跟单账号平仓-正确备注-预期成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的固定注释：ceshipingcangbeizhu
+      2. 进行开仓
+      3. 跟单账号进行平仓，平仓备注写：xxxxxxxx,平仓失败，给出提示
+      4. 跟单账号进行平仓，平仓备注写：ceshipingcangbeizhu,平仓成功
+      5. 策略账号进行平仓
+    - 预期结果：平仓的备注功能正确
+    "
+"passed","Fri Aug 29 09:35:35 CST 2025","Fri Aug 29 09:35:36 CST 2025","1205","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号（漏平）","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:21:12 CST 2025","Fri Aug 29 09:21:19 CST 2025","7377","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:26:20 CST 2025","Fri Aug 29 09:26:21 CST 2025","1244","test_vps","test_vps_orderclose","TestVPSOrderType","","","策略开仓","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 进行开仓，开仓订单数量控制为1个
+          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+          3. 进行平仓，平仓的订单类型-全部订单-平仓成功
+        - 预期结果：平仓的订单类型功能正确
+        "
+"passed","Fri Aug 29 09:41:23 CST 2025","Fri Aug 29 09:41:28 CST 2025","4351","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-账号列表-修改用户是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:32:54 CST 2025","Fri Aug 29 09:33:02 CST 2025","7566","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:24:56 CST 2025","Fri Aug 29 09:25:03 CST 2025","7406","test_vps","test_vps_orderclose","TestVPSCoreFunctionality","","","数据库校验-停止平仓-平仓手数不等于开仓手数","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    "
+"passed","Fri Aug 29 09:41:50 CST 2025","Fri Aug 29 09:42:04 CST 2025","13993","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略开仓-修改币种p","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:46:19 CST 2025","Fri Aug 29 09:46:20 CST 2025","1193","test_vps","test_delete","TestDeleteUser","","","跟单软件看板-VPS数据-删除策略账号",""
+"passed","Fri Aug 29 09:18:56 CST 2025","Fri Aug 29 09:19:03 CST 2025","7363","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:22:19 CST 2025","Fri Aug 29 09:22:20 CST 2025","1184","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","跟单平仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:46:22 CST 2025","Fri Aug 29 09:46:24 CST 2025","1598","test_vps","test_delete","TestDeleteUser","","","平台管理-品种管理-删除品种","测试删除用户接口"
+"passed","Fri Aug 29 09:25:31 CST 2025","Fri Aug 29 09:25:32 CST 2025","1323","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-sell方向-预期失败","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改跟单账号的跟单方向为正向，进行开仓
+          2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+          3. 跟单账号buy方向进行平仓，平仓成功
+          4. 策略账号buy方向进行平仓
+        - 预期结果：平仓的订单方向功能正确
+        "
+"passed","Fri Aug 29 09:29:00 CST 2025","Fri Aug 29 09:29:01 CST 2025","1534","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-交易平仓","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:19:57 CST 2025","Fri Aug 29 09:20:07 CST 2025","10419","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:36:52 CST 2025","Fri Aug 29 09:36:53 CST 2025","1176","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-跟单账号自己平仓","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:25:20 CST 2025","Fri Aug 29 09:25:22 CST 2025","1299","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-sell方向-预期成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为反向，进行开仓
+      2. 跟单账号buy方向进行平仓，平仓失败，给出提示
+      3. 跟单账号sell方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    "
+"passed","Fri Aug 29 09:36:00 CST 2025","Fri Aug 29 09:36:01 CST 2025","1187","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略平仓-出现漏平","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:30:01 CST 2025","Fri Aug 29 09:30:09 CST 2025","7459","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-0.01，总手数0.01
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:41:22 CST 2025","Fri Aug 29 09:41:23 CST 2025","1187","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","账号管理-账号列表-修改用户","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:25:18 CST 2025","Fri Aug 29 09:25:19 CST 2025","1310","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-buy方向-预期失败","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为反向，进行开仓
+      2. 跟单账号buy方向进行平仓，平仓失败，给出提示
+      3. 跟单账号sell方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    "
+"passed","Fri Aug 29 09:41:31 CST 2025","Fri Aug 29 09:41:50 CST 2025","18968","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略开仓-修改币种@","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:46:24 CST 2025","Fri Aug 29 09:46:24 CST 2025","192","test_vps","test_delete","TestDeleteUser","","","数据库校验-品种管理-删除品种",""
+"passed","Fri Aug 29 09:25:23 CST 2025","Fri Aug 29 09:25:24 CST 2025","1312","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","策略账号平仓-buy方向-预期成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为反向，进行开仓
+      2. 跟单账号buy方向进行平仓，平仓失败，给出提示
+      3. 跟单账号sell方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    "
+"passed","Fri Aug 29 09:26:04 CST 2025","Fri Aug 29 09:26:05 CST 2025","1493","test_vps","test_vps_orderclose","TestVPSOrderType","","","MT4平台开仓操作","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 登录MT4账号
+      2. 使用mt4接口进行开仓
+      3. 在自研平台进行平仓-订单类型-内部订单，平仓失败
+      4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
+    - 预期结果：平仓的订单类型功能正确
+    "
+"passed","Fri Aug 29 09:44:14 CST 2025","Fri Aug 29 09:44:28 CST 2025","14434","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略开仓-修改净值","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:27:06 CST 2025","Fri Aug 29 09:27:07 CST 2025","1528","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-分配下单请求","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:26:07 CST 2025","Fri Aug 29 09:26:08 CST 2025","1298","test_vps","test_vps_orderclose","TestVPSOrderType","","","自研平台平仓-内部订单-预期失败","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 登录MT4账号
+      2. 使用mt4接口进行开仓
+      3. 在自研平台进行平仓-订单类型-内部订单，平仓失败
+      4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
+    - 预期结果：平仓的订单类型功能正确
+    "
+"passed","Fri Aug 29 09:46:28 CST 2025","Fri Aug 29 09:46:28 CST 2025","100","test_vps","test_delete","TestDeleteUser","","","数据库校验-账号列表-删除账号",""
+"passed","Fri Aug 29 09:23:22 CST 2025","Fri Aug 29 09:23:23 CST 2025","1202","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略平仓","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:37:49 CST 2025","Fri Aug 29 09:37:49 CST 2025","64","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改策略账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:29:50 CST 2025","Fri Aug 29 09:29:58 CST 2025","7375","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-0.01，总手数0.01
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"skipped","Fri Aug 29 09:15:57 CST 2025","Fri Aug 29 09:15:57 CST 2025","0","test_vps","test_create","TestCreate","","","VPS管理-VPS列表-新增vps",""
+"passed","Fri Aug 29 09:22:06 CST 2025","Fri Aug 29 09:22:07 CST 2025","1274","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","停止功能校验（场景5）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:42:56 CST 2025","Fri Aug 29 09:43:35 CST 2025","39211","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略平仓-修改币种min","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:17:14 CST 2025","Fri Aug 29 09:17:15 CST 2025","1186","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略平仓","
     ### 测试说明
     - 功能校验，校验仪表盘的数据是否正确
     - 前置条件：有vps策略和vps跟单
@@ -17,7 +458,141 @@
       3. 数据正确
     - 预期结果：数据正确
     "
-"failed","Thu Aug 28 18:01:52 CST 2025","Thu Aug 28 18:01:55 CST 2025","2328","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","仪表盘-账号数据校验","
+"passed","Fri Aug 29 09:31:04 CST 2025","Fri Aug 29 09:31:11 CST 2025","7634","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-1，总订单10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:34:40 CST 2025","Fri Aug 29 09:34:42 CST 2025","1225","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改完之后进行开仓补全","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:32:52 CST 2025","Fri Aug 29 09:32:54 CST 2025","1517","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","交易下单-停止操作","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:32:04 CST 2025","Fri Aug 29 09:32:06 CST 2025","1550","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-交易平仓","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数5
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:18:13 CST 2025","Fri Aug 29 09:18:23 CST 2025","10656","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:30:53 CST 2025","Fri Aug 29 09:31:01 CST 2025","7533","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-1，总订单10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:30:40 CST 2025","Fri Aug 29 09:30:41 CST 2025","1531","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-复制下单请求","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-1，总订单10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:31:55 CST 2025","Fri Aug 29 09:32:03 CST 2025","7473","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数5
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:25:54 CST 2025","Fri Aug 29 09:25:56 CST 2025","1321","test_vps","test_vps_orderclose","TestVPSOrderQuantityControl","","","策略平仓-第二次平仓-订单数量为1","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，开仓订单数量控制为两个
+      2. 进行平仓，平仓一个
+      3. 进行平仓，平仓一个
+      4. 进行平仓，平仓一个，平仓失败，没有可平订单
+    - 预期结果：平仓的订单数量功能正确
+    "
+"passed","Fri Aug 29 09:46:09 CST 2025","Fri Aug 29 09:46:16 CST 2025","6752","test_vps","test_delete","TestDeleteUser","","","跟单软件看板-VPS数据-批量删除跟单账号",""
+"passed","Fri Aug 29 09:25:47 CST 2025","Fri Aug 29 09:25:48 CST 2025","1313","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","策略账号平仓-buy方向-预期成功","
+            ### 用例说明
+            - 前置条件：有vps策略和vps跟单
+            - 操作步骤：
+              1. 进行开仓
+              2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+              3. 跟单账号buy sell方向进行平仓，平仓成功
+              4. 策略账号buy方向进行平仓
+            - 预期结果：平仓的订单方向功能正确
+            "
+"passed","Fri Aug 29 09:22:44 CST 2025","Fri Aug 29 09:22:46 CST 2025","1252","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略开仓","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:32:06 CST 2025","Fri Aug 29 09:32:14 CST 2025","7530","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数5
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:39:13 CST 2025","Fri Aug 29 09:39:14 CST 2025","1184","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","修改策略账号信息（场景3：开启订单备注）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:25:39 CST 2025","Fri Aug 29 09:25:40 CST 2025","1242","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","策略账号开仓操作","
+            ### 用例说明
+            - 前置条件：有vps策略和vps跟单
+            - 操作步骤：
+              1. 进行开仓
+              2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+              3. 跟单账号buy sell方向进行平仓，平仓成功
+              4. 策略账号buy方向进行平仓
+            - 预期结果：平仓的订单方向功能正确
+            "
+"passed","Fri Aug 29 09:16:32 CST 2025","Fri Aug 29 09:16:33 CST 2025","1191","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略平仓","
     ### 测试说明
     - 功能校验，校验仪表盘的数据是否正确
     - 前置条件：有vps策略和vps跟单
@@ -26,7 +601,438 @@
       3. 数据正确
     - 预期结果：数据正确
     "
-"passed","Thu Aug 28 18:01:14 CST 2025","Thu Aug 28 18:01:15 CST 2025","1247","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略开仓","
+"passed","Fri Aug 29 09:32:14 CST 2025","Fri Aug 29 09:32:44 CST 2025","29359","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数5
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:36:26 CST 2025","Fri Aug 29 09:36:40 CST 2025","14529","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","出现漏平-redis数据和数据库的数据做比对","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:27:50 CST 2025","Fri Aug 29 09:27:51 CST 2025","1514","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-分配平仓","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:34:56 CST 2025","Fri Aug 29 09:35:04 CST 2025","7477","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-主指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:15:56 CST 2025","Fri Aug 29 09:15:57 CST 2025","1496","test_vps","test_create","TestCreate","","","VPS管理-VPS列表-获取可见用户信息",""
+"passed","Fri Aug 29 09:30:42 CST 2025","Fri Aug 29 09:30:53 CST 2025","10796","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-1，总订单10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:31:02 CST 2025","Fri Aug 29 09:31:03 CST 2025","1513","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-交易平仓","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-1，总订单10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:19:15 CST 2025","Fri Aug 29 09:19:16 CST 2025","1194","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","跟单平仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:38:38 CST 2025","Fri Aug 29 09:38:47 CST 2025","8083","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","策略开仓及备注校验（场景1）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:44:30 CST 2025","Fri Aug 29 09:44:31 CST 2025","1188","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","跟单软件看板-VPS数据-策略平仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:39:41 CST 2025","Fri Aug 29 09:39:43 CST 2025","2246","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","平仓操作（场景3）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:33:11 CST 2025","Fri Aug 29 09:33:13 CST 2025","1505","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-交易平仓","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:25:58 CST 2025","Fri Aug 29 09:26:04 CST 2025","5582","test_vps","test_vps_orderclose","TestVPSOrderType","","","登录MT4账号获取token","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 登录MT4账号
+      2. 使用mt4接口进行开仓
+      3. 在自研平台进行平仓-订单类型-内部订单，平仓失败
+      4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
+    - 预期结果：平仓的订单类型功能正确
+    "
+"passed","Fri Aug 29 09:24:04 CST 2025","Fri Aug 29 09:24:06 CST 2025","1268","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略开仓","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:23:24 CST 2025","Fri Aug 29 09:23:25 CST 2025","1204","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-跟单平仓","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:46:40 CST 2025","Fri Aug 29 09:46:41 CST 2025","691","test_vps","test_delete","TestDeleteUser","","","数据库校验-账号列表-批量删除账号","数据库校验批量删除结果"
+"passed","Fri Aug 29 09:26:25 CST 2025","Fri Aug 29 09:26:26 CST 2025","1309","test_vps","test_vps_orderclose","TestVPSOrderType","","","vps策略平仓-全部订单-预期成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 进行开仓，开仓订单数量控制为1个
+          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+          3. 进行平仓，平仓的订单类型-全部订单-平仓成功
+        - 预期结果：平仓的订单类型功能正确
+        "
+"passed","Fri Aug 29 09:26:15 CST 2025","Fri Aug 29 09:26:16 CST 2025","1309","test_vps","test_vps_orderclose","TestVPSOrderType","","","vps策略平仓-外部订单-预期失败","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 进行开仓，开仓订单数量控制为1个
+          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+          3. 进行平仓，平仓的订单类型-内部订单-平仓成功
+        - 预期结果：平仓的订单类型功能正确
+        "
+"passed","Fri Aug 29 09:19:17 CST 2025","Fri Aug 29 09:19:24 CST 2025","7296","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:38:00 CST 2025","Fri Aug 29 09:38:32 CST 2025","31506","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:35:44 CST 2025","Fri Aug 29 09:35:51 CST 2025","7357","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-主指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"skipped","Fri Aug 29 09:46:05 CST 2025","Fri Aug 29 09:46:05 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS列表列表-删除VPS",""
+"skipped","Fri Aug 29 09:15:57 CST 2025","Fri Aug 29 09:15:57 CST 2025","0","test_vps","test_create","TestCreate","","","VPS管理-VPS列表-获取要复制的VPS的ID",""
+"passed","Fri Aug 29 09:33:21 CST 2025","Fri Aug 29 09:33:50 CST 2025","29356","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:24:52 CST 2025","Fri Aug 29 09:24:53 CST 2025","1355","test_vps","test_vps_orderclose","TestVPSCoreFunctionality","","","策略账号平仓-时间间隔30秒","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    "
+"passed","Fri Aug 29 09:35:42 CST 2025","Fri Aug 29 09:35:43 CST 2025","1233","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略开仓","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:42:41 CST 2025","Fri Aug 29 09:42:55 CST 2025","13806","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略平仓-修改币种p","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:24:44 CST 2025","Fri Aug 29 09:24:45 CST 2025","1525","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","VPS交易下单-分配下单请求","
+            ### 测试说明
+            - 场景校验：手数范围>总手数>订单数量
+            - 前置条件：有vps策略和vps跟单
+              1. 进行开仓，手数范围0.1-1，总手数0.01
+              2. 预期下单失败：总手数不能低于最低手数
+            - 预期结果：提示正确
+            "
+"passed","Fri Aug 29 09:31:12 CST 2025","Fri Aug 29 09:31:41 CST 2025","29351","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-1，总订单10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:25:05 CST 2025","Fri Aug 29 09:25:06 CST 2025","1304","test_vps","test_vps_orderclose","TestVPSCoreFunctionality","","","策略账号再次平仓操作","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    "
+"passed","Fri Aug 29 09:31:42 CST 2025","Fri Aug 29 09:31:44 CST 2025","1521","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-复制下单请求","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数5
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:33:13 CST 2025","Fri Aug 29 09:33:20 CST 2025","7386","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:22:59 CST 2025","Fri Aug 29 09:23:13 CST 2025","13743","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:35:04 CST 2025","Fri Aug 29 09:35:33 CST 2025","29373","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:27:41 CST 2025","Fri Aug 29 09:27:49 CST 2025","7351","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:32:45 CST 2025","Fri Aug 29 09:32:47 CST 2025","1573","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-复制下单请求","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:29:02 CST 2025","Fri Aug 29 09:29:09 CST 2025","7450","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:28:41 CST 2025","Fri Aug 29 09:28:43 CST 2025","1525","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-复制下单请求","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:25:07 CST 2025","Fri Aug 29 09:25:09 CST 2025","1189","test_vps","test_vps_orderclose","TestVPSCoreFunctionality","","","跟单账号平仓操作","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    "
+"passed","Fri Aug 29 09:25:26 CST 2025","Fri Aug 29 09:25:27 CST 2025","1189","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","修改跟单账号为正向跟单","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改跟单账号的跟单方向为正向，进行开仓
+          2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+          3. 跟单账号buy方向进行平仓，平仓成功
+          4. 策略账号buy方向进行平仓
+        - 预期结果：平仓的订单方向功能正确
+        "
+"passed","Fri Aug 29 09:26:33 CST 2025","Fri Aug 29 09:26:34 CST 2025","1305","test_vps","test_vps_orderclose","TestVPSCloseRemark","","","跟单账号平仓-错误备注-预期失败","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的固定注释：ceshipingcangbeizhu
+      2. 进行开仓
+      3. 跟单账号进行平仓，平仓备注写：xxxxxxxx,平仓失败，给出提示
+      4. 跟单账号进行平仓，平仓备注写：ceshipingcangbeizhu,平仓成功
+      5. 策略账号进行平仓
+    - 预期结果：平仓的备注功能正确
+    "
+"passed","Fri Aug 29 09:39:45 CST 2025","Fri Aug 29 09:40:20 CST 2025","35348","test_vps","test_create_scene","TestCreate_Scene","","","新增跟单账号（仅使用后6个数据与模板匹配）",""
+"passed","Fri Aug 29 09:24:17 CST 2025","Fri Aug 29 09:24:24 CST 2025","7368","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:34:09 CST 2025","Fri Aug 29 09:34:13 CST 2025","4441","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单开仓指令-根据status状态发现有漏单","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:37:51 CST 2025","Fri Aug 29 09:37:52 CST 2025","1224","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改完之后进行开仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:33:52 CST 2025","Fri Aug 29 09:33:53 CST 2025","1190","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号（漏开）","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:36:49 CST 2025","Fri Aug 29 09:36:50 CST 2025","1469","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改完之后进行平仓补全","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:25:52 CST 2025","Fri Aug 29 09:25:53 CST 2025","1299","test_vps","test_vps_orderclose","TestVPSOrderQuantityControl","","","策略平仓-第一次平仓-订单数量为1","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，开仓订单数量控制为两个
+      2. 进行平仓，平仓一个
+      3. 进行平仓，平仓一个
+      4. 进行平仓，平仓一个，平仓失败，没有可平订单
+    - 预期结果：平仓的订单数量功能正确
+    "
+"passed","Fri Aug 29 09:16:37 CST 2025","Fri Aug 29 09:16:38 CST 2025","1314","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略开仓","
     ### 测试说明
     - 功能校验，校验仪表盘的数据是否正确
     - 前置条件：有vps策略和vps跟单
@@ -35,7 +1041,49 @@
       3. 数据正确
     - 预期结果：数据正确
     "
-"passed","Thu Aug 28 18:01:16 CST 2025","Thu Aug 28 18:01:26 CST 2025","10071","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-提取数据","
+"passed","Fri Aug 29 09:44:31 CST 2025","Fri Aug 29 09:44:51 CST 2025","20053","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略平仓-跟单账号固定手数","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:25:49 CST 2025","Fri Aug 29 09:25:50 CST 2025","1245","test_vps","test_vps_orderclose","TestVPSOrderQuantityControl","","","策略开仓-订单数量为2","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，开仓订单数量控制为两个
+      2. 进行平仓，平仓一个
+      3. 进行平仓，平仓一个
+      4. 进行平仓，平仓一个，平仓失败，没有可平订单
+    - 预期结果：平仓的订单数量功能正确
+    "
+"skipped","Fri Aug 29 09:15:57 CST 2025","Fri Aug 29 09:15:57 CST 2025","0","test_vps","test_create","TestCreate","","","数据库校验-VPS列表-新增vps",""
+"passed","Fri Aug 29 09:44:52 CST 2025","Fri Aug 29 09:45:07 CST 2025","14850","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略平仓-跟单账号修改品种","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:27:27 CST 2025","Fri Aug 29 09:27:41 CST 2025","13793","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:16:18 CST 2025","Fri Aug 29 09:16:20 CST 2025","1521","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略开仓","
     ### 测试说明
     - 功能校验，校验仪表盘的数据是否正确
     - 前置条件：有vps策略和vps跟单
@@ -43,4 +1091,1021 @@
       2. 获取仪表数据，提取数据库数据，然后进行校验
       3. 数据正确
     - 预期结果：数据正确
+    "
+"skipped","Fri Aug 29 09:15:57 CST 2025","Fri Aug 29 09:15:57 CST 2025","0","test_vps","test_create","TestCreate","","","VPS管理-VPS列表-复制默认节点",""
+"passed","Fri Aug 29 09:26:22 CST 2025","Fri Aug 29 09:26:24 CST 2025","1308","test_vps","test_vps_orderclose","TestVPSOrderType","","","vps策略平仓-外部订单-预期失败","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 进行开仓，开仓订单数量控制为1个
+          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+          3. 进行平仓，平仓的订单类型-全部订单-平仓成功
+        - 预期结果：平仓的订单类型功能正确
+        "
+"passed","Fri Aug 29 09:25:28 CST 2025","Fri Aug 29 09:25:30 CST 2025","1275","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","策略账号开仓操作","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改跟单账号的跟单方向为正向，进行开仓
+          2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+          3. 跟单账号buy方向进行平仓，平仓成功
+          4. 策略账号buy方向进行平仓
+        - 预期结果：平仓的订单方向功能正确
+        "
+"passed","Fri Aug 29 09:38:48 CST 2025","Fri Aug 29 09:38:50 CST 2025","2266","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","平仓操作（场景1）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:28:43 CST 2025","Fri Aug 29 09:28:51 CST 2025","7344","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:46:08 CST 2025","Fri Aug 29 09:46:08 CST 2025","158","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS数据-删除跟单账号",""
+"passed","Fri Aug 29 09:25:34 CST 2025","Fri Aug 29 09:25:35 CST 2025","1303","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-buy方向-预期成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改跟单账号的跟单方向为正向，进行开仓
+          2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+          3. 跟单账号buy方向进行平仓，平仓成功
+          4. 策略账号buy方向进行平仓
+        - 预期结果：平仓的订单方向功能正确
+        "
+"passed","Fri Aug 29 09:17:17 CST 2025","Fri Aug 29 09:17:18 CST 2025","1231","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-跟单平仓","
+    ### 测试说明
+    - 功能校验，校验仪表盘的数据是否正确
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 获取仪表数据，提取数据库数据，然后进行校验
+      3. 数据正确
+    - 预期结果：数据正确
+    "
+"passed","Fri Aug 29 09:16:29 CST 2025","Fri Aug 29 09:16:30 CST 2025","1592","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","仪表盘-账号数据校验","
+    ### 测试说明
+    - 功能校验，校验仪表盘的数据是否正确
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 获取仪表数据，提取数据库数据，然后进行校验
+      3. 数据正确
+    - 预期结果：数据正确
+    "
+"passed","Fri Aug 29 09:25:42 CST 2025","Fri Aug 29 09:25:43 CST 2025","1294","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-sell方向-预期失败","
+            ### 用例说明
+            - 前置条件：有vps策略和vps跟单
+            - 操作步骤：
+              1. 进行开仓
+              2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+              3. 跟单账号buy sell方向进行平仓，平仓成功
+              4. 策略账号buy方向进行平仓
+            - 预期结果：平仓的订单方向功能正确
+            "
+"passed","Fri Aug 29 09:15:45 CST 2025","Fri Aug 29 09:15:45 CST 2025","64","test_vps","test_create","TestCreate","","","数据库校验-账号列表-批量新增用户",""
+"passed","Fri Aug 29 09:15:51 CST 2025","Fri Aug 29 09:15:52 CST 2025","294","test_vps","test_create","TestCreate","","","数据库校验-品种管理-添加品种",""
+"passed","Fri Aug 29 09:26:38 CST 2025","Fri Aug 29 09:27:04 CST 2025","26320","test_vps","test_vps_orderclose","TestVPSCloseRemark","","","策略账号平仓-正确备注","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的固定注释：ceshipingcangbeizhu
+      2. 进行开仓
+      3. 跟单账号进行平仓，平仓备注写：xxxxxxxx,平仓失败，给出提示
+      4. 跟单账号进行平仓，平仓备注写：ceshipingcangbeizhu,平仓成功
+      5. 策略账号进行平仓
+    - 预期结果：平仓的备注功能正确
+    "
+"passed","Fri Aug 29 09:25:10 CST 2025","Fri Aug 29 09:25:11 CST 2025","1275","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","修改跟单账号为反向跟单","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为反向，进行开仓
+      2. 跟单账号buy方向进行平仓，平仓失败，给出提示
+      3. 跟单账号sell方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    "
+"passed","Fri Aug 29 09:15:49 CST 2025","Fri Aug 29 09:15:51 CST 2025","1574","test_vps","test_create","TestCreate","","","平台管理-品种管理-添加品种",""
+"passed","Fri Aug 29 09:38:57 CST 2025","Fri Aug 29 09:39:08 CST 2025","11072","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","策略开仓及备注校验（场景2）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:43:36 CST 2025","Fri Aug 29 09:43:37 CST 2025","1261","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","跟单软件看板-VPS数据-策略开仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:36:02 CST 2025","Fri Aug 29 09:36:09 CST 2025","7380","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-主指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:34:33 CST 2025","Fri Aug 29 09:34:34 CST 2025","1192","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:17:58 CST 2025","Fri Aug 29 09:17:59 CST 2025","1200","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","跟单平仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:37:52 CST 2025","Fri Aug 29 09:37:57 CST 2025","4377","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:41:14 CST 2025","Fri Aug 29 09:41:20 CST 2025","6708","test_vps","test_create_scene","TestCreate_Scene","","","修改跟单账号（仅使用后6个数据与模板匹配）",""
+"passed","Fri Aug 29 09:33:02 CST 2025","Fri Aug 29 09:33:10 CST 2025","7447","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:34:54 CST 2025","Fri Aug 29 09:34:56 CST 2025","1197","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略平仓","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:23:13 CST 2025","Fri Aug 29 09:23:21 CST 2025","7328","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:22:17 CST 2025","Fri Aug 29 09:22:18 CST 2025","1177","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略平仓（场景5）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:37:58 CST 2025","Fri Aug 29 09:38:00 CST 2025","1203","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略平仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:24:06 CST 2025","Fri Aug 29 09:24:17 CST 2025","10615","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:20:20 CST 2025","Fri Aug 29 09:20:28 CST 2025","7379","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:26:09 CST 2025","Fri Aug 29 09:26:11 CST 2025","1391","test_vps","test_vps_orderclose","TestVPSOrderType","","","自研平台平仓-外部订单-预期成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 登录MT4账号
+      2. 使用mt4接口进行开仓
+      3. 在自研平台进行平仓-订单类型-内部订单，平仓失败
+      4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
+    - 预期结果：平仓的订单类型功能正确
+    "
+"passed","Fri Aug 29 09:21:01 CST 2025","Fri Aug 29 09:21:11 CST 2025","10529","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:41:29 CST 2025","Fri Aug 29 09:41:30 CST 2025","1233","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","跟单软件看板-VPS数据-策略开仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:19:55 CST 2025","Fri Aug 29 09:19:57 CST 2025","1259","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略开仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:20:59 CST 2025","Fri Aug 29 09:21:00 CST 2025","1249","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略开仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:24:47 CST 2025","Fri Aug 29 09:24:48 CST 2025","1519","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","VPS交易下单-分配下单请求","
+            ### 测试说明
+            - 场景校验：手数范围>总手数>订单数量
+            - 前置条件：有vps策略和vps跟单
+              1. 进行开仓，手数范围0.1-1，总手数2
+              2. 预期下单失败：下单失败，请检查下单参数
+            - 预期结果：提示正确
+            "
+"passed","Fri Aug 29 09:17:47 CST 2025","Fri Aug 29 09:17:55 CST 2025","7298","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:45:07 CST 2025","Fri Aug 29 09:46:02 CST 2025","54484","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略平仓-修改净值","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:20:28 CST 2025","Fri Aug 29 09:20:58 CST 2025","29347","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:16:09 CST 2025","Fri Aug 29 09:16:16 CST 2025","7599","test_vps","test_create","TestCreate","","","跟单软件看板-VPS数据-新增跟单账号",""
+"passed","Fri Aug 29 09:23:26 CST 2025","Fri Aug 29 09:23:33 CST 2025","7419","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:46:03 CST 2025","Fri Aug 29 09:46:05 CST 2025","1518","test_vps","test_delete","TestDeleteUser","","","账号管理-组别列表-删除VPS组别",""
+"passed","Fri Aug 29 09:36:43 CST 2025","Fri Aug 29 09:36:47 CST 2025","4307","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:24:28 CST 2025","Fri Aug 29 09:24:30 CST 2025","1182","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-跟单平仓","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:26:17 CST 2025","Fri Aug 29 09:26:19 CST 2025","1306","test_vps","test_vps_orderclose","TestVPSOrderType","","","vps策略平仓-内部订单-预期成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 进行开仓，开仓订单数量控制为1个
+          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+          3. 进行平仓，平仓的订单类型-内部订单-平仓成功
+        - 预期结果：平仓的订单类型功能正确
+        "
+"passed","Fri Aug 29 09:36:53 CST 2025","Fri Aug 29 09:37:23 CST 2025","29365","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:18:54 CST 2025","Fri Aug 29 09:18:56 CST 2025","1239","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略开仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:19:24 CST 2025","Fri Aug 29 09:19:54 CST 2025","29552","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:28:00 CST 2025","Fri Aug 29 09:28:29 CST 2025","29359","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:26:27 CST 2025","Fri Aug 29 09:26:29 CST 2025","1201","test_vps","test_vps_orderclose","TestVPSCloseRemark","","","修改跟单账号固定注释","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的固定注释：ceshipingcangbeizhu
+      2. 进行开仓
+      3. 跟单账号进行平仓，平仓备注写：xxxxxxxx,平仓失败，给出提示
+      4. 跟单账号进行平仓，平仓备注写：ceshipingcangbeizhu,平仓成功
+      5. 策略账号进行平仓
+    - 预期结果：平仓的备注功能正确
+    "
+"passed","Fri Aug 29 09:15:59 CST 2025","Fri Aug 29 09:16:07 CST 2025","8360","test_vps","test_create","TestCreate","","","跟单软件看板-VPS数据-新增策略账号",""
+"passed","Fri Aug 29 09:16:20 CST 2025","Fri Aug 29 09:16:27 CST 2025","7006","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-提取数据","
+    ### 测试说明
+    - 功能校验，校验仪表盘的数据是否正确
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 获取仪表数据，提取数据库数据，然后进行校验
+      3. 数据正确
+    - 预期结果：数据正确
+    "
+"passed","Fri Aug 29 09:37:26 CST 2025","Fri Aug 29 09:37:26 CST 2025","50","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改策略账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:25:15 CST 2025","Fri Aug 29 09:25:16 CST 2025","1195","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","跟单账号平仓-币种错误","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为反向，进行开仓
+      2. 跟单账号buy方向进行平仓，平仓失败，给出提示
+      3. 跟单账号sell方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    "
+"passed","Fri Aug 29 09:27:52 CST 2025","Fri Aug 29 09:28:00 CST 2025","7873","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:22:03 CST 2025","Fri Aug 29 09:22:05 CST 2025","1257","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略开仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:39:18 CST 2025","Fri Aug 29 09:39:29 CST 2025","11135","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","策略开仓及备注校验（场景3）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:26:12 CST 2025","Fri Aug 29 09:26:13 CST 2025","1245","test_vps","test_vps_orderclose","TestVPSOrderType","","","策略开仓","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 进行开仓，开仓订单数量控制为1个
+          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+          3. 进行平仓，平仓的订单类型-内部订单-平仓成功
+        - 预期结果：平仓的订单类型功能正确
+        "
+"failed","Fri Aug 29 09:17:11 CST 2025","Fri Aug 29 09:17:13 CST 2025","1622","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","仪表盘-账号数据校验","
+    ### 测试说明
+    - 功能校验，校验仪表盘的数据是否正确
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 获取仪表数据，提取数据库数据，然后进行校验
+      3. 数据正确
+    - 预期结果：数据正确
+    "
+"passed","Fri Aug 29 09:28:51 CST 2025","Fri Aug 29 09:28:59 CST 2025","7402","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:16:07 CST 2025","Fri Aug 29 09:16:08 CST 2025","52","test_vps","test_create","TestCreate","","","数据库校验-VPS数据-新增策略账号",""
+"passed","Fri Aug 29 09:35:51 CST 2025","Fri Aug 29 09:35:59 CST 2025","7363","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:29:41 CST 2025","Fri Aug 29 09:29:42 CST 2025","1572","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-复制下单请求","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-0.01，总手数0.01
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:39:15 CST 2025","Fri Aug 29 09:39:16 CST 2025","1199","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","修改跟单账号（场景3：无固定注释）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:42:20 CST 2025","Fri Aug 29 09:42:21 CST 2025","1180","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","跟单软件看板-VPS数据-策略平仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:29:10 CST 2025","Fri Aug 29 09:29:39 CST 2025","29357","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:46:06 CST 2025","Fri Aug 29 09:46:08 CST 2025","1218","test_vps","test_delete","TestDeleteUser","","","跟单软件看板-VPS数据-删除跟单账号",""
+"passed","Fri Aug 29 09:38:33 CST 2025","Fri Aug 29 09:38:34 CST 2025","1175","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","修改策略账号信息（场景1）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:15:40 CST 2025","Fri Aug 29 09:15:40 CST 2025","50","test_vps","test_create","TestCreate","","","数据库校验-账号列表-新增用户",""
+"passed","Fri Aug 29 09:44:13 CST 2025","Fri Aug 29 09:44:13 CST 2025","50","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库-获取主账号净值","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:19:04 CST 2025","Fri Aug 29 09:19:11 CST 2025","7377","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:15:46 CST 2025","Fri Aug 29 09:15:47 CST 2025","1513","test_vps","test_create","TestCreate","","","账号管理-组别列表-新增VPS组别",""
+"passed","Fri Aug 29 09:16:17 CST 2025","Fri Aug 29 09:16:17 CST 2025","111","test_vps","test_create","TestCreate","","","数据库校验-VPS数据-新增跟单账号",""
+"passed","Fri Aug 29 09:46:17 CST 2025","Fri Aug 29 09:46:18 CST 2025","915","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS数据-批量删除跟单账号",""
+"passed","Fri Aug 29 09:32:47 CST 2025","Fri Aug 29 09:32:51 CST 2025","4372","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库查询-获取停止的order_no","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+      2. 点击停止
+      3. 校验账号的下单总手数和数据库的手数，应该不相等
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:21:32 CST 2025","Fri Aug 29 09:22:02 CST 2025","29402","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:17:33 CST 2025","Fri Aug 29 09:17:47 CST 2025","13548","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:22:08 CST 2025","Fri Aug 29 09:22:15 CST 2025","7462","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:34:14 CST 2025","Fri Aug 29 09:34:29 CST 2025","14798","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","出现漏开-redis数据和数据库的数据做比对","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:25:57 CST 2025","Fri Aug 29 09:25:58 CST 2025","1319","test_vps","test_vps_orderclose","TestVPSOrderQuantityControl","","","策略平仓-第三次平仓-空单验证","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，开仓订单数量控制为两个
+      2. 进行平仓，平仓一个
+      3. 进行平仓，平仓一个
+      4. 进行平仓，平仓一个，平仓失败，没有可平订单
+    - 预期结果：平仓的订单数量功能正确
+    "
+"passed","Fri Aug 29 09:39:09 CST 2025","Fri Aug 29 09:39:11 CST 2025","2291","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","平仓操作（场景2）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:33:53 CST 2025","Fri Aug 29 09:33:58 CST 2025","4303","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:46:29 CST 2025","Fri Aug 29 09:46:40 CST 2025","10703","test_vps","test_delete","TestDeleteUser","","","账号管理-账号列表-批量删除账号","测试批量删除用户接口"
+"passed","Fri Aug 29 09:17:19 CST 2025","Fri Aug 29 09:17:20 CST 2025","1245","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略开仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:23:34 CST 2025","Fri Aug 29 09:24:03 CST 2025","29340","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.6-1，总手数1
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确，权重正确
+    "
+"passed","Fri Aug 29 09:18:24 CST 2025","Fri Aug 29 09:18:53 CST 2025","29365","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:24:38 CST 2025","Fri Aug 29 09:24:42 CST 2025","4358","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:15:42 CST 2025","Fri Aug 29 09:15:44 CST 2025","2156","test_vps","test_create","TestCreate","","","账号管理-账号列表-批量新增用户",""
+"skipped","Fri Aug 29 09:46:05 CST 2025","Fri Aug 29 09:46:05 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","VPS管理-VPS列表列表-删除VPS数据",""
+"passed","Fri Aug 29 09:21:23 CST 2025","Fri Aug 29 09:21:24 CST 2025","1194","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","跟单平仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:33:59 CST 2025","Fri Aug 29 09:34:00 CST 2025","1239","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略开仓-出现漏单","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:43:38 CST 2025","Fri Aug 29 09:43:58 CST 2025","19992","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略开仓-跟单账号固定手数5","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:16:39 CST 2025","Fri Aug 29 09:16:46 CST 2025","7130","test_vps","test_getAccountDataPage","TestVPSOrderSend_newScenarios","","","数据库校验-策略开仓-提取数据","
+    ### 测试说明
+    - 功能校验，校验仪表盘的数据是否正确
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数1
+      2. 获取仪表数据，提取数据库数据，然后进行校验
+      3. 数据正确
+    - 预期结果：数据正确
+    "
+"passed","Fri Aug 29 09:24:26 CST 2025","Fri Aug 29 09:24:27 CST 2025","1176","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","跟单软件看板-VPS数据-策略平仓","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:36:41 CST 2025","Fri Aug 29 09:36:43 CST 2025","1201","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号（漏平）","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:24:50 CST 2025","Fri Aug 29 09:24:51 CST 2025","1238","test_vps","test_vps_orderclose","TestVPSCoreFunctionality","","","策略账号开仓操作","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    "
+"passed","Fri Aug 29 09:37:27 CST 2025","Fri Aug 29 09:37:28 CST 2025","1248","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略开仓-出现漏单","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Fri Aug 29 09:26:30 CST 2025","Fri Aug 29 09:26:31 CST 2025","1258","test_vps","test_vps_orderclose","TestVPSCloseRemark","","","策略开仓-带固定备注","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的固定注释：ceshipingcangbeizhu
+      2. 进行开仓
+      3. 跟单账号进行平仓，平仓备注写：xxxxxxxx,平仓失败，给出提示
+      4. 跟单账号进行平仓，平仓备注写：ceshipingcangbeizhu,平仓成功
+      5. 策略账号进行平仓
+    - 预期结果：平仓的备注功能正确
+    "
+"passed","Fri Aug 29 09:20:08 CST 2025","Fri Aug 29 09:20:15 CST 2025","7308","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-跟单指令开仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:29:43 CST 2025","Fri Aug 29 09:29:50 CST 2025","7432","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易下单-主指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-0.01，总手数0.01
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:25:36 CST 2025","Fri Aug 29 09:25:38 CST 2025","1297","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","策略账号平仓-buy方向-预期成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改跟单账号的跟单方向为正向，进行开仓
+          2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+          3. 跟单账号buy方向进行平仓，平仓成功
+          4. 策略账号buy方向进行平仓
+        - 预期结果：平仓的订单方向功能正确
+        "
+"passed","Fri Aug 29 09:21:25 CST 2025","Fri Aug 29 09:21:32 CST 2025","7388","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","数据库校验-主指令平仓数据","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:21:20 CST 2025","Fri Aug 29 09:21:22 CST 2025","1200","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略平仓（场景4）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:20:19 CST 2025","Fri Aug 29 09:20:20 CST 2025","1212","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","跟单平仓","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:38:52 CST 2025","Fri Aug 29 09:38:53 CST 2025","1181","test_vps","test_vpsfixed_annotations","TestVPSOrderSend_AllRemarkScenarios","","","修改策略账号信息（场景2）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单，验证三种备注场景的跟单行为
+- 三种场景：
+  1. 策略有固定注释，跟单无固定注释 → 预期：跟单取策略备注
+  2. 策略有固定注释，跟单有固定注释 → 预期：跟单取自身备注
+  3. 策略开启订单备注，跟单无固定注释 → 预期：跟单取开仓备注
+"
+"passed","Fri Aug 29 09:42:05 CST 2025","Fri Aug 29 09:42:18 CST 2025","13906","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略开仓-修改币种min","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号的后缀.@ .p .min
+      2. 进行开仓
+      3. 判断三个账号的币种手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的币种手数是否正确
+    - 预期结果：三个账号的币种手数正确
+    "
+"passed","Fri Aug 29 09:15:48 CST 2025","Fri Aug 29 09:15:48 CST 2025","50","test_vps","test_create","TestCreate","","","数据库校验-组别列表-新增VPS组别",""
+"passed","Fri Aug 29 09:24:30 CST 2025","Fri Aug 29 09:24:38 CST 2025","7607","test_vps","test_vps_ordersend2","TestVPSOrderSend_newScenarios","","","数据库校验-策略平仓-主指令及订单详情数据检查","
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5
+      2. 校验权重，优先满足手数范围，然后是总手数
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：权重正确，优先满足手数范围，然后是总手数
+    "
+"passed","Fri Aug 29 09:25:13 CST 2025","Fri Aug 29 09:25:14 CST 2025","1248","test_vps","test_vps_orderclose","TestVPSFollowDirection","","","策略账号开仓操作","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为反向，进行开仓
+      2. 跟单账号buy方向进行平仓，平仓失败，给出提示
+      3. 跟单账号sell方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    "
+"passed","Fri Aug 29 09:46:05 CST 2025","Fri Aug 29 09:46:05 CST 2025","95","test_vps","test_delete","TestDeleteUser","","","数据库校验-组别列表-删除VPS组别",""
+"passed","Fri Aug 29 09:29:59 CST 2025","Fri Aug 29 09:30:01 CST 2025","1548","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","VPS交易下单-交易平仓","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-0.01，总手数0.01
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:46:26 CST 2025","Fri Aug 29 09:46:27 CST 2025","1540","test_vps","test_delete","TestDeleteUser","","","账号管理-账号列表-删除账号","测试删除用户接口"
+"passed","Fri Aug 29 09:20:16 CST 2025","Fri Aug 29 09:20:17 CST 2025","1201","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略平仓（场景3）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:17:56 CST 2025","Fri Aug 29 09:17:57 CST 2025","1187","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略平仓（场景1）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:44:14 CST 2025","Fri Aug 29 09:44:14 CST 2025","52","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库-获取跟单账号净值","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
+    "
+"passed","Fri Aug 29 09:35:36 CST 2025","Fri Aug 29 09:35:41 CST 2025","4306","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号平仓-关闭
+          2. 进行开仓
+          3. 进行平仓
+          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          5. 修改vps跟单账号平仓-开启
+        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:30:09 CST 2025","Fri Aug 29 09:30:38 CST 2025","29343","test_vps","test_vps_masOrderSend","TestVPSMasOrdersend","","","数据库校验-交易平仓-跟单指令及订单详情数据检查","
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.01-0.01，总手数0.01
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    "
+"passed","Fri Aug 29 09:34:30 CST 2025","Fri Aug 29 09:34:31 CST 2025","1284","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-开仓补全","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:24:54 CST 2025","Fri Aug 29 09:24:56 CST 2025","1248","test_vps","test_vps_orderclose","TestVPSCoreFunctionality","","","平仓停止功能验证","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，手数：0.01-1，总订单数量5
+      2. 进行平仓，平仓时间修改为30秒
+      3. 点击平仓的停止按钮，校验平仓订单数量不等于下单数量
+      4. 再次进行平仓
+    - 预期结果：平仓的停止功能正确
+    "
+"passed","Fri Aug 29 09:19:12 CST 2025","Fri Aug 29 09:19:14 CST 2025","1180","test_vps","test_vps_ordersend","TestVPSOrderSend_AllScenarios","","","策略平仓（场景2）","
+### 用例说明
+- 前置条件：有vps策略和vps跟单
+- 包含五种开仓场景，验证不同参数组合下的订单数据正确性
+- 场景1：手数范围0.1-1，总订单3，总手数1
+- 场景2：手数范围0.01-0.01，总手数0.01
+- 场景3：手数范围0.1-1，总手数5
+- 场景4：手数范围0.01-1，总订单10
+- 场景5：手数范围0.1-1，总手数1-停止功能
+"
+"passed","Fri Aug 29 09:34:34 CST 2025","Fri Aug 29 09:34:39 CST 2025","4394","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+        ### 用例说明
+        - 前置条件：有vps策略和vps跟单
+        - 操作步骤：
+          1. 修改vps跟单账号开仓-关闭
+          2. 进行开仓
+          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+          4. 修改vps跟单账号开仓-开启
+          5. 进行补单操作，然后平仓
+        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+        "
+"passed","Fri Aug 29 09:43:58 CST 2025","Fri Aug 29 09:44:13 CST 2025","14361","test_vps","test_vpsMasOrder_money_scene","TestVPSMasOrder_money_scene","","","数据库校验-策略开仓-跟单账号修改品种","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 有三个账号，分别修改三个账号：固定手数 品种 净值比例
+      2. 进行开仓
+      3. 判断三个账号的手数是否正确
+      4. 进行平仓
+      5. 判断三个账号的手数是否正确
+    - 预期结果：三个账号的手数正确
     "

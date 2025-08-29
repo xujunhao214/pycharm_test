@@ -1,0 +1,613 @@
+{
+  "uid" : "775175b42e2da2fb",
+  "name" : "数据库校验-云跟单账号策略平仓-修改币种p",
+  "fullName" : "test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_money#test_dbclose_cfdp",
+  "historyId" : "3c81c7e8d4325331f3ef0909166b72d7",
+  "time" : {
+    "start" : 1756432795400,
+    "stop" : 1756432802440,
+    "duration" : 7040
+  },
+  "description" : "\n    ### 用例说明\n    - 前置条件：有云策略和云跟单\n    - 操作步骤：\n      1. 有三个账号，分别修改三个账号的后缀.@ .p .min\n      2. 进行开仓\n      3. 判断三个账号的币种手数是否正确\n      4. 进行平仓\n      5. 判断三个账号的币种手数是否正确\n    - 预期结果：三个账号的币种手数正确\n    ",
+  "descriptionHtml" : "<pre><code>### 用例说明\n- 前置条件：有云策略和云跟单\n- 操作步骤：\n  1. 有三个账号，分别修改三个账号的后缀.@ .p .min\n  2. 进行开仓\n  3. 判断三个账号的币种手数是否正确\n  4. 进行平仓\n  5. 判断三个账号的币种手数是否正确\n- 预期结果：三个账号的币种手数正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nassert (False or False or False)\n +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose",
+  "statusTrace" : "self = <lingkuan_828.test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_moneyandscene.Testcloudtrader_money object at 0x0000012EF6132D90>\nvar_manager = <lingkuan_828.commons.variable_manager.VariableManager object at 0x0000012EF7623640>\ndb_transaction = <pymysql.connections.Connection object at 0x0000012EF6322D90>\n\n    @allure.title(\"数据库校验-云跟单账号策略平仓-修改币种p\")\n    def test_dbclose_cfdp(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            cloudTrader_user_accounts_9 = var_manager.get_variable(\"cloudTrader_user_accounts_9\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type=%s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '1',\n                cloudTrader_user_accounts_9,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfdp_close = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfdp_close\", addsalve_size_cfdp_close)\n            addsalve_size_cfdp_total = sum(addsalve_size_cfdp_close)\n>           assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or\n                    math.isclose(addsalve_size_cfdp_total, 0.03, rel_tol=1e-9) or\n                    math.isclose(addsalve_size_cfdp_total, 1.0,\n                                 rel_tol=1e-9)), f\"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}\"\nE           AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nE           assert (False or False or False)\nE            +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\n\ntest_cloudTrader\\test_cloudtrader_money_scene.py:458: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1756432795400,
+      "stop" : 1756432795400,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1756432794961,
+      "stop" : 1756432795399,
+      "duration" : 438
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 用例说明\n    - 前置条件：有云策略和云跟单\n    - 操作步骤：\n      1. 有三个账号，分别修改三个账号的后缀.@ .p .min\n      2. 进行开仓\n      3. 判断三个账号的币种手数是否正确\n      4. 进行平仓\n      5. 判断三个账号的币种手数是否正确\n    - 预期结果：三个账号的币种手数正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nassert (False or False or False)\n +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose",
+    "statusTrace" : "self = <lingkuan_828.test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_moneyandscene.Testcloudtrader_money object at 0x0000012EF6132D90>\nvar_manager = <lingkuan_828.commons.variable_manager.VariableManager object at 0x0000012EF7623640>\ndb_transaction = <pymysql.connections.Connection object at 0x0000012EF6322D90>\n\n    @allure.title(\"数据库校验-云跟单账号策略平仓-修改币种p\")\n    def test_dbclose_cfdp(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            cloudTrader_user_accounts_9 = var_manager.get_variable(\"cloudTrader_user_accounts_9\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type=%s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '1',\n                cloudTrader_user_accounts_9,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n    \n        with allure.step(\"2. 校验数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            addsalve_size_cfdp_close = [record[\"size\"] for record in db_data]\n            var_manager.set_runtime_variable(\"addsalve_size_cfdp_close\", addsalve_size_cfdp_close)\n            addsalve_size_cfdp_total = sum(addsalve_size_cfdp_close)\n>           assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or\n                    math.isclose(addsalve_size_cfdp_total, 0.03, rel_tol=1e-9) or\n                    math.isclose(addsalve_size_cfdp_total, 1.0,\n                                 rel_tol=1e-9)), f\"修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：{addsalve_size_cfdp_total}\"\nE           AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nE           assert (False or False or False)\nE            +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\nE            +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\nE            +    where <built-in function isclose> = math.isclose\n\ntest_cloudTrader\\test_cloudtrader_money_scene.py:458: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情表账号数据",
+      "time" : {
+        "start" : 1756432795400,
+        "stop" : 1756432802439,
+        "duration" : 7039
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756432795400,
+          "stop" : 1756432802439,
+          "duration" : 7039
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432795449,
+            "stop" : 1756432796388,
+            "duration" : 939
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432795449,
+              "stop" : 1756432796388,
+              "duration" : 939
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "282a1ba808672f70",
+              "name" : "执行SQL",
+              "source" : "282a1ba808672f70.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "6d519d57810fde21",
+              "name" : "SQL参数",
+              "source" : "6d519d57810fde21.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "fcffe48b9bbd5bd0",
+            "name" : "查询条件",
+            "source" : "fcffe48b9bbd5bd0.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待1.0秒）",
+          "time" : {
+            "start" : 1756432796388,
+            "stop" : 1756432796390,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "fccdcb557c9a708e",
+            "name" : "当前状态",
+            "source" : "fccdcb557c9a708e.txt",
+            "type" : "text/plain",
+            "size" : 16
+          }, {
+            "uid" : "98483f2583825b91",
+            "name" : "超时倒计时",
+            "source" : "98483f2583825b91.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1756432796390,
+            "stop" : 1756432796391,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9f424ca166ef40bf",
+            "name" : "判断结果",
+            "source" : "9f424ca166ef40bf.txt",
+            "type" : "text/plain",
+            "size" : 36
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据发生变化",
+          "time" : {
+            "start" : 1756432796391,
+            "stop" : 1756432796392,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "49ad6115083f7a90",
+            "name" : "状态说明",
+            "source" : "49ad6115083f7a90.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432798441,
+            "stop" : 1756432799427,
+            "duration" : 986
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432798441,
+              "stop" : 1756432799427,
+              "duration" : 986
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "ebe001dc40fbe6c9",
+              "name" : "执行SQL",
+              "source" : "ebe001dc40fbe6c9.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "724fc277d938970d",
+              "name" : "SQL参数",
+              "source" : "724fc277d938970d.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "94fa078b7c27daaf",
+            "name" : "查询条件",
+            "source" : "94fa078b7c27daaf.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待4.0秒）",
+          "time" : {
+            "start" : 1756432799427,
+            "stop" : 1756432799428,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "5744a68504398d44",
+            "name" : "当前状态",
+            "source" : "5744a68504398d44.txt",
+            "type" : "text/plain",
+            "size" : 16
+          }, {
+            "uid" : "a04f3e1f1c0d9418",
+            "name" : "超时倒计时",
+            "source" : "a04f3e1f1c0d9418.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1756432799428,
+            "stop" : 1756432799429,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4c6ae2b23d9cfb9a",
+            "name" : "判断结果",
+            "source" : "4c6ae2b23d9cfb9a.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据首次稳定",
+          "time" : {
+            "start" : 1756432799429,
+            "stop" : 1756432799429,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ddca98e0e5cf1a59",
+            "name" : "状态说明",
+            "source" : "ddca98e0e5cf1a59.txt",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432801484,
+            "stop" : 1756432802437,
+            "duration" : 953
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432801484,
+              "stop" : 1756432802437,
+              "duration" : 953
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "1838e02f4991995e",
+              "name" : "执行SQL",
+              "source" : "1838e02f4991995e.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "8e27772807471a78",
+              "name" : "SQL参数",
+              "source" : "8e27772807471a78.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "b0f865bfc7315286",
+            "name" : "查询条件",
+            "source" : "b0f865bfc7315286.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待7.0秒）",
+          "time" : {
+            "start" : 1756432802437,
+            "stop" : 1756432802438,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "e754395854b9c427",
+            "name" : "当前状态",
+            "source" : "e754395854b9c427.txt",
+            "type" : "text/plain",
+            "size" : 16
+          }, {
+            "uid" : "d1f90bbdd9a188a4",
+            "name" : "超时倒计时",
+            "source" : "d1f90bbdd9a188a4.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1756432802438,
+            "stop" : 1756432802438,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c3fa2c9ca2c657be",
+            "name" : "判断结果",
+            "source" : "c3fa2c9ca2c657be.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据稳定达标",
+          "time" : {
+            "start" : 1756432802438,
+            "stop" : 1756432802438,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "69ed906cfd6484e2",
+            "name" : "结果说明",
+            "source" : "69ed906cfd6484e2.txt",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据库查询结果（最终稳定结果）",
+          "time" : {
+            "start" : 1756432802438,
+            "stop" : 1756432802439,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "963056b58a1a239",
+            "name" : "查询结果（共31条，显示前50条）",
+            "source" : "963056b58a1a239.json",
+            "type" : "application/json",
+            "size" : 7966
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ {
+          "uid" : "e0840288d496a5bd",
+          "name" : "执行SQL",
+          "source" : "e0840288d496a5bd.txt",
+          "type" : "text/plain",
+          "size" : 831
+        }, {
+          "uid" : "14eb4b92a6e3d09a",
+          "name" : "SQL参数",
+          "source" : "14eb4b92a6e3d09a.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "3dc6b336f618bda4",
+          "name" : "时间范围",
+          "source" : "3dc6b336f618bda4.txt",
+          "type" : "text/plain",
+          "size" : 7
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 16,
+        "hasContent" : true,
+        "attachmentsCount" : 25,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 17,
+      "hasContent" : true,
+      "attachmentsCount" : 25,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 校验数据",
+      "time" : {
+        "start" : 1756432802439,
+        "stop" : 1756432802440,
+        "duration" : 1
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nassert (False or False or False)\n +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_828\\test_cloudTrader\\test_cloudtrader_money_scene.py\", line 458, in test_dbclose_cfdp\n    assert (math.isclose(addsalve_size_cfdp_total, 0.02, rel_tol=1e-9) or\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "36dabc809dd513d",
+      "name" : "log",
+      "source" : "36dabc809dd513d.txt",
+      "type" : "text/plain",
+      "size" : 96927
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 19,
+    "hasContent" : true,
+    "attachmentsCount" : 26,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1756432802452,
+      "stop" : 1756432802452,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1756432802454,
+      "stop" : 1756432802454,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略-云策略列表-修改跟单账号"
+  }, {
+    "name" : "story",
+    "value" : "场景1：云策略-云策略列表-云跟单账号修改币种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudtrader_money_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "Testcloudtrader_moneyandscene"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "21760-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudtrader_money_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ {
+      "uid" : "589d8e5321789fea",
+      "status" : "failed",
+      "statusDetails" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nassert (False or False or False)\n +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose",
+      "time" : {
+        "start" : 1756432782921,
+        "stop" : 1756432789938,
+        "duration" : 7017
+      }
+    }, {
+      "uid" : "70bd3d8fd2c1bb6c",
+      "status" : "failed",
+      "statusDetails" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nassert (False or False or False)\n +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose",
+      "time" : {
+        "start" : 1756432770258,
+        "stop" : 1756432777454,
+        "duration" : 7196
+      }
+    }, {
+      "uid" : "588445c25d4bee08",
+      "status" : "failed",
+      "statusDetails" : "AssertionError: 修改币种下单总手数应该是0.02或者0.03，如果币种不在交易时间就是1，实际是：21.0\nassert (False or False or False)\n +  where False = <built-in function isclose>(21.0, 0.02, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 0.03, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose\n +  and   False = <built-in function isclose>(21.0, 1.0, rel_tol=1e-09)\n +    where <built-in function isclose> = math.isclose",
+      "time" : {
+        "start" : 1756432757698,
+        "stop" : 1756432764686,
+        "duration" : 6988
+      }
+    } ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "775175b42e2da2fb.json",
+  "parameterValues" : [ ]
+}

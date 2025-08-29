@@ -1,0 +1,1320 @@
+{
+  "uid" : "a61ca49e09dfb8e2",
+  "name" : "数据库校验-云跟单账号策略平仓-修改币种min",
+  "fullName" : "test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_money#test_dbclose_cfdmin",
+  "historyId" : "6359ccabb8273f8c7a83639d40aa27a9",
+  "time" : {
+    "start" : 1756432913252,
+    "stop" : 1756432944357,
+    "duration" : 31105
+  },
+  "description" : "\n    ### 用例说明\n    - 前置条件：有云策略和云跟单\n    - 操作步骤：\n      1. 有三个账号，分别修改三个账号的后缀.@ .p .min\n      2. 进行开仓\n      3. 判断三个账号的币种手数是否正确\n      4. 进行平仓\n      5. 判断三个账号的币种手数是否正确\n    - 预期结果：三个账号的币种手数正确\n    ",
+  "descriptionHtml" : "<pre><code>### 用例说明\n- 前置条件：有云策略和云跟单\n- 操作步骤：\n  1. 有三个账号，分别修改三个账号的后缀.@ .p .min\n  2. 进行开仓\n  3. 判断三个账号的币种手数是否正确\n  4. 进行平仓\n  5. 判断三个账号的币种手数是否正确\n- 预期结果：三个账号的币种手数正确\n</code></pre>\n",
+  "status" : "broken",
+  "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+  "statusTrace" : "self = <lingkuan_828.test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_moneyandscene.Testcloudtrader_money object at 0x0000012EF60B1D00>\nvar_manager = <lingkuan_828.commons.variable_manager.VariableManager object at 0x0000012EF7623640>\ndb_transaction = <pymysql.connections.Connection object at 0x0000012EF771C0A0>\n\n    @allure.title(\"数据库校验-云跟单账号策略平仓-修改币种min\")\n    def test_dbclose_cfdmin(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            cloudTrader_user_accounts_10 = var_manager.get_variable(\"cloudTrader_user_accounts_10\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type=%s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '1',\n                cloudTrader_user_accounts_10,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n\ntest_cloudTrader\\test_cloudtrader_money_scene.py:499: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_828.test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_moneyandscene.Testcloudtrader_money object at 0x0000012EF60B1D00>\ndb_transaction = <pymysql.connections.Connection object at 0x0000012EF771C0A0>\nsql = '\\n                        SELECT \\n                            fod.size,\\n                            fod.close_no,\\n...           WHERE foi.operation_type=%s\\n                            AND fod.account = %s\\n                            '\nparams = ('1', '300169'), time_field = 'foi.create_time', time_range = 1\norder_by = 'create_time DESC', timeout = 30, poll_interval = 2\nstable_period = 2, attach_to_allure = True\n\n    def query_database_with_time(\n            self,\n            db_transaction: pymysql.connections.Connection,\n            sql: str,\n            params: tuple = (),\n            time_field: Optional[str] = None,\n            time_range: int = MYSQL_TIME,\n            order_by: str = \"create_time DESC\",\n            timeout: int = WAIT_TIMEOUT,\n            poll_interval: int = POLL_INTERVAL,\n            stable_period: int = STBLE_PERIOD,\n            attach_to_allure: bool = True\n    ) -> List[Dict[str, Any]]:\n        \"\"\"轮询等待数据库记录稳定（带Allure分层提示）\"\"\"\n        start_time = time.time()\n        last_result = None\n        stable_start_time = None\n        final_result = None\n        has_data = False\n    \n        logger.info(\n            f\"[{self._get_current_time()}] 开始轮询等待数据稳定 | 超时: {timeout}秒 | 稳定期: {stable_period}秒\")\n    \n        with allure.step(f\"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）\"):\n            allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n            allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n            allure.attach(f\"{time_range}分钟\", \"时间范围\", allure.attachment_type.TEXT)\n    \n            while time.time() - start_time < timeout:\n                try:\n                    db_transaction.commit()  # 刷新事务\n    \n                    # 执行单次查询（带时间范围或不带）\n                    result = self._execute_query(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params,\n                        time_field=time_field,\n                        order_by=order_by,\n                        time_range=time_range,\n                        attach_to_allure=False  # 轮询过程中不附加完整报告\n                    )\n    \n                    # 记录轮询状态\n                    elapsed = time.time() - start_time\n                    with allure.step(f\"轮询中（已等待{elapsed:.1f}秒）\"):\n                        allure.attach(f\"结果数量: {len(result)}\", \"当前状态\", allure.attachment_type.TEXT)\n                        allure.attach(f\"剩余时间: {timeout - elapsed:.1f}秒\", \"超时倒计时\", allure.attachment_type.TEXT)\n    \n                    # 检查数据是否稳定\n                    if len(result) > 0:\n                        has_data = True\n                        if self._is_result_stable(result, last_result):\n                            if stable_start_time is None:\n                                stable_start_time = time.time()\n                                logger.debug(f\"[{self._get_current_time()}] 数据首次稳定，开始计时\")\n                                with allure.step(\"数据首次稳定\"):\n                                    allure.attach(f\"开始稳定期计时（需保持{stable_period}秒）\", \"状态说明\",\n                                                  allure.attachment_type.TEXT)\n                            elif time.time() - stable_start_time >= stable_period:\n                                final_result = result\n                                logger.info(\n                                    f\"[{self._get_current_time()}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| \"\n                                    f\"结果数: {len(result)}\"\n                                )\n                                with allure.step(\"数据稳定达标\"):\n                                    allure.attach(f\"已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）\",\n                                                  \"结果说明\", allure.attachment_type.TEXT)\n                                break\n                        else:\n                            stable_start_time = None  # 数据变化，重置计时器\n                            logger.debug(f\"[{self._get_current_time()}] 数据仍在变化，重置稳定计时器\")\n                            with allure.step(\"数据发生变化\"):\n                                allure.attach(\"重置稳定期计时器\", \"状态说明\", allure.attachment_type.TEXT)\n                    else:\n                        stable_start_time = None\n                        has_data = False\n                        logger.debug(f\"[{self._get_current_time()}] 查询结果为空，继续等待\")\n                        with allure.step(\"查询结果为空\"):\n                            allure.attach(\"继续等待数据出现\", \"状态说明\", allure.attachment_type.TEXT)\n    \n                    last_result = result\n                    time.sleep(poll_interval)\n    \n                except Exception as e:\n                    with allure.step(\"轮询查询异常（单次查询失败）\"):\n                        allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n                        allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                        allure.attach(str(e), \"错误详情\", allure.attachment_type.TEXT)\n                    logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                    time.sleep(poll_interval)\n    \n            # 超时处理：获取最终结果\n            if final_result is None:\n                with allure.step(\"轮询超时处理\"):\n                    allure.attach(f\"超过{timeout}秒未达到稳定状态，获取最终结果\", \"处理说明\",\n                                  allure.attachment_type.TEXT)\n                final_result = self._execute_query(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    time_field=time_field,\n                    order_by=order_by,\n                    time_range=time_range,\n                    attach_to_allure=attach_to_allure\n                )\n    \n            # 附加最终结果到报告\n            if attach_to_allure:\n                display_count = min(len(final_result), 50)\n                with allure.step(\"数据库查询结果（最终稳定结果）\"):\n                    allure.attach(\n                        self.serialize_data(final_result[:display_count]),\n                        f\"查询结果（共{len(final_result)}条，显示前50条）\",\n                        allure.attachment_type.JSON\n                    )\n    \n            # 判断超时场景\n            if len(final_result) == 0:\n                with allure.step(\"轮询超时（无结果）\"):\n                    allure.attach(f\"等待{timeout}秒后仍无查询结果\", \"超时详情\", allure.attachment_type.TEXT)\n                error_msg = f\"Failed: 等待记录出现超时（{timeout}秒）\"\n>               raise TimeoutError(error_msg)\nE               TimeoutError: Failed: 等待记录出现超时（30秒）\n\ncommons\\api_base.py:635: TimeoutError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1756432913252,
+      "stop" : 1756432913252,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1756432912822,
+      "stop" : 1756432913252,
+      "duration" : 430
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 用例说明\n    - 前置条件：有云策略和云跟单\n    - 操作步骤：\n      1. 有三个账号，分别修改三个账号的后缀.@ .p .min\n      2. 进行开仓\n      3. 判断三个账号的币种手数是否正确\n      4. 进行平仓\n      5. 判断三个账号的币种手数是否正确\n    - 预期结果：三个账号的币种手数正确\n    ",
+    "status" : "broken",
+    "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+    "statusTrace" : "self = <lingkuan_828.test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_moneyandscene.Testcloudtrader_money object at 0x0000012EF60B1D00>\nvar_manager = <lingkuan_828.commons.variable_manager.VariableManager object at 0x0000012EF7623640>\ndb_transaction = <pymysql.connections.Connection object at 0x0000012EF771C0A0>\n\n    @allure.title(\"数据库校验-云跟单账号策略平仓-修改币种min\")\n    def test_dbclose_cfdmin(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            cloudTrader_user_accounts_10 = var_manager.get_variable(\"cloudTrader_user_accounts_10\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type=%s\n                        AND fod.account = %s\n                        \"\"\"\n            params = (\n                '1',\n                cloudTrader_user_accounts_10,\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n\ntest_cloudTrader\\test_cloudtrader_money_scene.py:499: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_828.test_cloudTrader.test_cloudtrader_money_scene.Testcloudtrader_moneyandscene.Testcloudtrader_money object at 0x0000012EF60B1D00>\ndb_transaction = <pymysql.connections.Connection object at 0x0000012EF771C0A0>\nsql = '\\n                        SELECT \\n                            fod.size,\\n                            fod.close_no,\\n...           WHERE foi.operation_type=%s\\n                            AND fod.account = %s\\n                            '\nparams = ('1', '300169'), time_field = 'foi.create_time', time_range = 1\norder_by = 'create_time DESC', timeout = 30, poll_interval = 2\nstable_period = 2, attach_to_allure = True\n\n    def query_database_with_time(\n            self,\n            db_transaction: pymysql.connections.Connection,\n            sql: str,\n            params: tuple = (),\n            time_field: Optional[str] = None,\n            time_range: int = MYSQL_TIME,\n            order_by: str = \"create_time DESC\",\n            timeout: int = WAIT_TIMEOUT,\n            poll_interval: int = POLL_INTERVAL,\n            stable_period: int = STBLE_PERIOD,\n            attach_to_allure: bool = True\n    ) -> List[Dict[str, Any]]:\n        \"\"\"轮询等待数据库记录稳定（带Allure分层提示）\"\"\"\n        start_time = time.time()\n        last_result = None\n        stable_start_time = None\n        final_result = None\n        has_data = False\n    \n        logger.info(\n            f\"[{self._get_current_time()}] 开始轮询等待数据稳定 | 超时: {timeout}秒 | 稳定期: {stable_period}秒\")\n    \n        with allure.step(f\"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）\"):\n            allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n            allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n            allure.attach(f\"{time_range}分钟\", \"时间范围\", allure.attachment_type.TEXT)\n    \n            while time.time() - start_time < timeout:\n                try:\n                    db_transaction.commit()  # 刷新事务\n    \n                    # 执行单次查询（带时间范围或不带）\n                    result = self._execute_query(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=params,\n                        time_field=time_field,\n                        order_by=order_by,\n                        time_range=time_range,\n                        attach_to_allure=False  # 轮询过程中不附加完整报告\n                    )\n    \n                    # 记录轮询状态\n                    elapsed = time.time() - start_time\n                    with allure.step(f\"轮询中（已等待{elapsed:.1f}秒）\"):\n                        allure.attach(f\"结果数量: {len(result)}\", \"当前状态\", allure.attachment_type.TEXT)\n                        allure.attach(f\"剩余时间: {timeout - elapsed:.1f}秒\", \"超时倒计时\", allure.attachment_type.TEXT)\n    \n                    # 检查数据是否稳定\n                    if len(result) > 0:\n                        has_data = True\n                        if self._is_result_stable(result, last_result):\n                            if stable_start_time is None:\n                                stable_start_time = time.time()\n                                logger.debug(f\"[{self._get_current_time()}] 数据首次稳定，开始计时\")\n                                with allure.step(\"数据首次稳定\"):\n                                    allure.attach(f\"开始稳定期计时（需保持{stable_period}秒）\", \"状态说明\",\n                                                  allure.attachment_type.TEXT)\n                            elif time.time() - stable_start_time >= stable_period:\n                                final_result = result\n                                logger.info(\n                                    f\"[{self._get_current_time()}] 数据已稳定{stable_period}秒（耗时{time.time() - start_time:.1f}秒）| \"\n                                    f\"结果数: {len(result)}\"\n                                )\n                                with allure.step(\"数据稳定达标\"):\n                                    allure.attach(f\"已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）\",\n                                                  \"结果说明\", allure.attachment_type.TEXT)\n                                break\n                        else:\n                            stable_start_time = None  # 数据变化，重置计时器\n                            logger.debug(f\"[{self._get_current_time()}] 数据仍在变化，重置稳定计时器\")\n                            with allure.step(\"数据发生变化\"):\n                                allure.attach(\"重置稳定期计时器\", \"状态说明\", allure.attachment_type.TEXT)\n                    else:\n                        stable_start_time = None\n                        has_data = False\n                        logger.debug(f\"[{self._get_current_time()}] 查询结果为空，继续等待\")\n                        with allure.step(\"查询结果为空\"):\n                            allure.attach(\"继续等待数据出现\", \"状态说明\", allure.attachment_type.TEXT)\n    \n                    last_result = result\n                    time.sleep(poll_interval)\n    \n                except Exception as e:\n                    with allure.step(\"轮询查询异常（单次查询失败）\"):\n                        allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n                        allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                        allure.attach(str(e), \"错误详情\", allure.attachment_type.TEXT)\n                    logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                    time.sleep(poll_interval)\n    \n            # 超时处理：获取最终结果\n            if final_result is None:\n                with allure.step(\"轮询超时处理\"):\n                    allure.attach(f\"超过{timeout}秒未达到稳定状态，获取最终结果\", \"处理说明\",\n                                  allure.attachment_type.TEXT)\n                final_result = self._execute_query(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    time_field=time_field,\n                    order_by=order_by,\n                    time_range=time_range,\n                    attach_to_allure=attach_to_allure\n                )\n    \n            # 附加最终结果到报告\n            if attach_to_allure:\n                display_count = min(len(final_result), 50)\n                with allure.step(\"数据库查询结果（最终稳定结果）\"):\n                    allure.attach(\n                        self.serialize_data(final_result[:display_count]),\n                        f\"查询结果（共{len(final_result)}条，显示前50条）\",\n                        allure.attachment_type.JSON\n                    )\n    \n            # 判断超时场景\n            if len(final_result) == 0:\n                with allure.step(\"轮询超时（无结果）\"):\n                    allure.attach(f\"等待{timeout}秒后仍无查询结果\", \"超时详情\", allure.attachment_type.TEXT)\n                error_msg = f\"Failed: 等待记录出现超时（{timeout}秒）\"\n>               raise TimeoutError(error_msg)\nE               TimeoutError: Failed: 等待记录出现超时（30秒）\n\ncommons\\api_base.py:635: TimeoutError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情表账号数据",
+      "time" : {
+        "start" : 1756432913252,
+        "stop" : 1756432944357,
+        "duration" : 31105
+      },
+      "status" : "broken",
+      "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_828\\test_cloudTrader\\test_cloudtrader_money_scene.py\", line 499, in test_dbclose_cfdmin\n    db_data = self.query_database_with_time(\n  File \"D:\\pycharm_test\\lingkuan_828\\commons\\api_base.py\", line 635, in query_database_with_time\n    raise TimeoutError(error_msg)\n",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756432913253,
+          "stop" : 1756432944357,
+          "duration" : 31104
+        },
+        "status" : "broken",
+        "statusMessage" : "TimeoutError: Failed: 等待记录出现超时（30秒）\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_828\\commons\\api_base.py\", line 635, in query_database_with_time\n    raise TimeoutError(error_msg)\n",
+        "steps" : [ {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432913301,
+            "stop" : 1756432914236,
+            "duration" : 935
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432913301,
+              "stop" : 1756432914236,
+              "duration" : 935
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "d5f6ee92d3e15a7c",
+              "name" : "执行SQL",
+              "source" : "d5f6ee92d3e15a7c.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "5061f8d7763f412",
+              "name" : "SQL参数",
+              "source" : "5061f8d7763f412.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "a3d1eb2f10da1869",
+            "name" : "查询条件",
+            "source" : "a3d1eb2f10da1869.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待1.0秒）",
+          "time" : {
+            "start" : 1756432914236,
+            "stop" : 1756432914237,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "138c947a3cd0c",
+            "name" : "当前状态",
+            "source" : "138c947a3cd0c.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "a811012000d6c40f",
+            "name" : "超时倒计时",
+            "source" : "a811012000d6c40f.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432914237,
+            "stop" : 1756432914237,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bfddc581ce86f6e2",
+            "name" : "状态说明",
+            "source" : "bfddc581ce86f6e2.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432916296,
+            "stop" : 1756432917314,
+            "duration" : 1018
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432916297,
+              "stop" : 1756432917314,
+              "duration" : 1017
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "3da760a94231e6d9",
+              "name" : "执行SQL",
+              "source" : "3da760a94231e6d9.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "60d3b42350def734",
+              "name" : "SQL参数",
+              "source" : "60d3b42350def734.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "1bc21d0daa30ee79",
+            "name" : "查询条件",
+            "source" : "1bc21d0daa30ee79.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待4.1秒）",
+          "time" : {
+            "start" : 1756432917314,
+            "stop" : 1756432917315,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "85687a7e17d4b39",
+            "name" : "当前状态",
+            "source" : "85687a7e17d4b39.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "f793f783b4bf6a8d",
+            "name" : "超时倒计时",
+            "source" : "f793f783b4bf6a8d.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432917315,
+            "stop" : 1756432917315,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "5f4b686f6c08294",
+            "name" : "状态说明",
+            "source" : "5f4b686f6c08294.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432919373,
+            "stop" : 1756432920279,
+            "duration" : 906
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432919373,
+              "stop" : 1756432920279,
+              "duration" : 906
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "8a3ca925af90b147",
+              "name" : "执行SQL",
+              "source" : "8a3ca925af90b147.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "d14f4eefbdf1b292",
+              "name" : "SQL参数",
+              "source" : "d14f4eefbdf1b292.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "2f2c0f1a7f601c9f",
+            "name" : "查询条件",
+            "source" : "2f2c0f1a7f601c9f.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待7.0秒）",
+          "time" : {
+            "start" : 1756432920279,
+            "stop" : 1756432920280,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "178f75ef91805f7c",
+            "name" : "当前状态",
+            "source" : "178f75ef91805f7c.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "ad7a47372d9a6b1d",
+            "name" : "超时倒计时",
+            "source" : "ad7a47372d9a6b1d.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432920280,
+            "stop" : 1756432920281,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "7160442d8bf6df06",
+            "name" : "状态说明",
+            "source" : "7160442d8bf6df06.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432922339,
+            "stop" : 1756432923344,
+            "duration" : 1005
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432922340,
+              "stop" : 1756432923344,
+              "duration" : 1004
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "3e14edb0bcc19406",
+              "name" : "执行SQL",
+              "source" : "3e14edb0bcc19406.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "7c28a95258491e9",
+              "name" : "SQL参数",
+              "source" : "7c28a95258491e9.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "ce61ecac098eb4ca",
+            "name" : "查询条件",
+            "source" : "ce61ecac098eb4ca.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待10.1秒）",
+          "time" : {
+            "start" : 1756432923344,
+            "stop" : 1756432923345,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "debaec2ab63a4a7",
+            "name" : "当前状态",
+            "source" : "debaec2ab63a4a7.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "7ed9f9532225b194",
+            "name" : "超时倒计时",
+            "source" : "7ed9f9532225b194.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432923346,
+            "stop" : 1756432923346,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c7f8c98f1629a700",
+            "name" : "状态说明",
+            "source" : "c7f8c98f1629a700.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432925394,
+            "stop" : 1756432926316,
+            "duration" : 922
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432925394,
+              "stop" : 1756432926316,
+              "duration" : 922
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "3405060f1b8eb6f7",
+              "name" : "执行SQL",
+              "source" : "3405060f1b8eb6f7.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "3b2d01a16290da9b",
+              "name" : "SQL参数",
+              "source" : "3b2d01a16290da9b.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "8238647d89434c87",
+            "name" : "查询条件",
+            "source" : "8238647d89434c87.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待13.1秒）",
+          "time" : {
+            "start" : 1756432926316,
+            "stop" : 1756432926317,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "2871e56693a15ca1",
+            "name" : "当前状态",
+            "source" : "2871e56693a15ca1.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "f009a6cc6c916d11",
+            "name" : "超时倒计时",
+            "source" : "f009a6cc6c916d11.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432926317,
+            "stop" : 1756432926317,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "f72f72e77aaae86c",
+            "name" : "状态说明",
+            "source" : "f72f72e77aaae86c.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432928364,
+            "stop" : 1756432929356,
+            "duration" : 992
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432928364,
+              "stop" : 1756432929356,
+              "duration" : 992
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "380355245b7ccd00",
+              "name" : "执行SQL",
+              "source" : "380355245b7ccd00.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "bdb9248406026ece",
+              "name" : "SQL参数",
+              "source" : "bdb9248406026ece.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "bcc35ae3826bcd02",
+            "name" : "查询条件",
+            "source" : "bcc35ae3826bcd02.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待16.1秒）",
+          "time" : {
+            "start" : 1756432929356,
+            "stop" : 1756432929357,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "6d32796ad8b1cd0a",
+            "name" : "当前状态",
+            "source" : "6d32796ad8b1cd0a.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "959065ca364a4aa",
+            "name" : "超时倒计时",
+            "source" : "959065ca364a4aa.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432929357,
+            "stop" : 1756432929357,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "d85ff560b9daa80f",
+            "name" : "状态说明",
+            "source" : "d85ff560b9daa80f.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432931413,
+            "stop" : 1756432932358,
+            "duration" : 945
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432931414,
+              "stop" : 1756432932358,
+              "duration" : 944
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "be771de0c6db76f8",
+              "name" : "执行SQL",
+              "source" : "be771de0c6db76f8.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "e48883ad6ff915e",
+              "name" : "SQL参数",
+              "source" : "e48883ad6ff915e.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "3933acff67052b17",
+            "name" : "查询条件",
+            "source" : "3933acff67052b17.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待19.1秒）",
+          "time" : {
+            "start" : 1756432932358,
+            "stop" : 1756432932359,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "fbde492c983ec7b3",
+            "name" : "当前状态",
+            "source" : "fbde492c983ec7b3.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "d2275349ee217cae",
+            "name" : "超时倒计时",
+            "source" : "d2275349ee217cae.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432932359,
+            "stop" : 1756432932359,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "570f0564aa25fab9",
+            "name" : "状态说明",
+            "source" : "570f0564aa25fab9.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432934407,
+            "stop" : 1756432935396,
+            "duration" : 989
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432934407,
+              "stop" : 1756432935396,
+              "duration" : 989
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "25e4b53ac0a57667",
+              "name" : "执行SQL",
+              "source" : "25e4b53ac0a57667.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "baef744908b246ec",
+              "name" : "SQL参数",
+              "source" : "baef744908b246ec.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "5e7b428ae2444f3b",
+            "name" : "查询条件",
+            "source" : "5e7b428ae2444f3b.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待22.1秒）",
+          "time" : {
+            "start" : 1756432935396,
+            "stop" : 1756432935397,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "90564fdd2edc8e27",
+            "name" : "当前状态",
+            "source" : "90564fdd2edc8e27.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "f5710b55860ed280",
+            "name" : "超时倒计时",
+            "source" : "f5710b55860ed280.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432935397,
+            "stop" : 1756432935397,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "3f0e66289434a1b4",
+            "name" : "状态说明",
+            "source" : "3f0e66289434a1b4.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432937456,
+            "stop" : 1756432938367,
+            "duration" : 911
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432937456,
+              "stop" : 1756432938367,
+              "duration" : 911
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "bab60e4acf54a86c",
+              "name" : "执行SQL",
+              "source" : "bab60e4acf54a86c.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "c7d199ea3351ac05",
+              "name" : "SQL参数",
+              "source" : "c7d199ea3351ac05.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "e80f707039351a3f",
+            "name" : "查询条件",
+            "source" : "e80f707039351a3f.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待25.1秒）",
+          "time" : {
+            "start" : 1756432938367,
+            "stop" : 1756432938367,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "58a955c916386bf0",
+            "name" : "当前状态",
+            "source" : "58a955c916386bf0.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "b579bcc930092094",
+            "name" : "超时倒计时",
+            "source" : "b579bcc930092094.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432938367,
+            "stop" : 1756432938368,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "8be8baa79175d9dc",
+            "name" : "状态说明",
+            "source" : "8be8baa79175d9dc.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432940428,
+            "stop" : 1756432941430,
+            "duration" : 1002
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432940428,
+              "stop" : 1756432941430,
+              "duration" : 1002
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "f39f16c92a29d818",
+              "name" : "执行SQL",
+              "source" : "f39f16c92a29d818.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "1d026d27910c65a2",
+              "name" : "SQL参数",
+              "source" : "1d026d27910c65a2.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 0,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "d37e64a948d1257b",
+            "name" : "查询条件",
+            "source" : "d37e64a948d1257b.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 1,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待28.2秒）",
+          "time" : {
+            "start" : 1756432941430,
+            "stop" : 1756432941431,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "f6e400abc334c85f",
+            "name" : "当前状态",
+            "source" : "f6e400abc334c85f.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "d521139063b7ab4a",
+            "name" : "超时倒计时",
+            "source" : "d521139063b7ab4a.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "查询结果为空",
+          "time" : {
+            "start" : 1756432941431,
+            "stop" : 1756432941431,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c6aec4c04a465d89",
+            "name" : "状态说明",
+            "source" : "c6aec4c04a465d89.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询超时处理",
+          "time" : {
+            "start" : 1756432943441,
+            "stop" : 1756432943441,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "3be7393ecec4e9d0",
+            "name" : "处理说明",
+            "source" : "3be7393ecec4e9d0.txt",
+            "type" : "text/plain",
+            "size" : 53
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756432943441,
+            "stop" : 1756432944356,
+            "duration" : 915
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756432943442,
+              "stop" : 1756432944356,
+              "duration" : 914
+            },
+            "status" : "passed",
+            "steps" : [ {
+              "name" : "数据库查询结果",
+              "time" : {
+                "start" : 1756432944356,
+                "stop" : 1756432944356,
+                "duration" : 0
+              },
+              "status" : "passed",
+              "steps" : [ ],
+              "attachments" : [ {
+                "uid" : "11af82cd828102f1",
+                "name" : "查询结果（共0条，显示前50条）",
+                "source" : "11af82cd828102f1.json",
+                "type" : "application/json",
+                "size" : 2
+              } ],
+              "parameters" : [ ],
+              "hasContent" : true,
+              "stepsCount" : 0,
+              "attachmentsCount" : 1,
+              "shouldDisplayMessage" : false
+            } ],
+            "attachments" : [ {
+              "uid" : "7b1d06a7666db380",
+              "name" : "执行SQL",
+              "source" : "7b1d06a7666db380.txt",
+              "type" : "text/plain",
+              "size" : 945
+            }, {
+              "uid" : "855526596afa5d13",
+              "name" : "SQL参数",
+              "source" : "855526596afa5d13.txt",
+              "type" : "text/plain",
+              "size" : 21
+            } ],
+            "parameters" : [ ],
+            "hasContent" : true,
+            "stepsCount" : 1,
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "b27f8fb93a79a4c6",
+            "name" : "查询条件",
+            "source" : "b27f8fb93a79a4c6.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 2,
+          "attachmentsCount" : 4,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据库查询结果（最终稳定结果）",
+          "time" : {
+            "start" : 1756432944356,
+            "stop" : 1756432944357,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9cad8d8d33ca0311",
+            "name" : "查询结果（共0条，显示前50条）",
+            "source" : "9cad8d8d33ca0311.json",
+            "type" : "application/json",
+            "size" : 2
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询超时（无结果）",
+          "time" : {
+            "start" : 1756432944357,
+            "stop" : 1756432944357,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "6b2bcdfb5e1cc947",
+            "name" : "超时详情",
+            "source" : "6b2bcdfb5e1cc947.txt",
+            "type" : "text/plain",
+            "size" : 32
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ {
+          "uid" : "4c5dfbf20bd837b0",
+          "name" : "执行SQL",
+          "source" : "4c5dfbf20bd837b0.txt",
+          "type" : "text/plain",
+          "size" : 831
+        }, {
+          "uid" : "42cf4714e3f8aebe",
+          "name" : "SQL参数",
+          "source" : "42cf4714e3f8aebe.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "4c5cf7c19f584fa2",
+          "name" : "时间范围",
+          "source" : "4c5cf7c19f584fa2.txt",
+          "type" : "text/plain",
+          "size" : 7
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 46,
+        "attachmentsCount" : 70,
+        "shouldDisplayMessage" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 47,
+      "attachmentsCount" : 70,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "697daa00cb39136a",
+      "name" : "log",
+      "source" : "697daa00cb39136a.txt",
+      "type" : "text/plain",
+      "size" : 56739
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 48,
+    "attachmentsCount" : 71,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1756432944377,
+      "stop" : 1756432944377,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1756432944378,
+      "stop" : 1756432944378,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略-云策略列表-修改跟单账号"
+  }, {
+    "name" : "story",
+    "value" : "场景1：云策略-云策略列表-云跟单账号修改币种"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudtrader_money_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "Testcloudtrader_moneyandscene"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "21760-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudtrader_money_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ {
+      "uid" : "289866a103c8fd02",
+      "status" : "broken",
+      "statusDetails" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+      "time" : {
+        "start" : 1756432876419,
+        "stop" : 1756432907786,
+        "duration" : 31367
+      }
+    }, {
+      "uid" : "82e5203bf95ad9a7",
+      "status" : "broken",
+      "statusDetails" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+      "time" : {
+        "start" : 1756432839508,
+        "stop" : 1756432870952,
+        "duration" : 31444
+      }
+    }, {
+      "uid" : "8a0a4baf09f9721e",
+      "status" : "broken",
+      "statusDetails" : "TimeoutError: Failed: 等待记录出现超时（30秒）",
+      "time" : {
+        "start" : 1756432802896,
+        "stop" : 1756432834002,
+        "duration" : 31106
+      }
+    } ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "a61ca49e09dfb8e2.json",
+  "parameterValues" : [ ]
+}

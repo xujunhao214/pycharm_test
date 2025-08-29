@@ -1,0 +1,78 @@
+INFO     lingkuan_828.commons.api_base:api_base.py:849 [2025-08-29 09:29:00] 开始轮询等待无记录 | SQL: 
+                           SELECT 
+                               fod.size,
+                               fod.close_no,
+                               fod.magical,
+                               fod | 超时: 30秒 | 稳定期: 2秒
+INFO     lingkuan_828.commons.api_base:api_base.py:451 [2025-08-29 09:29:00] 执行SQL: 
+                           SELECT 
+                               fod.size,
+                               fod.close_no,
+                               fod.magical,
+                               fod.open_price,
+                               fod.symbol,
+                               fod.order_no,
+                               foi.true_total_lots,
+                               foi.order_no,
+                               foi.operation_type,
+                               foi.create_time,
+                               foi.status,
+                               foi.min_lot_size,
+                               foi.max_lot_size,
+                               foi.total_lots,
+                               foi.master_order,
+                               foi.total_orders
+                           FROM 
+                               follow_order_detail fod
+                           INNER JOIN 
+                               follow_order_instruct foi 
+                           ON 
+                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                           WHERE foi.operation_type = %s
+                               AND fod.account = %s
+                               AND fod.trader_id = %s
+                               AND foi.total_orders = %s
+                        AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
+参数: ('1', '300162', 7220, '4', 1, 1)
+INFO     lingkuan_828.commons.api_base:api_base.py:454 [2025-08-29 09:29:00] 查询成功，结果数量: 0
+INFO     lingkuan_828.commons.api_base:api_base.py:466 [2025-08-29 09:29:00] 查询结果: []
+INFO     lingkuan_828.commons.api_base:api_base.py:451 [2025-08-29 09:29:02] 执行SQL: 
+                           SELECT 
+                               fod.size,
+                               fod.close_no,
+                               fod.magical,
+                               fod.open_price,
+                               fod.symbol,
+                               fod.order_no,
+                               foi.true_total_lots,
+                               foi.order_no,
+                               foi.operation_type,
+                               foi.create_time,
+                               foi.status,
+                               foi.min_lot_size,
+                               foi.max_lot_size,
+                               foi.total_lots,
+                               foi.master_order,
+                               foi.total_orders
+                           FROM 
+                               follow_order_detail fod
+                           INNER JOIN 
+                               follow_order_instruct foi 
+                           ON 
+                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                           WHERE foi.operation_type = %s
+                               AND fod.account = %s
+                               AND fod.trader_id = %s
+                               AND foi.total_orders = %s
+                        AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
+参数: ('1', '300162', 7220, '4', 1, 1)
+INFO     lingkuan_828.commons.api_base:api_base.py:454 [2025-08-29 09:29:02] 查询成功，结果数量: 0
+INFO     lingkuan_828.commons.api_base:api_base.py:466 [2025-08-29 09:29:02] 查询结果: []
+INFO     lingkuan_828.commons.api_base:api_base.py:886 [2025-08-29 09:29:02] 无记录稳定2秒，符合预期（耗时2.2秒）
+INFO     root:api_base.py:1306 校验通过: 平仓失败，应该没有平仓订单
+
+实际: 0
+操作: ==
+预期: 0
+
+INFO     root:test_cloudOrderClose.py:687 平仓失败，应该没有平仓订单，结果有0个订单
