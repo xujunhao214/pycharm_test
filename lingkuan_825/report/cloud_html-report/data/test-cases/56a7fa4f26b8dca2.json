@@ -1,0 +1,2152 @@
+{
+  "uid" : "56a7fa4f26b8dca2",
+  "name" : "数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单",
+  "fullName" : "test_cloudTrader.test_lianxi.TestcloudtradingOrders6#test_dbquery_addsalve_orderSendclose",
+  "historyId" : "f5b70244a5d33eb8b4092c831d2d31e7",
+  "time" : {
+    "start" : 1756455562687,
+    "stop" : 1756455593531,
+    "duration" : 30844
+  },
+  "description" : "\n        ### 测试说明\n        - 前置条件：有云策略和云跟单\n          1. 进行开仓，手数范围：0.1-1，总订单数量4\n          2. 进行平仓-订单数量2\n          3. 校验平仓的订单数，应该等于2\n          4. 进行平仓-订单数量2\n          5. 校验平仓的订单数,等于4\n        - 预期结果：平仓的订单数量功能正确\n        ",
+  "descriptionHtml" : "<pre><code>    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围：0.1-1，总订单数量4\n      2. 进行平仓-订单数量2\n      3. 校验平仓的订单数，应该等于2\n      4. 进行平仓-订单数量2\n      5. 校验平仓的订单数,等于4\n    - 预期结果：平仓的订单数量功能正确\n</code></pre>\n",
+  "status" : "broken",
+  "statusMessage" : "RuntimeError: Failed: 数据库查询异常",
+  "statusTrace" : "self = <lingkuan_825.test_cloudTrader.test_lianxi.TestVPSMasOrderclose.TestcloudtradingOrders6 object at 0x00000265F9E483A0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000265FA04AEE0>\nsql = '\\n                       SELECT \\n                           fod.size,\\n                           fod.close_no,\\n   ...s\\n                            AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE '\nparams = ('1', '300162', 7275, 'changjing6', 1, 1)\norder_by = 'create_time DESC', convert_decimal = True, dictionary_cursor = True\nattach_to_allure = True\n\n    def query_database(self, db_transaction: pymysql.connections.Connection,\n                       sql: str,\n                       params: tuple = (),\n                       order_by: str = \"create_time DESC\",\n                       convert_decimal: bool = True,\n                       dictionary_cursor: bool = True,\n                       attach_to_allure: bool = True) -> List[Dict[str, Any]]:\n        \"\"\"基础数据库查询（单次查询，带Allure分层提示）\"\"\"\n        sql_upper = sql.upper()\n        final_sql = sql\n    \n        if order_by and \"ORDER BY\" not in sql_upper:\n            final_sql += f\" ORDER BY {order_by}\"\n        elif order_by:\n            logger.warning(f\"[{self._get_current_time()}] SQL已包含ORDER BY，忽略传入的排序: {order_by}\")\n    \n        try:\n            with allure.step(\"执行数据库查询\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n    \n                cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None\n                with db_transaction.cursor(cursor_type) as cursor:\n                    logger.info(f\"[{self._get_current_time()}] 执行SQL: {final_sql} \\n参数: {params}\")\n>                   cursor.execute(final_sql, params)\n\ncommons\\api_base.py:452: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n..\\venv\\lib\\site-packages\\pymysql\\cursors.py:151: in execute\n    query = self.mogrify(query, args)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pymysql.cursors.DictCursor object at 0x00000265F9FF2A60>\nquery = '\\n                       SELECT \\n                           fod.size,\\n                           fod.close_no,\\n   ...     AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC'\nargs = ('1', '300162', 7275, 'changjing6', 1, 1)\n\n    def mogrify(self, query, args=None):\n        \"\"\"\n        Returns the exact string that would be sent to the database by calling the\n        execute() method.\n    \n        :param query: Query to mogrify.\n        :type query: str\n    \n        :param args: Parameters used with query. (optional)\n        :type args: tuple, list or dict\n    \n        :return: The query with argument binding applied.\n        :rtype: str\n    \n        This method follows the extension to the DB API 2.0 followed by Psycopg.\n        \"\"\"\n        conn = self._get_db()\n    \n        if args is not None:\n>           query = query % self._escape_args(args, conn)\nE           TypeError: not enough arguments for format string\n\n..\\venv\\lib\\site-packages\\pymysql\\cursors.py:129: TypeError\n\nThe above exception was the direct cause of the following exception:\n\nself = <lingkuan_825.test_cloudTrader.test_lianxi.TestVPSMasOrderclose.TestcloudtradingOrders6 object at 0x00000265F9E483A0>\nvar_manager = <lingkuan_825.commons.variable_manager.VariableManager object at 0x00000265F9E48D90>\ndb_transaction = <pymysql.connections.Connection object at 0x00000265FA04AEE0>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单\")\n    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n            sql = f\"\"\"\n                   SELECT\n                       fod.size,\n                       fod.close_no,\n                       fod.magical,\n                       fod.open_price,\n                       fod.comment,\n                       fod.symbol,\n                       fod.order_no,\n                       fod.close_time,\n                       foi.true_total_lots,\n                       foi.order_no,\n                       foi.operation_type,\n                       foi.create_time,\n                       foi.status,\n                       foi.min_lot_size,\n                       foi.max_lot_size,\n                       foi.total_lots,\n                       foi.master_order,\n                       foi.total_orders\n                   FROM\n                       follow_order_detail fod\n                   INNER JOIN\n                       follow_order_instruct foi\n                   ON\n                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                   WHERE foi.operation_type = %s\n                       AND fod.account = %s\n                       AND fod.account = %s\n                       AND fod.trader_id = %s\n                       AND fod.comment = %s\n                       \"\"\"\n            params = (\n                '1',\n                cloudTrader_user_accounts_4,\n                cloudTrader_vps_ids_3,\n                'changjing6',\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n\ntest_cloudTrader\\test_lianxi.py:484: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:610: in query_database_with_time\n    final_result = self._execute_query(\ncommons\\api_base.py:675: in _execute_query\n    return self.query_database(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_825.test_cloudTrader.test_lianxi.TestVPSMasOrderclose.TestcloudtradingOrders6 object at 0x00000265F9E483A0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000265FA04AEE0>\nsql = '\\n                       SELECT \\n                           fod.size,\\n                           fod.close_no,\\n   ...s\\n                            AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE '\nparams = ('1', '300162', 7275, 'changjing6', 1, 1)\norder_by = 'create_time DESC', convert_decimal = True, dictionary_cursor = True\nattach_to_allure = True\n\n    def query_database(self, db_transaction: pymysql.connections.Connection,\n                       sql: str,\n                       params: tuple = (),\n                       order_by: str = \"create_time DESC\",\n                       convert_decimal: bool = True,\n                       dictionary_cursor: bool = True,\n                       attach_to_allure: bool = True) -> List[Dict[str, Any]]:\n        \"\"\"基础数据库查询（单次查询，带Allure分层提示）\"\"\"\n        sql_upper = sql.upper()\n        final_sql = sql\n    \n        if order_by and \"ORDER BY\" not in sql_upper:\n            final_sql += f\" ORDER BY {order_by}\"\n        elif order_by:\n            logger.warning(f\"[{self._get_current_time()}] SQL已包含ORDER BY，忽略传入的排序: {order_by}\")\n    \n        try:\n            with allure.step(\"执行数据库查询\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n    \n                cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None\n                with db_transaction.cursor(cursor_type) as cursor:\n                    logger.info(f\"[{self._get_current_time()}] 执行SQL: {final_sql} \\n参数: {params}\")\n                    cursor.execute(final_sql, params)\n                    result = cursor.fetchall()\n                    logger.info(\n                        f\"[{self._get_current_time()}] 查询成功，结果数量: {len(result)}\")\n    \n                    if result:\n                        if convert_decimal:\n                            result = self.convert_decimal_to_float(result)\n                        result = self._convert_date_types(result)\n    \n                    try:\n                        result_preview = json.dumps(result, ensure_ascii=False)\n                    except Exception as e:\n                        result_preview = f\"无法序列化完整结果: {str(e)}\"\n                    logger.info(f\"[{self._get_current_time()}] 查询结果: {result_preview}\")\n    \n                    if attach_to_allure:\n                        display_count = min(len(result), 50)\n                        with allure.step(\"数据库查询结果\"):\n                            allure.attach(\n                                self.serialize_data(result[:display_count]),\n                                f\"查询结果（共{len(result)}条，显示前50条）\",\n                                allure.attachment_type.JSON\n                            )\n    \n                return result\n    \n        except pymysql.Error as e:\n            with allure.step(\"数据库查询异常（pymysql错误）\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                allure.attach(f\"错误码: {e.args[0]} | 信息: {str(e)}\", \"错误详情\", allure.attachment_type.TEXT)\n            error_msg = (\n                f\"[{self._get_current_time()}] 数据库错误 (错误码: {e.args[0]}): {str(e)} | \"\n                f\"SQL: {final_sql[:200]} | 参数: {params}\"\n            )\n            logger.error(error_msg, exc_info=True)\n            raise pymysql.Error(f\"Failed: 数据库查询错误（错误码: {e.args[0]}）\") from e\n    \n        except Exception as e:\n            with allure.step(\"数据库查询异常（未知错误）\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                allure.attach(str(e), \"错误详情\", allure.attachment_type.TEXT)\n            error_msg = f\"[{self._get_current_time()}] 未知异常: {str(e)} | SQL: {final_sql[:200]}\"\n            logger.error(error_msg, exc_info=True)\n>           raise RuntimeError(f\"Failed: 数据库查询异常\") from e\nE           RuntimeError: Failed: 数据库查询异常\n\ncommons\\api_base.py:498: RuntimeError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1756455493200,
+      "stop" : 1756455493200,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1756455562284,
+      "stop" : 1756455562686,
+      "duration" : 402
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1756455493200,
+      "stop" : 1756455493201,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1756455493200,
+      "stop" : 1756455493200,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1756455503514,
+      "stop" : 1756455503514,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1756455562687,
+      "stop" : 1756455562687,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "description" : "\n        ### 测试说明\n        - 前置条件：有云策略和云跟单\n          1. 进行开仓，手数范围：0.1-1，总订单数量4\n          2. 进行平仓-订单数量2\n          3. 校验平仓的订单数，应该等于2\n          4. 进行平仓-订单数量2\n          5. 校验平仓的订单数,等于4\n        - 预期结果：平仓的订单数量功能正确\n        ",
+    "status" : "broken",
+    "statusMessage" : "RuntimeError: Failed: 数据库查询异常",
+    "statusTrace" : "self = <lingkuan_825.test_cloudTrader.test_lianxi.TestVPSMasOrderclose.TestcloudtradingOrders6 object at 0x00000265F9E483A0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000265FA04AEE0>\nsql = '\\n                       SELECT \\n                           fod.size,\\n                           fod.close_no,\\n   ...s\\n                            AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE '\nparams = ('1', '300162', 7275, 'changjing6', 1, 1)\norder_by = 'create_time DESC', convert_decimal = True, dictionary_cursor = True\nattach_to_allure = True\n\n    def query_database(self, db_transaction: pymysql.connections.Connection,\n                       sql: str,\n                       params: tuple = (),\n                       order_by: str = \"create_time DESC\",\n                       convert_decimal: bool = True,\n                       dictionary_cursor: bool = True,\n                       attach_to_allure: bool = True) -> List[Dict[str, Any]]:\n        \"\"\"基础数据库查询（单次查询，带Allure分层提示）\"\"\"\n        sql_upper = sql.upper()\n        final_sql = sql\n    \n        if order_by and \"ORDER BY\" not in sql_upper:\n            final_sql += f\" ORDER BY {order_by}\"\n        elif order_by:\n            logger.warning(f\"[{self._get_current_time()}] SQL已包含ORDER BY，忽略传入的排序: {order_by}\")\n    \n        try:\n            with allure.step(\"执行数据库查询\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n    \n                cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None\n                with db_transaction.cursor(cursor_type) as cursor:\n                    logger.info(f\"[{self._get_current_time()}] 执行SQL: {final_sql} \\n参数: {params}\")\n>                   cursor.execute(final_sql, params)\n\ncommons\\api_base.py:452: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n..\\venv\\lib\\site-packages\\pymysql\\cursors.py:151: in execute\n    query = self.mogrify(query, args)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pymysql.cursors.DictCursor object at 0x00000265F9FF2A60>\nquery = '\\n                       SELECT \\n                           fod.size,\\n                           fod.close_no,\\n   ...     AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC'\nargs = ('1', '300162', 7275, 'changjing6', 1, 1)\n\n    def mogrify(self, query, args=None):\n        \"\"\"\n        Returns the exact string that would be sent to the database by calling the\n        execute() method.\n    \n        :param query: Query to mogrify.\n        :type query: str\n    \n        :param args: Parameters used with query. (optional)\n        :type args: tuple, list or dict\n    \n        :return: The query with argument binding applied.\n        :rtype: str\n    \n        This method follows the extension to the DB API 2.0 followed by Psycopg.\n        \"\"\"\n        conn = self._get_db()\n    \n        if args is not None:\n>           query = query % self._escape_args(args, conn)\nE           TypeError: not enough arguments for format string\n\n..\\venv\\lib\\site-packages\\pymysql\\cursors.py:129: TypeError\n\nThe above exception was the direct cause of the following exception:\n\nself = <lingkuan_825.test_cloudTrader.test_lianxi.TestVPSMasOrderclose.TestcloudtradingOrders6 object at 0x00000265F9E483A0>\nvar_manager = <lingkuan_825.commons.variable_manager.VariableManager object at 0x00000265F9E48D90>\ndb_transaction = <pymysql.connections.Connection object at 0x00000265FA04AEE0>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单\")\n    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            cloudTrader_user_accounts_4 = var_manager.get_variable(\"cloudTrader_user_accounts_4\")\n            cloudTrader_vps_ids_3 = var_manager.get_variable(\"cloudTrader_vps_ids_3\")\n            sql = f\"\"\"\n                   SELECT\n                       fod.size,\n                       fod.close_no,\n                       fod.magical,\n                       fod.open_price,\n                       fod.comment,\n                       fod.symbol,\n                       fod.order_no,\n                       fod.close_time,\n                       foi.true_total_lots,\n                       foi.order_no,\n                       foi.operation_type,\n                       foi.create_time,\n                       foi.status,\n                       foi.min_lot_size,\n                       foi.max_lot_size,\n                       foi.total_lots,\n                       foi.master_order,\n                       foi.total_orders\n                   FROM\n                       follow_order_detail fod\n                   INNER JOIN\n                       follow_order_instruct foi\n                   ON\n                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                   WHERE foi.operation_type = %s\n                       AND fod.account = %s\n                       AND fod.account = %s\n                       AND fod.trader_id = %s\n                       AND fod.comment = %s\n                       \"\"\"\n            params = (\n                '1',\n                cloudTrader_user_accounts_4,\n                cloudTrader_vps_ids_3,\n                'changjing6',\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n>           db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n\ntest_cloudTrader\\test_lianxi.py:484: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:610: in query_database_with_time\n    final_result = self._execute_query(\ncommons\\api_base.py:675: in _execute_query\n    return self.query_database(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_825.test_cloudTrader.test_lianxi.TestVPSMasOrderclose.TestcloudtradingOrders6 object at 0x00000265F9E483A0>\ndb_transaction = <pymysql.connections.Connection object at 0x00000265FA04AEE0>\nsql = '\\n                       SELECT \\n                           fod.size,\\n                           fod.close_no,\\n   ...s\\n                            AND  foi.create_time BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE '\nparams = ('1', '300162', 7275, 'changjing6', 1, 1)\norder_by = 'create_time DESC', convert_decimal = True, dictionary_cursor = True\nattach_to_allure = True\n\n    def query_database(self, db_transaction: pymysql.connections.Connection,\n                       sql: str,\n                       params: tuple = (),\n                       order_by: str = \"create_time DESC\",\n                       convert_decimal: bool = True,\n                       dictionary_cursor: bool = True,\n                       attach_to_allure: bool = True) -> List[Dict[str, Any]]:\n        \"\"\"基础数据库查询（单次查询，带Allure分层提示）\"\"\"\n        sql_upper = sql.upper()\n        final_sql = sql\n    \n        if order_by and \"ORDER BY\" not in sql_upper:\n            final_sql += f\" ORDER BY {order_by}\"\n        elif order_by:\n            logger.warning(f\"[{self._get_current_time()}] SQL已包含ORDER BY，忽略传入的排序: {order_by}\")\n    \n        try:\n            with allure.step(\"执行数据库查询\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n    \n                cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None\n                with db_transaction.cursor(cursor_type) as cursor:\n                    logger.info(f\"[{self._get_current_time()}] 执行SQL: {final_sql} \\n参数: {params}\")\n                    cursor.execute(final_sql, params)\n                    result = cursor.fetchall()\n                    logger.info(\n                        f\"[{self._get_current_time()}] 查询成功，结果数量: {len(result)}\")\n    \n                    if result:\n                        if convert_decimal:\n                            result = self.convert_decimal_to_float(result)\n                        result = self._convert_date_types(result)\n    \n                    try:\n                        result_preview = json.dumps(result, ensure_ascii=False)\n                    except Exception as e:\n                        result_preview = f\"无法序列化完整结果: {str(e)}\"\n                    logger.info(f\"[{self._get_current_time()}] 查询结果: {result_preview}\")\n    \n                    if attach_to_allure:\n                        display_count = min(len(result), 50)\n                        with allure.step(\"数据库查询结果\"):\n                            allure.attach(\n                                self.serialize_data(result[:display_count]),\n                                f\"查询结果（共{len(result)}条，显示前50条）\",\n                                allure.attachment_type.JSON\n                            )\n    \n                return result\n    \n        except pymysql.Error as e:\n            with allure.step(\"数据库查询异常（pymysql错误）\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                allure.attach(f\"错误码: {e.args[0]} | 信息: {str(e)}\", \"错误详情\", allure.attachment_type.TEXT)\n            error_msg = (\n                f\"[{self._get_current_time()}] 数据库错误 (错误码: {e.args[0]}): {str(e)} | \"\n                f\"SQL: {final_sql[:200]} | 参数: {params}\"\n            )\n            logger.error(error_msg, exc_info=True)\n            raise pymysql.Error(f\"Failed: 数据库查询错误（错误码: {e.args[0]}）\") from e\n    \n        except Exception as e:\n            with allure.step(\"数据库查询异常（未知错误）\"):\n                allure.attach(final_sql, \"执行SQL\", allure.attachment_type.TEXT)\n                allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                allure.attach(str(e), \"错误详情\", allure.attachment_type.TEXT)\n            error_msg = f\"[{self._get_current_time()}] 未知异常: {str(e)} | SQL: {final_sql[:200]}\"\n            logger.error(error_msg, exc_info=True)\n>           raise RuntimeError(f\"Failed: 数据库查询异常\") from e\nE           RuntimeError: Failed: 数据库查询异常\n\ncommons\\api_base.py:498: RuntimeError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情表账号数据",
+      "time" : {
+        "start" : 1756455562687,
+        "stop" : 1756455593531,
+        "duration" : 30844
+      },
+      "status" : "broken",
+      "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\test_cloudTrader\\test_lianxi.py\", line 484, in test_dbquery_addsalve_orderSendclose\n    db_data = self.query_database_with_time(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 610, in query_database_with_time\n    final_result = self._execute_query(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1756455562687,
+          "stop" : 1756455593531,
+          "duration" : 30844
+        },
+        "status" : "broken",
+        "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 610, in query_database_with_time\n    final_result = self._execute_query(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+        "steps" : [ {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455562735,
+            "stop" : 1756455562738,
+            "duration" : 3
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455562736,
+              "stop" : 1756455562737,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "1e79ed38cb0c81a5",
+              "name" : "执行SQL",
+              "source" : "1e79ed38cb0c81a5.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "b085c0d776563978",
+              "name" : "SQL参数",
+              "source" : "b085c0d776563978.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455562737,
+              "stop" : 1756455562738,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "6ee222bbce8e196e",
+              "name" : "执行SQL",
+              "source" : "6ee222bbce8e196e.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "3d602901da4e6298",
+              "name" : "SQL参数",
+              "source" : "3d602901da4e6298.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "3cfe12abcab15830",
+              "name" : "错误详情",
+              "source" : "3cfe12abcab15830.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "ec2c90174736d669",
+            "name" : "查询条件",
+            "source" : "ec2c90174736d669.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455562738,
+            "stop" : 1756455562739,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ff9ff165aa3f2507",
+            "name" : "执行SQL",
+            "source" : "ff9ff165aa3f2507.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "93d1d7ea0b9fd3ee",
+            "name" : "SQL参数",
+            "source" : "93d1d7ea0b9fd3ee.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "a77ddc30778ef961",
+            "name" : "错误详情",
+            "source" : "a77ddc30778ef961.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455564794,
+            "stop" : 1756455564796,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455564794,
+              "stop" : 1756455564795,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "897f381751affcfa",
+              "name" : "执行SQL",
+              "source" : "897f381751affcfa.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "7505e510ce93a285",
+              "name" : "SQL参数",
+              "source" : "7505e510ce93a285.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455564795,
+              "stop" : 1756455564796,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "4adfb929376b1a7d",
+              "name" : "执行SQL",
+              "source" : "4adfb929376b1a7d.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "c99013ef787e4eb9",
+              "name" : "SQL参数",
+              "source" : "c99013ef787e4eb9.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "3fb844f898a7142e",
+              "name" : "错误详情",
+              "source" : "3fb844f898a7142e.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "aa68373d07b396e1",
+            "name" : "查询条件",
+            "source" : "aa68373d07b396e1.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455564797,
+            "stop" : 1756455564797,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "35c866feee7548ac",
+            "name" : "执行SQL",
+            "source" : "35c866feee7548ac.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "e20b060a793ecf4a",
+            "name" : "SQL参数",
+            "source" : "e20b060a793ecf4a.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "30edcea7983c235e",
+            "name" : "错误详情",
+            "source" : "30edcea7983c235e.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455566855,
+            "stop" : 1756455566858,
+            "duration" : 3
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455566856,
+              "stop" : 1756455566856,
+              "duration" : 0
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "c4b27e845c6252d2",
+              "name" : "执行SQL",
+              "source" : "c4b27e845c6252d2.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "30cf63748a28dec4",
+              "name" : "SQL参数",
+              "source" : "30cf63748a28dec4.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455566856,
+              "stop" : 1756455566858,
+              "duration" : 2
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "610ac60ce06d3b3f",
+              "name" : "执行SQL",
+              "source" : "610ac60ce06d3b3f.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "247bf60dedb22e5d",
+              "name" : "SQL参数",
+              "source" : "247bf60dedb22e5d.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "8e8e7a46bb134077",
+              "name" : "错误详情",
+              "source" : "8e8e7a46bb134077.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "bd7ee8c9f10a23e0",
+            "name" : "查询条件",
+            "source" : "bd7ee8c9f10a23e0.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455566858,
+            "stop" : 1756455566859,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "dd6de3e4bd9813e0",
+            "name" : "执行SQL",
+            "source" : "dd6de3e4bd9813e0.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "d89b893ff4bf4233",
+            "name" : "SQL参数",
+            "source" : "d89b893ff4bf4233.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "c0a9d19510cccb9f",
+            "name" : "错误详情",
+            "source" : "c0a9d19510cccb9f.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455568908,
+            "stop" : 1756455568910,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455568908,
+              "stop" : 1756455568909,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "ef10c7a3dd30a78c",
+              "name" : "执行SQL",
+              "source" : "ef10c7a3dd30a78c.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "7ed2eab2e9549a1d",
+              "name" : "SQL参数",
+              "source" : "7ed2eab2e9549a1d.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455568909,
+              "stop" : 1756455568910,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "8bc7542d53fc25a5",
+              "name" : "执行SQL",
+              "source" : "8bc7542d53fc25a5.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "90c79e391206fa26",
+              "name" : "SQL参数",
+              "source" : "90c79e391206fa26.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "5a2458e17545eb9f",
+              "name" : "错误详情",
+              "source" : "5a2458e17545eb9f.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "ed54df11ad065009",
+            "name" : "查询条件",
+            "source" : "ed54df11ad065009.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455568910,
+            "stop" : 1756455568911,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bea93135bd89c3c8",
+            "name" : "执行SQL",
+            "source" : "bea93135bd89c3c8.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "c148d1f279bfed81",
+            "name" : "SQL参数",
+            "source" : "c148d1f279bfed81.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "9a95072b7b70a3aa",
+            "name" : "错误详情",
+            "source" : "9a95072b7b70a3aa.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455570962,
+            "stop" : 1756455570964,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455570962,
+              "stop" : 1756455570963,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "4623c8ed0370f20c",
+              "name" : "执行SQL",
+              "source" : "4623c8ed0370f20c.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "625404b3bcb20de2",
+              "name" : "SQL参数",
+              "source" : "625404b3bcb20de2.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455570963,
+              "stop" : 1756455570964,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "2df4d3f0ece0f884",
+              "name" : "执行SQL",
+              "source" : "2df4d3f0ece0f884.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "116c2a1cbec8a896",
+              "name" : "SQL参数",
+              "source" : "116c2a1cbec8a896.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "acdd9d91ed4b66e8",
+              "name" : "错误详情",
+              "source" : "acdd9d91ed4b66e8.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "158e11b6ab2a8917",
+            "name" : "查询条件",
+            "source" : "158e11b6ab2a8917.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455570964,
+            "stop" : 1756455570965,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "fe1fd9b819762c45",
+            "name" : "执行SQL",
+            "source" : "fe1fd9b819762c45.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "53e7faab5f41f90",
+            "name" : "SQL参数",
+            "source" : "53e7faab5f41f90.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "f69dfd655e8e60b5",
+            "name" : "错误详情",
+            "source" : "f69dfd655e8e60b5.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455573014,
+            "stop" : 1756455573016,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455573014,
+              "stop" : 1756455573015,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "2a1acc6657b623e3",
+              "name" : "执行SQL",
+              "source" : "2a1acc6657b623e3.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "44acf532c11b9a5c",
+              "name" : "SQL参数",
+              "source" : "44acf532c11b9a5c.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455573015,
+              "stop" : 1756455573016,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "485b7dabaa3b6bda",
+              "name" : "执行SQL",
+              "source" : "485b7dabaa3b6bda.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "70b61a952bf6c0f4",
+              "name" : "SQL参数",
+              "source" : "70b61a952bf6c0f4.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "b78fb3887170cc23",
+              "name" : "错误详情",
+              "source" : "b78fb3887170cc23.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "219796c091a77cff",
+            "name" : "查询条件",
+            "source" : "219796c091a77cff.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455573016,
+            "stop" : 1756455573017,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "46c99ee9c83b1e80",
+            "name" : "执行SQL",
+            "source" : "46c99ee9c83b1e80.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "e572260cc86fecb3",
+            "name" : "SQL参数",
+            "source" : "e572260cc86fecb3.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "2b2c209283bc7ec1",
+            "name" : "错误详情",
+            "source" : "2b2c209283bc7ec1.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455575079,
+            "stop" : 1756455575081,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455575079,
+              "stop" : 1756455575080,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "8836cd54b33067fa",
+              "name" : "执行SQL",
+              "source" : "8836cd54b33067fa.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "d15bf0b89adbb174",
+              "name" : "SQL参数",
+              "source" : "d15bf0b89adbb174.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455575080,
+              "stop" : 1756455575081,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "a7b21b55746dabc8",
+              "name" : "执行SQL",
+              "source" : "a7b21b55746dabc8.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "4513625cf9124f39",
+              "name" : "SQL参数",
+              "source" : "4513625cf9124f39.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "ebf65fb4baa4faca",
+              "name" : "错误详情",
+              "source" : "ebf65fb4baa4faca.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "495862e343b5bca8",
+            "name" : "查询条件",
+            "source" : "495862e343b5bca8.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455575082,
+            "stop" : 1756455575082,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bf7e989cf2a73464",
+            "name" : "执行SQL",
+            "source" : "bf7e989cf2a73464.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "348a6a18f7a3a3ea",
+            "name" : "SQL参数",
+            "source" : "348a6a18f7a3a3ea.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "5b1d07c23684645e",
+            "name" : "错误详情",
+            "source" : "5b1d07c23684645e.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455577132,
+            "stop" : 1756455577134,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455577133,
+              "stop" : 1756455577133,
+              "duration" : 0
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "223ed2b738be02f",
+              "name" : "执行SQL",
+              "source" : "223ed2b738be02f.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "70d83349f9a1ea74",
+              "name" : "SQL参数",
+              "source" : "70d83349f9a1ea74.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455577133,
+              "stop" : 1756455577134,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "f5217234dac84045",
+              "name" : "执行SQL",
+              "source" : "f5217234dac84045.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "230547423fcd7206",
+              "name" : "SQL参数",
+              "source" : "230547423fcd7206.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "17895115b761502c",
+              "name" : "错误详情",
+              "source" : "17895115b761502c.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "c08a112f4e877572",
+            "name" : "查询条件",
+            "source" : "c08a112f4e877572.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455577135,
+            "stop" : 1756455577135,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "125258b59bf498f3",
+            "name" : "执行SQL",
+            "source" : "125258b59bf498f3.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "3891f4f1d93b4f62",
+            "name" : "SQL参数",
+            "source" : "3891f4f1d93b4f62.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "b6abb0d275d8725f",
+            "name" : "错误详情",
+            "source" : "b6abb0d275d8725f.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455579190,
+            "stop" : 1756455579193,
+            "duration" : 3
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455579190,
+              "stop" : 1756455579191,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "67a9eb98eb0b38d1",
+              "name" : "执行SQL",
+              "source" : "67a9eb98eb0b38d1.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "1a3fae60633a81b2",
+              "name" : "SQL参数",
+              "source" : "1a3fae60633a81b2.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455579192,
+              "stop" : 1756455579192,
+              "duration" : 0
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "f12ac6835ffe28bb",
+              "name" : "执行SQL",
+              "source" : "f12ac6835ffe28bb.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "7c372ca8f973b211",
+              "name" : "SQL参数",
+              "source" : "7c372ca8f973b211.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "8f68615b0e264d56",
+              "name" : "错误详情",
+              "source" : "8f68615b0e264d56.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "d4668e4bbb56c876",
+            "name" : "查询条件",
+            "source" : "d4668e4bbb56c876.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455579193,
+            "stop" : 1756455579193,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "591f15234a51d610",
+            "name" : "执行SQL",
+            "source" : "591f15234a51d610.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "c19ffb4789c59c2d",
+            "name" : "SQL参数",
+            "source" : "c19ffb4789c59c2d.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "e61b242406cd6e01",
+            "name" : "错误详情",
+            "source" : "e61b242406cd6e01.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455581251,
+            "stop" : 1756455581253,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455581251,
+              "stop" : 1756455581252,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "a52176b911b1826e",
+              "name" : "执行SQL",
+              "source" : "a52176b911b1826e.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "3a7d49c9ed71f2b8",
+              "name" : "SQL参数",
+              "source" : "3a7d49c9ed71f2b8.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455581252,
+              "stop" : 1756455581253,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "9207e15d67ec7d1c",
+              "name" : "执行SQL",
+              "source" : "9207e15d67ec7d1c.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "3c38026c00a30dc4",
+              "name" : "SQL参数",
+              "source" : "3c38026c00a30dc4.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "288b90cbec5d10f0",
+              "name" : "错误详情",
+              "source" : "288b90cbec5d10f0.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "ffbb4ef5eb3063ae",
+            "name" : "查询条件",
+            "source" : "ffbb4ef5eb3063ae.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455581254,
+            "stop" : 1756455581254,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c63deed50b679262",
+            "name" : "执行SQL",
+            "source" : "c63deed50b679262.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "4fb55fd814e0f007",
+            "name" : "SQL参数",
+            "source" : "4fb55fd814e0f007.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "e25ebfe72397a397",
+            "name" : "错误详情",
+            "source" : "e25ebfe72397a397.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455583304,
+            "stop" : 1756455583307,
+            "duration" : 3
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455583305,
+              "stop" : 1756455583306,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "983c19a0ef175aa7",
+              "name" : "执行SQL",
+              "source" : "983c19a0ef175aa7.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "da0863612145fbc7",
+              "name" : "SQL参数",
+              "source" : "da0863612145fbc7.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455583306,
+              "stop" : 1756455583306,
+              "duration" : 0
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "2c2a6f96bc0d0189",
+              "name" : "执行SQL",
+              "source" : "2c2a6f96bc0d0189.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "c937c9edb7a1d0ed",
+              "name" : "SQL参数",
+              "source" : "c937c9edb7a1d0ed.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "96ce13119b718aab",
+              "name" : "错误详情",
+              "source" : "96ce13119b718aab.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "a8c7f211289c165b",
+            "name" : "查询条件",
+            "source" : "a8c7f211289c165b.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455583307,
+            "stop" : 1756455583308,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4e78b5bb0c0a04af",
+            "name" : "执行SQL",
+            "source" : "4e78b5bb0c0a04af.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "ad6e642293bb800a",
+            "name" : "SQL参数",
+            "source" : "ad6e642293bb800a.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "90681c2275810934",
+            "name" : "错误详情",
+            "source" : "90681c2275810934.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455585355,
+            "stop" : 1756455585357,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455585355,
+              "stop" : 1756455585356,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "e21d42c55ed79b1",
+              "name" : "执行SQL",
+              "source" : "e21d42c55ed79b1.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "63f03d1129aca55",
+              "name" : "SQL参数",
+              "source" : "63f03d1129aca55.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455585356,
+              "stop" : 1756455585357,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "e5c435e5e6b700a2",
+              "name" : "执行SQL",
+              "source" : "e5c435e5e6b700a2.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "596c4fc6a8c0d3e3",
+              "name" : "SQL参数",
+              "source" : "596c4fc6a8c0d3e3.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "b6d60b9ebde25f80",
+              "name" : "错误详情",
+              "source" : "b6d60b9ebde25f80.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "5a3f94729a355260",
+            "name" : "查询条件",
+            "source" : "5a3f94729a355260.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455585357,
+            "stop" : 1756455585358,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "6fbdf47405e5fb36",
+            "name" : "执行SQL",
+            "source" : "6fbdf47405e5fb36.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "904d4fda4b009da6",
+            "name" : "SQL参数",
+            "source" : "904d4fda4b009da6.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "8f6647c976fb63d1",
+            "name" : "错误详情",
+            "source" : "8f6647c976fb63d1.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455587408,
+            "stop" : 1756455587410,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455587408,
+              "stop" : 1756455587409,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "21fa15fa86a1dda8",
+              "name" : "执行SQL",
+              "source" : "21fa15fa86a1dda8.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "2bf7e3b28218733b",
+              "name" : "SQL参数",
+              "source" : "2bf7e3b28218733b.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455587409,
+              "stop" : 1756455587410,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "19603a4babbc7423",
+              "name" : "执行SQL",
+              "source" : "19603a4babbc7423.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "192889e667c60dcc",
+              "name" : "SQL参数",
+              "source" : "192889e667c60dcc.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "9739ff53a1812908",
+              "name" : "错误详情",
+              "source" : "9739ff53a1812908.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "e90850024b57e265",
+            "name" : "查询条件",
+            "source" : "e90850024b57e265.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455587410,
+            "stop" : 1756455587411,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "76e1e3e4f2a8201",
+            "name" : "执行SQL",
+            "source" : "76e1e3e4f2a8201.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "86f196e151115734",
+            "name" : "SQL参数",
+            "source" : "86f196e151115734.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "f3b510dead9c6775",
+            "name" : "错误详情",
+            "source" : "f3b510dead9c6775.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455589471,
+            "stop" : 1756455589473,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455589471,
+              "stop" : 1756455589472,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "f017ef25807a12bb",
+              "name" : "执行SQL",
+              "source" : "f017ef25807a12bb.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "ecd01755b6107254",
+              "name" : "SQL参数",
+              "source" : "ecd01755b6107254.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455589472,
+              "stop" : 1756455589473,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "76cf281e64f38360",
+              "name" : "执行SQL",
+              "source" : "76cf281e64f38360.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "22beda6e00e26460",
+              "name" : "SQL参数",
+              "source" : "22beda6e00e26460.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "83ad411411b78515",
+              "name" : "错误详情",
+              "source" : "83ad411411b78515.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "9fbccf1a2f06c277",
+            "name" : "查询条件",
+            "source" : "9fbccf1a2f06c277.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455589473,
+            "stop" : 1756455589474,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bd0a9dd914603c01",
+            "name" : "执行SQL",
+            "source" : "bd0a9dd914603c01.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "5a9229fad0801e8d",
+            "name" : "SQL参数",
+            "source" : "5a9229fad0801e8d.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "ef352929c5431dc2",
+            "name" : "错误详情",
+            "source" : "ef352929c5431dc2.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455591523,
+            "stop" : 1756455591525,
+            "duration" : 2
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455591523,
+              "stop" : 1756455591524,
+              "duration" : 1
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "e29ac840a0f17ea5",
+              "name" : "执行SQL",
+              "source" : "e29ac840a0f17ea5.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "7f279e90147056a7",
+              "name" : "SQL参数",
+              "source" : "7f279e90147056a7.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455591524,
+              "stop" : 1756455591525,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "9cf20ffc023d1781",
+              "name" : "执行SQL",
+              "source" : "9cf20ffc023d1781.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "72ea65568b4a5eed",
+              "name" : "SQL参数",
+              "source" : "72ea65568b4a5eed.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "bc5538b5fd8fb744",
+              "name" : "错误详情",
+              "source" : "bc5538b5fd8fb744.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "830c745a253e1d49",
+            "name" : "查询条件",
+            "source" : "830c745a253e1d49.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        }, {
+          "name" : "轮询查询异常（单次查询失败）",
+          "time" : {
+            "start" : 1756455591525,
+            "stop" : 1756455591526,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "794782beb1ad2cc9",
+            "name" : "执行SQL",
+            "source" : "794782beb1ad2cc9.txt",
+            "type" : "text/plain",
+            "size" : 1349
+          }, {
+            "uid" : "e0655907479c9588",
+            "name" : "SQL参数",
+            "source" : "e0655907479c9588.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "20d0a77416a1719d",
+            "name" : "错误详情",
+            "source" : "20d0a77416a1719d.txt",
+            "type" : "text/plain",
+            "size" : 29
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "轮询超时处理",
+          "time" : {
+            "start" : 1756455593528,
+            "stop" : 1756455593528,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "5690c2f617b31b11",
+            "name" : "处理说明",
+            "source" : "5690c2f617b31b11.txt",
+            "type" : "text/plain",
+            "size" : 53
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1756455593528,
+            "stop" : 1756455593531,
+            "duration" : 3
+          },
+          "status" : "broken",
+          "statusMessage" : "RuntimeError: Failed: 数据库查询异常\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 675, in _execute_query\n    return self.query_database(\n  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 498, in query_database\n    raise RuntimeError(f\"Failed: 数据库查询异常\") from e\n",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1756455593529,
+              "stop" : 1756455593529,
+              "duration" : 0
+            },
+            "status" : "broken",
+            "statusMessage" : "TypeError: not enough arguments for format string\n",
+            "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_825\\commons\\api_base.py\", line 452, in query_database\n    cursor.execute(final_sql, params)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 151, in execute\n    query = self.mogrify(query, args)\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\pymysql\\cursors.py\", line 129, in mogrify\n    query = query % self._escape_args(args, conn)\n",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "d1538d2c931013d5",
+              "name" : "执行SQL",
+              "source" : "d1538d2c931013d5.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "a911fde7582c8657",
+              "name" : "SQL参数",
+              "source" : "a911fde7582c8657.txt",
+              "type" : "text/plain",
+              "size" : 41
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : true,
+            "stepsCount" : 0,
+            "hasContent" : true
+          }, {
+            "name" : "数据库查询异常（未知错误）",
+            "time" : {
+              "start" : 1756455593530,
+              "stop" : 1756455593530,
+              "duration" : 0
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "7a681749c0a7ebe6",
+              "name" : "执行SQL",
+              "source" : "7a681749c0a7ebe6.txt",
+              "type" : "text/plain",
+              "size" : 1463
+            }, {
+              "uid" : "da66880cf64ff372",
+              "name" : "SQL参数",
+              "source" : "da66880cf64ff372.txt",
+              "type" : "text/plain",
+              "size" : 41
+            }, {
+              "uid" : "87bbb053fb10ceb7",
+              "name" : "错误详情",
+              "source" : "87bbb053fb10ceb7.txt",
+              "type" : "text/plain",
+              "size" : 38
+            } ],
+            "parameters" : [ ],
+            "attachmentsCount" : 3,
+            "shouldDisplayMessage" : false,
+            "stepsCount" : 0,
+            "hasContent" : true
+          } ],
+          "attachments" : [ {
+            "uid" : "a27d6faaeba5f971",
+            "name" : "查询条件",
+            "source" : "a27d6faaeba5f971.txt",
+            "type" : "text/plain",
+            "size" : 47
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 6,
+          "shouldDisplayMessage" : true,
+          "stepsCount" : 2,
+          "hasContent" : true
+        } ],
+        "attachments" : [ {
+          "uid" : "70ce377bb1801535",
+          "name" : "执行SQL",
+          "source" : "70ce377bb1801535.txt",
+          "type" : "text/plain",
+          "size" : 1349
+        }, {
+          "uid" : "dd2bf89fc8274bb",
+          "name" : "SQL参数",
+          "source" : "dd2bf89fc8274bb.txt",
+          "type" : "text/plain",
+          "size" : 35
+        }, {
+          "uid" : "eadb0d4dc917fb4e",
+          "name" : "时间范围",
+          "source" : "eadb0d4dc917fb4e.txt",
+          "type" : "text/plain",
+          "size" : 7
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 145,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 64,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 145,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 65,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "baf120502988c2aa",
+      "name" : "log",
+      "source" : "baf120502988c2aa.txt",
+      "type" : "text/plain",
+      "size" : 40988
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 146,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 66,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1756455593659,
+      "stop" : 1756455593659,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1756455609280,
+      "stop" : 1756455609280,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1756455593658,
+      "stop" : 1756455593658,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略-策略账号交易下单-平仓的功能校验"
+  }, {
+    "name" : "story",
+    "value" : "场景6：平仓的订单数量功能校验-4"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_lianxi"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSMasOrderclose"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "66028-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_lianxi"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "56a7fa4f26b8dca2.json",
+  "parameterValues" : [ ]
+}

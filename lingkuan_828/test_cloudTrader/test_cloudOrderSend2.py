@@ -44,7 +44,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "",
                     "totalSzie": "1.00",
-                    "remark": "测试数据"
+                    "remark": "changjing1"
                 }
 
                 response = self.send_post_request(
@@ -73,6 +73,7 @@ class TestCloudStrategyOrder:
                         fod.magical,
                         fod.open_price,
                         fod.symbol,
+                        fod.comment,
                         fod.order_no,
                         foi.true_total_lots,
                         foi.order_no,
@@ -91,8 +92,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing1")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -213,6 +215,7 @@ class TestCloudStrategyOrder:
                         fod.magical,
                         fod.open_price,
                         fod.symbol,
+                        fod.comment,
                         fod.order_no,
                         foi.true_total_lots,
                         foi.order_no,
@@ -232,9 +235,10 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         AND fod.trader_id = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing1", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -280,8 +284,6 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"实际手数: {size}")
 
-        time.sleep(30)
-
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景2：复制下单-手数范围0.3-1，总订单数量1，总手数5")
     @allure.description("""
@@ -313,7 +315,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "1",
                     "totalSzie": "5.00",
-                    "remark": "测试数据"
+                    "remark": "changjing2"
                 }
 
                 response = self.send_post_request(
@@ -343,6 +345,7 @@ class TestCloudStrategyOrder:
                         fod.magical,
                         fod.open_price,
                         fod.symbol,
+                        fod.comment,
                         fod.order_no,
                         foi.true_total_lots,
                         foi.order_no,
@@ -361,8 +364,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing2")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -465,6 +469,7 @@ class TestCloudStrategyOrder:
                         fod.magical,
                         fod.open_price,
                         fod.symbol,
+                        fod.comment,
                         fod.order_no,
                         foi.true_total_lots,
                         foi.order_no,
@@ -484,9 +489,10 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         AND fod.trader_id = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing2", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -637,4 +643,3 @@ class TestCloudStrategyOrder:
                     "下单失败，请检查下单参数",
                     "响应msg字段应为：下单失败，请检查下单参数"
                 )
-            time.sleep(25)

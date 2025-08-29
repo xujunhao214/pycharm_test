@@ -1,1 +1,100 @@
-INFO     2025-08-29 12:41:06 [lingkuan_828.conftest;276]  : [2025-08-29 12:41] 测试会话开始: 2025-08-29 12:41:06, 测试组: vps
+INFO     2025-08-29 18:01:05 [lingkuan_828.conftest;276]  : [2025-08-29 18:01] 测试会话开始: 2025-08-29 18:01:05, 测试组: vps
+INFO     2025-08-29 18:01:05 [lingkuan_828.commons.variable_manager;40]  : [2025-08-29 18:01] 成功加载静态变量: VAR\uat_data.json
+INFO     2025-08-29 18:01:05 [lingkuan_828.commons.variable_manager;64]  : [2025-08-29 18:01] 成功加载运行时变量: VAR\runtime_vars_vps.json
+INFO     2025-08-29 18:01:05 [lingkuan_828.conftest;62]  : [2025-08-29 18:01:05] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 开始登录，环境: uat
+INFO     2025-08-29 18:01:05 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 192852
+INFO     2025-08-29 18:01:07 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-08-29 18:01:07 [lingkuan_828.commons.variable_manager;111]  : [2025-08-29 18:01] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-08-29 18:01:07 [lingkuan_828.commons.api_base;239]  : [2025-08-29 18:01:07] DELETE请求: /mascontrol/group | 数据: [364]
+INFO     2025-08-29 18:01:08 [lingkuan_828.conftest;157]  : [2025-08-29 18:01:08] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 执行完毕
+INFO     2025-08-29 18:01:09 [lingkuan_828.commons.api_base;740]  : [2025-08-29 18:01:09] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_group WHERE name = %s | 超时: 5秒
+INFO     2025-08-29 18:01:09 [lingkuan_828.commons.api_base;451]  : [2025-08-29 18:01:09] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+参数: ('测试vps',)
+INFO     2025-08-29 18:01:09 [lingkuan_828.commons.api_base;454]  : [2025-08-29 18:01:09] 查询成功，结果数量: 0
+INFO     2025-08-29 18:01:09 [lingkuan_828.commons.api_base;466]  : [2025-08-29 18:01:09] 查询结果: []
+INFO     2025-08-29 18:01:09 [lingkuan_828.commons.api_base;776]  : [2025-08-29 18:01:09] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_group WHERE name = %s
+INFO     2025-08-29 18:01:09 [lingkuan_828.conftest;62]  : [2025-08-29 18:01:09] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 开始登录，环境: uat
+INFO     2025-08-29 18:01:09 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 192852
+INFO     2025-08-29 18:01:13 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-08-29 18:01:13 [lingkuan_828.commons.variable_manager;111]  : [2025-08-29 18:01] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-08-29 18:01:13 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
+ERROR    2025-08-29 18:01:34 [lingkuan_828.commons.api_base;263]  : [2025-08-29 18:01:34] DELETE 请求异常: HTTPSConnectionPool(host='39.101.181.190', port=443): Max retries exceeded with url: /vps/subcontrol/trader (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001942FDC78E0>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。')) | URL: /subcontrol/trader
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connection.py", line 199, in _new_conn
+    sock = connection.create_connection(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 490, in _make_request
+    raise new_e
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 466, in _make_request
+    self._validate_conn(conn)
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 1095, in _validate_conn
+    conn.connect()
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connection.py", line 693, in connect
+    self.sock = sock = self._new_conn()
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connection.py", line 214, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x000001942FDC78E0>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "D:\pycharm_test\venv\lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='39.101.181.190', port=443): Max retries exceeded with url: /vps/subcontrol/trader (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001942FDC78E0>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pycharm_test\lingkuan_828\commons\api_base.py", line 238, in send_delete_request
+    response = logged_session.delete(url, json=json_data)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 671, in delete
+    return self.request("DELETE", url, **kwargs)
+  File "D:\pycharm_test\lingkuan_828\commons\session.py", line 127, in request
+    response = super().request(method, full_url, *args, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "D:\pycharm_test\venv\lib\site-packages\requests\adapters.py", line 700, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='39.101.181.190', port=443): Max retries exceeded with url: /vps/subcontrol/trader (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001942FDC78E0>: Failed to establish a new connection: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。'))
+INFO     2025-08-29 18:01:34 [lingkuan_828.conftest;157]  : [2025-08-29 18:01:34] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 执行完毕
+INFO     2025-08-29 18:01:39 [lingkuan_828.conftest;62]  : [2025-08-29 18:01:39] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 开始登录，环境: uat
+INFO     2025-08-29 18:01:39 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 840204
+INFO     2025-08-29 18:01:41 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-08-29 18:01:41 [lingkuan_828.commons.variable_manager;111]  : [2025-08-29 18:01] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-08-29 18:01:41 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
+INFO     2025-08-29 18:01:41 [lingkuan_828.commons.api_base;239]  : [2025-08-29 18:01:41] DELETE请求: /subcontrol/trader | 数据: [7281]
+INFO     2025-08-29 18:01:42 [lingkuan_828.conftest;157]  : [2025-08-29 18:01:42] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 执行完毕
+INFO     2025-08-29 18:01:42 [root;220]  : 查询条件: table=follow_trader, account=300152
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;740]  : [2025-08-29 18:01:42] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;451]  : [2025-08-29 18:01:42] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;454]  : [2025-08-29 18:01:42] 查询成功，结果数量: 0
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;466]  : [2025-08-29 18:01:42] 查询结果: []
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;776]  : [2025-08-29 18:01:42] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;451]  : [2025-08-29 18:01:42] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;454]  : [2025-08-29 18:01:42] 查询成功，结果数量: 0
+INFO     2025-08-29 18:01:42 [lingkuan_828.commons.api_base;466]  : [2025-08-29 18:01:42] 查询结果: []
+INFO     2025-08-29 18:01:42 [lingkuan_828.conftest;62]  : [2025-08-29 18:01:42] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 开始登录，环境: uat
+INFO     2025-08-29 18:01:42 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 840204
+ERROR    2025-08-29 18:02:05 [lingkuan_828.conftest;129]  : 第1次登录失败: 登录失败: MFA验证失败
+INFO     2025-08-29 18:02:15 [lingkuan_828.conftest;100]  : UAT登录尝试 2/5，MFA验证码: 573020
+INFO     2025-08-29 18:02:15 [lingkuan_828.conftest;124]  : UAT登录成功（第2次尝试）
+INFO     2025-08-29 18:02:15 [lingkuan_828.commons.variable_manager;111]  : [2025-08-29 18:01] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-08-29 18:02:15 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
