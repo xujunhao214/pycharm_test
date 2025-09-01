@@ -1,11 +1,7 @@
 import pytest
 import sys
 import os
-import io
 import subprocess
-
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
 def run_cloud_tests(env: str = "test"):
@@ -38,9 +34,6 @@ def run_cloud_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_delete.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_refine/test_cloudTrader/test_lianxi.py",
 
-        "-o", "log_file_encoding=utf-8",
-        "-o", "console_output_encoding=utf-8",
-
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
@@ -61,8 +54,7 @@ def run_cloud_tests(env: str = "test"):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        encoding="utf-8",
-        errors="replace"
+        encoding="utf-8"
     )
     print(f"Cloud文件生成输出: {result.stderr}")
 
