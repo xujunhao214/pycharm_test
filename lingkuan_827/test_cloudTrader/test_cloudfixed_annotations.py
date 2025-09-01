@@ -166,7 +166,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 message=f"预期：跟单取策略备注",
                 attachment_name="备注详情"
             )
-            logger.info(f"场景1备注验证通过: {comment}")
+            logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("策略和平仓操作")
@@ -340,7 +340,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 message="预期：跟单取自身备注",
                 attachment_name="备注详情"
             )
-            logger.info(f"场景2备注验证通过: {comment}")
+            logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("策略和平仓操作")
@@ -514,7 +514,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 message="预期：跟单取开仓备注",
                 attachment_name="备注详情"
             )
-            logger.info(f"场景3备注验证通过: {comment}")
+            logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("策略和平仓操作")

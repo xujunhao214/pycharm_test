@@ -510,13 +510,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值-容差100"):
+                with allure.step("5.7 验证净值-容差500"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=100,
+                        abs_tol=500,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )

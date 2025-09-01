@@ -163,7 +163,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             comment = db_data[0]["comment"]
             assert comment == "ceshiceluebeizhu", \
                 f"场景1备注错误，预期: ceshiceluebeizhu, 实际: {comment}"
-            logger.info(f"场景1备注验证通过: {comment}")
+            logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景1：策略有固定注释，跟单无固定注释")
     @allure.title("策略和平仓操作")
@@ -334,7 +334,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             comment = db_data[0]["comment"]
             assert comment == "ceshigendanbeizhu", \
                 f"场景2备注错误，预期: ceshigendanbeizhu, 实际: {comment}"
-            logger.info(f"场景2备注验证通过: {comment}")
+            logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.title("策略和平仓操作")
@@ -505,7 +505,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             comment = db_data[0]["comment"]
             assert comment == "ceshikaicangbeizhu", \
                 f"场景3备注错误，预期: ceshikaicangbeizhu, 实际: {comment}"
-            logger.info(f"场景3备注验证通过: {comment}")
+            logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景3：策略开启订单备注，跟单无固定注释")
     @allure.title("策略和平仓操作")
