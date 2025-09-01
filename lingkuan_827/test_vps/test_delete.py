@@ -122,7 +122,6 @@ class TestDeleteUser(APITestBase):
             "success",
             "响应msg字段应为success"
         )
-        time.sleep(15)
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-强制删除VPS")
@@ -162,7 +161,6 @@ class TestDeleteUser(APITestBase):
             "success",
             "响应msg字段应为success"
         )
-        time.sleep(15)
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS列表列表-删除VPS")

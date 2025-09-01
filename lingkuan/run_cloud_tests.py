@@ -7,8 +7,9 @@ import subprocess
 def run_cloud_tests(env: str = "test"):
     """运行CloudTrader测试，生成独立报告，同时暴露结果目录供合并"""
     # 配置独立报告路径（保持原有稳定逻辑）
-    report_dir = "/www/python/jenkins/workspace/Documentatio_Test/results"
-    html_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/html"
+    report_dir = f"report/cloud_allure-results"  # 独立结果目录
+    html_dir = f"report/cloud_html-report"  # 独立HTML报告
+    brief_dir = f"report/cloud_brief-report"
 
     # 确保目录存在
     os.makedirs(report_dir, exist_ok=True)
@@ -21,16 +22,19 @@ def run_cloud_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_masOrderSend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_open.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudOrderSend_level.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_create_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudtrader_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_cloudtrader_money.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_create.py",
+        # "test_cloudTrader/test_lianxi.py",
+        # "test_cloudTrader/test_lianxi2.py",
+        # "test_cloudTrader/test_getAccountDataPage.py",
+        # "test_cloudTrader/test_cloudOrderSend.py",
+        # "test_cloudTrader/test_cloudOrderClose.py",
+        # "test_cloudTrader/test_cloud_masOrderSend.py",
+        # "test_cloudTrader/test_cloud_masOrderClose.py",
+        # "test_cloudTrader/test_cloudOrder_open_level.py",
+        # "test_cloudTrader/test_cloudfixed_annotations.py",
+        # "test_cloudTrader/test_create_scene.py",
+        # "test_cloudTrader/test_cloudtrader_money_scene.py",
+        "test_cloudTrader/test_delete.py",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
@@ -61,6 +65,9 @@ def run_cloud_tests(env: str = "test"):
         if exit_code != 0:
             os.system(f"allure generate {report_dir} -o {html_dir} --clean")
             print(f"Cloud独立报告: file://{os.path.abspath(html_dir)}/index.html")
+        else:
+            os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
+            print(f"Cloud独立简要报告: file://{os.path.abspath(brief_dir)}/index.html")
     except Exception as e:
         print(f"Cloud独立报告生成失败: {str(e)}")
 
@@ -69,6 +76,6 @@ def run_cloud_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)

@@ -2,39 +2,45 @@ import pytest
 import sys
 import os
 import subprocess
+import io
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
-def run_cloud_tests(env: str = "test"):
-    """运行CloudTrader测试，生成独立报告，同时暴露结果目录供合并"""
-    # 配置独立报告路径（保持原有稳定逻辑）
+def run_vps_tests(env: str = "test"):
+    """运行VPS测试，生成独立报告，同时暴露结果目录供合并"""
+    # 配置独立报告路径
     report_dir = "/www/python/jenkins/workspace/Documentatio_Test/results"
     html_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/html"
 
-    # 确保目录存在
     os.makedirs(report_dir, exist_ok=True)
 
-    # 构建pytest参数（保留原有稳定配置）
+    # 构建pytest参数
     args = [
         "-s", "-v",
         f"--env={env}",
-        f"--test-group=cloud",
+        f"--test-group=vps",
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_getAccountDataPage.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderClose.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloud_masOrderSend.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloud_masOrderClose.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrder_open_level.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudfixed_annotations.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudtrader_money_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_delete.py",
-        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_lianxi.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_getAccountDataPage.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_ordersend.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_orderclose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_masOrderSend.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_masOrderClose.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vpsOrder_open_level.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vpsfixed_annotations.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vpsMasOrder_money_scene.py",
+        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_delete.py",
+        # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_lianxi.py",
 
-        "--log-file=./Logs/cloud_pytest.log",
+        "-o", "log_file_encoding=utf-8",
+        "-o", "console_output_encoding=utf-8",
+
+        "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
@@ -54,17 +60,18 @@ def run_cloud_tests(env: str = "test"):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        encoding="utf-8"
+        encoding="utf-8",
+        errors="replace"
     )
-    print(f"Cloud文件生成输出: {result.stderr}")
+    print(f"VPS文件生成输出: {result.stderr}")
 
-    # 生成独立HTML报告（沿用原有稳定逻辑）
+    # 生成独立HTML报告
     try:
         if exit_code != 0:
             os.system(f"allure generate {report_dir} -o {html_dir} --clean")
-            print(f"Cloud独立报告: file://{os.path.abspath(html_dir)}/index.html")
+            print(f"VPS独立报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
-        print(f"Cloud独立报告生成失败: {str(e)}")
+        print(f"VPS独立报告生成失败: {str(e)}")
 
     # 返回结果目录（供并行脚本合并）
     return exit_code, report_dir
@@ -72,5 +79,5 @@ def run_cloud_tests(env: str = "test"):
 
 if __name__ == "__main__":
     env = sys.argv[1] if len(sys.argv) > 1 else "uat"
-    exit_code, _ = run_cloud_tests(env)
+    exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)

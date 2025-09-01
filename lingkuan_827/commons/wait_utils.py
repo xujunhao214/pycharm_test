@@ -5,12 +5,13 @@ from allure_commons.model2 import Status
 from allure_commons.reporter import AllureReporter
 from allure_commons._allure import StepContext
 from typing import Callable, Any, Optional
+from lingkuan_827.VAR.VAR import *
 
 
 def wait_for_condition(
         condition: Callable[[], Any],
-        timeout: int = 30,
-        poll_interval: float = 1.0,
+        timeout: int = WAIT_TIMEOUT,
+        poll_interval: float = POLL_INTERVAL,
         error_message: str = "等待条件超时未满足",
         step_title: Optional[str] = None
 ) -> Any:

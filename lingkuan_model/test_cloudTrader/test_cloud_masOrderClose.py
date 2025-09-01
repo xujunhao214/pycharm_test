@@ -2,8 +2,7 @@ import allure
 import logging
 import pytest
 import time
-import math
-from lingkuan_model.VAR.VAR import *
+import re
 from lingkuan_model.conftest import var_manager
 from lingkuan_model.commons.api_base import *
 import requests
@@ -43,7 +42,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "2",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing1"
             }
             response = self.send_post_request(
                 logged_session,
@@ -93,6 +92,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -117,10 +117,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -131,18 +133,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
-
-                with allure.step("验证订单数量"):
-                    self.verify_data(
-                        actual_value=len(db_data),
-                        expected_value=0,
-                        op=CompareOp.EQ,
-                        message=f"平仓的币种错误，应该没有平仓订单",
-                        attachment_name="订单数量详情"
-                    )
-                    logging.info(f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单")
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓的币种错误，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -152,6 +150,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -177,11 +176,13 @@ class TestVPSMasOrderclose:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -192,18 +193,14 @@ class TestVPSMasOrderclose:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
-
-                with allure.step("验证订单数量"):
-                    self.verify_data(
-                        actual_value=len(db_data),
-                        expected_value=0,
-                        op=CompareOp.EQ,
-                        message=f"平仓的币种错误，应该没有平仓订单",
-                        attachment_name="订单数量详情"
-                    )
-                    logging.info(f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单")
+                self.verify_data(
+                    actual_value=len(db_data),
+                    expected_value=0,
+                    op=CompareOp.EQ,
+                    message=f"平仓的币种错误，应该没有平仓订单",
+                    attachment_name="订单数量详情"
+                )
+                logging.info(f"平仓的币种错误，应该没有平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略-策略账号交易下单-交易平仓-正常平仓")
         def test_copy_order_close2(self, var_manager, logged_session):
@@ -240,6 +237,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                             SELECT 
                                 fod.size,
+                                fod.comment,
                                 fod.close_no,
                                 fod.magical,
                                 fod.open_price,
@@ -260,10 +258,12 @@ class TestVPSMasOrderclose:
                                 foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
+                                AND fod.comment = %s
                                 """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -295,6 +295,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                             SELECT 
                                 fod.size,
+                                fod.comment,
                                 fod.close_no,
                                 fod.magical,
                                 fod.open_price,
@@ -320,11 +321,13 @@ class TestVPSMasOrderclose:
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
                                 AND fod.trader_id = %s
+                                AND fod.comment = %s
                                 """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -347,8 +350,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"正常平仓，应该有两个平仓订单，结果有{len(db_data)}个订单")
-
-        time.sleep(30)
 
     @allure.story("场景2：平仓的停止功能校验")
     @allure.description("""
@@ -381,7 +382,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "5",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing2"
             }
             response = self.send_post_request(
                 logged_session,
@@ -454,6 +455,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                                SELECT 
                                    fod.size,
+                                   fod.comment,
                                    fod.close_no,
                                    fod.magical,
                                    fod.open_price,
@@ -477,10 +479,12 @@ class TestVPSMasOrderclose:
                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                WHERE foi.operation_type = %s
                                    AND fod.account = %s
+                                   AND fod.comment = %s
                                    """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -512,6 +516,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.close_no,
                            fod.magical,
                            fod.open_price,
@@ -537,11 +542,13 @@ class TestVPSMasOrderclose:
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
                            AND fod.trader_id = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -599,6 +606,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -619,10 +627,12 @@ class TestVPSMasOrderclose:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -654,6 +664,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -679,11 +690,13 @@ class TestVPSMasOrderclose:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.trader_id = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -706,8 +719,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-    time.sleep(30)
 
     @allure.story("场景3：平仓的订单方向功能校验-sell")
     @allure.description("""
@@ -747,7 +758,7 @@ class TestVPSMasOrderclose:
                         "followStatus": 1,
                         "followOpen": 1,
                         "followClose": 1,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],
@@ -784,7 +795,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing3"
             }
             response = self.send_post_request(
                 logged_session,
@@ -838,6 +849,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -863,11 +875,13 @@ class TestVPSMasOrderclose:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.trader_id = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -923,6 +937,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                               SELECT 
                                   fod.size,
+                                  fod.comment,
                                   fod.close_no,
                                   fod.magical,
                                   fod.open_price,
@@ -948,11 +963,13 @@ class TestVPSMasOrderclose:
                               WHERE foi.operation_type = %s
                                   AND fod.account = %s
                                   AND fod.trader_id = %s
+                                  AND fod.comment = %s
                                   """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1010,6 +1027,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                                 SELECT 
                                     fod.size,
+                                    fod.comment,
                                     fod.close_no,
                                     fod.magical,
                                     fod.open_price,
@@ -1030,10 +1048,12 @@ class TestVPSMasOrderclose:
                                     foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                 WHERE foi.operation_type = %s
                                     AND fod.account = %s
+                                    AND fod.comment = %s
                                     """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1056,8 +1076,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-    time.sleep(30)
 
     @allure.story("场景4：平仓的订单方向功能校验-buy sell")
     @allure.description("""
@@ -1097,7 +1115,7 @@ class TestVPSMasOrderclose:
                         "followStatus": 1,
                         "followOpen": 1,
                         "followClose": 1,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],
@@ -1134,7 +1152,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing4"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1187,6 +1205,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -1211,10 +1230,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1270,6 +1291,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                       SELECT 
                           fod.size,
+                          fod.comment,
                           fod.close_no,
                           fod.magical,
                           fod.open_price,
@@ -1295,11 +1317,13 @@ class TestVPSMasOrderclose:
                       WHERE foi.operation_type = %s
                           AND fod.account = %s
                           AND fod.trader_id = %s
+                          AND fod.comment = %s
                           """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1357,6 +1381,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1377,10 +1402,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1403,8 +1430,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-        time.sleep(30)
 
     @allure.story("场景5：平仓的订单方向功能校验-buy")
     @allure.description("""
@@ -1444,7 +1469,7 @@ class TestVPSMasOrderclose:
                         "followStatus": 1,
                         "followOpen": 1,
                         "followClose": 1,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],
@@ -1481,7 +1506,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing5"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1534,6 +1559,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -1558,10 +1584,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1617,6 +1645,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                       SELECT 
                           fod.size,
+                          fod.comment,
                           fod.close_no,
                           fod.magical,
                           fod.open_price,
@@ -1642,11 +1671,13 @@ class TestVPSMasOrderclose:
                       WHERE foi.operation_type = %s
                           AND fod.account = %s
                           AND fod.trader_id = %s
+                          AND fod.comment = %s
                           """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1704,6 +1735,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1724,10 +1756,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1751,19 +1785,17 @@ class TestVPSMasOrderclose:
                     )
                     logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
-        time.sleep(30)
-
     @allure.story("场景6：平仓的订单数量功能校验-4")
     @allure.description("""
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围：0.1-1，总订单数量4
-      2. 进行平仓-订单数量2
-      3. 校验平仓的订单数，应该等于2
-      4. 进行平仓-订单数量2
-      5. 校验平仓的订单数,等于4
-    - 预期结果：平仓的订单数量功能正确
-    """)
+            ### 测试说明
+            - 前置条件：有云策略和云跟单
+              1. 进行开仓，手数范围：0.1-1，总订单数量4
+              2. 进行平仓-订单数量2
+              3. 校验平仓的订单数，应该等于2
+              4. 进行平仓-订单数量2
+              5. 校验平仓的订单数,等于4
+            - 预期结果：平仓的订单数量功能正确
+            """)
     class TestcloudtradingOrders6(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
@@ -1783,7 +1815,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing6"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1833,38 +1865,41 @@ class TestVPSMasOrderclose:
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
-                   SELECT 
-                       fod.size,
-                       fod.close_no,
-                       fod.magical,
-                       fod.open_price,
-                       fod.symbol,
-                       fod.order_no,
-                       fod.close_time,
-                       foi.true_total_lots,
-                       foi.order_no,
-                       foi.operation_type,
-                       foi.create_time,
-                       foi.status,
-                       foi.min_lot_size,
-                       foi.max_lot_size,
-                       foi.total_lots,
-                       foi.master_order,
-                       foi.total_orders
-                   FROM 
-                       follow_order_detail fod
-                   INNER JOIN 
-                       follow_order_instruct foi 
-                   ON 
-                       foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                   WHERE foi.operation_type = %s
-                       AND fod.account = %s
-                       AND fod.trader_id = %s
-                       """
+                           SELECT 
+                               fod.size,
+                               fod.close_no,
+                               fod.magical,
+                               fod.open_price,
+                               fod.comment,
+                               fod.symbol,
+                               fod.order_no,
+                               fod.close_time,
+                               foi.true_total_lots,
+                               foi.order_no,
+                               foi.operation_type,
+                               foi.create_time,
+                               foi.status,
+                               foi.min_lot_size,
+                               foi.max_lot_size,
+                               foi.total_lots,
+                               foi.master_order,
+                               foi.total_orders
+                           FROM 
+                               follow_order_detail fod
+                           INNER JOIN 
+                               follow_order_instruct foi 
+                           ON 
+                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                           WHERE foi.operation_type = %s
+                               AND fod.account = %s
+                               AND fod.trader_id = %s
+                               AND fod.comment = %s
+                               """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    'changjing6',
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1917,32 +1952,35 @@ class TestVPSMasOrderclose:
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            fod.close_time,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            """
+                                SELECT 
+                                    fod.size,
+                                    fod.close_no,
+                                    fod.magical,
+                                    fod.comment,
+                                    fod.open_price,
+                                    fod.symbol,
+                                    fod.order_no,
+                                    fod.close_time,
+                                    foi.true_total_lots,
+                                    foi.order_no,
+                                    foi.operation_type,
+                                    foi.create_time,
+                                    foi.status,
+                                    foi.total_orders
+                                FROM 
+                                    follow_order_detail fod
+                                INNER JOIN 
+                                    follow_order_instruct foi 
+                                ON 
+                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                                WHERE foi.operation_type = %s
+                                    AND fod.account = %s
+                                    AND fod.comment = %s
+                                    """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1972,38 +2010,41 @@ class TestVPSMasOrderclose:
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
-                         SELECT 
-                             fod.size,
-                             fod.close_no,
-                             fod.magical,
-                             fod.open_price,
-                             fod.symbol,
-                             fod.order_no,
-                             fod.close_time,
-                             foi.true_total_lots,
-                             foi.order_no,
-                             foi.operation_type,
-                             foi.create_time,
-                             foi.status,
-                             foi.min_lot_size,
-                             foi.max_lot_size,
-                             foi.total_lots,
-                             foi.master_order,
-                             foi.total_orders
-                         FROM 
-                             follow_order_detail fod
-                         INNER JOIN 
-                             follow_order_instruct foi 
-                         ON 
-                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                         WHERE foi.operation_type = %s
-                             AND fod.account = %s
-                             AND fod.trader_id = %s
-                             """
+                                 SELECT 
+                                     fod.size,
+                                     fod.close_no,
+                                     fod.magical,
+                                     fod.comment,
+                                     fod.open_price,
+                                     fod.symbol,
+                                     fod.order_no,
+                                     fod.close_time,
+                                     foi.true_total_lots,
+                                     foi.order_no,
+                                     foi.operation_type,
+                                     foi.create_time,
+                                     foi.status,
+                                     foi.min_lot_size,
+                                     foi.max_lot_size,
+                                     foi.total_lots,
+                                     foi.master_order,
+                                     foi.total_orders
+                                 FROM 
+                                     follow_order_detail fod
+                                 INNER JOIN 
+                                     follow_order_instruct foi 
+                                 ON 
+                                     foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                                 WHERE foi.operation_type = %s
+                                     AND fod.account = %s
+                                     AND fod.trader_id = %s
+                                     AND fod.comment = %s
+                                     """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2026,8 +2067,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-        time.sleep(30)
 
     @allure.story("场景7：平仓的订单数量功能校验-0/8")
     @allure.description("""
@@ -2059,7 +2098,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing7"
             }
             response = self.send_post_request(
                 logged_session,
@@ -2110,6 +2149,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                        SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -2134,10 +2174,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing7"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2192,6 +2234,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -2212,10 +2255,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing7"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2247,6 +2292,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                          SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -2272,11 +2318,13 @@ class TestVPSMasOrderclose:
                          WHERE foi.operation_type = %s
                              AND fod.account = %s
                              AND fod.trader_id = %s
+                             AND fod.comment = %s
                              """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing7"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2299,8 +2347,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-        time.sleep(30)
 
     @allure.story("场景8：平仓的订单类型功能校验-内部订单")
     @allure.description("""
@@ -2332,7 +2378,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing8"
             }
             response = self.send_post_request(
                 logged_session,
@@ -2383,6 +2429,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -2407,10 +2454,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing8"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2465,6 +2514,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -2485,10 +2535,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing8"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2520,6 +2572,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                          SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -2545,11 +2598,13 @@ class TestVPSMasOrderclose:
                          WHERE foi.operation_type = %s
                              AND fod.account = %s
                              AND fod.trader_id = %s
+                             AND fod.comment = %s
                              """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing8"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2588,26 +2643,57 @@ class TestVPSMasOrderclose:
     """)
     class TestcloudtradingOrders9(APITestBase):
         @allure.title("登录MT4账号获取token")
-        @pytest.mark.retry(n=3, delay=5)
         def test_mt4_login(self, var_manager):
             global token_mt4, headers
-            url = "https://mt4.mtapi.io/Connect?user=300160&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+            max_retries = 5  # 最大重试次数
+            retry_interval = 5  # 重试间隔（秒）
+            token_mt4 = None
 
-            payload = {}
-            headers = {
-                'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
-                'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
-                'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
-                'Content-Type': 'application/json',
-                'Accept': '*/*',
-                'Host': 'mt4.mtapi.io',
-                'Connection': 'keep-alive'
-            }
+            # 用于验证token格式的正则表达式（UUID格式）
+            uuid_pattern = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 
-            response = requests.request("GET", url, headers=headers, data=payload)
-            token_mt4 = response.text
-            print(f"登录MT4账号获取token:{token_mt4}")
-            logging.info(f"登录MT4账号获取token:{token_mt4}")
+            for attempt in range(max_retries):
+                try:
+                    url = "https://mt4.mtapi.io/Connect?user=300160&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+
+                    headers = {
+                        'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
+                        'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
+                        'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*',
+                        'Host': 'mt4.mtapi.io',
+                        'Connection': 'keep-alive'
+                    }
+
+                    response = requests.request("GET", url, headers=headers, data={})
+                    response_text = response.text.strip()  # 去除可能的空白字符
+
+                    logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
+
+                    # 验证响应是否为有效的UUID格式token
+                    if uuid_pattern.match(response_text):
+                        token_mt4 = response_text
+                        logging.info(f"第{attempt + 1}次尝试成功 - 获取到token: {token_mt4}")
+                        break
+                    else:
+                        logging.warning(f"第{attempt + 1}次尝试失败 - 无效的token格式: {response_text}")
+
+                except Exception as e:
+                    logging.error(f"第{attempt + 1}次尝试发生异常: {str(e)}")
+
+                # 如果不是最后一次尝试，等待后重试
+                if attempt < max_retries - 1:
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}次重试...")
+                    time.sleep(retry_interval)
+
+            # 最终验证结果
+            if not token_mt4 or not uuid_pattern.match(token_mt4):
+                logging.error(f"经过{max_retries}次尝试后，MT4登录仍失败")
+                assert False, f"MT4登录失败，最后响应: {response_text if 'response_text' in locals() else '无响应'}"
+            else:
+                print(f"登录MT4账号获取token: {token_mt4}")
+                logging.info(f"登录MT4账号获取token: {token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
@@ -2837,8 +2923,6 @@ class TestVPSMasOrderclose:
                 )
                 logging.info(f"平仓的订单数量应该是1，结果有{len(db_data)}个订单")
 
-        time.sleep(30)
-
     @allure.story("场景10：平仓的订单类型功能校验-全部订单")
     @allure.description("""
     ### 测试说明
@@ -2869,7 +2953,7 @@ class TestVPSMasOrderclose:
                 "endSize": "1.00",
                 "totalNum": "4",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing10"
             }
             response = self.send_post_request(
                 logged_session,
@@ -2920,6 +3004,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -2944,10 +3029,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing10"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3002,6 +3089,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -3021,10 +3109,12 @@ class TestVPSMasOrderclose:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing10"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3056,6 +3146,7 @@ class TestVPSMasOrderclose:
                 sql = f"""
                          SELECT 
                              fod.size,
+                             fod.comment,
                              fod.close_no,
                              fod.magical,
                              fod.open_price,
@@ -3081,11 +3172,13 @@ class TestVPSMasOrderclose:
                          WHERE foi.operation_type = %s
                              AND fod.account = %s
                              AND fod.trader_id = %s
+                             AND fod.comment = %s
                              """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing10"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3108,8 +3201,6 @@ class TestVPSMasOrderclose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-        time.sleep(30)
 
     @allure.story("场景11：平仓的订单备注功能校验")
     @allure.description("""

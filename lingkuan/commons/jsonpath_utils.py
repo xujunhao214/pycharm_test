@@ -1,3 +1,4 @@
+import logging
 from jsonpath_ng import parse
 from typing import Optional, Any, List, Dict, Union
 
@@ -28,7 +29,7 @@ class JsonPathUtils:
 
         except Exception as e:
             # 处理无效表达式等异常
-            print(f"JSONPath解析错误: {e}")
+            logging.info(f"JSONPath解析错误: {e}")
             return default
 
     def assert_value(self, data: dict, expression: str, expected: any) -> None:

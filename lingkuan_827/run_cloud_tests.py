@@ -1,7 +1,11 @@
 import pytest
 import sys
 import os
+import io
 import subprocess
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
 def run_cloud_tests(env: str = "test"):
@@ -24,9 +28,9 @@ def run_cloud_tests(env: str = "test"):
 
         # "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_lianxi.py",
-        # "test_cloudTrader/test_lianxi2.py",
+        "test_cloudTrader/test_lianxi2.py",
+        # "test_cloudTrader/test_getAccountDataPage.py",
         # "test_cloudTrader/test_cloudOrderSend.py",
-        # "test_cloudTrader/test_cloudOrderSend2.py",
         # "test_cloudTrader/test_cloudOrderClose.py",
         # "test_cloudTrader/test_cloud_masOrderSend.py",
         # "test_cloudTrader/test_cloud_masOrderClose.py",
@@ -34,7 +38,10 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_cloudfixed_annotations.py",
         # "test_cloudTrader/test_create_scene.py",
         # "test_cloudTrader/test_cloudtrader_money_scene.py",
-        "test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_delete.py",
+
+        "-o", "log_file_encoding=utf-8",
+        "-o", "console_output_encoding=utf-8",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
@@ -56,7 +63,8 @@ def run_cloud_tests(env: str = "test"):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        encoding="utf-8"
+        encoding="utf-8",
+        errors="replace"
     )
     print(f"Cloud文件生成输出: {result.stderr}")
 

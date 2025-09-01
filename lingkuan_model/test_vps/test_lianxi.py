@@ -1,266 +1,150 @@
 import time
+import math
 import allure
 import logging
 import pytest
+import re
+from lingkuan_model.VAR.VAR import *
 from lingkuan_model.conftest import var_manager
 from lingkuan_model.commons.api_base import *
-from lingkuan_model.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_model.commons.jsonpath_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"
+SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("仪表盘")
-class TestVPSOrderSend_newScenarios:
-    @allure.story("仪表盘-云策略-策略账号数据")
+# ------------------------------------
+# 大模块4：VPS策略下单-平仓的订单类型功能验证
+# ------------------------------------
+@allure.feature("VPS策略下单-平仓的功能校验")
+# @pytest.mark.skipif(True, reason=SKIP_REASON)
+class TestVPSOrderType:
+    @allure.story("场景6：平仓的订单类型功能验证-MT4外部订单")
     @allure.description("""
-    ### 测试说明
-    - 功能校验，校验仪表盘的数据是否正确
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数1
-      2. 获取仪表数据，提取数据库数据，然后进行校验
-      3. 数据正确
-    - 预期结果：数据正确
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 登录MT4账号
+      2. 使用mt4接口进行开仓
+      3. 在自研平台进行平仓-订单类型-内部订单，平仓失败
+      4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
+    - 预期结果：平仓的订单类型功能正确
     """)
-    class TestVPSOrderSend1(APITestBase):
-        @allure.title("云策略交易下单-分配下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
-            # 发送云策略交易下单-复制下单请求
-            masOrderSend = var_manager.get_variable("masOrderSend")
-            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
-            data = {
-                "traderList": [cloudTrader_user_ids_2],
-                "type": 0,
-                "tradeType": 0,
-                "symbol": masOrderSend["symbol"],
-                "startSize": "0.10",
-                "endSize": "1.00",
-                "totalSzie": "1.00",
-                "remark": "测试数据"
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderSend',
-                json_data=data
-            )
+    class TestMT4ExternalOrderClose(APITestBase):
+        @allure.title("登录MT4账号获取token")
+        def test_mt4_login(self, var_manager):
+            global token_mt4, headers
+            max_retries = 5  # 最大重试次数
+            retry_interval = 5  # 重试间隔（秒）
+            token_mt4 = None
 
-            # 验证下单成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
+            # 用于验证token格式的正则表达式（UUID格式）
+            uuid_pattern = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 
-        @allure.title("数据库校验-策略开仓-提取数据")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情表账号数据"):
-                global profit_sum, total, order_num, margin_proportion, free_margin, euqit
-                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
-                sql = f"""
-                           SELECT 
-                               fod.size,
-                               fod.send_no,
-                               fod.profit,
-                               fod.open_time,
-                               fod.order_no,
-                               foi.operation_type,
-                               foi.create_time
-                           FROM 
-                               follow_order_detail fod
-                           INNER JOIN 
-                               follow_order_instruct foi 
-                           ON 
-                               foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                           WHERE foi.operation_type = %s
-                               AND fod.account = %s
-                               """
-                params = (
-                    '0',
-                    cloudTrader_user_accounts_2,
-                )
+            for attempt in range(max_retries):
+                try:
+                    url = "https://mt4.mtapi.io/Connect?user=300151&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
 
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time_with_timezone(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="fod.open_time"
-                )
-            with allure.step("2. 提取数据"):
-                profit_db = [record["profit"] for record in db_data]
-                profit_sum = sum(profit_db)
+                    headers = {
+                        'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
+                        'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
+                        'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*',
+                        'Host': 'mt4.mtapi.io',
+                        'Connection': 'keep-alive'
+                    }
 
-                size = [record["size"] for record in db_data]
-                total = sum(size)
+                    response = requests.request("GET", url, headers=headers, data={})
+                    response_text = response.text.strip()  # 去除可能的空白字符
 
-                order_num = len(db_data)
+                    logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
 
-            with allure.step("3. 获取follow_trader表账号数据"):
-                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
-                sql = f"""SELECT free_margin,euqit FROM follow_trader WHERE account = %s"""
-                params = (cloudTrader_user_accounts_2,)
+                    # 验证响应是否为有效的UUID格式token
+                    if uuid_pattern.match(response_text):
+                        token_mt4 = response_text
+                        logging.info(f"第{attempt + 1}次尝试成功 - 获取到token: {token_mt4}")
+                        break
+                    else:
+                        logging.warning(f"第{attempt + 1}次尝试失败 - 无效的token格式: {response_text}")
 
-                db_data = self.query_database(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-            with allure.step("4. 提取数据"):
-                free_margin = db_data[0]["free_margin"]
-                euqit = db_data[0]["euqit"]
-                margin_proportion = (euqit / free_margin) * 100
-                # 使用 round 函数保留两位小数，round 函数的第二个参数指定保留的小数位数
-                margin_proportion = round(margin_proportion, 2)
+                except Exception as e:
+                    logging.error(f"第{attempt + 1}次尝试发生异常: {str(e)}")
 
-        @pytest.mark.retry(n=3, delay=5)
-        @allure.title("仪表盘-账号数据校验")
-        def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
-            with allure.step("1. 获取仪表盘-账号数据"):
-                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
-                params = {
-                    "page": 1,
-                    "limit": 10,
-                    "order": "",
-                    "asc": False,
-                    "deleted": None,
-                    "brokerName": "AS",
-                    "account": cloudTrader_user_accounts_2,
+                # 如果不是最后一次尝试，等待后重试
+                if attempt < max_retries - 1:
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}次重试...")
+                    time.sleep(retry_interval)
+
+            # 最终验证结果
+            if not token_mt4 or not uuid_pattern.match(token_mt4):
+                logging.error(f"经过{max_retries}次尝试后，MT4登录仍失败")
+                assert False, f"MT4登录失败，最后响应: {response_text if 'response_text' in locals() else '无响应'}"
+            else:
+                print(f"登录MT4账号获取token: {token_mt4}")
+                logging.info(f"登录MT4账号获取token: {token_mt4}")
+
+        @allure.title("MT4平台开仓操作")
+        def test_mt4_open(self, var_manager):
+            url = f"https://mt4.mtapi.io/OrderSend?id={token_mt4}&symbol=XAUUSD&operation=Buy&volume=1&placedType=Client&price=0.00"
+
+            payload = ""
+            self.response = requests.request("GET", url, headers=headers, data=payload)
+            self.json_utils = JsonPathUtils()
+            self.response = self.response.json()  # 解析JSON响应
+            ticket = self.json_utils.extract(self.response, "$.ticket")
+            print(ticket)
+            logging.info(ticket)
+
+        @pytest.mark.url("vps")
+        @allure.title("自研平台平仓-内部订单-预期失败")
+        def test_trader_orderclose(self, var_manager, logged_session):
+            with allure.step("1. 发送全平订单平仓请求"):
+                vps_trader_id = var_manager.get_variable("vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
+                data = {
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "1",
+                    "closeType": 0,
+                    "remark": "",
+                    "symbol": "XAUUSD",
+                    "type": 0,
+                    "traderId": vps_trader_id,
+                    "account": new_user["account"]
                 }
-                response = self.send_get_request(
+                response = self.send_post_request(
                     logged_session,
-                    '/dashboard/getAccountDataPage',
-                    params=params,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data,
                 )
             with allure.step("2. 验证响应"):
-                self.assert_response_status(
-                    response,
-                    200,
-                    "获取仪表盘数据失败"
+                self.assert_response_status(response, 200, "平仓失败")
+                self.assert_json_value(response, "$.msg", f"{new_user['account']}暂无可平仓订单",
+                                       f"响应msg字段应为{new_user['account']}暂无可平仓订单")
+
+        @pytest.mark.url("vps")
+        @allure.title("自研平台平仓-外部订单-预期成功")
+        def test_trader_orderclose2(self, var_manager, logged_session):
+            with allure.step("1. 发送全平订单平仓请求"):
+                vps_trader_id = var_manager.get_variable("vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
+                data = {
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "1",
+                    "closeType": 1,
+                    "remark": "",
+                    "symbol": "XAUUSD",
+                    "type": 0,
+                    "traderId": vps_trader_id,
+                    "account": new_user["account"]
+                }
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data,
                 )
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "success",
-                    "响应msg字段应为success"
-                )
-            with allure.step("3. 提取数据"):
-                self.json_utils = JsonPathUtils()
-                response = response.json()
-                sourceAccount = self.json_utils.extract(response, "$.data[0].sourceAccount")
-                profit = self.json_utils.extract(response, "$.data[0].profit")
-                orderNum = self.json_utils.extract(response, "$.data[0].orderNum")
-                lots = self.json_utils.extract(response, "$.data[0].lots")
-                marginProportion = self.json_utils.extract(response, "$.data[0].marginProportion")
-                proportion = self.json_utils.extract(response, "$.data[0].proportion")
-                equity = self.json_utils.extract(response, "$.data[0].equity")
-                logging.info(
-                    f"提取的数据:{sourceAccount, profit, orderNum, lots, marginProportion, proportion, equity}")
-
-            with allure.step("4. 数据校验"):
-                with allure.step("5.1 验证账号"):
-                    cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
-                    self.verify_data(
-                        actual_value=sourceAccount,
-                        expected_value=cloudTrader_user_accounts_2,
-                        op=CompareOp.EQ,
-                        use_isclose=False,
-                        message=f"账号数据符合预期",
-                        attachment_name="账号详情"
-                    )
-                    logging.info(f"账号数据符合预期，实际是{sourceAccount}")
-
-                # with allure.step("5.2 验证盈利"):
-                #         self.verify_data(
-                #             actual_value=float(profit),
-                #             expected_value=float(profit_sum),
-                #             op=CompareOp.EQ,
-                #             use_isclose=True,
-                #             abs_tol=100,
-                #             message=f"盈利数据符合预期",
-                #             attachment_name="盈利详情"
-                #         )
-                #         logging.info(f"盈利数据符合预期，实际是{profit_sum}")
-
-                with allure.step("5.3 验证持仓订单量"):
-                    self.verify_data(
-                        actual_value=float(orderNum),
-                        expected_value=float(order_num),
-                        op=CompareOp.EQ,
-                        use_isclose=True,
-                        abs_tol=3,
-                        message=f"持仓订单量数据符合预期",
-                        attachment_name="持仓订单量详情"
-                    )
-                    logging.info(f"持仓订单量数据符合预期，实际是{order_num}")
-
-                with allure.step("5.4 验证持仓手数"):
-                    self.verify_data(
-                        actual_value=float(lots),
-                        expected_value=float(total),
-                        op=CompareOp.EQ,
-                        use_isclose=True,
-                        abs_tol=0,
-                        message=f"持仓手数符合预期",
-                        attachment_name="持仓手数详情"
-                    )
-                    logging.info(f"持仓手数符合预期，实际是{total}")
-
-                with allure.step("5.5 验证可用预付款"):
-                    self.verify_data(
-                        actual_value=float(marginProportion),
-                        expected_value=float(free_margin),
-                        op=CompareOp.EQ,
-                        use_isclose=True,
-                        abs_tol=10000,
-                        message=f"可用预付款符合预期",
-                        attachment_name="可用预付款详情"
-                    )
-                    logging.info(f"可用预付款符合预期，实际是{free_margin}")
-
-                with allure.step("5.6 验证可用预付款比例"):
-                    self.verify_data(
-                        actual_value=float(proportion),
-                        expected_value=float(margin_proportion),
-                        op=CompareOp.EQ,
-                        use_isclose=True,
-                        abs_tol=100,
-                        message=f"可用预付款比例符合预期",
-                        attachment_name="可用预付款比例详情"
-                    )
-                    logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
-
-                with allure.step("5.7 验证净值"):
-                    self.verify_data(
-                        actual_value=float(equity),
-                        expected_value=float(euqit),
-                        op=CompareOp.EQ,
-                        use_isclose=True,
-                        abs_tol=500,
-                        message=f"净值符合预期",
-                        attachment_name="净值详情"
-                    )
-                    logging.info(f"净值符合预期，实际是{euqit}")
-
-        @allure.title("云策略交易下单-分配平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
-            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
-            # 发送平仓请求
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderList": [cloudTrader_user_ids_2]
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderClose',
-                json_data=data
-            )
-
-            # 验证平仓成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
+            with allure.step("2. 验证响应"):
+                self.assert_response_status(response, 200, "平仓失败")
+                self.assert_json_value(response, "$.msg", "success", "响应msg字段应为success")

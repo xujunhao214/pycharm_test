@@ -7,8 +7,9 @@ import subprocess
 def run_vps_tests(env: str = "test"):
     """运行VPS测试，生成独立报告，同时暴露结果目录供合并"""
     # 配置独立报告路径
-    report_dir = "/www/python/jenkins/workspace/Documentatio_Test/results"
-    html_dir = "/www/python/jenkins/workspace/Documentatio_Test/results/html"
+    report_dir = f"report/vps_allure-results"
+    html_dir = f"report/vps_html-report"
+    brief_dir = f"report/vps_brief-report"
 
     os.makedirs(report_dir, exist_ok=True)
 
@@ -20,16 +21,19 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_masOrderSend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_ordersend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_level.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_Leakage_open.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_create_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_scene.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_vps_money.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan/test_vps/test_delete_scene.py",
+        # "test_vps/test_create.py",
+        # "test_vps/test_lianxi.py",
+        # "test_vps/test_lianxi2.py",
+        # "test_vps/test_getAccountDataPage.py",
+        # "test_vps/test_vps_ordersend.py",
+        # "test_vps/test_vps_orderclose.py",
+        # "test_vps/test_vps_masOrderSend.py",
+        # "test_vps/test_vps_masOrderClose.py",
+        # "test_vps/test_vpsOrder_open_level.py",
+        # "test_vps/test_vpsfixed_annotations.py",
+        # "test_vps/test_create_scene.py",
+        # "test_vps/test_vpsMasOrder_money_scene.py",
+        "test_vps/test_delete.py",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",
@@ -60,6 +64,9 @@ def run_vps_tests(env: str = "test"):
         if exit_code != 0:
             os.system(f"allure generate {report_dir} -o {html_dir} --clean")
             print(f"VPS独立报告: file://{os.path.abspath(html_dir)}/index.html")
+        else:
+            os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
+            print(f"VPS独立简要报告: file://{os.path.abspath(brief_dir)}/index.html")
     except Exception as e:
         print(f"VPS独立报告生成失败: {str(e)}")
 
@@ -68,6 +75,6 @@ def run_vps_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)

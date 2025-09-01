@@ -1,7 +1,11 @@
 import pytest
 import sys
 import os
+import io
 import subprocess
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
 def run_vps_tests(env: str = "test"):
@@ -23,9 +27,9 @@ def run_vps_tests(env: str = "test"):
 
         # "test_vps/test_create.py",
         # "test_vps/test_lianxi.py",
-        # "test_vps/test_lianxi2.py",
+        "test_vps/test_lianxi2.py",
+        # "test_vps/test_getAccountDataPage.py",
         # "test_vps/test_vps_ordersend.py",
-        # "test_vps/test_vps_ordersend2.py",
         # "test_vps/test_vps_orderclose.py",
         # "test_vps/test_vps_masOrderSend.py",
         # "test_vps/test_vps_masOrderClose.py",
@@ -33,7 +37,10 @@ def run_vps_tests(env: str = "test"):
         # "test_vps/test_vpsfixed_annotations.py",
         # "test_vps/test_create_scene.py",
         # "test_vps/test_vpsMasOrder_money_scene.py",
-        "test_vps/test_delete.py",
+        # "test_vps/test_delete.py",
+
+        "-o", "log_file_encoding=utf-8",
+        "-o", "console_output_encoding=utf-8",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",
@@ -55,7 +62,8 @@ def run_vps_tests(env: str = "test"):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        encoding="utf-8"
+        encoding="utf-8",
+        errors="replace"
     )
     print(f"VPS文件生成输出: {result.stderr}")
 

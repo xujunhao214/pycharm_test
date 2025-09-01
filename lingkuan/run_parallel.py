@@ -137,5 +137,5 @@ def run_all_tests_parallel(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "test"
+    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
     sys.exit(run_all_tests_parallel(env))

@@ -2,6 +2,10 @@ import pytest
 import sys
 import os
 import subprocess
+import io
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
 def run_vps_tests(env: str = "test"):
@@ -33,6 +37,9 @@ def run_vps_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_delete.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_lianxi.py",
 
+        "-o", "log_file_encoding=utf-8",
+        "-o", "console_output_encoding=utf-8",
+
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
@@ -53,7 +60,8 @@ def run_vps_tests(env: str = "test"):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        encoding="utf-8"
+        encoding="utf-8",
+        errors="replace"
     )
     print(f"VPS文件生成输出: {result.stderr}")
 

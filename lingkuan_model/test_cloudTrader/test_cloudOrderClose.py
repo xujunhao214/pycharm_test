@@ -2,8 +2,7 @@ import allure
 import logging
 import pytest
 import time
-import math
-from lingkuan_model.VAR.VAR import *
+import re
 from lingkuan_model.conftest import var_manager
 from lingkuan_model.commons.api_base import *
 import requests
@@ -51,7 +50,7 @@ class TestCloudCoreFunctionality:
                     "endSize": "1.00",
                     "totalNum": "5",
                     "totalSzie": "",
-                    "remark": ""
+                    "remark": "changjing1"
                 }
 
                 response = self.send_post_request(
@@ -109,12 +108,14 @@ class TestCloudCoreFunctionality:
 
                 sql = """
                             SELECT 
+                                fod.comment,
                                 fod.size,
                                 fod.close_no,
                                 fod.magical,
                                 fod.open_price,
                                 fod.symbol,
                                 fod.order_no,
+                                fod.comment,
                                 foi.true_total_lots,
                                 foi.order_no,
                                 foi.operation_type,
@@ -133,9 +134,10 @@ class TestCloudCoreFunctionality:
                                 foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
+                                AND fod.comment = %s
                                 AND fod.trader_id = %s
                         """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing1", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -227,6 +229,7 @@ class TestCloudCoreFunctionality:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -245,9 +248,10 @@ class TestCloudCoreFunctionality:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         AND fod.trader_id = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing1", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -303,7 +307,6 @@ class TestCloudCoreFunctionality:
                     "success",
                     "复制平仓响应msg字段应为success"
                 )
-            time.sleep(30)
 
 
 # ------------------------------------
@@ -343,7 +346,7 @@ class TestCloudFollowDirection:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "测试数据"
+                    "remark": "changjing2"
                 }
 
                 response = self.send_post_request(
@@ -409,6 +412,7 @@ class TestCloudFollowDirection:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -427,10 +431,11 @@ class TestCloudFollowDirection:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            AND fod.trader_id = %s
                            AND foi.total_orders = %s
                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "3")
+                params = ('1', cloudTrader_user_accounts_4, "changjing2", cloudTrader_vps_ids_3, "3")
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -498,6 +503,7 @@ class TestCloudFollowDirection:
                                    fod.open_price,
                                    fod.symbol,
                                    fod.order_no,
+                                   fod.comment,
                                    foi.true_total_lots,
                                    foi.order_no,
                                    foi.operation_type,
@@ -516,9 +522,10 @@ class TestCloudFollowDirection:
                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                WHERE foi.operation_type = %s
                                    AND fod.account = %s
+                                   AND fod.comment = %s
                                    AND fod.trader_id = %s
                            """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing2", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -545,8 +552,6 @@ class TestCloudFollowDirection:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-        time.sleep(30)
 
     # @pytest.mark.skipif(reason=SKIP_REASON)
     @allure.story("场景3：平仓的订单方向功能校验-buy sell")
@@ -580,7 +585,7 @@ class TestCloudFollowDirection:
                     "endSize": "1.00",
                     "totalNum": "4",
                     "totalSzie": "1.00",
-                    "remark": "测试数据"
+                    "remark": "changjing3"
                 }
 
                 response = self.send_post_request(
@@ -645,6 +650,7 @@ class TestCloudFollowDirection:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -663,10 +669,11 @@ class TestCloudFollowDirection:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                                AND foi.total_orders = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "4")
+                params = ('1', cloudTrader_user_accounts_4, "changjing3", cloudTrader_vps_ids_3, "4")
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -734,6 +741,7 @@ class TestCloudFollowDirection:
                                        fod.open_price,
                                        fod.symbol,
                                        fod.order_no,
+                                       fod.comment,
                                        foi.true_total_lots,
                                        foi.order_no,
                                        foi.operation_type,
@@ -752,9 +760,10 @@ class TestCloudFollowDirection:
                                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                    WHERE foi.operation_type = %s
                                        AND fod.account = %s
+                                       AND fod.comment = %s
                                        AND fod.trader_id = %s
                                """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing3", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -781,8 +790,6 @@ class TestCloudFollowDirection:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-            time.sleep(30)
 
 
 # ------------------------------------
@@ -822,7 +829,7 @@ class TestCloudOrderQuantityControl:
                     "endSize": "1.00",
                     "totalNum": "4",
                     "totalSzie": "",
-                    "remark": ""
+                    "remark": "changjing4"
                 }
 
                 response = self.send_post_request(
@@ -889,6 +896,7 @@ class TestCloudOrderQuantityControl:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -907,9 +915,10 @@ class TestCloudOrderQuantityControl:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            AND fod.trader_id = %s
                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing4", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time(
@@ -982,6 +991,7 @@ class TestCloudOrderQuantityControl:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -1000,9 +1010,10 @@ class TestCloudOrderQuantityControl:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing4", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1021,8 +1032,6 @@ class TestCloudOrderQuantityControl:
                     attachment_name="订单数量详情"
                 )
                 logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
-
-            time.sleep(30)
 
 
 # ------------------------------------
@@ -1062,7 +1071,7 @@ class TestCloudOrderType:
                     "endSize": "1.00",
                     "totalNum": "2",
                     "totalSzie": "",
-                    "remark": ""
+                    "remark": "changjing5"
                 }
 
                 response = self.send_post_request(
@@ -1128,6 +1137,7 @@ class TestCloudOrderType:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -1146,9 +1156,10 @@ class TestCloudOrderType:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            AND fod.trader_id = %s
                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing5", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -1217,6 +1228,7 @@ class TestCloudOrderType:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -1235,9 +1247,10 @@ class TestCloudOrderType:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing5", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1279,23 +1292,55 @@ class TestCloudOrderType:
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):
             global token_mt4, headers
-            url = "https://mt4.mtapi.io/Connect?user=300162&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+            max_retries = 5  # 最大重试次数
+            retry_interval = 5  # 重试间隔（秒）
+            token_mt4 = None
 
-            payload = {}
-            headers = {
-                'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
-                'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
-                'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
-                'Content-Type': 'application/json',
-                'Accept': '*/*',
-                'Host': 'mt4.mtapi.io',
-                'Connection': 'keep-alive'
-            }
+            # 用于验证token格式的正则表达式（UUID格式）
+            uuid_pattern = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 
-            response = requests.request("GET", url, headers=headers, data=payload)
-            token_mt4 = response.text
-            print(f"登录MT4账号获取token:{token_mt4}")
-            logging.info(f"登录MT4账号获取token:{token_mt4}")
+            for attempt in range(max_retries):
+                try:
+                    url = "https://mt4.mtapi.io/Connect?user=300162&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+
+                    headers = {
+                        'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
+                        'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
+                        'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*',
+                        'Host': 'mt4.mtapi.io',
+                        'Connection': 'keep-alive'
+                    }
+
+                    response = requests.request("GET", url, headers=headers, data={})
+                    response_text = response.text.strip()  # 去除可能的空白字符
+
+                    logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
+
+                    # 验证响应是否为有效的UUID格式token
+                    if uuid_pattern.match(response_text):
+                        token_mt4 = response_text
+                        logging.info(f"第{attempt + 1}次尝试成功 - 获取到token: {token_mt4}")
+                        break
+                    else:
+                        logging.warning(f"第{attempt + 1}次尝试失败 - 无效的token格式: {response_text}")
+
+                except Exception as e:
+                    logging.error(f"第{attempt + 1}次尝试发生异常: {str(e)}")
+
+                # 如果不是最后一次尝试，等待后重试
+                if attempt < max_retries - 1:
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}次重试...")
+                    time.sleep(retry_interval)
+
+            # 最终验证结果
+            if not token_mt4 or not uuid_pattern.match(token_mt4):
+                logging.error(f"经过{max_retries}次尝试后，MT4登录仍失败")
+                assert False, f"MT4登录失败，最后响应: {response_text if 'response_text' in locals() else '无响应'}"
+            else:
+                print(f"登录MT4账号获取token: {token_mt4}")
+                logging.info(f"登录MT4账号获取token: {token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
@@ -1357,6 +1402,7 @@ class TestCloudOrderType:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -1446,6 +1492,7 @@ class TestCloudOrderType:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -1486,8 +1533,6 @@ class TestCloudOrderType:
                 )
                 logging.info(f"平仓的订单数量应该是1，结果有{len(db_data)}个订单")
 
-            time.sleep(30)
-
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景7：平仓的订单类型功能校验-全部订单")
     @allure.description("""
@@ -1520,7 +1565,7 @@ class TestCloudOrderType:
                     "endSize": "1.00",
                     "totalNum": "2",
                     "totalSzie": "",
-                    "remark": ""
+                    "remark": "changjing7"
                 }
 
                 response = self.send_post_request(
@@ -1586,6 +1631,7 @@ class TestCloudOrderType:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -1604,9 +1650,10 @@ class TestCloudOrderType:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            AND fod.trader_id = %s
                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing7", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -1675,6 +1722,7 @@ class TestCloudOrderType:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -1693,9 +1741,10 @@ class TestCloudOrderType:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing7", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1718,8 +1767,6 @@ class TestCloudOrderType:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量应该是2，结果有{len(db_data)}个订单")
-
-            time.sleep(30)
 
 
 # ------------------------------------
@@ -1825,6 +1872,7 @@ class TestCloudCloseRemark:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -1843,9 +1891,10 @@ class TestCloudCloseRemark:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            AND fod.trader_id = %s
                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "ceshipingcangbeizhu", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -1914,6 +1963,7 @@ class TestCloudCloseRemark:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -1932,9 +1982,10 @@ class TestCloudCloseRemark:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "ceshipingcangbeizhu", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1957,8 +2008,6 @@ class TestCloudCloseRemark:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量应该是2，结果有{len(db_data)}个订单")
-
-            time.sleep(30)
 
 
 # ------------------------------------
@@ -2000,7 +2049,7 @@ class TestCloudClose:
                     "endSize": "1.00",
                     "totalNum": "2",
                     "totalSzie": "",
-                    "remark": "ceshipingcangbeizhu"
+                    "remark": "changjing9"
                 }
 
                 response = self.send_post_request(
@@ -2059,6 +2108,7 @@ class TestCloudClose:
                                    fod.open_price,
                                    fod.symbol,
                                    fod.order_no,
+                                   fod.comment,
                                    foi.true_total_lots,
                                    foi.order_no,
                                    foi.operation_type,
@@ -2077,9 +2127,10 @@ class TestCloudClose:
                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                WHERE foi.operation_type = %s
                                    AND fod.account = %s
+                                   AND fod.comment = %s
                                    AND fod.trader_id = %s
                            """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing9", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -2148,6 +2199,7 @@ class TestCloudClose:
                            fod.open_price,
                            fod.symbol,
                            fod.order_no,
+                           fod.comment,
                            foi.true_total_lots,
                            foi.order_no,
                            foi.operation_type,
@@ -2166,9 +2218,10 @@ class TestCloudClose:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            AND fod.trader_id = %s
                    """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing9", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time(
@@ -2202,7 +2255,7 @@ class TestCloudClose:
                     "intervalTime": 0,
                     "num": "",
                     "closeType": 0,
-                    "remark": "ceshipingcangbeizhu",
+                    "remark": "",
                     "cloudTraderId": [cloudTrader_traderList_4],
                     "symbol": new_user['symbol'],
                     "type": 0
@@ -2237,6 +2290,7 @@ class TestCloudClose:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -2255,9 +2309,10 @@ class TestCloudClose:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing9", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -2280,8 +2335,6 @@ class TestCloudClose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量应该是2，结果有{len(db_data)}个订单")
-
-            time.sleep(30)
 
     @allure.story("场景10：平仓的功能校验-全平订单")
     @allure.description("""
@@ -2317,7 +2370,7 @@ class TestCloudClose:
                     "endSize": "1.00",
                     "totalNum": "2",
                     "totalSzie": "",
-                    "remark": "ceshipingcangbeizhu"
+                    "remark": "changjing10"
                 }
 
                 response = self.send_post_request(
@@ -2376,6 +2429,7 @@ class TestCloudClose:
                                        fod.open_price,
                                        fod.symbol,
                                        fod.order_no,
+                                       fod.comment,
                                        foi.true_total_lots,
                                        foi.order_no,
                                        foi.operation_type,
@@ -2394,9 +2448,10 @@ class TestCloudClose:
                                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                    WHERE foi.operation_type = %s
                                        AND fod.account = %s
+                                       AND fod.comment = %s
                                        AND fod.trader_id = %s
                                """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing10", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.wait_for_database_no_record(
@@ -2465,6 +2520,7 @@ class TestCloudClose:
                                fod.open_price,
                                fod.symbol,
                                fod.order_no,
+                               fod.comment,
                                foi.true_total_lots,
                                foi.order_no,
                                foi.operation_type,
@@ -2483,9 +2539,10 @@ class TestCloudClose:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                AND fod.trader_id = %s
                        """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing10", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time(
@@ -2541,34 +2598,36 @@ class TestCloudClose:
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = """
-                               SELECT 
-                                   fod.size,
-                                   fod.close_no,
-                                   fod.magical,
-                                   fod.open_price,
-                                   fod.symbol,
-                                   fod.order_no,
-                                   foi.true_total_lots,
-                                   foi.order_no,
-                                   foi.operation_type,
-                                   foi.create_time,
-                                   foi.status,
-                                   foi.min_lot_size,
-                                   foi.max_lot_size,
-                                   foi.total_lots,
-                                   foi.master_order,
-                                   foi.total_orders
-                               FROM 
-                                   follow_order_detail fod
-                               INNER JOIN 
-                                   follow_order_instruct foi 
-                               ON 
-                                   foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                               WHERE foi.operation_type = %s
-                                   AND fod.account = %s
-                                   AND fod.trader_id = %s
+                       SELECT 
+                           fod.size,
+                           fod.close_no,
+                           fod.magical,
+                           fod.open_price,
+                           fod.symbol,
+                           fod.order_no,
+                           fod.comment,
+                           foi.true_total_lots,
+                           foi.order_no,
+                           foi.operation_type,
+                           foi.create_time,
+                           foi.status,
+                           foi.min_lot_size,
+                           foi.max_lot_size,
+                           foi.total_lots,
+                           foi.master_order,
+                           foi.total_orders
+                       FROM 
+                           follow_order_detail fod
+                       INNER JOIN 
+                           follow_order_instruct foi 
+                       ON 
+                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                       WHERE foi.operation_type = %s
+                           AND fod.account = %s
+                           AND fod.comment = %s
+                           AND fod.trader_id = %s
                            """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing10", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -2591,8 +2650,6 @@ class TestCloudClose:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量应该是2，结果有{len(db_data)}个订单")
-
-            time.sleep(30)
 
     @allure.story("场景11：平仓的功能校验-全平订单")
     @allure.description("""
@@ -2624,7 +2681,7 @@ class TestCloudClose:
                     "endSize": "1.00",
                     "totalNum": "2",
                     "totalSzie": "",
-                    "remark": "ceshipingcangbeizhu"
+                    "remark": "changjing11"
                 }
 
                 response = self.send_post_request(
@@ -2683,6 +2740,7 @@ class TestCloudClose:
                                    fod.open_price,
                                    fod.symbol,
                                    fod.order_no,
+                                   fod.comment,
                                    foi.true_total_lots,
                                    foi.order_no,
                                    foi.operation_type,
@@ -2701,9 +2759,10 @@ class TestCloudClose:
                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                                WHERE foi.operation_type = %s
                                    AND fod.account = %s
+                                   AND fod.comment = %s
                                    AND fod.trader_id = %s
                            """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, "changjing11", cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(

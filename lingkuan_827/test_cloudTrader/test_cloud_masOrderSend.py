@@ -24,6 +24,48 @@ class TestCloudMasOrdersend:
     - 预期结果：账号的数据正确
     """)
     class TestCloudtradingOrders1(APITestBase):
+        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+            with allure.step("1. 修改跟单账号，没有固定注释"):
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                data = [
+                    {
+                        "traderList": [
+                            cloudTrader_traderList_4
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": cloudTrader_traderList_2,
+                        "masterAccount": cloudTrader_user_accounts_2,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": 1,
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": "",
+                        "commentType": None,
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": 100,
+                        "remark": "",
+                        "cfd": None,
+                        "forex": None
+                    }
+                ]
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudBatchUpdate',
+                    json_data=data
+                )
+            with allure.step("2. 验证响应状态码和内容"):
+                self.assert_response_status(response, 200, "修改跟单账号失败")
+                self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
+
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -37,7 +79,7 @@ class TestCloudMasOrdersend:
                 "startSize": "0.10",
                 "endSize": "1.00",
                 "totalSzie": "1.00",
-                "remark": "测试数据"
+                "remark": "changjing1"
             }
             response = self.send_post_request(
                 logged_session,
@@ -60,6 +102,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -82,10 +125,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -165,6 +210,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -185,10 +231,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -200,7 +248,6 @@ class TestCloudMasOrdersend:
                 )
 
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
@@ -267,6 +314,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -285,10 +333,12 @@ class TestCloudMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -314,16 +364,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -333,6 +385,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -357,11 +410,13 @@ class TestCloudMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -387,16 +442,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
@@ -407,8 +464,6 @@ class TestCloudMasOrdersend:
                         f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
-
-            time.sleep(25)
 
     @allure.story("场景2：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
@@ -437,7 +492,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试数据"
+                "remark": "changjing2"
             }
             response = self.send_post_request(
                 logged_session,
@@ -460,6 +515,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -482,10 +538,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -575,6 +633,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -595,10 +654,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -678,6 +739,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -696,10 +758,12 @@ class TestCloudMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -725,16 +789,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
@@ -744,6 +810,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -768,11 +835,13 @@ class TestCloudMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -798,16 +867,18 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
+                    trader_ordersend = var_manager.get_variable("trader_ordersend")
+                    totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=5,
+                        expected_value=float(totalSzie),
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
-                    logging.info(f'订单详情总手数是：{total}')
+                    logging.info(f"详情总手数验证通过: {total}")
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
@@ -818,8 +889,6 @@ class TestCloudMasOrdersend:
                         f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
-
-            time.sleep(25)
 
     @allure.story("场景3：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
@@ -848,7 +917,7 @@ class TestCloudMasOrdersend:
                 "endSize": "0.01",
                 "totalNum": "",
                 "totalSzie": "0.01",
-                "remark": ""
+                "remark": "changjing3"
             }
             response = self.send_post_request(
                 logged_session,
@@ -871,6 +940,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -893,10 +963,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -973,6 +1045,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -993,10 +1066,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1064,6 +1139,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1082,10 +1158,12 @@ class TestCloudMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1130,6 +1208,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1154,11 +1233,13 @@ class TestCloudMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1205,8 +1286,6 @@ class TestCloudMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景4：复制下单-手数0.01-1，总订单10")
     @allure.description("""
     ### 测试说明
@@ -1234,7 +1313,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "10",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing4"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1257,6 +1336,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -1279,10 +1359,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    'changjing4'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1358,6 +1440,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -1378,10 +1461,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    'changjing4'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1436,6 +1521,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1454,10 +1540,12 @@ class TestCloudMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    'changjing4'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1500,6 +1588,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1524,11 +1613,13 @@ class TestCloudMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    'changjing4'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1573,8 +1664,6 @@ class TestCloudMasOrdersend:
                     )
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
-            time.sleep(25)
-
     @allure.story("场景5：复制下单-手数0.1-1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -1602,7 +1691,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "5",
-                "remark": "测试数据"
+                "remark": "changjing5"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1625,6 +1714,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -1647,10 +1737,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    'changjing5'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1728,6 +1820,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -1748,10 +1841,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    'changjing5'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1764,9 +1859,10 @@ class TestCloudMasOrdersend:
 
             with allure.step("2. 数据校验"):
                 with allure.step("验证指令总手数"):
-                    total_lots = db_data[0]["total_lots"]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    total_lotssum = sum(total_lots)
                     self.verify_data(
-                        actual_value=float(total_lots),
+                        actual_value=float(total_lotssum),
                         expected_value=float(5),
                         op=CompareOp.EQ,
                         message="指令总手数应符合预期",
@@ -1816,6 +1912,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1834,10 +1931,12 @@ class TestCloudMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    'changjing5'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1863,15 +1962,15 @@ class TestCloudMasOrdersend:
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证指令总手数"):
-                    total_lots = db_data[0]["total_lots"]
+                    true_total_lots = db_data[0]["true_total_lots"]
                     self.verify_data(
-                        actual_value=float(total_lots),
+                        actual_value=float(true_total_lots),
                         expected_value=float(5),
                         op=CompareOp.EQ,
                         message="指令总手数应符合预期",
                         attachment_name="指令总手数详情"
                     )
-                    logging.info(f"指令总手数验证通过: {total_lots}")
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -1893,6 +1992,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -1917,11 +2017,13 @@ class TestCloudMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    'changjing5'
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1968,8 +2070,6 @@ class TestCloudMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景6：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
@@ -1998,7 +2098,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "5",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing6"
             }
             response = self.send_post_request(
                 logged_session,
@@ -2079,6 +2179,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -2101,10 +2202,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2135,6 +2238,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                        SELECT 
                            fod.size,
+                           fod.comment,
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
@@ -2155,10 +2259,12 @@ class TestCloudMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2213,6 +2319,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -2231,10 +2338,12 @@ class TestCloudMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2266,6 +2375,7 @@ class TestCloudMasOrdersend:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
@@ -2290,11 +2400,13 @@ class TestCloudMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2324,4 +2436,4 @@ class TestCloudMasOrdersend:
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
-            time.sleep(25)
+            time.sleep(30)
