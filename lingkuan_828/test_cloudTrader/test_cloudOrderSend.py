@@ -1507,3 +1507,5 @@ class TestCloudStrategyOrder:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
+
+                time.sleep(30)

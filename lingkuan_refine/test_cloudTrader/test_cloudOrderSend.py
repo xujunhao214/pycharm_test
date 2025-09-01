@@ -44,7 +44,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "测试数据"
+                    "remark": "changjing1"
                 }
 
                 response = self.send_post_request(
@@ -73,6 +73,7 @@ class TestCloudStrategyOrder:
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -92,8 +93,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing1")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -219,6 +221,7 @@ class TestCloudStrategyOrder:
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -240,8 +243,9 @@ class TestCloudStrategyOrder:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing1")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -280,8 +284,6 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-            time.sleep(25)
-
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景2：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
@@ -313,7 +315,7 @@ class TestCloudStrategyOrder:
                     "endSize": "0.01",
                     "totalNum": "",
                     "totalSzie": "0.01",
-                    "remark": ""
+                    "remark": "changjing2"
                 }
 
                 response = self.send_post_request(
@@ -341,6 +343,7 @@ class TestCloudStrategyOrder:
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -360,8 +363,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing2")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -472,6 +476,7 @@ class TestCloudStrategyOrder:
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -493,8 +498,9 @@ class TestCloudStrategyOrder:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing2")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -531,8 +537,6 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-            time.sleep(25)
-
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景3：复制下单-手数0.01-1，总订单10")
     @allure.description("""
@@ -564,7 +568,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "10",
                     "totalSzie": "",
-                    "remark": ""
+                    "remark": "changjing3"
                 }
 
                 response = self.send_post_request(
@@ -592,6 +596,7 @@ class TestCloudStrategyOrder:
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -611,8 +616,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing3")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -712,6 +718,7 @@ class TestCloudStrategyOrder:
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -733,8 +740,9 @@ class TestCloudStrategyOrder:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing3")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -769,8 +777,6 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
-            time.sleep(25)
-
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景4：复制下单-手数0.1-1，总手数5")
     @allure.description("""
@@ -802,7 +808,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "",
                     "totalSzie": "5",
-                    "remark": "测试数据"
+                    "remark": "changjing4"
                 }
 
                 response = self.send_post_request(
@@ -830,6 +836,7 @@ class TestCloudStrategyOrder:
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -849,8 +856,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing4")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -966,6 +974,7 @@ class TestCloudStrategyOrder:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -985,8 +994,9 @@ class TestCloudStrategyOrder:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing4")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1023,8 +1033,6 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-            time.sleep(25)
-
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景5：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
@@ -1057,7 +1065,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "5",
                     "totalSzie": "",
-                    "remark": "测试数据"
+                    "remark": "changjing5"
                 }
 
                 response = self.send_post_request(
@@ -1146,6 +1154,7 @@ class TestCloudStrategyOrder:
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
+                        fod.comment,
                         fod.symbol,
                         fod.order_no,
                         foi.true_total_lots,
@@ -1165,8 +1174,9 @@ class TestCloudStrategyOrder:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing5")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1243,8 +1253,6 @@ class TestCloudStrategyOrder:
                     "复制平仓响应msg字段应为success"
                 )
 
-            time.sleep(25)
-
     @allure.story("场景6：分配下单-手数0.1-1，总手数1")
     @allure.description("""
     ### 测试说明
@@ -1272,7 +1280,7 @@ class TestCloudStrategyOrder:
                     "startSize": "0.10",
                     "endSize": "1.00",
                     "totalSzie": "1.00",
-                    "remark": "测试数据",
+                    "remark": "changjing6",
                     "totalNum": 0
                 }
 
@@ -1302,6 +1310,7 @@ class TestCloudStrategyOrder:
                             fod.magical,
                             fod.open_price,
                             fod.symbol,
+                            fod.comment,
                             fod.order_no,
                             foi.true_total_lots,
                             foi.order_no,
@@ -1320,8 +1329,9 @@ class TestCloudStrategyOrder:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                     """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4, "changjing6")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1435,6 +1445,7 @@ class TestCloudStrategyOrder:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1456,8 +1467,9 @@ class TestCloudStrategyOrder:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                     """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing6")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1496,4 +1508,4 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-            time.sleep(25)
+                time.sleep(30)

@@ -38,7 +38,7 @@ class TestVPSCoreFunctionality:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing1",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": "5",
@@ -137,6 +137,7 @@ class TestVPSCoreFunctionality:
                         fod.size,
                         fod.close_no,
                         fod.magical,
+                        fod.comment,
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
@@ -153,10 +154,12 @@ class TestVPSCoreFunctionality:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

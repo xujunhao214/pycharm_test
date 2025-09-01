@@ -32,7 +32,7 @@ class TestVPSOrderSend_newScenarios:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing1",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": "",
@@ -73,6 +73,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -90,10 +91,12 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -184,6 +187,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -199,10 +203,12 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -323,6 +329,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -336,10 +343,12 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -398,6 +407,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -416,11 +426,13 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         AND fod.trader_id = %s
                         """
                 params = (
                     '1',
                     vps_user_accounts_1,
+                    "changjing1",
                     vps_addslave_id,
                 )
 
@@ -467,8 +479,6 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"实际手数: {size}")
 
-            time.sleep(25)
-
     @allure.story("场景2：VPS策略下单-手数范围0.3-1，总订单数量1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -490,7 +500,7 @@ class TestVPSOrderSend_newScenarios:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing2",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": "1",
@@ -531,6 +541,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -548,10 +559,12 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -624,6 +637,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -641,10 +655,12 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -800,6 +816,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -813,10 +830,12 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -876,6 +895,7 @@ class TestVPSOrderSend_newScenarios:
                         fod.open_price,
                         fod.symbol,
                         fod.order_no,
+                        fod.comment,
                         foi.true_total_lots,
                         foi.order_no,
                         foi.operation_type,
@@ -894,11 +914,13 @@ class TestVPSOrderSend_newScenarios:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         AND fod.trader_id = %s
                         """
                 params = (
                     '1',
                     vps_user_accounts_1,
+                    "changjing2",
                     vps_addslave_id,
                 )
 
@@ -1023,4 +1045,4 @@ class TestVPSOrderSend_newScenarios:
                     "响应msg字段应为：下单失败，请检查下单参数"
                 )
 
-            time.sleep(25)
+            time.sleep(30)

@@ -35,7 +35,7 @@ class TestVPSMasOrdersend:
                 "startSize": "0.10",
                 "endSize": "1.00",
                 "totalSzie": "1.00",
-                "remark": "测试数据"
+                "remark": "changjing1"
             }
             response = self.send_post_request(
                 logged_session,
@@ -62,6 +62,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -81,10 +82,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -167,6 +170,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -184,10 +188,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -268,6 +274,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -283,10 +290,12 @@ class TestVPSMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -334,6 +343,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -355,11 +365,13 @@ class TestVPSMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -407,8 +419,6 @@ class TestVPSMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景2：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
@@ -436,7 +446,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试数据"
+                "remark": "changjing2"
             }
             response = self.send_post_request(
                 logged_session,
@@ -462,6 +472,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -481,10 +492,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -577,6 +590,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -594,10 +608,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -680,6 +696,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -695,10 +712,12 @@ class TestVPSMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -746,6 +765,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -767,11 +787,13 @@ class TestVPSMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -820,8 +842,6 @@ class TestVPSMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景3：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -849,7 +869,7 @@ class TestVPSMasOrdersend:
                 "endSize": "0.01",
                 "totalNum": "",
                 "totalSzie": "0.01",
-                "remark": ""
+                "remark": "changjing3"
             }
             response = self.send_post_request(
                 logged_session,
@@ -875,6 +895,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -894,10 +915,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -977,6 +1000,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -994,10 +1018,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1068,6 +1094,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1083,10 +1110,12 @@ class TestVPSMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1134,6 +1163,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1155,11 +1185,13 @@ class TestVPSMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1206,8 +1238,6 @@ class TestVPSMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景4：复制下单-手数0.01-1，总订单10")
     @allure.description("""
     ### 测试说明
@@ -1235,7 +1265,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "10",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing4"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1261,6 +1291,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -1280,10 +1311,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1362,6 +1395,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -1379,10 +1413,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1451,6 +1487,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1466,10 +1503,12 @@ class TestVPSMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1515,6 +1554,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1536,11 +1576,13 @@ class TestVPSMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1585,8 +1627,6 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
-            time.sleep(25)
-
     @allure.story("场景5：复制下单-手数0.1-1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -1614,7 +1654,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "5",
-                "remark": "测试数据"
+                "remark": "changjing5"
             }
             response = self.send_post_request(
                 logged_session,
@@ -1640,6 +1680,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -1659,10 +1700,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1743,6 +1786,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -1760,10 +1804,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1832,6 +1878,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1848,10 +1895,12 @@ class TestVPSMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1910,6 +1959,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1931,11 +1981,13 @@ class TestVPSMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing5"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1982,8 +2034,6 @@ class TestVPSMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景6：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
@@ -2012,7 +2062,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "5",
                 "totalSzie": "",
-                "remark": ""
+                "remark": "changjing6"
             }
             response = self.send_post_request(
                 logged_session,
@@ -2096,6 +2146,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -2115,10 +2166,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2152,6 +2205,7 @@ class TestVPSMasOrdersend:
                            fod.send_no,
                            fod.magical,
                            fod.open_price,
+                           fod.comment,
                            fod.symbol,
                            fod.order_no,
                            foi.true_total_lots,
@@ -2169,10 +2223,12 @@ class TestVPSMasOrdersend:
                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
+                           AND fod.comment = %s
                            """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2230,6 +2286,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -2245,10 +2302,12 @@ class TestVPSMasOrdersend:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2283,6 +2342,7 @@ class TestVPSMasOrdersend:
                             fod.close_no,
                             fod.magical,
                             fod.open_price,
+                            fod.comment,
                             fod.symbol,
                             fod.order_no,
                             foi.true_total_lots,
@@ -2304,11 +2364,13 @@ class TestVPSMasOrdersend:
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
                             AND fod.trader_id = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing6"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2338,4 +2400,4 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
-            time.sleep(25)
+                time.sleep(30)
