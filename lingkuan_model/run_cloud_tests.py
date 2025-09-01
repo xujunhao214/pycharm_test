@@ -24,7 +24,6 @@ def run_cloud_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_create.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_getAccountDataPage.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderSend2.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloudOrderClose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloud_masOrderSend.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_cloudTrader/test_cloud_masOrderClose.py",

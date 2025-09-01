@@ -498,7 +498,7 @@ class TestVPSMasOrder_money_scene:
                     )
                     logging.info(f"币种验证通过: {symbol}")
 
-            time.sleep(25)
+            time.sleep(30)
 
     @allure.story("场景2：VPS策略下单-跟单修改模式、品种")
     @allure.description("""
@@ -941,4 +941,4 @@ class TestVPSMasOrder_money_scene:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-            time.sleep(40)
+            time.sleep(30)

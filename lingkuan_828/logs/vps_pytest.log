@@ -1,1610 +1,223 @@
-INFO     2025-09-01 09:08:19 [lingkuan_828.conftest;276]  : [2025-09-01 09:08] 测试会话开始: 2025-09-01 09:08:19, 测试组: vps
-INFO     2025-09-01 09:08:19 [lingkuan_828.commons.variable_manager;40]  : [2025-09-01 09:08] 成功加载静态变量: VAR\uat_data.json
-INFO     2025-09-01 09:08:19 [lingkuan_828.commons.variable_manager;64]  : [2025-09-01 09:08] 成功加载运行时变量: VAR\runtime_vars_vps.json
-INFO     2025-09-01 09:08:19 [lingkuan_828.conftest;62]  : [2025-09-01 09:08:19] 用例 test_vps/test_vps_ordersend2.py::TestVPSOrderSend_newScenarios::TestVPSOrderSend1::test_trader_orderSend 开始登录，环境: uat
-INFO     2025-09-01 09:08:19 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 193434
-INFO     2025-09-01 09:08:20 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
-INFO     2025-09-01 09:08:20 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 09:08] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
-INFO     2025-09-01 09:08:20 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
-INFO     2025-09-01 09:08:21 [lingkuan_828.commons.api_base;152]  : [2025-09-01 09:08:21] POST请求（JSON）: /subcontrol/trader/orderSend | 数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'changjing1', 'intervalTime': 100, 'type': 0, 'totalNum': '', 'totalSzie': '1.00', 'startSize': '0.60', 'endSize': '1.00', 'traderId': 7305}
-INFO     2025-09-01 09:08:21 [lingkuan_828.commons.api_base;160]  : [2025-09-01 09:08:21] 请求后等待 1 秒
-INFO     2025-09-01 09:08:22 [lingkuan_828.conftest;157]  : [2025-09-01 09:08:22] 用例 test_vps/test_vps_ordersend2.py::TestVPSOrderSend_newScenarios::TestVPSOrderSend1::test_trader_orderSend 执行完毕
-INFO     2025-09-01 09:08:22 [lingkuan_828.commons.api_base;950]  : [2025-09-01 09:08:22] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     2025-09-01 09:08:22 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:22] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:24 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:24] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:24 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:24] 查询结果: []
-INFO     2025-09-01 09:08:26 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:26] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:27 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:27] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:27 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:27] 查询结果: []
-INFO     2025-09-01 09:08:29 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:29] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:30 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:30] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:30 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:30] 查询结果: []
-INFO     2025-09-01 09:08:32 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:32] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:33 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:33] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:33 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:33] 查询结果: []
-INFO     2025-09-01 09:08:35 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:35] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:36 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:36] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:36 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:36] 查询结果: []
-INFO     2025-09-01 09:08:38 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:38] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:40 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:40] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:40 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:40] 查询结果: []
-INFO     2025-09-01 09:08:42 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:42] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:43 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:43] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:43 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:43] 查询结果: []
-INFO     2025-09-01 09:08:45 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:45] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:46 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:46] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:46 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:46] 查询结果: []
-INFO     2025-09-01 09:08:48 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:48] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:49 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:49] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:49 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:49] 查询结果: []
-INFO     2025-09-01 09:08:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:51] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:53 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:53] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:53 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:53] 查询结果: []
-INFO     2025-09-01 09:08:55 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:08:55] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:08:56 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:08:56] 查询成功，结果数量: 0
-INFO     2025-09-01 09:08:56 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:08:56] 查询结果: []
-INFO     2025-09-01 09:09:01 [lingkuan_828.commons.api_base;950]  : [2025-09-01 09:09:01] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     2025-09-01 09:09:01 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:01] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:03 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:03] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:03 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:03] 查询结果: []
-INFO     2025-09-01 09:09:05 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:05] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:06 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:06] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:06 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:06] 查询结果: []
-INFO     2025-09-01 09:09:08 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:08] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:09 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:09] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:09 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:09] 查询结果: []
-INFO     2025-09-01 09:09:11 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:11] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:12 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:12] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:12 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:12] 查询结果: []
-INFO     2025-09-01 09:09:14 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:14] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:15 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:15] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:15 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:15] 查询结果: []
-INFO     2025-09-01 09:09:17 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:17] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:19 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:19] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:19 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:19] 查询结果: []
-INFO     2025-09-01 09:09:21 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:21] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:22 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:22] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:22 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:22] 查询结果: []
-INFO     2025-09-01 09:09:24 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:24] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:25 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:25] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:25 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:25] 查询结果: []
-INFO     2025-09-01 09:09:27 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:27] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:28 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:28] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:28 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:28] 查询结果: []
-INFO     2025-09-01 09:09:30 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:30] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:31 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:31] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:31 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:31] 查询结果: []
-INFO     2025-09-01 09:09:33 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:33] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:35 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:35] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:35 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:35] 查询结果: []
-INFO     2025-09-01 09:09:40 [lingkuan_828.commons.api_base;950]  : [2025-09-01 09:09:40] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     2025-09-01 09:09:40 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:40] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:41 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:41] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:41 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:41] 查询结果: []
-INFO     2025-09-01 09:09:43 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:43] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:44 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:44] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:44 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:44] 查询结果: []
-INFO     2025-09-01 09:09:47 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:47] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:48 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:48] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:48 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:48] 查询结果: []
-INFO     2025-09-01 09:09:50 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:50] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:51] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:51] 查询结果: []
-INFO     2025-09-01 09:09:53 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:53] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:54 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:54] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:54 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:54] 查询结果: []
-INFO     2025-09-01 09:09:56 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:56] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:09:57 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:09:57] 查询成功，结果数量: 0
-INFO     2025-09-01 09:09:57 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:09:57] 查询结果: []
-INFO     2025-09-01 09:09:59 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:09:59] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:00 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:00] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:00 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:00] 查询结果: []
-INFO     2025-09-01 09:10:02 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:02] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:04 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:04] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:04 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:04] 查询结果: []
-INFO     2025-09-01 09:10:06 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:06] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:07 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:07] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:07 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:07] 查询结果: []
-INFO     2025-09-01 09:10:09 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:09] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:10 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:10] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:10 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:10] 查询结果: []
-INFO     2025-09-01 09:10:12 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:12] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:13 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:13] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:13 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:13] 查询结果: []
-INFO     2025-09-01 09:10:19 [lingkuan_828.commons.api_base;950]  : [2025-09-01 09:10:19] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     2025-09-01 09:10:19 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:19] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:20 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:20] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:20 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:20] 查询结果: []
-INFO     2025-09-01 09:10:22 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:22] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:23 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:23] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:23 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:23] 查询结果: []
-INFO     2025-09-01 09:10:25 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:25] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:26 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:26] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:26 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:26] 查询结果: []
-INFO     2025-09-01 09:10:28 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:28] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:30 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:30] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:30 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:30] 查询结果: []
-INFO     2025-09-01 09:10:32 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:32] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:33 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:33] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:33 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:33] 查询结果: []
-INFO     2025-09-01 09:10:35 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:35] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:36 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:36] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:36 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:36] 查询结果: []
-INFO     2025-09-01 09:10:38 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:38] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:39 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:39] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:39 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:39] 查询结果: []
-INFO     2025-09-01 09:10:41 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:41] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:42 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:42] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:42 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:42] 查询结果: []
-INFO     2025-09-01 09:10:45 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:45] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:46 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:46] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:46 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:46] 查询结果: []
-INFO     2025-09-01 09:10:48 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:48] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:49 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:49] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:49 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:49] 查询结果: []
-INFO     2025-09-01 09:10:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:51] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.min_lot_size,
-                        foi.max_lot_size,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300151', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:52] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:52] 查询结果: []
-INFO     2025-09-01 09:10:52 [lingkuan_828.commons.api_base;950]  : [2025-09-01 09:10:52] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     2025-09-01 09:10:53 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:53] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:54 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:54] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:54 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:54] 查询结果: []
-INFO     2025-09-01 09:10:56 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:56] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:10:57 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:10:57] 查询成功，结果数量: 0
-INFO     2025-09-01 09:10:57 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:10:57] 查询结果: []
-INFO     2025-09-01 09:10:59 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:10:59] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:11:00 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:11:00] 查询成功，结果数量: 0
-INFO     2025-09-01 09:11:00 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:11:00] 查询结果: []
-INFO     2025-09-01 09:11:02 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:11:02] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:11:03 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:11:03] 查询成功，结果数量: 0
-INFO     2025-09-01 09:11:03 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:11:03] 查询结果: []
-INFO     2025-09-01 09:11:05 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:11:05] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:11:06 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:11:06] 查询成功，结果数量: 0
-INFO     2025-09-01 09:11:06 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:11:06] 查询结果: []
-INFO     2025-09-01 09:11:08 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:11:08] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:11:10 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:11:10] 查询成功，结果数量: 0
-INFO     2025-09-01 09:11:10 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:11:10] 查询结果: []
-INFO     2025-09-01 09:11:12 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:11:12] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
-INFO     2025-09-01 09:11:13 [lingkuan_828.commons.api_base;454]  : [2025-09-01 09:11:13] 查询成功，结果数量: 0
-INFO     2025-09-01 09:11:13 [lingkuan_828.commons.api_base;466]  : [2025-09-01 09:11:13] 查询结果: []
-INFO     2025-09-01 09:11:15 [lingkuan_828.commons.api_base;451]  : [2025-09-01 09:11:15] 执行SQL: 
-                    SELECT 
-                        fod.size,
-                        fod.send_no,
-                        fod.magical,
-                        fod.open_price,
-                        fod.symbol,
-                        fod.order_no,
-                        fod.comment,
-                        foi.true_total_lots,
-                        foi.order_no,
-                        foi.operation_type,
-                        foi.create_time,
-                        foi.status,
-                        foi.total_lots,
-                        foi.total_orders
-                    FROM 
-                        follow_order_detail fod
-                    INNER JOIN 
-                        follow_order_instruct foi 
-                    ON 
-                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s
-                        AND fod.account = %s
-                        AND fod.comment = %s
-                         AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN NOW() - INTERVAL %s MINUTE AND NOW() + INTERVAL %s MINUTE  ORDER BY create_time DESC 
-参数: ('0', '300152', 'changjing1', 1, 1)
+INFO     2025-09-01 15:53:05 [lingkuan_828.conftest;276]  : [2025-09-01 15:53] 测试会话开始: 2025-09-01 15:53:05, 测试组: vps
+INFO     2025-09-01 15:53:05 [lingkuan_828.commons.variable_manager;40]  : [2025-09-01 15:53] 成功加载静态变量: VAR\uat_data.json
+INFO     2025-09-01 15:53:05 [lingkuan_828.commons.variable_manager;64]  : [2025-09-01 15:53] 成功加载运行时变量: VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:53:05 [lingkuan_828.conftest;62]  : [2025-09-01 15:53:05] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 开始登录，环境: uat
+INFO     2025-09-01 15:53:05 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 254891
+INFO     2025-09-01 15:53:27 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-09-01 15:53:27 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:53:28 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:28] DELETE请求: /mascontrol/group | 数据: [368]
+INFO     2025-09-01 15:53:29 [lingkuan_828.conftest;157]  : [2025-09-01 15:53:29] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 执行完毕
+INFO     2025-09-01 15:53:29 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:29] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_group WHERE name = %s | 超时: 5秒
+INFO     2025-09-01 15:53:29 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:29] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+参数: ('测试vps',)
+INFO     2025-09-01 15:53:29 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:29] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:29 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:29] 查询结果: []
+INFO     2025-09-01 15:53:29 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:29] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_group WHERE name = %s
+INFO     2025-09-01 15:53:29 [lingkuan_828.conftest;62]  : [2025-09-01 15:53:29] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 开始登录，环境: uat
+INFO     2025-09-01 15:53:29 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 254891
+INFO     2025-09-01 15:53:30 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-09-01 15:53:30 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:53:30 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
+INFO     2025-09-01 15:53:31 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:31] DELETE请求: /subcontrol/trader | 数据: [7306]
+INFO     2025-09-01 15:53:32 [lingkuan_828.conftest;157]  : [2025-09-01 15:53:32] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 执行完毕
+INFO     2025-09-01 15:53:32 [root;218]  : 查询条件: table=follow_trader, account=300152
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:32] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:32] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:32] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:32] 查询结果: []
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:32] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:32] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:32] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:32 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:32] 查询结果: []
+INFO     2025-09-01 15:53:32 [lingkuan_828.conftest;62]  : [2025-09-01 15:53:32] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 开始登录，环境: uat
+INFO     2025-09-01 15:53:32 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 627444
+ERROR    2025-09-01 15:53:33 [lingkuan_828.conftest;129]  : 第1次登录失败: 登录失败: MFA验证失败
+INFO     2025-09-01 15:53:43 [lingkuan_828.conftest;100]  : UAT登录尝试 2/5，MFA验证码: 627444
+INFO     2025-09-01 15:53:44 [lingkuan_828.conftest;124]  : UAT登录成功（第2次尝试）
+INFO     2025-09-01 15:53:44 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:53:44 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
+INFO     2025-09-01 15:53:44 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:44] DELETE请求: /subcontrol/trader | 数据: [7244]
+INFO     2025-09-01 15:53:45 [lingkuan_828.test_vps.test_delete;278]  : [2025-09-01 15:53] 第1个跟单账号（ID: 7244）删除成功
+INFO     2025-09-01 15:53:45 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:45] DELETE请求: /subcontrol/trader | 数据: [7245]
+INFO     2025-09-01 15:53:46 [lingkuan_828.test_vps.test_delete;278]  : [2025-09-01 15:53] 第2个跟单账号（ID: 7245）删除成功
+INFO     2025-09-01 15:53:46 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:46] DELETE请求: /subcontrol/trader | 数据: [7246]
+INFO     2025-09-01 15:53:47 [lingkuan_828.test_vps.test_delete;278]  : [2025-09-01 15:53] 第3个跟单账号（ID: 7246）删除成功
+INFO     2025-09-01 15:53:47 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:47] DELETE请求: /subcontrol/trader | 数据: [7247]
+INFO     2025-09-01 15:53:48 [lingkuan_828.test_vps.test_delete;278]  : [2025-09-01 15:53] 第4个跟单账号（ID: 7247）删除成功
+INFO     2025-09-01 15:53:48 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:48] DELETE请求: /subcontrol/trader | 数据: [7248]
+INFO     2025-09-01 15:53:50 [lingkuan_828.test_vps.test_delete;278]  : [2025-09-01 15:53] 第5个跟单账号（ID: 7248）删除成功
+INFO     2025-09-01 15:53:50 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:50] DELETE请求: /subcontrol/trader | 数据: [7249]
+INFO     2025-09-01 15:53:51 [lingkuan_828.test_vps.test_delete;278]  : [2025-09-01 15:53] 第6个跟单账号（ID: 7249）删除成功
+INFO     2025-09-01 15:53:51 [lingkuan_828.conftest;157]  : [2025-09-01 15:53:51] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 执行完毕
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:51] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:51] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:51] 查询结果: []
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:51] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:51] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:51] 查询结果: []
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:51] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300153',)
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:51] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:51] 查询结果: []
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:51] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300153',)
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:51] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:51] 查询结果: []
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:51] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300154',)
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:51] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:51] 查询结果: []
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:51] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300154',)
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:51] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:51] 查询结果: []
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:51] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:51 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:51] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300155',)
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:52] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:52] 查询结果: []
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:52] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:52] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300155',)
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:52] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:52] 查询结果: []
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:52] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:52] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300156',)
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:52] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:52] 查询结果: []
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:52] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:52] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300156',)
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:52] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:52] 查询结果: []
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:52] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:52] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300157',)
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:52] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:52] 查询结果: []
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:52] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:52] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('300157',)
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:52] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:52 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:52] 查询结果: []
+INFO     2025-09-01 15:53:52 [lingkuan_828.conftest;62]  : [2025-09-01 15:53:52] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 开始登录，环境: uat
+INFO     2025-09-01 15:53:52 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 627444
+INFO     2025-09-01 15:53:55 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-09-01 15:53:55 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:53:55 [lingkuan_828.conftest;152]  : 切换到VPS URL: https://39.101.181.190/vps
+INFO     2025-09-01 15:53:55 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:55] DELETE请求: /subcontrol/trader | 数据: [7305]
+INFO     2025-09-01 15:53:56 [lingkuan_828.conftest;157]  : [2025-09-01 15:53:56] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 执行完毕
+INFO     2025-09-01 15:53:56 [root;350]  : 查询条件: table=follow_trader, account=300151
+INFO     2025-09-01 15:53:56 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:56] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:53:56 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:56] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('300151',)
+INFO     2025-09-01 15:53:56 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:56] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:56 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:56] 查询结果: []
+INFO     2025-09-01 15:53:56 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:56] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     2025-09-01 15:53:56 [lingkuan_828.conftest;62]  : [2025-09-01 15:53:56] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 开始登录，环境: uat
+INFO     2025-09-01 15:53:56 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 627444
+INFO     2025-09-01 15:53:57 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-09-01 15:53:57 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:53:58 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:53:58] DELETE请求: /mascontrol/variety/deleteTemplate | 数据: [31]
+INFO     2025-09-01 15:53:59 [lingkuan_828.conftest;157]  : [2025-09-01 15:53:59] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 执行完毕
+INFO     2025-09-01 15:53:59 [root;397]  : 查询条件: table=follow_variety, templateName2=测试模版1
+INFO     2025-09-01 15:53:59 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:53:59] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_variety WHERE template_name = %s | 超时: 5秒
+INFO     2025-09-01 15:53:59 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:53:59] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('测试模版1',)
+INFO     2025-09-01 15:53:59 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:53:59] 查询成功，结果数量: 0
+INFO     2025-09-01 15:53:59 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:53:59] 查询结果: []
+INFO     2025-09-01 15:53:59 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:53:59] 删除成功（耗时0.2秒）| SQL: SELECT * FROM follow_variety WHERE template_name = %s
+INFO     2025-09-01 15:53:59 [lingkuan_828.conftest;62]  : [2025-09-01 15:53:59] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 开始登录，环境: uat
+INFO     2025-09-01 15:53:59 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 627444
+INFO     2025-09-01 15:54:01 [lingkuan_828.conftest;124]  : UAT登录成功（第1次尝试）
+INFO     2025-09-01 15:54:01 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:54:01 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:01] DELETE请求: /mascontrol/user | 数据: [6863]
+INFO     2025-09-01 15:54:02 [lingkuan_828.conftest;157]  : [2025-09-01 15:54:02] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 执行完毕
+INFO     2025-09-01 15:54:03 [root;444]  : 查询条件: table=FOLLOW_TRADER_USER, name=300151
+INFO     2025-09-01 15:54:03 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:03] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:03 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:03] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300151',)
+INFO     2025-09-01 15:54:03 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:03] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:03 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:03] 查询结果: []
+INFO     2025-09-01 15:54:03 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:03] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:03 [lingkuan_828.conftest;62]  : [2025-09-01 15:54:03] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 开始登录，环境: uat
+INFO     2025-09-01 15:54:03 [lingkuan_828.conftest;100]  : UAT登录尝试 1/5，MFA验证码: 632098
+ERROR    2025-09-01 15:54:04 [lingkuan_828.conftest;129]  : 第1次登录失败: 登录失败: MFA验证失败
+INFO     2025-09-01 15:54:14 [lingkuan_828.conftest;100]  : UAT登录尝试 2/5，MFA验证码: 632098
+INFO     2025-09-01 15:54:15 [lingkuan_828.conftest;124]  : UAT登录成功（第2次尝试）
+INFO     2025-09-01 15:54:15 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:54:15 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:15] DELETE请求: /mascontrol/user | 数据: [6868]
+INFO     2025-09-01 15:54:16 [root;499]  : 第1个账号（ID: 6868）删除接口调用成功
+INFO     2025-09-01 15:54:17 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:17] DELETE请求: /mascontrol/user | 数据: [6865]
+INFO     2025-09-01 15:54:18 [root;499]  : 第2个账号（ID: 6865）删除接口调用成功
+INFO     2025-09-01 15:54:18 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:18] DELETE请求: /mascontrol/user | 数据: [6870]
+INFO     2025-09-01 15:54:19 [root;499]  : 第3个账号（ID: 6870）删除接口调用成功
+INFO     2025-09-01 15:54:20 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:20] DELETE请求: /mascontrol/user | 数据: [6864]
+INFO     2025-09-01 15:54:21 [root;499]  : 第4个账号（ID: 6864）删除接口调用成功
+INFO     2025-09-01 15:54:22 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:22] DELETE请求: /mascontrol/user | 数据: [6867]
+INFO     2025-09-01 15:54:23 [root;499]  : 第5个账号（ID: 6867）删除接口调用成功
+INFO     2025-09-01 15:54:23 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:23] DELETE请求: /mascontrol/user | 数据: [6869]
+INFO     2025-09-01 15:54:24 [root;499]  : 第6个账号（ID: 6869）删除接口调用成功
+INFO     2025-09-01 15:54:25 [lingkuan_828.commons.api_base;239]  : [2025-09-01 15:54:25] DELETE请求: /mascontrol/user | 数据: [6866]
+INFO     2025-09-01 15:54:26 [root;499]  : 第7个账号（ID: 6866）删除接口调用成功
+INFO     2025-09-01 15:54:26 [lingkuan_828.conftest;157]  : [2025-09-01 15:54:26] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 执行完毕
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:26] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300152',)
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:26] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:26] 查询结果: []
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:26] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300153',)
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:26] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:26] 查询结果: []
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:26] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300154',)
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:26] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:26] 查询结果: []
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:26] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300155',)
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:26] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:26] 查询结果: []
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:26 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:26] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300156',)
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:27] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:27] 查询结果: []
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:27] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300157',)
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:27] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:27] 查询结果: []
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;740]  : [2025-09-01 15:54:27] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;451]  : [2025-09-01 15:54:27] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('300158',)
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;454]  : [2025-09-01 15:54:27] 查询成功，结果数量: 0
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;466]  : [2025-09-01 15:54:27] 查询结果: []
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.api_base;776]  : [2025-09-01 15:54:27] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.variable_manager;111]  : [2025-09-01 15:53] 运行时变量已保存到: D:\pycharm_test\lingkuan_828\VAR\runtime_vars_vps.json
+INFO     2025-09-01 15:54:27 [lingkuan_828.conftest;303]  : [2025-09-01 15:53] 测试会话结束，总耗时: 82.00秒
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.feishu_notification;131]  : [2025-09-01 15:53] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.feishu_notification;139]  : [2025-09-01 15:53] 飞书响应状态码: 200
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.feishu_notification;140]  : [2025-09-01 15:53] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     2025-09-01 15:54:27 [lingkuan_828.commons.feishu_notification;145]  : [2025-09-01 15:53] [FEISHU] 消息发送成功
+INFO     2025-09-01 15:54:27 [lingkuan_828.conftest;315]  : [2025-09-01 15:53] 飞书通知发送成功

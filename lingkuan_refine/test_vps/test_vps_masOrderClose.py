@@ -2,6 +2,7 @@ import allure
 import logging
 import pytest
 import time
+import re
 from lingkuan_refine.conftest import var_manager
 from lingkuan_refine.commons.api_base import *
 import requests
@@ -728,8 +729,8 @@ class TestVPSMasOrderclose:
                 params = (
                     '1',
                     vps_user_accounts_1,
+                    "changjing2",
                     vps_addslave_id,
-                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2676,26 +2677,57 @@ class TestVPSMasOrderclose:
     """)
     class TestVPStradingOrders9(APITestBase):
         @allure.title("登录MT4账号获取token")
-        @pytest.mark.retry(n=3, delay=5)
         def test_mt4_login(self, var_manager):
             global token_mt4, headers
-            url = "https://mt4.mtapi.io/Connect?user=300151&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+            max_retries = 5  # 最大重试次数
+            retry_interval = 5  # 重试间隔（秒）
+            token_mt4 = None
 
-            payload = {}
-            headers = {
-                'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
-                'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
-                'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
-                'Content-Type': 'application/json',
-                'Accept': '*/*',
-                'Host': 'mt4.mtapi.io',
-                'Connection': 'keep-alive'
-            }
+            # 用于验证token格式的正则表达式（UUID格式）
+            uuid_pattern = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 
-            response = requests.request("GET", url, headers=headers, data=payload)
-            token_mt4 = response.text
-            print(f"登录MT4账号获取token:{token_mt4}")
-            logging.info(f"登录MT4账号获取token:{token_mt4}")
+            for attempt in range(max_retries):
+                try:
+                    url = "https://mt4.mtapi.io/Connect?user=300151&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+
+                    headers = {
+                        'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
+                        'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
+                        'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*',
+                        'Host': 'mt4.mtapi.io',
+                        'Connection': 'keep-alive'
+                    }
+
+                    response = requests.request("GET", url, headers=headers, data={})
+                    response_text = response.text.strip()  # 去除可能的空白字符
+
+                    logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
+
+                    # 验证响应是否为有效的UUID格式token
+                    if uuid_pattern.match(response_text):
+                        token_mt4 = response_text
+                        logging.info(f"第{attempt + 1}次尝试成功 - 获取到token: {token_mt4}")
+                        break
+                    else:
+                        logging.warning(f"第{attempt + 1}次尝试失败 - 无效的token格式: {response_text}")
+
+                except Exception as e:
+                    logging.error(f"第{attempt + 1}次尝试发生异常: {str(e)}")
+
+                # 如果不是最后一次尝试，等待后重试
+                if attempt < max_retries - 1:
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}次重试...")
+                    time.sleep(retry_interval)
+
+            # 最终验证结果
+            if not token_mt4 or not uuid_pattern.match(token_mt4):
+                logging.error(f"经过{max_retries}次尝试后，MT4登录仍失败")
+                assert False, f"MT4登录失败，最后响应: {response_text if 'response_text' in locals() else '无响应'}"
+            else:
+                print(f"登录MT4账号获取token: {token_mt4}")
+                logging.info(f"登录MT4账号获取token: {token_mt4}")
 
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):

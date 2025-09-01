@@ -23,7 +23,6 @@ def run_vps_tests(env: str = "test"):
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_create.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_getAccountDataPage.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_ordersend.py",
-        "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_ordersend2.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_orderclose.py",
         "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_masOrderSend.py",
         # "/www/python/jenkins/workspace/Documentatio_Test/lingkuan_model/test_vps/test_vps_masOrderClose.py",

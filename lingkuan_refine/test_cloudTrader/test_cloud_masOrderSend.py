@@ -24,6 +24,48 @@ class TestCloudMasOrdersend:
     - 预期结果：账号的数据正确
     """)
     class TestCloudtradingOrders1(APITestBase):
+        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+            with allure.step("1. 修改跟单账号，没有固定注释"):
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                data = [
+                    {
+                        "traderList": [
+                            cloudTrader_traderList_4
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": cloudTrader_traderList_2,
+                        "masterAccount": cloudTrader_user_accounts_2,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": 1,
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": "",
+                        "commentType": None,
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": 100,
+                        "remark": "",
+                        "cfd": None,
+                        "forex": None
+                    }
+                ]
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudBatchUpdate',
+                    json_data=data
+                )
+            with allure.step("2. 验证响应状态码和内容"):
+                self.assert_response_status(response, 200, "修改跟单账号失败")
+                self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
+
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求

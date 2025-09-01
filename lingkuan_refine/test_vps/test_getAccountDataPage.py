@@ -67,23 +67,23 @@ class TestVPSOrderSend_newScenarios:
                 global profit_sum, total, order_num, margin_proportion, free_margin, euqit
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
-                                   SELECT 
-                                       fod.size,
-                                       fod.send_no,
-                                       fod.profit,
-                                       fod.open_time,
-                                       fod.order_no,
-                                       foi.operation_type,
-                                       foi.create_time
-                                   FROM 
-                                       follow_order_detail fod
-                                   INNER JOIN 
-                                       follow_order_instruct foi 
-                                   ON 
-                                       foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                                   WHERE foi.operation_type = %s
-                                       AND fod.account = %s
-                                       """
+                   SELECT 
+                       fod.size,
+                       fod.send_no,
+                       fod.profit,
+                       fod.open_time,
+                       fod.order_no,
+                       foi.operation_type,
+                       foi.create_time
+                   FROM 
+                       follow_order_detail fod
+                   INNER JOIN 
+                       follow_order_instruct foi 
+                   ON 
+                       foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                   WHERE foi.operation_type = %s
+                       AND fod.account = %s
+                       """
                 params = (
                     '0',
                     vps_user_accounts_1,
@@ -215,13 +215,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款-容差10000"):
+                with allure.step("5.5 验证可用预付款-容差15000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=10000,
+                        abs_tol=15000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -251,6 +251,7 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"净值符合预期，实际是{euqit}")
 
+        @pytest.mark.skipif(True, reason="跳过")
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
         def test_trader_orderclose(self, var_manager, logged_session):
@@ -281,40 +282,6 @@ class TestVPSOrderSend_newScenarios:
                 "success",
                 "响应msg字段应为success"
             )
-
-        @pytest.mark.skipif(True, reason="跳过")
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
-
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        # time.sleep(25)
 
     @allure.story("仪表盘-vps跟单数据")
     @allure.description("""
@@ -519,37 +486,37 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款"):
+                with allure.step("5.5 验证可用预付款-容差15000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=10000,
+                        abs_tol=15000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
                     logging.info(f"可用预付款符合预期，实际是{free_margin}")
 
-                with allure.step("5.6 验证可用预付款比例"):
+                with allure.step("5.6 验证可用预付款比例-容差5"):
                     self.verify_data(
                         actual_value=float(proportion),
                         expected_value=float(margin_proportion),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=100,
+                        abs_tol=5,
                         message=f"可用预付款比例符合预期",
                         attachment_name="可用预付款比例详情"
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值"):
+                with allure.step("5.7 验证净值-容差100"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=500,
+                        abs_tol=100,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )

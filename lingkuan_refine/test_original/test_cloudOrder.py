@@ -231,7 +231,7 @@ class TestMasOrderSend(APITestBase):
                 f'平仓总手数不匹配，预期: {totalSzie}, 实际: {size_sum}'
             logger.info(f"平仓总手数校验通过: {totalSzie}")
 
-        time.sleep(60)  # 等待系统状态稳定
+        time.sleep(60)
 
     # -------------------------- 复制下单场景 --------------------------
     @allure.story("复制下单场景")
