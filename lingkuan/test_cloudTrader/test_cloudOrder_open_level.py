@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("交易下单-云策略复制下单-漏单场景")
+@allure.feature("云策略-策略账号交易下单-漏单场景")
 class TestcloudTrader_openandlevel:
     @allure.story("场景1：交易下单-云策略复制下单-漏开")
     @allure.description("""
@@ -50,7 +50,7 @@ class TestcloudTrader_openandlevel:
                         "followStatus": 1,
                         "followOpen": 0,
                         "followClose": 1,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],
@@ -278,7 +278,7 @@ class TestcloudTrader_openandlevel:
                         "followStatus": 1,
                         "followOpen": 1,
                         "followClose": 1,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],
@@ -570,7 +570,7 @@ class TestcloudTrader_openandlevel:
                         "followStatus": 1,
                         "followOpen": 1,
                         "followClose": 0,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],
@@ -903,7 +903,7 @@ class TestcloudTrader_openandlevel:
                         "followStatus": 1,
                         "followOpen": 1,
                         "followClose": 1,
-                        "fixedComment": "ceshi",
+                        "fixedComment": "",
                         "commentType": None,
                         "digits": 0,
                         "followTraderIds": [],

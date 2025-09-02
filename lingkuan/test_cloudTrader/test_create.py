@@ -432,7 +432,7 @@ class TestCreate_cloudTrader(APITestBase):
             "account": "",
             "platform": "",
             "templateId": "",
-            "fixedComment": "ceshi",
+            "fixedComment": "",
             "commentType": "",
             "digits": ""
         }
@@ -576,7 +576,7 @@ class TestCreate_cloudTrader(APITestBase):
                 "followStatus": 1,
                 "followOpen": 1,
                 "followClose": 1,
-                "fixedComment": "ceshi",
+                "fixedComment": "",
                 "commentType": "",
                 "digits": 0,
                 "followTraderIds": [],

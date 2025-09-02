@@ -556,15 +556,15 @@ class TestCloudFollowDirection:
     # @pytest.mark.skipif(reason=SKIP_REASON)
     @allure.story("场景3：平仓的订单方向功能校验-buy sell")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-          2. 平仓-订单方向-sell，平仓失败
-          3. 校验数据库是否有平仓订单-应该没有
-          4. 平仓-订单方向-buy sell，平仓成功
-          5. 校验订单数据是否正确
-        - 预期结果：平仓的订单方向功能正确
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 平仓-订单方向-sell，平仓失败
+      3. 校验数据库是否有平仓订单-应该没有
+      4. 平仓-订单方向-buy sell，平仓成功
+      5. 校验订单数据是否正确
+    - 预期结果：平仓的订单方向功能正确
+    """)
     class TestMasOrderSend3(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, logged_session, var_manager):
@@ -2653,13 +2653,13 @@ class TestCloudClose:
 
     @allure.story("场景11：平仓的功能校验-全平订单")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单数量2
-          2. 平仓-全平策略
-          3. 校验订单数据是否正确
-        - 预期结果：平仓的功能校验-全平订单功能正确
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.1-1，总订单数量2
+      2. 平仓-全平策略
+      3. 校验订单数据是否正确
+    - 预期结果：平仓的功能校验-全平订单功能正确
+    """)
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend11(APITestBase):
         @allure.title("云策略-复制下单操作")

@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("跟单软件看板-vps数据-修改跟单账号")
+@allure.feature("VPS策略下单-修改跟单账号")
 class TestVPSMasOrder_money_scene:
     @allure.story("场景1：VPS策略下单-跟单修改币种")
     @allure.description("""

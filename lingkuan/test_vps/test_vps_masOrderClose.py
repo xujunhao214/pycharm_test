@@ -484,7 +484,7 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易开仓-主指令及订单详情数据检查-开仓订单不等于开仓总订单数")
+        @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-平仓订单不等于开仓总订单数")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -543,7 +543,7 @@ class TestVPSMasOrderclose:
                 )
                 logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-开仓订单不等于开仓总订单数")
+        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-平仓订单不等于开仓总订单数")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1113,16 +1113,16 @@ class TestVPSMasOrderclose:
 
     @allure.story("场景4：平仓的订单方向功能校验-buy sell")
     @allure.description("""
-            ### 测试说明
-            - 前置条件：有vps策略和vps跟单
-              1. 修改跟单账号，跟单方向-反向sell
-              2. 进行开仓
-              3. 交易下单-跟单账号自己平仓-buy
-              4. 校验平仓的订单数，应该不等于4
-              5. 交易下单-跟单账号自己平仓-buy sell
-              6. 校验平仓的订单数,等于4
-            - 预期结果：平仓的订单方向功能正确
-            """)
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 修改跟单账号，跟单方向-反向sell
+      2. 进行开仓
+      3. 交易下单-跟单账号自己平仓-buy
+      4. 校验平仓的订单数，应该不等于4
+      5. 交易下单-跟单账号自己平仓-buy sell
+      6. 校验平仓的订单数,等于4
+    - 预期结果：平仓的订单方向功能正确
+    """)
     class TestVPStradingOrders4(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号为反向跟单")

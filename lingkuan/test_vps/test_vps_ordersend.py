@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
 
 
-@allure.feature("云策略复制下单-开仓的场景校验")
+@allure.feature("VPS策略下单-开仓的场景校验")
 class TestVPSOrdersend:
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
@@ -3234,13 +3234,13 @@ class TestVPSOrdersend:
     class TestVPStradingOrders8(APITestBase):
         @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
         @allure.description("""
-            ### 测试说明
-            - 场景校验：手数范围>总手数>订单数量
-            - 前置条件：有vps策略和vps跟单
-              1. 进行开仓，手数范围0.1-1，总手数0.01
-              2. 预期下单失败：总手数不能低于最低手数
-            - 预期结果：提示正确
-            """)
+        ### 测试说明
+        - 场景校验：手数范围>总手数>订单数量
+        - 前置条件：有vps策略和vps跟单
+          1. 进行开仓，手数范围0.1-1，总手数0.01
+          2. 预期下单失败：总手数不能低于最低手数
+        - 预期结果：提示正确
+        """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求

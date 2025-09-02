@@ -497,15 +497,15 @@ class TestVPSFollowDirection:
 
     @allure.story("场景3：平仓的订单方向功能验证-跟单是buy")
     @allure.description("""
-        ### 用例说明
-        - 前置条件：有vps策略和vps跟单
-        - 操作步骤：
-          1. 修改跟单账号的跟单方向为正向，进行开仓
-          2. 跟单账号sell方向进行平仓，平仓失败，给出提示
-          3. 跟单账号buy方向进行平仓，平仓成功
-          4. 策略账号buy方向进行平仓
-        - 预期结果：平仓的订单方向功能正确
-        """)
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改跟单账号的跟单方向为正向，进行开仓
+      2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+      3. 跟单账号buy方向进行平仓，平仓成功
+      4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    """)
     class TestReverseFollowClose_buy(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号为正向跟单")
@@ -698,15 +698,15 @@ class TestVPSFollowDirection:
 
     @allure.story("场景4：平仓的订单方向功能验证-平仓buy sell")
     @allure.description("""
-            ### 用例说明
-            - 前置条件：有vps策略和vps跟单
-            - 操作步骤：
-              1. 进行开仓
-              2. 跟单账号sell方向进行平仓，平仓失败，给出提示
-              3. 跟单账号buy sell方向进行平仓，平仓成功
-              4. 策略账号buy方向进行平仓
-            - 预期结果：平仓的订单方向功能正确
-            """)
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+    1. 进行开仓
+    2. 跟单账号sell方向进行平仓，平仓失败，给出提示
+    3. 跟单账号buy sell方向进行平仓，平仓成功
+    4. 策略账号buy方向进行平仓
+    - 预期结果：平仓的订单方向功能正确
+    """)
     class TestReverseFollowClose_all(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")

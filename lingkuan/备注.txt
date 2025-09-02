@@ -115,8 +115,8 @@ run_parallel_console.py 有控制台输出，实时重定向输出流（实时�
 
 
 828版本：
-1.修改api基类，使得allure报告分层
-2.#假设原代码中有这些调用
+1.修改api基类，使得allure报告分层，这样可以更清晰的查看执行步骤和异常信息。
+2.根据情况替换allure报告的格式
 allure.attach("内容", "名称", allure.attachment_type.TEXT)
 allure.attach("内容", "名称", allure.attachment_type.JSON)
 # 替换为字符串
@@ -124,5 +124,7 @@ allure.attach("内容", "名称", allure.attachment_type.TEXT)
 allure.attach("内容", "名称", attachment_type="application/json")
 根据实际情况修改，不然报错：TypeError: Object of type AttachmentType is not JSON serializable
 主要修改在判断两个列表数据是否相等
-3.之前的执行用例判断，有时间需要大改，之前的判断结果异常没有分层导致allure报告分类不好看
+3.开仓加备注，校验的时候，SQL查询加备注字段，这样可以减少每个场景后面的停止时间，减少总的执行时间。
 是一个稳定的版本
+4.优化路径问题，不用每次修改执行文件变更路径
+5.命令行执行合并的执行文件报错，导致不能很好的切换环境，进行修改
