@@ -36,6 +36,9 @@ class Testcloudtrader_moneyandscene:
             cloudTrader_vps_id = var_manager.get_variable("cloudTrader_vps_ids_2")
             cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
             vpsId = var_manager.get_variable("vpsId")
+            IP_ADDRESS = var_manager.get_variable("IP_ADDRESS")
+            vpsname = var_manager.get_variable("vpsname")
+            desc = IP_ADDRESS + "-" + vpsname + "-" + "-跟单账号"
             data = {
                 "id": cloudTrader_user_ids_2,
                 "account": cloudTrader_user_accounts_2,
@@ -47,7 +50,7 @@ class Testcloudtrader_moneyandscene:
                 "sort": 100,
                 "vpsDescs": [
                     {
-                        "desc": "39.99.136.49-^主VPS-跟单账号",
+                        "desc": desc,
                         "status": 0,
                         "statusExtra": "启动成功",
                         "forex": "",
@@ -55,14 +58,14 @@ class Testcloudtrader_moneyandscene:
                         "traderId": cloudTrader_vps_ids_1,
                         "sourceId": cloudTrader_vps_id,
                         "sourceAccount": cloudTrader_user_accounts_1,
-                        "sourceName": "测试数据",
+                        "sourceName": "",
                         "loginNode": new_user["serverNode"],
                         "nodeType": 0,
                         "nodeName": "账号节点",
                         "type": None,
                         "vpsId": vpsId,
-                        "vpsName": "^主VPS",
-                        "ipAddress": "39.99.136.49",
+                        "vpsName": vpsname,
+                        "ipAddress": IP_ADDRESS,
                         "traderType": 1,
                         "abRemark": None,
                         "accountMode": 0,
@@ -132,7 +135,7 @@ class Testcloudtrader_moneyandscene:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试币种"
+                "remark": "changjing1"
             }
 
             response = self.send_post_request(
@@ -157,6 +160,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.symbol,
                             fod.order_no,
@@ -173,10 +177,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '0',
                     cloudTrader_user_accounts_8,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -225,6 +231,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.symbol,
                             fod.order_no,
@@ -241,10 +248,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '0',
                     cloudTrader_user_accounts_9,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -291,6 +300,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.symbol,
                             fod.order_no,
@@ -307,10 +317,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '0',
                     cloudTrader_user_accounts_10,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -403,6 +415,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.symbol,
                             fod.order_no,
@@ -419,10 +432,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_8,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -471,6 +486,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.symbol,
                             fod.order_no,
@@ -487,10 +503,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_9,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -537,6 +555,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.symbol,
                             fod.order_no,
@@ -553,10 +572,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_10,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -595,8 +616,6 @@ class Testcloudtrader_moneyandscene:
                     )
                     logging.info(f"币种验证通过: {symbol}")
 
-            time.sleep(25)
-
     @allure.story("场景2：云策略策略下单-跟单修改模式、品种")
     @allure.description("""
     ### 用例说明
@@ -628,7 +647,7 @@ class Testcloudtrader_moneyandscene:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试交易下单数据"
+                "remark": "changjing2"
             }
 
             response = self.send_post_request(
@@ -653,6 +672,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.order_no,
                             foi.true_total_lots,
@@ -668,10 +688,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
                     '0',
                     cloudTrader_user_accounts_5,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -706,6 +728,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.order_no,
                             foi.true_total_lots,
@@ -721,10 +744,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
                     '0',
                     cloudTrader_user_accounts_6,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -816,6 +841,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.order_no,
                             foi.true_total_lots,
@@ -831,10 +857,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
                     '0',
                     cloudTrader_user_accounts_7,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -925,6 +953,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.order_no,
                             foi.true_total_lots,
@@ -940,10 +969,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                             """
                 params = (
                     '1',
                     cloudTrader_user_accounts_5,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -979,6 +1010,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.order_no,
                             foi.true_total_lots,
@@ -994,10 +1026,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
                     '1',
                     cloudTrader_user_accounts_6,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1033,6 +1067,7 @@ class Testcloudtrader_moneyandscene:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.close_no,
                             fod.order_no,
                             foi.true_total_lots,
@@ -1048,10 +1083,12 @@ class Testcloudtrader_moneyandscene:
                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type=%s
                             AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
                     '1',
                     cloudTrader_user_accounts_7,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1086,5 +1123,3 @@ class Testcloudtrader_moneyandscene:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-            time.sleep(25)

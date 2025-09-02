@@ -520,4 +520,3 @@ class TestCloudOrderSend_newScenarios:
                 "响应msg字段应为success"
             )
 
-        time.sleep(25)

@@ -262,7 +262,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "测试数据",
+                "remark": "",
                 "Cfd": "",
                 "mode_desc": "固定手数（5倍）"
             },
@@ -270,7 +270,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": vps_template_id,
-                "remark": "测试数据",
+                "remark": "",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"
             },
@@ -278,7 +278,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "测试数据",
+                "remark": "",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -286,7 +286,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "测试数据",
+                "remark": "",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -294,7 +294,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "测试数据",
+                "remark": "",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -302,7 +302,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "测试数据",
+                "remark": "",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },

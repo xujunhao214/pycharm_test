@@ -105,9 +105,12 @@ class TestCreate_cloudTrader(APITestBase):
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
             vpsId = db_data[0]["id"]
-            # 存入变量管理器
             var_manager.set_runtime_variable("vpsId", vpsId)
             print(f"成功提取 VPS ID: {vpsId}")
+
+            vpsname=db_data[0]["name"]
+            var_manager.set_runtime_variable("vpsname", vpsname)
+            print(f"成功提取vpsname: {vpsname}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")

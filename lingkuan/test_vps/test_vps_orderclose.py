@@ -1015,6 +1015,8 @@ class TestVPSOrderQuantityControl:
                 )
                 logging.info(f"{new_user['account']}暂无可平仓订单")
 
+        time.sleep(30)
+
 
 # ------------------------------------
 # 大模块4：VPS策略下单-平仓的订单类型功能验证
@@ -1600,5 +1602,3 @@ class TestVPSCloseRemark:
                     "success",
                     "响应msg字段应为success"
                 )
-
-            time.sleep(25)

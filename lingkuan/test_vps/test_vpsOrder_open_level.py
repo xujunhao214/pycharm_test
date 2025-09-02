@@ -38,7 +38,7 @@ class TestLeakageopen_level:
                 "platform": add_Slave["platform"],
                 "account": vps_user_accounts_1,
                 "password": encrypted_password,
-                "remark": add_Slave["remark"],
+                "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
@@ -49,7 +49,7 @@ class TestLeakageopen_level:
                 "followOpen": 0,
                 "followClose": 1,
                 "followRep": 0,
-                "fixedComment": add_Slave["fixedComment"],
+                "fixedComment": "",
                 "commentType": 2,
                 "digits": 0,
                 "cfd": "@",
@@ -104,7 +104,7 @@ class TestLeakageopen_level:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing1",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -139,6 +139,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
@@ -161,10 +162,12 @@ class TestLeakageopen_level:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -307,11 +310,13 @@ class TestLeakageopen_level:
                            WHERE symbol LIKE %s 
                              AND source_user = %s
                              AND account = %s
+                             AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -355,7 +360,7 @@ class TestLeakageopen_level:
                     actual=vps_redis_comparable_list_open,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @pytest.mark.url("vps")
@@ -396,7 +401,7 @@ class TestLeakageopen_level:
                 "platform": add_Slave["platform"],
                 "account": vps_user_accounts_1,
                 "password": encrypted_password,
-                "remark": add_Slave["remark"],
+                "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
@@ -407,7 +412,7 @@ class TestLeakageopen_level:
                 "followOpen": 1,
                 "followClose": 1,
                 "followRep": 0,
-                "fixedComment": add_Slave["fixedComment"],
+                "fixedComment": "",
                 "commentType": 2,
                 "digits": 0,
                 "cfd": "@",
@@ -488,6 +493,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
@@ -508,10 +514,12 @@ class TestLeakageopen_level:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -598,6 +606,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
@@ -616,10 +625,12 @@ class TestLeakageopen_level:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -666,6 +677,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
@@ -690,11 +702,13 @@ class TestLeakageopen_level:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -743,8 +757,6 @@ class TestLeakageopen_level:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
         ### 用例说明
@@ -770,7 +782,7 @@ class TestLeakageopen_level:
                 "platform": add_Slave["platform"],
                 "account": add_Slave["account"],
                 "password": encrypted_password,
-                "remark": add_Slave["remark"],
+                "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
@@ -781,7 +793,7 @@ class TestLeakageopen_level:
                 "followOpen": 1,
                 "followClose": 0,
                 "followRep": 0,
-                "fixedComment": add_Slave["fixedComment"],
+                "fixedComment": "",
                 "commentType": 2,
                 "digits": 0,
                 "cfd": "@",
@@ -840,7 +852,7 @@ class TestLeakageopen_level:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing2",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -875,6 +887,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
@@ -898,10 +911,12 @@ class TestLeakageopen_level:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -982,6 +997,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.send_no,
                         fod.magical,
                         fod.open_price,
@@ -1003,10 +1019,12 @@ class TestLeakageopen_level:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '0',
                     vps_user_accounts_1,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1093,6 +1111,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
@@ -1112,10 +1131,12 @@ class TestLeakageopen_level:
                         foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1168,11 +1189,13 @@ class TestLeakageopen_level:
                         WHERE symbol LIKE %s 
                           AND source_user = %s
                           AND account = %s
+                          AND comment = %s
                         """
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
                     vps_user_accounts_1,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1204,11 +1227,13 @@ class TestLeakageopen_level:
                            WHERE symbol LIKE %s 
                              AND source_user = %s
                              AND account = %s
+                             AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1252,7 +1277,7 @@ class TestLeakageopen_level:
                     actual=vps_redis_comparable_list_level,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @pytest.mark.url("vps")
@@ -1267,7 +1292,7 @@ class TestLeakageopen_level:
                 "platform": add_Slave["platform"],
                 "account": add_Slave["account"],
                 "password": encrypted_password,
-                "remark": add_Slave["remark"],
+                "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
@@ -1278,7 +1303,7 @@ class TestLeakageopen_level:
                 "followOpen": 1,
                 "followClose": 1,
                 "followRep": 0,
-                "fixedComment": add_Slave["fixedComment"],
+                "fixedComment": "",
                 "commentType": 2,
                 "digits": 0,
                 "cfd": "@",
@@ -1387,6 +1412,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
@@ -1412,11 +1438,13 @@ class TestLeakageopen_level:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1465,8 +1493,6 @@ class TestLeakageopen_level:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-            time.sleep(25)
-
     @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
     ### 用例说明
@@ -1494,14 +1520,14 @@ class TestLeakageopen_level:
                     "account": new_user["account"],
                     "password": encrypted_password,
                     "platform": new_user["platform"],
-                    "remark": "测试数据",
+                    "remark": "",
                     "platformId": platformId,
                     "templateId": 1,
                     "followStatus": 0,
                     "cfd": "",
                     "forex": "",
                     "followOrderRemark": 1,
-                    "fixedComment": "ceshiceluebeizhu",
+                    "fixedComment": "",
                     "commentType": None,
                     "digits": 0
                 }
@@ -1550,7 +1576,7 @@ class TestLeakageopen_level:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing3",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -1591,11 +1617,13 @@ class TestLeakageopen_level:
                            WHERE symbol LIKE %s 
                              AND source_user = %s
                              AND account = %s
+                             AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
                     new_user["account"],
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1639,7 +1667,7 @@ class TestLeakageopen_level:
                     actual=vps_redis_comparable_list_open,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @pytest.mark.url("vps")
@@ -1681,14 +1709,14 @@ class TestLeakageopen_level:
                     "account": new_user["account"],
                     "password": encrypted_password,
                     "platform": new_user["platform"],
-                    "remark": "测试数据",
+                    "remark": "",
                     "platformId": platformId,
                     "templateId": 1,
                     "followStatus": 1,
                     "cfd": "",
                     "forex": "",
                     "followOrderRemark": 1,
-                    "fixedComment": "ceshiceluebeizhu",
+                    "fixedComment": "",
                     "commentType": None,
                     "digits": 0
                 }
@@ -1765,11 +1793,13 @@ class TestLeakageopen_level:
                     WHERE account = %s
                         AND source_user = %s
                         AND trader_id = %s
+                        AND comment = %s
                         """
                 params = (
                     vps_user_accounts_1,
                     new_user["account"],
-                    vps_addslave_id
+                    vps_addslave_id,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1836,6 +1866,7 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT 
                         fod.size,
+                        fod.comment,
                         fod.close_no,
                         fod.magical,
                         fod.open_price,
@@ -1860,11 +1891,13 @@ class TestLeakageopen_level:
                     WHERE foi.operation_type = %s
                         AND fod.account = %s
                         AND fod.trader_id = %s
+                        AND fod.comment = %s
                         """
                 params = (
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1912,5 +1945,3 @@ class TestLeakageopen_level:
                         f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
-
-            time.sleep(25)

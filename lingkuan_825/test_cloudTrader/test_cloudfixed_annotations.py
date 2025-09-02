@@ -37,9 +37,9 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "id": cloudTrader_traderList_2,
                 "cloudId": cloudMaster_id,
                 "sourceType": 0,
-                "remark": "测试数据",
+                "remark": "",
                 "runningStatus": 0,
-                "followOrderRemark": 0,  # 关闭跟单备注
+                "followOrderRemark": 0,
                 "traderId": cloudTrader_vps_ids_1,
                 "managerIp": None,
                 "managerAccount": None,
@@ -84,7 +84,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "followStatus": 1,
                 "followOpen": 1,
                 "followClose": 1,
-                "fixedComment": "",  # 跟单无固定注释
+                "fixedComment": "",
                 "commentType": None,
                 "digits": 0,
                 "followTraderIds": [],
@@ -120,7 +120,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "ceshikaicangbeizhu"  # 开仓备注
+                "remark": "ceshikaicangbeizhu"
             }
 
             response = self.send_post_request(
@@ -212,9 +212,9 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "id": cloudTrader_traderList_2,
                 "cloudId": cloudMaster_id,
                 "sourceType": 0,
-                "remark": "测试数据",
+                "remark": "",
                 "runningStatus": 0,
-                "followOrderRemark": 0,  # 关闭跟单备注
+                "followOrderRemark": 0,
                 "traderId": cloudTrader_vps_ids_1,
                 "managerIp": None,
                 "managerAccount": None,
@@ -295,7 +295,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "ceshikaicangbeizhu"  # 开仓备注
+                "remark": "ceshikaicangbeizhu"
             }
 
             response = self.send_post_request(
@@ -386,7 +386,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "id": cloudTrader_traderList_2,
                 "cloudId": cloudMaster_id,
                 "sourceType": 0,
-                "remark": "测试数据",
+                "remark": "",
                 "runningStatus": 0,
                 "followOrderRemark": 1,  # 开启跟单备注
                 "traderId": cloudTrader_vps_ids_1,
@@ -433,7 +433,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "followStatus": 1,
                 "followOpen": 1,
                 "followClose": 1,
-                "fixedComment": "",  # 跟单无固定注释
+                "fixedComment": "",
                 "commentType": None,
                 "digits": 0,
                 "followTraderIds": [],
@@ -469,7 +469,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "ceshikaicangbeizhu"  # 开仓备注
+                "remark": "ceshikaicangbeizhu"
             }
 
             response = self.send_post_request(

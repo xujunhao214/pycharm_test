@@ -37,13 +37,13 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "remark": "测试数据",
+            "remark": "",
             "platformId": platformId,
             "templateId": 1,
             "followStatus": 1,
             "cfd": "",
             "forex": "",
-            "followOrderRemark": 0,  # 关闭跟单备注，使用策略备注
+            "followOrderRemark": 0,，使用策略备注
             "fixedComment": "ceshiceluebeizhu",
             "commentType": None,
             "digits": 0
@@ -81,7 +81,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             "followOpen": 1,
             "followClose": 1,
             "followRep": 0,
-            "fixedComment": "",  # 跟单无固定注释
+            "fixedComment": "",
             "commentType": "",
             "digits": 0,
             "cfd": "",
@@ -185,7 +185,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "remark": "测试数据",
+            "remark": "",
             "platformId": platformId,
             "templateId": 1,
             "followStatus": 1,
@@ -328,7 +328,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "remark": "测试数据",
+            "remark": "",
             "platformId": platformId,
             "templateId": 1,
             "followStatus": 1,
@@ -368,7 +368,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
             "followOpen": 1,
             "followClose": 1,
             "followRep": 0,
-            "fixedComment": "",  # 跟单无固定注释
+            "fixedComment": "",
             "commentType": "",
             "digits": 0,
             "cfd": "",
@@ -395,7 +395,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         data = {
             "symbol": trader_ordersend["symbol"],
             "placedType": 0,
-            "remark": "ceshikaicangbeizhu",  # 开仓备注
+            "remark": "ceshikaicangbeizhu",
             "intervalTime": 100,
             "type": 0,
             "totalNum": trader_ordersend["totalNum"],

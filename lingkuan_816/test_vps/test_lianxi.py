@@ -36,7 +36,7 @@ class TestVPSOrderSend_closeaddremark(APITestBase):
                 "account": new_user["account"],
                 "password": encrypted_password,
                 "platform": new_user["platform"],
-                "remark": "测试数据",
+                "remark": "",
                 "platformId": 346,
                 "templateId": 1,
                 "followStatus": 1,

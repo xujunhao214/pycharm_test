@@ -251,7 +251,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_openlist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -876,7 +876,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_levellist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -1113,7 +1113,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudTrader_traderList_2,
                     "cloudId": cloudMaster_id,
                     "sourceType": 0,
-                    "remark": "测试数据",
+                    "remark": "",
                     "runningStatus": 1,
                     "followOrderRemark": 1,
                     "traderId": cloudTrader_vps_ids_1,
@@ -1314,7 +1314,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_openlist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改策略账号信息")
@@ -1330,7 +1330,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudTrader_traderList_2,
                     "cloudId": cloudMaster_id,
                     "sourceType": 0,
-                    "remark": "测试数据",
+                    "remark": "",
                     "runningStatus": 0,
                     "followOrderRemark": 1,
                     "traderId": cloudTrader_vps_ids_1,
@@ -1802,7 +1802,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_openlist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改策略账号信息")

@@ -312,7 +312,7 @@ class TestLeakageopen(APITestBase):
                 actual=vps_redis_comparable_list_open,
                 expected=db_comparable_list,
                 fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                tolerance=1e-6  # 浮点数比较容差
+                tolerance=1e-6
             )
 
     @pytest.mark.url("vps")
@@ -1118,7 +1118,7 @@ class TestLeakagelevel(APITestBase):
                 actual=vps_redis_comparable_list_level,
                 expected=db_comparable_list,
                 fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                tolerance=1e-6  # 浮点数比较容差
+                tolerance=1e-6
             )
 
     @pytest.mark.url("vps")
@@ -1346,7 +1346,7 @@ class TestLeakageopen_addstatus(APITestBase):
                 "account": new_user["account"],
                 "password": encrypted_password,
                 "platform": new_user["platform"],
-                "remark": "测试数据",
+                "remark": "",
                 "platformId": platformId,
                 "templateId": 1,
                 "followStatus": 0,
@@ -1491,7 +1491,7 @@ class TestLeakageopen_addstatus(APITestBase):
                 actual=vps_redis_comparable_list_open,
                 expected=db_comparable_list,
                 fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                tolerance=1e-6  # 浮点数比较容差
+                tolerance=1e-6
             )
 
     @pytest.mark.url("vps")
@@ -1533,7 +1533,7 @@ class TestLeakageopen_addstatus(APITestBase):
                 "account": new_user["account"],
                 "password": encrypted_password,
                 "platform": new_user["platform"],
-                "remark": "测试数据",
+                "remark": "",
                 "platformId": platformId,
                 "templateId": 1,
                 "followStatus": 1,

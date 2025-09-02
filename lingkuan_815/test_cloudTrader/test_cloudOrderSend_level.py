@@ -345,7 +345,7 @@ class TestcloudTrader_level(APITestBase):
                 actual=cloudtrader_redis_comparable_levellist,
                 expected=db_comparable_list,
                 fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                tolerance=1e-6  # 浮点数比较容差
+                tolerance=1e-6
             )
 
     # ---------------------------

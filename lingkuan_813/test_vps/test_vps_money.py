@@ -31,7 +31,7 @@ class TestVPSOrderSend_money(APITestBase):
             "id": vps_trader_id,
             "account": new_user["account"],
             "password": encrypted_password,
-            "remark": "测试数据",
+            "remark": "",
             "followStatus": 1,
             "templateId": 1,
             "type": 0,

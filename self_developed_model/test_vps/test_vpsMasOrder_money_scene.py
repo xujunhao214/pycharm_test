@@ -29,14 +29,13 @@ class TestVPSMasOrder_money_scene:
         @pytest.mark.url("vps")
         @allure.title("账号管理-账号列表-修改用户")
         def test_update_user(self, logged_session, var_manager, encrypted_password):
-            # 1. 发送创建用户请求
             new_user = var_manager.get_variable("new_user")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "id": vps_trader_id,
                 "account": new_user["account"],
                 "password": encrypted_password,
-                "remark": "测试数据",
+                "remark": "",
                 "followStatus": 1,
                 "templateId": 1,
                 "type": 0,
@@ -98,7 +97,7 @@ class TestVPSMasOrder_money_scene:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing1",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -130,18 +129,33 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略开仓-修改币种@")
         def test_dbtrader_cfda(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_5 = var_manager.get_variable("vps_user_accounts_5")
-                # symbol,order_no,size,trader_id,account
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE source_user = %s
-                      AND account = %s
-                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_5,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -149,8 +163,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -187,18 +200,34 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略开仓-修改币种p")
         def test_dbtrader_cfdp(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_6 = var_manager.get_variable("vps_user_accounts_6")
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE source_user = %s
-                      AND account = %s
-                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_6,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -206,8 +235,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -242,18 +270,34 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略开仓-修改币种min")
         def test_dbtrader_cfdmin(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_7 = var_manager.get_variable("vps_user_accounts_7")
 
                 sql = f"""
-                        SELECT * 
-                        FROM follow_order_detail 
-                        WHERE source_user = %s
-                          AND account = %s
-                        """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_7,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -261,8 +305,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -329,20 +372,34 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略平仓-修改币种@")
         def test_dbclose_cfda(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_5 = var_manager.get_variable("vps_user_accounts_5")
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE source_user = %s
-                      AND account = %s
-                      AND close_status = %s
-                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.close_no,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
-                    new_user["account"],
+                    "1",
                     vps_user_accounts_5,
-                    "1"
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -350,8 +407,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -388,20 +444,34 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略平仓-修改币种p")
         def test_dbclose_cfdp(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_6 = var_manager.get_variable("vps_user_accounts_6")
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE source_user = %s
-                      AND account = %s
-                      AND close_status = %s
-                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.close_no,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
-                    new_user["account"],
+                    '1',
                     vps_user_accounts_6,
-                    "1"
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -409,8 +479,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -445,20 +514,34 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略平仓-修改币种min")
         def test_dbclose_cfdmin(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_7 = var_manager.get_variable("vps_user_accounts_7")
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE source_user = %s
-                      AND account = %s
-                      AND close_status = %s
-                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.close_no,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
-                    new_user["account"],
+                    '1',
                     vps_user_accounts_7,
-                    "1"
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -466,8 +549,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -498,8 +580,6 @@ class TestVPSMasOrder_money_scene:
                     )
                     logging.info(f"币种验证通过: {symbol}")
 
-            time.sleep(30)
-
     @allure.story("场景2：VPS策略下单-跟单修改模式、品种")
     @allure.description("""
     ### 用例说明
@@ -523,7 +603,7 @@ class TestVPSMasOrder_money_scene:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": "changjing2",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -555,22 +635,33 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略开仓-跟单账号固定手数5")
         def test_dbdetail_followParam5(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_2 = var_manager.get_variable("vps_user_accounts_2")
-                symbol = trader_ordersend["symbol"]
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE symbol LIKE %s 
-                      AND source_user = %s
-                      AND account = %s
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
-                    f"%{symbol}%",
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -578,8 +669,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -601,22 +691,33 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略开仓-跟单账号修改品种")
         def test_dbdetail_templateId3(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_3 = var_manager.get_variable("vps_user_accounts_3")
-                symbol = trader_ordersend["symbol"]
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE symbol LIKE %s 
-                      AND source_user = %s
-                      AND account = %s
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
-                    f"%{symbol}%",
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_3,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -624,8 +725,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -702,22 +802,33 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略开仓-修改净值")
         def test_vps_dbtrader_euqit2(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_4 = var_manager.get_variable("vps_user_accounts_4")
-                symbol = trader_ordersend["symbol"]
 
                 sql = f"""
-                        SELECT * 
-                        FROM follow_order_detail 
-                        WHERE symbol LIKE %s 
-                          AND source_user = %s
-                          AND account = %s
-                        """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                    """
                 params = (
-                    f"%{symbol}%",
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_4,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -725,8 +836,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -787,27 +897,36 @@ class TestVPSMasOrder_money_scene:
             )
 
         # @pytest.mark.skip(reason=SKIP_REASON)
-        @allure.title("数据库校验-策略平仓-跟单账号固定手数")
+        @allure.title("数据库校验-策略平仓-跟单账号固定手数5")
         def test_dbclose_followParam5(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_2 = var_manager.get_variable("vps_user_accounts_2")
-                symbol = trader_ordersend["symbol"]
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE symbol LIKE %s 
-                      AND source_user = %s
-                      AND account = %s
-                      AND close_status = %s
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
-                    f"%{symbol}%",
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_2,
-                    "1"
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -815,8 +934,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -838,24 +956,33 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略平仓-跟单账号修改品种")
         def test_dbclose_templateId3(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_3 = var_manager.get_variable("vps_user_accounts_3")
-                symbol = trader_ordersend["symbol"]
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE symbol LIKE %s 
-                      AND source_user = %s
-                      AND account = %s
-                      AND close_status = %s
-                    """
+                       SELECT 
+                           fod.size,
+                           fod.comment,
+                           fod.send_no,
+                           fod.order_no,
+                           foi.true_total_lots,
+                           foi.order_no,
+                           foi.operation_type,
+                           foi.create_time,
+                           foi.status
+                       FROM 
+                           follow_order_detail fod
+                       INNER JOIN 
+                           follow_order_instruct foi 
+                       ON 
+                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                       WHERE foi.operation_type=%s
+                           AND fod.account = %s
+                           AND fod.comment = %s
+                       """
                 params = (
-                    f"%{symbol}%",
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_3,
-                    "1"
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -863,8 +990,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -887,24 +1013,33 @@ class TestVPSMasOrder_money_scene:
         @allure.title("数据库校验-策略平仓-修改净值")
         def test_dbclose_euqit(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_4 = var_manager.get_variable("vps_user_accounts_4")
-                symbol = trader_ordersend["symbol"]
 
                 sql = f"""
-                    SELECT * 
-                    FROM follow_order_detail 
-                    WHERE symbol LIKE %s 
-                      AND source_user = %s
-                      AND account = %s
-                      AND close_status = %s
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type=%s
+                            AND fod.account = %s
+                            AND fod.comment = %s
                     """
                 params = (
-                    f"%{symbol}%",
-                    new_user["account"],
+                    '0',
                     vps_user_accounts_4,
-                    "1"
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -912,8 +1047,7 @@ class TestVPSMasOrder_money_scene:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=2
+                    time_field="foi.create_time"
                 )
 
             with allure.step("2. 校验数据"):
@@ -940,5 +1074,3 @@ class TestVPSMasOrder_money_scene:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-            time.sleep(30)

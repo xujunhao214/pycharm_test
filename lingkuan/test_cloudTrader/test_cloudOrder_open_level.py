@@ -118,7 +118,7 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试交易下单数据"
+                "remark": "changjing1"
             }
 
             response = self.send_post_request(
@@ -144,6 +144,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                     SELECT 
                         fod.send_no,
+                        fod.comment,
                         fod.magical,
                         fod.remark,
                         fod.symbol,
@@ -164,7 +165,7 @@ class TestcloudTrader_openandlevel:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND foi.cloud_account = %s
-                                            """
+                     """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
@@ -201,11 +202,13 @@ class TestcloudTrader_openandlevel:
                                WHERE symbol LIKE %s 
                                  AND source_user = %s
                                  AND account = %s
+                                 AND comment = %s
                                """
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -251,7 +254,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_openlist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -366,6 +369,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.magical,
                             fod.open_price,
@@ -465,6 +469,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -488,10 +493,12 @@ class TestcloudTrader_openandlevel:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
-                    cloudTrader_user_accounts_4
+                    cloudTrader_user_accounts_4,
+                    "changjing1"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -530,8 +537,6 @@ class TestcloudTrader_openandlevel:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                time.sleep(25)
 
     @allure.story("场景2：交易下单-云策略复制下单-漏平")
     @allure.description("""
@@ -638,7 +643,7 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试交易下单数据"
+                "remark": "changjing2"
             }
 
             response = self.send_post_request(
@@ -663,6 +668,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                             SELECT 
                                 fod.size,
+                                fod.comment,
                                 fod.send_no,
                                 fod.magical,
                                 fod.open_price,
@@ -685,10 +691,12 @@ class TestcloudTrader_openandlevel:
                                 foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
+                                AND fod.comment = %s
                                 """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -763,6 +771,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                        SELECT 
                            fod.send_no,
+                           fod.comment,
                            fod.magical,
                            fod.remark,
                            fod.symbol,
@@ -786,10 +795,12 @@ class TestcloudTrader_openandlevel:
                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                        WHERE foi.operation_type = %s
                            AND foi.cloud_account = %s
+                           AND fod.comment = %s
                                                """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -805,8 +816,8 @@ class TestcloudTrader_openandlevel:
                 assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
 
                 close_remark = db_data[0]["close_remark"]
-                logging.info(f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}")
-                assert close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是:未开通平仓状态，实际是：{close_remark}"
+                logging.info(f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}")
+                assert close_remark == "平仓异常: 未开通平仓状态", f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}"
 
             with allure.step("3. 提取数据"):
                 cloudTrader_master_order_level = [record["master_order"] for record in db_data]
@@ -826,11 +837,13 @@ class TestcloudTrader_openandlevel:
                           WHERE symbol LIKE %s 
                             AND source_user = %s
                             AND account = %s
+                            AND comment = %s
                           """
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -876,7 +889,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_levellist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -1018,6 +1031,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -1041,10 +1055,12 @@ class TestcloudTrader_openandlevel:
                                foi.master_order = fod.magical COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
-                    cloudTrader_user_accounts_4
+                    cloudTrader_user_accounts_4,
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1085,8 +1101,6 @@ class TestcloudTrader_openandlevel:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                time.sleep(25)
-
     @allure.story("场景3：交易下单-云策略复制下单-策略账号-策略状态关闭")
     @allure.description("""
     ### 用例说明
@@ -1113,7 +1127,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudTrader_traderList_2,
                     "cloudId": cloudMaster_id,
                     "sourceType": 0,
-                    "remark": "测试数据",
+                    "remark": "",
                     "runningStatus": 1,
                     "followOrderRemark": 1,
                     "traderId": cloudTrader_vps_ids_1,
@@ -1122,7 +1136,7 @@ class TestcloudTrader_openandlevel:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",
+                    "fixedComment": "",
                     "commentType": None,
                     "digits": 0
                 }
@@ -1181,7 +1195,7 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试交易下单数据"
+                "remark": "changjing3"
             }
 
             response = self.send_post_request(
@@ -1207,6 +1221,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                     SELECT 
                         fod.send_no,
+                        fod.comment,
                         fod.magical,
                         fod.remark,
                         fod.symbol,
@@ -1227,7 +1242,7 @@ class TestcloudTrader_openandlevel:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND foi.cloud_account = %s
-                                            """
+                 """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
@@ -1264,11 +1279,13 @@ class TestcloudTrader_openandlevel:
                                WHERE symbol LIKE %s 
                                  AND source_user = %s
                                  AND account = %s
+                                 AND comment = %s
                                """
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1314,7 +1331,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_openlist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改策略账号信息")
@@ -1330,7 +1347,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudTrader_traderList_2,
                     "cloudId": cloudMaster_id,
                     "sourceType": 0,
-                    "remark": "测试数据",
+                    "remark": "",
                     "runningStatus": 0,
                     "followOrderRemark": 1,
                     "traderId": cloudTrader_vps_ids_1,
@@ -1339,7 +1356,7 @@ class TestcloudTrader_openandlevel:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",
+                    "fixedComment": "",
                     "commentType": None,
                     "digits": 0
                 }
@@ -1418,6 +1435,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.magical,
                             fod.open_price,
@@ -1517,6 +1535,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -1540,10 +1559,12 @@ class TestcloudTrader_openandlevel:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
-                    cloudTrader_user_accounts_4
+                    cloudTrader_user_accounts_4,
+                    "changjing3"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1582,8 +1603,6 @@ class TestcloudTrader_openandlevel:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                time.sleep(25)
 
     @allure.story("场景4：交易下单-云策略复制下单-云策略-策略状态关闭")
     @allure.description("""
@@ -1669,7 +1688,7 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "测试交易下单数据"
+                "remark": "changjing4"
             }
 
             response = self.send_post_request(
@@ -1695,6 +1714,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                     SELECT 
                         fod.send_no,
+                        fod.comment,
                         fod.magical,
                         fod.remark,
                         fod.symbol,
@@ -1715,7 +1735,7 @@ class TestcloudTrader_openandlevel:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND foi.cloud_account = %s
-                                            """
+                      """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
@@ -1752,11 +1772,13 @@ class TestcloudTrader_openandlevel:
                                WHERE symbol LIKE %s 
                                  AND source_user = %s
                                  AND account = %s
+                                 AND comment = %s
                                """
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1802,7 +1824,7 @@ class TestcloudTrader_openandlevel:
                     actual=cloudtrader_redis_comparable_openlist,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                    tolerance=1e-6  # 浮点数比较容差
+                    tolerance=1e-6
                 )
 
         @allure.title("云策略-云策略列表-修改策略账号信息")
@@ -1896,6 +1918,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                         SELECT 
                             fod.size,
+                            fod.comment,
                             fod.send_no,
                             fod.magical,
                             fod.open_price,
@@ -1992,6 +2015,7 @@ class TestcloudTrader_openandlevel:
                 sql = f"""
                            SELECT 
                                fod.size,
+                               fod.comment,
                                fod.close_no,
                                fod.magical,
                                fod.open_price,
@@ -2015,10 +2039,12 @@ class TestcloudTrader_openandlevel:
                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
+                               AND fod.comment = %s
                                """
                 params = (
                     '1',
-                    cloudTrader_user_accounts_4
+                    cloudTrader_user_accounts_4,
+                    "changjing4"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2056,5 +2082,3 @@ class TestcloudTrader_openandlevel:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                time.sleep(25)

@@ -2435,5 +2435,3 @@ class TestCloudMasOrdersend:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
-
-            time.sleep(30)

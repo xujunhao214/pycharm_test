@@ -3308,5 +3308,3 @@ class TestVPSOrdersend:
                     "下单失败，请检查下单参数",
                     "响应msg字段应为：下单失败，请检查下单参数"
                 )
-
-            time.sleep(30)

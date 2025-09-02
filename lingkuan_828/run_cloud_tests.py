@@ -27,7 +27,10 @@ def run_cloud_tests(env: str = "test"):
         f"--test-group=cloud",
         f"--alluredir={report_dir}",
         "--clean-alluredir",
+
         "test_cloudTrader/test_lianxi2.py",
+
+
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",

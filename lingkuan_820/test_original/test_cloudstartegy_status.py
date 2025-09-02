@@ -228,7 +228,7 @@ class Testcloudstargy_status(APITestBase):
                 actual=cloudtrader_redis_comparable_openlist,
                 expected=db_comparable_list,
                 fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                tolerance=1e-6  # 浮点数比较容差
+                tolerance=1e-6
             )
 
     @allure.title("云策略-云策略列表-修改策略账号信息")

@@ -29,14 +29,13 @@ class TestVPSOrderSend_money(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("账号管理-账号列表-修改用户")
     def test_update_user(self, logged_session, var_manager, encrypted_password):
-        # 1. 发送创建用户请求
         new_user = var_manager.get_variable("new_user")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         data = {
             "id": vps_trader_id,
             "account": new_user["account"],
             "password": encrypted_password,
-            "remark": "测试数据",
+            "remark": "",
             "followStatus": 1,
             "templateId": 1,
             "type": 0,
