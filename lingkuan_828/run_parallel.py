@@ -129,7 +129,7 @@ def run_all_tests_parallel(env: str = "test"):
         # 生成汇总HTML报告
         print("\n开始生成汇总报告...")
         os.system(f"allure generate {merged_results_dir} -o {merged_report_dir} --clean")
-        print(f"汇总报告生成成功: file://{os.path.abspath(merged_report_dir)}/index.html")
+        print(f"汇总报告生成成功: file://{merged_report_dir}/index.html")
     except Exception as e:
         print(f"汇总报告生成失败: {str(e)}")
 
