@@ -2,9 +2,9 @@ import allure
 import logging
 import pytest
 import time
-from self_developed_model.conftest import var_manager
-from self_developed_model.commons.api_base import *
-from self_developed_model.commons.redis_utils import *
+from self_developed.conftest import var_manager
+from self_developed.commons.api_base import *
+from self_developed.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该用例暂时跳过"
@@ -1227,11 +1227,13 @@ class TestLeakageopen_level:
                            WHERE symbol LIKE %s 
                              AND source_user = %s
                              AND account = %s
+                             AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
                     new_user["account"],
+                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
