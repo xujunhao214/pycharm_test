@@ -778,11 +778,11 @@ class TestCloudStrategyOrder:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
     # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景4：复制下单-手数0.1-1，总手数5")
+    @allure.story("场景4：复制下单-手数0.01-1，总手数5")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数5
+      1. 进行开仓，手数范围0.01-1，总手数5
       2. 校验账号的数据是否正确
       3. 进行平仓
       4. 校验账号的数据是否正确
