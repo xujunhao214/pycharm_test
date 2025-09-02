@@ -11,9 +11,9 @@ def run_cloud_tests(env: str = "test"):
     project_root = os.path.dirname(current_script_path)
 
     # 3. 基于项目根目录，动态生成报告路径（相对路径转绝对路径）
-    report_dir = os.path.join(project_root, "report", "cloud_allure-results")
-    html_dir = os.path.join(project_root, "report", "cloud_html-report")
-    brief_dir = os.path.join(project_root, "report", "cloud_brief-report")
+    report_dir = os.path.join(project_root, "report", "results")
+    html_dir = os.path.join(project_root, "report", "results/html")
+    # brief_dir = os.path.join(project_root, "report", "cloud_brief-report")
 
     # 确保目录存在
     os.makedirs(report_dir, exist_ok=True)
@@ -69,9 +69,9 @@ def run_cloud_tests(env: str = "test"):
         if exit_code != 0:
             os.system(f"allure generate {report_dir} -o {html_dir} --clean")
             print(f"Cloud独立报告: file://{os.path.abspath(html_dir)}/index.html")
-        else:
-            os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
-            print(f"Cloud独立简要报告: file://{os.path.abspath(brief_dir)}/index.html")
+        # else:
+        #     os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
+        #     print(f"Cloud独立简要报告: file://{os.path.abspath(brief_dir)}/index.html")
     except Exception as e:
         print(f"Cloud独立报告生成失败: {str(e)}")
 
