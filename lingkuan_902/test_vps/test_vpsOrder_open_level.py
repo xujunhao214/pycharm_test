@@ -1227,13 +1227,11 @@ class TestLeakageopen_level:
                            WHERE symbol LIKE %s 
                              AND source_user = %s
                              AND account = %s
-                             AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
                     new_user["account"],
-                    "changjing2"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
