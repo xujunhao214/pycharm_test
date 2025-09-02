@@ -1627,11 +1627,11 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
-    @allure.story("场景5：复制下单-手数0.1-1，总手数5")
+    @allure.story("场景5：复制下单-手数0.01-1，总手数5")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
-      1. 进行开仓，手数范围0.1-1，总手数5
+      1. 进行开仓，手数范围0.01-1，总手数5
       2. 校验账号的数据是否正确
       3. 进行平仓
       4. 校验账号的数据是否正确
@@ -1650,7 +1650,7 @@ class TestVPSMasOrdersend:
                 "intervalTime": 100,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
-                "startSize": "0.1",
+                "startSize": "0.01",
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "5",
@@ -1746,7 +1746,7 @@ class TestVPSMasOrdersend:
                     max_lot_size = db_data[0]["max_lot_size"]
                     self.verify_data(
                         actual_value=float(max_lot_size),
-                        expected_value=float(0.10),
+                        expected_value=float(0.01),
                         op=CompareOp.EQ,
                         message="开始手数应符合预期",
                         attachment_name="开始手数详情"
