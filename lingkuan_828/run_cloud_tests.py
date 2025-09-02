@@ -5,11 +5,15 @@ import subprocess
 
 
 def run_cloud_tests(env: str = "test"):
-    """运行CloudTrader测试，生成独立报告，同时暴露结果目录供合并"""
-    # 配置独立报告路径（保持原有稳定逻辑）
-    report_dir = f"report/cloud_allure-results"  # 独立结果目录
-    html_dir = f"report/cloud_html-report"  # 独立HTML报告
-    brief_dir = f"report/cloud_brief-report"
+    # 1. 获取当前脚本的绝对路径
+    current_script_path = os.path.abspath(__file__)
+    # 2. 获取脚本所在的目录
+    project_root = os.path.dirname(current_script_path)
+
+    # 3. 基于项目根目录，动态生成报告路径（相对路径转绝对路径）
+    report_dir = os.path.join(project_root, "report", "cloud_allure-results")
+    html_dir = os.path.join(project_root, "report", "cloud_html-report")
+    brief_dir = os.path.join(project_root, "report", "cloud_brief-report")
 
     # 确保目录存在
     os.makedirs(report_dir, exist_ok=True)

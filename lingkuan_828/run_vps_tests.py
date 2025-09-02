@@ -5,11 +5,15 @@ import subprocess
 
 
 def run_vps_tests(env: str = "test"):
-    """运行VPS测试，生成独立报告，同时暴露结果目录供合并"""
-    # 配置独立报告路径
-    report_dir = f"report/vps_allure-results"
-    html_dir = f"report/vps_html-report"
-    brief_dir = f"report/vps_brief-report"
+    # 1. 获取当前脚本的绝对路径
+    current_script_path = os.path.abspath(__file__)
+    # 2. 获取脚本所在的目录
+    project_root = os.path.dirname(current_script_path)
+
+    # 3. 基于项目根目录，动态生成报告路径（相对路径转绝对路径）
+    report_dir = os.path.join(project_root, "report", "vps_allure-results")
+    html_dir = os.path.join(project_root, "report", "vps_html-report")
+    brief_dir = os.path.join(project_root, "report", "vps_brief-report")
 
     os.makedirs(report_dir, exist_ok=True)
 

@@ -6,6 +6,11 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 import threading
 
+# 当前脚本（run_parallel.py）的绝对路径
+current_script_path = os.path.abspath(__file__)
+# 项目根目录
+PROJECT_ROOT = os.path.dirname(current_script_path)
+
 
 def stream_output(pipe, prefix, is_error=False):
     """实时输出子进程日志"""
@@ -55,9 +60,9 @@ def run_test_script(script_path: str, env: str = "test") -> tuple:
 
     # 解析子脚本返回的结果目录（通过约定路径获取，更稳定）
     if "cloud" in script_name:
-        report_dir = "report/cloud_allure-results"
+        report_dir = os.path.join(PROJECT_ROOT, "report", "cloud_allure-results")
     else:
-        report_dir = "report/vps_allure-results"
+        report_dir = os.path.join(PROJECT_ROOT, "report", "vps_allure-results")
 
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
@@ -96,10 +101,14 @@ def run_all_tests_parallel(env: str = "test"):
         "run_cloud_tests.py"
     ]
 
+    report_root = os.path.join(PROJECT_ROOT, "report")
+    os.makedirs(report_root, exist_ok=True)
+
     # 检查脚本存在性
     for script in test_scripts:
-        if not os.path.exists(script):
-            print(f"错误: 脚本 {script} 不存在")
+        script_path = os.path.join(PROJECT_ROOT, script)
+        if not os.path.exists(script_path):
+            print(f"错误: 脚本 {script_path} 不存在")
             return 1
 
     # 并行执行，获取每个脚本的结果目录
@@ -109,8 +118,8 @@ def run_all_tests_parallel(env: str = "test"):
 
     # 提取结果目录
     source_dirs = [report_dir for (_, _, report_dir) in results]
-    merged_results_dir = "report/merged_allure-results"  # 合并结果目录
-    merged_report_dir = "report/merged_html-report"  # 合并HTML报告
+    merged_results_dir = os.path.join(PROJECT_ROOT, "report", "merged_allure-results")
+    merged_report_dir = os.path.join(PROJECT_ROOT, "report", "merged_html-report")
 
     # 合并结果并生成汇总报告
     try:

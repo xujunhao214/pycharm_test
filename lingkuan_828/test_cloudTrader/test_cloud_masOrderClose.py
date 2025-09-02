@@ -353,16 +353,16 @@ class TestVPSMasOrderclose:
 
     @allure.story("场景2：平仓的停止功能校验")
     @allure.description("""
-           ### 测试说明
-           - 前置条件：有云策略和云跟单
-             1. 进行开仓，手数范围0.1-1，总订单5
-             2. 进行平仓
-             3. 发送停止请求
-             4. 校验平仓的订单数，应该不等于4
-             5. 进行平仓-正常平仓
-             6. 校验平仓的订单数,等于4
-           - 预期结果：平仓的停止功能正确
-           """)
+       ### 测试说明
+       - 前置条件：有云策略和云跟单
+         1. 进行开仓，手数范围0.1-1，总订单5
+         2. 进行平仓
+         3. 发送停止请求
+         4. 校验平仓的订单数，应该不等于5
+         5. 进行平仓-正常平仓
+         6. 校验平仓的订单数,等于5
+       - 预期结果：平仓的停止功能正确
+       """)
     class TestcloudtradingOrders2(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
@@ -448,7 +448,7 @@ class TestVPSMasOrderclose:
                 "响应msg字段应为success"
             )
 
-        @allure.title("数据库校验-交易开仓-主指令及订单详情数据检查-开仓订单不等于开仓总订单数")
+        @allure.title("数据库校验-交易开仓-主指令及订单详情数据检查-平仓订单不等于开仓总订单数")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
@@ -508,7 +508,7 @@ class TestVPSMasOrderclose:
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
-        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-没有订单")
+        @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-平仓订单不等于开仓总订单数")
         def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -649,7 +649,7 @@ class TestVPSMasOrderclose:
                 with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
-                        expected_value=4,
+                        expected_value=5,
                         op=CompareOp.EQ,
                         message=f"正常平仓，应该有4个平仓订单",
                         attachment_name="订单数量详情"
@@ -713,7 +713,7 @@ class TestVPSMasOrderclose:
                 with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),
-                        expected_value=4,
+                        expected_value=5,
                         op=CompareOp.EQ,
                         message=f"正常平仓，应该有4个平仓订单",
                         attachment_name="订单数量详情"
@@ -722,16 +722,16 @@ class TestVPSMasOrderclose:
 
     @allure.story("场景3：平仓的订单方向功能校验-sell")
     @allure.description("""
-            ### 测试说明
-            - 前置条件：有云策略和云跟单
-              1. 修改跟单账号，跟单方向-反向sell
-              2. 进行开仓
-              3. 交易下单-跟单账号自己平仓-buy
-              4. 校验平仓的订单数，应该不等于4
-              5. 交易下单-跟单账号自己平仓-sell
-              6. 校验平仓的订单数,等于4
-            - 预期结果：平仓的订单方向功能正确
-            """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改跟单账号，跟单方向-反向sell
+      2. 进行开仓
+      3. 交易下单-跟单账号自己平仓-buy
+      4. 校验平仓的订单数，应该不等于4
+      5. 交易下单-跟单账号自己平仓-sell
+      6. 校验平仓的订单数,等于4
+    - 预期结果：平仓的订单方向功能正确
+    """)
     class TestVPStradingOrders3(APITestBase):
         @allure.title("修改跟单账号为反向跟单")
         def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
@@ -1787,15 +1787,15 @@ class TestVPSMasOrderclose:
 
     @allure.story("场景6：平仓的订单数量功能校验-4")
     @allure.description("""
-            ### 测试说明
-            - 前置条件：有云策略和云跟单
-              1. 进行开仓，手数范围：0.1-1，总订单数量4
-              2. 进行平仓-订单数量2
-              3. 校验平仓的订单数，应该等于2
-              4. 进行平仓-订单数量2
-              5. 校验平仓的订单数,等于4
-            - 预期结果：平仓的订单数量功能正确
-            """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围：0.1-1，总订单数量4
+      2. 进行平仓-订单数量2
+      3. 校验平仓的订单数，应该等于2
+      4. 进行平仓-订单数量2
+      5. 校验平仓的订单数,等于4
+    - 预期结果：平仓的订单数量功能正确
+    """)
     class TestcloudtradingOrders6(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
