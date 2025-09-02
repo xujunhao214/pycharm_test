@@ -18,6 +18,10 @@ def run_cloud_tests(env: str = "test"):
     # 确保目录存在
     os.makedirs(report_dir, exist_ok=True)
 
+    print(f"当前脚本绝对路径: {os.path.abspath(__file__)}")
+    print(f"项目根目录: {project_root}")
+    print(f"Cloud 结果目录: {report_dir}")
+
     # 构建pytest参数（保留原有稳定配置）
     args = [
         "-s", "-v",

@@ -17,6 +17,10 @@ def run_vps_tests(env: str = "test"):
 
     os.makedirs(report_dir, exist_ok=True)
 
+    print(f"当前脚本绝对路径: {os.path.abspath(__file__)}")
+    print(f"项目根目录: {project_root}")
+    print(f"Cloud 结果目录: {report_dir}")
+
     # 构建pytest参数
     args = [
         "-s", "-v",
