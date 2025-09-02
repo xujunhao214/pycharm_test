@@ -13,13 +13,13 @@ def run_vps_tests(env: str = "test"):
     # 3. 基于项目根目录，动态生成报告路径（相对路径转绝对路径）
     report_dir = os.path.join(project_root, "report", "vps_allure-results")
     html_dir = os.path.join(project_root, "report", "vps_html-report")
-    brief_dir = os.path.join(project_root, "report", "vps_brief-report")
+    # brief_dir = os.path.join(project_root, "report", "vps_brief-report")
 
     os.makedirs(report_dir, exist_ok=True)
 
     print(f"当前脚本绝对路径: {os.path.abspath(__file__)}")
     print(f"项目根目录: {project_root}")
-    print(f"Cloud 结果目录: {report_dir}")
+    print(f"VPS 结果目录: {report_dir}")
 
     # 构建pytest参数
     args = [
@@ -72,9 +72,9 @@ def run_vps_tests(env: str = "test"):
         if exit_code != 0:
             os.system(f"allure generate {report_dir} -o {html_dir} --clean")
             print(f"VPS独立报告: file://{os.path.abspath(html_dir)}/index.html")
-        else:
-            os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
-            print(f"VPS独立简要报告: file://{os.path.abspath(brief_dir)}/index.html")
+        # else:
+        #     os.system(f"allure generate {report_dir} -o {brief_dir} --clean --report-type=brief")
+        #     print(f"VPS独立简要报告: file://{os.path.abspath(brief_dir)}/index.html")
     except Exception as e:
         print(f"VPS独立报告生成失败: {str(e)}")
 
