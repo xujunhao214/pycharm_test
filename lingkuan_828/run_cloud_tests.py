@@ -11,8 +11,8 @@ def run_cloud_tests(env: str = "test"):
     project_root = os.path.dirname(current_script_path)
 
     # 3. 基于项目根目录，动态生成报告路径（相对路径转绝对路径）
-    report_dir = os.path.join(project_root, "report", "cloud_allure_results")
-    html_dir = os.path.join(project_root, "report", "cloud_html-report")
+    report_dir = os.path.join(project_root, "report", "cloud_results")
+    html_dir = os.path.join(project_root, "report", "cloud_html")
     # brief_dir = os.path.join(project_root, "report", "cloud_brief-report")
 
     # 确保目录存在

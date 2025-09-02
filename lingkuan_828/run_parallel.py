@@ -60,9 +60,9 @@ def run_test_script(script_path: str, env: str = "test") -> tuple:
 
     # 解析子脚本返回的结果目录（通过约定路径获取，更稳定）
     if "cloud" in script_name:
-        report_dir = os.path.join(PROJECT_ROOT, "report", "cloud_allure_results")
+        report_dir = os.path.join(PROJECT_ROOT, "report", "cloud_results")
     else:
-        report_dir = os.path.join(PROJECT_ROOT, "report", "vps_allure_results")
+        report_dir = os.path.join(PROJECT_ROOT, "report", "vps_results")
 
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
