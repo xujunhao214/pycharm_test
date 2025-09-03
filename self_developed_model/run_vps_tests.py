@@ -36,6 +36,7 @@ def run_vps_tests(env: str = "test"):
         "test_vps/test_create_scene.py",
         "test_vps/test_vpsMasOrder_money_scene.py",
         "test_vps/test_delete.py",
+        # "test_cloudTrader/test_lianxi.py",
 
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=info",
