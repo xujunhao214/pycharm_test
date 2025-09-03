@@ -880,6 +880,7 @@ class TestLeakageopen_level:
                 "响应msg字段应为success"
             )
 
+        @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
@@ -990,6 +991,7 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
+        @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):

@@ -2651,14 +2651,14 @@ class TestCloudClose:
                     )
                     logging.info(f"平仓的订单数量应该是2，结果有{len(db_data)}个订单")
 
-    @allure.story("场景11：平仓的功能校验-全平订单")
+    @allure.story("场景11：平仓的功能校验-全平策略")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
       1. 进行开仓，手数范围0.1-1，总订单数量2
       2. 平仓-全平策略
       3. 校验订单数据是否正确
-    - 预期结果：平仓的功能校验-全平订单功能正确
+    - 预期结果：平仓的功能校验-全平策略功能正确
     """)
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend11(APITestBase):

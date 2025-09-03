@@ -13,51 +13,6 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("数据管理-删除VPS测试数据")
 class TestDeleteUser(APITestBase):
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("账号管理-组别列表-删除VPS组别")
-    def test_delete_group(self, logged_session, var_manager):
-        # 1. 发送删除VPS组别请求
-        vps_group_id = var_manager.get_variable("vps_group_id")
-        response = self.send_delete_request(
-            logged_session,
-            "/mascontrol/group",
-            json_data=[vps_group_id]
-        )
-
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "删除vps组别失败"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=3, delay=5)
-    @allure.title("数据库校验-组别列表-删除VPS组别")
-    def test_dbdelete_group(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否删除成功"):
-            add_vpsgroup = var_manager.get_variable("add_vpsgroup")
-            sql = f"SELECT * FROM follow_group WHERE name = %s"
-            params = (add_vpsgroup["name"],)
-            try:
-                self.wait_for_database_deletion(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-                allure.attach(f"VPS组别 {add_vpsgroup['name']} 已成功从数据库删除", "验证结果")
-            except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
-                pytest.fail(f"删除失败: {str(e)}")
-
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-清空VPS数据")
     def test_closeVps(self, logged_session, var_manager):
@@ -529,3 +484,47 @@ class TestDeleteUser(APITestBase):
                 except TimeoutError as e:
                     allure.attach(f"删除超时: {str(e)}", "验证结果")
                     pytest.fail(f"删除失败: {str(e)}")
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("账号管理-组别列表-删除VPS组别")
+    def test_delete_group(self, logged_session, var_manager):
+        # 1. 发送删除VPS组别请求
+        vps_group_id = var_manager.get_variable("vps_group_id")
+        response = self.send_delete_request(
+            logged_session,
+            "/mascontrol/group",
+            json_data=[vps_group_id]
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "删除vps组别失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-组别列表-删除VPS组别")
+    def test_dbdelete_group(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否删除成功"):
+            add_vpsgroup = var_manager.get_variable("add_vpsgroup")
+            sql = f"SELECT * FROM follow_group WHERE name = %s"
+            params = (add_vpsgroup["name"],)
+            try:
+                self.wait_for_database_deletion(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params
+                )
+                allure.attach(f"VPS组别 {add_vpsgroup['name']} 已成功从数据库删除", "验证结果")
+            except TimeoutError as e:
+                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                pytest.fail(f"删除失败: {str(e)}")
