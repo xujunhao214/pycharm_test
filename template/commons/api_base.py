@@ -6,6 +6,7 @@ import pytest
 import math
 from typing import List, Dict, Any, Optional, Tuple
 import datetime
+from urllib.parse import urlencode
 from decimal import Decimal
 import pymysql
 import requests
@@ -90,10 +91,30 @@ class APITestBase:
             headers: Dict[str, str],
             body: Optional[Any],
             is_json: bool = True,
+            params: Optional[Dict[str, Any]] = None,  # 新增：支持URL参数，默认None
     ) -> None:
-        """统一附加请求详情到Allure步骤"""
+        """统一附加请求详情到Allure步骤（新增URL参数params展示）"""
         with allure.step("请求详情"):
-            allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+            # 1. 处理params：拼接完整URL（含查询参数，便于直接复制访问）
+            if params:
+                # 避免URL已有?时重复拼接，用&连接
+                separator = "&" if "?" in url else "?"
+                # 将params字典转为URL参数字符串（如{"version":"v2"}→"version=v2"）
+                url_with_params = f"{url}{separator}{urlencode(params)}"
+                allure.attach(url_with_params, "请求完整URL（含参数）", allure.attachment_type.TEXT)
+            else:
+                # 无params时，仅展示原始URL
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+
+            # 2. 展示URL参数（若有）
+            if params:
+                allure.attach(
+                    json.dumps(params, ensure_ascii=False, indent=2),
+                    "URL查询参数",
+                    allure.attachment_type.JSON,  # 用JSON格式展示，更清晰
+                )
+
+            # 3. 原有逻辑：展示请求头、请求体（保持不变）
             allure.attach(
                 json.dumps(dict(headers), ensure_ascii=False, indent=2),
                 "请求头",
@@ -131,54 +152,92 @@ class APITestBase:
                 )
 
     def send_post_request(self, logged_session, url, json_data=None, data=None, files=None,
+                          params=None,  # 新增：支持URL查询参数
                           sleep_seconds=SLEEP_SECONDS):
-        """发送POST请求（异常分层优化）"""
+        """发送POST请求（异常分层优化，新增params参数支持URL查询）"""
         method = "POST"
         with allure.step(f"执行 {method} 请求"):
             try:
+                # 1. 附加请求详情到Allure（新增params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_session.headers,
+                    params=params,  # 新增：将params传入，用于Allure展示
                     body=json_data if json_data else data,
                     is_json=bool(json_data),
                 )
 
+                # 2. 发送POST请求（根据不同场景携带params）
                 if files:
-                    response = logged_session.post(url, data=data, files=files)
-                    logger.info(f"[{self._get_current_time()}] POST请求（带文件）: {url} | 表单数据: {data}")
+                    # 场景1：带文件上传（表单数据+URL参数）
+                    response = logged_session.post(
+                        url=url,
+                        data=data,
+                        files=files,
+                        params=params  # 新增：传递URL参数
+                    )
+                    logger.info(
+                        f"[{self._get_current_time()}] POST请求（带文件+URL参数）: {url} "
+                        f"| URL参数: {params} | 表单数据: {data}"
+                    )
                 elif json_data:
-                    response = logged_session.post(url, json=json_data)
-                    logger.info(f"[{self._get_current_time()}] POST请求（JSON）: {url} | 数据: {json_data}")
+                    # 场景2：JSON请求体（JSON数据+URL参数）
+                    response = logged_session.post(
+                        url=url,
+                        json=json_data,
+                        params=params  # 新增：传递URL参数
+                    )
+                    logger.info(
+                        f"[{self._get_current_time()}] POST请求（JSON+URL参数）: {url} "
+                        f"| URL参数: {params} | JSON数据: {json_data}"
+                    )
                 else:
-                    response = logged_session.post(url, data=data)
-                    logger.info(f"[{self._get_current_time()}] POST请求（表单）: {url} | 数据: {data}")
+                    # 场景3：普通表单请求（表单数据+URL参数）
+                    response = logged_session.post(
+                        url=url,
+                        data=data,
+                        params=params  # 新增：传递URL参数
+                    )
+                    logger.info(
+                        f"[{self._get_current_time()}] POST请求（表单+URL参数）: {url} "
+                        f"| URL参数: {params} | 表单数据: {data}"
+                    )
 
+                # 3. 附加响应详情（原有逻辑不变）
                 self._attach_response_details(response)
 
+                # 4. 请求后等待（原有逻辑不变）
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
 
+            # 5. 异常捕获与处理（新增params到异常详情）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_session.headers,
+                        params=params,  # 新增：异常时也展示URL参数
                         body=json_data if json_data else data,
                         is_json=bool(json_data),
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"URL参数: {params}\n"  # 新增：异常详情中显示URL参数
                         f"请求头: {logged_session.headers}\n"
                         f"请求体: {json_data if json_data else data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(
+                    f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
+                    f"| URL: {url} | URL参数: {params}",  # 新增：日志中打印URL参数
+                    exc_info=True
+                )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_get_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):

@@ -10,11 +10,11 @@ ENV_CONFIG = {
         "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "http://39.99.136.49/vps",
         "db_config": {
-            "host": "39.99.136.49",
+            "host": "39.99.146.95",
             "port": 3306,
             "user": "root",
-            "password": "xizcJWmXFkB5f4fm",
-            "database": "follow-order-cp",
+            "password": "gQ9^sR7#tD5j",
+            "database": "copyglobal_v2_schema",
             "charset": "utf8mb4",
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10
@@ -31,11 +31,11 @@ ENV_CONFIG = {
         "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "https://39.101.181.190/vps",
         "db_config": {
-            "host": "39.99.241.16",
+            "host": "39.99.146.95",
             "port": 3306,
             "user": "root",
-            "password": "5v07DqL!F7333",
-            "database": "follow-order-cp",
+            "password": "gQ9^sR7#tD5j",
+            "database": "copyglobal_v2_schema",
             "charset": "utf8mb4",
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10

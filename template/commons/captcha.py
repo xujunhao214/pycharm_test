@@ -34,7 +34,7 @@ class UniversalCaptchaRecognizer:
         save_path = os.path.join(SAVE_DIR, SAVE_FILENAME)
         # 保存图片（若文件已存在会自动覆盖）
         contrast_img.save(save_path)
-        print(f"图片已保存至：{save_path}")
+        # print(f"图片已保存至：{save_path}")
 
         return contrast_img
 
@@ -47,7 +47,7 @@ class UniversalCaptchaRecognizer:
             image_bytes = base64.b64decode(base64_data)
             raw_img = Image.open(io.BytesIO(image_bytes))
         except Exception as e:
-            print(f"[错误] 解析图片失败：{str(e)}")
+            # print(f"[错误] 解析图片失败：{str(e)}")
             return "*" * CAPTCHA_LENGTH
 
         processed_img = self.minimal_preprocess(raw_img)
@@ -84,9 +84,9 @@ class UniversalCaptchaRecognizer:
                 timeout=5
             )
             raw_result = result.stdout.decode('utf-8', errors='replace').strip()
-            print(f"[OCR识别] 原始输出：{raw_result}（配置：psm={psm_mode}, 置信度={confidence}）")
+            # print(f"[OCR识别] 原始输出：{raw_result}（配置：psm={psm_mode}, 置信度={confidence}）")
         except Exception as e:
-            print(f"[错误] OCR识别失败：{str(e)}")
+            # print(f"[错误] OCR识别失败：{str(e)}")
             return "*" * CAPTCHA_LENGTH
 
         # 关键：后处理规则匹配修正c/e混淆
