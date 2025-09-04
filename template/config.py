@@ -7,7 +7,7 @@ import pymysql
 # 环境配置
 ENV_CONFIG = {
     Environment.TEST: {
-        "base_url": "http://39.99.136.49/api",
+        "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "http://39.99.136.49/vps",
         "db_config": {
             "host": "39.99.136.49",
@@ -28,7 +28,7 @@ ENV_CONFIG = {
         "data_source_dir": "template/VAR"
     },
     Environment.UAT: {
-        "base_url": "https://uat.atcp.top/api",
+        "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "https://39.101.181.190/vps",
         "db_config": {
             "host": "39.99.241.16",

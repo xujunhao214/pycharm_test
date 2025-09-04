@@ -7,6 +7,8 @@ import datetime
 from pymysql import err
 import os
 import time
+from template.commons.jsonpath_utils import JsonPathUtils
+from template.commons.captcha import UniversalCaptchaRecognizer
 import xml.etree.ElementTree as ET
 from pytest import Config
 from template.commons.mfa_key import generate_code
@@ -40,7 +42,7 @@ def environment(request):
     return Environment(env)
 
 
-@pytest.fixture(scope="function")  # 改为function作用域
+@pytest.fixture(scope="session")
 def api_session(environment) -> EnvironmentSession:
     """创建支持多URL的API会话（每个用例独立）"""
     config = ENV_CONFIG[environment]
@@ -53,107 +55,172 @@ def api_session(environment) -> EnvironmentSession:
     session.close()
 
 
-@pytest.fixture(scope="function")
+'''
+function:	默认值，每个测试函数执行前创建 fixture，函数执行后销毁。
+class：每个测试类（class）只创建一次 fixture，类所有类中所有测试方法共享。
+module：每个模块（.py 文件）只创建一次 fixture，模块内所有用例共享。
+package：每个包（文件夹）只创建一次 fixture，包内所有模块的用例共享。
+session：整个测试会话（一次 pytest 命令执行）只创建一次 fixture，所有用例共享。
+'''
+
+
+@pytest.fixture(scope="session")
 def logged_session(api_session, var_manager, request, environment):
-    """登录夹具：任何环境登录失败都直接终止用例执行"""
-    # 1. 初始化登录配置
-    api_session.use_base_url()
+    """新项目登录夹具：支持验证码识别和重试，登录失败终止用例"""
+    # 1. 初始化配置
+    api_session.use_base_url()  # 使用基础URL
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     logger.info(f"[{current_time}] 用例 {request.node.nodeid} 开始登录，环境: {environment.value}")
     print(f"环境: {environment.value}")
 
-    # 2. 获取登录基础数据
+    # 2. 获取登录基础数据（从变量管理器）
     try:
-        login_data = var_manager.get_variable("login")
+        login_config = var_manager.get_variable("login_config")  # 新项目的登录配置
+        username = login_config["username"]
+        password = login_config["password"]
     except Exception as e:
-        pytest.fail(f"获取登录数据失败: {str(e)}", pytrace=False)
+        pytest.fail(f"获取登录配置失败: {str(e)}", pytrace=False)
 
     access_token = None
+    json_utils = JsonPathUtils()
+    captcha_recognizer = UniversalCaptchaRecognizer()
 
-    # 3. 根据环境执行登录逻辑
+    # 3. 登录逻辑（按环境区分，新项目主要适配test/uat环境）
     try:
-        if environment.value == "test":
-            # 测试环境登录逻辑
-            response = api_session.post("/sys/auth/login", json=login_data)
-            if response.status_code != 200:
-                pytest.fail(
-                    f"测试环境登录失败 - 状态码: {response.status_code}, 响应: {response.text[:500]}",
-                    pytrace=False
-                )
-
-            response_json = response.json()
-            access_token = response_json.get("data", {}).get("access_token")
-            if not access_token:
-                pytest.fail("测试环境登录响应中未找到access_token", pytrace=False)
-
-            logger.info("测试环境登录成功")
-
-        elif environment.value == "uat":
-            # UAT环境登录逻辑（带重试）
-            max_retries = 5
-            retry_interval = 10
-            access_token = None
+        if environment.value in ["test", "uat"]:
+            # 新项目登录：带验证码+重试机制
+            max_retries = 5  # 最大重试次数
+            retry_interval = 10  # 重试间隔（秒）
 
             for attempt in range(max_retries):
                 try:
-                    mfa_code = generate_code(MFA_SECRET_KEY)
-                    logger.info(f"UAT登录尝试 {attempt + 1}/{max_retries}，MFA验证码: {mfa_code}")
+                    # 3.1 获取新验证码
+                    current_ms = int(time.time() * 1000)
+                    current_s = int(time.time())
+                    captcha_url = f"/sys/randomImage/{current_ms}?_t={current_s}"
 
-                    login_payload = {
-                        "username": login_data["username"],
-                        "password": login_data["password"],
-                        "captcha": "",
-                        "key": "",
-                        "secretKey": "",
-                        "code": mfa_code,
-                        "isMfaVerified": 1,
-                        "isStartMfaVerify": 1
+                    captcha_headers = {
+                        'priority': 'u=1, i',
+                        'tenant_id': '0',
+                        'x-sign': '417B110F1E71BD2CFE96366E67849B0B',
+                        'Accept': '*/*'
                     }
 
-                    response = api_session.post("/sys/auth/login", json=login_payload)
-                    response.raise_for_status()  # 触发HTTP错误异常
+                    # 新增：打印请求URL和头，便于排查
+                    # logger.info(f"请求验证码接口: {api_session.base_url}{captcha_url}")
+                    # logger.info(f"验证码请求头: {captcha_headers}")
+
+                    captcha_response = api_session.get(
+                        captcha_url,
+                        headers=captcha_headers
+                    )
+                    captcha_response.raise_for_status()
+                    # 新增：打印完整响应，关键！确认接口返回格式
+                    # logger.info(f"验证码接口响应状态码: {captcha_response.status_code}")
+                    # logger.info(f"验证码接口响应头: {captcha_response.headers}")
+                    # logger.info(f"验证码接口响应内容（前1000字符）: {captcha_response.text[:1000]}")
+
+                    try:
+                        captcha_json = captcha_response.json()
+                        # logger.info(f"验证码接口JSON响应: {captcha_json}")
+                    except Exception as e:
+                        logger.error(f"解析验证码响应为JSON失败（可能返回图片流）: {str(e)}")
+                        # 若返回图片流，直接将响应内容转为Base64
+                        import base64
+                        captcha_base64 = base64.b64encode(captcha_response.content).decode('utf-8')
+                        logger.info(f"已将图片流转为Base64（长度: {len(captcha_base64)}）")
+                    else:
+                        # 解析JSON，提取Base64（可能字段名不是result，需根据实际调整）
+                        # 常见可能字段：data、image、imgBase64等，根据打印的JSON响应修改
+                        captcha_base64 = json_utils.extract(captcha_json, "$.result")
+
+                    if not captcha_base64:
+                        raise ValueError("未提取到验证码Base64数据")
+
+                    # 3.2 识别验证码
+                    recognized_code = captcha_recognizer.adaptive_recognize(captcha_base64)
+                    logger.info(f"第{attempt + 1}次尝试 - 验证码识别结果: {recognized_code}")
+
+                    # 3.3 构造登录参数
+                    login_payload = {
+                        "username": username,
+                        "password": password,
+                        "remember_me": "true",
+                        "captcha": recognized_code,
+                        "checkKey": f"{current_ms}"  # 与验证码对应的时间戳
+                    }
+
+                    # 3.4 发送登录请求
+                    login_headers = {
+                        'priority': 'u=1, i',
+                        'tenant_id': '0',
+                        'content-type': 'application/json;charset=UTF-8',
+                        'Accept': '*/*',
+                        'Host': 'dev.lgcopytrade.top',
+                        'Connection': 'keep-alive'
+                    }
+
+                    response = api_session.post(
+                        "/sys/login",
+                        json=login_payload,
+                        headers=login_headers
+                    )
+                    response.raise_for_status()
                     response_json = response.json()
 
-                    if response_json.get("code") != 0:
-                        raise ValueError(f"登录失败: {response_json.get('msg')}")
+                    # 3.5 验证登录结果
+                    if not response_json.get("success"):
+                        error_msg = response_json.get("message", "未知错误")
+                        if "验证码错误" in error_msg:
+                            raise ValueError(f"验证码错误: {error_msg}")
+                        else:
+                            # 非验证码错误（如账号密码错误）直接失败
+                            pytest.fail(f"登录失败: {error_msg}", pytrace=False)
 
-                    access_token = response_json["data"]["access_token"]
+                    # 3.6 提取token
+                    access_token = response_json.get("result", {}).get("token")  # 假设token在result.token
                     if not access_token:
-                        raise ValueError("未返回access_token")
+                        raise ValueError("登录响应中未找到token")
 
-                    logger.info(f"UAT登录成功（第{attempt + 1}次尝试）")
+                    logger.info(f"{environment.value}环境登录成功（第{attempt + 1}次尝试）")
                     break
 
                 except Exception as e:
-                    error_msg = f"第{attempt + 1}次登录失败: {str(e)}"
-                    logger.error(error_msg)
-                    if attempt == max_retries - 1:  # 最后一次尝试失败
-                        pytest.fail(f"UAT登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
+                    error_detail = f"第{attempt + 1}次登录失败: {str(e)}"
+                    logger.error(error_detail)
+                    if attempt == max_retries - 1:
+                        # 最后一次尝试失败，终止用例
+                        pytest.fail(f"{environment.value}环境登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
+                    # 非最后一次尝试，等待重试
                     time.sleep(retry_interval)
 
         else:
             pytest.fail(f"不支持的环境类型: {environment.value}", pytrace=False)
 
     except Exception as e:
-        # 捕获所有登录过程中的异常并终止
         pytest.fail(f"登录过程发生未预期错误: {str(e)}", pytrace=False)
 
-    # 4. 设置认证信息
+    # 4. 设置全局认证信息
     var_manager.set_runtime_variable("access_token", access_token)
     api_session.headers.update({
-        "Authorization": f"{access_token}",
-        "x-sign": "417B110F1E71BD20FE96366E67849B0B"
+        "X-Access-Token": access_token,
+        'priority': 'u=1, i',
+        'tenant_id': '0',
+        'content-type': 'application/json;charset=UTF-8',
+        'Accept': '*/*',
+        'Host': 'dev.lgcopytrade.top',
+        'Connection': 'keep-alive'
     })
 
-    # 5. 处理URL切换
+    # 5. 处理URL切换（保持原有逻辑）
     url_marker = next(request.node.iter_markers(name="url"), None)
     if url_marker and url_marker.args[0] == "vps":
         api_session.use_vps_url()
         logger.info(f"切换到VPS URL: {api_session.vps_url}")
 
-    yield api_session
+    yield api_session  # 提供会话给用例
 
-    # 6. 可选：会话清理逻辑（仅在登录成功时执行）
+    # 6. 用例执行完毕清理
     logger.info(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 用例 {request.node.nodeid} 执行完毕")
 
 

@@ -1337,7 +1337,7 @@ class TestCloudOrderType:
             # 最终验证结果
             if not token_mt4 or not uuid_pattern.match(token_mt4):
                 logging.error(f"经过{max_retries}次尝试后，MT4登录仍失败")
-                assert False, f"MT4登录失败，最后响应: {response_text if 'response_text' in locals() else '无响应'}"
+                assert False, "MT4登录失败"
             else:
                 print(f"登录MT4账号获取token: {token_mt4}")
                 logging.info(f"登录MT4账号获取token: {token_mt4}")

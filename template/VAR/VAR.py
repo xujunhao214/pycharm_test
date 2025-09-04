@@ -1,4 +1,5 @@
 import datetime
+import time
 
 # 加密密钥
 MT4 = "FOLLOWERSHIP4KEY"
@@ -38,3 +39,9 @@ MFA_SECRET_KEY = "APVHUYXFWW4DZWT7L4HI3EO4Y7VY4J2VEXE4JGZNAVCYRSAOVNQQ"
 
 # 项目名称
 PROJECT_NAME = "自研跟单V1.4.2"
+
+# 生成当前时间的毫秒级时间戳
+current_timestamp_ms = int(time.time() * 1000)
+
+# 生成当前时间的秒级时间戳
+current_timestamp_seconds = int(time.time())
