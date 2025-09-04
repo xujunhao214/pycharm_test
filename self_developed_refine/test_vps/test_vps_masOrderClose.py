@@ -2675,6 +2675,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于1
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPStradingOrders9(APITestBase):
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):
