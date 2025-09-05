@@ -3,12 +3,13 @@ import allure
 import logging
 import pytest
 from template.VAR.VAR import *
-from template.commons.jsonpath_utils import *
-
-json_unit = JsonPathUtils()
+from template.commons.json_path import *
 
 
 class Test_usr(APITestBase):
+    # 实例化JsonPath工具类（全局复用）
+    json_utils = JsonPathUtils()
+
     @allure.title("数据库查询-提取数据")
     def test_dbbchain_trader(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库"):
@@ -24,18 +25,21 @@ class Test_usr(APITestBase):
         with allure.step("2. 提取数据"):
             brokerId = db_data[0]["id"]
 
-    @allure.title("账号管理-交易员账号-绑定交易员-用户列表")
+    @allure.title("账号管理-交易员账号-绑定交易员-用户列表-提取用户id")
     def test_user_list(self, logged_session):
         global user_id
-        with allure.step("1. 发送请求"):
+        target_email = "xujunhao@163.com"
+
+        with allure.step("1. 构造参数并发送GET请求"):
             params = {
                 "_t": current_timestamp_seconds,
                 "column": "createTime",
                 "field": "id,,username,nickname,email,phone",
                 "pageNo": "1",
                 "pageSize": "5",
-                "order": "asc"
+                "order": "desc"
             }
+
             response = self.send_get_request(
                 logged_session,
                 '/sys/user/list',
@@ -50,8 +54,26 @@ class Test_usr(APITestBase):
                 "响应success字段应为true"
             )
 
-        with allure.step("3. 提取数据"):
-            user_id = json_unit.extract(response.json(), "$.result.records[?(@.email == 'xujunhao@163.com')].id")
+        with allure.step(f"3. 提取用户ID"):
+            all_users = self.json_utils.extract(
+                data=response.json(),
+                expression="$.result.records[*]",
+                multi_match=True,
+                default=[]
+            )
+
+            user_id = None
+            if not all_users:
+                assert False, f"提取用户列表失败：$.result.records为空，接口返回异常"
+
+            for user in all_users:
+                user_email = user.get("email")
+                if user_email and user_email.lower() == target_email.lower():
+                    user_id = user.get("id")
+                    break
+
+            assert user_id is not None, f"未找到email={target_email}的用户，请检查用户是否存在或分页参数"
+            logging.info(f"提取用户ID成功 | email={target_email} | user_id={user_id}")
 
     @allure.title("账号管理-交易员账号-绑定交易员-用户列表")
     def test_user_list(self, logged_session):
@@ -77,7 +99,8 @@ class Test_usr(APITestBase):
             )
 
         with allure.step("3. 提取数据"):
-            server_id = json_unit.extract(response.json(), "$.result.records[?(@.server == 'CPTMarkets-Demo')].id")
+            server_id = self.json_utils.extract(response.json(),
+                                                "$.result.records[?(@.server == 'CPTMarkets-Demo')].id")
 
     @allure.title("账号管理-交易员账号-绑定交易员-用户列表")
     def test_user_list(self, logged_session):
@@ -106,8 +129,7 @@ class Test_usr(APITestBase):
             )
 
         with allure.step("3. 提取数据"):
-            json_unit = JsonPathUtils()
-            user_id = json_unit.extract(response.json(), "$.result.records[?(@.email == 'xujunhao@163.com')].id")
+            user_id = self.json_utils.extract(response.json(), "$.result.records[?(@.email == 'xujunhao@163.com')].id")
 
     @allure.title("账号管理-交易员账号-绑定账户")
     def test_account_bind(self, var_manager, logged_session):
@@ -199,8 +221,7 @@ class Test_usr(APITestBase):
             )
 
         with allure.step("3. 提取数据"):
-            json_unit = JsonPathUtils()
-            jeecg_row_key = json_unit.extract(response.json(), "$.result.records[4].jeecg_row_key")
+            jeecg_row_key = self.json_utils.extract(response.json(), "$.result.records[4].jeecg_row_key")
 
     @allure.title("任务中心-MT4绑定审核-提取数据2")
     def test_api_getData2(self, logged_session):
@@ -230,7 +251,7 @@ class Test_usr(APITestBase):
             )
 
         with allure.step("3. 提取数据"):
-            pass_id = json_unit.extract(response.json(), "$.result.records[0].id")
+            pass_id = self.json_utils.extract(response.json(), "$.result.records[0].id")
 
     @allure.title("任务中心-MT4绑定审核-通过")
     def test_account_pass(self, logged_session):
