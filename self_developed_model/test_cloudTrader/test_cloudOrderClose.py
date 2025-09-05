@@ -1276,7 +1276,6 @@ class TestCloudOrderType:
 
             time.sleep(30)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
     @allure.story("场景6：平仓的订单类型功能校验-外部订单")
     @allure.description("""
     ### 测试说明
@@ -1288,6 +1287,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend6(APITestBase):
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):

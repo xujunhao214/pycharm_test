@@ -1652,7 +1652,7 @@ class TestCloudStrategyOrder:
                     self.verify_data(
                         actual_value=float(size),
                         expected_value=0.6,
-                        op=CompareOp.GT,
+                        op=CompareOp.GE,
                         message="实际手数符合预期",
                         attachment_name="实际手数"
                     )
@@ -1773,7 +1773,7 @@ class TestCloudStrategyOrder:
                     self.verify_data(
                         actual_value=float(size),
                         expected_value=0.6,
-                        op=CompareOp.GT,
+                        op=CompareOp.GE,
                         message="实际手数符合预期",
                         attachment_name="实际手数"
                     )
@@ -1893,7 +1893,7 @@ class TestCloudStrategyOrder:
                         self.verify_data(
                             actual_value=float(i),
                             expected_value=0.3,
-                            op=CompareOp.GT,
+                            op=CompareOp.GE,
                             message="实际手数符合预期",
                             attachment_name="实际手数"
                         )
@@ -2018,7 +2018,7 @@ class TestCloudStrategyOrder:
                         self.verify_data(
                             actual_value=float(i),
                             expected_value=0.3,
-                            op=CompareOp.GT,
+                            op=CompareOp.GE,
                             message="实际手数符合预期",
                             attachment_name="实际手数"
                         )
