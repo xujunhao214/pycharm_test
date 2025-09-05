@@ -428,7 +428,6 @@ class Test_create:
                 "passwordType": "0",
                 "subscribeFee": "0",
                 "type": "SLAVE_REAL",
-                "strategy": "",
                 "platform": "4"
             }
             response = self.send_post_request(
