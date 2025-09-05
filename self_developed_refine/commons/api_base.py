@@ -530,8 +530,7 @@ class APITestBase:
         final_result = None
         has_data = False
 
-        # ------------------------------ 改造1：生成固定时间范围（轮询开始时计算一次） ------------------------------
-        # 以“轮询开始时间”为基准，计算 [start_timestamp, end_timestamp]（时间范围：±time_range分钟）
+        # 生成固定时间范围（轮询开始时计算一次）
         poll_start_datetime = datetime.datetime.now()
         fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(
             "%Y-%m-%d %H:%M:%S")
@@ -552,16 +551,15 @@ class APITestBase:
                 try:
                     db_transaction.commit()  # 刷新事务
 
-                    # ------------------------------ 改造2：传入固定时间范围，而非动态计算 ------------------------------
+                    # 传入固定时间范围，而非动态计算
                     result = self._execute_query(
                         db_transaction=db_transaction,
                         sql=sql,
                         params=params,
                         time_field=time_field,
                         order_by=order_by,
-                        # 关键：传入固定时间范围，不再传time_range（避免动态计算）
-                        fixed_time_start=fixed_time_start,
-                        fixed_time_end=fixed_time_end,
+                        fixed_time_start=fixed_time_start,  # 传递固定开始时间
+                        fixed_time_end=fixed_time_end,  # 传递固定结束时间
                         attach_to_allure=False  # 轮询过程中不重复附加报告
                     )
 
@@ -619,7 +617,7 @@ class APITestBase:
                     logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...")
                     time.sleep(poll_interval)
 
-            # 超时处理：获取最终结果（改造3：仍使用固定时间范围）
+            # 超时处理：获取最终结果（仍使用固定时间范围）
             if final_result is None:
                 with allure.step("轮询超时处理"):
                     allure.attach(
@@ -673,7 +671,7 @@ class APITestBase:
             params: tuple,
             time_field: Optional[str],
             order_by: str,
-            # ------------------------------ 改造4：参数替换（删除time_range，新增固定时间范围） ------------------------------
+            # 参数替换（删除time_range，新增固定时间范围）
             fixed_time_start: Optional[str] = None,
             fixed_time_end: Optional[str] = None,
             attach_to_allure: bool = True
@@ -681,7 +679,7 @@ class APITestBase:
         """执行单次数据库查询（核心改造：使用固定时间范围拼接SQL，而非动态NOW()）"""
         with allure.step("执行单次数据库查询"):
             if time_field and fixed_time_start and fixed_time_end:
-                # ------------------------------ 改造5：拼接固定时间条件（而非动态INTERVAL） ------------------------------
+                # 拼接固定时间条件（而非动态INTERVAL）
                 sql_upper = sql.upper()
                 final_sql = sql
                 final_params = list(params)
@@ -789,25 +787,35 @@ class APITestBase:
                                    poll_interval: int = POLL_INTERVAL) -> None:
         """轮询等待数据库记录删除（带Allure分层提示）"""
         start_time = time.time()
+
+        # 生成固定时间范围（轮询开始时计算一次）
+        poll_start_datetime = datetime.datetime.now()
+        fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+
         logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒")
 
         with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
             allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
             allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                          allure.attachment_type.TEXT)
 
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
 
                     if time_field:
-                        result = self.query_database_with_time(
+                        result = self._execute_query(
                             db_transaction=db_transaction,
                             sql=sql,
                             params=params,
                             time_field=time_field,
-                            time_range=time_range,
                             order_by=order_by,
-                            timeout=1,  # 单次查询不超时
+                            fixed_time_start=fixed_time_start,
+                            fixed_time_end=fixed_time_end,
                             attach_to_allure=False
                         )
                     else:
@@ -847,14 +855,14 @@ class APITestBase:
             # 超时处理
             db_transaction.commit()
             if time_field:
-                final_result = self.query_database_with_time(
+                final_result = self._execute_query(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
                     time_field=time_field,
-                    time_range=time_range,
                     order_by=order_by,
-                    timeout=1,
+                    fixed_time_start=fixed_time_start,
+                    fixed_time_end=fixed_time_end,
                     attach_to_allure=True
                 )
             else:
@@ -898,6 +906,13 @@ class APITestBase:
         start_time = time.time()
         stable_start_time = None  # 无记录稳定期计时器
 
+        # 生成固定时间范围（轮询开始时计算一次）
+        poll_start_datetime = datetime.datetime.now()
+        fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+
         logger.info(
             f"[{self._get_current_time()}] 开始轮询等待无记录 | "
             f"SQL: {sql[:200]} | 超时: {timeout}秒 | 稳定期: {stable_period}秒"
@@ -906,6 +921,8 @@ class APITestBase:
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):
             allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
             allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                          allure.attachment_type.TEXT)
 
             while time.time() - start_time < timeout:
                 try:
@@ -916,7 +933,8 @@ class APITestBase:
                         params=params,
                         time_field=time_field,
                         order_by=order_by,
-                        time_range=time_range,
+                        fixed_time_start=fixed_time_start,  # 传递固定时间参数
+                        fixed_time_end=fixed_time_end,
                         attach_to_allure=False
                     )
 
@@ -966,7 +984,8 @@ class APITestBase:
                 params=params,
                 time_field=time_field,
                 order_by=order_by,
-                time_range=time_range,
+                fixed_time_start=fixed_time_start,
+                fixed_time_end=fixed_time_end,
                 attach_to_allure=attach_to_allure
             )
 
@@ -999,14 +1018,21 @@ class APITestBase:
         stable_start_time = None
         final_result = None
 
-        logger.info(
-            f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒"
-        )
+        # 生成固定时间范围（轮询开始时计算一次）
+        poll_start_datetime = datetime.datetime.now()
+        fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+
+        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
             allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
             allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
             allure.attach(f"{timezone_offset}", "时区偏移量（小时）", allure.attachment_type.TEXT)
+            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                          allure.attachment_type.TEXT)
 
             while time.time() - start_time < timeout:
                 try:
@@ -1018,7 +1044,8 @@ class APITestBase:
                         params=params,
                         time_field=time_field,
                         order_by=order_by,
-                        time_range=time_range,
+                        fixed_time_start=fixed_time_start,  # 传递固定时间参数
+                        fixed_time_end=fixed_time_end,
                         timezone_offset=offset_str,
                         attach_to_allure=False
                     )
@@ -1070,7 +1097,8 @@ class APITestBase:
                     params=params,
                     time_field=time_field,
                     order_by=order_by,
-                    time_range=time_range,
+                    fixed_time_start=fixed_time_start,
+                    fixed_time_end=fixed_time_end,
                     timezone_offset=offset_str,
                     attach_to_allure=True
                 )
@@ -1093,32 +1121,35 @@ class APITestBase:
             params: tuple,
             time_field: Optional[str],
             order_by: str,
-            time_range: int,
             timezone_offset: str,
+            # 新增：接收固定时间参数
+            fixed_time_start: Optional[str] = None,
+            fixed_time_end: Optional[str] = None,
             attach_to_allure: bool = True
     ) -> List[Dict[str, Any]]:
         """带时区转换的单次查询辅助方法（带Allure分层提示）"""
         with allure.step(f"带时区转换查询（目标时区: {timezone_offset}）"):
-            if time_field:
+            if time_field and fixed_time_start and fixed_time_end:
                 # 转换时间字段时区（假设数据库存储UTC时间）
                 converted_time_field = f"CONVERT_TZ({time_field}, '+00:00', '{timezone_offset}')"
                 sql_upper = sql.upper()
                 final_sql = sql
                 final_params = list(params)
 
-                time_condition = (
-                    f" {converted_time_field} BETWEEN NOW() - INTERVAL %s MINUTE "
-                    f"AND NOW() + INTERVAL %s MINUTE "
-                )
+                # 使用固定时间范围（已转换为时区对应的时间）
+                time_condition = f" {converted_time_field} BETWEEN %s AND %s "
 
                 if "WHERE" in sql_upper:
                     final_sql += f" AND {time_condition}"
                 else:
                     final_sql += f" WHERE {time_condition}"
-                final_params.extend([time_range, time_range])
+                final_params.extend([fixed_time_start, fixed_time_end])
 
                 allure.attach(f"时间字段转换: {time_field} (UTC → {timezone_offset})", "时区处理",
                               allure.attachment_type.TEXT)
+                allure.attach(
+                    f"带时区固定时间范围: {converted_time_field} BETWEEN {fixed_time_start} AND {fixed_time_end}",
+                    "查询条件", allure.attachment_type.TEXT)
                 return self.query_database(
                     db_transaction=db_transaction,
                     sql=final_sql,
@@ -1126,6 +1157,11 @@ class APITestBase:
                     order_by=order_by,
                     attach_to_allure=attach_to_allure
                 )
+            elif time_field:
+                # 异常处理：缺少固定时间参数
+                err_msg = f"使用time_field={time_field}时，必须传入fixed_time_start和fixed_time_end"
+                allure.attach(err_msg, "参数异常", allure.attachment_type.TEXT)
+                raise ValueError(err_msg)
             else:
                 allure.attach("不涉及时间字段转换", "时区处理", allure.attachment_type.TEXT)
                 return self.query_database(
