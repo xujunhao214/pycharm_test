@@ -1,0 +1,295 @@
+{
+  "uid" : "cba2fe6f661a9464",
+  "name" : "数据库查询-校验跟随者账号是否解绑成功",
+  "fullName" : "test_cloudTrader.test_delete.Test_delete#test_dbbchain_follow",
+  "historyId" : "010454cca5bd03cf0c2d22418a3def8d",
+  "time" : {
+    "start" : 1757052913619,
+    "stop" : 1757052913680,
+    "duration" : 61
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 跟随者账号解绑失败，实际状态为: PASS\nassert 'PASS' == 'UNBIND'\n  \n  - UNBIND\n  + PASS",
+  "statusTrace" : "self = <template.test_cloudTrader.test_delete.Test_delete object at 0x0000026BF173F220>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x0000026BF173FA60>\ndb_transaction = <pymysql.connections.Connection object at 0x0000026BF1AC5490>\n\n    @allure.title(\"数据库查询-校验跟随者账号是否解绑成功\")\n    def test_dbbchain_follow(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库\"):\n            follow_account = var_manager.get_variable(\"follow_account\")\n            sql = f\"SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE account = %s\"\n            params = (follow_account,)\n    \n            db_data = self.query_database(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params\n            )\n    \n        with allure.step(\"2. 校验跟随者账号是否解绑成功\"):\n            status_list = [record[\"status\"] for record in db_data]\n            for i in status_list:\n>               assert i == \"UNBIND\", f\"跟随者账号解绑失败，实际状态为: {i}\"\nE               AssertionError: 跟随者账号解绑失败，实际状态为: PASS\nE               assert 'PASS' == 'UNBIND'\nE                 \nE                 - UNBIND\nE                 + PASS\n\ntest_cloudTrader\\test_delete.py:47: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1757052913213,
+      "stop" : 1757052913619,
+      "duration" : 406
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1757052913619,
+      "stop" : 1757052913619,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1757052907417,
+      "stop" : 1757052907417,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1757052907417,
+      "stop" : 1757052907417,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1757052907417,
+      "stop" : 1757052907417,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1757052913213,
+      "stop" : 1757052913213,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 跟随者账号解绑失败，实际状态为: PASS\nassert 'PASS' == 'UNBIND'\n  \n  - UNBIND\n  + PASS",
+    "statusTrace" : "self = <template.test_cloudTrader.test_delete.Test_delete object at 0x0000026BF173F220>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x0000026BF173FA60>\ndb_transaction = <pymysql.connections.Connection object at 0x0000026BF1AC5490>\n\n    @allure.title(\"数据库查询-校验跟随者账号是否解绑成功\")\n    def test_dbbchain_follow(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库\"):\n            follow_account = var_manager.get_variable(\"follow_account\")\n            sql = f\"SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE account = %s\"\n            params = (follow_account,)\n    \n            db_data = self.query_database(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params\n            )\n    \n        with allure.step(\"2. 校验跟随者账号是否解绑成功\"):\n            status_list = [record[\"status\"] for record in db_data]\n            for i in status_list:\n>               assert i == \"UNBIND\", f\"跟随者账号解绑失败，实际状态为: {i}\"\nE               AssertionError: 跟随者账号解绑失败，实际状态为: PASS\nE               assert 'PASS' == 'UNBIND'\nE                 \nE                 - UNBIND\nE                 + PASS\n\ntest_cloudTrader\\test_delete.py:47: AssertionError",
+    "steps" : [ {
+      "name" : "1. 查询数据库",
+      "time" : {
+        "start" : 1757052913620,
+        "stop" : 1757052913679,
+        "duration" : 59
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1757052913620,
+          "stop" : 1757052913679,
+          "duration" : 59
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1757052913679,
+            "stop" : 1757052913679,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b5296a154b92ec53",
+            "name" : "查询结果（共5条，显示前50条）",
+            "source" : "b5296a154b92ec53.json",
+            "type" : "application/json",
+            "size" : 1870
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ {
+          "uid" : "d1258517779ddb3c",
+          "name" : "执行SQL",
+          "source" : "d1258517779ddb3c.txt",
+          "type" : "text/plain",
+          "size" : 190
+        }, {
+          "uid" : "cfe47b0099f30ac9",
+          "name" : "SQL参数",
+          "source" : "cfe47b0099f30ac9.txt",
+          "type" : "text/plain",
+          "size" : 14
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3,
+        "stepsCount" : 1,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3,
+      "stepsCount" : 2,
+      "hasContent" : true
+    }, {
+      "name" : "2. 校验跟随者账号是否解绑成功",
+      "time" : {
+        "start" : 1757052913679,
+        "stop" : 1757052913680,
+        "duration" : 1
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 跟随者账号解绑失败，实际状态为: PASS\nassert 'PASS' == 'UNBIND'\n  \n  - UNBIND\n  + PASS\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_delete.py\", line 47, in test_dbbchain_follow\n    assert i == \"UNBIND\", f\"跟随者账号解绑失败，实际状态为: {i}\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "b3595fdf6b155cd4",
+      "name" : "log",
+      "source" : "b3595fdf6b155cd4.txt",
+      "type" : "text/plain",
+      "size" : 2088
+    } ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 4,
+    "stepsCount" : 4,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1757052913683,
+      "stop" : 1757052913683,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1757052913682,
+      "stop" : 1757052913682,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1757052919618,
+      "stop" : 1757052919619,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_delete"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "34448-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "cba2fe6f661a9464.json",
+  "parameterValues" : [ ]
+}
