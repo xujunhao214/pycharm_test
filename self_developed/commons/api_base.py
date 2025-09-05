@@ -691,36 +691,53 @@ class APITestBase:
                 )
 
     def _is_result_stable(self, current: List[Dict], previous: List[Dict]) -> bool:
-        """判断两次查询结果是否稳定（数量和内容都不变）"""
+        """判断两次查询结果是否稳定（自动识别唯一键）"""
         with allure.step("判断结果稳定性"):
-            if previous is None:
-                allure.attach("首次查询，无历史数据对比", "判断结果", allure.attachment_type.TEXT)
-                return False  # 首次查询，不稳定
+            if previous is None or len(current) == 0:
+                allure.attach("首次查询或结果为空，无对比", "判断结果", allure.attachment_type.TEXT)
+                return False
 
-            # 检查记录数量
+            # 1. 自动识别唯一键（按优先级匹配：可根据业务调整顺序）
+            candidate_keys = ['order_no', 'send_no', 'close_no', 'foi.order_no', 'fod.send_no',
+                              'fod.close_no', 'id']  # 优先级从高到低
+            unique_key = None
+            sample_item = current[0]  # 取第一条结果当样本
+            for key in candidate_keys:
+                if key in sample_item:
+                    unique_key = key
+                    break
+            # 若没有匹配到候选键，报错提示
+            if not unique_key:
+                err_msg = f"未识别到唯一键（候选键: {candidate_keys}，结果字段: {list(sample_item.keys())}）"
+                allure.attach(err_msg, "判断异常", allure.attachment_type.TEXT)
+                raise ValueError(err_msg)
+            allure.attach(f"自动识别唯一键: {unique_key}", "唯一键信息", allure.attachment_type.TEXT)
+
+            # 2. 后续逻辑和方案1一致（数量对比→唯一键映射→内容对比）
             if len(current) != len(previous):
                 allure.attach(f"数量变化: 前{len(previous)}条 → 现{len(current)}条", "判断结果",
                               allure.attachment_type.TEXT)
                 return False
 
-            # 检查记录内容（通过id匹配）
-            current_map = {item.get('id'): item for item in current}
-            previous_map = {item.get('id'): item for item in previous}
+            current_map = {item[unique_key]: item for item in current}
+            previous_map = {item[unique_key]: item for item in previous}
 
             if set(current_map.keys()) != set(previous_map.keys()):
-                allure.attach(f"ID集合变化: 前{set(previous_map.keys())} → 现{set(current_map.keys())}", "判断结果",
-                              allure.attachment_type.TEXT)
+                added = current_map.keys() - previous_map.keys()
+                removed = previous_map.keys() - current_map.keys()
+                allure.attach(f"唯一键变化: 新增{added}，删除{removed}", "判断结果", allure.attachment_type.TEXT)
                 return False
 
-            # 对比关键字段（跳过动态时间字段）
-            for id, curr_item in current_map.items():
-                prev_item = previous_map[id]
-                for key in curr_item:
-                    if key in {'create_time', 'update_time', 'response_time'}:
+            ignore_fields = {'create_time', 'update_time', 'response_time', 'open_time', 'close_time'}
+            for key in current_map:
+                curr_item = current_map[key]
+                prev_item = previous_map[key]
+                for field in curr_item:
+                    if field in ignore_fields:
                         continue
-                    if curr_item[key] != prev_item[key]:
-                        allure.attach(f"字段'{key}'值变化: {prev_item[key]} → {curr_item[key]}", "判断结果",
-                                      allure.attachment_type.TEXT)
+                    if curr_item[field] != prev_item[field]:
+                        allure.attach(f"唯一键[{key}]的字段'{field}'变化: {prev_item[field]} → {curr_item[field]}",
+                                      "判断结果", allure.attachment_type.TEXT)
                         return False
 
             allure.attach("数量和内容均未变化，结果稳定", "判断结果", allure.attachment_type.TEXT)

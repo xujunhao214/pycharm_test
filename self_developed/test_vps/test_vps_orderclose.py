@@ -1022,7 +1022,6 @@ class TestVPSOrderQuantityControl:
 # 大模块4：VPS策略下单-平仓的订单类型功能验证
 # ------------------------------------
 @allure.feature("VPS策略下单-平仓的功能校验")
-# @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSOrderType:
     @allure.story("场景6：平仓的订单类型功能验证-MT4外部订单")
     @allure.description("""
@@ -1035,6 +1034,7 @@ class TestVPSOrderType:
       4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT4ExternalOrderClose(APITestBase):
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):

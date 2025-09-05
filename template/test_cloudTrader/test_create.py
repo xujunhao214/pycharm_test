@@ -6,7 +6,9 @@ from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
 
 
+@allure.feature("账号管理")
 class Test_create:
+    @allure.story("创建交易员账号")
     class Test_trader(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
@@ -282,6 +284,7 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
+    @allure.story("创建跟随者账号")
     class Test_follow(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
