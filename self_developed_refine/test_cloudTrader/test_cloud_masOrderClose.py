@@ -651,10 +651,10 @@ class TestVPSMasOrderclose:
                         actual_value=len(db_data),
                         expected_value=5,
                         op=CompareOp.EQ,
-                        message=f"正常平仓，应该有4个平仓订单",
+                        message=f"正常平仓，应该有5个平仓订单",
                         attachment_name="订单数量详情"
                     )
-                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
+                    logging.info(f"正常平仓，应该有5个平仓订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查-有订单")
         def test_dbquery_addsalve_orderSendclose2(self, var_manager, db_transaction):
@@ -715,10 +715,10 @@ class TestVPSMasOrderclose:
                         actual_value=len(db_data),
                         expected_value=5,
                         op=CompareOp.EQ,
-                        message=f"正常平仓，应该有4个平仓订单",
+                        message=f"正常平仓，应该有5个平仓订单",
                         attachment_name="订单数量详情"
                     )
-                    logging.info(f"正常平仓，应该有4个平仓订单，结果有{len(db_data)}个订单")
+                    logging.info(f"正常平仓，应该有5个平仓订单，结果有{len(db_data)}个订单")
 
     @allure.story("场景3：平仓的订单方向功能校验-sell")
     @allure.description("""
