@@ -1015,7 +1015,7 @@ class TestVPSOrderQuantityControl:
                 )
                 logging.info(f"{new_user['account']}暂无可平仓订单")
 
-        time.sleep(30)
+        # time.sleep(30)
 
 
 # ------------------------------------
