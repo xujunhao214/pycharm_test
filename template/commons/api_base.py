@@ -1348,9 +1348,9 @@ class APITestBase:
 
             # 生成详细提示信息（包含容差参数）
             detail_msg = (
-                f"\n预期: {expected_value}\n"
+                f"\n实际: {actual_value}\n"
                 f"操作: {op.value}\n"
-                f"实际: {actual_value}\n"
+                f"预期: {expected_value}\n"
             )
 
             # 添加allure.attach，将信息写入报告
