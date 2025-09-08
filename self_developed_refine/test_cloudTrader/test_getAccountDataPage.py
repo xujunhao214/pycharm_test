@@ -519,4 +519,3 @@ class TestCloudOrderSend_newScenarios:
                 "success",
                 "响应msg字段应为success"
             )
-
