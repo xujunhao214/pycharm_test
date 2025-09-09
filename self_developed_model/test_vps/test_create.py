@@ -1,4 +1,3 @@
-# self_developed_model/tests/test_create.py
 import time
 import pytest
 import logging

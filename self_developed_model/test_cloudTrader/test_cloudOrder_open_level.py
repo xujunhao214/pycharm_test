@@ -1,4 +1,3 @@
-# self_developed_model/tests/test_云策略_ordersend.py
 import allure
 import logging
 import pytest
