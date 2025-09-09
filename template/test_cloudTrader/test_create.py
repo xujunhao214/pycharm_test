@@ -826,6 +826,56 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
+        @allure.title("跟单管理-实时跟单-检查是否有订阅记录")
+        def test_api_getColumnsAndData(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                follow_account = var_manager.get_variable("follow_account")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "account": follow_account,
+                    "pageNo": 1,
+                    "pageSize": 100,
+                    "status": "NORMAL,AUDIT"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    f'/online/cgreport/api/getColumnsAndData/1560189381093109761',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step("3. 判断是否有订阅信息"):
+                result = self.json_utils.extract(response.json(), "$.result.data.records[*]")
+                deletePa_id = self.json_utils.extract(response.json(), "$.result.data.records[0].id")
+                if not result:
+                    logging.info(f"无订阅信息")
+                    allure.attach(
+                        "无订阅信息",
+                        name="订阅信息"
+                    )
+                else:
+                    logging.info(f"有订阅信息")
+                    allure.attach(
+                        "有订阅信息",
+                        name="订阅信息"
+                    )
+                    with allure.step("4. 删除订阅信息"):
+                        data = {
+                            "id": deletePa_id
+                        }
+                        self.send_delete_request(
+                            logged_session,
+                            f'/blockchain/master-slave/deletePa',
+                            json_data=data
+                        )
+
         # @pytest.mark.skip(reason="跳过此用例")
         @allure.title("账号管理-跟单者账号-订阅")
         def test_admin_add(self, var_manager, logged_session):

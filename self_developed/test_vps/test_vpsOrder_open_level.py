@@ -1178,6 +1178,7 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
+        @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
         def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):

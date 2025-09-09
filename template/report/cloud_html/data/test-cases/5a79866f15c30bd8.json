@@ -1,0 +1,385 @@
+{
+  "uid" : "5a79866f15c30bd8",
+  "name" : "账号管理-跟单者账号-订阅",
+  "fullName" : "test_cloudTrader.test_create.Test_follow#test_admin_add",
+  "historyId" : "8da926fc454e1bd488b226989b7a2548",
+  "time" : {
+    "start" : 1757411317519,
+    "stop" : 1757411321104,
+    "duration" : 3585
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 响应success字段应为true（JSON断言失败）",
+  "statusTrace" : "self = <Response [200]>, kwargs = {}\n\n    def json(self, **kwargs):\n        r\"\"\"Decodes the JSON response body (if any) as a Python object.\n    \n        This may return a dictionary, list, etc. depending on what is in the response.\n    \n        :param \\*\\*kwargs: Optional arguments that ``json.loads`` takes.\n        :raises requests.exceptions.JSONDecodeError: If the response body does not\n            contain valid json.\n        \"\"\"\n    \n        if not self.encoding and self.content and len(self.content) > 3:\n            # No encoding set. JSON RFC 4627 section 3 states we should expect\n            # UTF-8, -16 or -32. Detect which one to use; If the detection or\n            # decoding fails, fall back to `self.text` (using charset_normalizer to make\n            # a best guess).\n            encoding = guess_json_utf(self.content)\n            if encoding is not None:\n                try:\n                    return complexjson.loads(self.content.decode(encoding), **kwargs)\n                except UnicodeDecodeError:\n                    # Wrong UTF codec detected; usually because it's not UTF-8\n                    # but some other 8-bit codec.  This is an RFC violation,\n                    # and the server didn't bother to tell us what codec *was*\n                    # used.\n                    pass\n                except JSONDecodeError as e:\n                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\n    \n        try:\n>           return complexjson.loads(self.text, **kwargs)\n\n..\\venv\\lib\\site-packages\\requests\\models.py:976: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nD:\\python_tools\\python\\lib\\json\\__init__.py:357: in loads\n    return _default_decoder.decode(s)\nD:\\python_tools\\python\\lib\\json\\decoder.py:337: in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <json.decoder.JSONDecoder object at 0x000001D34BFBE640>\ns = '访问超时，请稍后再试!', idx = 0\n\n    def raw_decode(self, s, idx=0):\n        \"\"\"Decode a JSON document from ``s`` (a ``str`` beginning with\n        a JSON document) and return a 2-tuple of the Python\n        representation and the index in ``s`` where the document ended.\n    \n        This can be used to decode a JSON document from a string that may\n        have extraneous data at the end.\n    \n        \"\"\"\n        try:\n            obj, end = self.scan_once(s, idx)\n        except StopIteration as err:\n>           raise JSONDecodeError(\"Expecting value\", s, err.value) from None\nE           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\nD:\\python_tools\\python\\lib\\json\\decoder.py:355: JSONDecodeError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success'\n\n    def extract_jsonpath(self, response: requests.Response, json_path: str) -> Any:\n        \"\"\"使用jsonpath-ng解析JSON路径（分层提示优化）\"\"\"\n        try:\n>           json_data = response.json()\n\ncommons\\api_base.py:451: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <Response [200]>, kwargs = {}\n\n    def json(self, **kwargs):\n        r\"\"\"Decodes the JSON response body (if any) as a Python object.\n    \n        This may return a dictionary, list, etc. depending on what is in the response.\n    \n        :param \\*\\*kwargs: Optional arguments that ``json.loads`` takes.\n        :raises requests.exceptions.JSONDecodeError: If the response body does not\n            contain valid json.\n        \"\"\"\n    \n        if not self.encoding and self.content and len(self.content) > 3:\n            # No encoding set. JSON RFC 4627 section 3 states we should expect\n            # UTF-8, -16 or -32. Detect which one to use; If the detection or\n            # decoding fails, fall back to `self.text` (using charset_normalizer to make\n            # a best guess).\n            encoding = guess_json_utf(self.content)\n            if encoding is not None:\n                try:\n                    return complexjson.loads(self.content.decode(encoding), **kwargs)\n                except UnicodeDecodeError:\n                    # Wrong UTF codec detected; usually because it's not UTF-8\n                    # but some other 8-bit codec.  This is an RFC violation,\n                    # and the server didn't bother to tell us what codec *was*\n                    # used.\n                    pass\n                except JSONDecodeError as e:\n                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\n    \n        try:\n            return complexjson.loads(self.text, **kwargs)\n        except JSONDecodeError as e:\n            # Catch JSON-related errors and raise as requests.JSONDecodeError\n            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError\n>           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\nE           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n..\\venv\\lib\\site-packages\\requests\\models.py:980: JSONDecodeError\n\nThe above exception was the direct cause of the following exception:\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success', expected_value = True\nerror_msg_prefix = '响应success字段应为true'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n>           actual_value = self.extract_jsonpath(response, json_path)\n\ncommons\\api_base.py:466: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success'\n\n    def extract_jsonpath(self, response: requests.Response, json_path: str) -> Any:\n        \"\"\"使用jsonpath-ng解析JSON路径（分层提示优化）\"\"\"\n        try:\n            json_data = response.json()\n            jsonpath_expr = parse(json_path)\n            matches = jsonpath_expr.find(json_data)\n            return [match.value for match in matches] if matches else None\n        except Exception as e:\n            with allure.step(\"JSONPath解析异常\"):\n                allure.attach(json_path, \"解析路径\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n                allure.attach(str(e), \"解析错误\", allure.attachment_type.TEXT)\n            logger.error(f\"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}\")\n>           raise ValueError(f\"Failed: JSONPath解析失败（{json_path}）\") from e\nE           ValueError: Failed: JSONPath解析失败（$.success）\n\ncommons\\api_base.py:461: ValueError\n\nThe above exception was the direct cause of the following exception:\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001D375B1D970>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001D375B1DC10>\n\n    @allure.title(\"账号管理-跟单者账号-订阅\")\n    def test_admin_add(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            trader_pass_id = var_manager.get_variable(\"trader_pass_id\")\n            follow_pass_id = var_manager.get_variable(\"follow_pass_id\")\n            data = {\n                \"masterId\": trader_pass_id,\n                \"slaveId\": follow_pass_id,\n                \"direction\": \"FORWARD\",\n                \"followingMode\": \"2\",\n                \"fixedProportion\": \"1\",\n                \"fixedLots\": None,\n                \"order\": {\"paymentAccount\": \"\", \"paymentMethod\": \"\"},\n            }\n            response = self.send_post_request(\n                logged_session,\n                f'/blockchain/master-slave/admin/add',\n                json_data=data\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n>           self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n\ntest_cloudTrader\\test_create.py:901: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success', expected_value = True\nerror_msg_prefix = '响应success字段应为true'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 响应success字段应为true（JSON断言失败）\n\ncommons\\api_base.py:484: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1757411210739,
+      "stop" : 1757411210740,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1757411210739,
+      "stop" : 1757411210739,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1757411210739,
+      "stop" : 1757411210739,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1757411211203,
+      "stop" : 1757411211203,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1757411211203,
+      "stop" : 1757411258155,
+      "duration" : 46952
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 响应success字段应为true（JSON断言失败）",
+    "statusTrace" : "self = <Response [200]>, kwargs = {}\n\n    def json(self, **kwargs):\n        r\"\"\"Decodes the JSON response body (if any) as a Python object.\n    \n        This may return a dictionary, list, etc. depending on what is in the response.\n    \n        :param \\*\\*kwargs: Optional arguments that ``json.loads`` takes.\n        :raises requests.exceptions.JSONDecodeError: If the response body does not\n            contain valid json.\n        \"\"\"\n    \n        if not self.encoding and self.content and len(self.content) > 3:\n            # No encoding set. JSON RFC 4627 section 3 states we should expect\n            # UTF-8, -16 or -32. Detect which one to use; If the detection or\n            # decoding fails, fall back to `self.text` (using charset_normalizer to make\n            # a best guess).\n            encoding = guess_json_utf(self.content)\n            if encoding is not None:\n                try:\n                    return complexjson.loads(self.content.decode(encoding), **kwargs)\n                except UnicodeDecodeError:\n                    # Wrong UTF codec detected; usually because it's not UTF-8\n                    # but some other 8-bit codec.  This is an RFC violation,\n                    # and the server didn't bother to tell us what codec *was*\n                    # used.\n                    pass\n                except JSONDecodeError as e:\n                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\n    \n        try:\n>           return complexjson.loads(self.text, **kwargs)\n\n..\\venv\\lib\\site-packages\\requests\\models.py:976: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nD:\\python_tools\\python\\lib\\json\\__init__.py:357: in loads\n    return _default_decoder.decode(s)\nD:\\python_tools\\python\\lib\\json\\decoder.py:337: in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <json.decoder.JSONDecoder object at 0x000001D34BFBE640>\ns = '访问超时，请稍后再试!', idx = 0\n\n    def raw_decode(self, s, idx=0):\n        \"\"\"Decode a JSON document from ``s`` (a ``str`` beginning with\n        a JSON document) and return a 2-tuple of the Python\n        representation and the index in ``s`` where the document ended.\n    \n        This can be used to decode a JSON document from a string that may\n        have extraneous data at the end.\n    \n        \"\"\"\n        try:\n            obj, end = self.scan_once(s, idx)\n        except StopIteration as err:\n>           raise JSONDecodeError(\"Expecting value\", s, err.value) from None\nE           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\nD:\\python_tools\\python\\lib\\json\\decoder.py:355: JSONDecodeError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success'\n\n    def extract_jsonpath(self, response: requests.Response, json_path: str) -> Any:\n        \"\"\"使用jsonpath-ng解析JSON路径（分层提示优化）\"\"\"\n        try:\n>           json_data = response.json()\n\ncommons\\api_base.py:451: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <Response [200]>, kwargs = {}\n\n    def json(self, **kwargs):\n        r\"\"\"Decodes the JSON response body (if any) as a Python object.\n    \n        This may return a dictionary, list, etc. depending on what is in the response.\n    \n        :param \\*\\*kwargs: Optional arguments that ``json.loads`` takes.\n        :raises requests.exceptions.JSONDecodeError: If the response body does not\n            contain valid json.\n        \"\"\"\n    \n        if not self.encoding and self.content and len(self.content) > 3:\n            # No encoding set. JSON RFC 4627 section 3 states we should expect\n            # UTF-8, -16 or -32. Detect which one to use; If the detection or\n            # decoding fails, fall back to `self.text` (using charset_normalizer to make\n            # a best guess).\n            encoding = guess_json_utf(self.content)\n            if encoding is not None:\n                try:\n                    return complexjson.loads(self.content.decode(encoding), **kwargs)\n                except UnicodeDecodeError:\n                    # Wrong UTF codec detected; usually because it's not UTF-8\n                    # but some other 8-bit codec.  This is an RFC violation,\n                    # and the server didn't bother to tell us what codec *was*\n                    # used.\n                    pass\n                except JSONDecodeError as e:\n                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\n    \n        try:\n            return complexjson.loads(self.text, **kwargs)\n        except JSONDecodeError as e:\n            # Catch JSON-related errors and raise as requests.JSONDecodeError\n            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError\n>           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\nE           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n..\\venv\\lib\\site-packages\\requests\\models.py:980: JSONDecodeError\n\nThe above exception was the direct cause of the following exception:\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success', expected_value = True\nerror_msg_prefix = '响应success字段应为true'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n>           actual_value = self.extract_jsonpath(response, json_path)\n\ncommons\\api_base.py:466: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success'\n\n    def extract_jsonpath(self, response: requests.Response, json_path: str) -> Any:\n        \"\"\"使用jsonpath-ng解析JSON路径（分层提示优化）\"\"\"\n        try:\n            json_data = response.json()\n            jsonpath_expr = parse(json_path)\n            matches = jsonpath_expr.find(json_data)\n            return [match.value for match in matches] if matches else None\n        except Exception as e:\n            with allure.step(\"JSONPath解析异常\"):\n                allure.attach(json_path, \"解析路径\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n                allure.attach(str(e), \"解析错误\", allure.attachment_type.TEXT)\n            logger.error(f\"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}\")\n>           raise ValueError(f\"Failed: JSONPath解析失败（{json_path}）\") from e\nE           ValueError: Failed: JSONPath解析失败（$.success）\n\ncommons\\api_base.py:461: ValueError\n\nThe above exception was the direct cause of the following exception:\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001D375B1D970>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001D375B1DC10>\n\n    @allure.title(\"账号管理-跟单者账号-订阅\")\n    def test_admin_add(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            trader_pass_id = var_manager.get_variable(\"trader_pass_id\")\n            follow_pass_id = var_manager.get_variable(\"follow_pass_id\")\n            data = {\n                \"masterId\": trader_pass_id,\n                \"slaveId\": follow_pass_id,\n                \"direction\": \"FORWARD\",\n                \"followingMode\": \"2\",\n                \"fixedProportion\": \"1\",\n                \"fixedLots\": None,\n                \"order\": {\"paymentAccount\": \"\", \"paymentMethod\": \"\"},\n            }\n            response = self.send_post_request(\n                logged_session,\n                f'/blockchain/master-slave/admin/add',\n                json_data=data\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n>           self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n\ntest_cloudTrader\\test_create.py:901: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001D375AC27F0>\nresponse = <Response [200]>, json_path = '$.success', expected_value = True\nerror_msg_prefix = '响应success字段应为true'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 响应success字段应为true（JSON断言失败）\n\ncommons\\api_base.py:484: AssertionError",
+    "steps" : [ {
+      "name" : "1. 发送请求",
+      "time" : {
+        "start" : 1757411317519,
+        "stop" : 1757411321100,
+        "duration" : 3581
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1757411317519,
+          "stop" : 1757411321100,
+          "duration" : 3581
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1757411317519,
+            "stop" : 1757411317520,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "530d988e07e8108f",
+            "name" : "请求URL",
+            "source" : "530d988e07e8108f.txt",
+            "type" : "text/plain",
+            "size" : 34
+          }, {
+            "uid" : "c77e6e8013398a0b",
+            "name" : "请求头",
+            "source" : "c77e6e8013398a0b.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "63b49cd01fb17f57",
+            "name" : "请求体（JSON）",
+            "source" : "63b49cd01fb17f57.json",
+            "type" : "application/json",
+            "size" : 240
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1757411318096,
+            "stop" : 1757411318097,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a94cb9e6af92ebd5",
+            "name" : "响应状态码",
+            "source" : "a94cb9e6af92ebd5.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "fcc22d5f4e21837a",
+            "name" : "响应头",
+            "source" : "fcc22d5f4e21837a.json",
+            "type" : "application/json",
+            "size" : 302
+          }, {
+            "uid" : "3864b79f5932060f",
+            "name" : "响应体（文本）",
+            "source" : "3864b79f5932060f.txt",
+            "type" : "text/plain",
+            "size" : 31
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 2,
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 3,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1757411321100,
+        "stop" : 1757411321103,
+        "duration" : 3
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: Failed: 响应success字段应为true（JSON断言失败）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_create.py\", line 901, in test_admin_add\n    self.assert_json_value(\n  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 484, in assert_json_value\n    raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\n",
+      "steps" : [ {
+        "name" : "JSONPath解析异常",
+        "time" : {
+          "start" : 1757411321100,
+          "stop" : 1757411321101,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "bfbeaeca66de34aa",
+          "name" : "解析路径",
+          "source" : "bfbeaeca66de34aa.txt",
+          "type" : "text/plain",
+          "size" : 9
+        }, {
+          "uid" : "fa12b2c7dee31abe",
+          "name" : "响应内容",
+          "source" : "fa12b2c7dee31abe.txt",
+          "type" : "text/plain",
+          "size" : 31
+        }, {
+          "uid" : "1856c5a2126008b0",
+          "name" : "解析错误",
+          "source" : "1856c5a2126008b0.txt",
+          "type" : "text/plain",
+          "size" : 41
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "JSON断言失败: $.success",
+        "time" : {
+          "start" : 1757411321101,
+          "stop" : 1757411321103,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "694e3e7f363cca85",
+          "name" : "JSON路径",
+          "source" : "694e3e7f363cca85.txt",
+          "type" : "text/plain",
+          "size" : 9
+        }, {
+          "uid" : "75623f8c2aae2ac7",
+          "name" : "预期值",
+          "source" : "75623f8c2aae2ac7.txt",
+          "type" : "text/plain",
+          "size" : 4
+        }, {
+          "uid" : "3a7a191bf61e7e1f",
+          "name" : "响应内容",
+          "source" : "3a7a191bf61e7e1f.txt",
+          "type" : "text/plain",
+          "size" : 31
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "74806113552baaca",
+      "name" : "log",
+      "source" : "74806113552baaca.txt",
+      "type" : "text/plain",
+      "size" : 801
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 7,
+    "attachmentsCount" : 13,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1757411344401,
+      "stop" : 1757411344402,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1757411344400,
+      "stop" : 1757411344400,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1757411344400,
+      "stop" : 1757411344400,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "创建跟随者账号"
+  }, {
+    "name" : "feature",
+    "value" : "账号管理"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_create"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "23392-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "5a79866f15c30bd8.json",
+  "parameterValues" : [ ]
+}

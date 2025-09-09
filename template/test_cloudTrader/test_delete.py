@@ -6,6 +6,7 @@ from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
 
 
+@allure.feature("账号管理-删除账号")
 class Test_delete(APITestBase):
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("账号管理-跟随者账号-解绑账户")
