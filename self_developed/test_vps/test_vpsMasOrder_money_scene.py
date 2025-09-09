@@ -1,4 +1,3 @@
-# self_developed/tests/test_vps_ordersend.py
 import time
 import allure
 import logging

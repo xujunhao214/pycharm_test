@@ -1,4 +1,3 @@
-# lingkuan_730/tests/test_create.py
 import time
 import pytest
 import logging
