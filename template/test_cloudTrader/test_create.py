@@ -335,8 +335,8 @@ class Test_create:
         def test_dbbchain_trader2(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库"):
                 trader_account = var_manager.get_variable("trader_account")
-                sql = f"SELECT run_ip_addr,equity,equity_init,audit_by FROM bchain_trader WHERE account = %s and status = %s"
-                params = (trader_account, "PASS",)
+                sql = f"SELECT run_ip_addr,equity,equity_init,audit_by FROM bchain_trader WHERE account = %s"
+                params = (trader_account,)
                 db_data = self.query_database(
                     db_transaction=db_transaction,
                     sql=sql,

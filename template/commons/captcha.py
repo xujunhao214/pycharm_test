@@ -11,7 +11,7 @@ TESSERACT_PATH = r'D:\test_tools\Tesseract-OCR\tesseract.exe'  # 替换为你的
 CAPTCHA_LENGTH = 4
 SUPPORTED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 # 固定保存路径配置
-SAVE_DIR = '../Files/png'  # 父目录
+SAVE_DIR = './Files/png'  # 父目录
 SAVE_FILENAME = 'preprocessed_captcha.png'  # 固定文件名
 
 
