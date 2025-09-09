@@ -277,6 +277,7 @@ class Test_create:
 
         @allure.title("任务中心-MT4绑定审核-提取数据2")
         def test_api_getData0(self, var_manager, logged_session):
+            account = var_manager.get_variable("trader_account")
             with allure.step("1. 发送请求"):
                 params = {
                     "_t": current_timestamp_seconds,
@@ -302,8 +303,33 @@ class Test_create:
                 )
 
             with allure.step("3. 提取数据"):
-                trader_pass_id = self.json_utils.extract(response.json(), "$.result.records[0].id")
+                all_pass_account = self.json_utils.extract(
+                    data=response.json(),
+                    expression="$.result.records[*]",
+                    multi_match=True,
+                    default=[]
+                )
+                trader_pass_id = None
+                existing_account = [account.get("account") for account in all_pass_account if account.get("account")]
+
+                for trader_pass in all_pass_account:
+                    current_server = trader_pass.get("account")
+                    if current_server == account:
+                        trader_pass_id = trader_pass.get("id")
+                        break
+
+                assert trader_pass_id is not None, (
+                    f"未找MT4审核[{account}]的ID！"
+                    f"\n当前返回的MT4审核列表：{existing_account}"
+                    f"\n请检查：1. 账号是否正确； 2. 是否在当前分页（pageSize=50）"
+                )
+                logging.info(f"提取成功 | 账号的id: {account} | trader_pass_id: {trader_pass_id}")
                 var_manager.set_runtime_variable("trader_pass_id", trader_pass_id)
+                allure.attach(
+                    name="账号id",
+                    body=str(trader_pass_id),
+                    attachment_type=allure.attachment_type.TEXT
+                )
 
         @allure.title("任务中心-MT4绑定审核-通过")
         def test_account_pass(self, var_manager, logged_session):
@@ -690,6 +716,7 @@ class Test_create:
 
         @allure.title("任务中心-MT4绑定审核-提取数据2")
         def test_api_getData0(self, var_manager, logged_session):
+            account = var_manager.get_variable("follow_account")
             with allure.step("1. 发送请求"):
                 params = {
                     "_t": current_timestamp_seconds,
@@ -715,8 +742,63 @@ class Test_create:
                 )
 
             with allure.step("3. 提取数据"):
-                follow_pass_id = self.json_utils.extract(response.json(), "$.result.records[0].id")
+                all_pass_account = self.json_utils.extract(
+                    data=response.json(),
+                    expression="$.result.records[*]",
+                    multi_match=True,
+                    default=[]
+                )
+                follow_pass_id = None
+                existing_account = [account.get("account") for account in all_pass_account if account.get("account")]
+
+                for trader_pass in all_pass_account:
+                    current_server = trader_pass.get("account")
+                    if current_server == account:
+                        follow_pass_id = trader_pass.get("id")
+                        break
+
+                assert follow_pass_id is not None, (
+                    f"未找MT4审核[{account}]的ID！"
+                    f"\n当前返回的MT4审核列表：{existing_account}"
+                    f"\n请检查：1. 账号是否正确； 2. 是否在当前分页（pageSize=50）"
+                )
+                logging.info(f"提取成功 | 账号的id: {account} | trader_pass_id: {follow_pass_id}")
                 var_manager.set_runtime_variable("follow_pass_id", follow_pass_id)
+                allure.attach(
+                    name="账号id",
+                    body=str(follow_pass_id),
+                    attachment_type=allure.attachment_type.TEXT
+                )
+
+        # @allure.title("任务中心-MT4绑定审核-提取数据2")
+        # def test_api_getData0(self, var_manager, logged_session):
+        #     with allure.step("1. 发送请求"):
+        #         params = {
+        #             "_t": current_timestamp_seconds,
+        #             "column": "id",
+        #             "order": "desc",
+        #             "pageNo": 1,
+        #             "pageSize": 20,
+        #             "superQueryMatchType": "and",
+        #             "status": "PENDING,VERIFICATION"
+        #         }
+        #         response = self.send_get_request(
+        #             logged_session,
+        #             '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',
+        #             params=params
+        #         )
+        #
+        #     with allure.step("2. 返回校验"):
+        #         self.assert_json_value(
+        #             response,
+        #             "$.success",
+        #             True,
+        #             "响应success字段应为true"
+        #         )
+        #
+        #     with allure.step("3. 提取数据"):
+        #         follow_pass_id = self.json_utils.extract(response.json(), "$.result.records[0].id")
+        #         var_manager.set_runtime_variable("follow_pass_id", follow_pass_id)
 
         @allure.title("任务中心-MT4绑定审核-通过")
         def test_account_pass(self, var_manager, logged_session):

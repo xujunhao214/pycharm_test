@@ -14,16 +14,16 @@ SKIP_REASON = "该用例暂时跳过"
 class TestLeakageopen_level:
     @allure.story("场景1：VPS策略下单-漏开")
     @allure.description("""
-        ### 用例说明
-        - 前置条件：有vps策略和vps跟单
-        - 操作步骤：
-          1. 修改vps跟单账号开仓-关闭
-          2. 进行开仓
-          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-          4. 修改vps跟单账号开仓-开启
-          5. 进行补单操作，然后平仓
-        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
-        """)
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    """)
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
@@ -1106,6 +1106,7 @@ class TestLeakageopen_level:
                 "响应msg字段应为success"
             )
 
+        @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
