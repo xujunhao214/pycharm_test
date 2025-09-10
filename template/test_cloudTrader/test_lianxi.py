@@ -16,7 +16,7 @@ class Test_create:
         json_utils = JsonPathUtils()
 
         @allure.title("跟单管理-实时跟单-检查是否有订阅记录")
-        def test_api_getColumnsAndData(self, var_manager, logged_session):
+        def test_api_getColumnsAndData2(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 follow_account = var_manager.get_variable("follow_account")
                 params = {
@@ -42,7 +42,6 @@ class Test_create:
 
             with allure.step("3. 判断是否有订阅信息"):
                 result = self.json_utils.extract(response.json(), "$.result.data.records[*]")
-                deletePa_id = self.json_utils.extract(response.json(), "$.result.data.records[0].id")
                 if not result:
                     logging.info(f"无订阅信息")
                     allure.attach(
@@ -55,12 +54,3 @@ class Test_create:
                         "有订阅信息",
                         name="订阅信息"
                     )
-                    with allure.step("4. 删除订阅信息"):
-                        data = {
-                            "id": deletePa_id
-                        }
-                        self.send_delete_request(
-                            logged_session,
-                            f'/blockchain/master-slave/deletePa',
-                            json_data=data
-                        )

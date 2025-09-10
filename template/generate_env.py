@@ -19,18 +19,18 @@ class Environment(Enum):
 ENV_CONFIG = {
     Environment.TEST.value: {
         "test_environment": "测试环境",
-        "browser_version": "自研跟单1.4.2",
+        "browser_version": "跟单社区",
         "base_url": "https://uat.atcp.top/api",
-        "vps_url": "http://39.99.136.49:9001",
-        "db_host": "39.99.136.49",
+        # "vps_url": "http://39.99.136.49:9001",
+        "db_host": "39.99.146.95",
         "db_port": 3306,
     },
     Environment.UAT.value: {
         "test_environment": "UAT环境",
-        "browser_version": "自研跟单1.4.2",
+        "browser_version": "跟单社区",
         "base_url": "https://uat.atcp.top/api",
-        "vps_url": "https://39.101.181.190/vps",
-        "db_host": "39.99.241.16",
+        # "vps_url": "https://39.101.181.190/vps",
+        "db_host": "39.99.146.95",
         "db_port": 3306,
     }
 }
@@ -56,7 +56,7 @@ def generate_environment_xml(output_dir, env_value):
         add_param(environment, "Test Environment", env_config["test_environment"])
         add_param(environment, "Browser.Version", env_config["browser_version"])
         add_param(environment, "BASE_URL", env_config["base_url"])
-        add_param(environment, "VPS_URL", env_config["vps_url"])
+        # add_param(environment, "VPS_URL", env_config["vps_url"])
         add_param(environment, "DB Host", env_config["db_host"])
         add_param(environment, "DB Port", str(env_config["db_port"]))
 
