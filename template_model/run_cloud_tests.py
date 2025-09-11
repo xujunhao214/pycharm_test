@@ -16,10 +16,13 @@ def run_cloud_tests(env: str = "test"):
     report_dir = os.path.join(project_root, "report", "cloud_results")
     html_dir = os.path.join(project_root, "report", "cloud_html")
     os.makedirs(report_dir, exist_ok=True)
+    # 1. 新增：确保HTML报告目录存在（避免生成时目录不存在导致失败）
+    os.makedirs(html_dir, exist_ok=True)
 
     print(f"当前脚本绝对路径: {os.path.abspath(__file__)}")
     print(f"项目根目录: {project_root}")
     print(f"Cloud 结果目录: {report_dir}")
+    print(f"Cloud HTML报告目录: {html_dir}")  # 新增：打印HTML目录，便于Jenkins排查
 
     args = [
         "-s", "-v",
@@ -75,8 +78,24 @@ def run_cloud_tests(env: str = "test"):
         print(f"Cloud 环境文件生成失败: {str(e)}")
 
     try:
-        os.system(f"allure generate {report_dir} -o {html_dir} --clean")
+        # 2. 新增：用subprocess替代os.system，捕获Allure生成错误（关键！os.system不抛异常）
+        allure_cmd = f"allure generate {report_dir} -o {html_dir} --clean"
+        print(f"执行Allure生成命令: {allure_cmd}")  # 新增：打印命令，便于排查语法错误
+        result = subprocess.run(
+            allure_cmd,
+            shell=True,
+            check=True,  # 命令失败时抛异常
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        # 3. 新增：赋予HTML目录权限（Jenkins用户需读权限）
+        os.system(f"chmod -R 755 {html_dir}")  # 递归给所有文件/目录755权限
         print(f"Cloud独立报告: file://{os.path.abspath(html_dir)}/index.html")
+        print(f"Allure报告生成日志: {result.stdout}")  # 打印生成日志，确认成功
+    except subprocess.CalledProcessError as e:
+        # 新增：捕获Allure错误（如命令不存在、结果目录空）
+        print(f"Cloud独立报告生成失败！命令: {e.cmd}，错误信息: {e.stderr}")
     except Exception as e:
         print(f"Cloud独立报告生成失败: {str(e)}")
 
