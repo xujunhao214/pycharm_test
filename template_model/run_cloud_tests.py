@@ -1,41 +1,59 @@
-import pytest
+# 第一步：优先配置Python路径（解决ModuleNotFoundError核心问题）
 import sys
 import os
+
+# 获取当前脚本绝对路径和项目根目录
+current_script_path = os.path.abspath(__file__)
+project_root = os.path.dirname(current_script_path)
+# 将项目根目录加入Python搜索路径（确保能找到template_model包）
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+    print(f"[路径配置] 已将项目根目录加入Python路径：{project_root}")
+else:
+    print(f"[路径配置] 项目根目录已在Python路径中：{project_root}")
+
+# 第二步：导入其他依赖模块
+import pytest
 import subprocess
 import io
 
 
 def run_cloud_tests(env: str = "test"):
-    # 设置标准输出为utf-8编码（解决print中文乱码）
+    # 解决中文乱码问题
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-    current_script_path = os.path.abspath(__file__)
-    project_root = os.path.dirname(current_script_path)
-
-    report_dir = os.path.join(project_root, "report", "cloud_results")
-    html_dir = os.path.join(project_root, "report", "cloud_html")
+    # 定义报告目录（绝对路径，避免Jenkins路径混乱）
+    report_dir = os.path.join(project_root, "report", "cloud_results")  # Allure结果目录（.json文件）
+    html_dir = os.path.join(project_root, "report", "cloud_html")  # HTML报告目录
+    # 确保目录存在（避免生成报告时目录缺失）
     os.makedirs(report_dir, exist_ok=True)
-    # 1. 新增：确保HTML报告目录存在（避免生成时目录不存在导致失败）
     os.makedirs(html_dir, exist_ok=True)
 
-    print(f"当前脚本绝对路径: {os.path.abspath(__file__)}")
-    print(f"项目根目录: {project_root}")
-    print(f"Cloud 结果目录: {report_dir}")
-    print(f"Cloud HTML报告目录: {html_dir}")  # 新增：打印HTML目录，便于Jenkins排查
+    # 打印关键路径信息（便于Jenkins日志排查）
+    print("\n" + "=" * 50)
+    print(f"[环境信息] 当前脚本绝对路径：{current_script_path}")
+    print(f"[环境信息] 项目根目录：{project_root}")
+    print(f"[环境信息] Allure结果目录：{report_dir}")
+    print(f"[环境信息] HTML报告目录：{html_dir}")
+    print(f"[环境信息] 测试环境：{env}")
+    print("=" * 50 + "\n")
 
-    args = [
-        "-s", "-v",
+    # pytest执行参数（--alluredir指向结果目录，确保生成Allure数据）
+    pytest_args = [
+        "-s", "-v",  # 显示详细日志和打印输出
         f"--env={env}",
         f"--test-group=cloud",
-        f"--alluredir={report_dir}",
-        "--clean-alluredir",
+        f"--alluredir={report_dir}",  # Allure核心参数：结果输出路径
+        "--clean-alluredir",  # 每次执行前清空旧结果（避免脏数据）
 
+        # 测试用例文件（基于项目根目录的相对路径，已配置路径可直接找到）
         "test_cloudTrader/test_create.py",
         "test_cloudTrader/test_agent.py",
         "test_cloudTrader/test_delete.py",
-        # "test_cloudTrader/test_lianxi.py",
+        # "test_cloudTrader/test_lianxi.py",  # 按需启用
 
+        # 日志配置（输出到项目内Logs目录，便于追溯）
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
@@ -43,66 +61,77 @@ def run_cloud_tests(env: str = "test"):
         "--log-level=info"
     ]
 
+    # 执行pytest测试（捕获异常，避免脚本崩溃）
+    pytest_exit_code = 1
     try:
-        exit_code = pytest.main(args)
-        print(f"Cloud pytest 执行完成，退出码: {exit_code}")
+        print(f"[pytest执行] 开始执行测试，参数：{pytest_args}")
+        pytest_exit_code = pytest.main(pytest_args)
+        print(f"[pytest执行] 测试完成，退出码：{pytest_exit_code}")
     except Exception as e:
-        print(f"Cloud pytest 执行异常: {str(e)}")
-        exit_code = 1
+        error_msg = f"[pytest执行] 执行异常：{str(e)}"
+        print(f"[ERROR] {error_msg}")
+        # 写入日志（可选，便于后续排查）
+        with open("./Logs/cloud_pytest.log", "a", encoding="utf-8") as f:
+            f.write(f"{error_msg}\n")
+        pytest_exit_code = 1
 
-    # 生成环境文件（字节流处理+安全编码）
+    # 生成Allure环境信息文件（兼容原有逻辑）
     generate_env_cmd = [
-        "python", "generate_env.py",
-        "--env", env, "--output-dir", report_dir
+        sys.executable,  # 使用当前Python解释器（避免环境不一致）
+        os.path.join(project_root, "generate_env.py"),
+        "--env", env,
+        "--output-dir", report_dir
     ]
     try:
-        result = subprocess.run(
+        print(f"[环境文件] 生成Allure环境信息，命令：{generate_env_cmd}")
+        env_result = subprocess.run(
             generate_env_cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE  # 字节流模式
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8'
         )
-
-        # 解码stderr（多编码尝试+替换错误字符）
-        encodings = ['utf-8', 'gbk', sys.getdefaultencoding(), 'latin-1']
-        stderr_output = "无法解码的错误信息"
-        for encoding in encodings:
-            try:
-                stderr_output = result.stderr.decode(encoding, errors='replace')
-                break
-            except:
-                continue
-
-        # 打印时确保编码兼容
-        print(f"Cloud文件生成输出: {stderr_output.encode('utf-8', errors='replace').decode('utf-8')}")
+        if env_result.stdout:
+            print(f"[环境文件] 生成输出：{env_result.stdout.strip()}")
+        if env_result.stderr:
+            print(f"[环境文件] 警告信息：{env_result.stderr.strip()}")
     except Exception as e:
-        print(f"Cloud 环境文件生成失败: {str(e)}")
+        print(f"[WARNING] 环境文件生成失败（不影响核心报告）：{str(e)}")
 
+    # 生成Allure HTML报告（增强日志，便于定位失败原因）
     try:
-        # 2. 新增：用subprocess替代os.system，捕获Allure生成错误（关键！os.system不抛异常）
         allure_cmd = f"allure generate {report_dir} -o {html_dir} --clean"
-        print(f"执行Allure生成命令: {allure_cmd}")  # 新增：打印命令，便于排查语法错误
-        result = subprocess.run(
+        print(f"[Allure报告] 执行生成命令：{allure_cmd}")
+        # 用subprocess捕获完整输出（替代os.system，便于排查错误）
+        allure_result = subprocess.run(
             allure_cmd,
             shell=True,
-            check=True,  # 命令失败时抛异常
+            check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
+            encoding='utf-8'
         )
-        # 3. 新增：赋予HTML目录权限（Jenkins用户需读权限）
-        os.system(f"chmod -R 755 {html_dir}")  # 递归给所有文件/目录755权限
-        print(f"Cloud独立报告: file://{os.path.abspath(html_dir)}/index.html")
-        print(f"Allure报告生成日志: {result.stdout}")  # 打印生成日志，确认成功
+        # 赋予HTML目录权限（确保Jenkins能访问）
+        os.system(f"chmod -R 755 {html_dir}")
+        print(f"[Allure报告] 生成成功！日志：{allure_result.stdout.strip()}")
+        print(f"[Allure报告] 本地访问路径：file://{os.path.abspath(html_dir)}/index.html")
     except subprocess.CalledProcessError as e:
-        # 新增：捕获Allure错误（如命令不存在、结果目录空）
-        print(f"Cloud独立报告生成失败！命令: {e.cmd}，错误信息: {e.stderr}")
+        # 详细打印错误信息（如allure未安装、结果目录空）
+        print(f"[ERROR] Allure报告生成失败！")
+        print(f"[ERROR] 执行命令：{e.cmd}")
+        print(f"[ERROR] 标准输出：{e.stdout.strip()}")
+        print(f"[ERROR] 错误输出：{e.stderr.strip()}")
     except Exception as e:
-        print(f"Cloud独立报告生成失败: {str(e)}")
+        print(f"[ERROR] Allure报告生成异常：{str(e)}")
 
-    return exit_code, report_dir
+    # 返回最终退出码（Jenkins根据此码判断构建结果）
+    print(f"\n[执行完成] Cloud测试最终退出码：{pytest_exit_code}")
+    return pytest_exit_code, report_dir
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
+    # 接收命令行参数：第一个参数为测试环境（默认uat）
+    env = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1].strip() else "uat"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)
