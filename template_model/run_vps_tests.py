@@ -30,7 +30,7 @@ def run_vps_tests(env: str = "test"):
 
         # "test_vps/test_create.py",
         # "test_vps/test_lianxi.py",
-        # "test_vps/test_lianxi2.py",
+        "test_vps/test_lianxi2.py",
         # "test_vps/test_getAccountDataPage.py",
         # "test_vps/test_vps_ordersend.py",
         # "test_vps/test_vps_orderclose.py",
