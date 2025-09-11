@@ -39,7 +39,7 @@ class Test_create:
                     "column": "createTime",
                     "field": "id,,username,nickname,email,phone",
                     "pageNo": "1",
-                    "pageSize": "5",
+                    "pageSize": "20",
                     "order": "desc"
                 }
 
@@ -518,7 +518,7 @@ class Test_create:
                     "column": "createTime",
                     "field": "id,,username,nickname,email,phone",
                     "pageNo": "1",
-                    "pageSize": "5",
+                    "pageSize": "20",
                     "order": "desc"
                 }
 

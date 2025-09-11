@@ -15,20 +15,23 @@ class Test_create:
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        @allure.title("跟单管理-实时跟单-检查是否有订阅记录")
-        def test_api_getColumnsAndData2(self, var_manager, logged_session):
-            with allure.step("1. 发送请求"):
-                follow_account = var_manager.get_variable("follow_account")
+        @allure.title("账号管理-交易员账号-绑定交易员-用户列表-提取用户id")
+        def test_user_list(self, var_manager, logged_session):
+            target_email = "xujunhao@163.com"
+
+            with allure.step("1. 构造参数并发送GET请求"):
                 params = {
                     "_t": current_timestamp_seconds,
-                    "account": follow_account,
-                    "pageNo": 1,
-                    "pageSize": 100,
-                    "status": "NORMAL,AUDIT"
+                    "column": "createTime",
+                    "field": "id,,username,nickname,email,phone",
+                    "pageNo": "1",
+                    "pageSize": "20",
+                    "order": "desc"
                 }
+
                 response = self.send_get_request(
                     logged_session,
-                    f'/online/cgreport/api/getColumnsAndData/1560189381093109761',
+                    '/sys/user/list',
                     params=params
                 )
 
@@ -40,17 +43,29 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step("3. 判断是否有订阅信息"):
-                result = self.json_utils.extract(response.json(), "$.result.data.records[*]")
-                if not result:
-                    logging.info(f"无订阅信息")
-                    allure.attach(
-                        "无订阅信息",
-                        name="订阅信息"
-                    )
-                else:
-                    logging.info(f"有订阅信息")
-                    allure.attach(
-                        "有订阅信息",
-                        name="订阅信息"
-                    )
+            with allure.step(f"3. 提取用户ID"):
+                all_users = self.json_utils.extract(
+                    data=response.json(),
+                    expression="$.result.records[*]",
+                    multi_match=True,
+                    default=[]
+                )
+
+                user_id = None
+                if not all_users:
+                    assert False, f"提取用户列表失败：$.result.records为空，接口返回异常"
+
+                for user in all_users:
+                    user_email = user.get("email")
+                    if user_email and user_email.lower() == target_email.lower():
+                        user_id = user.get("id")
+                        break
+
+                assert user_id is not None, f"未找到email={target_email}的用户，请检查用户是否存在或分页参数"
+                logging.info(f"提取用户ID成功 | email={target_email} | user_id={user_id}")
+                var_manager.set_runtime_variable("trader_user_id", user_id)
+                allure.attach(
+                    name="用户ID",
+                    body=str(user_id),
+                    attachment_type=allure.attachment_type.TEXT
+                )

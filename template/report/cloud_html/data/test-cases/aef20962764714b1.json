@@ -1,0 +1,367 @@
+{
+  "uid" : "aef20962764714b1",
+  "name" : "账号管理-跟随者账号-绑定跟随者-用户列表-提取用户id",
+  "fullName" : "test_cloudTrader.test_create.Test_follow#test_user_list",
+  "historyId" : "95e988f7b9ae1ffc1bb1a94df27947ab",
+  "time" : {
+    "start" : 1757570332071,
+    "stop" : 1757570335646,
+    "duration" : 3575
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 未找到email=xujunhao@163.com的用户，请检查用户是否存在或分页参数\nassert None is not None",
+  "statusTrace" : "self = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001DFD7C52A00>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001DFD7C73C40>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001DFD7C35CA0>\n\n    @allure.title(\"账号管理-跟随者账号-绑定跟随者-用户列表-提取用户id\")\n    def test_user_list(self, var_manager, logged_session):\n        target_email = \"xujunhao@163.com\"\n        with allure.step(\"1. 构造参数并发送GET请求\"):\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"column\": \"createTime\",\n                \"field\": \"id,,username,nickname,email,phone\",\n                \"pageNo\": \"1\",\n                \"pageSize\": \"5\",\n                \"order\": \"desc\"\n            }\n    \n            response = self.send_get_request(\n                logged_session,\n                '/sys/user/list',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n    \n        with allure.step(f\"3. 提取用户ID\"):\n            all_users = self.json_utils.extract(\n                data=response.json(),\n                expression=\"$.result.records[*]\",\n                multi_match=True,\n                default=[]\n            )\n    \n            user_id = None\n            if not all_users:\n                assert False, f\"提取用户列表失败：$.result.records为空，接口返回异常\"\n    \n            for user in all_users:\n                user_email = user.get(\"email\")\n                if user_email and user_email.lower() == target_email.lower():\n                    user_id = user.get(\"id\")\n                    break\n    \n>           assert user_id is not None, f\"未找到email={target_email}的用户，请检查用户是否存在或分页参数\"\nE           AssertionError: 未找到email=xujunhao@163.com的用户，请检查用户是否存在或分页参数\nE           assert None is not None\n\ntest_cloudTrader\\test_create.py:557: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1757570273415,
+      "stop" : 1757570298719,
+      "duration" : 25304
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1757570272969,
+      "stop" : 1757570272969,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1757570272969,
+      "stop" : 1757570272969,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1757570272969,
+      "stop" : 1757570272969,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1757570273415,
+      "stop" : 1757570273415,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 未找到email=xujunhao@163.com的用户，请检查用户是否存在或分页参数\nassert None is not None",
+    "statusTrace" : "self = <template.test_cloudTrader.test_create.Test_create.Test_follow object at 0x000001DFD7C52A00>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001DFD7C73C40>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001DFD7C35CA0>\n\n    @allure.title(\"账号管理-跟随者账号-绑定跟随者-用户列表-提取用户id\")\n    def test_user_list(self, var_manager, logged_session):\n        target_email = \"xujunhao@163.com\"\n        with allure.step(\"1. 构造参数并发送GET请求\"):\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"column\": \"createTime\",\n                \"field\": \"id,,username,nickname,email,phone\",\n                \"pageNo\": \"1\",\n                \"pageSize\": \"5\",\n                \"order\": \"desc\"\n            }\n    \n            response = self.send_get_request(\n                logged_session,\n                '/sys/user/list',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n    \n        with allure.step(f\"3. 提取用户ID\"):\n            all_users = self.json_utils.extract(\n                data=response.json(),\n                expression=\"$.result.records[*]\",\n                multi_match=True,\n                default=[]\n            )\n    \n            user_id = None\n            if not all_users:\n                assert False, f\"提取用户列表失败：$.result.records为空，接口返回异常\"\n    \n            for user in all_users:\n                user_email = user.get(\"email\")\n                if user_email and user_email.lower() == target_email.lower():\n                    user_id = user.get(\"id\")\n                    break\n    \n>           assert user_id is not None, f\"未找到email={target_email}的用户，请检查用户是否存在或分页参数\"\nE           AssertionError: 未找到email=xujunhao@163.com的用户，请检查用户是否存在或分页参数\nE           assert None is not None\n\ntest_cloudTrader\\test_create.py:557: AssertionError",
+    "steps" : [ {
+      "name" : "1. 构造参数并发送GET请求",
+      "time" : {
+        "start" : 1757570332071,
+        "stop" : 1757570335636,
+        "duration" : 3565
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1757570332071,
+          "stop" : 1757570335636,
+          "duration" : 3565
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1757570332071,
+            "stop" : 1757570332072,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a2d931c677d2dfec",
+            "name" : "请求URL",
+            "source" : "a2d931c677d2dfec.txt",
+            "type" : "text/plain",
+            "size" : 14
+          }, {
+            "uid" : "ef07734f021adb5f",
+            "name" : "请求头",
+            "source" : "ef07734f021adb5f.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "7422fba628aa0a47",
+            "name" : "请求体（表单/文件）",
+            "source" : "7422fba628aa0a47.txt",
+            "type" : "text/plain",
+            "size" : 137
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1757570332632,
+            "stop" : 1757570332633,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "926493ccf37cf6a5",
+            "name" : "响应状态码",
+            "source" : "926493ccf37cf6a5.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "e357eff5d820943d",
+            "name" : "响应头",
+            "source" : "e357eff5d820943d.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "ec734e26351462de",
+            "name" : "响应体（JSON）",
+            "source" : "ec734e26351462de.json",
+            "type" : "application/json",
+            "size" : 8995
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 2,
+        "hasContent" : true,
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 3,
+      "hasContent" : true,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1757570335636,
+        "stop" : 1757570335641,
+        "duration" : 5
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.success",
+        "time" : {
+          "start" : 1757570335640,
+          "stop" : 1757570335641,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "56e70bc4a356ab31",
+          "name" : "请求URL",
+          "source" : "56e70bc4a356ab31.txt",
+          "type" : "text/plain",
+          "size" : 158
+        }, {
+          "uid" : "c80a3c594ee79494",
+          "name" : "预期值",
+          "source" : "c80a3c594ee79494.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "8eeb9f5bbdc2850d",
+          "name" : "实际值",
+          "source" : "8eeb9f5bbdc2850d.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "hasContent" : true,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "3. 提取用户ID",
+      "time" : {
+        "start" : 1757570335641,
+        "stop" : 1757570335646,
+        "duration" : 5
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 未找到email=xujunhao@163.com的用户，请检查用户是否存在或分页参数\nassert None is not None\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_create.py\", line 557, in test_user_list\n    assert user_id is not None, f\"未找到email={target_email}的用户，请检查用户是否存在或分页参数\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "ffb614fefa8416aa",
+      "name" : "log",
+      "source" : "ffb614fefa8416aa.txt",
+      "type" : "text/plain",
+      "size" : 246
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 7,
+    "hasContent" : true,
+    "attachmentsCount" : 10,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1757570411381,
+      "stop" : 1757570411381,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1757570411382,
+      "stop" : 1757570411383,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1757570411381,
+      "stop" : 1757570411381,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "创建跟随者账号"
+  }, {
+    "name" : "feature",
+    "value" : "账号管理"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_create"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "27212-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "aef20962764714b1.json",
+  "parameterValues" : [ ]
+}

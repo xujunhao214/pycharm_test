@@ -83,7 +83,7 @@ class Test_create:
                 "status": "",
                 "dividendTimeBegin": dividendTime,
                 "dividendTimeEnd": dividendTime,
-                "followerUser": "xujunhao4@163.com",
+                "followerUser": "xujunhao5@163.com",
                 "followerTa": "2088767546",
                 "dividendUser": ""
             },
@@ -95,7 +95,7 @@ class Test_create:
                 "status": "",
                 "dividendTimeBegin": dividendTime,
                 "dividendTimeEnd": dividendTime,
-                "followerUser": "xujunhao4@163.com",
+                "followerUser": "xujunhao5@163.com",
                 "followerTa": "2088767545",
                 "dividendUser": ""
             }
@@ -126,14 +126,14 @@ class Test_create:
         def test_agent_dividend_4level_usd(self, var_manager, logged_session, case_params):
             self._run_test(case_params, logged_session)
 
-        @allure.title("返佣管理-跟单分红-3级代理-AUD币种")
+        @allure.title("返佣管理-跟单分红-4级代理-AUD币种")
         @pytest.mark.parametrize("case_params", [case_params_list[5]])
-        def test_agent_dividend_3level_aud(self, var_manager, logged_session, case_params):
+        def test_agent_dividend_4level_aud(self, var_manager, logged_session, case_params):
             self._run_test(case_params, logged_session)
 
-        @allure.title("返佣管理-跟单分红-3级代理-JPY币种")
+        @allure.title("返佣管理-跟单分红-4级代理-JPY币种")
         @pytest.mark.parametrize("case_params", [case_params_list[6]])
-        def test_agent_dividend_3level_jpy(self, var_manager, logged_session, case_params):
+        def test_agent_dividend_4level_jpy(self, var_manager, logged_session, case_params):
             self._run_test(case_params, logged_session)
 
         # 公共测试逻辑（抽取复用）
@@ -231,7 +231,7 @@ class Test_create:
                             expected_value=float(periodP),
                             op=CompareOp.EQ,
                             message="币种的转换应符合预期",
-                            attachment_name=f"币种的转换详情,当前币种{currency}"
+                            attachment_name=f"币种的转换详情,当前币种{currency}，转换前：{periodProfit},转换后：{periodP}"
                         )
                     logging.info(f"币种的转换验证通过：{periodProfitUsd}")
 
