@@ -80,14 +80,12 @@ def run_test_script(script_path: str, env: str = "test") -> tuple:
     # 结果目录
     if "cloud" in script_name:
         report_dir = os.path.join(PROJECT_ROOT, "report", "cloud_results")
-    else:
-        report_dir = os.path.join(PROJECT_ROOT, "report", "vps_results")
 
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
     print(f"[{end_time.strftime('%H:%M:%S')}] {prefix} 执行完成 (耗时: {duration:.2f}秒)")
 
-    return (script_name, exit_code, report_dir)
+    return (script_name, exit_code)
 
 
 def merge_allure_reports(source_dirs: list, merged_dir: str):
@@ -111,7 +109,6 @@ def merge_allure_reports(source_dirs: list, merged_dir: str):
 
 def run_all_tests_parallel(env: str = "test"):
     test_scripts = [
-        "run_vps_tests.py",
         "run_cloud_tests.py"
     ]
 
