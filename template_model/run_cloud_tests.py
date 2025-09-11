@@ -1,6 +1,8 @@
-# 第一步：优先配置Python路径（解决ModuleNotFoundError核心问题）
 import sys
 import os
+import pytest
+import subprocess
+import io
 
 # 获取当前脚本绝对路径和项目根目录
 current_script_path = os.path.abspath(__file__)
@@ -11,11 +13,6 @@ if project_root not in sys.path:
     print(f"[路径配置] 已将项目根目录加入Python路径：{project_root}")
 else:
     print(f"[路径配置] 项目根目录已在Python路径中：{project_root}")
-
-# 第二步：导入其他依赖模块
-import pytest
-import subprocess
-import io
 
 
 def run_cloud_tests(env: str = "test"):
