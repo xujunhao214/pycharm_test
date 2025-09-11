@@ -8,7 +8,7 @@ import subprocess
 import numpy as np
 
 # ---------------------- 通用配置 ----------------------
-# ！！！修复1：TESSERACT_PATH 指向 tesseract 可执行文件，而非 tessdata 目录（之前的致命错误）
+# ！！！修复1：TESSERACT_PATH 指向 tesseract 可执行文件，而非 tessdata 目录
 TESSERACT_PATH = r'/www/python/tesseract-5.5.0/tesseract'  # 正确路径：可执行文件
 CAPTCHA_LENGTH = 4
 SUPPORTED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
