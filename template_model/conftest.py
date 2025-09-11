@@ -12,7 +12,6 @@ from template_model.commons.captcha import UniversalCaptchaRecognizer
 import xml.etree.ElementTree as ET
 from pytest import Config
 from template_model.commons.mfa_key import generate_code
-from template_model.commons.Encryption_and_decryption import aes_encrypt_str
 from template_model.commons.session import EnvironmentSession
 from template_model.commons.variable_manager import VariableManager
 from template_model.commons.test_tracker import TestResultTracker
