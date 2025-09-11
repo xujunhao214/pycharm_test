@@ -13,7 +13,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("VPS策略下单-开仓的场景校验")
 class TestVPSOrdersend:
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
@@ -481,7 +481,7 @@ class TestVPSOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景2：复制下单-手数范围0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -934,7 +934,7 @@ class TestVPSOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景3：复制下单-手数范围0.01-1，总手数10")
     @allure.description("""
     ### 测试说明
@@ -1369,7 +1369,7 @@ class TestVPSOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景4：复制下单-手数0.01-1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -1822,7 +1822,7 @@ class TestVPSOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景5：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
@@ -2281,7 +2281,7 @@ class TestVPSOrdersend:
     - 场景校验：手数范围>总手数>订单数量
     - 前置条件：有vps策略和vps跟单
       1. 进行开仓，手数范围0.6-1，总手数1
-      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于0.6
+      2. 校验手数范围限制是否生效，只有一个订单，订单手数大于等于0.6
       3. 进行平仓
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确，权重正确

@@ -521,7 +521,7 @@ class TestCloudFollowDirection:
 
         time.sleep(30)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景3：平仓的订单方向功能校验-buy sell")
     @allure.description("""
     ### 测试说明
@@ -1188,7 +1188,7 @@ class TestCloudOrderType:
 
             time.sleep(30)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景6：平仓的订单类型功能校验-外部订单")
     @allure.description("""
     ### 测试说明

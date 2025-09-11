@@ -21,8 +21,8 @@ class Test_create:
                 "limit": 20,
                 "type": "",
                 "status": "",
-                "dividendTimeBegin": "",
-                "dividendTimeEnd": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
                 "followerUser": "xujunhao@163.com",
                 "followerTa": "301388048",
                 "dividendUser": ""
@@ -33,8 +33,8 @@ class Test_create:
                 "limit": 20,
                 "type": "",
                 "status": "",
-                "dividendTimeBegin": "",
-                "dividendTimeEnd": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
                 "followerUser": "xujunhao2@163.com",
                 "followerTa": "301387254",
                 "dividendUser": ""
@@ -45,8 +45,8 @@ class Test_create:
                 "limit": 20,
                 "type": "",
                 "status": "",
-                "dividendTimeBegin": "",
-                "dividendTimeEnd": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
                 "followerUser": "xujunhao3@163.com",
                 "followerTa": "301388062",
                 "dividendUser": ""
@@ -57,8 +57,8 @@ class Test_create:
                 "limit": 20,
                 "type": "",
                 "status": "",
-                "dividendTimeBegin": "",
-                "dividendTimeEnd": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
                 "followerUser": "xujunhao4@163.com",
                 "followerTa": "301388316",
                 "dividendUser": ""
@@ -69,8 +69,8 @@ class Test_create:
                 "limit": 20,
                 "type": "",
                 "status": "",
-                "dividendTimeBegin": "",
-                "dividendTimeEnd": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
                 "followerUser": "xujunhao5@163.com",
                 "followerTa": "301388532",
                 "dividendUser": ""
@@ -81,10 +81,22 @@ class Test_create:
                 "limit": 20,
                 "type": "",
                 "status": "",
-                "dividendTimeBegin": "2025-09-09",
-                "dividendTimeEnd": "2025-09-09",
-                "followerUser": "1156160434@qq.com",
-                "followerTa": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
+                "followerUser": "xujunhao4@163.com",
+                "followerTa": "2088767546",
+                "dividendUser": ""
+            },
+            {
+                "_t": current_timestamp_seconds,
+                "page": 1,
+                "limit": 20,
+                "type": "",
+                "status": "",
+                "dividendTimeBegin": dividendTime,
+                "dividendTimeEnd": dividendTime,
+                "followerUser": "xujunhao4@163.com",
+                "followerTa": "2088767545",
                 "dividendUser": ""
             }
         ]
@@ -114,9 +126,14 @@ class Test_create:
         def test_agent_dividend_4level_usd(self, var_manager, logged_session, case_params):
             self._run_test(case_params, logged_session)
 
-        @allure.title("返佣管理-跟单分红-4级代理-AUD币种")
+        @allure.title("返佣管理-跟单分红-3级代理-AUD币种")
         @pytest.mark.parametrize("case_params", [case_params_list[5]])
-        def test_agent_dividend_4level_aud(self, var_manager, logged_session, case_params):
+        def test_agent_dividend_3level_aud(self, var_manager, logged_session, case_params):
+            self._run_test(case_params, logged_session)
+
+        @allure.title("返佣管理-跟单分红-3级代理-JPY币种")
+        @pytest.mark.parametrize("case_params", [case_params_list[6]])
+        def test_agent_dividend_3level_jpy(self, var_manager, logged_session, case_params):
             self._run_test(case_params, logged_session)
 
         # 公共测试逻辑（抽取复用）

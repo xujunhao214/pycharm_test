@@ -13,7 +13,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("云策略复制下单-开仓的场景校验")
 class TestCloudStrategyOrder:
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
@@ -284,7 +284,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景2：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -537,7 +537,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景3：复制下单-手数0.01-1，总订单10")
     @allure.description("""
     ### 测试说明
@@ -777,7 +777,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景4：复制下单-手数0.1-1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -929,7 +929,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-        # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+        # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
@@ -958,7 +958,7 @@ class TestCloudStrategyOrder:
                     "复制平仓响应msg字段应为success"
                 )
 
-        # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+        # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-复制下单平仓数据")
         def test_copy_verify_close_db(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -1033,7 +1033,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景5：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
@@ -1224,7 +1224,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
-        # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+        # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
@@ -1508,7 +1508,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景7：复制下单-手数范围0.6-1，总手数1")
     @allure.description("""
     ### 测试说明
@@ -1779,7 +1779,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"实际手数: {size}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景8：复制下单-手数范围0.3-1，总订单数量1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -2047,7 +2047,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f'订单详情总手数是：{total}')
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景9：交易分配-手数范围0.1-1，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -2093,7 +2093,7 @@ class TestCloudStrategyOrder:
                     "响应msg字段应为：总手数不能低于最低手数"
                 )
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景10：交易分配-手数范围0.1-1，总手数2")
     @allure.description("""
     ### 测试说明

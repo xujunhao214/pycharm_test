@@ -1263,7 +1263,7 @@ class TestCloudOrderType:
 
             time.sleep(30)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景6：平仓的订单类型功能校验-外部订单")
     @allure.description("""
     ### 测试说明

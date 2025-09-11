@@ -13,7 +13,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("云策略复制下单-开仓的场景校验")
 class TestCloudStrategyOrder:
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
@@ -240,7 +240,7 @@ class TestCloudStrategyOrder:
 
             time.sleep(25)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景2：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -455,7 +455,7 @@ class TestCloudStrategyOrder:
 
             time.sleep(25)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景3：复制下单-手数0.01-1，总订单10")
     @allure.description("""
     ### 测试说明
@@ -659,7 +659,7 @@ class TestCloudStrategyOrder:
 
             time.sleep(25)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景4：复制下单-手数0.1-1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -785,7 +785,7 @@ class TestCloudStrategyOrder:
                     f'总手数与订单详情不匹配，预期: 5, 实际: {size_sum}'
                 logger.info(f"复制下单总手数与订单详情校验通过: {size_sum}")
 
-        # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+        # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
@@ -814,7 +814,7 @@ class TestCloudStrategyOrder:
                     "复制平仓响应msg字段应为success"
                 )
 
-        # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+        # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-复制下单平仓数据")
         def test_copy_verify_close_db(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -878,7 +878,7 @@ class TestCloudStrategyOrder:
 
             time.sleep(25)
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景5：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
@@ -1051,7 +1051,7 @@ class TestCloudStrategyOrder:
                 # 校验订单数和下单总订单数
                 assert len(db_data) != 5, f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单"
 
-        # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+        # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""

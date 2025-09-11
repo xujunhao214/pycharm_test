@@ -406,11 +406,11 @@ class TestDelete_cloudTrader(APITestBase):
     def test_deleteTemplate(self, logged_session, var_manager):
         """测试删除用户接口"""
         # 1. 发送删除品种请求
-        cloudTrader_template_id2 = var_manager.get_variable("cloudTrader_template_id2")
+        cloudTrader_template_id1 = var_manager.get_variable("cloudTrader_template_id1")
         response = self.send_delete_request(
             logged_session,
             '/mascontrol/variety/deleteTemplate',
-            json_data=[cloudTrader_template_id2]
+            json_data=[cloudTrader_template_id1]
         )
 
         # 2. 验证响应状态码

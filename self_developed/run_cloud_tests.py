@@ -30,6 +30,7 @@ def run_cloud_tests(env: str = "test"):
 
         "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_lianxi.py",
+        # "test_cloudTrader/test_lianxi2.py",
         "test_cloudTrader/test_getAccountDataPage.py",
         "test_cloudTrader/test_cloudOrderSend.py",
         "test_cloudTrader/test_cloudOrderClose.py",

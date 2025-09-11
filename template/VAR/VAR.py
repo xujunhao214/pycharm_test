@@ -46,3 +46,6 @@ current_timestamp_ms = int(time.time() * 1000)
 
 # 生成当前时间的秒级时间戳
 current_timestamp_seconds = int(time.time())
+
+# 返佣管理-跟单分红查询日期
+dividendTime = "2025-09-11"

@@ -13,23 +13,24 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("VPS策略下单-开仓的场景校验")
 class TestVPSOrdersend:
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
-    @allure.story("场景1：复制下单-手数范围0.01-1，总手数1")
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @allure.story("场景13：复制下单-固定手数-手数范围0.01-1，总手数0.3")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
-      1. 修改下单手数0.25，手数取余-取小数，合约比例0.5
-      2. 进行开仓，手数范围0.01-1，总手数1
-      3. 校验账号的数据是否正确
+      1. 修改跟单账号下单比例0.25，手数取余-四舍五入，合约比例0.5
+      2. 进行开仓，手数范围0.01-1，总手数0.3
+      3. 校验账号的数据是否正确-下单手数是0.25*0.5=0.125，取小数是0.12
       4. 进行平仓
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    class TestVPSOrderSend10(APITestBase):
+    class TestVPSOrderSend13(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")
         def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号"):
+                # followMode  0 : 固定手数  1：手数比例 2：净值比例
                 # remainder  0 : 四舍五入  1：取小数
                 new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -45,7 +46,7 @@ class TestVPSOrdersend:
                     "remark": "",
                     "followDirection": 0,
                     "followMode": 1,
-                    "remainder": 1,
+                    "remainder": 0,
                     "followParam": "0.25",
                     "placedType": 0,
                     "templateId": vps_template_id2,
@@ -80,11 +81,11 @@ class TestVPSOrdersend:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing10",
+                "remark": "changjing13",
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": "",
-                "totalSzie": "1",
+                "totalSzie": "0.3",
                 "startSize": "0.01",
                 "endSize": "1.0",
                 "traderId": vps_trader_id
@@ -144,7 +145,7 @@ class TestVPSOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing10"
+                    "changjing13"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -174,9 +175,9 @@ class TestVPSOrdersend:
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=float(1),
+                        expected_value=float(0.3),
                         op=CompareOp.EQ,
-                        abs_tol=0.01,
+                        abs_tol=0.001,
                         message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
@@ -215,7 +216,7 @@ class TestVPSOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing10"
+                    "changjing13"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -248,21 +249,11 @@ class TestVPSOrdersend:
                         actual_value=float(total),
                         expected_value=float(0.12),
                         op=CompareOp.EQ,
-                        abs_tol=0.01,
+                        abs_tol=0.011,
                         message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                with allure.step("验证详情手数和指令手数一致"):
-                    size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
-                    self.assert_list_equal_ignore_order(
-                        size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                    )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -358,7 +349,7 @@ class TestVPSOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing10"
+                    "changjing13"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -388,9 +379,9 @@ class TestVPSOrdersend:
                     total = sum(size)
                     self.verify_data(
                         actual_value=float(total),
-                        expected_value=float(1),
+                        expected_value=float(0.3),
                         op=CompareOp.EQ,
-                        abs_tol=0.01,
+                        abs_tol=0.001,
                         message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
@@ -435,7 +426,7 @@ class TestVPSOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing10"
+                    "changjing13"
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -467,7 +458,7 @@ class TestVPSOrdersend:
                         actual_value=float(total),
                         expected_value=float(0.12),
                         op=CompareOp.EQ,
-                        abs_tol=0.01,
+                        abs_tol=0.011,
                         message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )

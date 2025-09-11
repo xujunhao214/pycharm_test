@@ -107,7 +107,7 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("vpsId", vpsId)
             print(f"成功提取 VPS ID: {vpsId}")
 
-            vpsname=db_data[0]["name"]
+            vpsname = db_data[0]["name"]
             var_manager.set_runtime_variable("vpsname", vpsname)
             print(f"成功提取vpsname: {vpsname}")
 
@@ -674,6 +674,61 @@ class TestCreate_cloudTrader(APITestBase):
             db_data = self.query_database(db_transaction, sql, params)
 
         with allure.step("2. 提取数据"):
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            cloudTrader_template_id1 = db_data[0]["template_id"]
+            logging.info(f"新增品种id: {cloudTrader_template_id1}")
+            var_manager.set_runtime_variable("cloudTrader_template_id1", cloudTrader_template_id1)
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("平台管理-品种管理-添加品种2")
+    def test_create_variety2(self, logged_session, var_manager):
+        # 1. 读取CSV文件
+        add_variety = var_manager.get_variable("add_variety")
+        with open(add_variety["csv_variety_path2"], 'rb') as f:
+            # print(f'打印输出文件：{add_variety["csv_variety_path"]}')
+            csv_file = f.read()
+
+        # 2. 构造请求参数
+        files = {
+            "file": ("品种数据50.csv", csv_file, "text/csv")
+        }
+        data = {
+            "templateName": add_variety["templateName4"]
+        }
+
+        # 1. 添加品种
+        response = self.send_post_request(
+            logged_session,
+            '/mascontrol/variety/addTemplate',
+            data=data,
+            files=files
+        )
+
+        # 2. 判断是否添加成功
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-品种管理-添加品种2")
+    def test_dbquery_variety2(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            add_variety = var_manager.get_variable("add_variety")
+            # 从变量中获取表名和模板名
+            template_name = add_variety["templateName4"]
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_variety WHERE template_name = %s",
+                (template_name,)
+            )
+
             # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")

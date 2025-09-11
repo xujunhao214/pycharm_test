@@ -13,7 +13,7 @@ SKIP_REASON = "该用例暂时跳过"
 
 @allure.feature("云策略复制下单-开仓的场景校验2")
 class TestCloudStrategyOrder:
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景7：复制下单-手数范围0.6-1，总手数1")
     @allure.description("""
     ### 测试说明
@@ -284,7 +284,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"实际手数: {size}")
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景8：复制下单-手数范围0.3-1，总订单数量1，总手数5")
     @allure.description("""
     ### 测试说明
@@ -552,7 +552,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f'订单详情总手数是：{total}')
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景9：交易分配-手数范围0.1-1，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -598,7 +598,7 @@ class TestCloudStrategyOrder:
                     "响应msg字段应为：总手数不能低于最低手数"
                 )
 
-    # @pytest.mark.skipif(condition=True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景10：交易分配-手数范围0.1-1，总手数2")
     @allure.description("""
     ### 测试说明

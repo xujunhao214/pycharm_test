@@ -676,9 +676,9 @@ class TestCreate_cloudTrader(APITestBase):
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            cloudTrader_template_id2 = db_data[0]["template_id"]
-            logging.info(f"新增品种id: {cloudTrader_template_id2}")
-            var_manager.set_runtime_variable("cloudTrader_template_id2", cloudTrader_template_id2)
+            cloudTrader_template_id1 = db_data[0]["template_id"]
+            logging.info(f"新增品种id: {cloudTrader_template_id1}")
+            var_manager.set_runtime_variable("cloudTrader_template_id1", cloudTrader_template_id1)
 
     @allure.title("云策略-云策略列表-新增云策略-手动下单")
     def test_create_handcloudMaster(self, var_manager, logged_session):
