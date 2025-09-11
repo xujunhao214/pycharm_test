@@ -463,15 +463,6 @@ def pytest_unconfigure(config):
         config.pluginmanager.unregister(tracker)
 
 
-@pytest.fixture
-def encrypted_password(request):
-    # 获取加密密钥
-    MT4_KEY = MT4
-    """夹具：对输入的明文密码进行加密"""
-    plain_password = PASSWORD
-    return aes_encrypt_str(plain_password, MT4_KEY)
-
-
 # ----------------------
 # 新增Redis fixture
 # ----------------------
