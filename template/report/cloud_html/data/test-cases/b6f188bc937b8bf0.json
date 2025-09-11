@@ -1,0 +1,605 @@
+{
+  "uid" : "b6f188bc937b8bf0",
+  "name" : "返佣管理-跟单分红-4级代理-JPY币种",
+  "fullName" : "test_cloudTrader.test_agent.Test_trader#test_agent_dividend_4level_jpy",
+  "historyId" : "34c7a0698fa1b41bfe05212297b80394",
+  "time" : {
+    "start" : 1757575027244,
+    "stop" : 1757575031075,
+    "duration" : 3831
+  },
+  "status" : "failed",
+  "statusMessage" : "Failed: 校验失败: 信号源分红金额应符合预期\n\n实际: 220.47\n操作: ==\n预期: 297.93",
+  "statusTrace" : "self = <template.test_cloudTrader.test_agent.Test_create.Test_trader object at 0x000002187F99A3A0>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000002187F99A400>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000002187F9BA1F0>\ncase_params = {'_t': 1757574998, 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'dividendUser': '', ...}\n\n    @allure.title(\"返佣管理-跟单分红-4级代理-JPY币种\")\n    @pytest.mark.parametrize(\"case_params\", [case_params_list[6]])\n    def test_agent_dividend_4level_jpy(self, var_manager, logged_session, case_params):\n>       self._run_test(case_params, logged_session)\n\ntest_cloudTrader\\test_agent.py:137: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntest_cloudTrader\\test_agent.py:385: in _run_test\n    self.verify_data(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_agent.Test_create.Test_trader object at 0x000002187F99A3A0>\nactual_value = 220.47, expected_value = 297.93, op = <CompareOp.EQ: '=='>\nmessage = '信号源分红金额应符合预期', attachment_name = '信号源分红金额详情'\nattachment_type = 'text/plain', use_isclose = True, rel_tol = 0.01, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                pytest.fail(\n                    f\"校验类型错误: {str(e)}\\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}\")\n    \n            # 生成详细提示信息（包含容差参数）\n            detail_msg = (\n                f\"\\n实际: {actual_value}\\n\"\n                f\"操作: {op.value}\\n\"\n                f\"预期: {expected_value}\\n\"\n            )\n    \n            # 添加allure.attach，将信息写入报告\n            allure.attach(\n                detail_msg,  # 附件内容\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n>               pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\nE               Failed: 校验失败: 信号源分红金额应符合预期\nE               \nE               实际: 220.47\nE               操作: ==\nE               预期: 297.93\n\ncommons\\api_base.py:1364: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1757574998585,
+      "stop" : 1757574998585,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1757574998584,
+      "stop" : 1757574998585,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1757574998585,
+      "stop" : 1757574998585,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1757574998585,
+      "stop" : 1757575000895,
+      "duration" : 2310
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1757574998585,
+      "stop" : 1757574998585,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "Failed: 校验失败: 信号源分红金额应符合预期\n\n实际: 220.47\n操作: ==\n预期: 297.93",
+    "statusTrace" : "self = <template.test_cloudTrader.test_agent.Test_create.Test_trader object at 0x000002187F99A3A0>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000002187F99A400>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000002187F9BA1F0>\ncase_params = {'_t': 1757574998, 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'dividendUser': '', ...}\n\n    @allure.title(\"返佣管理-跟单分红-4级代理-JPY币种\")\n    @pytest.mark.parametrize(\"case_params\", [case_params_list[6]])\n    def test_agent_dividend_4level_jpy(self, var_manager, logged_session, case_params):\n>       self._run_test(case_params, logged_session)\n\ntest_cloudTrader\\test_agent.py:137: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntest_cloudTrader\\test_agent.py:385: in _run_test\n    self.verify_data(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_agent.Test_create.Test_trader object at 0x000002187F99A3A0>\nactual_value = 220.47, expected_value = 297.93, op = <CompareOp.EQ: '=='>\nmessage = '信号源分红金额应符合预期', attachment_name = '信号源分红金额详情'\nattachment_type = 'text/plain', use_isclose = True, rel_tol = 0.01, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                pytest.fail(\n                    f\"校验类型错误: {str(e)}\\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}\")\n    \n            # 生成详细提示信息（包含容差参数）\n            detail_msg = (\n                f\"\\n实际: {actual_value}\\n\"\n                f\"操作: {op.value}\\n\"\n                f\"预期: {expected_value}\\n\"\n            )\n    \n            # 添加allure.attach，将信息写入报告\n            allure.attach(\n                detail_msg,  # 附件内容\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n>               pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\nE               Failed: 校验失败: 信号源分红金额应符合预期\nE               \nE               实际: 220.47\nE               操作: ==\nE               预期: 297.93\n\ncommons\\api_base.py:1364: Failed",
+    "steps" : [ {
+      "name" : "1. 构造参数并发送GET请求",
+      "time" : {
+        "start" : 1757575027244,
+        "stop" : 1757575030944,
+        "duration" : 3700
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1757575027244,
+          "stop" : 1757575030944,
+          "duration" : 3700
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1757575027244,
+            "stop" : 1757575027245,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9d65a2601b8dff05",
+            "name" : "请求URL",
+            "source" : "9d65a2601b8dff05.txt",
+            "type" : "text/plain",
+            "size" : 30
+          }, {
+            "uid" : "4511d291cee14849",
+            "name" : "请求头",
+            "source" : "4511d291cee14849.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "df171d9210a484a5",
+            "name" : "请求体（表单/文件）",
+            "source" : "df171d9210a484a5.txt",
+            "type" : "text/plain",
+            "size" : 201
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1757575027930,
+            "stop" : 1757575027935,
+            "duration" : 5
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "1d07b23fe727277b",
+            "name" : "响应状态码",
+            "source" : "1d07b23fe727277b.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "a78353ce14ddca1a",
+            "name" : "响应头",
+            "source" : "a78353ce14ddca1a.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "bf80e0a5b02bc736",
+            "name" : "响应体（JSON）",
+            "source" : "bf80e0a5b02bc736.json",
+            "type" : "application/json",
+            "size" : 15925
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 6,
+        "stepsCount" : 2,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 6,
+      "stepsCount" : 3,
+      "hasContent" : true
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1757575030944,
+        "stop" : 1757575030951,
+        "duration" : 7
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.success",
+        "time" : {
+          "start" : 1757575030950,
+          "stop" : 1757575030951,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "8c953dea3087b19a",
+          "name" : "请求URL",
+          "source" : "8c953dea3087b19a.txt",
+          "type" : "text/plain",
+          "size" : 210
+        }, {
+          "uid" : "f4b56820c53d795c",
+          "name" : "预期值",
+          "source" : "f4b56820c53d795c.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "7c1e55e2239f153d",
+          "name" : "实际值",
+          "source" : "7c1e55e2239f153d.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3,
+      "stepsCount" : 1,
+      "hasContent" : true
+    }, {
+      "name" : "3. 数据校验",
+      "time" : {
+        "start" : 1757575030962,
+        "stop" : 1757575031075,
+        "duration" : 113
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 校验失败: 信号源分红金额应符合预期\n\n实际: 220.47\n操作: ==\n预期: 297.93\n\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_agent.py\", line 385, in _run_test\n    self.verify_data(\n  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 1364, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "验证期间盈利是否正确",
+        "time" : {
+          "start" : 1757575031011,
+          "stop" : 1757575031012,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 期间盈利应符合预期",
+          "time" : {
+            "start" : 1757575031011,
+            "stop" : 1757575031012,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c66d0d4ba5f873c6",
+            "name" : "期间盈利详情",
+            "source" : "c66d0d4ba5f873c6.attach",
+            "type" : "text/plain",
+            "size" : 46
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 1,
+        "hasContent" : true
+      }, {
+        "name" : "验证币种的转换是否正确",
+        "time" : {
+          "start" : 1757575031012,
+          "stop" : 1757575031013,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 币种的转换应符合预期",
+          "time" : {
+            "start" : 1757575031012,
+            "stop" : 1757575031013,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "5f0f907122218cf3",
+            "name" : "币种的转换详情,当前币种JPY，转换前：88670.88,转换后：595.87",
+            "source" : "5f0f907122218cf3.attach",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 1,
+        "hasContent" : true
+      }, {
+        "name" : "验证预计分红金额是否正确",
+        "time" : {
+          "start" : 1757575031013,
+          "stop" : 1757575031024,
+          "duration" : 11
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 预计分红金额应符合预期",
+          "time" : {
+            "start" : 1757575031023,
+            "stop" : 1757575031024,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4aaf5b345ab42efd",
+            "name" : "预计分红金额详情",
+            "source" : "4aaf5b345ab42efd.attach",
+            "type" : "text/plain",
+            "size" : 41
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 1,
+        "hasContent" : true
+      }, {
+        "name" : "验证分红金额是否正确",
+        "time" : {
+          "start" : 1757575031032,
+          "stop" : 1757575031033,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "1b11ecce0d51a51c",
+          "name" : "text/plain",
+          "source" : "1b11ecce0d51a51c.attach",
+          "type" : "text/plain",
+          "size" : 21
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 0,
+        "hasContent" : true
+      }, {
+        "name" : "验证分红金额是否正确",
+        "time" : {
+          "start" : 1757575031043,
+          "stop" : 1757575031044,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "4538247366b57c14",
+          "name" : "text/plain",
+          "source" : "4538247366b57c14.attach",
+          "type" : "text/plain",
+          "size" : 21
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 0,
+        "hasContent" : true
+      }, {
+        "name" : "验证分红金额是否正确",
+        "time" : {
+          "start" : 1757575031051,
+          "stop" : 1757575031053,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "50d1878f92fe4a90",
+          "name" : "text/plain",
+          "source" : "50d1878f92fe4a90.attach",
+          "type" : "text/plain",
+          "size" : 21
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 0,
+        "hasContent" : true
+      }, {
+        "name" : "验证分红金额是否正确",
+        "time" : {
+          "start" : 1757575031060,
+          "stop" : 1757575031061,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "b8b25d9b1482bcc9",
+          "name" : "text/plain",
+          "source" : "b8b25d9b1482bcc9.attach",
+          "type" : "text/plain",
+          "size" : 21
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 0,
+        "hasContent" : true
+      }, {
+        "name" : "验证信号源分红金额是否正确",
+        "time" : {
+          "start" : 1757575031061,
+          "stop" : 1757575031075,
+          "duration" : 14
+        },
+        "status" : "failed",
+        "statusMessage" : "Failed: 校验失败: 信号源分红金额应符合预期\n\n实际: 220.47\n操作: ==\n预期: 297.93\n\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_agent.py\", line 385, in _run_test\n    self.verify_data(\n  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 1364, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+        "steps" : [ {
+          "name" : "校验: 信号源分红金额应符合预期",
+          "time" : {
+            "start" : 1757575031073,
+            "stop" : 1757575031074,
+            "duration" : 1
+          },
+          "status" : "failed",
+          "statusMessage" : "Failed: 校验失败: 信号源分红金额应符合预期\n\n实际: 220.47\n操作: ==\n预期: 297.93\n\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 1364, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "1a03419c986e5141",
+            "name" : "信号源分红金额详情",
+            "source" : "1a03419c986e5141.attach",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : true,
+          "attachmentsCount" : 1,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1,
+        "stepsCount" : 1,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 8,
+      "stepsCount" : 12,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "4f704511c2622df2",
+      "name" : "slaveRecords排序对比",
+      "source" : "4f704511c2622df2.txt",
+      "type" : "text/plain",
+      "size" : 53
+    }, {
+      "uid" : "99858e136da2302d",
+      "name" : "log",
+      "source" : "99858e136da2302d.txt",
+      "type" : "text/plain",
+      "size" : 1479
+    } ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 19,
+    "stepsCount" : 19,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1757575031112,
+      "stop" : 1757575031112,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1757575031110,
+      "stop" : 1757575031111,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1757575031113,
+      "stop" : 1757575031113,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "返佣管理-跟单分红"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_agent"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_create"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "34960-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_agent"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ {
+    "name" : "case_params",
+    "value" : "{'_t': 1757574998, 'page': 1, 'limit': 20, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao5@163.com', 'followerTa': '2088767545', 'dividendUser': ''}"
+  } ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "b6f188bc937b8bf0.json",
+  "parameterValues" : [ "{'_t': 1757574998, 'page': 1, 'limit': 20, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao5@163.com', 'followerTa': '2088767545', 'dividendUser': ''}" ]
+}
