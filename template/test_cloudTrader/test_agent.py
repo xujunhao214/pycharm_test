@@ -2,6 +2,7 @@ import time
 from template.commons.api_base import APITestBase, CompareOp
 import allure
 import logging
+import datetime
 import pytest
 from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
@@ -152,10 +153,55 @@ class Test_create:
                     True,
                     "响应success字段应为true"
                 )
+            # 先将response转为json对象
+            response = response.json()
+
+            # -------------------------- 外层排序：result.list 按 endEquityTime 倒序 --------------------------
+            # 提取外层列表 result.list（兼容空列表场景，避免后续报错）
+            outer_list = response.get("result", {}).get("list", [])
+            if not outer_list:
+                logging.warning("响应中 result.list 为空，无需执行任何排序")
+                allure.attach("响应 result.list 为空，跳过所有排序", "排序日志", allure.attachment_type.TEXT)
+                return response  # 返回原响应，无排序操作
+
+            def outer_sort_key(outer_item):
+                """外层排序的key生成函数：解析endEquityTime为时间戳，用于倒序"""
+                end_time_str = outer_item.get("endEquityTime", "")  # 外层list元素的endEquityTime
+                if not end_time_str:
+                    # 无时间字段时，默认用极小时间戳（排最后）
+                    return datetime.datetime(1970, 1, 1).timestamp()
+                try:
+                    # 解析时间字符串（格式："2025-09-11 16:10:00"）为datetime对象
+                    end_time = datetime.strptime(end_time_str, "%Y-%m-%d %H:%M:%S")
+                    # 返回时间戳（正数值，倒序时用reverse=True）
+                    return end_time.timestamp()
+                except ValueError:
+                    # 时间格式错误时，默认用极小时间戳（排最后）
+                    logging.warning(f"外层list元素时间格式错误：endEquityTime={end_time_str}，将排最后")
+                    return datetime.datetime(1970, 1, 1).timestamp()
+
+            # 执行外层排序（reverse=True 表示倒序，最新时间在前）
+            sorted_outer_list = sorted(outer_list, key=outer_sort_key, reverse=True)
+            # 将排序后的外层列表放回响应json，覆盖原list
+            response["result"]["list"] = sorted_outer_list
+
+            # 打印外层排序日志（便于调试）
+            outer_before_sort = [(item.get("id"), item.get("endEquityTime")) for item in outer_list]
+            outer_after_sort = [(item.get("id"), item.get("endEquityTime")) for item in sorted_outer_list]
+            logging.info(f"外层 result.list 排序完成（按endEquityTime倒序）："
+                         f"原顺序(Id, endEquityTime)={outer_before_sort}, "
+                         f"排序后(Id, endEquityTime)={outer_after_sort}")
+            # 附加外层排序对比到Allure报告
+            allure.attach(
+                f"外层排序前(Id, endEquityTime)：{outer_before_sort}\n"
+                f"外层排序后(Id, endEquityTime)：{outer_after_sort}",
+                "外层 result.list 排序对比",
+                allure.attachment_type.TEXT
+            )
 
             # -------------------------- 新增：slaveRecords排序逻辑 --------------------------
             # 1. 先将response转为json对象
-            response = response.json()
+            # response = response.json()
             # 2. 提取slaveRecords列表（兼容空列表场景）
             slave_records = self.json_utils.extract(response, "$.result.list[0].slaveRecords") or []
             # 3. 按dividendType排序：0在前，1在后（核心排序逻辑）
