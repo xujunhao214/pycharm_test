@@ -41,3 +41,29 @@ class JsonPathUtils:
         """断言JSONPath表达式提取的值包含预期值"""
         actual = self.extract(data, expression)
         assert expected in actual, f"断言失败：'{actual}' 不包含 '{expected}'"
+
+    # 新增：断言提取的值为None（未找到或显式为None）
+    def assert_is_none(self, data: dict, expression: str) -> None:
+        actual = self.extract(data, expression)
+        assert actual is None, f"断言失败：实际值 '{actual}' 不为None"
+
+    # 新增：断言提取的值是为空列表（[]）
+    def assert_empty_list(self, data: dict, expression: str) -> None:
+        actual = self.extract(data, expression)
+        assert isinstance(actual, list) and len(actual) == 0, \
+            f"断言失败：实际值 '{actual}' 不是空列表"
+
+    # 新增：断言提取的值是为空字典（{}）
+    def assert_empty_dict(self, data: dict, expression: str) -> None:
+        actual = self.extract(data, expression)
+        assert isinstance(actual, dict) and len(actual) == 0, \
+            f"断言失败：实际值 '{actual}' 不是空字典"
+
+    # 新增：断言提取的值为空（None、空列表、空字典、空字符串）
+    def assert_empty(self, data: dict, expression: str) -> None:
+        """通用空值断言：匹配 None、[]、{}、"" 等空值场景"""
+        actual = self.extract(data, expression)
+        if isinstance(actual, (list, dict, str)):
+            assert len(actual) == 0, f"断言失败：实际值 '{actual}' 不为空"
+        else:
+            assert actual is None, f"断言失败：实际值 '{actual}' 不为空"
