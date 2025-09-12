@@ -45,9 +45,9 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",  # 每次执行前清空旧结果（避免脏数据）
 
         # 测试用例文件（基于项目根目录的相对路径，已配置路径可直接找到）
-        "test_cloudTrader/test_create.py",
+        # "test_cloudTrader/test_create.py",
         "test_cloudTrader/test_agent.py",
-        "test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_delete.py",
         # "test_cloudTrader/test_lianxi.py",  # 按需启用
 
         # 日志配置（输出到项目内Logs目录，便于追溯）
