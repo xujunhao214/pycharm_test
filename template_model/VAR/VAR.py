@@ -1,10 +1,6 @@
 import datetime
 import time
 
-# 加密密钥
-MT4 = "FOLLOWERSHIP4KEY"
-PASSWORD = "Test123456"
-
 # 飞书机器人WEBHOOK_URL
 WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
 
@@ -35,11 +31,8 @@ TIMEZONE_OFFSET = 5  # 时区偏移量（小时）
 # api基类执行完等待时间
 SLEEP_SECONDS = 3
 
-# MFA登录生成新的验证码秘钥
-MFA_SECRET_KEY = "APVHUYXFWW4DZWT7L4HI3EO4Y7VY4J2VEXE4JGZNAVCYRSAOVNQQ"
-
 # 项目名称
-PROJECT_NAME = "自研跟单V1.4.2"
+PROJECT_NAME = "跟单社区"
 
 # 生成当前时间的毫秒级时间戳
 current_timestamp_ms = int(time.time() * 1000)
