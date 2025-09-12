@@ -7,8 +7,7 @@ import subprocess
 import numpy as np
 
 # ---------------------- 通用配置 ----------------------
-# TESSERACT_PATH = r'D:\test_tools\Tesseract-OCR\tesseract.exe'  # 替换为你的Tesseract路径
-TESSERACT_PATH = r'/www/python/tesseract-5.5.0/tessdata'  # 替换为你的Tesseract路径
+TESSERACT_PATH = r'D:\test_tools\Tesseract-OCR\tesseract.exe'  # 替换为你的Tesseract路径
 CAPTCHA_LENGTH = 4
 SUPPORTED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 # 固定保存路径配置
