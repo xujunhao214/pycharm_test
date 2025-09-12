@@ -42,3 +42,6 @@ current_timestamp_seconds = int(time.time())
 
 # 返佣管理-跟单分红查询日期
 dividendTime = "2025-09-11"
+
+# 跟单社区
+URL_TOP = "https://dev.lgcopytrade.top/api"

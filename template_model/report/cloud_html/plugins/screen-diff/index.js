@@ -47,12 +47,12 @@
             'click [name="screen-diff-type"]': 'onDiffTypeChange',
             'mousemove .screen-diff__overlay': 'onOverlayMove'
         },
-        template_modelContext: function () {
+        templateContext: function () {
             return {
                 diffType: settings.get('diffType')
             }
         },
-        template_model: function (data) {
+        template: function (data) {
             var testType = data.labels.filter(function (label) {
                 return label.name === 'testType'
             })[0];

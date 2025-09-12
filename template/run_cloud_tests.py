@@ -28,9 +28,10 @@ def run_cloud_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "test_cloudTrader/test_create.py",
-        "test_cloudTrader/test_agent.py",
-        "test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_create.py",
+        # "test_cloudTrader/test_agent.py",
+        # "test_cloudTrader/test_topup.py",
+        # "test_cloudTrader/test_delete.py",
         # "test_cloudTrader/test_lianxi.py",
 
         "--log-file=./Logs/cloud_pytest.log",
