@@ -19,7 +19,7 @@ class Test_create:
         def test_dbbchain_trader(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库"):
                 sql = f"SELECT id,name FROM bchain_trader_broker WHERE name = %s"
-                params = ("CPT Markets",)
+                params = ("ACY",)
                 db_data = self.query_database(
                     db_transaction=db_transaction,
                     sql=sql,
@@ -86,7 +86,7 @@ class Test_create:
 
         @allure.title("账号管理-交易员账号-绑定交易员-提取服务器ID")
         def test_api_getData1(self, var_manager, logged_session):
-            target_server = "CPTMarkets-Demo"
+            target_server = "ACYSecurities-Demo"
             trader_broker_id = var_manager.get_variable("trader_broker_id")
             with allure.step("1. 发送请求"):
                 params = {
@@ -457,7 +457,7 @@ class Test_create:
                 data = {
                     "id": trader_pass_id,
                     "policy_name": valid_strategy_name,
-                    "virtual_server_name": "CPT Markets",
+                    "virtual_server_name": "ACY",
                     "virtual_status": 0,
                     "strategy_introduce_cn": "中文",
                     "strategy_introduce_ch": "繁体",
@@ -500,7 +500,7 @@ class Test_create:
         def test_dbbchain_trader(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库"):
                 sql = f"SELECT id,name FROM bchain_trader_broker WHERE name = %s"
-                params = ("CPT Markets",)
+                params = ("ACY",)
                 db_data = self.query_database(
                     db_transaction=db_transaction,
                     sql=sql,
@@ -566,7 +566,7 @@ class Test_create:
 
         @allure.title("账号管理-跟随者账号-绑定跟随者-提取服务器ID")
         def test_api_getData1(self, var_manager, logged_session):
-            target_server = "CPTMarkets-Demo"
+            target_server = "ACYSecurities-Demo"
             follow_brokerId = var_manager.get_variable("follow_brokerId")
             with allure.step("1. 发送请求"):
                 params = {

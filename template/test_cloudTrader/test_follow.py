@@ -2,6 +2,7 @@ import time
 from template.commons.api_base import APITestBase, CompareOp
 import allure
 import logging
+import json
 import pytest
 from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
