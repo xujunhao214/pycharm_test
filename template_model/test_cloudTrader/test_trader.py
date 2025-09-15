@@ -2,6 +2,7 @@ import time
 from template_model.commons.api_base import APITestBase, CompareOp
 import allure
 import logging
+import json
 import pytest
 from template_model.VAR.VAR import *
 from template_model.commons.jsonpath_utils import *
@@ -10,12 +11,12 @@ from template_model.commons.random_generator import *
 
 @allure.feature("账号管理")
 class Test_create:
-    @allure.story("交易员账号")
+    @allure.story("交易员账户查询校验")
     class Test_trader(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("绑定时间查询")
         def test_query_create_time(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -50,6 +51,18 @@ class Test_create:
                     "$.result.records[*].recommenders_user_name",
                     default=[],
                     multi_match=True
+                )
+
+                if not create_time_list:
+                    attach_body = f"绑定时间查询-开始时间：{ONE_HOUR_AGO}，返回的create_time列表为空（暂无数据）"
+                else:
+                    attach_body = f"绑定时间查询-开始时间：{ONE_HOUR_AGO}，返回 {len(create_time_list)} 条记录，create_time值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(create_time_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{ONE_HOUR_AGO}查询结果",
+                    attachment_type="text/plain"
                 )
 
                 for idx, create_time in enumerate(create_time_list):
@@ -129,26 +142,36 @@ class Test_create:
                     params=params
                 )
 
-            with allure.step("2. 返回校验"):
-                self.assert_json_value(
-                    response,
-                    "$.success",
-                    True,
-                    "响应success字段应为true"
-                )
-
             with allure.step("3. 查询校验"):
-                user_id_query = self.json_utils.extract(response.json(), "$.result.records[0].user_id")
                 update_by = self.json_utils.extract(response.json(), "$.result.records[0].update_by")
 
-                self.verify_data(
-                    actual_value=user_id_query,
-                    expected_value=trader_user_id,
-                    op=CompareOp.EQ,
-                    use_isclose=False,
-                    message="查询结果符合预期",
-                    attachment_name=f"查询结果,用户是：{update_by}"
+                user_id_query_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[*].user_id",
+                    default=[],
+                    multi_match=True
                 )
+
+                if not user_id_query_list:
+                    attach_body = f"用户查询：{trader_user_id}，返回的user_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"用户查询：{trader_user_id}，返回 {len(user_id_query_list)} 条记录，user_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(user_id_query_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{trader_user_id}查询结果",
+                    attachment_type="text/plain"
+                )
+                for idx, user_id_query in enumerate(user_id_query_list):
+                    self.verify_data(
+                        actual_value=user_id_query,
+                        expected_value=trader_user_id,
+                        op=CompareOp.EQ,
+                        use_isclose=False,
+                        message="查询结果符合预期",
+                        attachment_name=f"查询结果,用户是：{update_by}"
+                    )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("策略名称查询-存在结果")
@@ -227,26 +250,45 @@ class Test_create:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("状态查询")
-        def test_query_status(self, var_manager, logged_session):
-            with allure.step("1. 发送请求"):
+        # 定义所有需要测试的状态（作为参数化数据源）
+        STATUS_PARAMS = [
+            ("VERIFICATION", "连接中"),
+            ("PASS", "已连接"),
+            ("ERROR", "密码错误"),
+            ("PENDING", "审核中"),
+            ("UNBIND", "已解绑"),
+            ("REFUSE", "已拒绝")
+        ]
+
+        # 使用parametrize参数化：每个状态生成一个独立用例
+        @pytest.mark.parametrize("status, status_desc", STATUS_PARAMS)
+        @allure.title("状态查询：{status_desc}（{status}）")  # 标题动态显示状态信息
+        def test_query_status(self, var_manager, logged_session, status, status_desc):
+            """按状态拆分的独立用例：查询指定状态并校验结果"""
+            # 用例级附件：当前状态说明
+            allure.attach(
+                body=f"状态编码：{status}\n状态描述：{status_desc}",
+                name=f"{status_desc}状态说明",
+                attachment_type="text/plain"
+            )
+
+            with allure.step(f"1. 发送请求：查询[{status_desc}]状态（{status}）"):
                 params = {
                     "_t": current_timestamp_seconds,
-                    "status": "PASS",
+                    "status": status,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
                     "pageSize": 20,
-                    "type": "MASTER_REAL"
+                    "type": "SLAVE_REAL"
                 }
                 response = self.send_get_request(
                     logged_session,
-                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',
+                    '/online/cgform/api/getData/2c9a814a81d3a91b0181e04a36e00001',
                     params=params
                 )
 
-            with allure.step("2. 返回校验"):
+            with allure.step("2. 基础响应校验：success = True"):
                 self.assert_json_value(
                     response,
                     "$.success",
@@ -254,22 +296,36 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step("3. 查询校验"):
+            with allure.step(f"3. 业务校验：返回记录的status应为{status}"):
                 status_list = self.json_utils.extract(
                     response.json(),
                     "$.result.records[*].status",
-                    default=[],  # 若未找到，默认返回空列表
-                    multi_match=True  # 强制返回列表（即使只有一个结果）
+                    default=[],
+                    multi_match=True
                 )
 
-                for idx, status in enumerate(status_list):
+                # 生成查询结果附件
+                if not status_list:
+                    attach_body = f"状态查询[{status_desc}]：返回的records为空列表（暂无数据）"
+                else:
+                    attach_body = f"状态查询[{status_desc}]，返回 {len(status_list)} 条记录，status值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(status_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{status_desc}状态查询结果",
+                    attachment_type="text/plain"
+                )
+
+                # 校验每条记录的status
+                for idx, actual_status in enumerate(status_list):
                     self.verify_data(
-                        actual_value=status,
-                        expected_value="PASS",
+                        actual_value=actual_status,
+                        expected_value=status,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的status符合预期",
-                        attachment_name=f"第 {idx + 1} 条记录的status校验"
+                        message=f"第 {idx + 1} 条记录的status应为{status}",
+                        attachment_name=f"{status_desc}状态第 {idx + 1} 条记录校验"
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
@@ -384,6 +440,18 @@ class Test_create:
                     multi_match=True
                 )
 
+                if not broker_id_list:
+                    attach_body = f"经纪商查询：{trader_broker_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"经纪商查询：{trader_broker_id}，返回 {len(broker_id_list)} 条记录，recommenders_user_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(broker_id_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{trader_broker_id}查询结果",
+                    attachment_type="text/plain"
+                )
+
                 for idx, broker_id in enumerate(broker_id_list):
                     self.verify_data(
                         actual_value=broker_id,
@@ -431,6 +499,18 @@ class Test_create:
                     multi_match=True
                 )
 
+                if not server_id_list:
+                    attach_body = f"服务器查询：{trader_server_id}，返回的server_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"服务器：查询{trader_server_id}，返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(server_id_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{trader_server_id}查询结果",
+                    attachment_type="text/plain"
+                )
+
                 for idx, server_id in enumerate(server_id_list):
                     self.verify_data(
                         actual_value=server_id,
@@ -445,9 +525,10 @@ class Test_create:
         @allure.title("虚拟服务商查询")
         def test_query_virtual_server_name(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
+                virtual_server_name = var_manager.get_variable("virtual_server_name")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "virtual_server_name": "CPT Markets",
+                    "virtual_server_name": virtual_server_name,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
@@ -470,17 +551,35 @@ class Test_create:
                 )
 
             with allure.step("3. 查询校验"):
-                virtual_server_name = self.json_utils.extract(response.json(),
-                                                              "$.result.records[0].virtual_server_name")
-
-                self.verify_data(
-                    actual_value=virtual_server_name,
-                    expected_value="CPT Markets",
-                    op=CompareOp.EQ,
-                    use_isclose=False,
-                    message="查询结果符合预期",
-                    attachment_name=f"查询结果"
+                virtual_server_name_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[*].virtual_server_name",
+                    default=[],
+                    multi_match=True
                 )
+
+                if not virtual_server_name_list:
+                    attach_body = f"虚拟服务商查询：{virtual_server_name}，返回的virtual_server_name列表为空（暂无数据）"
+                else:
+                    attach_body = f"虚拟服务商查询：{virtual_server_name}，返回 {len(virtual_server_name_list)} 条记录，virtual_server_name值如下：\n" + \
+                                  "\n".join(
+                                      [f"第 {idx + 1} 条：{s}" for idx, s in enumerate(virtual_server_name_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"虚拟服务商查询结果",
+                    attachment_type="text/plain"
+                )
+
+                for idx, virtual_server_name in enumerate(virtual_server_name_list):
+                    self.verify_data(
+                        actual_value=virtual_server_name,
+                        expected_value="CPT Markets",
+                        op=CompareOp.EQ,
+                        use_isclose=False,
+                        message="查询结果符合预期",
+                        attachment_name=f"查询结果"
+                    )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("订阅类型查询-手数-查询结果为空")
@@ -590,6 +689,18 @@ class Test_create:
                     multi_match=True
                 )
 
+                if not subscribe_fee_list:
+                    attach_body = f"订阅费查询：0，返回的subscribe_fee列表为空（暂无数据）"
+                else:
+                    attach_body = f"订阅费查询：0，返回 {len(subscribe_fee_list)} 条记录，subscribe_fee值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(subscribe_fee_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"订阅费查询结果",
+                    attachment_type="text/plain"
+                )
+
                 for idx, subscribe_fee in enumerate(subscribe_fee_list):
                     self.verify_data(
                         actual_value=subscribe_fee,
@@ -672,6 +783,18 @@ class Test_create:
                     multi_match=True
                 )
 
+                if not level_id_list:
+                    attach_body = f"等级查询：3，返回的level_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"等级查询：3，返回 {len(level_id_list)} 条记录，level_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(level_id_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"等级为3查询结果",
+                    attachment_type="text/plain"
+                )
+
                 for idx, level_id in enumerate(level_id_list):
                     self.verify_data(
                         actual_value=float(level_id),
@@ -745,6 +868,35 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
+            with allure.step("3. 查询校验"):
+                connected_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[*].connected",
+                    default=[],
+                    multi_match=True
+                )
+
+                if not connected_list:
+                    attach_body = f"是否连接查询-是，返回的connected列表为空（暂无数据）"
+                else:
+                    attach_body = f"是否连接查询-是，返回 {len(connected_list)} 条记录，connected值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(connected_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"是否连接查询-是，查询结果",
+                    attachment_type="text/plain"
+                )
+
+                for idx, connected in enumerate(connected_list):
+                    self.verify_data(
+                        actual_value=float(connected),
+                        expected_value=float(1),
+                        op=CompareOp.EQ,
+                        message=f"第 {idx + 1} 条记录的连接符合预期",
+                        attachment_name=f"第 {idx + 1} 条记录的连接校验"
+                    )
+
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("是否连接查询-否")
         def test_query_connectednot(self, var_manager, logged_session):
@@ -781,6 +933,18 @@ class Test_create:
                     multi_match=True
                 )
 
+                if not connected_list:
+                    attach_body = f"是否连接查询-否，返回的connected列表为空（暂无数据）"
+                else:
+                    attach_body = f"是否连接查询-否，返回 {len(connected_list)} 条记录，connected值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(connected_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"是否连接查询-否，查询结果",
+                    attachment_type="text/plain"
+                )
+
                 for idx, connected in enumerate(connected_list):
                     self.verify_data(
                         actual_value=float(connected),
@@ -790,7 +954,7 @@ class Test_create:
                         attachment_name=f"第 {idx + 1} 条记录的连接校验"
                     )
 
-        @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("推荐人ID查询")
         def test_query_recommenders(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -825,6 +989,18 @@ class Test_create:
                     "$.result.records[*].recommenders_user_id",
                     default=[],
                     multi_match=True
+                )
+
+                if not recommenders_user_id_list:
+                    attach_body = f"推荐人ID查询：{trader_user_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"推荐人ID查询：{trader_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{trader_user_id}查询结果",
+                    attachment_type="text/plain"
                 )
 
                 for idx, recommenders_user_id in enumerate(recommenders_user_id_list):
@@ -873,13 +1049,15 @@ class Test_create:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("推荐人名字查询")
         def test_query_recommenders_name(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
+                login_config = var_manager.get_variable("login_config")
+                recommenders_user_name = login_config.get("username")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "recommenders_user_name": "xujunhao@163.com",
+                    "recommenders_user_name": recommenders_user_name,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
@@ -907,6 +1085,19 @@ class Test_create:
                     "$.result.records[*].recommenders_user_name",
                     default=[],
                     multi_match=True
+                )
+
+                if not recommenders_user_name_list:
+                    attach_body = f"推荐人名字查询：{recommenders_user_name}，返回的recommenders_user_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"推荐人名字查询：{recommenders_user_name}，返回 {len(recommenders_user_name_list)} 条记录，recommenders_user_id值如下：\n" + \
+                                  "\n".join(
+                                      [f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_name_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{recommenders_user_name}查询结果",
+                    attachment_type="text/plain"
                 )
 
                 for idx, recommenders_user_name in enumerate(recommenders_user_name_list):
@@ -1011,4 +1202,158 @@ class Test_create:
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的推荐人ID符合预期",
                         attachment_name=f"第 {idx + 1} 条记录的推荐人ID校验"
+                    )
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("高级查询-策略名称查询")
+        def test_query_superQueryParams_val(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                # 1. 先构造 superQueryParams 的原始 JSON 数组（字典转 JSON 字符串）
+                super_query_params = [
+                    {
+                        "rule": "like",  # 模糊匹配（包含）
+                        "type": "text",  # 字段类型为文本
+                        "val": "xjh",  # 匹配值（包含“xjh”）
+                        "field": "policy_name"  # 匹配的字段名（策略名称）
+                    }
+                ]
+                # 将 Python 列表转为 JSON 字符串（确保后端能识别为 JSON 格式）
+                super_query_json = json.dumps(super_query_params)
+
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": "1",
+                    "pageSize": "50",
+                    "superQueryMatchType": "and",
+                    "superQueryParams": super_query_json,
+                    "type": "MASTER_REAL",
+                    "status": "VERIFICATION,PASS,PENDING,ERROR"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step("3. 查询校验"):
+                policy_name_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[*].policy_name",
+                    default=[],
+                    multi_match=True
+                )
+
+                if not policy_name_list:
+                    attach_body = f"高级查询-策略名称查询：xjh，返回的policy_name列表为空（暂无数据）"
+                else:
+                    attach_body = f"高级查询-策略名称查询：xjh，返回 {len(policy_name_list)} 条记录，policy_name值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(policy_name_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"{ONE_HOUR_AGO}查询结果",
+                    attachment_type="text/plain"
+                )
+
+                for idx, policy_name in enumerate(policy_name_list):
+                    # 直接判断 "xjh" 是否在 policy_name 中
+                    if "xjh" not in policy_name:
+                        # 校验失败时手动报错
+                        pytest.fail(
+                            f"第 {idx + 1} 条记录的策略名称不符合预期：\n"
+                            f"实际值：{policy_name}\n"
+                            f"预期：包含 'xjh'"
+                        )
+                    # 校验通过时添加附件
+                    allure.attach(
+                        f"第 {idx + 1} 条记录的策略名称（{policy_name}）包含'xjh'",
+                        name=f"第 {idx + 1} 条记录校验通过",
+                        attachment_type="text/plain"
+                    )
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("高级查询-策略名称查询")
+        def test_query_superQueryParams_val(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                # 1. 先构造 superQueryParams 的原始 JSON 数组（字典转 JSON 字符串）
+                super_query_params = [
+                    {
+                        "rule": "like",  # 模糊匹配（包含）
+                        "type": "text",  # 字段类型为文本
+                        "val": "xjh",  # 匹配值（包含“xjh”）
+                        "field": "policy_name"  # 匹配的字段名（策略名称）
+                    }
+                ]
+                # 将 Python 列表转为 JSON 字符串（确保后端能识别为 JSON 格式）
+                super_query_json = json.dumps(super_query_params)
+
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": "1",
+                    "pageSize": "50",
+                    "superQueryMatchType": "and",
+                    "superQueryParams": super_query_json,
+                    "type": "MASTER_REAL",
+                    "status": "VERIFICATION,PASS,PENDING,ERROR"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step("3. 查询校验"):
+                policy_name_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[*].policy_name",
+                    default=[],
+                    multi_match=True
+                )
+
+                if not policy_name_list:
+                    attach_body = f"高级查询-策略名称查询：xjh，返回的policy_name列表为空（暂无数据）"
+                else:
+                    attach_body = f"高级查询-策略名称查询：xjh，返回 {len(policy_name_list)} 条记录，policy_name值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(policy_name_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"策略名称查询结果",
+                    attachment_type="text/plain"
+                )
+
+                for idx, policy_name in enumerate(policy_name_list):
+                    # 直接判断 "xjh" 是否在 policy_name 中
+                    if "xjh" not in policy_name:
+                        # 校验失败时手动报错
+                        pytest.fail(
+                            f"第 {idx + 1} 条记录的策略名称不符合预期：\n"
+                            f"实际值：{policy_name}\n"
+                            f"预期：包含 'xjh'"
+                        )
+                    # 校验通过时添加附件
+                    allure.attach(
+                        f"第 {idx + 1} 条记录的策略名称（{policy_name}）包含'xjh'",
+                        name=f"第 {idx + 1} 条记录校验通过",
+                        attachment_type="text/plain"
                     )

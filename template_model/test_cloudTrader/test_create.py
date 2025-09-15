@@ -457,6 +457,7 @@ class Test_create:
                 data = {
                     "id": trader_pass_id,
                     "policy_name": valid_strategy_name,
+                    "virtual_server_name": "CPT Markets",
                     "virtual_status": 0,
                     "strategy_introduce_cn": "中文",
                     "strategy_introduce_ch": "繁体",

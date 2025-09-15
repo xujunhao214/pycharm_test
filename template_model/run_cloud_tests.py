@@ -31,6 +31,7 @@ def run_cloud_tests(env: str = "test"):
         "test_cloudTrader/test_create.py",
         "test_cloudTrader/test_trader.py",
         "test_cloudTrader/test_agent.py",
+        "test_cloudTrader/test_follow_dividend.py",
         "test_cloudTrader/test_topup.py",
         "test_cloudTrader/test_delete.py",
         # "test_cloudTrader/test_lianxi.py",
