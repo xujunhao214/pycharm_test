@@ -20,6 +20,12 @@ future_time = current_time + datetime.timedelta(days=30)
 # 格式化为指定字符串格式
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 
+# 计算1小时前的时间（timedelta(hours=1) 表示1小时间隔）
+one_hour_ago = current_time - datetime.timedelta(hours=1)
+
+# 格式化为 "%Y-%m-%d %H:%M:%S"（与你当前 DATETIME_NOW 格式一致）
+ONE_HOUR_AGO = one_hour_ago.strftime("%Y-%m-%d %H:%M:%S")
+
 # mysql查询语句，查询最近时间的数据
 MYSQL_TIME = 1  # 时间范围（分钟）
 WAIT_TIMEOUT = 30  # 数据库查询等待超时时间（秒）

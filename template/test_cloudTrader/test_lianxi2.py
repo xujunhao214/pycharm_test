@@ -1,60 +1,77 @@
-# lingkuan_815/tests/test_vps_ordersend.py
 import time
-import math
+from template.commons.api_base import APITestBase, CompareOp
 import allure
 import logging
 import pytest
+import requests
 from template.VAR.VAR import *
-from template.conftest import var_manager
-from template.commons.api_base import APITestBase
-from template.commons.redis_utils import *
-
-logger = logging.getLogger(__name__)
-SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
+from template.commons.jsonpath_utils import *
+from template.commons.random_generator import *
 
 
-# ---------------------------
-# 修改模式、品种
-# ---------------------------
-@allure.feature("云策略策略下单-跟单修改模式、品种")
-class TestVPSOrderSend_Scence(APITestBase):
-    # ---------------------------
-    # 数据库查询-获取VPSID
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库查询-获取VPSID")
-    def test_get_vpsID(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库数据"):
-            ip_address = var_manager.get_variable("IP_ADDRESS")
+@allure.feature("账号管理")
+class Test_create:
+    @allure.story("创建交易员账号")
+    class Test_trader(APITestBase):
+        # 实例化JsonPath工具类（全局复用）
+        json_utils = JsonPathUtils()
 
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM follow_vps WHERE ip_address = %s",
-                (ip_address,)
-            )
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("服务器查询")
+        def test_query_server_id(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                trader_server_id = var_manager.get_variable("trader_server_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "server_id": trader_server_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 20,
+                    "status": "VERIFICATION,PASS,PENDING,ERROR",
+                    "type": "SLAVE_REAL"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/2c9a814a81d3a91b0181e04a36e00001',
+                    params=params
+                )
 
-            # 提取数据库中的值
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
 
-            vpsId = db_data[0]["id"]
-            # 存入变量管理器
-            var_manager.set_runtime_variable("vpsId", vpsId)
-            print(f"成功提取 VPS ID: {vpsId}")
+            with allure.step("3. 查询校验"):
+                server_id_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[*].server_id",
+                    default=[],
+                    multi_match=True
+                )
 
-    # ---------------------------
-    # VPS管理-VPS列表-获取可见用户信息
-    # ---------------------------
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-获取可见用户信息")
-    def test_get_user(self, logged_session, var_manager):
-        # 1. 请求可见用户列表接口
-        response = self.send_get_request(
-            logged_session,
-            '/sys/role/role'
-        )
+                if not server_id_list:
+                    attach_body = f"查询{trader_server_id}服务器，返回的server_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"查询{trader_server_id}服务器：返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(server_id_list)])
 
-        # 2. 获取可见用户信息
-        vps_user_data = response.extract_jsonpath("$.data")
-        logging.info(f"获取的可见用户信息：{vps_user_data}")
-        var_manager.set_runtime_variable("vps_user_data", vps_user_data)
+                allure.attach(
+                    body=attach_body,
+                    name=f"{trader_server_id}查询结果",
+                    attachment_type="text/plain"
+                )
+
+                for idx, server_id in enumerate(server_id_list):
+                    self.verify_data(
+                        actual_value=server_id,
+                        expected_value=trader_server_id,
+                        op=CompareOp.EQ,
+                        use_isclose=False,
+                        message=f"第 {idx + 1} 条记录的server_id符合预期",
+                        attachment_name=f"第 {idx + 1} 条记录的server_id校验"
+                    )

@@ -72,7 +72,7 @@ class Test_create:
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("绑定时间查询-不存在结果")
+        @allure.title("绑定时间查询-查询结果为空")
         def test_query_create_timeno(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -192,7 +192,7 @@ class Test_create:
                 )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("策略名称查询-不存在结果")
+        @allure.title("策略名称查询-查询结果为空")
         def test_query_policy_noname(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -313,7 +313,7 @@ class Test_create:
                 )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("MT4账号查询-不存在结果")
+        @allure.title("MT4账号查询-查询结果为空")
         def test_query_MT4accountNO(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -483,7 +483,7 @@ class Test_create:
                 )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("订阅类型查询-手数-不存在结果")
+        @allure.title("订阅类型查询-手数-查询结果为空")
         def test_query_subscribe_fee_idsize(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -519,7 +519,7 @@ class Test_create:
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("订阅类型查询-月-不存在结果")
+        @allure.title("订阅类型查询-月-查询结果为空")
         def test_query_subscribe_fee_idmonth(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -601,7 +601,7 @@ class Test_create:
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("订阅费查询-不存在结果")
+        @allure.title("订阅费查询-查询结果为空")
         def test_query_subscribe_feeno(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -682,7 +682,7 @@ class Test_create:
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("等级查询-不存在结果")
+        @allure.title("等级查询-查询结果为空")
         def test_query_level_idno(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -838,7 +838,7 @@ class Test_create:
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("推荐人ID查询-不存在结果")
+        @allure.title("推荐人ID查询-查询结果为空")
         def test_query_recommendersno(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -920,7 +920,7 @@ class Test_create:
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("推荐人名字查询-不存在结果")
+        @allure.title("推荐人名字查询-查询结果为空")
         def test_query_recommenders_nameno(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {

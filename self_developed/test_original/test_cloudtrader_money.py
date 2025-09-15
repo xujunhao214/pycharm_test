@@ -47,7 +47,7 @@ class Testcloudtrader_money(APITestBase):
             "sort": 100,
             "vpsDescs": [
                 {
-                    "desc": "39.99.136.49-^主VPS-跟单账号",
+                    "desc": "39.99.226.176-^主VPS-跟单账号",
                     "status": 0,
                     "statusExtra": "启动成功",
                     "forex": "",
@@ -62,7 +62,7 @@ class Testcloudtrader_money(APITestBase):
                     "type": None,
                     "vpsId": vpsId,
                     "vpsName": "^主VPS",
-                    "ipAddress": "39.99.136.49",
+                    "ipAddress": "39.99.226.176",
                     "traderType": 1,
                     "abRemark": None,
                     "accountMode": 0,

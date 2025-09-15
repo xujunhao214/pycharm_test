@@ -47,7 +47,9 @@ current_timestamp_ms = int(time.time() * 1000)
 current_timestamp_seconds = int(time.time())
 
 # 返佣管理-跟单分红查询日期
-dividendTime = "2025-09-11"
+dividendTime_now = datetime.datetime.now().strftime("%Y-%m-%d")
+dividendTime_ago = datetime.datetime.now() - datetime.timedelta(days=3)
+dividendTime_ago = dividendTime_ago.strftime("%Y-%m-%d")
 
 # 跟单社区
 URL_TOP = "https://dev.lgcopytrade.top/api"
