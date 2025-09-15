@@ -5,7 +5,7 @@ import logging
 import pytest
 from lingkuan_910.VAR.VAR import *
 from lingkuan_910.conftest import var_manager
-from lingkuan_910.commons.api_base import APITestBase, CompareOp
+from lingkuan_910.commons.api_base import APITestBase
 from lingkuan_910.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
@@ -17,85 +17,43 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 # ---------------------------
 @allure.feature("云策略策略下单-跟单修改模式、品种")
 class TestVPSOrderSend_Scence(APITestBase):
-    @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
-        with allure.step("1. 获取订单详情表账号数据"):
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            sql = f"""
-                        SELECT 
-                            fod.size,
-                            fod.comment,
-                            fod.send_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.total_lots,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                            """
-            params = (
-                '0',
-                vps_user_accounts_1,
-                "changjing1"
+    # ---------------------------
+    # 数据库查询-获取VPSID
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取VPSID")
+    def test_get_vpsID(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库数据"):
+            ip_address = var_manager.get_variable("IP_ADDRESS")
+
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address = %s",
+                (ip_address,)
             )
 
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.query_database_with_time_with_timezone(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="fod.open_time",
-                time_range=10
-            )
-
-        with allure.step("2. 数据校验"):
+            # 提取数据库中的值
             if not db_data:
                 pytest.fail("数据库查询结果为空，无法提取数据")
 
-            with allure.step("验证订单状态"):
-                status = db_data[0]["status"]
-                self.verify_data(
-                    actual_value=status,
-                    expected_value=(0, 1),
-                    op=CompareOp.IN,
-                    message="订单状态应为0或1",
-                    attachment_name="订单状态详情"
-                )
-                logging.info(f"订单状态验证通过: {status}")
+            vpsId = db_data[0]["id"]
+            # 存入变量管理器
+            var_manager.set_runtime_variable("vpsId", vpsId)
+            print(f"成功提取 VPS ID: {vpsId}")
 
-            with allure.step("验证详情总手数"):
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                self.verify_data(
-                    actual_value=float(total),
-                    expected_value=float(0.12),
-                    op=CompareOp.EQ,
-                    rel_tol=1e-2,
-                    message="详情总手数应符合预期",
-                    attachment_name="详情总手数"
-                )
-                logging.info(f"详情总手数验证通过: {total}")
+    # ---------------------------
+    # VPS管理-VPS列表-获取可见用户信息
+    # ---------------------------
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-获取可见用户信息")
+    def test_get_user(self, logged_session, var_manager):
+        # 1. 请求可见用户列表接口
+        response = self.send_get_request(
+            logged_session,
+            '/sys/role/role'
+        )
 
-            with allure.step("验证详情手数和指令手数一致"):
-                size = [record["size"] for record in db_data]
-                true_total_lots = [record["true_total_lots"] for record in db_data]
-                self.assert_list_equal_ignore_order(
-                    size,
-                    true_total_lots,
-                    f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                )
-                logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+        # 2. 获取可见用户信息
+        vps_user_data = response.extract_jsonpath("$.data")
+        logging.info(f"获取的可见用户信息：{vps_user_data}")
+        var_manager.set_runtime_variable("vps_user_data", vps_user_data)
