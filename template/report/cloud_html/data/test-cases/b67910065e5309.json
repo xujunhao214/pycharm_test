@@ -1,0 +1,367 @@
+{
+  "uid" : "b67910065e5309",
+  "name" : "跟单用户查询-查询结果为空",
+  "fullName" : "test_cloudTrader.test_follow_dividend.Test_trader#test_query_followerUserno",
+  "historyId" : "1204793ab3424fcdaf8e3e4a5e38987f",
+  "time" : {
+    "start" : 1757923069053,
+    "stop" : 1757923072658,
+    "duration" : 3605
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 断言失败：实际值 'None' 不是空列表",
+  "statusTrace" : "self = <template.test_cloudTrader.test_follow_dividend.Test_create.Test_trader object at 0x000001C61EC4C1F0>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001C61EC1E070>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001C61EC1E280>\n\n    @allure.title(\"跟单用户查询-查询结果为空\")\n    def test_query_followerUserno(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"page\": 1,\n                \"limit\": 100,\n                \"type\": \"\",\n                \"status\": \"\",\n                \"dividendTimeBegin\": \"\",\n                \"dividendTimeEnd\": \"\",\n                \"followerUser\": \"xxxxxxxxxxxxxxxxx\",\n                \"followerTa\": \"\",\n                \"dividendUser\": \"\"\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/agent/agentLevelDividend/page',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n    \n        with allure.step(f\"3. 查询结果校验\"):\n>           self.json_utils.assert_empty_list(\n                data=response.json(),\n                expression=\"$.result.records\"\n            )\n\ntest_cloudTrader\\test_follow_dividend.py:368: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.commons.jsonpath_utils.JsonPathUtils object at 0x000001C61EBFF6D0>\ndata = {'code': 200, 'message': '', 'result': {'list': [], 'total': 0}, 'success': True, ...}\nexpression = '$.result.records'\n\n    def assert_empty_list(self, data: dict, expression: str) -> None:\n        actual = self.extract(data, expression)\n>       assert isinstance(actual, list) and len(actual) == 0, \\\n            f\"断言失败：实际值 '{actual}' 不是空列表\"\nE       AssertionError: 断言失败：实际值 'None' 不是空列表\n\ncommons\\jsonpath_utils.py:53: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1757923040176,
+      "stop" : 1757923041822,
+      "duration" : 1646
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1757923040175,
+      "stop" : 1757923040175,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1757923040175,
+      "stop" : 1757923040175,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1757923040175,
+      "stop" : 1757923040176,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1757923040176,
+      "stop" : 1757923040176,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 断言失败：实际值 'None' 不是空列表",
+    "statusTrace" : "self = <template.test_cloudTrader.test_follow_dividend.Test_create.Test_trader object at 0x000001C61EC4C1F0>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001C61EC1E070>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001C61EC1E280>\n\n    @allure.title(\"跟单用户查询-查询结果为空\")\n    def test_query_followerUserno(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"page\": 1,\n                \"limit\": 100,\n                \"type\": \"\",\n                \"status\": \"\",\n                \"dividendTimeBegin\": \"\",\n                \"dividendTimeEnd\": \"\",\n                \"followerUser\": \"xxxxxxxxxxxxxxxxx\",\n                \"followerTa\": \"\",\n                \"dividendUser\": \"\"\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/agent/agentLevelDividend/page',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n    \n        with allure.step(f\"3. 查询结果校验\"):\n>           self.json_utils.assert_empty_list(\n                data=response.json(),\n                expression=\"$.result.records\"\n            )\n\ntest_cloudTrader\\test_follow_dividend.py:368: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.commons.jsonpath_utils.JsonPathUtils object at 0x000001C61EBFF6D0>\ndata = {'code': 200, 'message': '', 'result': {'list': [], 'total': 0}, 'success': True, ...}\nexpression = '$.result.records'\n\n    def assert_empty_list(self, data: dict, expression: str) -> None:\n        actual = self.extract(data, expression)\n>       assert isinstance(actual, list) and len(actual) == 0, \\\n            f\"断言失败：实际值 '{actual}' 不是空列表\"\nE       AssertionError: 断言失败：实际值 'None' 不是空列表\n\ncommons\\jsonpath_utils.py:53: AssertionError",
+    "steps" : [ {
+      "name" : "1. 发送请求",
+      "time" : {
+        "start" : 1757923069053,
+        "stop" : 1757923072648,
+        "duration" : 3595
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1757923069053,
+          "stop" : 1757923072648,
+          "duration" : 3595
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1757923069053,
+            "stop" : 1757923069056,
+            "duration" : 3
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "eee9359515c79188",
+            "name" : "请求URL",
+            "source" : "eee9359515c79188.txt",
+            "type" : "text/plain",
+            "size" : 30
+          }, {
+            "uid" : "24afbb544743ecfc",
+            "name" : "请求头",
+            "source" : "24afbb544743ecfc.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "805c7503aab6a6dd",
+            "name" : "请求体（表单/文件）",
+            "source" : "805c7503aab6a6dd.txt",
+            "type" : "text/plain",
+            "size" : 192
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1757923069647,
+            "stop" : 1757923069648,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a3aa4f0cedebe702",
+            "name" : "响应状态码",
+            "source" : "a3aa4f0cedebe702.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "57875c2f5b02a560",
+            "name" : "响应头",
+            "source" : "57875c2f5b02a560.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "2938f279e3b969a",
+            "name" : "响应体（JSON）",
+            "source" : "2938f279e3b969a.json",
+            "type" : "application/json",
+            "size" : 133
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 2,
+        "hasContent" : true,
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 3,
+      "hasContent" : true,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1757923072648,
+        "stop" : 1757923072653,
+        "duration" : 5
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.success",
+        "time" : {
+          "start" : 1757923072652,
+          "stop" : 1757923072653,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "6614e2d2c4560709",
+          "name" : "请求URL",
+          "source" : "6614e2d2c4560709.txt",
+          "type" : "text/plain",
+          "size" : 199
+        }, {
+          "uid" : "531dc64ae494a7ce",
+          "name" : "预期值",
+          "source" : "531dc64ae494a7ce.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "bbb14c2b2e299788",
+          "name" : "实际值",
+          "source" : "bbb14c2b2e299788.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "hasContent" : true,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "3. 查询结果校验",
+      "time" : {
+        "start" : 1757923072653,
+        "stop" : 1757923072658,
+        "duration" : 5
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 断言失败：实际值 'None' 不是空列表\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_follow_dividend.py\", line 368, in test_query_followerUserno\n    self.json_utils.assert_empty_list(\n  File \"D:\\pycharm_test\\template\\commons\\jsonpath_utils.py\", line 53, in assert_empty_list\n    assert isinstance(actual, list) and len(actual) == 0, \\\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "5da10f212805fddf",
+      "name" : "log",
+      "source" : "5da10f212805fddf.txt",
+      "type" : "text/plain",
+      "size" : 317
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 7,
+    "hasContent" : true,
+    "attachmentsCount" : 10,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1757923087155,
+      "stop" : 1757923087155,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1757923087157,
+      "stop" : 1757923087157,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1757923087156,
+      "stop" : 1757923087156,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "跟随者账户查询校验"
+  }, {
+    "name" : "feature",
+    "value" : "账号管理"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_follow_dividend"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_create"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "31740-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_follow_dividend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "b67910065e5309.json",
+  "parameterValues" : [ ]
+}

@@ -117,7 +117,7 @@ class Test_create:
             with allure.step(f"3. 查询校验"):
                 self.json_utils.assert_empty_list(
                     data=response.json(),
-                    expression="$.result.records"
+                    expression="$.result.list"
                 )
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
@@ -128,7 +128,7 @@ class Test_create:
             ("1", "代理分红")
         ]
 
-        @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @pytest.mark.parametrize("status, status_desc", STATUS_PARAMS)
         @allure.title("分红类型查询：{status_desc}（{status}）")
         def test_query_create_time(self, var_manager, logged_session, status, status_desc):
@@ -367,7 +367,7 @@ class Test_create:
             with allure.step(f"3. 查询结果校验"):
                 self.json_utils.assert_empty_list(
                     data=response.json(),
-                    expression="$.result.records"
+                    expression="$.result.list"
                 )
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
@@ -466,7 +466,118 @@ class Test_create:
             with allure.step(f"3. 查询结果校验"):
                 self.json_utils.assert_empty_list(
                     data=response.json(),
-                    expression="$.result.records"
+                    expression="$.result.list"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("分红用户查询")
+        def test_query_dividendUser(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                login_config = var_manager.get_variable("login_config")
+                dividendUser = login_config.get("username")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "page": 1,
+                    "limit": 100,
+                    "type": "",
+                    "status": "",
+                    "dividendTimeBegin": "",
+                    "dividendTimeEnd": "",
+                    "followerUser": "",
+                    "followerTa": "",
+                    "dividendUser": dividendUser
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/agent/agentLevelDividend/page',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询结果校验"):
+                dividendUser_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.list[*].slaveRecords[*].dividendUser",
+                    default=[],
+                    multi_match=True
+                )
+
+                if not dividendUser_list:
+                    attach_body = f"分红用户查询：{dividendUser}，返回的dividendUser列表为空（暂无数据）"
+                else:
+                    attach_body = f"分红用户查询：{dividendUser}，返回 {len(dividendUser_list)} 条记录，dividendUser值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(dividendUser_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"分红用户:{dividendUser}查询结果",
+                    attachment_type="text/plain"
+                )
+
+                # 关键：检查是否存在至少一条符合预期的记录
+                matched_records = [
+                    (idx + 1, user)  # 记录“符合预期的记录序号和值”
+                    for idx, user in enumerate(dividendUser_list)
+                    if user == dividendUser  # 对比：实际值 == 预期值
+                ]
+
+                # 统一断言：若没有符合预期的记录，则报错
+                assert matched_records, (
+                    f"分红用户查询校验失败：返回的 {len(dividendUser_list)} 条记录中，"
+                    f"没有找到 dividendUser = {dividendUser} 的记录\n"
+                    f"所有返回值：{dividendUser_list}"
+                )
+
+                allure.attach(
+                    body=f"找到 {len(matched_records)} 条符合预期的记录：\n" + \
+                         "\n".join([f"第 {idx} 条：{user}" for idx, user in matched_records]),
+                    name=f"符合预期的分红用户记录",
+                    attachment_type="text/plain"
+                )
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("分红用户查询-查询结果为空")
+        def test_query_dividendUserNO(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "page": 1,
+                    "limit": 100,
+                    "type": "",
+                    "status": "",
+                    "dividendTimeBegin": "",
+                    "dividendTimeEnd": "",
+                    "followerUser": "",
+                    "followerTa": "",
+                    "dividendUser": "xxxxxxxx"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/agent/agentLevelDividend/page',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询结果校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.list"
                 )
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')

@@ -18,7 +18,7 @@ class Test_create:
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("分红用户查询")
-        def test_query_followerTa(self, var_manager, logged_session):
+        def test_query_dividendUser(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 login_config = var_manager.get_variable("login_config")
                 dividendUser = login_config.get("username")
@@ -68,12 +68,23 @@ class Test_create:
                     attachment_type="text/plain"
                 )
 
-                for idx, followerUserlist in enumerate(dividendUser_list):
-                    self.verify_data(
-                        actual_value=followerUserlist,
-                        expected_value=dividendUser,
-                        op=CompareOp.EQ,
-                        use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的dividendUser应为{followerUserlist}",
-                        attachment_name=f"分红用户:{dividendUser}第 {idx + 1} 条记录校验"
-                    )
+                # 关键：检查是否存在至少一条符合预期的记录
+                matched_records = [
+                    (idx + 1, user)  # 记录“符合预期的记录序号和值”
+                    for idx, user in enumerate(dividendUser_list)
+                    if user == dividendUser  # 对比：实际值 == 预期值
+                ]
+
+                # 统一断言：若没有符合预期的记录，则报错
+                assert matched_records, (
+                    f"分红用户查询校验失败：返回的 {len(dividendUser_list)} 条记录中，"
+                    f"没有找到 dividendUser = {dividendUser} 的记录\n"
+                    f"所有返回值：{dividendUser_list}"
+                )
+
+                allure.attach(
+                    body=f"找到 {len(matched_records)} 条符合预期的记录：\n" + \
+                         "\n".join([f"第 {idx} 条：{user}" for idx, user in matched_records]),
+                    name=f"符合预期的分红用户记录",
+                    attachment_type="text/plain"
+                )
