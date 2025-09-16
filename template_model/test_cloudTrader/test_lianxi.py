@@ -1,12 +1,12 @@
 import time
-from template.commons.api_base import APITestBase, CompareOp
+from template_model.commons.api_base import APITestBase, CompareOp
 import allure
 import logging
 import pytest
 import json
-from template.VAR.VAR import *
-from template.commons.jsonpath_utils import *
-from template.commons.random_generator import *
+from template_model.VAR.VAR import *
+from template_model.commons.jsonpath_utils import *
+from template_model.commons.random_generator import *
 
 
 @allure.feature("账号管理")

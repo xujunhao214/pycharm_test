@@ -376,7 +376,7 @@ class Test_create:
         @allure.title("跟单账号查询")
         def test_query_followerTa(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
-                followerTa = var_manager.get_variable("follow_account2")
+                followerTa = var_manager.get_variable("follow_account")
                 params = {
                     "_t": current_timestamp_seconds,
                     "page": 1,
