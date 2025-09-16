@@ -17,24 +17,22 @@ class Test_create:
         json_utils = JsonPathUtils()
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("服务器查询")
-        def test_query_server_id(self, var_manager, logged_session):
+        @allure.title("喊单者账号ID查询-开仓前")
+        def test_query_trader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
-                trader_server_id = var_manager.get_variable("trader_server_id")
+                trader_pass_id = var_manager.get_variable("trader_pass_id")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "server_id": trader_server_id,
+                    "trader_id": trader_pass_id,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 20,
-                    "status": "VERIFICATION,PASS,PENDING,ERROR",
-                    "type": "SLAVE_REAL"
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
                     logged_session,
-                    '/online/cgform/api/getData/2c9a814a81d3a91b0181e04a36e00001',
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
                     params=params
                 )
 
@@ -46,32 +44,236 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step("3. 查询校验"):
-                server_id_list = self.json_utils.extract(
+            with allure.step(f"3. 查询校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.records"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("跟单账号ID查询-开仓前")
+        def test_query_follow_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                follow_pass_id = var_manager.get_variable("follow_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": follow_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.records"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("喊单者账号ID查询-开仓后")
+        def test_query_opentrader_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                trader_pass_id = var_manager.get_variable("trader_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": trader_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                trader_id_list = self.json_utils.extract(
                     response.json(),
-                    "$.result.records[*].server_id",
+                    "$.result.records[0].trader_id",
                     default=[],
                     multi_match=True
                 )
 
-                if not server_id_list:
-                    attach_body = f"查询{trader_server_id}服务器，返回的server_id列表为空（暂无数据）"
+                if not trader_id_list:
+                    attach_body = f"账号ID查询[{trader_pass_id}]，返回的trader_id列表为空（暂无数据）"
                 else:
-                    attach_body = f"查询{trader_server_id}服务器：返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
-                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(server_id_list)])
+                    attach_body = f"账号ID查询[{trader_pass_id}]，返回 {len(trader_id_list)} 条记录，trader_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(trader_id_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{trader_server_id}查询结果",
+                    name=f"账号ID:{trader_pass_id}查询结果",
                     attachment_type="text/plain"
                 )
 
-                for idx, server_id in enumerate(server_id_list):
+                # 校验每条记录的dividendType
+                for idx, trader_id in enumerate(trader_id_list):
                     self.verify_data(
-                        actual_value=server_id,
-                        expected_value=trader_server_id,
+                        actual_value=int(trader_id),
+                        expected_value=int(trader_pass_id),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的server_id符合预期",
-                        attachment_name=f"第 {idx + 1} 条记录的server_id校验"
+                        message=f"第 {idx + 1} 条记录的账号ID应为{trader_id}",
+                        attachment_name=f"账号ID:{trader_pass_id}第 {idx + 1} 条记录校验"
                     )
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("跟单账号ID查询-开仓后")
+        def test_query_openfollow_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                follow_pass_id = var_manager.get_variable("follow_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": follow_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                trader_id_list = self.json_utils.extract(
+                    response.json(),
+                    "$.result.records[0].trader_id",
+                    default=[],
+                    multi_match=True
+                )
+
+                if not trader_id_list:
+                    attach_body = f"账号ID查询[{follow_pass_id}]，返回的trader_id列表为空（暂无数据）"
+                else:
+                    attach_body = f"账号ID查询[{follow_pass_id}]，返回 {len(trader_id_list)} 条记录，trader_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(trader_id_list)])
+
+                allure.attach(
+                    body=attach_body,
+                    name=f"账号ID:{follow_pass_id}查询结果",
+                    attachment_type="text/plain"
+                )
+
+                # 校验每条记录的dividendType
+                for idx, trader_id in enumerate(trader_id_list):
+                    self.verify_data(
+                        actual_value=int(trader_id),
+                        expected_value=int(follow_pass_id),
+                        op=CompareOp.EQ,
+                        use_isclose=False,
+                        message=f"第 {idx + 1} 条记录的账号ID应为{trader_id}",
+                        attachment_name=f"账号ID:{follow_pass_id}第 {idx + 1} 条记录校验"
+                    )
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("喊单者账号ID查询-平仓后")
+        def test_query_closetrader_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                trader_pass_id = var_manager.get_variable("trader_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": trader_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.records"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')
+
+        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @allure.title("跟单账号ID查询-平仓后")
+        def test_query_closefollow_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                follow_pass_id = var_manager.get_variable("follow_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": follow_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.records"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')

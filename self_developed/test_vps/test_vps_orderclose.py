@@ -1140,7 +1140,7 @@ class TestVPSOrderType:
             payload = ""
             self.response = requests.request("GET", url, headers=headers, data=payload)
             self.json_utils = JsonPathUtils()
-            self.response = self.response.json()  # 解析JSON响应
+            self.response = self.response.json()
             ticket = self.json_utils.extract(self.response, "$.ticket")
             print(ticket)
             logging.info(ticket)
