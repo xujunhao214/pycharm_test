@@ -186,7 +186,7 @@ class Test_create:
                     attachment_type="text/plain"
                 )
 
-                # 校验每条记录的dividendType
+                
                 for idx, actual_status in enumerate(dividendType_list):
                     self.verify_data(
                         actual_value=int(actual_status),

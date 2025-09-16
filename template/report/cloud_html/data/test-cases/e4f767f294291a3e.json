@@ -1,0 +1,364 @@
+{
+  "uid" : "e4f767f294291a3e",
+  "name" : "跟单账号ID查询-开仓前",
+  "fullName" : "test_cloudTrader.test_lianxi2.Test_orderseng#test_query_follow_passid",
+  "historyId" : "a57deb5a68909cb79a2e30a716225f7a",
+  "time" : {
+    "start" : 1758016173574,
+    "stop" : 1758016177192,
+    "duration" : 3618
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 断言失败：实际值 '[{'order_no': 44253359, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:44:10', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854531', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253358, 'commission': -0.08, 'comment': '#QCI3Y#WK_AUTO', 'id': '1967887936664854531', 'open_price': 3696.67, 'tp': 0.0, 'profit': -0.23, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253354, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:41:54', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854530', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253353, 'commission': -0.08, 'comment': '#QCI3T#WK_AUTO', 'id': '1967887936664854530', 'open_price': 3696.86, 'tp': 0.0, 'profit': -0.51, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253340, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.43, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:37:38', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936669048833', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253339, 'commission': -0.08, 'comment': '#QCI3F#WK_AUTO', 'id': '1967887936669048833', 'open_price': 3695.58, 'tp': 0.0, 'profit': 1.41, 'slip_point': 0.0, 'market_account_id': ''}]' 不是空列表",
+  "statusTrace" : "self = <template.test_cloudTrader.test_lianxi2.Test_openandclouseall.Test_orderseng object at 0x000001527FD8B460>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001527FD99460>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001527FD997C0>\n\n    @allure.title(\"跟单账号ID查询-开仓前\")\n    def test_query_follow_passid(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            follow_pass_id = var_manager.get_variable(\"follow_pass_id\")\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"trader_id\": follow_pass_id,\n                \"column\": \"id\",\n                \"order\": \"desc\",\n                \"pageNo\": 1,\n                \"pageSize\": 50,\n                \"superQueryMatchType\": \"and\"\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n    \n        with allure.step(f\"3. 查询校验\"):\n>           self.json_utils.assert_empty_list(\n                data=response.json(),\n                expression=\"$.result.records\"\n            )\n\ntest_cloudTrader\\test_lianxi2.py:87: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.commons.jsonpath_utils.JsonPathUtils object at 0x000001527FD52AF0>\ndata = {'code': 0, 'message': '', 'result': {'records': [{'close_price': 3696.52, 'comment': '#QCI3Y#WK_AUTO', 'commission': ...comment': '#QCI3F#WK_AUTO', 'commission': -0.08, 'id': '1967887936669048833', ...}], 'total': 3}, 'success': True, ...}\nexpression = '$.result.records'\n\n    def assert_empty_list(self, data: dict, expression: str) -> None:\n        actual = self.extract(data, expression)\n>       assert isinstance(actual, list) and len(actual) == 0, \\\n            f\"断言失败：实际值 '{actual}' 不是空列表\"\nE       AssertionError: 断言失败：实际值 '[{'order_no': 44253359, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:44:10', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854531', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253358, 'commission': -0.08, 'comment': '#QCI3Y#WK_AUTO', 'id': '1967887936664854531', 'open_price': 3696.67, 'tp': 0.0, 'profit': -0.23, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253354, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:41:54', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854530', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253353, 'commission': -0.08, 'comment': '#QCI3T#WK_AUTO', 'id': '1967887936664854530', 'open_price': 3696.86, 'tp': 0.0, 'profit': -0.51, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253340, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.43, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:37:38', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936669048833', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253339, 'commission': -0.08, 'comment': '#QCI3F#WK_AUTO', 'id': '1967887936669048833', 'open_price': 3695.58, 'tp': 0.0, 'profit': 1.41, 'slip_point': 0.0, 'market_account_id': ''}]' 不是空列表\n\ncommons\\jsonpath_utils.py:53: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1758016145381,
+      "stop" : 1758016145381,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1758016145381,
+      "stop" : 1758016145382,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1758016145381,
+      "stop" : 1758016145381,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1758016145381,
+      "stop" : 1758016145381,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1758016145382,
+      "stop" : 1758016169672,
+      "duration" : 24290
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 断言失败：实际值 '[{'order_no': 44253359, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:44:10', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854531', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253358, 'commission': -0.08, 'comment': '#QCI3Y#WK_AUTO', 'id': '1967887936664854531', 'open_price': 3696.67, 'tp': 0.0, 'profit': -0.23, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253354, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:41:54', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854530', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253353, 'commission': -0.08, 'comment': '#QCI3T#WK_AUTO', 'id': '1967887936664854530', 'open_price': 3696.86, 'tp': 0.0, 'profit': -0.51, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253340, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.43, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:37:38', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936669048833', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253339, 'commission': -0.08, 'comment': '#QCI3F#WK_AUTO', 'id': '1967887936669048833', 'open_price': 3695.58, 'tp': 0.0, 'profit': 1.41, 'slip_point': 0.0, 'market_account_id': ''}]' 不是空列表",
+    "statusTrace" : "self = <template.test_cloudTrader.test_lianxi2.Test_openandclouseall.Test_orderseng object at 0x000001527FD8B460>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001527FD99460>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001527FD997C0>\n\n    @allure.title(\"跟单账号ID查询-开仓前\")\n    def test_query_follow_passid(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            follow_pass_id = var_manager.get_variable(\"follow_pass_id\")\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"trader_id\": follow_pass_id,\n                \"column\": \"id\",\n                \"order\": \"desc\",\n                \"pageNo\": 1,\n                \"pageSize\": 50,\n                \"superQueryMatchType\": \"and\"\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.success\",\n                True,\n                \"响应success字段应为true\"\n            )\n    \n        with allure.step(f\"3. 查询校验\"):\n>           self.json_utils.assert_empty_list(\n                data=response.json(),\n                expression=\"$.result.records\"\n            )\n\ntest_cloudTrader\\test_lianxi2.py:87: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.commons.jsonpath_utils.JsonPathUtils object at 0x000001527FD52AF0>\ndata = {'code': 0, 'message': '', 'result': {'records': [{'close_price': 3696.52, 'comment': '#QCI3Y#WK_AUTO', 'commission': ...comment': '#QCI3F#WK_AUTO', 'commission': -0.08, 'id': '1967887936669048833', ...}], 'total': 3}, 'success': True, ...}\nexpression = '$.result.records'\n\n    def assert_empty_list(self, data: dict, expression: str) -> None:\n        actual = self.extract(data, expression)\n>       assert isinstance(actual, list) and len(actual) == 0, \\\n            f\"断言失败：实际值 '{actual}' 不是空列表\"\nE       AssertionError: 断言失败：实际值 '[{'order_no': 44253359, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:44:10', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854531', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253358, 'commission': -0.08, 'comment': '#QCI3Y#WK_AUTO', 'id': '1967887936664854531', 'open_price': 3696.67, 'tp': 0.0, 'profit': -0.23, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253354, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:41:54', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854530', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253353, 'commission': -0.08, 'comment': '#QCI3T#WK_AUTO', 'id': '1967887936664854530', 'open_price': 3696.86, 'tp': 0.0, 'profit': -0.51, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253340, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.43, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:37:38', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936669048833', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253339, 'commission': -0.08, 'comment': '#QCI3F#WK_AUTO', 'id': '1967887936669048833', 'open_price': 3695.58, 'tp': 0.0, 'profit': 1.41, 'slip_point': 0.0, 'market_account_id': ''}]' 不是空列表\n\ncommons\\jsonpath_utils.py:53: AssertionError",
+    "steps" : [ {
+      "name" : "1. 发送请求",
+      "time" : {
+        "start" : 1758016173574,
+        "stop" : 1758016177171,
+        "duration" : 3597
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1758016173574,
+          "stop" : 1758016177171,
+          "duration" : 3597
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1758016173574,
+            "stop" : 1758016173577,
+            "duration" : 3
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "8b310ccde2ca827e",
+            "name" : "请求URL",
+            "source" : "8b310ccde2ca827e.txt",
+            "type" : "text/plain",
+            "size" : 59
+          }, {
+            "uid" : "4d1865c31886d80a",
+            "name" : "请求头",
+            "source" : "4d1865c31886d80a.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "d1daa358c8ad7754",
+            "name" : "请求体（表单/文件）",
+            "source" : "d1daa358c8ad7754.txt",
+            "type" : "text/plain",
+            "size" : 146
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3,
+          "hasContent" : true,
+          "stepsCount" : 0
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1758016174157,
+            "stop" : 1758016174160,
+            "duration" : 3
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bdaf2332b738b9f3",
+            "name" : "响应状态码",
+            "source" : "bdaf2332b738b9f3.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "ecb3602524c0f365",
+            "name" : "响应头",
+            "source" : "ecb3602524c0f365.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "b312457f114808d",
+            "name" : "响应体（JSON）",
+            "source" : "b312457f114808d.json",
+            "type" : "application/json",
+            "size" : 2369
+          } ],
+          "parameters" : [ ],
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 6,
+        "hasContent" : true,
+        "stepsCount" : 2
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 6,
+      "hasContent" : true,
+      "stepsCount" : 3
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1758016177171,
+        "stop" : 1758016177182,
+        "duration" : 11
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.success",
+        "time" : {
+          "start" : 1758016177180,
+          "stop" : 1758016177182,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "53cdef4510017d09",
+          "name" : "请求URL",
+          "source" : "53cdef4510017d09.txt",
+          "type" : "text/plain",
+          "size" : 200
+        }, {
+          "uid" : "56d16c9067635440",
+          "name" : "预期值",
+          "source" : "56d16c9067635440.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "8b5318494eba1d13",
+          "name" : "实际值",
+          "source" : "8b5318494eba1d13.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3,
+      "hasContent" : true,
+      "stepsCount" : 1
+    }, {
+      "name" : "3. 查询校验",
+      "time" : {
+        "start" : 1758016177183,
+        "stop" : 1758016177191,
+        "duration" : 8
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 断言失败：实际值 '[{'order_no': 44253359, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:44:10', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854531', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253358, 'commission': -0.08, 'comment': '#QCI3Y#WK_AUTO', 'id': '1967887936664854531', 'open_price': 3696.67, 'tp': 0.0, 'profit': -0.23, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253354, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.42, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:41:54', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936664854530', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253353, 'commission': -0.08, 'comment': '#QCI3T#WK_AUTO', 'id': '1967887936664854530', 'open_price': 3696.86, 'tp': 0.0, 'profit': -0.51, 'slip_point': 0.0, 'market_account_id': ''}, {'order_no': 44253340, 'magic': 2088767545, 'symbol': 'XAUUSDzero', 'trader_id': '1967760842374959105', 'margin': 55.43, 'swap': 0.0, 'owning_account': '2088767546', 'open_time': '2025-09-16 12:37:38', 'owning_userid': '1962808746181640193', 'type': 0, 'close_price': 3696.52, 'jeecg_row_key': '1967887936669048833', 'size': 0.01, 'sl': 0.0, 'master_order_no': 44253339, 'commission': -0.08, 'comment': '#QCI3F#WK_AUTO', 'id': '1967887936669048833', 'open_price': 3695.58, 'tp': 0.0, 'profit': 1.41, 'slip_point': 0.0, 'market_account_id': ''}]' 不是空列表\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_lianxi2.py\", line 87, in test_query_follow_passid\n    self.json_utils.assert_empty_list(\n  File \"D:\\pycharm_test\\template\\commons\\jsonpath_utils.py\", line 53, in assert_empty_list\n    assert isinstance(actual, list) and len(actual) == 0, \\\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0,
+      "hasContent" : true,
+      "stepsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "41b4d1e142bb639f",
+      "name" : "log",
+      "source" : "41b4d1e142bb639f.txt",
+      "type" : "text/plain",
+      "size" : 300
+    } ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 10,
+    "hasContent" : true,
+    "stepsCount" : 7
+  },
+  "afterStages" : [ {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1758016194962,
+      "stop" : 1758016194962,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1758016194963,
+      "stop" : 1758016194964,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1758016194961,
+      "stop" : 1758016194961,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "账户管理-持仓订单"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_lianxi2"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_openandclouseall"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "38124-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_lianxi2"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "e4f767f294291a3e.json",
+  "parameterValues" : [ ]
+}
