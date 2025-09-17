@@ -933,6 +933,8 @@ class Test_create:
 
             with allure.step("3. 判断是否有订阅信息"):
                 result = self.json_utils.extract(response.json(), "$.result.data.records[*]")
+                follow_jeecg_rowkey = self.json_utils.extract(response.json(), "$.result.data.records[0].jeecg_row_key")
+                var_manager.set_runtime_variable("follow_jeecg_rowkey", follow_jeecg_rowkey)
                 if not result:
                     pytest.fail("无订阅信息")
                 else:

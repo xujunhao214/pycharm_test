@@ -360,8 +360,6 @@ class APITestBase:
             allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
             allure.attach(f"期望值: {expected_status}", "预期状态码", allure.attachment_type.TEXT)
             allure.attach(f"实际值: {actual_status}", "实际状态码", allure.attachment_type.TEXT)
-            allure.attach(response.text[:500] + "..." if len(response.text) > 500 else response.text,
-                          "响应内容", allure.attachment_type.TEXT)
 
         try:
             assert actual_status == expected_status, \
