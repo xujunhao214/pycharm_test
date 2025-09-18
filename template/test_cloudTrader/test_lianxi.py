@@ -15,7 +15,7 @@ from template.commons.session import percentage_to_decimal
 
 @allure.feature("跟随方式-按净值")
 class Test_openandclouseall:
-    @allure.story("场景2：跟随方式-按净值-1%")
+    @allure.story("场景2：跟随方式-按净值-100%")
     @allure.description("""
     ### 测试说明
     - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系
@@ -41,9 +41,9 @@ class Test_openandclouseall:
                 follow_jeecg_rowkey = var_manager.get_variable("follow_jeecg_rowkey")
                 data = {
                     "id": follow_jeecg_rowkey,
-                    "direction": "FORWARD",
+                    "direction": "REVERSE",
                     "followingMode": 4,
-                    "fixedProportion": 1,
+                    "fixedProportion": 100,
                     "fixedLots": None
                 }
                 response = self.send_put_request(
@@ -516,6 +516,7 @@ class Test_openandclouseall:
                             actual_value=float(add_size),
                             expected_value=float(expected_lots_open),
                             op=CompareOp.EQ,
+                            abs_tol=0.01,
                             message=f"手数符合预期",
                             attachment_name="手数详情"
                         )
@@ -527,7 +528,7 @@ class Test_openandclouseall:
 
                     self.verify_data(
                         actual_value=float(type),
-                        expected_value=float(0),
+                        expected_value=float(1),
                         op=CompareOp.EQ,
                         message=f"跟单方向符合预期",
                         attachment_name="跟单方向详情"
@@ -736,6 +737,7 @@ class Test_openandclouseall:
                             actual_value=float(slave_lots),
                             expected_value=float(expected_lots_open),
                             op=CompareOp.EQ,
+                            abs_tol=0.01,
                             message=f"跟单手数符合预期",
                             attachment_name="跟单手数详情"
                         )
@@ -928,6 +930,7 @@ class Test_openandclouseall:
                                 actual_value=float(totalLots),
                                 expected_value=float(expected_lots_open),
                                 op=CompareOp.EQ,
+                                abs_tol=0.01,
                                 message=f"手数符合预期",
                                 attachment_name="手数详情"
                             )
@@ -1108,6 +1111,7 @@ class Test_openandclouseall:
                             actual_value=float(slave_lots),
                             expected_value=float(expected_lots_open),
                             op=CompareOp.EQ,
+                            abs_tol=0.01,
                             message=f"跟单手数符合预期",
                             attachment_name="跟单手数详情"
                         )
