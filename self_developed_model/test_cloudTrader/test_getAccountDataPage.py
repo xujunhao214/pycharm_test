@@ -23,6 +23,30 @@ class TestCloudOrderSend_newScenarios:
     - 预期结果：数据正确
     """)
     class TestCloudOrderSend1(APITestBase):
+        # @pytest.mark.skipif(True, reason="跳过")
+        @allure.title("云策略交易下单-分配平仓-防止数据残留")
+        def test_copy_orderprevent_close(self, var_manager, logged_session):
+            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
+            # 发送平仓请求
+            data = {
+                "isCloseAll": 1,
+                "intervalTime": 100,
+                "traderList": [cloudTrader_user_ids_2]
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/bargain/masOrderClose',
+                json_data=data
+            )
+
+            # 验证平仓成功
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求

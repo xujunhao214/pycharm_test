@@ -15,7 +15,7 @@ from template.commons.session import percentage_to_decimal
 
 @allure.feature("跟随方式-按手数")
 class Test_openandclouseall:
-    @allure.story("场景3：跟随方式-按手数-0.01,跟单方向反向")
+    @allure.story("场景1：跟随方式-按手数-0.01")
     @allure.description("""
     ### 测试说明
     - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系
@@ -30,7 +30,7 @@ class Test_openandclouseall:
     - 预期结果：喊单和跟单数据校验正确
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
-    class Test_orderseng3(APITestBase):
+    class Test_orderseng1(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
@@ -41,7 +41,7 @@ class Test_openandclouseall:
                 follow_jeecg_rowkey = var_manager.get_variable("follow_jeecg_rowkey")
                 data = {
                     "id": follow_jeecg_rowkey,
-                    "direction": "REVERSE",
+                    "direction": "FORWARD",
                     "followingMode": 3,
                     "fixedProportion": None,
                     "fixedLots": 0.01
@@ -89,6 +89,78 @@ class Test_openandclouseall:
                 fixed_lots = self.json_utils.extract(response.json(),
                                                      "$.result.data.records[0].fixed_lots")
                 var_manager.set_runtime_variable("fixed_lots", fixed_lots)
+
+        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓前")
+        def test_query_trader_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                trader_pass_id = var_manager.get_variable("trader_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": trader_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.records"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')
+
+        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓前")
+        def test_query_follow_passid(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                follow_pass_id = var_manager.get_variable("follow_pass_id")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "trader_id": follow_pass_id,
+                    "column": "id",
+                    "order": "desc",
+                    "pageNo": 1,
+                    "pageSize": 50,
+                    "superQueryMatchType": "and"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
+
+            with allure.step(f"3. 查询校验"):
+                self.json_utils.assert_empty_list(
+                    data=response.json(),
+                    expression="$.result.records"
+                )
+                logging.info("查询结果符合预期：records为空列表")
+                allure.attach("查询结果为空，符合预期", 'text/plain')
 
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):
@@ -412,7 +484,7 @@ class Test_openandclouseall:
 
                     self.verify_data(
                         actual_value=float(type),
-                        expected_value=float(1),
+                        expected_value=float(0),
                         op=CompareOp.EQ,
                         message=f"跟单方向符合预期",
                         attachment_name="跟单方向详情"
@@ -655,54 +727,21 @@ class Test_openandclouseall:
                     "响应searchCount字段应为true"
                 )
 
-            with allure.step(f"3. 查询校验"):
-                order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
-                logging.info(f"喊单者手数是: {order_size}")
-                var_manager.set_runtime_variable("order_size", order_size)
+            with allure.step(f"3. 数据校验"):
+                with allure.step("喊单者手数校验-MT4开仓手数和持仓订单手数"):
+                    totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
+                    logging.info(f"手数是: {totalLots}")
 
-                account_list = self.json_utils.extract(
-                    response.json(),
-                    "$.records[0].account",
-                    default=[],
-                    multi_match=True
-                )
+                    lots_open = var_manager.get_variable("lots_open")
 
-                if not account_list:
-                    attach_body = f"账号查询[{trader_account}]，返回的account列表为空（暂无数据）"
-                else:
-                    attach_body = f"账号查询[{trader_account}]，返回 {len(account_list)} 条记录，account值如下：\n" + \
-                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(account_list)])
-
-                allure.attach(
-                    body=attach_body,
-                    name=f"账号:{trader_account}查询结果",
-                    attachment_type="text/plain"
-                )
-
-                for idx, account in enumerate(account_list):
                     self.verify_data(
-                        actual_value=account,
-                        expected_value=trader_account,
+                        actual_value=float(totalLots),
+                        expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的账号应为{account}",
-                        attachment_name=f"账号:{trader_account}第 {idx + 1} 条记录校验"
+                        message=f"手数符合预期",
+                        attachment_name="手数详情"
                     )
-
-                    with allure.step("手数校验-MT4开仓手数和持仓订单手数"):
-                        totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
-                        logging.info(f"手数是: {totalLots}")
-
-                        lots_open = var_manager.get_variable("lots_open")
-
-                        self.verify_data(
-                            actual_value=float(totalLots),
-                            expected_value=float(lots_open),
-                            op=CompareOp.EQ,
-                            message=f"手数符合预期",
-                            attachment_name="手数详情"
-                        )
-                        logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
+                    logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
@@ -734,54 +773,21 @@ class Test_openandclouseall:
                     "响应searchCount字段应为true"
                 )
 
-            with allure.step(f"3. 查询校验"):
-                order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
-                logging.info(f"喊单者手数是: {order_size}")
-                var_manager.set_runtime_variable("order_size", order_size)
+            with allure.step(f"3. 数据校验"):
+                with allure.step("跟单手数校验-MT4开仓手数和持仓订单手数"):
+                    totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
+                    logging.info(f"手数是: {totalLots}")
 
-                account_list = self.json_utils.extract(
-                    response.json(),
-                    "$.records[0].account",
-                    default=[],
-                    multi_match=True
-                )
+                    fixed_lots = var_manager.get_variable("fixed_lots")
 
-                if not account_list:
-                    attach_body = f"账号查询[{follow_account}]，返回的account列表为空（暂无数据）"
-                else:
-                    attach_body = f"账号查询[{follow_account}]，返回 {len(account_list)} 条记录，account值如下：\n" + \
-                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(account_list)])
-
-                allure.attach(
-                    body=attach_body,
-                    name=f"账号:{follow_account}查询结果",
-                    attachment_type="text/plain"
-                )
-
-                for idx, account in enumerate(account_list):
                     self.verify_data(
-                        actual_value=account,
-                        expected_value=follow_account,
+                        actual_value=float(totalLots),
+                        expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的账号应为{account}",
-                        attachment_name=f"账号:{follow_account}第 {idx + 1} 条记录校验"
+                        message=f"手数符合预期",
+                        attachment_name="手数详情"
                     )
-
-                    with allure.step("跟单手数校验-MT4开仓手数和持仓订单手数"):
-                        totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
-                        logging.info(f"手数是: {totalLots}")
-
-                        fixed_lots = var_manager.get_variable("fixed_lots")
-
-                        self.verify_data(
-                            actual_value=float(totalLots),
-                            expected_value=float(fixed_lots),
-                            op=CompareOp.EQ,
-                            message=f"手数符合预期",
-                            attachment_name="手数详情"
-                        )
-                        logger.info(f"跟单者手数：{totalLots}")
+                    logger.info(f"跟单者手数：{totalLots}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")

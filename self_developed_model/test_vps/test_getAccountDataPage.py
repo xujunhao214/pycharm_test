@@ -23,6 +23,38 @@ class TestVPSOrderSend_newScenarios:
     - 预期结果：数据正确
     """)
     class TestVPSOrderSend1(APITestBase):
+        # @pytest.mark.skipif(True, reason="跳过")
+        @pytest.mark.url("vps")
+        @allure.title("跟单软件看板-VPS数据-策略平仓-防止数据残留")
+        def test_trader_orderprevent_close(self, var_manager, logged_session):
+            # 1. 发送全平订单平仓请求
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
+            new_user = var_manager.get_variable("new_user")
+            data = {
+                "isCloseAll": 1,
+                "intervalTime": 100,
+                "traderId": vps_trader_id,
+                "account": new_user["account"]
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderClose',
+                json_data=data,
+            )
+
+            # 2. 验证响应
+            self.assert_response_status(
+                response,
+                200,
+                "平仓失败"
+            )
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
         @pytest.mark.url("vps")
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("跟单软件看板-VPS数据-策略开仓")

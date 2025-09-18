@@ -87,6 +87,7 @@ class Test_openandclouseall:
             self.response = requests.request("GET", url, headers=headers, data=payload)
             self.json_utils = JsonPathUtils()
             self.response = self.response.json()
+
             ticket_open = self.json_utils.extract(self.response, "$.ticket")
             lots_open = self.json_utils.extract(self.response, "$.lots")
             var_manager.set_runtime_variable("ticket_open", ticket_open)
@@ -97,23 +98,61 @@ class Test_openandclouseall:
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager):
-            with allure.step("1. 发送平仓请求"):
-                ticket_open = var_manager.get_variable("ticket_open")
-                url = f"https://mt4.mtapi.io/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
+            max_attempts = 3  # 最大总尝试次数
+            retry_interval = 10  # 每次尝试间隔时间(秒)
+            global token_mt4, headers  # 声明使用全局变量
+            ticket_open = var_manager.get_variable("ticket_open")
+            ticket_close = None
 
-                self.response = requests.request("GET", url, headers=headers)
-                self.json_utils = JsonPathUtils()
-                self.response = self.response.json()
+            # 提取登录所需变量
+            uuid_pattern = re.compile(
+                r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 
-            with allure.step("2. 数据校验"):
-                ticket_close = self.json_utils.extract(self.response, "$.ticket")
+            for attempt in range(max_attempts):
+                try:
+                    with allure.step(f"1. 发送平仓请求 (第{attempt + 1}次尝试)"):
+                        # 检查token是否有效，无效则重新登录
+                        if not token_mt4 or not uuid_pattern.match(token_mt4):
+                            with allure.step("token无效或不存在，重新登录MT4"):
+                                self.test_mt4_login(var_manager)  # 调用登录方法获取新token
 
-                self.verify_data(
-                    actual_value=ticket_close,
-                    expected_value=ticket_open,
-                    op=CompareOp.EQ,
-                    use_isclose=False,
-                    message=f"预期：开仓订单号和平仓订单号一致",
-                    attachment_name="订单号详情"
-                )
-                logger.info(f"开仓订单号和平仓订单号一致,开仓订单号：{ticket_open} 平仓订单号：{ticket_close}")
+                        # 发送平仓请求
+                        url = f"https://mt4.mtapi.io/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
+                        self.response = requests.request("GET", url, headers=headers)
+                        self.response_json = self.response.json()
+                        logging.info(f"第{attempt + 1}次平仓响应: {self.response_json[:500]}")
+
+                    # 提取平仓订单号
+                    ticket_close = self.json_utils.extract(self.response_json, "$.ticket")
+
+                    # 检查平仓是否成功
+                    if ticket_close is not None:
+                        with allure.step("2. 数据校验"):
+                            self.verify_data(
+                                actual_value=ticket_close,
+                                expected_value=ticket_open,
+                                op=CompareOp.EQ,
+                                use_isclose=False,
+                                message="预期：开仓订单号和平仓订单号一致",
+                                attachment_name="订单号详情"
+                            )
+                            logger.info(
+                                f"开仓订单号和平仓订单号一致,开仓订单号：{ticket_open} 平仓订单号：{ticket_close}")
+                        break  # 成功则跳出循环
+                    else:
+                        logging.warning(f"第{attempt + 1}次平仓失败，未获取到平仓订单号")
+
+                except Exception as e:
+                    logging.error(f"第{attempt + 1}次平仓发生异常: {str(e)}")
+
+                # 如果不是最后一次尝试，等待后重试
+                if attempt < max_attempts - 1:
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}次尝试...")
+                    time.sleep(retry_interval)
+                    # 主动重新登录获取新token
+                    with allure.step(f"准备第{attempt + 2}次尝试，先重新登录MT4"):
+                        self.test_mt4_login(var_manager)
+
+            # 所有尝试结束后仍失败，标记用例失败
+            if ticket_close is None:
+                pytest.fail(f"经过{max_attempts}次尝试（包含重新登录）后，平仓仍失败，订单号: {ticket_open}")

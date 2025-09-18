@@ -90,6 +90,105 @@ class Test_openandclouseall:
                                                      "$.result.data.records[0].fixed_lots")
                 var_manager.set_runtime_variable("fixed_lots", fixed_lots)
 
+        @pytest.mark.retry(n=3, delay=20)
+        @allure.title("跟单管理-VPS管理-提取喊单者净值")
+        def test_query_get_traderquit(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                trader_account = var_manager.get_variable("trader_account")
+                vpsrunIpAddr = var_manager.get_variable("vpsrunIpAddr")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "pageNo": "1",
+                    "pageSize": "50",
+                    "accountLike": trader_account,
+                    "serverNameLike": "",
+                    "connectTraderLike": "",
+                    "connected": "",
+                    "runIpAddr": vpsrunIpAddr
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/blockchain/account/getRecordList',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.searchCount",
+                    True,
+                    "响应searchCount字段应为true"
+                )
+
+            with allure.step(f"3. 提取净值数据"):
+                trader_equity = self.json_utils.extract(response.json(), "$.records[0].equity")
+                currency = self.json_utils.extract(response.json(), "$.records[0].currency")
+
+                if currency == "USD":
+                    trader_periodP = round(float(trader_equity) * 1.0, 2)
+                elif currency == "JPY":
+                    trader_periodP = round(float(trader_equity) * 0.00672, 2)
+                elif currency == "AUD":
+                    trader_periodP = round(float(trader_equity) * 0.6251, 2)
+                elif currency == "USC":
+                    trader_periodP = round(float(trader_equity) * 0.01, 2)
+                else:
+                    pytest.fail(f"不支持的币种：{currency}，请补充币种转换逻辑")
+
+                logging.info(f"币种的转换详情,当前币种{currency}，转换前：{trader_equity},转换后：{trader_periodP}")
+                allure.attach(f"币种类型转换详情,当前币种{currency}，转换前：{trader_equity},转换后：{trader_periodP}",
+                              "币种类型转换详情", allure.attachment_type.TEXT)
+                var_manager.set_runtime_variable("trader_periodP", trader_periodP)
+
+        @allure.title("跟单管理-VPS管理-提取跟单者净值")
+        def test_query_get_followquit(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                follow_account = var_manager.get_variable("follow_account")
+                vpsrunIpAddr = var_manager.get_variable("vpsrunIpAddr")
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "pageNo": "1",
+                    "pageSize": "50",
+                    "accountLike": follow_account,
+                    "serverNameLike": "",
+                    "connectTraderLike": "",
+                    "connected": "",
+                    "runIpAddr": vpsrunIpAddr
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/blockchain/account/getRecordList',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.searchCount",
+                    True,
+                    "响应searchCount字段应为true"
+                )
+
+            with allure.step(f"3. 提取净值数据"):
+                follow_equity = self.json_utils.extract(response.json(), "$.records[0].equity")
+                currency = self.json_utils.extract(response.json(), "$.records[0].currency")
+
+                if currency == "USD":
+                    follow_periodP = round(float(follow_equity) * 1.0, 2)
+                elif currency == "JPY":
+                    follow_periodP = round(float(follow_equity) * 0.00672, 2)
+                elif currency == "AUD":
+                    follow_periodP = round(float(follow_equity) * 0.6251, 2)
+                elif currency == "USC":
+                    follow_periodP = round(float(follow_equity) * 0.01, 2)
+                else:
+                    pytest.fail(f"不支持的币种：{currency}，请补充币种转换逻辑")
+
+                logging.info(f"币种的转换详情,当前币种{currency}，转换前：{follow_equity},转换后：{follow_periodP}")
+                allure.attach(f"币种类型转换详情,当前币种{currency}，转换前：{follow_equity},转换后：{follow_periodP}",
+                              "币种类型转换详情", allure.attachment_type.TEXT)
+                var_manager.set_runtime_variable("follow_periodP", follow_periodP)
+
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):
             global token_mt4, headers
