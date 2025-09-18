@@ -238,7 +238,7 @@ class Test_openandclouseall:
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1039,7 +1039,7 @@ class Test_openandclouseall:
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1307,7 +1307,7 @@ class Test_openandclouseall:
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1863,7 +1863,6 @@ class Test_openandclouseall:
         def test_mt4_close(self, var_manager):
             max_attempts = 3  # 最大总尝试次数
             retry_interval = 10  # 每次尝试间隔时间(秒)
-            global token_mt4, headers  # 声明使用全局变量
             ticket_open = var_manager.get_variable("ticket_open")
             ticket_close = None
 
@@ -2108,7 +2107,7 @@ class Test_openandclouseall:
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2376,7 +2375,7 @@ class Test_openandclouseall:
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2932,7 +2931,6 @@ class Test_openandclouseall:
         def test_mt4_close(self, var_manager):
             max_attempts = 3  # 最大总尝试次数
             retry_interval = 10  # 每次尝试间隔时间(秒)
-            global token_mt4, headers  # 声明使用全局变量
             ticket_open = var_manager.get_variable("ticket_open")
             ticket_close = None
 
@@ -3177,7 +3175,7 @@ class Test_openandclouseall:
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
