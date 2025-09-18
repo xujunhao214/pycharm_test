@@ -394,7 +394,7 @@ class APITestBase:
         except Exception as e:
             with allure.step("JSONPath解析异常"):
                 allure.attach(json_path, "解析路径", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
+                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
                 allure.attach(str(e), "解析错误", allure.attachment_type.TEXT)
             logger.error(f"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}")
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e

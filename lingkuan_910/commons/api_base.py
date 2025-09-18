@@ -360,8 +360,6 @@ class APITestBase:
             allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
             allure.attach(f"期望值: {expected_status}", "预期状态码", allure.attachment_type.TEXT)
             allure.attach(f"实际值: {actual_status}", "实际状态码", allure.attachment_type.TEXT)
-            allure.attach(response.text[:500] + "..." if len(response.text) > 500 else response.text,
-                          "响应内容", allure.attachment_type.TEXT)
 
         try:
             assert actual_status == expected_status, \
@@ -396,7 +394,7 @@ class APITestBase:
         except Exception as e:
             with allure.step("JSONPath解析异常"):
                 allure.attach(json_path, "解析路径", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
+                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
                 allure.attach(str(e), "解析错误", allure.attachment_type.TEXT)
             logger.error(f"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}")
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
@@ -419,7 +417,6 @@ class APITestBase:
             with allure.step(f"JSON断言失败: {json_path}"):
                 allure.attach(json_path, "JSON路径", allure.attachment_type.TEXT)
                 allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
             logger.error(
                 f"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}")
             raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
@@ -542,11 +539,6 @@ class APITestBase:
         )
 
         with allure.step(f"轮询等待数据稳定（超时: {timeout}秒，稳定期: {stable_period}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)  # Allure展示固定时间
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()  # 刷新事务
@@ -609,10 +601,6 @@ class APITestBase:
 
                 except Exception as e:
                     with allure.step("轮询查询异常（单次查询失败）"):
-                        allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                        allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-                        allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                                      allure.attachment_type.TEXT)
                         allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
                     logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...")
                     time.sleep(poll_interval)
@@ -798,11 +786,6 @@ class APITestBase:
         logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒")
 
         with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -919,11 +902,6 @@ class APITestBase:
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -1028,12 +1006,6 @@ class APITestBase:
         logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"{timezone_offset}", "时区偏移量（小时）", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()

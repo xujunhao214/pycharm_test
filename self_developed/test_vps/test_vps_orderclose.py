@@ -31,50 +31,6 @@ class TestVPSCoreFunctionality:
     """)
     class TestStopCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
-        @allure.title("修改跟单账号")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
-            with allure.step("1. 修改跟单账号"):
-                # remainder  0 : 四舍五入  1：取小数
-                new_user = var_manager.get_variable("new_user")
-                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-                vps_trader_id = var_manager.get_variable("vps_trader_id")
-                vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-                platformId = var_manager.get_variable("platformId")
-                data = {
-                    "traderId": vps_trader_id,
-                    "platform": new_user["platform"],
-                    "account": vps_user_accounts_1,
-                    "password": encrypted_password,
-                    "remark": "",
-                    "followDirection": 0,
-                    "followMode": 1,
-                    "remainder": 0,
-                    "followParam": 1,
-                    "placedType": 0,
-                    "templateId": 1,
-                    "followStatus": 1,
-                    "followOpen": 1,
-                    "followClose": 1,
-                    "followRep": 0,
-                    "fixedComment": "",
-                    "commentType": "",
-                    "digits": 0,
-                    "cfd": "",
-                    "forex": "",
-                    "abRemark": "",
-                    "id": vps_addslave_id,
-                    "platformId": platformId
-                }
-                response = self.send_post_request(
-                    logged_session,
-                    '/subcontrol/follow/updateSlave',
-                    json_data=data
-                )
-            with allure.step("2. 验证响应状态码和内容"):
-                self.assert_response_status(response, 200, "修改跟单账号失败")
-                self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
-
-        @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
         def test_trader_orderSend(self, var_manager, logged_session):
             # 1. 发送策略开仓请求
@@ -1059,7 +1015,7 @@ class TestVPSOrderQuantityControl:
                 )
                 logging.info(f"{new_user['account']}暂无可平仓订单")
 
-        # time.sleep(30)
+        time.sleep(30)
 
 
 # ------------------------------------

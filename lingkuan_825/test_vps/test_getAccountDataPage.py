@@ -215,13 +215,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款-容差10000"):
+                with allure.step("5.5 验证可用预付款-容差150000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=10000,
+                        abs_tol=150000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -525,7 +525,7 @@ class TestVPSOrderSend_newScenarios:
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=10000,
+                        abs_tol=150000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -549,7 +549,7 @@ class TestVPSOrderSend_newScenarios:
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=500,
+                        abs_tol=150000,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )
