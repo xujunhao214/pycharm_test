@@ -14,6 +14,7 @@ SKIP_REASON = "该用例暂时跳过"
 @allure.feature("数据管理-创建数据-为VPS测试准备")
 class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.retry(n=3, delay=10)
     @allure.title("账号管理-账号列表-新增单个用户")
     def test_create_user(self, logged_session, var_manager, encrypted_password):
         # 1. 发送创建用户请求

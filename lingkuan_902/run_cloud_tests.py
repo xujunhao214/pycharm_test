@@ -65,7 +65,7 @@ def run_cloud_tests(env: str = "test"):
         result = subprocess.run(
             generate_env_cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE  # 字节流模式
+            stderr=subprocess.PIPE
         )
 
         # 解码stderr（多编码尝试+替换错误字符）
