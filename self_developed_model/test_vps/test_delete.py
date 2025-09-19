@@ -410,6 +410,53 @@ class TestDeleteUser(APITestBase):
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("平台管理-品种管理-删除品种2")
+    def test_deleteTemplate2(self, logged_session, var_manager):
+        """测试删除用户接口"""
+        # 1. 发送删除品种请求
+        vps_template_id2 = var_manager.get_variable("vps_template_id2")
+        response = self.send_delete_request(
+            logged_session,
+            '/mascontrol/variety/deleteTemplate',
+            json_data=[vps_template_id2]
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "删除品种失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-品种管理-删除品种2")
+    def test_dbdelete_template2(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否删除成功"):
+            add_variety = var_manager.get_variable("add_variety")
+            logging.info(f"查询条件: table=follow_variety, templateName2={add_variety['templateName3']}")
+
+            sql = f"SELECT * FROM follow_variety WHERE template_name = %s"
+            params = (add_variety["templateName3"],)
+            try:
+                self.wait_for_database_deletion(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params
+                )
+                allure.attach(f"品种 {add_variety['templateName3']} 已成功从数据库删除", "验证结果")
+            except TimeoutError as e:
+                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                pytest.fail(f"删除失败: {str(e)}")
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-删除账号")
     def test_delete_user(self, logged_session, var_manager):
         """测试删除用户接口"""

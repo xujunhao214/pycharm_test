@@ -501,14 +501,13 @@ class TestcloudTrader_openandlevel:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time_with_timezone(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
@@ -1567,14 +1566,13 @@ class TestcloudTrader_openandlevel:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time_with_timezone(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="foi.create_time"
                 )
             with allure.step("2. 数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
@@ -2047,12 +2045,13 @@ class TestcloudTrader_openandlevel:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time_with_timezone(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="foi.create_time"
                 )
+
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")

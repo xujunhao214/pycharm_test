@@ -54,7 +54,7 @@ class Test_create:
                 )
 
                 if not create_time_list:
-                    attach_body = f"绑定日期查询-开始时间：{ONE_HOUR_AGO}，返回的create_time列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"绑定日期查询-开始时间：{ONE_HOUR_AGO}，返回 {len(create_time_list)} 条记录，create_time值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(create_time_list)])
@@ -161,7 +161,7 @@ class Test_create:
                 )
 
                 if not user_id_query_list:
-                    attach_body = f"用户查询：{follow_user_id}，返回的user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"用户查询：{follow_user_id}，返回 {len(user_id_query_list)} 条记录，user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(user_id_query_list)])
@@ -372,7 +372,7 @@ class Test_create:
                 )
 
                 if not broker_id_list:
-                    attach_body = f"经纪商查询：{trader_broker_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"经纪商查询：{trader_broker_id}，返回 {len(broker_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(broker_id_list)])
@@ -431,7 +431,7 @@ class Test_create:
                 )
 
                 if not server_id_list:
-                    attach_body = f"服务器查询：{trader_server_id}，返回的server_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"服务器：查询{trader_server_id}，返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(server_id_list)])
@@ -489,7 +489,7 @@ class Test_create:
                 )
 
                 if not connected_list:
-                    attach_body = f"是否连接查询-是，返回的connected列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"是否连接查询-是，返回 {len(connected_list)} 条记录，connected值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(connected_list)])
@@ -546,7 +546,7 @@ class Test_create:
                 )
 
                 if not connected_list:
-                    attach_body = f"是否连接查询-否，返回的connected列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"是否连接查询-否，返回 {len(connected_list)} 条记录，connected值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(connected_list)])
@@ -717,7 +717,7 @@ class Test_create:
                 )
 
                 if not blocked_password_extra_list:
-                    attach_body = f"封闭状态说明-已解封，返回的blocked_password_extra列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"封闭状态说明-已解封，返回 {len(blocked_password_extra_list)} 条记录，blocked_password_extra值如下：\n" + \
                                   "\n".join(
@@ -813,7 +813,7 @@ class Test_create:
                 )
 
                 if not recommenders_user_id_list:
-                    attach_body = f"推荐人ID查询：{trader_user_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"推荐人ID查询：{trader_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
@@ -909,7 +909,7 @@ class Test_create:
                 )
 
                 if not recommenders_user_name_list:
-                    attach_body = f"推荐人名字查询：{recommenders_user_name}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"推荐人名字查询：{recommenders_user_name}，返回 {len(recommenders_user_name_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join(
@@ -1016,7 +1016,7 @@ class Test_create:
                 )
 
                 if not recommenders_user_id_list:
-                    attach_body = f"推荐人ID查询：{trader_user_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"推荐人ID查询：{trader_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
@@ -1093,7 +1093,7 @@ class Test_create:
                 )
 
                 if not user_id_query_list:
-                    attach_body = f"用户查询：{follow_user_id}，返回的user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"用户查询：{follow_user_id}，返回 {len(user_id_query_list)} 条记录，user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(user_id_query_list)])
