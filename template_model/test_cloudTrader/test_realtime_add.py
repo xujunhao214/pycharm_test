@@ -60,7 +60,7 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step(f"3. 业务校验：返回记录的following_mode应为{status}"):
+            with allure.step(f"3. 查询结果校验：返回记录的following_mode应为{status}"):
                 status_list = self.json_utils.extract(
                     response.json(),
                     "$.result.data.records[*].following_mode",
@@ -132,7 +132,7 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step(f"3. 业务校验：返回记录的direction应为{status}"):
+            with allure.step(f"3. 查询结果校验：返回记录的direction应为{status}"):
                 status_list = self.json_utils.extract(
                     response.json(),
                     "$.result.data.records[*].direction",
@@ -206,7 +206,7 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step(f"3. 业务校验：返回记录的pause应为{status}"):
+            with allure.step(f"3. 查询结果校验：返回记录的pause应为{status}"):
                 status_list = self.json_utils.extract(
                     response.json(),
                     "$.result.data.records[*].pause",
@@ -282,7 +282,7 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step(f"3. 业务校验：返回记录的status应为{status}"):
+            with allure.step(f"3. 查询结果校验：返回记录的status应为{status}"):
                 status_list = self.json_utils.extract(
                     response.json(),
                     "$.result.data.records[*].status",

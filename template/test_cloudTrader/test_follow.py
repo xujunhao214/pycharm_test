@@ -227,7 +227,7 @@ class Test_create:
                     "响应success字段应为true"
                 )
 
-            with allure.step(f"3. 业务校验：返回记录的status应为{status}"):
+            with allure.step(f"3. 查询结果校验：返回记录的status应为{status}"):
                 status_list = self.json_utils.extract(
                     response.json(),
                     "$.result.records[*].status",
