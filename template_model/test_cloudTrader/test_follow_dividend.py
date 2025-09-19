@@ -8,9 +8,9 @@ from template_model.commons.jsonpath_utils import *
 from template_model.commons.random_generator import *
 
 
-@allure.feature("账号管理")
+@allure.feature("返佣管理-跟单分红")
 class Test_create:
-    @allure.story("跟随者账户查询校验")
+    @allure.story("跟单分红查询校验")
     class Test_trader(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
@@ -186,7 +186,6 @@ class Test_create:
                     attachment_type="text/plain"
                 )
 
-                
                 for idx, actual_status in enumerate(dividendType_list):
                     self.verify_data(
                         actual_value=int(actual_status),

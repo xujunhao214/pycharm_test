@@ -9,7 +9,7 @@ from template_model.commons.jsonpath_utils import *
 from template_model.commons.random_generator import *
 
 
-@allure.feature("账号管理")
+@allure.feature("账号管理-交易员账户")
 class Test_create:
     @allure.story("交易员账户查询校验")
     class Test_trader(APITestBase):

@@ -29,6 +29,7 @@ class Test_create:
                 brokerId = db_data[0]["id"]
                 var_manager.set_runtime_variable("trader_broker_id", brokerId)
 
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("账号管理-交易员账号-绑定交易员-用户列表-提取用户id")
         def test_user_list(self, var_manager, logged_session):
             target_email = "xujunhao@163.com"
@@ -336,12 +337,13 @@ class Test_create:
             with allure.step("1. 发送请求"):
                 trader_pass_id = var_manager.get_variable("trader_pass_id")
                 trader_jeecgrow_key = var_manager.get_variable("trader_jeecgrow_key")
+                vpsrunIpAddr = var_manager.get_variable("vpsrunIpAddr")
                 data = {
                     "pass": True,
                     "commission": False,
                     "planId": trader_jeecgrow_key,
                     "toSynDate": DATETIME_NOW,
-                    "bindIpAddr": None
+                    "bindIpAddr": vpsrunIpAddr
                 }
                 response = self.send_post_request(
                     logged_session,
@@ -806,12 +808,13 @@ class Test_create:
             with allure.step("1. 发送请求"):
                 follow_pass_id = var_manager.get_variable("follow_pass_id")
                 follow_jeecgrow_key = var_manager.get_variable("follow_jeecgrow_key")
+                vpsrunIpAddr = var_manager.get_variable("vpsrunIpAddr")
                 data = {
                     "pass": True,
                     "commission": False,
                     "planId": follow_jeecgrow_key,
                     "toSynDate": DATETIME_NOW,
-                    "bindIpAddr": None
+                    "bindIpAddr": vpsrunIpAddr
                 }
                 response = self.send_post_request(
                     logged_session,
@@ -933,6 +936,8 @@ class Test_create:
 
             with allure.step("3. 判断是否有订阅信息"):
                 result = self.json_utils.extract(response.json(), "$.result.data.records[*]")
+                follow_jeecg_rowkey = self.json_utils.extract(response.json(), "$.result.data.records[0].jeecg_row_key")
+                var_manager.set_runtime_variable("follow_jeecg_rowkey", follow_jeecg_rowkey)
                 if not result:
                     pytest.fail("无订阅信息")
                 else:

@@ -27,7 +27,7 @@ one_hour_ago = current_time - datetime.timedelta(hours=1)
 ONE_HOUR_AGO = one_hour_ago.strftime("%Y-%m-%d %H:%M:%S")
 
 # mysql查询语句，查询最近时间的数据
-MYSQL_TIME = 1.5  # 时间范围（分钟）
+MYSQL_TIME = 1  # 时间范围（分钟）
 WAIT_TIMEOUT = 30  # 数据库查询等待超时时间（秒）
 DELETE_WAIT_TIMEOUT = 5  # 数据库删除查询超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）
@@ -53,3 +53,6 @@ dividendTime_ago = dividendTime_ago.strftime("%Y-%m-%d")
 
 # 跟单社区
 URL_TOP = "https://dev.lgcopytrade.top/api"
+
+# MT4URL
+MT4_URL = "https://mt4.mtapi.io"

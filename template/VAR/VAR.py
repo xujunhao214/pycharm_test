@@ -53,3 +53,6 @@ dividendTime_ago = dividendTime_ago.strftime("%Y-%m-%d")
 
 # 跟单社区
 URL_TOP = "https://dev.lgcopytrade.top/api"
+
+# MT4URL
+MT4_URL = "https://mt4.mtapi.io"

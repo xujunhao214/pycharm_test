@@ -206,7 +206,7 @@ class Test_openandclouseall:
                 host = var_manager.get_variable("host")
                 port = var_manager.get_variable("port")
                 try:
-                    url = f"https://mt4.mtapi.io/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
+                    url = f"{MT4_URL}/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
 
                     headers = {
                         'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
@@ -251,7 +251,7 @@ class Test_openandclouseall:
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
             symbol = var_manager.get_variable("symbol")
-            url = f"https://mt4.mtapi.io/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
+            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
 
             payload = ""
             self.response = requests.request("GET", url, headers=headers, data=payload)
@@ -895,7 +895,7 @@ class Test_openandclouseall:
                                 self.test_mt4_login(var_manager)  # 调用登录方法获取新token
 
                         # 发送平仓请求
-                        url = f"https://mt4.mtapi.io/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
+                        url = f"{MT4_URL}/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
                         self.response = requests.request("GET", url, headers=headers)
                         self.response_json = self.response.json()
                         logging.info(f"第{attempt + 1}次平仓响应: {self.response_json}")
@@ -1451,7 +1451,7 @@ class Test_openandclouseall:
                 host = var_manager.get_variable("host")
                 port = var_manager.get_variable("port")
                 try:
-                    url = f"https://mt4.mtapi.io/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
+                    url = f"{MT4_URL}/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
 
                     headers = {
                         'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
@@ -1496,7 +1496,7 @@ class Test_openandclouseall:
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
             symbol = var_manager.get_variable("symbol")
-            url = f"https://mt4.mtapi.io/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
+            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
 
             payload = ""
             self.response = requests.request("GET", url, headers=headers, data=payload)
@@ -2140,7 +2140,7 @@ class Test_openandclouseall:
                                 self.test_mt4_login(var_manager)  # 调用登录方法获取新token
 
                         # 发送平仓请求
-                        url = f"https://mt4.mtapi.io/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
+                        url = f"{MT4_URL}/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
                         self.response = requests.request("GET", url, headers=headers)
                         self.response_json = self.response.json()
                         logging.info(f"第{attempt + 1}次平仓响应: {self.response_json}")
@@ -2535,7 +2535,7 @@ class Test_openandclouseall:
                 host = var_manager.get_variable("host")
                 port = var_manager.get_variable("port")
                 try:
-                    url = f"https://mt4.mtapi.io/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
+                    url = f"{MT4_URL}/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
 
                     headers = {
                         'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
@@ -2580,7 +2580,7 @@ class Test_openandclouseall:
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
             symbol = var_manager.get_variable("symbol")
-            url = f"https://mt4.mtapi.io/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
+            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
 
             payload = ""
             self.response = requests.request("GET", url, headers=headers, data=payload)
@@ -3221,7 +3221,7 @@ class Test_openandclouseall:
                                 self.test_mt4_login(var_manager)  # 调用登录方法获取新token
 
                         # 发送平仓请求
-                        url = f"https://mt4.mtapi.io/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
+                        url = f"{MT4_URL}/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
                         self.response = requests.request("GET", url, headers=headers)
                         self.response_json = self.response.json()
                         logging.info(f"第{attempt + 1}次平仓响应: {self.response_json}")
@@ -3615,7 +3615,7 @@ class Test_openandclouseall:
                 host = var_manager.get_variable("host")
                 port = var_manager.get_variable("port")
                 try:
-                    url = f"https://mt4.mtapi.io/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
+                    url = f"{MT4_URL}/Connect?user={trader_account}&password={trader_password}&host={host}&port={port}&connectTimeoutSeconds=30"
 
                     headers = {
                         'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
@@ -3660,7 +3660,7 @@ class Test_openandclouseall:
         @allure.title("MT4平台开仓操作")
         def test_mt4_open(self, var_manager):
             symbol = var_manager.get_variable("symbol")
-            url = f"https://mt4.mtapi.io/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
+            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
 
             payload = ""
             self.response = requests.request("GET", url, headers=headers, data=payload)
@@ -4301,7 +4301,7 @@ class Test_openandclouseall:
                                 self.test_mt4_login(var_manager)  # 调用登录方法获取新token
 
                         # 发送平仓请求
-                        url = f"https://mt4.mtapi.io/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
+                        url = f"{MT4_URL}/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
                         self.response = requests.request("GET", url, headers=headers)
                         self.response_json = self.response.json()
                         logging.info(f"第{attempt + 1}次平仓响应: {self.response_json}")

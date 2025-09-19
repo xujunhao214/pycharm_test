@@ -217,3 +217,31 @@ class EnvironmentSession(requests.Session):
             self.logger.info(f"[{DATETIME_NOW}] 响应内容样本: {content_sample}")
         except Exception as e:
             self.logger.warning(f"[{DATETIME_NOW}] 响应解码失败: {str(e)}")
+
+
+def percentage_to_decimal(percentage_value):
+    """
+    将百分比数据转换为小数（正常数据）
+    :param percentage_value: 原始百分比值（支持int/float/带%的str，如 50、"50%"、120.5）
+    :return: 转换后的小数（如 0.5、1.205）
+    :raises ValueError: 若格式无法识别，抛出异常
+    """
+    # 1. 处理带百分号的字符串（如 "50%" → "50"）
+    if isinstance(percentage_value, str):
+        # 去掉字符串中的 "%"，并清理前后空格（避免 " 50% " 这类异常格式）
+        cleaned = percentage_value.strip().replace("%", "")
+        # 尝试转换为数值
+        try:
+            percentage_num = float(cleaned)
+        except ValueError:
+            raise ValueError(f"无法识别的百分比字符串格式: {percentage_value}（需如 '50%' 或 '120.5%'）")
+    # 2. 处理纯数值（int/float，如 50、120.5）
+    elif isinstance(percentage_value, (int, float)):
+        percentage_num = float(percentage_value)
+    # 3. 不支持的类型
+    else:
+        raise TypeError(f"百分比值类型不支持: {type(percentage_value)}（仅支持int/float/str）")
+
+    # 4. 核心转换：百分比 ÷ 100
+    decimal_value = percentage_num / 100
+    return decimal_value

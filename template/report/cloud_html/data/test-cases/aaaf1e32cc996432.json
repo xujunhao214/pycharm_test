@@ -1,0 +1,264 @@
+{
+  "uid" : "aaaf1e32cc996432",
+  "name" : "跟单管理-VPS管理-喊单者账号-开仓后",
+  "fullName" : "test_cloudTrader.test_oac_equit.Test_orderseng3#test_query_opentrader_getRecordList",
+  "historyId" : "b8340805afdf40b599276eda744445f1",
+  "time" : {
+    "start" : 1758249787792,
+    "stop" : 1758249791364,
+    "duration" : 3572
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系\n      1. MT4进行登录，然后进行开仓，总手数0.01\n      2. 账号管理-持仓订单-喊单和跟单数据校验\n      3. 跟单管理-开仓日志-喊单和跟单数据校验\n      4. 跟单管理-VPS管理-喊单和跟单数据校验\n      5. MT4进行平仓\n      6.账号管理-持仓订单-喊单和跟单数据校验\n      7.跟单管理-开仓日志-喊单和跟单数据校验\n      8.跟单管理-VPS管理-喊单和跟单数据校验\n    - 预期结果：喊单和跟单数据校验正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系\n  1. MT4进行登录，然后进行开仓，总手数0.01\n  2. 账号管理-持仓订单-喊单和跟单数据校验\n  3. 跟单管理-开仓日志-喊单和跟单数据校验\n  4. 跟单管理-VPS管理-喊单和跟单数据校验\n  5. MT4进行平仓\n  6.账号管理-持仓订单-喊单和跟单数据校验\n  7.跟单管理-开仓日志-喊单和跟单数据校验\n  8.跟单管理-VPS管理-喊单和跟单数据校验\n- 预期结果：喊单和跟单数据校验正确\n</code></pre>\n",
+  "status" : "broken",
+  "statusMessage" : "TypeError: float() argument must be a string or a number, not 'NoneType'",
+  "statusTrace" : "self = <template.test_cloudTrader.test_oac_equit.Test_openandclouseall.Test_orderseng3 object at 0x000001F114E60850>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001F114E58640>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001F114E53280>\n\n    @pytest.mark.retry(n=3, delay=20)\n    @allure.title(\"跟单管理-VPS管理-喊单者账号-开仓后\")\n    def test_query_opentrader_getRecordList(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            trader_account = var_manager.get_variable(\"trader_account\")\n            vpsrunIpAddr = var_manager.get_variable(\"vpsrunIpAddr\")\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"pageNo\": \"1\",\n                \"pageSize\": \"50\",\n                \"accountLike\": trader_account,\n                \"serverNameLike\": \"\",\n                \"connectTraderLike\": \"\",\n                \"connected\": \"\",\n                \"runIpAddr\": vpsrunIpAddr\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/blockchain/account/getRecordList',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.searchCount\",\n                True,\n                \"响应searchCount字段应为true\"\n            )\n    \n        with allure.step(f\"3. 数据校验\"):\n            with allure.step(\"喊单者手数校验-MT4开仓手数和持仓订单手数\"):\n                totalLots = self.json_utils.extract(response.json(), \"$.records[0].totalLots\")\n                logging.info(f\"手数是: {totalLots}\")\n    \n                lots_open = var_manager.get_variable(\"lots_open\")\n    \n                self.verify_data(\n>                   actual_value=float(totalLots),\n                    expected_value=float(lots_open),\n                    op=CompareOp.EQ,\n                    message=f\"手数符合预期\",\n                    attachment_name=\"手数详情\"\n                )\nE               TypeError: float() argument must be a string or a number, not 'NoneType'\n\ntest_cloudTrader\\test_oac_equit.py:3130: TypeError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系\n      1. MT4进行登录，然后进行开仓，总手数0.01\n      2. 账号管理-持仓订单-喊单和跟单数据校验\n      3. 跟单管理-开仓日志-喊单和跟单数据校验\n      4. 跟单管理-VPS管理-喊单和跟单数据校验\n      5. MT4进行平仓\n      6.账号管理-持仓订单-喊单和跟单数据校验\n      7.跟单管理-开仓日志-喊单和跟单数据校验\n      8.跟单管理-VPS管理-喊单和跟单数据校验\n    - 预期结果：喊单和跟单数据校验正确\n    ",
+    "status" : "broken",
+    "statusMessage" : "TypeError: float() argument must be a string or a number, not 'NoneType'",
+    "statusTrace" : "self = <template.test_cloudTrader.test_oac_equit.Test_openandclouseall.Test_orderseng3 object at 0x000001F114E60850>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001F114E58640>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000001F114E53280>\n\n    @pytest.mark.retry(n=3, delay=20)\n    @allure.title(\"跟单管理-VPS管理-喊单者账号-开仓后\")\n    def test_query_opentrader_getRecordList(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            trader_account = var_manager.get_variable(\"trader_account\")\n            vpsrunIpAddr = var_manager.get_variable(\"vpsrunIpAddr\")\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"pageNo\": \"1\",\n                \"pageSize\": \"50\",\n                \"accountLike\": trader_account,\n                \"serverNameLike\": \"\",\n                \"connectTraderLike\": \"\",\n                \"connected\": \"\",\n                \"runIpAddr\": vpsrunIpAddr\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/blockchain/account/getRecordList',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.searchCount\",\n                True,\n                \"响应searchCount字段应为true\"\n            )\n    \n        with allure.step(f\"3. 数据校验\"):\n            with allure.step(\"喊单者手数校验-MT4开仓手数和持仓订单手数\"):\n                totalLots = self.json_utils.extract(response.json(), \"$.records[0].totalLots\")\n                logging.info(f\"手数是: {totalLots}\")\n    \n                lots_open = var_manager.get_variable(\"lots_open\")\n    \n                self.verify_data(\n>                   actual_value=float(totalLots),\n                    expected_value=float(lots_open),\n                    op=CompareOp.EQ,\n                    message=f\"手数符合预期\",\n                    attachment_name=\"手数详情\"\n                )\nE               TypeError: float() argument must be a string or a number, not 'NoneType'\n\ntest_cloudTrader\\test_oac_equit.py:3130: TypeError",
+    "steps" : [ {
+      "name" : "1. 发送请求",
+      "time" : {
+        "start" : 1758249787793,
+        "stop" : 1758249791355,
+        "duration" : 3562
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1758249787793,
+          "stop" : 1758249791355,
+          "duration" : 3562
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1758249787793,
+            "stop" : 1758249787794,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b1e1eeda49a61554",
+            "name" : "请求URL",
+            "source" : "b1e1eeda49a61554.txt",
+            "type" : "text/plain",
+            "size" : 33
+          }, {
+            "uid" : "64e019a3114d55d7",
+            "name" : "请求头",
+            "source" : "64e019a3114d55d7.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "9ba8d0064bd655e5",
+            "name" : "请求体（表单/文件）",
+            "source" : "9ba8d0064bd655e5.txt",
+            "type" : "text/plain",
+            "size" : 173
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1758249788349,
+            "stop" : 1758249788350,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "e7555cdb6c3abbf6",
+            "name" : "响应状态码",
+            "source" : "e7555cdb6c3abbf6.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "4b35a016c585550a",
+            "name" : "响应头",
+            "source" : "4b35a016c585550a.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "f48dfc2a074fc447",
+            "name" : "响应体（JSON）",
+            "source" : "f48dfc2a074fc447.json",
+            "type" : "application/json",
+            "size" : 183
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 2,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 3,
+      "hasContent" : true
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1758249791355,
+        "stop" : 1758249791360,
+        "duration" : 5
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.searchCount",
+        "time" : {
+          "start" : 1758249791359,
+          "stop" : 1758249791360,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "c45f6593591077ed",
+          "name" : "请求URL",
+          "source" : "c45f6593591077ed.txt",
+          "type" : "text/plain",
+          "size" : 191
+        }, {
+          "uid" : "4bc86d682c45d2a8",
+          "name" : "预期值",
+          "source" : "4bc86d682c45d2a8.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "77172c96f1590aef",
+          "name" : "实际值",
+          "source" : "77172c96f1590aef.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 1,
+      "hasContent" : true
+    }, {
+      "name" : "3. 数据校验",
+      "time" : {
+        "start" : 1758249791360,
+        "stop" : 1758249791364,
+        "duration" : 4
+      },
+      "status" : "broken",
+      "statusMessage" : "TypeError: float() argument must be a string or a number, not 'NoneType'\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_oac_equit.py\", line 3130, in test_query_opentrader_getRecordList\n    actual_value=float(totalLots),\n",
+      "steps" : [ {
+        "name" : "喊单者手数校验-MT4开仓手数和持仓订单手数",
+        "time" : {
+          "start" : 1758249791360,
+          "stop" : 1758249791364,
+          "duration" : 4
+        },
+        "status" : "broken",
+        "statusMessage" : "TypeError: float() argument must be a string or a number, not 'NoneType'\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_oac_equit.py\", line 3130, in test_query_opentrader_getRecordList\n    actual_value=float(totalLots),\n",
+        "steps" : [ ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 0,
+        "shouldDisplayMessage" : true,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 1,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "aa5be8c6897315bd",
+      "name" : "log",
+      "source" : "aa5be8c6897315bd.txt",
+      "type" : "text/plain",
+      "size" : 1257
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 10,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 8,
+    "hasContent" : true
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "跟随方式-按净值"
+  }, {
+    "name" : "story",
+    "value" : "场景3：跟随方式-按净值-1%"
+  }, {
+    "name" : "tag",
+    "value" : "retry(n=3, delay=20)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_oac_equit"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_openandclouseall"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "17284-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_oac_equit"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "retry(n=3, delay=20)" ]
+  },
+  "source" : "aaaf1e32cc996432.json",
+  "parameterValues" : [ ]
+}

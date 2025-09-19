@@ -43,7 +43,7 @@ def run_cloud_tests(env: str = "test"):
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=info",
-        "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+        "--log-file-format=%(levelname)-8s %(asctime)s [%(module)s;%(lineno)s]  : %(message)s",
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
         "--log-level=info"
     ]

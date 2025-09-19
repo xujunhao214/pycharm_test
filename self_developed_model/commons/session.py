@@ -2,6 +2,7 @@ import os
 import datetime
 import requests
 import json
+from logging.handlers import TimedRotatingFileHandler
 from self_developed_model.VAR.VAR import *
 from typing import Dict, Any, Optional
 from pathlib import Path
@@ -20,13 +21,20 @@ log_dir.mkdir(parents=True, exist_ok=True)
 log_file = log_dir / "requests.log"
 
 # 按天轮转日志，保留1天
-file_handler = logging.handlers.TimedRotatingFileHandler(
-    log_file, when="D", interval=1, backupCount=10, encoding="utf-8"
-    # log_file, when="H", interval=1, backupCount=10, encoding="utf-8"
+file_handler = TimedRotatingFileHandler(
+    log_file,
+    when="midnight",  # 每天午夜轮转
+    interval=1,  # 间隔1天
+    backupCount=1,  # 保留1个备份（即只保留昨天的日志）
+    encoding="utf-8",
+    utc=False  # 使用本地时间
 )
 
-# 日志格式包含时间、级别、环境标识和消息
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - [%(env)s] - %(message)s")
+# 日志格式包含级别、时间、所在模块名和消息
+formatter = logging.Formatter(
+    "%(levelname)-8s - %(asctime)s - [%(module)s:%(lineno)d] - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 file_handler.setFormatter(formatter)
 
 # 配置基础logger（支持info级别）
