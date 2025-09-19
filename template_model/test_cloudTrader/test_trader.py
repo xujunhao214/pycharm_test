@@ -54,7 +54,7 @@ class Test_create:
                 )
 
                 if not create_time_list:
-                    attach_body = f"绑定时间查询-开始时间：{ONE_HOUR_AGO}，返回的create_time列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"绑定时间查询-开始时间：{ONE_HOUR_AGO}，返回 {len(create_time_list)} 条记录，create_time值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(create_time_list)])
@@ -153,7 +153,7 @@ class Test_create:
                 )
 
                 if not user_id_query_list:
-                    attach_body = f"用户查询：{trader_user_id}，返回的user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"用户查询：{trader_user_id}，返回 {len(user_id_query_list)} 条记录，user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(user_id_query_list)])
@@ -441,7 +441,7 @@ class Test_create:
                 )
 
                 if not broker_id_list:
-                    attach_body = f"经纪商查询：{trader_broker_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"经纪商查询：{trader_broker_id}，返回 {len(broker_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(broker_id_list)])
@@ -500,7 +500,7 @@ class Test_create:
                 )
 
                 if not server_id_list:
-                    attach_body = f"服务器查询：{trader_server_id}，返回的server_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"服务器：查询{trader_server_id}，返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(server_id_list)])
@@ -559,7 +559,7 @@ class Test_create:
                 )
 
                 if not virtual_server_name_list:
-                    attach_body = f"虚拟服务商查询：{virtual_server_name}，返回的virtual_server_name列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"虚拟服务商查询：{virtual_server_name}，返回 {len(virtual_server_name_list)} 条记录，virtual_server_name值如下：\n" + \
                                   "\n".join(
@@ -574,7 +574,7 @@ class Test_create:
                 for idx, virtual_server_name in enumerate(virtual_server_name_list):
                     self.verify_data(
                         actual_value=virtual_server_name,
-                        expected_value="CPT Markets",
+                        expected_value="ACY",
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message="查询结果符合预期",
@@ -690,7 +690,7 @@ class Test_create:
                 )
 
                 if not subscribe_fee_list:
-                    attach_body = f"订阅费查询：0，返回的subscribe_fee列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"订阅费查询：0，返回 {len(subscribe_fee_list)} 条记录，subscribe_fee值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(subscribe_fee_list)])
@@ -784,7 +784,7 @@ class Test_create:
                 )
 
                 if not level_id_list:
-                    attach_body = f"等级查询：3，返回的level_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"等级查询：3，返回 {len(level_id_list)} 条记录，level_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(level_id_list)])
@@ -877,7 +877,7 @@ class Test_create:
                 )
 
                 if not connected_list:
-                    attach_body = f"是否连接查询-是，返回的connected列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"是否连接查询-是，返回 {len(connected_list)} 条记录，connected值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(connected_list)])
@@ -934,7 +934,7 @@ class Test_create:
                 )
 
                 if not connected_list:
-                    attach_body = f"是否连接查询-否，返回的connected列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"是否连接查询-否，返回 {len(connected_list)} 条记录，connected值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(connected_list)])
@@ -992,7 +992,7 @@ class Test_create:
                 )
 
                 if not recommenders_user_id_list:
-                    attach_body = f"推荐人ID查询：{trader_user_id}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"推荐人ID查询：{trader_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
@@ -1088,7 +1088,7 @@ class Test_create:
                 )
 
                 if not recommenders_user_name_list:
-                    attach_body = f"推荐人名字查询：{recommenders_user_name}，返回的recommenders_user_id列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"推荐人名字查询：{recommenders_user_name}，返回 {len(recommenders_user_name_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join(
@@ -1194,6 +1194,9 @@ class Test_create:
                     multi_match=True
                 )
 
+                if not recommenders_user_id_list:
+                    pytest.fail("查询结果为空，不符合预期")
+
                 for idx, recommenders_user_id in enumerate(recommenders_user_id_list):
                     self.verify_data(
                         actual_value=trader_user_id,
@@ -1254,7 +1257,7 @@ class Test_create:
                 )
 
                 if not policy_name_list:
-                    attach_body = f"高级查询-策略名称查询：xjh，返回的policy_name列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"高级查询-策略名称查询：xjh，返回 {len(policy_name_list)} 条记录，policy_name值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(policy_name_list)])
@@ -1262,83 +1265,6 @@ class Test_create:
                 allure.attach(
                     body=attach_body,
                     name=f"{ONE_HOUR_AGO}查询结果",
-                    attachment_type="text/plain"
-                )
-
-                for idx, policy_name in enumerate(policy_name_list):
-                    # 直接判断 "xjh" 是否在 policy_name 中
-                    if "xjh" not in policy_name:
-                        # 校验失败时手动报错
-                        pytest.fail(
-                            f"第 {idx + 1} 条记录的策略名称不符合预期：\n"
-                            f"实际值：{policy_name}\n"
-                            f"预期：包含 'xjh'"
-                        )
-                    # 校验通过时添加附件
-                    allure.attach(
-                        f"第 {idx + 1} 条记录的策略名称（{policy_name}）包含'xjh'",
-                        name=f"第 {idx + 1} 条记录校验通过",
-                        attachment_type="text/plain"
-                    )
-
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("高级查询-策略名称查询")
-        def test_query_superQueryParams_val(self, var_manager, logged_session):
-            with allure.step("1. 发送请求"):
-                # 1. 先构造 superQueryParams 的原始 JSON 数组（字典转 JSON 字符串）
-                super_query_params = [
-                    {
-                        "rule": "like",  # 模糊匹配（包含）
-                        "type": "text",  # 字段类型为文本
-                        "val": "xjh",  # 匹配值（包含“xjh”）
-                        "field": "policy_name"  # 匹配的字段名（策略名称）
-                    }
-                ]
-                # 将 Python 列表转为 JSON 字符串（确保后端能识别为 JSON 格式）
-                super_query_json = json.dumps(super_query_params)
-
-                params = {
-                    "_t": current_timestamp_seconds,
-                    "column": "id",
-                    "order": "desc",
-                    "pageNo": "1",
-                    "pageSize": "50",
-                    "superQueryMatchType": "and",
-                    "superQueryParams": super_query_json,
-                    "type": "MASTER_REAL",
-                    "status": "VERIFICATION,PASS,PENDING,ERROR"
-                }
-                response = self.send_get_request(
-                    logged_session,
-                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',
-                    params=params
-                )
-
-            with allure.step("2. 返回校验"):
-                self.assert_json_value(
-                    response,
-                    "$.success",
-                    True,
-                    "响应success字段应为true"
-                )
-
-            with allure.step("3. 查询校验"):
-                policy_name_list = self.json_utils.extract(
-                    response.json(),
-                    "$.result.records[*].policy_name",
-                    default=[],
-                    multi_match=True
-                )
-
-                if not policy_name_list:
-                    attach_body = f"高级查询-策略名称查询：xjh，返回的policy_name列表为空（暂无数据）"
-                else:
-                    attach_body = f"高级查询-策略名称查询：xjh，返回 {len(policy_name_list)} 条记录，policy_name值如下：\n" + \
-                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(policy_name_list)])
-
-                allure.attach(
-                    body=attach_body,
-                    name=f"策略名称查询结果",
                     attachment_type="text/plain"
                 )
 

@@ -32,6 +32,7 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_trader.py",
         # "test_cloudTrader/test_follow.py",
         # "test_cloudTrader/test_follow_dividend.py",
+        # "test_cloudTrader/test_realtime_add.py",
         # "test_cloudTrader/test_agent.py",
         # "test_cloudTrader/test_topup.py",
         # "test_cloudTrader/test_oac_proportion.py",
@@ -43,10 +44,10 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_lianxi2.py",
 
         "--log-file=./Logs/cloud_pytest.log",
-        "--log-file-level=info",
-        "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+        "--log-file-level=debug",
+        "--log-file-format=%(levelname)-8s - %(asctime)s - [%(module)s:%(lineno)d] - %(message)s",
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
-        "--log-level=info"
+        "--log-level=debug"
     ]
 
     try:

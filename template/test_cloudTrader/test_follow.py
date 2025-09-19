@@ -199,7 +199,7 @@ class Test_create:
             # 用例级附件：当前状态说明
             allure.attach(
                 body=f"状态编码：{status}\n状态描述：{status_desc}",
-                name=f"{status_desc}状态说明",
+                name=f"状态-{status_desc}：说明",
                 attachment_type="text/plain"
             )
 
@@ -237,14 +237,14 @@ class Test_create:
 
                 # 生成查询结果附件
                 if not status_list:
-                    attach_body = f"状态查询[{status_desc}]：返回的records为空列表（暂无数据）"
+                    attach_body = f"状态查询-{status_desc}：返回的records为空列表（暂无数据）"
                 else:
-                    attach_body = f"状态查询[{status_desc}]，返回 {len(status_list)} 条记录，status值如下：\n" + \
+                    attach_body = f"状态查询-{status_desc}，返回 {len(status_list)} 条记录，status值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(status_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{status_desc}状态查询结果",
+                    name=f"状态-{status_desc}：查询结果",
                     attachment_type="text/plain"
                 )
 
@@ -256,7 +256,7 @@ class Test_create:
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的status应为{status}",
-                        attachment_name=f"{status_desc}状态第 {idx + 1} 条记录校验"
+                        attachment_name=f"状态-{status_desc}：第 {idx + 1} 条记录校验"
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
