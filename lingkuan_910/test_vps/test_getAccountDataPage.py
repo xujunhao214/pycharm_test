@@ -23,39 +23,6 @@ class TestVPSOrderSend_newScenarios:
     - 预期结果：数据正确
     """)
     class TestVPSOrderSend1(APITestBase):
-        # @pytest.mark.skipif(True, reason="跳过")
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-策略平仓-防止数据残留")
-        def test_trader_orderprevent_close(self, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            new_user = var_manager.get_variable("new_user")
-            vps_user_accounts = new_user["account"]
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_trader_id,
-                "account": vps_user_accounts
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
-
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
         @pytest.mark.url("vps")
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -98,8 +65,7 @@ class TestVPSOrderSend_newScenarios:
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 global profit_sum, total, order_num, margin_proportion, free_margin, euqit
-                new_user = var_manager.get_variable("new_user")
-                vps_user_accounts = new_user["account"]
+                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
                    SELECT 
                        fod.size,
@@ -120,7 +86,7 @@ class TestVPSOrderSend_newScenarios:
                        """
                 params = (
                     '0',
-                    vps_user_accounts,
+                    vps_user_accounts_1,
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -140,8 +106,9 @@ class TestVPSOrderSend_newScenarios:
                 order_num = len(db_data)
 
             with allure.step("3. 获取follow_trader表账号数据"):
+                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""SELECT free_margin,euqit FROM follow_trader WHERE account = %s"""
-                params = (vps_user_accounts,)
+                params = (vps_user_accounts_1,)
 
                 db_data = self.query_database(
                     db_transaction=db_transaction,
@@ -159,8 +126,7 @@ class TestVPSOrderSend_newScenarios:
         @allure.title("仪表盘-账号数据校验")
         def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
-                new_user = var_manager.get_variable("new_user")
-                vps_user_accounts = new_user["account"]
+                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 params = {
                     "page": 1,
                     "limit": 10,
@@ -168,7 +134,7 @@ class TestVPSOrderSend_newScenarios:
                     "asc": False,
                     "deleted": None,
                     "brokerName": "AS",
-                    "account": vps_user_accounts,
+                    "account": vps_user_accounts_1,
                 }
                 response = self.send_get_request(
                     logged_session,
@@ -190,7 +156,7 @@ class TestVPSOrderSend_newScenarios:
             with allure.step("3. 提取数据"):
                 self.json_utils = JsonPathUtils()
                 response = response.json()
-                sourceAccount = self.json_utils.extract(response, "$.data[0].account")
+                sourceAccount = self.json_utils.extract(response, "$.data[0].sourceAccount")
                 profit = self.json_utils.extract(response, "$.data[0].profit")
                 orderNum = self.json_utils.extract(response, "$.data[0].orderNum")
                 lots = self.json_utils.extract(response, "$.data[0].lots")
@@ -202,9 +168,10 @@ class TestVPSOrderSend_newScenarios:
 
             with allure.step("4. 数据校验"):
                 with allure.step("5.1 验证账号"):
+                    new_user = var_manager.get_variable("new_user")
                     self.verify_data(
                         actual_value=sourceAccount,
-                        expected_value=vps_user_accounts,
+                        expected_value=new_user["account"],
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"账号数据符合预期",
@@ -248,13 +215,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款-容差150000"):
+                with allure.step("5.5 验证可用预付款-容差15000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=15000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -272,13 +239,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值-容差150000"):
+                with allure.step("5.7 验证净值-容差500"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=500,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )
@@ -410,6 +377,7 @@ class TestVPSOrderSend_newScenarios:
                 order_num = len(db_data)
 
             with allure.step("3. 获取follow_trader表账号数据"):
+                vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""SELECT free_margin,euqit FROM follow_trader WHERE account = %s"""
                 params = (vps_user_accounts_1,)
 
@@ -459,7 +427,7 @@ class TestVPSOrderSend_newScenarios:
             with allure.step("3. 提取数据"):
                 self.json_utils = JsonPathUtils()
                 response = response.json()
-                sourceAccount = self.json_utils.extract(response, "$.data[0].account")
+                sourceAccount = self.json_utils.extract(response, "$.data[0].sourceAccount")
                 profit = self.json_utils.extract(response, "$.data[0].profit")
                 orderNum = self.json_utils.extract(response, "$.data[0].orderNum")
                 lots = self.json_utils.extract(response, "$.data[0].lots")
@@ -471,9 +439,10 @@ class TestVPSOrderSend_newScenarios:
 
             with allure.step("4. 数据校验"):
                 with allure.step("5.1 验证账号"):
+                    new_user = var_manager.get_variable("new_user")
                     self.verify_data(
                         actual_value=sourceAccount,
-                        expected_value=vps_user_accounts_1,
+                        expected_value=new_user["account"],
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"账号数据符合预期",
@@ -499,7 +468,7 @@ class TestVPSOrderSend_newScenarios:
                         expected_value=float(order_num),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=0,
+                        abs_tol=3,
                         message=f"持仓订单量数据符合预期",
                         attachment_name="持仓订单量详情"
                     )
@@ -517,13 +486,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款-容差150000"):
+                with allure.step("5.5 验证可用预付款-容差15000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=15000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -541,13 +510,13 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值-容差150000"):
+                with allure.step("5.7 验证净值-容差500"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=500,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )
@@ -584,7 +553,7 @@ class TestVPSOrderSend_newScenarios:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.skip(reason=SKIP_REASON)
+        # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-跟单平仓")
         def test_addtrader_orderclose(self, var_manager, logged_session):

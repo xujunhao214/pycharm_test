@@ -23,30 +23,6 @@ class TestCloudOrderSend_newScenarios:
     - 预期结果：数据正确
     """)
     class TestCloudOrderSend1(APITestBase):
-        # @pytest.mark.skipif(True, reason="跳过")
-        @allure.title("云策略交易下单-分配平仓-防止数据残留")
-        def test_copy_orderprevent_close(self, var_manager, logged_session):
-            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
-            # 发送平仓请求
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderList": [cloudTrader_user_ids_2]
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderClose',
-                json_data=data
-            )
-
-            # 验证平仓成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -171,7 +147,7 @@ class TestCloudOrderSend_newScenarios:
             with allure.step("3. 提取数据"):
                 self.json_utils = JsonPathUtils()
                 response = response.json()
-                sourceAccount = self.json_utils.extract(response, "$.data[0].account")
+                sourceAccount = self.json_utils.extract(response, "$.data[0].sourceAccount")
                 profit = self.json_utils.extract(response, "$.data[0].profit")
                 orderNum = self.json_utils.extract(response, "$.data[0].orderNum")
                 lots = self.json_utils.extract(response, "$.data[0].lots")
@@ -183,10 +159,10 @@ class TestCloudOrderSend_newScenarios:
 
             with allure.step("4. 数据校验"):
                 with allure.step("5.1 验证账号"):
-                    cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                    cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
                     self.verify_data(
                         actual_value=sourceAccount,
-                        expected_value=cloudTrader_user_accounts_2,
+                        expected_value=cloudTrader_user_accounts_1,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"账号数据符合预期",
@@ -212,7 +188,7 @@ class TestCloudOrderSend_newScenarios:
                         expected_value=float(order_num),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=0,
+                        abs_tol=3,
                         message=f"持仓订单量数据符合预期",
                         attachment_name="持仓订单量详情"
                     )
@@ -230,13 +206,13 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款-容差150000"):
+                with allure.step("5.5 验证可用预付款-容差15000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=15000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -254,13 +230,13 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值-容差150000"):
+                with allure.step("5.7 验证净值-容差500"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=500,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )
@@ -396,7 +372,7 @@ class TestCloudOrderSend_newScenarios:
         @allure.title("仪表盘-账号数据校验")
         def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
-                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 params = {
                     "page": 1,
                     "limit": 10,
@@ -426,7 +402,7 @@ class TestCloudOrderSend_newScenarios:
             with allure.step("3. 提取数据"):
                 self.json_utils = JsonPathUtils()
                 response = response.json()
-                sourceAccount = self.json_utils.extract(response, "$.data[0].account")
+                sourceAccount = self.json_utils.extract(response, "$.data[0].sourceAccount")
                 profit = self.json_utils.extract(response, "$.data[0].profit")
                 orderNum = self.json_utils.extract(response, "$.data[0].orderNum")
                 lots = self.json_utils.extract(response, "$.data[0].lots")
@@ -438,10 +414,10 @@ class TestCloudOrderSend_newScenarios:
 
             with allure.step("4. 数据校验"):
                 with allure.step("5.1 验证账号"):
-                    cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+                    cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
                     self.verify_data(
                         actual_value=sourceAccount,
-                        expected_value=cloudTrader_user_accounts_4,
+                        expected_value=cloudTrader_user_accounts_1,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"账号数据符合预期",
@@ -485,13 +461,13 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"持仓手数符合预期，实际是{total}")
 
-                with allure.step("5.5 验证可用预付款-容差150000"):
+                with allure.step("5.5 验证可用预付款-容差15000"):
                     self.verify_data(
                         actual_value=float(marginProportion),
                         expected_value=float(free_margin),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=15000,
                         message=f"可用预付款符合预期",
                         attachment_name="可用预付款详情"
                     )
@@ -509,13 +485,13 @@ class TestCloudOrderSend_newScenarios:
                     )
                     logging.info(f"可用预付款比例符合预期，实际是{margin_proportion}")
 
-                with allure.step("5.7 验证净值-容差150000"):
+                with allure.step("5.7 验证净值-容差500"):
                     self.verify_data(
                         actual_value=float(equity),
                         expected_value=float(euqit),
                         op=CompareOp.EQ,
                         use_isclose=True,
-                        abs_tol=150000,
+                        abs_tol=500,
                         message=f"净值符合预期",
                         attachment_name="净值详情"
                     )

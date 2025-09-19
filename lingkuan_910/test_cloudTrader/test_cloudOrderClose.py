@@ -1274,7 +1274,7 @@ class TestCloudOrderType:
                     )
                     logging.info(f"平仓的订单数量应该是2，结果有{len(db_data)}个订单")
 
-            time.sleep(30)
+            # time.sleep(30)
 
     @allure.story("场景6：平仓的订单类型功能校验-外部订单")
     @allure.description("""
