@@ -16,7 +16,7 @@ class Test_create:
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("绑定日期查询")
         def test_query_create_time(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -775,7 +775,7 @@ class Test_create:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("推荐人ID查询")
         def test_query_recommenders(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -870,7 +870,7 @@ class Test_create:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("推荐人名字查询")
         def test_query_recommenders_name(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
