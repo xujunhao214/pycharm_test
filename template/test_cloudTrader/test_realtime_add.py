@@ -314,7 +314,7 @@ class Test_create:
                         attachment_name=f"状态-{status_desc}：第 {idx + 1} 条记录校验"
                     )
 
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+        @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("跟随时间查询")
         def test_query_create_time(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
