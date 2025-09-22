@@ -17,14 +17,32 @@ class Test_create:
         json_utils = JsonPathUtils()
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("跟单用户查询")
-        def test_query_username(self, var_manager, logged_session):
+        @allure.title("组合查询")
+        def test_query_all(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
+                follow_account = var_manager.get_variable("follow_account")
+                trader_account = var_manager.get_variable("trader_account")
+                trader_master_nickname = var_manager.get_variable("trader_master_nickname")
+                follow_nickname = var_manager.get_variable("follow_nickname")
+                trader_master_server = var_manager.get_variable("trader_master_server")
+                follow_slave_server = var_manager.get_variable("follow_slave_server")
+                trader_pass_id = var_manager.get_variable("trader_pass_id")
+                follow_pass_id = var_manager.get_variable("follow_pass_id")
                 login_config = var_manager.get_variable("login_config")
                 username_log = login_config["username"]
                 params = {
                     "_t": current_timestamp_seconds,
+                    "account": follow_account,
+                    "following_mode": 2,
+                    "master_account": trader_account,
+                    "master_nickname": trader_master_nickname,
+                    "nickname": follow_nickname,
+                    "master_server": trader_master_server,
+                    "slave_server": follow_slave_server,
+                    "master_id": trader_pass_id,
+                    "slave_id": follow_pass_id,
                     "username": username_log,
+                    "pause": 0,
                     "pageNo": 1,
                     "pageSize": 20,
                     "status": "NORMAL,AUDIT"
@@ -44,64 +62,31 @@ class Test_create:
                 )
 
             with allure.step("3. 查询校验"):
-                username_list = self.json_utils.extract(
+                account_list = self.json_utils.extract(
                     response.json(),
-                    "$.result.data.records[*].username",
+                    "$.result.data.records[*].account",
                     default=[],
                     multi_match=True
                 )
 
-                if not username_list:
+                if not account_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"跟单用户查询：{username_log}，返回 {len(username_list)} 条记录，username值如下：\n" + \
-                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(username_list)])
+                    attach_body = f"跟随者账户查询：{follow_account}，返回 {len(account_list)} 条记录，account值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(account_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"跟单用户-{username_log}:查询结果",
+                    name=f"{follow_account}查询结果",
                     attachment_type="text/plain"
                 )
 
-                for idx, username in enumerate(username_list):
+                for idx, account in enumerate(account_list):
                     self.verify_data(
-                        actual_value=username,
-                        expected_value=username_log,
+                        actual_value=account,
+                        expected_value=follow_account,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的跟单用户符合预期",
-                        attachment_name=f"第 {idx + 1} 条记录的跟单用户校验"
+                        message=f"第 {idx + 1} 条记录的跟随者账户符合预期",
+                        attachment_name=f"第 {idx + 1} 条记录的跟随者账户校验"
                     )
-
-        # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("跟单用户查询-查询结果为空")
-        def test_query_usernameNO(self, var_manager, logged_session):
-            with allure.step("1. 发送请求"):
-                params = {
-                    "_t": current_timestamp_seconds,
-                    "username": "XXXXXXXXX",
-                    "pageNo": 1,
-                    "pageSize": 20,
-                    "status": "NORMAL,AUDIT"
-                }
-                response = self.send_get_request(
-                    logged_session,
-                    '/online/cgreport/api/getColumnsAndData/1560189381093109761',
-                    params=params
-                )
-
-            with allure.step("2. 返回校验"):
-                self.assert_json_value(
-                    response,
-                    "$.success",
-                    True,
-                    "响应success字段应为true"
-                )
-
-            with allure.step("3. 查询校验"):
-                self.json_utils.assert_empty_list(
-                    data=response.json(),
-                    expression="$.result.data.records"
-                )
-                logging.info("查询结果符合预期：records为空列表")
-                allure.attach("查询结果为空，符合预期", 'text/plain')

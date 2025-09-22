@@ -1,3 +1,5 @@
+
+
 import pytest
 import pymysql
 from template_model.VAR.VAR import *

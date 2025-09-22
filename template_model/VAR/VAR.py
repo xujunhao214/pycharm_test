@@ -17,8 +17,11 @@ DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 current_time = datetime.datetime.now()
 # 计算15天后的时间
 future_time = current_time + datetime.timedelta(days=30)
+# 计算1天前的时间
+old_time = current_time - datetime.timedelta(days=1)
 # 格式化为指定字符串格式
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
+DATETIME_OLDTIME = old_time.strftime("%Y-%m-%d")
 
 # 计算1小时前的时间（timedelta(hours=1) 表示1小时间隔）
 one_hour_ago = current_time - datetime.timedelta(hours=1)
