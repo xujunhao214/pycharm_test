@@ -17,14 +17,6 @@ SAVE_DIR = '/www/python/jenkins/workspace/Community/template_model_model_model/F
 SAVE_FILENAME = 'preprocessed_captcha.png'  # 固定文件名
 
 
-# # ！！！初始化日志配置（确保日志能输出到控制台/Jenkins日志）
-# logging.basicConfig(
-#     level=logging.INFO,  # 日志级别：INFO及以上都能输出
-#     format='[%(asctime)s] [验证码识别] %(message)s',  # 日志格式：含时间和模块标识
-#     datefmt='%Y-%m-%d %H:%M:%S'  # 时间格式
-# )
-
-
 class UniversalCaptchaRecognizer:
     def __init__(self):
         self.init_tesseract()
