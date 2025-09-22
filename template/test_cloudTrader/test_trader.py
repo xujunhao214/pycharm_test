@@ -1164,7 +1164,7 @@ class Test_create:
                     "broker_id": trader_broker_id,
                     "server_id": trader_server_id,
                     "subscribe_fee": 0,
-                    "level_id": 3,
+                    # "level_id": 3,
                     "connected": 1,
                     "column": "id",
                     "order": "desc",

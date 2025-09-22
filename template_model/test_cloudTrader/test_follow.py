@@ -338,10 +338,10 @@ class Test_create:
         @allure.title("经纪商查询")
         def test_query_broker_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
-                trader_broker_id = var_manager.get_variable("trader_broker_id")
+                follow_broker_id = var_manager.get_variable("follow_broker_id")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "broker_id": trader_broker_id,
+                    "broker_id": follow_broker_id,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
@@ -374,19 +374,19 @@ class Test_create:
                 if not broker_id_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"经纪商查询：{trader_broker_id}，返回 {len(broker_id_list)} 条记录，recommenders_user_id值如下：\n" + \
+                    attach_body = f"经纪商查询：{follow_broker_id}，返回 {len(broker_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(broker_id_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{trader_broker_id}查询结果",
+                    name=f"{follow_broker_id}查询结果",
                     attachment_type="text/plain"
                 )
 
                 for idx, broker_id in enumerate(broker_id_list):
                     self.verify_data(
                         actual_value=broker_id,
-                        expected_value=trader_broker_id,
+                        expected_value=follow_broker_id,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的broker_id符合预期",
@@ -397,10 +397,10 @@ class Test_create:
         @allure.title("服务器查询")
         def test_query_server_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
-                trader_server_id = var_manager.get_variable("trader_server_id")
+                follow_server_id = var_manager.get_variable("follow_server_id")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "server_id": trader_server_id,
+                    "server_id": follow_server_id,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
@@ -433,19 +433,19 @@ class Test_create:
                 if not server_id_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"服务器：查询{trader_server_id}，返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
+                    attach_body = f"服务器：查询{follow_server_id}，返回 {len(server_id_list)} 条记录，server_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(server_id_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{trader_server_id}查询结果",
+                    name=f"{follow_server_id}查询结果",
                     attachment_type="text/plain"
                 )
 
                 for idx, server_id in enumerate(server_id_list):
                     self.verify_data(
                         actual_value=server_id,
-                        expected_value=trader_server_id,
+                        expected_value=follow_server_id,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的server_id符合预期",
@@ -681,7 +681,7 @@ class Test_create:
                     )
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-        @allure.title("封闭状态说明")
+        @allure.title("封闭状态说明查询")
         def test_query_blocked_password_extra(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 params = {
@@ -779,10 +779,10 @@ class Test_create:
         @allure.title("推荐人ID查询")
         def test_query_recommenders(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
-                trader_user_id = var_manager.get_variable("trader_user_id")
+                follow_user_id = var_manager.get_variable("follow_user_id")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "recommenders_user_id": trader_user_id,
+                    "recommenders_user_id": follow_user_id,
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
@@ -815,18 +815,18 @@ class Test_create:
                 if not recommenders_user_id_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"推荐人ID查询：{trader_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
+                    attach_body = f"推荐人ID查询：{follow_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{trader_user_id}查询结果",
+                    name=f"{follow_user_id}查询结果",
                     attachment_type="text/plain"
                 )
 
                 for idx, recommenders_user_id in enumerate(recommenders_user_id_list):
                     self.verify_data(
-                        actual_value=trader_user_id,
+                        actual_value=follow_user_id,
                         expected_value=recommenders_user_id,
                         op=CompareOp.IN,
                         use_isclose=False,
@@ -971,21 +971,19 @@ class Test_create:
         @allure.title("组合查询")
         def test_query_combination(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
-                trader_user_id = var_manager.get_variable("trader_user_id")
-                valid_strategy_name = var_manager.get_variable("valid_strategy_name")
-                trader_account = var_manager.get_variable("trader_account")
-                trader_broker_id = var_manager.get_variable("trader_broker_id")
-                trader_server_id = var_manager.get_variable("trader_server_id")
+                follow_user_id = var_manager.get_variable("follow_user_id")
+                follow_account = var_manager.get_variable("follow_account")
+                follow_broker_id = var_manager.get_variable("follow_broker_id")
+                follow_server_id = var_manager.get_variable("follow_server_id")
                 params = {
                     "_t": current_timestamp_seconds,
-                    "user_id": trader_user_id,
-                    "policy_name": valid_strategy_name,
+                    "user_id": follow_user_id,
                     "status": "PASS",
-                    "account": trader_account,
-                    "broker_id": trader_broker_id,
-                    "server_id": trader_server_id,
+                    "account": follow_account,
+                    "broker_id": follow_broker_id,
+                    "server_id": follow_server_id,
                     "subscribe_fee": 0,
-                    "level_id": 3,
+                    # "level_id": 3,
                     "connected": 1,
                     "column": "id",
                     "order": "desc",
@@ -1018,18 +1016,18 @@ class Test_create:
                 if not recommenders_user_id_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"推荐人ID查询：{trader_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
+                    attach_body = f"推荐人ID查询：{follow_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{trader_user_id}查询结果",
+                    name=f"{follow_user_id}查询结果",
                     attachment_type="text/plain"
                 )
 
                 for idx, recommenders_user_id in enumerate(recommenders_user_id_list):
                     self.verify_data(
-                        actual_value=trader_user_id,
+                        actual_value=follow_user_id,
                         expected_value=recommenders_user_id,
                         op=CompareOp.IN,
                         use_isclose=False,

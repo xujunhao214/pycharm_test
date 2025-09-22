@@ -18,38 +18,31 @@ class Test_create:
 
         # @pytest.mark.skipif(True, reason="该用例暂时跳过")
         @allure.title("组合查询")
-        def test_query_all(self, var_manager, logged_session):
+        def test_query_combination(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
+                follow_user_id = var_manager.get_variable("follow_user_id")
                 follow_account = var_manager.get_variable("follow_account")
-                trader_account = var_manager.get_variable("trader_account")
-                trader_master_nickname = var_manager.get_variable("trader_master_nickname")
-                follow_nickname = var_manager.get_variable("follow_nickname")
-                trader_master_server = var_manager.get_variable("trader_master_server")
-                follow_slave_server = var_manager.get_variable("follow_slave_server")
-                trader_pass_id = var_manager.get_variable("trader_pass_id")
-                follow_pass_id = var_manager.get_variable("follow_pass_id")
-                login_config = var_manager.get_variable("login_config")
-                username_log = login_config["username"]
+                follow_broker_id = var_manager.get_variable("follow_broker_id")
+                follow_server_id = var_manager.get_variable("follow_server_id")
                 params = {
                     "_t": current_timestamp_seconds,
+                    "user_id": follow_user_id,
+                    "status": "PASS",
                     "account": follow_account,
-                    "following_mode": 2,
-                    "master_account": trader_account,
-                    "master_nickname": trader_master_nickname,
-                    "nickname": follow_nickname,
-                    "master_server": trader_master_server,
-                    "slave_server": follow_slave_server,
-                    "master_id": trader_pass_id,
-                    "slave_id": follow_pass_id,
-                    "username": username_log,
-                    "pause": 0,
+                    "broker_id": follow_broker_id,
+                    "server_id": follow_server_id,
+                    "subscribe_fee": 0,
+                    # "level_id": 3,
+                    "connected": 1,
+                    "column": "id",
+                    "order": "desc",
                     "pageNo": 1,
                     "pageSize": 20,
-                    "status": "NORMAL,AUDIT"
+                    "type": "SLAVE_REAL"
                 }
                 response = self.send_get_request(
                     logged_session,
-                    '/online/cgreport/api/getColumnsAndData/1560189381093109761',
+                    '/online/cgform/api/getData/2c9a814a81d3a91b0181e04a36e00001',
                     params=params
                 )
 
@@ -62,31 +55,31 @@ class Test_create:
                 )
 
             with allure.step("3. 查询校验"):
-                account_list = self.json_utils.extract(
+                recommenders_user_id_list = self.json_utils.extract(
                     response.json(),
-                    "$.result.data.records[*].account",
+                    "$.result.records[*].recommenders_user_id",
                     default=[],
                     multi_match=True
                 )
 
-                if not account_list:
+                if not recommenders_user_id_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"跟随者账户查询：{follow_account}，返回 {len(account_list)} 条记录，account值如下：\n" + \
-                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(account_list)])
+                    attach_body = f"推荐人ID查询：{follow_user_id}，返回 {len(recommenders_user_id_list)} 条记录，recommenders_user_id值如下：\n" + \
+                                  "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(recommenders_user_id_list)])
 
                 allure.attach(
                     body=attach_body,
-                    name=f"{follow_account}查询结果",
+                    name=f"{follow_user_id}查询结果",
                     attachment_type="text/plain"
                 )
 
-                for idx, account in enumerate(account_list):
+                for idx, recommenders_user_id in enumerate(recommenders_user_id_list):
                     self.verify_data(
-                        actual_value=account,
-                        expected_value=follow_account,
-                        op=CompareOp.EQ,
+                        actual_value=follow_user_id,
+                        expected_value=recommenders_user_id,
+                        op=CompareOp.IN,
                         use_isclose=False,
-                        message=f"第 {idx + 1} 条记录的跟随者账户符合预期",
-                        attachment_name=f"第 {idx + 1} 条记录的跟随者账户校验"
+                        message=f"第 {idx + 1} 条记录的推荐人ID符合预期",
+                        attachment_name=f"第 {idx + 1} 条记录的推荐人ID校验"
                     )

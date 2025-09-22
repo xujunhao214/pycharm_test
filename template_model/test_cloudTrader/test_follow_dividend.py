@@ -54,7 +54,7 @@ class Test_create:
                 )
 
                 if not dividendType_list:
-                    attach_body = f"分红时间查询，返回的dividendTime列表为空（暂无数据）"
+                    pytest.fail("分红时间查询结果为空，不符合预期")
                 else:
                     attach_body = f"分红时间查询，返回 {len(dividendType_list)} 条记录，dividendTime值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(dividendType_list)])
@@ -312,7 +312,7 @@ class Test_create:
                 )
 
                 if not followerUser_list:
-                    attach_body = f"跟单用户查询：{followerUser}，返回的followerUser列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"跟单用户查询：{followerUser}，返回 {len(followerUser_list)} 条记录，followerUser值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(followerUser_list)])
@@ -411,7 +411,7 @@ class Test_create:
                 )
 
                 if not followerTa_list:
-                    attach_body = f"跟单账号查询：{followerTa}，返回的followerTa列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"跟单账号查询：{followerTa}，返回 {len(followerTa_list)} 条记录，followerTa值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(followerTa_list)])
@@ -511,7 +511,7 @@ class Test_create:
                 )
 
                 if not dividendUser_list:
-                    attach_body = f"分红用户查询：{dividendUser}，返回的dividendUser列表为空（暂无数据）"
+                    pytest.fail("查询结果为空，不符合预期")
                 else:
                     attach_body = f"分红用户查询：{dividendUser}，返回 {len(dividendUser_list)} 条记录，dividendUser值如下：\n" + \
                                   "\n".join([f"第 {idx + 1} 条：{s}" for idx, s in enumerate(dividendUser_list)])

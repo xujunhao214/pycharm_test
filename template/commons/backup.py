@@ -35,7 +35,7 @@ class UniversalCaptchaRecognizer:
         # 配置 pytesseract 路径（若用 subprocess 调用，此配置不影响，但保留避免其他问题）
         pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
         # ！！！修复3：强制设置 TESSDATA_PREFIX，避免语言包加载失败
-        os.environ["TESSDATA_PREFIX"] = '/www/python/tesseract-5.5.0/tessdata/'
+        os.environ["TESSDATA_PREFIX"] = '/usr/bin/tesseract/tessdata/'
         logging.info(f"TESSDATA_PREFIX 已设置：{os.getenv('TESSDATA_PREFIX')}")
 
     def minimal_preprocess(self, image: Image.Image) -> Image.Image:

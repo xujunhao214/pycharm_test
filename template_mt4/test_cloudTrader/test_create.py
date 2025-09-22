@@ -510,7 +510,7 @@ class Test_create:
                 )
             with allure.step("2. 提取数据"):
                 brokerId = db_data[0]["id"]
-                var_manager.set_runtime_variable("follow_brokerId", brokerId)
+                var_manager.set_runtime_variable("follow_broker_id", brokerId)
 
         @allure.title("账号管理-跟随者账号-绑定跟随者-用户列表-提取用户id")
         def test_user_list(self, var_manager, logged_session):
@@ -569,11 +569,11 @@ class Test_create:
         @allure.title("账号管理-跟随者账号-绑定跟随者-提取服务器ID")
         def test_api_getData1(self, var_manager, logged_session):
             target_server = "ACYSecurities-Demo"
-            follow_brokerId = var_manager.get_variable("follow_brokerId")
+            follow_broker_id = var_manager.get_variable("follow_broker_id")
             with allure.step("1. 发送请求"):
                 params = {
                     "_t": current_timestamp_seconds,
-                    "broker_id": follow_brokerId,
+                    "broker_id": follow_broker_id,
                     "pageSize": "50"
                 }
                 response = self.send_get_request(
@@ -625,11 +625,11 @@ class Test_create:
             follow_account = var_manager.get_variable("follow_account")
             follow_password = var_manager.get_variable("follow_password")
             follow_user_id = var_manager.get_variable("follow_user_id")
-            follow_brokerId = var_manager.get_variable("follow_brokerId")
+            follow_broker_id = var_manager.get_variable("follow_broker_id")
             follow_server_id = var_manager.get_variable("follow_server_id")
             data = {
                 "userId": follow_user_id,
-                "brokerId": follow_brokerId,
+                "brokerId": follow_broker_id,
                 "serverId": follow_server_id,
                 "account": follow_account,
                 "password": follow_password,
@@ -657,11 +657,11 @@ class Test_create:
             follow_account = var_manager.get_variable("follow_account")
             follow_password = var_manager.get_variable("follow_password")
             follow_user_id = var_manager.get_variable("follow_user_id")
-            follow_brokerId = var_manager.get_variable("follow_brokerId")
+            follow_broker_id = var_manager.get_variable("follow_broker_id")
             follow_server_id = var_manager.get_variable("follow_server_id")
             data = {
                 "userId": follow_user_id,
-                "brokerId": follow_brokerId,
+                "brokerId": follow_broker_id,
                 "serverId": follow_server_id,
                 "account": follow_account,
                 "password": follow_password,

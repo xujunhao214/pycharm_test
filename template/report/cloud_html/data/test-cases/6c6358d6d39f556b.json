@@ -1,0 +1,284 @@
+{
+  "uid" : "6c6358d6d39f556b",
+  "name" : "跟单管理-VPS管理-跟单者账号-开仓后",
+  "fullName" : "test_cloudTrader.test_oac_equit.Test_orderseng1#test_query_openfollow_getRecordList",
+  "historyId" : "686bc5458e9b9879fac17e179ca1e1d7",
+  "time" : {
+    "start" : 1758528943184,
+    "stop" : 1758528946762,
+    "duration" : 3578
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系\n      1. MT4进行登录，然后进行开仓，总手数0.01\n      2. 账号管理-持仓订单-喊单和跟单数据校验\n      3. 跟单管理-开仓日志-喊单和跟单数据校验\n      4. 跟单管理-VPS管理-喊单和跟单数据校验\n      5. MT4进行平仓\n      6.账号管理-持仓订单-喊单和跟单数据校验\n      7.跟单管理-开仓日志-喊单和跟单数据校验\n      8.跟单管理-VPS管理-喊单和跟单数据校验\n    - 预期结果：喊单和跟单数据校验正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系\n  1. MT4进行登录，然后进行开仓，总手数0.01\n  2. 账号管理-持仓订单-喊单和跟单数据校验\n  3. 跟单管理-开仓日志-喊单和跟单数据校验\n  4. 跟单管理-VPS管理-喊单和跟单数据校验\n  5. MT4进行平仓\n  6.账号管理-持仓订单-喊单和跟单数据校验\n  7.跟单管理-开仓日志-喊单和跟单数据校验\n  8.跟单管理-VPS管理-喊单和跟单数据校验\n- 预期结果：喊单和跟单数据校验正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "Failed: 校验失败: 手数符合预期\n\n实际: 0.0\n操作: ==\n预期: 0.01",
+  "statusTrace" : "self = <template.test_cloudTrader.test_oac_equit.Test_openandclouseall.Test_orderseng1 object at 0x000002705C773250>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000002705C79A8B0>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000002705C796760>\n\n    @allure.title(\"跟单管理-VPS管理-跟单者账号-开仓后\")\n    def test_query_openfollow_getRecordList(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            follow_account = var_manager.get_variable(\"follow_account\")\n            vpsrunIpAddr = var_manager.get_variable(\"vpsrunIpAddr\")\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"pageNo\": \"1\",\n                \"pageSize\": \"50\",\n                \"accountLike\": follow_account,\n                \"serverNameLike\": \"\",\n                \"connectTraderLike\": \"\",\n                \"connected\": \"\",\n                \"runIpAddr\": vpsrunIpAddr\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/blockchain/account/getRecordList',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.searchCount\",\n                True,\n                \"响应searchCount字段应为true\"\n            )\n    \n        with allure.step(f\"3. 数据校验\"):\n            with allure.step(\"跟单手数校验-MT4开仓手数和持仓订单手数\"):\n                totalLots = self.json_utils.extract(response.json(), \"$.records[0].totalLots\")\n                logging.info(f\"手数是: {totalLots}\")\n                if not totalLots:\n                    allure.attach(\"跟单手数为空\", \"跟单手数详情\", allure.attachment_type.TEXT)\n                else:\n                    lots_open = var_manager.get_variable(\"lots_open\")\n                    follow_periodP = var_manager.get_variable(\"follow_periodP\")\n                    trader_periodP = var_manager.get_variable(\"trader_periodP\")\n                    # 获取跟单净值比例\n                    fixed_proportion = var_manager.get_variable(\"fixed_proportion\")\n                    # 百分比数据转换\n                    follow_fixed_decimal = percentage_to_decimal(fixed_proportion)\n                    expected_lots_open = lots_open * (follow_periodP / trader_periodP) * follow_fixed_decimal\n                    # 四舍五入保留两位小数\n                    expected_lots_open = round(expected_lots_open, 2)\n    \n                    # 最小手数限制（0.01）\n                    min_order_size = 0.01\n                    if expected_lots_open < min_order_size:\n                        allure.attach(\n                            f\"计算预期手数{expected_lots_open} < 最小手数{min_order_size}，强制重置为{min_order_size}\",\n                            \"预期手数调整说明\", allure.attachment_type.TEXT)\n                        expected_lots_open = min_order_size\n    \n>                   self.verify_data(\n                        actual_value=float(totalLots),\n                        expected_value=float(expected_lots_open),\n                        op=CompareOp.EQ,\n                        message=f\"手数符合预期\",\n                        attachment_name=\"手数详情\"\n                    )\n\ntest_cloudTrader\\test_oac_equit.py:867: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_oac_equit.Test_openandclouseall.Test_orderseng1 object at 0x000002705C773250>\nactual_value = 0.0, expected_value = 0.01, op = <CompareOp.EQ: '=='>\nmessage = '手数符合预期', attachment_name = '手数详情', attachment_type = 'text/plain'\nuse_isclose = True, rel_tol = 1e-09, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                pytest.fail(\n                    f\"校验类型错误: {str(e)}\\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}\")\n    \n            # 生成详细提示信息（包含容差参数）\n            detail_msg = (\n                f\"\\n实际: {actual_value}\\n\"\n                f\"操作: {op.value}\\n\"\n                f\"预期: {expected_value}\\n\"\n            )\n    \n            # 添加allure.attach，将信息写入报告\n            allure.attach(\n                detail_msg,  # 附件内容\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n>               pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\nE               Failed: 校验失败: 手数符合预期\nE               \nE               实际: 0.0\nE               操作: ==\nE               预期: 0.01\n\ncommons\\api_base.py:1362: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系\n      1. MT4进行登录，然后进行开仓，总手数0.01\n      2. 账号管理-持仓订单-喊单和跟单数据校验\n      3. 跟单管理-开仓日志-喊单和跟单数据校验\n      4. 跟单管理-VPS管理-喊单和跟单数据校验\n      5. MT4进行平仓\n      6.账号管理-持仓订单-喊单和跟单数据校验\n      7.跟单管理-开仓日志-喊单和跟单数据校验\n      8.跟单管理-VPS管理-喊单和跟单数据校验\n    - 预期结果：喊单和跟单数据校验正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "Failed: 校验失败: 手数符合预期\n\n实际: 0.0\n操作: ==\n预期: 0.01",
+    "statusTrace" : "self = <template.test_cloudTrader.test_oac_equit.Test_openandclouseall.Test_orderseng1 object at 0x000002705C773250>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000002705C79A8B0>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x000002705C796760>\n\n    @allure.title(\"跟单管理-VPS管理-跟单者账号-开仓后\")\n    def test_query_openfollow_getRecordList(self, var_manager, logged_session):\n        with allure.step(\"1. 发送请求\"):\n            follow_account = var_manager.get_variable(\"follow_account\")\n            vpsrunIpAddr = var_manager.get_variable(\"vpsrunIpAddr\")\n            params = {\n                \"_t\": current_timestamp_seconds,\n                \"pageNo\": \"1\",\n                \"pageSize\": \"50\",\n                \"accountLike\": follow_account,\n                \"serverNameLike\": \"\",\n                \"connectTraderLike\": \"\",\n                \"connected\": \"\",\n                \"runIpAddr\": vpsrunIpAddr\n            }\n            response = self.send_get_request(\n                logged_session,\n                '/blockchain/account/getRecordList',\n                params=params\n            )\n    \n        with allure.step(\"2. 返回校验\"):\n            self.assert_json_value(\n                response,\n                \"$.searchCount\",\n                True,\n                \"响应searchCount字段应为true\"\n            )\n    \n        with allure.step(f\"3. 数据校验\"):\n            with allure.step(\"跟单手数校验-MT4开仓手数和持仓订单手数\"):\n                totalLots = self.json_utils.extract(response.json(), \"$.records[0].totalLots\")\n                logging.info(f\"手数是: {totalLots}\")\n                if not totalLots:\n                    allure.attach(\"跟单手数为空\", \"跟单手数详情\", allure.attachment_type.TEXT)\n                else:\n                    lots_open = var_manager.get_variable(\"lots_open\")\n                    follow_periodP = var_manager.get_variable(\"follow_periodP\")\n                    trader_periodP = var_manager.get_variable(\"trader_periodP\")\n                    # 获取跟单净值比例\n                    fixed_proportion = var_manager.get_variable(\"fixed_proportion\")\n                    # 百分比数据转换\n                    follow_fixed_decimal = percentage_to_decimal(fixed_proportion)\n                    expected_lots_open = lots_open * (follow_periodP / trader_periodP) * follow_fixed_decimal\n                    # 四舍五入保留两位小数\n                    expected_lots_open = round(expected_lots_open, 2)\n    \n                    # 最小手数限制（0.01）\n                    min_order_size = 0.01\n                    if expected_lots_open < min_order_size:\n                        allure.attach(\n                            f\"计算预期手数{expected_lots_open} < 最小手数{min_order_size}，强制重置为{min_order_size}\",\n                            \"预期手数调整说明\", allure.attachment_type.TEXT)\n                        expected_lots_open = min_order_size\n    \n>                   self.verify_data(\n                        actual_value=float(totalLots),\n                        expected_value=float(expected_lots_open),\n                        op=CompareOp.EQ,\n                        message=f\"手数符合预期\",\n                        attachment_name=\"手数详情\"\n                    )\n\ntest_cloudTrader\\test_oac_equit.py:867: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_oac_equit.Test_openandclouseall.Test_orderseng1 object at 0x000002705C773250>\nactual_value = 0.0, expected_value = 0.01, op = <CompareOp.EQ: '=='>\nmessage = '手数符合预期', attachment_name = '手数详情', attachment_type = 'text/plain'\nuse_isclose = True, rel_tol = 1e-09, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                pytest.fail(\n                    f\"校验类型错误: {str(e)}\\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}\")\n    \n            # 生成详细提示信息（包含容差参数）\n            detail_msg = (\n                f\"\\n实际: {actual_value}\\n\"\n                f\"操作: {op.value}\\n\"\n                f\"预期: {expected_value}\\n\"\n            )\n    \n            # 添加allure.attach，将信息写入报告\n            allure.attach(\n                detail_msg,  # 附件内容\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n>               pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\nE               Failed: 校验失败: 手数符合预期\nE               \nE               实际: 0.0\nE               操作: ==\nE               预期: 0.01\n\ncommons\\api_base.py:1362: Failed",
+    "steps" : [ {
+      "name" : "1. 发送请求",
+      "time" : {
+        "start" : 1758528943184,
+        "stop" : 1758528946736,
+        "duration" : 3552
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1758528943184,
+          "stop" : 1758528946736,
+          "duration" : 3552
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1758528943184,
+            "stop" : 1758528943185,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ba8930f702584d2e",
+            "name" : "请求URL",
+            "source" : "ba8930f702584d2e.txt",
+            "type" : "text/plain",
+            "size" : 33
+          }, {
+            "uid" : "8e26eb21b06fc168",
+            "name" : "请求头",
+            "source" : "8e26eb21b06fc168.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "b5d0bd69476f838d",
+            "name" : "请求体（表单/文件）",
+            "source" : "b5d0bd69476f838d.txt",
+            "type" : "text/plain",
+            "size" : 172
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1758528943733,
+            "stop" : 1758528943734,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "76180a5471c4ead3",
+            "name" : "响应状态码",
+            "source" : "76180a5471c4ead3.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "8a18b0a98381a50f",
+            "name" : "响应头",
+            "source" : "8a18b0a98381a50f.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "86df38021919fcd3",
+            "name" : "响应体（JSON）",
+            "source" : "86df38021919fcd3.json",
+            "type" : "application/json",
+            "size" : 831
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 2,
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 3,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1758528946736,
+        "stop" : 1758528946748,
+        "duration" : 12
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.searchCount",
+        "time" : {
+          "start" : 1758528946746,
+          "stop" : 1758528946748,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "f4948e9e9f0b0d64",
+          "name" : "请求URL",
+          "source" : "f4948e9e9f0b0d64.txt",
+          "type" : "text/plain",
+          "size" : 190
+        }, {
+          "uid" : "e2b3362f703b904",
+          "name" : "预期值",
+          "source" : "e2b3362f703b904.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "bdcdec7067fd9e9",
+          "name" : "实际值",
+          "source" : "bdcdec7067fd9e9.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 1,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "3. 数据校验",
+      "time" : {
+        "start" : 1758528946748,
+        "stop" : 1758528946761,
+        "duration" : 13
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 校验失败: 手数符合预期\n\n实际: 0.0\n操作: ==\n预期: 0.01\n\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_oac_equit.py\", line 867, in test_query_openfollow_getRecordList\n    self.verify_data(\n  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 1362, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "跟单手数校验-MT4开仓手数和持仓订单手数",
+        "time" : {
+          "start" : 1758528946748,
+          "stop" : 1758528946759,
+          "duration" : 11
+        },
+        "status" : "failed",
+        "statusMessage" : "Failed: 校验失败: 手数符合预期\n\n实际: 0.0\n操作: ==\n预期: 0.01\n\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_oac_equit.py\", line 867, in test_query_openfollow_getRecordList\n    self.verify_data(\n  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 1362, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+        "steps" : [ {
+          "name" : "校验: 手数符合预期",
+          "time" : {
+            "start" : 1758528946757,
+            "stop" : 1758528946758,
+            "duration" : 1
+          },
+          "status" : "failed",
+          "statusMessage" : "Failed: 校验失败: 手数符合预期\n\n实际: 0.0\n操作: ==\n预期: 0.01\n\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 1362, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\venv\\lib\\site-packages\\_pytest\\outcomes.py\", line 178, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "f29c4b96d4c9b202",
+            "name" : "手数详情",
+            "source" : "f29c4b96d4c9b202.attach",
+            "type" : "text/plain",
+            "size" : 37
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 1,
+        "attachmentsCount" : 1,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 1,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "1b71fb50d653929f",
+      "name" : "log",
+      "source" : "1b71fb50d653929f.txt",
+      "type" : "text/plain",
+      "size" : 625
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 9,
+    "attachmentsCount" : 11,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景1：跟随方式-按净值-100%"
+  }, {
+    "name" : "feature",
+    "value" : "跟随方式-按净值"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_oac_equit"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_openandclouseall"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "32840-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_oac_equit"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "6c6358d6d39f556b.json",
+  "parameterValues" : [ ]
+}
