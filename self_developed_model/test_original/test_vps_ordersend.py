@@ -17,7 +17,7 @@ SKIP_REASON = "该用例暂时跳过"
 - 场景1：手数范围0.1-1，总订单3，总手数1
 - 场景2：手数范围0.01-0.01，总手数0.01
 - 场景3：手数范围0.1-1，总手数5
-- 场景4：手数范围0.01-1，总订单10
+- 场景4：手数范围0.01-1，总订单数10
 - 场景5：手数范围0.1-1，总手数1-停止功能
 """)
 class TestVPSOrderSend_AllScenarios(APITestBase):
@@ -654,8 +654,8 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         }
         self._verify_close_order_slave(var_manager, db_transaction, test_params)
 
-    # -------------------------- 场景4：手数范围0.01-1，总订单10 --------------------------
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    # -------------------------- 场景4：手数范围0.01-1，总订单数10 --------------------------
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @pytest.mark.url("vps")
     @allure.title("策略开仓")
     def test_scenario4_trader_orderSend(self, var_manager, logged_session):
@@ -668,7 +668,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         }
         self._send_open_order(var_manager, logged_session, test_params)
 
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @allure.title("数据库校验-主指令开仓数据")
     def test_scenario4_dbquery_master_open(self, var_manager, db_transaction):
         test_params = {
@@ -680,7 +680,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         }
         self._verify_open_order_master(var_manager, db_transaction, test_params)
 
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @allure.title("数据库校验-跟单指令开仓数据")
     def test_scenario4_dbquery_slave_open(self, var_manager, db_transaction):
         test_params = {
@@ -692,7 +692,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         }
         self._verify_open_order_slave(var_manager, db_transaction, test_params)
 
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @pytest.mark.url("vps")
     @allure.title("策略平仓（场景4）")
     def test_scenario4_trader_close(self, var_manager, logged_session):
@@ -700,7 +700,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         new_user = var_manager.get_variable("new_user")
         self._send_close_order(var_manager, logged_session, vps_trader_id, new_user["account"])
 
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @pytest.mark.url("vps")
     @allure.title("跟单平仓")
     def test_scenario4_slave_close(self, var_manager, logged_session):
@@ -708,7 +708,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         self._send_close_order(var_manager, logged_session, vps_addslave_id, vps_user_accounts_1)
 
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @allure.title("数据库校验-主指令平仓数据")
     def test_scenario4_dbquery_master_close(self, var_manager, db_transaction):
         test_params = {
@@ -720,7 +720,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
         }
         self._verify_close_order_master(var_manager, db_transaction, test_params)
 
-    @allure.story("场景4：手数范围0.01-1，总订单10")
+    @allure.story("场景4：手数范围0.01-1，总订单数10")
     @allure.title("数据库校验-跟单指令平仓数据")
     def test_scenario4_dbquery_slave_close(self, var_manager, db_transaction):
         test_params = {

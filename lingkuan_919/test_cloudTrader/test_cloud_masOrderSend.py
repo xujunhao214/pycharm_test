@@ -1286,11 +1286,11 @@ class TestCloudMasOrdersend:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
-    @allure.story("场景4：复制下单-手数0.01-1，总订单10")
+    @allure.story("场景4：复制下单-手数0.01-1，总订单数10")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-1，总订单10
+      1. 进行开仓，手数范围0.01-1，总订单数10
       2. 校验账号的数据是否正确
       3. 进行平仓
       4. 校验账号的数据是否正确

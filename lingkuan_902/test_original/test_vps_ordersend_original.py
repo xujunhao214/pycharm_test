@@ -607,7 +607,7 @@ class TestVPSOrderSend3(VPSOrderTestBase):
 - 预期结果：检验喊单账号和跟单账号的数据正确
 """)
 class TestVPSOrderSend4(VPSOrderTestBase):
-    """测试用例4：手数范围0.01-1，总订单10"""
+    """测试用例4：手数范围0.01-1，总订单数10"""
     test_params = {
         "totalNum": "10",
         "totalSzie": "",

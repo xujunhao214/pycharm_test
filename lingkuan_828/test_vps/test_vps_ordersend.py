@@ -935,11 +935,11 @@ class TestVPSOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景3：复制下单-手数范围0.01-1，总手数10")
+    @allure.story("场景3：复制下单-手数范围0.01-1，总订单数10")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.01-1，总手数10
+      1. 进行开仓，手数范围0.01-1，总订单数10
       2. 校验账号的数据是否正确
       3. 进行平仓
       4. 校验账号的数据是否正确
