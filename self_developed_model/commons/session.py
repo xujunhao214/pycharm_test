@@ -41,7 +41,7 @@ file_handler.setFormatter(formatter)
 logger = logging.getLogger("requests.session")
 logger.propagate = False
 logger.addHandler(file_handler)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class EnvironmentSession(requests.Session):

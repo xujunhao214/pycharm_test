@@ -42,10 +42,10 @@ def run_cloud_tests(env: str = "test"):
         "test_cloudTrader/test_delete.py",
 
         "--log-file=./Logs/cloud_pytest.log",
-        "--log-file-level=info",
+        "--log-file-level=debug",
         "--log-file-format=%(levelname)-8s %(asctime)s [%(module)s;%(lineno)s]  : %(message)s",
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
-        "--log-level=info"
+        "--log-level=debug"
     ]
 
     try:

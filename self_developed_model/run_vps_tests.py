@@ -42,10 +42,10 @@ def run_vps_tests(env: str = "test"):
         "test_vps/test_delete.py",
 
         "--log-file=./Logs/vps_pytest.log",
-        "--log-file-level=info",
-        "--log-file-format=%(levelname)-8s %(asctime)s [%(name)s;%(lineno)s]  : %(message)s",
+        "--log-file-level=debug",
+        "--log-file-format=%(levelname)-8s %(asctime)s [%(module)s;%(lineno)s]  : %(message)s",
         "--log-file-date-format=%Y-%m-%d %H:%M:%S",
-        "--log-level=info"
+        "--log-level=debug"
     ]
 
     try:
