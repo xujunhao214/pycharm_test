@@ -33,7 +33,7 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_follow.py",
         # "test_cloudTrader/test_follow_dividend.py",
         # "test_cloudTrader/test_realtime_add.py",
-        # "test_cloudTrader/test_agent.py",
+        "test_cloudTrader/test_agent.py",
         # "test_cloudTrader/test_topup.py",
         # "test_cloudTrader/test_oac_proportion.py",
         "test_cloudTrader/test_openclose.py",
