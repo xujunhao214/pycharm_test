@@ -28,7 +28,7 @@ def run_cloud_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        # "test_cloudTrader/test_create.py",
+        "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_trader.py",
         # "test_cloudTrader/test_follow.py",
         # "test_cloudTrader/test_follow_dividend.py",
