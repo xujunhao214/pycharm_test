@@ -42,7 +42,7 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_oac_equit.py",
         # "test_cloudTrader/test_delete.py",
         # "test_cloudTrader/test_lianxi.py",
-        "test_cloudTrader/test_lianxi3.py",
+        "test_cloudTrader/test_lianxi2.py",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=debug",
