@@ -35,7 +35,8 @@ class Test_openandclouseall:
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        def run_clear_old(self, var_manager, logged_session):
+        @allure.step("数据校验开始前操作")
+        def test_run_clear_old(self, var_manager, logged_session):
             # 实例化类
             public_front = PublicUtils()
 
