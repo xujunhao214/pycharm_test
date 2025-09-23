@@ -11,7 +11,7 @@ from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
 from template.commons.random_generator import *
 from template.commons.session import percentage_to_decimal
-from template.public_function.test_proportion_public import Test_public
+from template.public_function.proportion_public import PublicUtils
 
 
 @allure.feature("跟随方式-按比例")
@@ -37,7 +37,7 @@ class Test_openandclouseall:
 
         def run_clear_old(self, var_manager, logged_session):
             # 实例化类
-            public_front = Test_public()
+            public_front = PublicUtils()
 
             # 按顺序调用
             # 先登录获取 token

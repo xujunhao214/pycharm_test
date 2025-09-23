@@ -11,7 +11,7 @@ from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
 from template.commons.random_generator import *
 from template.commons.session import percentage_to_decimal
-from template.public_function.test_proportion_public import Test_clear_old
+from template.public_function.proportion_public import Test_clear_old
 
 
 @allure.feature("跟随方式-按比例")

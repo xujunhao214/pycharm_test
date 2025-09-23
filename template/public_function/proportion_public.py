@@ -15,7 +15,7 @@ from template.commons.session import percentage_to_decimal
 
 
 @allure.title("数据校验开始前操作")
-class Test_public(APITestBase):
+class PublicUtils(APITestBase):
     # 实例化JsonPath工具类（全局复用）
     json_utils = JsonPathUtils()
 
