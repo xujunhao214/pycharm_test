@@ -157,7 +157,7 @@ class Test_openandclouseall:
             with allure.step(f"3. 查询校验"):
                 self.json_utils.assert_empty_list(
                     data=response.json(),
-                    expression="$.result.records"
+                    expression="$.result.records[0].trader_id"
                 )
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
