@@ -1,5 +1,5 @@
 import time
-from template_model.commons.api_base import APITestBase, CompareOp, logger
+from template.commons.api_base import APITestBase, CompareOp, logger
 import allure
 import logging
 import logging
@@ -299,6 +299,35 @@ class PublicUtils(APITestBase):
             else:
                 logging.info("开仓成功")
 
+    @allure.title("MT4平台开仓操作")
+    def test_mt4_open2(self, var_manager):
+        with allure.step("发送开仓请求"):
+            symbol = var_manager.get_variable("symbol")
+            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.2&placedType=Client&price=0.00"
+
+            payload = ""
+            self.response = requests.request("GET", url, headers=headers, data=payload)
+            allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+            headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+            allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
+            self.json_utils = JsonPathUtils()
+            self.response = self.response.json()
+            allure.attach(json.dumps(self.response, ensure_ascii=False, indent=2), "响应内容",
+                          allure.attachment_type.JSON)
+
+            ticket_open = self.json_utils.extract(self.response, "$.ticket")
+            lots_open = self.json_utils.extract(self.response, "$.lots")
+            var_manager.set_runtime_variable("ticket_open", ticket_open)
+            var_manager.set_runtime_variable("lots_open", lots_open)
+            print(ticket_open, lots_open)
+            logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
+            if lots_open is None:
+                logging.info("开仓失败")
+                # 重新开仓
+                self.test_mt4_open(var_manager)
+            else:
+                logging.info("开仓成功")
+
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4平台平仓操作")
     def test_mt4_close(self, var_manager):
@@ -306,7 +335,6 @@ class PublicUtils(APITestBase):
             max_attempts = 3  # 最大总尝试次数
             retry_interval = 10  # 每次尝试间隔时间(秒)
             global token_mt4, headers  # 声明使用全局变量
-            ticket_open = var_manager.get_variable("ticket_open")
             ticket_close = None
 
             # 提取登录所需变量
@@ -316,6 +344,7 @@ class PublicUtils(APITestBase):
             for attempt in range(max_attempts):
                 try:
                     with allure.step(f"1. 发送平仓请求 (第{attempt + 1}次尝试)"):
+                        ticket_open = var_manager.get_variable("ticket_open")
                         # 检查token是否有效，无效则重新登录
                         if not token_mt4 or not uuid_pattern.match(token_mt4):
                             with allure.step("token无效或不存在，重新登录MT4"):
