@@ -602,11 +602,11 @@ class APITestBase:
                     logger.info(f"[{self._get_current_time()}] 查询结果: {result_preview[:500]}")
 
                     if attach_to_allure:
-                        display_count = min(len(result), 100)
+                        display_count = min(len(result), 50)
                         with allure.step("数据库查询结果"):
                             allure.attach(
                                 self.serialize_data(result[:display_count]),
-                                f"查询结果（共{len(result)}条，显示前100条）",
+                                f"查询结果（共{len(result)}条，显示前50条）",
                                 allure.attachment_type.JSON
                             )
 
@@ -755,11 +755,11 @@ class APITestBase:
 
             # 附加最终结果到报告
             if attach_to_allure:
-                display_count = min(len(final_result), 100)
+                display_count = min(len(final_result), 50)
                 with allure.step("数据库查询结果（最终稳定结果）"):
                     allure.attach(
                         self.serialize_data(final_result[:display_count]),
-                        f"查询结果（共{len(final_result)}条，显示前100条）",
+                        f"查询结果（共{len(final_result)}条，显示前50条）",
                         allure.attachment_type.JSON
                     )
 
@@ -950,7 +950,7 @@ class APITestBase:
                     attach_to_allure=True
                 )
 
-            display_count = min(len(final_result), 100)
+            display_count = min(len(final_result), 50)
             with allure.step("等待删除超时"):
                 allure.attach(f"超过{timeout}秒仍有{len(final_result)}条记录未删除", "超时说明",
                               allure.attachment_type.TEXT)
@@ -1162,7 +1162,7 @@ class APITestBase:
             # 附加结果到报告
             if final_result and attach_to_allure:
                 with allure.step("带时区查询最终结果"):
-                    allure.attach(self.serialize_data(final_result[:100]), "结果预览", allure.attachment_type.JSON)
+                    allure.attach(self.serialize_data(final_result[:500]), "结果预览", allure.attachment_type.JSON)
 
             if not final_result:
                 with allure.step("时区查询无结果"):

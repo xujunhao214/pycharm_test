@@ -91,7 +91,7 @@ class Test_follow_batch(APITestBase):
     # 省略其他全局用例（保持不变）
 
     # -------------------------- 修复的核心部分 --------------------------
-    @allure.title("【多账号】完整流程：绑定→审核→订阅（{current_account}）")  # 修复1：使用简单变量
+    @allure.title("【多账号】完整流程：绑定→审核→订阅")  # 修复1：使用简单变量
     @pytest.mark.parametrize("follow_acc", FOLLOW_ACCOUNT_LIST)
     @pytest.mark.dependency(depends=[
         "test_dbbchain_trader",
