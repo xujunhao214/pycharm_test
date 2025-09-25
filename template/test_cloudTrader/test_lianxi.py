@@ -1,97 +1,28 @@
-import time
-import statistics
-from typing import List, Union
-from template.commons.api_base import APITestBase, CompareOp
+from template.commons.api_base import APITestBase
 import allure
 import logging
-import json
 import pytest
+import json
+import requests
 from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
-from template.commons.random_generator import *
-
-# 配置日志（确保输出格式清晰）
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+from template.public_function.proportion_public import PublicUtils
 
 
-@allure.story("开仓/平仓时间差数据统计")
-class Test_trader(APITestBase):
+@allure.feature("账号管理-删除账号")
+class Test_delete(APITestBase):
     # 实例化JsonPath工具类（全局复用）
     json_utils = JsonPathUtils()
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
-    @allure.title("组合查询")
-    def test_query_all(self, var_manager, logged_session):
-        with allure.step("1. 发送请求"):
-            follow_account = var_manager.get_variable("follow_account")
-            trader_account = var_manager.get_variable("trader_account")
-            trader_master_nickname = var_manager.get_variable("trader_master_nickname")
-            follow_nickname = var_manager.get_variable("follow_nickname")
-            trader_master_server = var_manager.get_variable("trader_master_server")
-            follow_slave_server = var_manager.get_variable("follow_slave_server")
-            trader_pass_id = var_manager.get_variable("trader_pass_id")
-            follow_pass_id = var_manager.get_variable("follow_pass_id")
-            login_config = var_manager.get_variable("login_config")
-            username_log = login_config["username"]
-            params = {
-                "_t": current_timestamp_seconds,
-                "account": follow_account,
-                "master_account": trader_account,
-                "master_nickname": trader_master_nickname,
-                "nickname": follow_nickname,
-                "master_server": trader_master_server,
-                "slave_server": follow_slave_server,
-                "master_id": trader_pass_id,
-                "slave_id": follow_pass_id,
-                "username": username_log,
-                "pause": 0,
-                "pageNo": 1,
-                "pageSize": 20,
-                "status": "NORMAL,AUDIT"
-            }
-            response = self.send_get_request(
-                logged_session,
-                '/online/cgreport/api/getColumnsAndData/1560189381093109761',
-                params=params
-            )
+    @allure.title("公共方法-校验前操作")
+    def test_run_public(self, var_manager, logged_session):
+        # 实例化类
+        public_front = PublicUtils()
 
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.success",
-                True,
-                "响应success字段应为true"
-            )
-
-        with allure.step("3. 查询校验"):
-            account_list = self.json_utils.extract(
-                response.json(),
-                "$.result.data.records[*].account",
-                default=[],
-                multi_match=True
-            )
-
-            if not account_list:
-                pytest.fail("查询结果为空，不符合预期")
-            else:
-                attach_body = f"跟随者账户查询：{follow_account}，返回 {len(account_list)} 条记录"
-
-            allure.attach(
-                body=attach_body,
-                name=f"{follow_account}查询结果",
-                attachment_type="text/plain"
-            )
-
-            for idx, account in enumerate(account_list):
-                self.verify_data(
-                    actual_value=account,
-                    expected_value=follow_account,
-                    op=CompareOp.EQ,
-                    use_isclose=False,
-                    message=f"第 {idx + 1} 条记录的跟随者账户符合预期",
-                    attachment_name=f"第 {idx + 1} 条记录的跟随者账户校验"
-                )
+        # 按顺序调用
+        # 登录获取 token
+        public_front.test_login(var_manager)
+        # 平仓喊单账号
+        public_front.test_close_trader(var_manager)
+        # 平仓跟单账号
+        public_front.test_close_follow(var_manager)

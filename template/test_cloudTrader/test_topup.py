@@ -27,7 +27,7 @@ class Test_topup:
                     "lang": 0,
                     "orgCode": "A01"
                 })
-                header = {
+                headers = {
                     'priority': 'u=1, i',
                     'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NTgyNDY3ODIsInVzZXJuYW1lIjoiYW5vbnltb3VzIn0.lvI66l-hA0VqHCsfgODrPoH4KylpOpzVuSOOycls5gE',
                     'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NTc0OTMyMDMsInVzZXJuYW1lIjoiYWRtaW4ifQ.PkFLjsBa0NbCUF8ROtmIGABzYmUH2ldQfqz_ERvaKsY',
@@ -37,9 +37,13 @@ class Test_topup:
                     'Connection': 'keep-alive'
                 }
 
-                response = requests.request("POST", url, headers=header, data=payload)
+                response = requests.request("POST", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"登录返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -70,8 +74,12 @@ class Test_topup:
                 }
 
                 response = requests.request("GET", url, headers=headers, data={})
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -102,8 +110,12 @@ class Test_topup:
                 ]
 
                 response = requests.request("POST", url, headers=headers, data={}, files=files)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"提交付款凭证返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -142,8 +154,12 @@ class Test_topup:
                 })
 
                 response = requests.request("POST", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -169,8 +185,12 @@ class Test_topup:
                 })
 
                 response = requests.request("GET", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 响应校验"):
                 paymentComment = self.json_utils.extract(response.json(), "$.result.records[0].paymentComment")
@@ -294,8 +314,12 @@ class Test_topup:
                 })
 
                 response = requests.request("GET", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 响应校验"):
                 with allure.step("2. 返回校验"):
@@ -325,8 +349,12 @@ class Test_topup:
                 url = f"{URL_TOP}/agent/agentWallet/getWalletByUserId?userId={trader_user_id}"
 
                 response = requests.request("GET", url, headers=headers, data={})
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -378,8 +406,12 @@ class Test_topup:
                 }
 
                 response = requests.request("POST", url, headers=header, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"登录返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -410,8 +442,12 @@ class Test_topup:
                 }
 
                 response = requests.request("GET", url, headers=headers, data={})
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -442,8 +478,12 @@ class Test_topup:
                 ]
 
                 response = requests.request("POST", url, headers=headers, data={}, files=files)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"提交付款凭证返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -482,8 +522,12 @@ class Test_topup:
                 })
 
                 response = requests.request("POST", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -509,8 +553,12 @@ class Test_topup:
                 })
 
                 response = requests.request("GET", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 响应校验"):
                 paymentComment = self.json_utils.extract(response.json(), "$.result.records[0].paymentComment")
@@ -634,8 +682,12 @@ class Test_topup:
                 })
 
                 response = requests.request("GET", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 响应校验"):
                 with allure.step("2. 返回校验"):
@@ -665,8 +717,12 @@ class Test_topup:
                 url = f"{URL_TOP}/agent/agentWallet/getWalletByUserId?userId={trader_user_id}"
 
                 response = requests.request("GET", url, headers=headers, data={})
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(
@@ -699,8 +755,12 @@ class Test_topup:
                 url = f"{URL_TOP}/online/cgform/api/getData/4028839781b865e40181b8784023000b?to_uid={trader_user_id}&pageSize=10&pageNo=1&type=1,8&column=create_time&order=desc"
 
                 response = requests.request("GET", url, headers=headers, data={})
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                 print(response.text)
-                logging.info(f"response返回信息：{response.text}")
+                logging.info(f"返回信息：{response.text}")
+                allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
             with allure.step("2. 返回校验"):
                 self.assert_json_value(

@@ -10,7 +10,7 @@ from template.commons.random_generator import *
 
 @allure.feature("账号管理")
 class Test_create:
-    @allure.story("创建交易员账号")
+    @allure.story("绑定交易员账号")
     class Test_trader(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
@@ -493,7 +493,7 @@ class Test_create:
                     "响应message字段应为:修改成功！"
                 )
 
-    @allure.story("创建跟随者账号")
+    @allure.story("绑定跟随者账号")
     class Test_follow(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
@@ -772,36 +772,6 @@ class Test_create:
                     body=str(follow_pass_id),
                     attachment_type=allure.attachment_type.TEXT
                 )
-
-        # @allure.title("任务中心-MT4绑定审核-提取数据2")
-        # def test_api_getData0(self, var_manager, logged_session):
-        #     with allure.step("1. 发送请求"):
-        #         params = {
-        #             "_t": current_timestamp_seconds,
-        #             "column": "id",
-        #             "order": "desc",
-        #             "pageNo": 1,
-        #             "pageSize": 20,
-        #             "superQueryMatchType": "and",
-        #             "status": "PENDING,VERIFICATION"
-        #         }
-        #         response = self.send_get_request(
-        #             logged_session,
-        #             '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',
-        #             params=params
-        #         )
-        #
-        #     with allure.step("2. 返回校验"):
-        #         self.assert_json_value(
-        #             response,
-        #             "$.success",
-        #             True,
-        #             "响应success字段应为true"
-        #         )
-        #
-        #     with allure.step("3. 提取数据"):
-        #         follow_pass_id = self.json_utils.extract(response.json(), "$.result.records[0].id")
-        #         var_manager.set_runtime_variable("follow_pass_id", follow_pass_id)
 
         @allure.title("任务中心-MT4绑定审核-通过")
         def test_account_pass(self, var_manager, logged_session):

@@ -99,7 +99,7 @@ class Test_numberall:
             public_front = PublicUtils()
 
             # 按顺序调用
-            # 先登录获取 token
+            # 登录获取 token
             public_front.test_login(var_manager)
             # 平仓喊单账号
             public_front.test_close_trader(var_manager)
@@ -1221,7 +1221,7 @@ class Test_numberall:
             public_front = PublicUtils()
 
             # 按顺序调用
-            # 先登录获取 token
+            # 登录获取 token
             public_front.test_login(var_manager)
             # 平仓喊单账号
             public_front.test_close_trader(var_manager)
@@ -2182,7 +2182,7 @@ class Test_numberall:
             public_front = PublicUtils()
 
             # 按顺序调用
-            # 先登录获取 token
+            # 登录获取 token
             public_front.test_login(var_manager)
             # 平仓喊单账号
             public_front.test_close_trader(var_manager)

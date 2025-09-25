@@ -17,10 +17,11 @@ from requests.exceptions import (
 from jsonpath_ng import parse
 from template_model.VAR.VAR import *
 from template_model.commons.wait_utils import wait_for_condition
+from urllib.parse import urlparse, urlunparse
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-from enum import Enum
 
 
 # 定义比较操作枚举，方便调用时清晰表达意图
@@ -281,46 +282,124 @@ class APITestBase:
                 logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
-    def send_delete_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
-        """发送DELETE请求（异常分层优化）"""
+    def send_delete_request(self, logged_session, url, json_data=None, params=None, sleep_seconds=SLEEP_SECONDS):
+        """
+        发送DELETE请求（异常分层优化）
+
+        :param logged_session: 已登录的会话对象
+        :param url: 请求URL
+        :param json_data: 请求体JSON数据（可选）
+        :param params: URL查询参数（可选，如{'id': '1971039114011594754'}）
+        :param sleep_seconds: 请求后等待秒数
+        :return: 响应对象
+        """
         method = "DELETE"
-        with allure.step(f"执行 {method} 请求"):
+        with allure.step(f"执行 {method} 请求: {url}"):
             try:
+                # 处理参数，确保查询参数通过params传递而非直接拼接在url中
+                full_url = url
+                if params:
+                    # 移除URL中已存在的查询参数，避免重复
+                    parsed_url = urlparse(url)
+                    if parsed_url.query:
+                        logger.warning(f"URL中已包含查询参数: {parsed_url.query}，将被params参数覆盖")
+                        full_url = urlunparse(parsed_url._replace(query=''))
+
+                # 附加请求详情到allure报告
                 self._attach_request_details(
                     method=method,
-                    url=url,
+                    url=full_url,
                     headers=logged_session.headers,
+                    params=params,
                     body=json_data,
                     is_json=True,
                 )
 
-                response = logged_session.delete(url, json=json_data)
-                logger.info(f"[{self._get_current_time()}] DELETE请求: {url} | 数据: {json_data}")
+                # 发送DELETE请求，查询参数通过params参数传递
+                response = logged_session.delete(
+                    full_url,
+                    json=json_data,
+                    params=params
+                )
 
+                # 记录请求日志
+                logger.info(
+                    f"[{self._get_current_time()}] {method}请求: {full_url} "
+                    f"| 参数: {params} | 数据: {json_data} | 状态码: {response.status_code}"
+                )
+
+                # 附加响应详情到allure报告
                 self._attach_response_details(response)
 
+                # 请求后等待
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
+
                 return response
 
-            except (SSLError, ConnectionError, Timeout, RequestException) as e:
-                with allure.step(f"{method} 请求异常"):
+            except (SSLError, ConnectionError, Timeout) as e:
+                error_type = "网络层异常"
+                with allure.step(f"{method} 请求{error_type}"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_session.headers,
+                        params=params,
                         body=json_data,
                         is_json=True,
                     )
                     error_detail = (
-                        f"请求异常: {str(e)}\n"
+                        f"{error_type}: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"查询参数: {params}\n"
                         f"请求头: {logged_session.headers}\n"
                         f"请求体: {json_data}"
                     )
-                    allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
-                raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
+                    allure.attach(error_detail, f"{error_type}详情", allure.attachment_type.TEXT)
+                logger.error(
+                    f"[{self._get_current_time()}] {method}请求{error_type}: {str(e)} "
+                    f"| URL: {url} | 参数: {params}",
+                    exc_info=True
+                )
+                raise ConnectionError(f"Failed: {method}请求{error_type}（{str(e)[:1000]}）") from e
+
+            except RequestException as e:
+                error_type = "请求层异常"
+                with allure.step(f"{method} 请求{error_type}"):
+                    self._attach_request_details(
+                        method=method,
+                        url=url,
+                        headers=logged_session.headers,
+                        params=params,
+                        body=json_data,
+                        is_json=True,
+                    )
+                    error_detail = (
+                        f"{error_type}: {str(e)}\n"
+                        f"URL: {url}\n"
+                        f"查询参数: {params}\n"
+                        f"请求头: {logged_session.headers}\n"
+                        f"请求体: {json_data}"
+                    )
+                    allure.attach(error_detail, f"{error_type}详情", allure.attachment_type.TEXT)
+                logger.error(
+                    f"[{self._get_current_time()}] {method}请求{error_type}: {str(e)} "
+                    f"| URL: {url} | 参数: {params}",
+                    exc_info=True
+                )
+                raise RequestException(f"Failed: {method}请求{error_type}（{str(e)[:1000]}）") from e
+
+            except Exception as e:
+                error_type = "未知异常"
+                with allure.step(f"{method} 请求{error_type}"):
+                    error_detail = f"{error_type}: {str(e)}\nURL: {url}\n查询参数: {params}"
+                    allure.attach(error_detail, f"{error_type}详情", allure.attachment_type.TEXT)
+                logger.error(
+                    f"[{self._get_current_time()}] {method}请求{error_type}: {str(e)} "
+                    f"| URL: {url} | 参数: {params}",
+                    exc_info=True
+                )
+                raise Exception(f"Failed: {method}请求{error_type}（{str(e)[:1000]}）") from e
 
     def send_put_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
         """发送PUT请求（异常分层优化）"""

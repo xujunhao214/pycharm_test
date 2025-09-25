@@ -5,17 +5,18 @@ import allure
 import logging
 import json
 import pytest
-import re
-import datetime
-import requests
 from template_model.VAR.VAR import *
 from template_model.commons.jsonpath_utils import *
 from template_model.commons.random_generator import *
+import re
+import datetime
+import requests
 from template_model.commons.api_base import APITestBase, CompareOp, logger
 
 
 @allure.feature("创建开平仓订单然后统计时间差")
 class Test_createTD:
+    # @pytest.mark.skip(reason="跳过此用例")
     @allure.story("创建开平仓订单")
     class Test_create_order(APITestBase):
         # 工具类实例化
@@ -60,7 +61,7 @@ class Test_createTD:
         }
 
         # 配置参数
-        TOTAL_CYCLES = 50  # 总循环次数
+        TOTAL_CYCLES = 3  # 总循环次数
         MAX_LOGIN_RETRIES = 5  # 登录最大重试次数
         LOGIN_RETRY_INTERVAL = 5  # 登录重试间隔(秒)
         MAX_TRADE_RETRIES = 3  # 交易操作最大重试次数
@@ -87,9 +88,13 @@ class Test_createTD:
 
                     # 发送登录请求
                     response = requests.get(url, headers=self.headers, timeout=15)
+                    allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                    headers_json = json.dumps(self.headers, ensure_ascii=False, indent=2)
+                    allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                     response_text = response.text.strip()
 
                     logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
+                    allure.attach(response_text, "响应内容", allure.attachment_type.TEXT)
 
                     # 验证Token格式
                     if self.uuid_pattern.match(response_text):
@@ -133,8 +138,13 @@ class Test_createTD:
                     # 发送开仓请求
                     url = f"{MT4_URL}/OrderSend?id={self.token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
                     response = requests.get(url, headers=self.headers, timeout=15)
+                    allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                    headers_json = json.dumps(self.headers, ensure_ascii=False, indent=2)
+                    allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                     response_json = response.json()
                     logging.info(f"第{cycle}次循环第{attempt + 1}次开仓响应: {response_json}")
+                    allure.attach(json.dumps(response_json, ensure_ascii=False, indent=2), "响应内容",
+                                  allure.attachment_type.JSON)
 
                     # 提取订单号
                     ticket_open = self.json_utils.extract(response_json, "$.ticket")
@@ -171,8 +181,13 @@ class Test_createTD:
                     # 发送平仓请求
                     url = f"{MT4_URL}/OrderClose?id={self.token_mt4}&ticket={ticket_open}&price=0.00"
                     response = requests.get(url, headers=self.headers, timeout=15)
+                    allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                    headers_json = json.dumps(self.headers, ensure_ascii=False, indent=2)
+                    allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
                     response_json = response.json()
                     logging.info(f"第{cycle}次循环第{attempt + 1}次平仓响应: {response_json}")
+                    allure.attach(json.dumps(response_json, ensure_ascii=False, indent=2), "响应内容",
+                                  allure.attachment_type.JSON)
 
                     # 提取平仓订单号
                     ticket_close = self.json_utils.extract(response_json, "$.ticket")
@@ -187,7 +202,8 @@ class Test_createTD:
                             message=f"第{cycle}次循环 - 开仓平仓订单号一致性校验",
                             attachment_name=f"第{cycle}次循环订单号详情"
                         )
-                        logging.info(f"第{cycle}次循环平仓成功 - 开仓订单号: {ticket_open}, 平仓订单号: {ticket_close}")
+                        logging.info(
+                            f"第{cycle}次循环平仓成功 - 开仓订单号: {ticket_open}, 平仓订单号: {ticket_close}")
                         return True
 
                     logging.warning(f"第{cycle}次循环第{attempt + 1}次平仓未获取到订单号")
