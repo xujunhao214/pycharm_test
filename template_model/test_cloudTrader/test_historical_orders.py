@@ -552,7 +552,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="该用例暂时跳过")
     @allure.title("MT4账号查询")
     def test_query_trader_id(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):

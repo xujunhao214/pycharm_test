@@ -16,10 +16,37 @@ from template.commons.api_base import APITestBase, CompareOp, logger
 
 @allure.feature("创建开平仓订单然后统计时间差")
 class Test_createTD:
+    # @pytest.mark.skip(reason="跳过此用例")
     @allure.story("创建开平仓订单")
     class Test_create_order(APITestBase):
         # 工具类实例化
         json_utils = JsonPathUtils()
+
+        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @allure.title("跟单管理-实时跟单-修改订阅数据")
+        def test_query_updata_editPa(self, var_manager, logged_session):
+            with allure.step("1. 发送修改订阅数据请求"):
+                follow_jeecg_rowkey = var_manager.get_variable("follow_jeecg_rowkey")
+                data = {
+                    "id": follow_jeecg_rowkey,
+                    "direction": "FORWARD",
+                    "followingMode": 2,
+                    "fixedProportion": 100,
+                    "fixedLots": None
+                }
+                response = self.send_put_request(
+                    logged_session,
+                    '/blockchain/master-slave/editPa',
+                    json_data=data
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.success",
+                    True,
+                    "响应success字段应为true"
+                )
 
         # 全局变量
         token_mt4 = None

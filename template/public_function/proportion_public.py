@@ -272,6 +272,12 @@ class PublicUtils(APITestBase):
             var_manager.set_runtime_variable("lots_open", lots_open)
             print(ticket_open, lots_open)
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
+            if lots_open is None:
+                logging.info("开仓失败")
+                # 重新开仓
+                self.test_mt4_open(var_manager)
+            else:
+                logging.info("开仓成功")
 
     @allure.title("MT4平台开仓操作")
     def test_mt4_open2(self, var_manager):

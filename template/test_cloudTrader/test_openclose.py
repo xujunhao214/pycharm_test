@@ -95,6 +95,12 @@ class Test_openandclouseall:
             var_manager.set_runtime_variable("lots_open", lots_open)
             print(ticket_open, lots_open)
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
+            if lots_open is None:
+                logging.info("开仓失败")
+                # 重新开仓
+                self.test_mt4_open(var_manager)
+            else:
+                logging.info("开仓成功")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
