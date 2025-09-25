@@ -236,23 +236,24 @@ class PublicUtils(APITestBase):
                         'Connection': 'keep-alive'
                     }
 
-                    response = requests.request("GET", url, headers=headers, data={})
-                    allure.attach(url, "请求URL", allure.attachment_type.TEXT)
-                    headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
-                    allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-                    # 去除可能的空白字符
-                    response_text = response.text.strip()
+                    with allure.step(f"第{attempt + 1}次尝试"):
+                        response = requests.request("GET", url, headers=headers, data={})
+                        allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                        headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                        allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
+                        # 去除可能的空白字符
+                        response_text = response.text.strip()
 
-                    logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
-                    allure.attach(response_text, "响应内容", allure.attachment_type.TEXT)
+                        logging.info(f"第{attempt + 1}次登录尝试 - 响应内容: {response_text}")
+                        allure.attach(response_text, "响应内容", allure.attachment_type.TEXT)
 
-                    # 验证响应是否为有效的UUID格式token
-                    if uuid_pattern.match(response_text):
-                        token_mt4 = response_text
-                        logging.info(f"第{attempt + 1}次尝试成功 - 获取到token: {token_mt4}")
-                        break
-                    else:
-                        logging.warning(f"第{attempt + 1}次尝试失败 - 无效的token格式: {response_text}")
+                        # 验证响应是否为有效的UUID格式token
+                        if uuid_pattern.match(response_text):
+                            token_mt4 = response_text
+                            logging.info(f"第{attempt + 1}次尝试成功 - 获取到token: {token_mt4}")
+                            break
+                        else:
+                            logging.warning(f"第{attempt + 1}次尝试失败 - 无效的token格式: {response_text}")
 
                 except Exception as e:
                     logging.error(f"第{attempt + 1}次尝试发生异常: {str(e)}")
