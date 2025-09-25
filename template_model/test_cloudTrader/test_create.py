@@ -448,7 +448,7 @@ class Test_create:
                 )
 
         @allure.title("账号管理-交易员账号-编辑账号")
-        def test_duplicate_check(self, var_manager, logged_session):
+        def test_update(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 trader_pass_id = var_manager.get_variable("trader_pass_id")
                 trader_run_ip_addr = var_manager.get_variable("trader_run_ip_addr")
