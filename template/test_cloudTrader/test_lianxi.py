@@ -1,63 +1,97 @@
 import time
-from template.commons.api_base import APITestBase, CompareOp, logger
+import statistics
+from typing import List, Union
+from template.commons.api_base import APITestBase, CompareOp
 import allure
 import logging
-import logging
-import datetime
-import re
+import json
 import pytest
-import requests
 from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
 from template.commons.random_generator import *
-from template.commons.session import percentage_to_decimal
-from template.public_function.proportion_public import Test_public
+
+# 配置日志（确保输出格式清晰）
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
-@allure.feature("跟随方式-按比例")
-class Test_openandclouseall:
-    @allure.story("场景1：跟随方式-按比例-固定比例100%")
-    @allure.description("""
-    ### 测试说明
-    - 前置条件：有喊单账号、跟单账号，跟单已经和喊单有订阅关系
-      1. MT4进行登录，然后进行开仓，总手数0.01
-      2. 账号管理-持仓订单-喊单和跟单数据校验
-      3. 跟单管理-开仓日志-喊单和跟单数据校验
-      4. 跟单管理-VPS管理-喊单和跟单数据校验
-      5. MT4进行平仓
-      6.账号管理-持仓订单-喊单和跟单数据校验
-      7.跟单管理-开仓日志-喊单和跟单数据校验
-      8.跟单管理-VPS管理-喊单和跟单数据校验
-    - 预期结果：喊单和跟单数据校验正确
-    """)
-    # @pytest.mark.skipif(True, reason="跳过此用例")
-    class Test_orderseng1(APITestBase):
-        # 实例化JsonPath工具类（全局复用）
-        json_utils = JsonPathUtils()
+@allure.story("开仓/平仓时间差数据统计")
+class Test_trader(APITestBase):
+    # 实例化JsonPath工具类（全局复用）
+    json_utils = JsonPathUtils()
 
-        @allure.title("数据校验开始前操作")
-        def run_clear_old(self, var_manager, logged_session):
-            # 实例化类
-            public_front = Test_public()
+    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @allure.title("组合查询")
+    def test_query_all(self, var_manager, logged_session):
+        with allure.step("1. 发送请求"):
+            follow_account = var_manager.get_variable("follow_account")
+            trader_account = var_manager.get_variable("trader_account")
+            trader_master_nickname = var_manager.get_variable("trader_master_nickname")
+            follow_nickname = var_manager.get_variable("follow_nickname")
+            trader_master_server = var_manager.get_variable("trader_master_server")
+            follow_slave_server = var_manager.get_variable("follow_slave_server")
+            trader_pass_id = var_manager.get_variable("trader_pass_id")
+            follow_pass_id = var_manager.get_variable("follow_pass_id")
+            login_config = var_manager.get_variable("login_config")
+            username_log = login_config["username"]
+            params = {
+                "_t": current_timestamp_seconds,
+                "account": follow_account,
+                "master_account": trader_account,
+                "master_nickname": trader_master_nickname,
+                "nickname": follow_nickname,
+                "master_server": trader_master_server,
+                "slave_server": follow_slave_server,
+                "master_id": trader_pass_id,
+                "slave_id": follow_pass_id,
+                "username": username_log,
+                "pause": 0,
+                "pageNo": 1,
+                "pageSize": 20,
+                "status": "NORMAL,AUDIT"
+            }
+            response = self.send_get_request(
+                logged_session,
+                '/online/cgreport/api/getColumnsAndData/1560189381093109761',
+                params=params
+            )
 
-            # 按顺序调用
-            # 先登录获取 token
-            public_front.test_login(var_manager)
-            # 平仓喊单账号
-            public_front.test_close_trader(var_manager)
-            # 平仓跟单账号
-            public_front.test_close_follow(var_manager)
-            # 清理魔术号相关数据
-            public_front.test_query_magic(var_manager, logged_session)
-            # 清理账号ID相关数据
-            public_front.test_query_follow_passid(var_manager, logged_session)
-            # 修改订阅数据
-            public_front.test_query_updata_editPa(var_manager, logged_session)
-            # 订阅列表数据
-            public_front.test_query_getColumnsAndData(var_manager, logged_session)
-            # 登录MT4账号获取token
-            public_front.test_mt4_login(var_manager)
-            # MT4平台开仓操作
-            public_front.test_mt4_open(var_manager)
-            # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+        with allure.step("2. 返回校验"):
+            self.assert_json_value(
+                response,
+                "$.success",
+                True,
+                "响应success字段应为true"
+            )
+
+        with allure.step("3. 查询校验"):
+            account_list = self.json_utils.extract(
+                response.json(),
+                "$.result.data.records[*].account",
+                default=[],
+                multi_match=True
+            )
+
+            if not account_list:
+                pytest.fail("查询结果为空，不符合预期")
+            else:
+                attach_body = f"跟随者账户查询：{follow_account}，返回 {len(account_list)} 条记录"
+
+            allure.attach(
+                body=attach_body,
+                name=f"{follow_account}查询结果",
+                attachment_type="text/plain"
+            )
+
+            for idx, account in enumerate(account_list):
+                self.verify_data(
+                    actual_value=account,
+                    expected_value=follow_account,
+                    op=CompareOp.EQ,
+                    use_isclose=False,
+                    message=f"第 {idx + 1} 条记录的跟随者账户符合预期",
+                    attachment_name=f"第 {idx + 1} 条记录的跟随者账户校验"
+                )

@@ -21,7 +21,7 @@ class PublicUtils(APITestBase):
 
     @allure.title("跟单社区前端-登录")
     def test_login(self, var_manager):
-        with allure.step("1. 发送登录请求"):
+        with allure.step("1. 跟单社区前端-发送登录请求"):
             url = f"{URL_TOP}/sys/mLogin"
 
             payload = json.dumps({
@@ -58,7 +58,7 @@ class PublicUtils(APITestBase):
 
     @allure.title("跟单社区前端-喊单账号平仓")
     def test_close_trader(self, var_manager):
-        with allure.step("1. 发送喊单账号平仓请求"):
+        with allure.step("1. 跟单社区前端-发送喊单账号平仓请求"):
             global headers
             trader_pass_id = var_manager.get_variable("trader_pass_id")
             token_top = var_manager.get_variable("token_top")
@@ -87,7 +87,7 @@ class PublicUtils(APITestBase):
 
     @allure.title("跟单社区前端-跟单账号平仓")
     def test_close_follow(self, var_manager):
-        with allure.step("1. 发送跟单账号平仓请求"):
+        with allure.step("1. 跟单社区前端-发送跟单账号平仓请求"):
             follow_pass_id = var_manager.get_variable("follow_pass_id")
             url = f"{URL_TOP}/blockchain/account/closeAllOrder?traderId={follow_pass_id}&including=true"
 
@@ -107,7 +107,7 @@ class PublicUtils(APITestBase):
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("账号管理-持仓订单-魔术号查询-开仓前")
     def test_query_magic(self, var_manager, logged_session):
-        with allure.step("1. 发送魔术号查询请求"):
+        with allure.step("1. 跟单社区后台-账号管理-持仓订单-发送魔术号查询请求"):
             trader_account = var_manager.get_variable("trader_account")
             params = {
                 "_t": current_timestamp_seconds,
@@ -115,7 +115,7 @@ class PublicUtils(APITestBase):
                 "column": "id",
                 "order": "desc",
                 "pageNo": 1,
-                "pageSize": 50,
+                "pageSize": 20,
                 "superQueryMatchType": "and"
             }
             response = self.send_get_request(
@@ -153,7 +153,7 @@ class PublicUtils(APITestBase):
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("账号管理-持仓订单-账号ID查询-开仓前")
     def test_query_follow_passid(self, var_manager, logged_session):
-        with allure.step("1. 发送账号ID查询请求"):
+        with allure.step("1. 跟单社区后台-账号管理-持仓订单-发送账号ID查询请求"):
             trader_pass_id = var_manager.get_variable("trader_pass_id")
             params = {
                 "_t": current_timestamp_seconds,
@@ -161,7 +161,7 @@ class PublicUtils(APITestBase):
                 "column": "id",
                 "order": "desc",
                 "pageNo": 1,
-                "pageSize": 50,
+                "pageSize": 20,
                 "superQueryMatchType": "and"
             }
             response = self.send_get_request(
@@ -195,62 +195,6 @@ class PublicUtils(APITestBase):
                         f'/online/cgform/api/form/402883977b38c9ca017b38c9caff0000/{trader_id}'
                     )
                     allure.attach(f"删除数据成功：{trader_id}", "删除结果", allure.attachment_type.TEXT)
-
-    # @pytest.mark.skipif(True, reason="跳过此用例")
-    @allure.title("跟单管理-实时跟单-修改订阅数据")
-    def test_query_updata_editPa(self, var_manager, logged_session):
-        with allure.step("1. 发送修改订阅数据请求"):
-            follow_jeecg_rowkey = var_manager.get_variable("follow_jeecg_rowkey")
-            data = {
-                "id": follow_jeecg_rowkey,
-                "direction": "FORWARD",
-                "followingMode": 2,
-                "fixedProportion": 100,
-                "fixedLots": None
-            }
-            response = self.send_put_request(
-                logged_session,
-                '/blockchain/master-slave/editPa',
-                json_data=data
-            )
-
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.success",
-                True,
-                "响应success字段应为true"
-            )
-
-    # @pytest.mark.skipif(True, reason="跳过此用例")
-    @allure.title("跟单管理-实时跟单-订阅列表数据")
-    def test_query_getColumnsAndData(self, var_manager, logged_session):
-        with allure.step("1. 发送订阅列表数据请求"):
-            follow_account = var_manager.get_variable("follow_account")
-            params = {
-                "_t": current_timestamp_seconds,
-                "account": follow_account,
-                "pageNo": "1",
-                "pageSize": "20",
-                "status": "NORMAL,AUDIT"
-            }
-            response = self.send_get_request(
-                logged_session,
-                '/online/cgreport/api/getColumnsAndData/1560189381093109761',
-                params=params
-            )
-
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.success",
-                True,
-                "响应success字段应为true"
-            )
-        with allure.step("3. 提取数据"):
-            follow_fixed_proportion = self.json_utils.extract(response.json(),
-                                                              "$.result.data.records[0].fixed_proportion")
-            var_manager.set_runtime_variable("follow_fixed_proportion", follow_fixed_proportion)
 
     @allure.title("登录MT4账号获取token")
     def test_mt4_login(self, var_manager):
@@ -329,6 +273,23 @@ class PublicUtils(APITestBase):
             print(ticket_open, lots_open)
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
 
+    @allure.title("MT4平台开仓操作")
+    def test_mt4_open2(self, var_manager):
+        with allure.step("1. MT4平台开仓操作"):
+            symbol = var_manager.get_variable("symbol")
+            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.2&placedType=Client&price=0.00"
+
+            payload = ""
+            self.response = requests.request("GET", url, headers=headers, data=payload)
+            self.json_utils = JsonPathUtils()
+            self.response = self.response.json()
+            ticket_open = self.json_utils.extract(self.response, "$.ticket")
+            lots_open = self.json_utils.extract(self.response, "$.lots")
+            var_manager.set_runtime_variable("ticket_open", ticket_open)
+            var_manager.set_runtime_variable("lots_open", lots_open)
+            print(ticket_open, lots_open)
+            logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
+
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4平台平仓操作")
     def test_mt4_close(self, var_manager):
@@ -358,6 +319,7 @@ class PublicUtils(APITestBase):
 
                     # 提取平仓订单号
                     ticket_close = self.json_utils.extract(self.response_json, "$.ticket")
+                    print(f"ticket_close:{ticket_close}")
 
                     # 检查平仓是否成功
                     if ticket_close is not None:

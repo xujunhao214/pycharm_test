@@ -23,8 +23,8 @@ old_time = current_time - datetime.timedelta(days=1)
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 DATETIME_OLDTIME = old_time.strftime("%Y-%m-%d")
 
-# 计算1小时前的时间（timedelta(hours=1) 表示1小时间隔）
-one_hour_ago = current_time - datetime.timedelta(hours=1)
+# 计算9小时前的时间（timedelta(hours=9) 表示9小时间隔）
+one_hour_ago = current_time - datetime.timedelta(hours=9)
 
 # 格式化为 "%Y-%m-%d %H:%M:%S"（与你当前 DATETIME_NOW 格式一致）
 ONE_HOUR_AGO = one_hour_ago.strftime("%Y-%m-%d %H:%M:%S")

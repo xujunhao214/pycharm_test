@@ -30,7 +30,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
@@ -66,7 +66,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
@@ -179,7 +179,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
@@ -299,7 +299,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
@@ -401,7 +401,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
@@ -486,7 +486,7 @@ class Test_openandclouseall:
                 params = {
                     "_t": current_timestamp_seconds,
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "self_master_ticket": ticket_open
                 }
                 response = self.send_get_request(
@@ -625,7 +625,7 @@ class Test_openandclouseall:
                 params = {
                     "_t": current_timestamp_seconds,
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "self_master_ticket": ticket_open
                 }
                 response = self.send_get_request(
@@ -743,7 +743,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(
@@ -779,7 +779,7 @@ class Test_openandclouseall:
                     "column": "id",
                     "order": "desc",
                     "pageNo": 1,
-                    "pageSize": 50,
+                    "pageSize": 20,
                     "superQueryMatchType": "and"
                 }
                 response = self.send_get_request(

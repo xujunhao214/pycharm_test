@@ -19,6 +19,7 @@ class Test_openandclouseall:
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
+        @pytest.mark.retry(n=3, delay=20)
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):
             global token_mt4, headers

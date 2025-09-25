@@ -10,7 +10,7 @@ from template_model.commons.jsonpath_utils import *
 from template_model.commons.random_generator import *
 
 
-@allure.feature("跟单社区")
+@allure.feature("跟单社区前端")
 class Test_topup:
     @allure.story("充值审核驳回")
     class Test_topup_rejet(APITestBase):
