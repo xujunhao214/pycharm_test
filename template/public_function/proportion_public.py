@@ -344,7 +344,7 @@ class PublicUtils(APITestBase):
 
             for attempt in range(max_attempts):
                 try:
-                    with allure.step(f"1. 发送平仓请求 (第{attempt + 1}次尝试)"):
+                    with allure.step(f"1. 第{attempt + 1}次尝试"):
                         ticket_open = var_manager.get_variable("ticket_open")
                         # 检查token是否有效，无效则重新登录
                         if not token_mt4 or not uuid_pattern.match(token_mt4):
@@ -391,7 +391,7 @@ class PublicUtils(APITestBase):
                     logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}次尝试...")
                     time.sleep(retry_interval)
                     # 主动重新登录获取新token
-                    with allure.step(f"准备第{attempt + 2}次尝试，先重新登录MT4"):
+                    with allure.step(f"准备第{attempt + 2}次尝试，重新登录MT4"):
                         self.test_mt4_login(var_manager)
                     # 重新开仓
                     with allure.step(f"准备第{attempt + 2}次尝试，重新开仓"):

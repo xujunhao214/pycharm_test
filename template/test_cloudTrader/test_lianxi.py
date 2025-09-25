@@ -26,3 +26,6 @@ class Test_delete(APITestBase):
         public_front.test_close_trader(var_manager)
         # 平仓跟单账号
         public_front.test_close_follow(var_manager)
+        public_front.test_mt4_login(var_manager)
+        public_front.test_mt4_open(var_manager)
+        public_front.test_mt4_close(var_manager)
