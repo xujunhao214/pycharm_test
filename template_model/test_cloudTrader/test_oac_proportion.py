@@ -653,12 +653,12 @@ class Test_proportionall:
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-平仓后")
@@ -1789,12 +1789,12 @@ class Test_proportionall:
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
@@ -2765,12 +2765,12 @@ class Test_proportionall:
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
@@ -3768,12 +3768,12 @@ class Test_proportionall:
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")

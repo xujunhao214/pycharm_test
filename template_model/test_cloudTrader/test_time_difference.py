@@ -61,7 +61,7 @@ class Test_createTD:
         }
 
         # 配置参数
-        TOTAL_CYCLES = 3  # 总循环次数
+        TOTAL_CYCLES = 10  # 总循环次数
         MAX_LOGIN_RETRIES = 5  # 登录最大重试次数
         LOGIN_RETRY_INTERVAL = 5  # 登录重试间隔(秒)
         MAX_TRADE_RETRIES = 3  # 交易操作最大重试次数
