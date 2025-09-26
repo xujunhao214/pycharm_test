@@ -279,6 +279,7 @@ class Test_createTD:
             if fail_count > 0:
                 pytest.fail(f"共有{fail_count}次循环失败，请查看日志详情")
 
+    # @pytest.mark.skip(reason="跳过此用例")
     @allure.story("开仓/平仓时间差数据统计")
     class Test_difference(APITestBase):
         # 实例化JsonPath工具类（全局复用）

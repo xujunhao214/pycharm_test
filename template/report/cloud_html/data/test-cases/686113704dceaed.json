@@ -1,0 +1,481 @@
+{
+  "uid" : "686113704dceaed",
+  "name" : "【多账号】完整流程：绑定→审核→订阅",
+  "fullName" : "test_cloudTrader.test_add_create.Test_follow_batch#test_follow_full_flow",
+  "historyId" : "a889dd8ed540c2a3a5ddb201d74fe2f5",
+  "time" : {
+    "start" : 1758858008198,
+    "stop" : 1758858018465,
+    "duration" : 10267
+  },
+  "description" : "当前执行账号：301392109",
+  "descriptionHtml" : "<p>当前执行账号：301392109</p>\n",
+  "status" : "failed",
+  "statusMessage" : "Failed: 账号301392109执行失败：未找到账号301392109的MT4审核ID！\n  当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nassert None is not None",
+  "statusTrace" : "self = <template.test_cloudTrader.test_add_create.Test_follow_batch object at 0x0000021941581CD0>\nfollow_acc = {'account': 301392109, 'password': 'an0emxc'}\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x0000021941581C10>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x0000021941563D90>\n\n    @allure.title(\"【多账号】完整流程：绑定→审核→订阅\")\n    @pytest.mark.parametrize(\"follow_acc\", FOLLOW_ACCOUNT_LIST)\n    def test_follow_full_flow(self, follow_acc, var_manager, logged_session):\n        \"\"\"单个跟随者账号完整流程：绑定→提取审核ID→审核通过→清理历史订阅→订阅→校验结果\"\"\"\n        # 提取当前账号信息并校验\n        current_account = follow_acc.get(\"account\")\n        current_password = follow_acc.get(\"password\")\n        assert current_account, f\"账号数据异常，缺少'account'字段：{follow_acc}\"\n        assert current_password, f\"账号{current_account}缺少'password'字段\"\n        var_prefix = f\"follow_{current_account}\"\n        allure.dynamic.description(f\"当前执行账号：{current_account}\")\n    \n        try:\n            # 步骤1：绑定当前账号\n            with allure.step(f\"1. 绑定账号：{current_account}\"):\n                follow_user_id = var_manager.get_variable(\"follow_user_id\")\n                follow_broker_id = var_manager.get_variable(\"follow_broker_id\")\n                follow_server_id = var_manager.get_variable(\"follow_server_id\")\n    \n                bind_data = {\n                    \"userId\": follow_user_id,\n                    \"brokerId\": follow_broker_id,\n                    \"serverId\": follow_server_id,\n                    \"account\": current_account,\n                    \"password\": current_password,\n                    \"display\": \"PRIVATE\",\n                    \"passwordType\": \"0\",\n                    \"subscribeFee\": \"0\",\n                    \"type\": \"SLAVE_REAL\",\n                    \"platform\": \"4\"\n                }\n    \n                bind_response = self.send_post_request(\n                    logged_session,\n                    '/blockchain/account/bind',\n                    json_data=bind_data\n                )\n                self.assert_json_value(\n                    bind_response,\n                    \"$.success\",\n                    True,\n                    f\"账号{current_account}绑定失败\"\n                )\n                allure.attach(\n                    json.dumps(bind_data, indent=2, ensure_ascii=False),\n                    name=f\"{current_account}绑定请求数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n                logging.info(f\"账号{current_account}绑定成功\")\n    \n            # 步骤2：提取当前账号MT4审核ID\n            with allure.step(f\"2. 提取{current_account}的MT4审核ID\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"column\": \"id\",\n                    \"order\": \"desc\",\n                    \"pageNo\": 1,\n                    \"pageSize\": 20,\n                    \"superQueryMatchType\": \"and\",\n                    \"status\": \"PENDING,VERIFICATION\"\n                }\n                pass_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    pass_response,\n                    \"$.success\",\n                    True,\n                    f\"查询{current_account}MT4审核记录失败\"\n                )\n                all_pass_records = self.json_utils.extract(\n                    data=pass_response.json(),\n                    expression=\"$.result.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n                existing_accounts = [r.get(\"account\") for r in all_pass_records if r.get(\"account\")]\n    \n                current_pass_id = None\n                for record in all_pass_records:\n                    if record.get(\"account\") == current_account:\n                        current_pass_id = record.get(\"id\")\n                        break\n    \n>               assert current_pass_id is not None, (\n                    f\"未找到账号{current_account}的MT4审核ID！\"\n                    f\"\\n当前审核列表中的账号：{existing_accounts}\"\n                )\nE               AssertionError: 未找到账号301392109的MT4审核ID！\nE                 当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nE               assert None is not None\n\ntest_cloudTrader\\test_add_create.py:275: AssertionError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <template.test_cloudTrader.test_add_create.Test_follow_batch object at 0x0000021941581CD0>\nfollow_acc = {'account': 301392109, 'password': 'an0emxc'}\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x0000021941581C10>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x0000021941563D90>\n\n    @allure.title(\"【多账号】完整流程：绑定→审核→订阅\")\n    @pytest.mark.parametrize(\"follow_acc\", FOLLOW_ACCOUNT_LIST)\n    def test_follow_full_flow(self, follow_acc, var_manager, logged_session):\n        \"\"\"单个跟随者账号完整流程：绑定→提取审核ID→审核通过→清理历史订阅→订阅→校验结果\"\"\"\n        # 提取当前账号信息并校验\n        current_account = follow_acc.get(\"account\")\n        current_password = follow_acc.get(\"password\")\n        assert current_account, f\"账号数据异常，缺少'account'字段：{follow_acc}\"\n        assert current_password, f\"账号{current_account}缺少'password'字段\"\n        var_prefix = f\"follow_{current_account}\"\n        allure.dynamic.description(f\"当前执行账号：{current_account}\")\n    \n        try:\n            # 步骤1：绑定当前账号\n            with allure.step(f\"1. 绑定账号：{current_account}\"):\n                follow_user_id = var_manager.get_variable(\"follow_user_id\")\n                follow_broker_id = var_manager.get_variable(\"follow_broker_id\")\n                follow_server_id = var_manager.get_variable(\"follow_server_id\")\n    \n                bind_data = {\n                    \"userId\": follow_user_id,\n                    \"brokerId\": follow_broker_id,\n                    \"serverId\": follow_server_id,\n                    \"account\": current_account,\n                    \"password\": current_password,\n                    \"display\": \"PRIVATE\",\n                    \"passwordType\": \"0\",\n                    \"subscribeFee\": \"0\",\n                    \"type\": \"SLAVE_REAL\",\n                    \"platform\": \"4\"\n                }\n    \n                bind_response = self.send_post_request(\n                    logged_session,\n                    '/blockchain/account/bind',\n                    json_data=bind_data\n                )\n                self.assert_json_value(\n                    bind_response,\n                    \"$.success\",\n                    True,\n                    f\"账号{current_account}绑定失败\"\n                )\n                allure.attach(\n                    json.dumps(bind_data, indent=2, ensure_ascii=False),\n                    name=f\"{current_account}绑定请求数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n                logging.info(f\"账号{current_account}绑定成功\")\n    \n            # 步骤2：提取当前账号MT4审核ID\n            with allure.step(f\"2. 提取{current_account}的MT4审核ID\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"column\": \"id\",\n                    \"order\": \"desc\",\n                    \"pageNo\": 1,\n                    \"pageSize\": 20,\n                    \"superQueryMatchType\": \"and\",\n                    \"status\": \"PENDING,VERIFICATION\"\n                }\n                pass_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    pass_response,\n                    \"$.success\",\n                    True,\n                    f\"查询{current_account}MT4审核记录失败\"\n                )\n                all_pass_records = self.json_utils.extract(\n                    data=pass_response.json(),\n                    expression=\"$.result.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n                existing_accounts = [r.get(\"account\") for r in all_pass_records if r.get(\"account\")]\n    \n                current_pass_id = None\n                for record in all_pass_records:\n                    if record.get(\"account\") == current_account:\n                        current_pass_id = record.get(\"id\")\n                        break\n    \n                assert current_pass_id is not None, (\n                    f\"未找到账号{current_account}的MT4审核ID！\"\n                    f\"\\n当前审核列表中的账号：{existing_accounts}\"\n                )\n                var_manager.set_runtime_variable(f\"{var_prefix}_pass_id\", current_pass_id)\n                allure.attach(\n                    str(current_pass_id),\n                    name=f\"{current_account}MT4审核ID\",\n                    attachment_type=allure.attachment_type.TEXT\n                )\n    \n            # 步骤3：MT4审核通过\n            with allure.step(f\"3. {current_account}的MT4审核通过\"):\n                follow_jeecgrow_key = var_manager.get_variable(\"follow_jeecgrow_key\")\n                vpsrunIpAddr = var_manager.get_variable(\"vpsrunIpAddr\")\n                current_pass_id = var_manager.get_variable(f\"{var_prefix}_pass_id\")\n    \n                pass_data = {\n                    \"pass\": True,\n                    \"commission\": False,\n                    \"planId\": follow_jeecgrow_key,\n                    \"toSynDate\": DATETIME_NOW,\n                    \"bindIpAddr\": vpsrunIpAddr\n                }\n    \n                audit_response = self.send_post_request(\n                    logged_session,\n                    f'/blockchain/account/pass/{current_pass_id}',\n                    json_data=pass_data\n                )\n                self.assert_json_value(\n                    audit_response,\n                    \"$.success\",\n                    True,\n                    f\"账号{current_account}MT4审核通过失败\"\n                )\n                allure.attach(\n                    json.dumps(pass_data, indent=2, ensure_ascii=False),\n                    name=f\"{current_account}审核请求数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n    \n            # 步骤4：清理历史订阅记录\n            with allure.step(f\"4. 清理{current_account}的历史订阅记录\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"account\": current_account,\n                    \"pageNo\": 1,\n                    \"pageSize\": 100,\n                    \"status\": \"NORMAL,AUDIT\"\n                }\n                clean_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgreport/api/getColumnsAndData/1560189381093109761',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    clean_response,\n                    \"$.success\",\n                    True,\n                    f\"查询{current_account}历史订阅记录失败\"\n                )\n                history_records = self.json_utils.extract(\n                    data=clean_response.json(),\n                    expression=\"$.result.data.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n    \n                if history_records:\n                    delete_count = 0\n                    for record in history_records:\n                        record_id = record.get(\"id\")\n                        if record_id:\n                            delete_response = self.send_delete_request(\n                                logged_session,\n                                '/blockchain/master-slave/deletePa',\n                                json_data={\"id\": record_id}\n                            )\n                            self.assert_json_value(\n                                delete_response,\n                                \"$.success\",\n                                True,\n                                f\"删除{current_account}历史订阅记录（ID：{record_id}）失败\"\n                            )\n                            delete_count += 1\n                    allure.attach(f\"成功删除{delete_count}条记录\", name=f\"{current_account}清理结果\")\n                else:\n                    allure.attach(\"无历史记录\", name=f\"{current_account}清理结果\")\n    \n            # 步骤5：订阅跟单\n            with allure.step(f\"5. 进行刷新\"):\n                with allure.step(\"1. 发送请求\"):\n                    params = {\n                        \"_t\": current_timestamp_seconds,\n                        \"column\": \"id\",\n                        \"order\": \"desc\",\n                        \"pageNo\": 1,\n                        \"pageSize\": 20,\n                        \"status\": \"VERIFICATION,PASS,PENDING,ERROR\",\n                        \"type\": \"SLAVE_REAL\"\n                    }\n                    self.send_get_request(\n                        logged_session,\n                        '/online/cgform/api/getData/2c9a814a81d3a91b0181e04a36e00001',\n                        params=params\n                    )\n    \n            # 步骤6：订阅跟单\n            with allure.step(f\"6. {current_account}订阅跟单\"):\n                trader_pass_id = var_manager.get_variable(\"trader_pass_id\")\n                current_pass_id = var_manager.get_variable(f\"{var_prefix}_pass_id\")\n                assert trader_pass_id, \"主账号trader_pass_id未配置\"\n    \n                subscribe_data = {\n                    \"masterId\": trader_pass_id,\n                    \"slaveId\": current_pass_id,\n                    \"direction\": \"FORWARD\",\n                    \"followingMode\": \"2\",\n                    \"fixedProportion\": \"100\",\n                    \"fixedLots\": None,\n                    \"order\": {\"paymentAccount\": \"\", \"paymentMethod\": \"\"},\n                }\n    \n                subscribe_response = self.send_post_request(\n                    logged_session,\n                    '/blockchain/master-slave/admin/add',\n                    json_data=subscribe_data\n                )\n                self.assert_json_value(\n                    subscribe_response,\n                    \"$.success\",\n                    True,\n                    f\"{current_account}订阅跟单失败\"\n                )\n                allure.attach(\n                    json.dumps(subscribe_data, indent=2),\n                    name=f\"{current_account}订阅数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n    \n            # 步骤7：校验订阅结果\n            with allure.step(f\"7. 校验{current_account}的订阅记录\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"account\": current_account,\n                    \"pageNo\": 1,\n                    \"pageSize\": 100,\n                    \"status\": \"NORMAL,AUDIT\"\n                }\n                verify_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgreport/api/getColumnsAndData/1560189381093109761',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    verify_response,\n                    \"$.success\",\n                    True,\n                    f\"校验{current_account}订阅记录失败\"\n                )\n                result = self.json_utils.extract(\n                    verify_response.json(),\n                    \"$.result.data.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n    \n                if not result:\n                    pytest.fail(f\"{current_account}未查询到订阅记录\")\n                else:\n                    follow_jeecg_rowkey = self.json_utils.extract(\n                        verify_response.json(),\n                        \"$.result.data.records[0].jeecg_row_key\"\n                    )\n                    var_manager.set_runtime_variable(f\"{var_prefix}_jeecg_rowkey\", follow_jeecg_rowkey)\n                    allure.attach(\"订阅记录存在\", name=f\"{current_account}订阅结果\")\n                    logging.info(f\"账号{current_account}订阅校验成功\")\n    \n        except Exception as e:\n            error_msg = f\"账号{current_account}执行失败：{str(e)[:200]}\"\n            allure.attach(error_msg, name=f\"{current_account}失败详情\",\n                          attachment_type=allure.attachment_type.TEXT)\n            logging.error(error_msg, exc_info=True)\n>           pytest.fail(error_msg)\nE           Failed: 账号301392109执行失败：未找到账号301392109的MT4审核ID！\nE             当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nE           assert None is not None\n\ntest_cloudTrader\\test_add_create.py:461: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1758857952998,
+      "stop" : 1758857966186,
+      "duration" : 13188
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1758857952998,
+      "stop" : 1758857952998,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1758857952285,
+      "stop" : 1758857952285,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1758857952285,
+      "stop" : 1758857952286,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1758857952285,
+      "stop" : 1758857952285,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "当前执行账号：301392109",
+    "status" : "failed",
+    "statusMessage" : "Failed: 账号301392109执行失败：未找到账号301392109的MT4审核ID！\n  当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nassert None is not None",
+    "statusTrace" : "self = <template.test_cloudTrader.test_add_create.Test_follow_batch object at 0x0000021941581CD0>\nfollow_acc = {'account': 301392109, 'password': 'an0emxc'}\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x0000021941581C10>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x0000021941563D90>\n\n    @allure.title(\"【多账号】完整流程：绑定→审核→订阅\")\n    @pytest.mark.parametrize(\"follow_acc\", FOLLOW_ACCOUNT_LIST)\n    def test_follow_full_flow(self, follow_acc, var_manager, logged_session):\n        \"\"\"单个跟随者账号完整流程：绑定→提取审核ID→审核通过→清理历史订阅→订阅→校验结果\"\"\"\n        # 提取当前账号信息并校验\n        current_account = follow_acc.get(\"account\")\n        current_password = follow_acc.get(\"password\")\n        assert current_account, f\"账号数据异常，缺少'account'字段：{follow_acc}\"\n        assert current_password, f\"账号{current_account}缺少'password'字段\"\n        var_prefix = f\"follow_{current_account}\"\n        allure.dynamic.description(f\"当前执行账号：{current_account}\")\n    \n        try:\n            # 步骤1：绑定当前账号\n            with allure.step(f\"1. 绑定账号：{current_account}\"):\n                follow_user_id = var_manager.get_variable(\"follow_user_id\")\n                follow_broker_id = var_manager.get_variable(\"follow_broker_id\")\n                follow_server_id = var_manager.get_variable(\"follow_server_id\")\n    \n                bind_data = {\n                    \"userId\": follow_user_id,\n                    \"brokerId\": follow_broker_id,\n                    \"serverId\": follow_server_id,\n                    \"account\": current_account,\n                    \"password\": current_password,\n                    \"display\": \"PRIVATE\",\n                    \"passwordType\": \"0\",\n                    \"subscribeFee\": \"0\",\n                    \"type\": \"SLAVE_REAL\",\n                    \"platform\": \"4\"\n                }\n    \n                bind_response = self.send_post_request(\n                    logged_session,\n                    '/blockchain/account/bind',\n                    json_data=bind_data\n                )\n                self.assert_json_value(\n                    bind_response,\n                    \"$.success\",\n                    True,\n                    f\"账号{current_account}绑定失败\"\n                )\n                allure.attach(\n                    json.dumps(bind_data, indent=2, ensure_ascii=False),\n                    name=f\"{current_account}绑定请求数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n                logging.info(f\"账号{current_account}绑定成功\")\n    \n            # 步骤2：提取当前账号MT4审核ID\n            with allure.step(f\"2. 提取{current_account}的MT4审核ID\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"column\": \"id\",\n                    \"order\": \"desc\",\n                    \"pageNo\": 1,\n                    \"pageSize\": 20,\n                    \"superQueryMatchType\": \"and\",\n                    \"status\": \"PENDING,VERIFICATION\"\n                }\n                pass_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    pass_response,\n                    \"$.success\",\n                    True,\n                    f\"查询{current_account}MT4审核记录失败\"\n                )\n                all_pass_records = self.json_utils.extract(\n                    data=pass_response.json(),\n                    expression=\"$.result.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n                existing_accounts = [r.get(\"account\") for r in all_pass_records if r.get(\"account\")]\n    \n                current_pass_id = None\n                for record in all_pass_records:\n                    if record.get(\"account\") == current_account:\n                        current_pass_id = record.get(\"id\")\n                        break\n    \n>               assert current_pass_id is not None, (\n                    f\"未找到账号{current_account}的MT4审核ID！\"\n                    f\"\\n当前审核列表中的账号：{existing_accounts}\"\n                )\nE               AssertionError: 未找到账号301392109的MT4审核ID！\nE                 当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nE               assert None is not None\n\ntest_cloudTrader\\test_add_create.py:275: AssertionError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <template.test_cloudTrader.test_add_create.Test_follow_batch object at 0x0000021941581CD0>\nfollow_acc = {'account': 301392109, 'password': 'an0emxc'}\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x0000021941581C10>\nlogged_session = <template.commons.session.EnvironmentSession object at 0x0000021941563D90>\n\n    @allure.title(\"【多账号】完整流程：绑定→审核→订阅\")\n    @pytest.mark.parametrize(\"follow_acc\", FOLLOW_ACCOUNT_LIST)\n    def test_follow_full_flow(self, follow_acc, var_manager, logged_session):\n        \"\"\"单个跟随者账号完整流程：绑定→提取审核ID→审核通过→清理历史订阅→订阅→校验结果\"\"\"\n        # 提取当前账号信息并校验\n        current_account = follow_acc.get(\"account\")\n        current_password = follow_acc.get(\"password\")\n        assert current_account, f\"账号数据异常，缺少'account'字段：{follow_acc}\"\n        assert current_password, f\"账号{current_account}缺少'password'字段\"\n        var_prefix = f\"follow_{current_account}\"\n        allure.dynamic.description(f\"当前执行账号：{current_account}\")\n    \n        try:\n            # 步骤1：绑定当前账号\n            with allure.step(f\"1. 绑定账号：{current_account}\"):\n                follow_user_id = var_manager.get_variable(\"follow_user_id\")\n                follow_broker_id = var_manager.get_variable(\"follow_broker_id\")\n                follow_server_id = var_manager.get_variable(\"follow_server_id\")\n    \n                bind_data = {\n                    \"userId\": follow_user_id,\n                    \"brokerId\": follow_broker_id,\n                    \"serverId\": follow_server_id,\n                    \"account\": current_account,\n                    \"password\": current_password,\n                    \"display\": \"PRIVATE\",\n                    \"passwordType\": \"0\",\n                    \"subscribeFee\": \"0\",\n                    \"type\": \"SLAVE_REAL\",\n                    \"platform\": \"4\"\n                }\n    \n                bind_response = self.send_post_request(\n                    logged_session,\n                    '/blockchain/account/bind',\n                    json_data=bind_data\n                )\n                self.assert_json_value(\n                    bind_response,\n                    \"$.success\",\n                    True,\n                    f\"账号{current_account}绑定失败\"\n                )\n                allure.attach(\n                    json.dumps(bind_data, indent=2, ensure_ascii=False),\n                    name=f\"{current_account}绑定请求数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n                logging.info(f\"账号{current_account}绑定成功\")\n    \n            # 步骤2：提取当前账号MT4审核ID\n            with allure.step(f\"2. 提取{current_account}的MT4审核ID\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"column\": \"id\",\n                    \"order\": \"desc\",\n                    \"pageNo\": 1,\n                    \"pageSize\": 20,\n                    \"superQueryMatchType\": \"and\",\n                    \"status\": \"PENDING,VERIFICATION\"\n                }\n                pass_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    pass_response,\n                    \"$.success\",\n                    True,\n                    f\"查询{current_account}MT4审核记录失败\"\n                )\n                all_pass_records = self.json_utils.extract(\n                    data=pass_response.json(),\n                    expression=\"$.result.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n                existing_accounts = [r.get(\"account\") for r in all_pass_records if r.get(\"account\")]\n    \n                current_pass_id = None\n                for record in all_pass_records:\n                    if record.get(\"account\") == current_account:\n                        current_pass_id = record.get(\"id\")\n                        break\n    \n                assert current_pass_id is not None, (\n                    f\"未找到账号{current_account}的MT4审核ID！\"\n                    f\"\\n当前审核列表中的账号：{existing_accounts}\"\n                )\n                var_manager.set_runtime_variable(f\"{var_prefix}_pass_id\", current_pass_id)\n                allure.attach(\n                    str(current_pass_id),\n                    name=f\"{current_account}MT4审核ID\",\n                    attachment_type=allure.attachment_type.TEXT\n                )\n    \n            # 步骤3：MT4审核通过\n            with allure.step(f\"3. {current_account}的MT4审核通过\"):\n                follow_jeecgrow_key = var_manager.get_variable(\"follow_jeecgrow_key\")\n                vpsrunIpAddr = var_manager.get_variable(\"vpsrunIpAddr\")\n                current_pass_id = var_manager.get_variable(f\"{var_prefix}_pass_id\")\n    \n                pass_data = {\n                    \"pass\": True,\n                    \"commission\": False,\n                    \"planId\": follow_jeecgrow_key,\n                    \"toSynDate\": DATETIME_NOW,\n                    \"bindIpAddr\": vpsrunIpAddr\n                }\n    \n                audit_response = self.send_post_request(\n                    logged_session,\n                    f'/blockchain/account/pass/{current_pass_id}',\n                    json_data=pass_data\n                )\n                self.assert_json_value(\n                    audit_response,\n                    \"$.success\",\n                    True,\n                    f\"账号{current_account}MT4审核通过失败\"\n                )\n                allure.attach(\n                    json.dumps(pass_data, indent=2, ensure_ascii=False),\n                    name=f\"{current_account}审核请求数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n    \n            # 步骤4：清理历史订阅记录\n            with allure.step(f\"4. 清理{current_account}的历史订阅记录\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"account\": current_account,\n                    \"pageNo\": 1,\n                    \"pageSize\": 100,\n                    \"status\": \"NORMAL,AUDIT\"\n                }\n                clean_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgreport/api/getColumnsAndData/1560189381093109761',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    clean_response,\n                    \"$.success\",\n                    True,\n                    f\"查询{current_account}历史订阅记录失败\"\n                )\n                history_records = self.json_utils.extract(\n                    data=clean_response.json(),\n                    expression=\"$.result.data.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n    \n                if history_records:\n                    delete_count = 0\n                    for record in history_records:\n                        record_id = record.get(\"id\")\n                        if record_id:\n                            delete_response = self.send_delete_request(\n                                logged_session,\n                                '/blockchain/master-slave/deletePa',\n                                json_data={\"id\": record_id}\n                            )\n                            self.assert_json_value(\n                                delete_response,\n                                \"$.success\",\n                                True,\n                                f\"删除{current_account}历史订阅记录（ID：{record_id}）失败\"\n                            )\n                            delete_count += 1\n                    allure.attach(f\"成功删除{delete_count}条记录\", name=f\"{current_account}清理结果\")\n                else:\n                    allure.attach(\"无历史记录\", name=f\"{current_account}清理结果\")\n    \n            # 步骤5：订阅跟单\n            with allure.step(f\"5. 进行刷新\"):\n                with allure.step(\"1. 发送请求\"):\n                    params = {\n                        \"_t\": current_timestamp_seconds,\n                        \"column\": \"id\",\n                        \"order\": \"desc\",\n                        \"pageNo\": 1,\n                        \"pageSize\": 20,\n                        \"status\": \"VERIFICATION,PASS,PENDING,ERROR\",\n                        \"type\": \"SLAVE_REAL\"\n                    }\n                    self.send_get_request(\n                        logged_session,\n                        '/online/cgform/api/getData/2c9a814a81d3a91b0181e04a36e00001',\n                        params=params\n                    )\n    \n            # 步骤6：订阅跟单\n            with allure.step(f\"6. {current_account}订阅跟单\"):\n                trader_pass_id = var_manager.get_variable(\"trader_pass_id\")\n                current_pass_id = var_manager.get_variable(f\"{var_prefix}_pass_id\")\n                assert trader_pass_id, \"主账号trader_pass_id未配置\"\n    \n                subscribe_data = {\n                    \"masterId\": trader_pass_id,\n                    \"slaveId\": current_pass_id,\n                    \"direction\": \"FORWARD\",\n                    \"followingMode\": \"2\",\n                    \"fixedProportion\": \"100\",\n                    \"fixedLots\": None,\n                    \"order\": {\"paymentAccount\": \"\", \"paymentMethod\": \"\"},\n                }\n    \n                subscribe_response = self.send_post_request(\n                    logged_session,\n                    '/blockchain/master-slave/admin/add',\n                    json_data=subscribe_data\n                )\n                self.assert_json_value(\n                    subscribe_response,\n                    \"$.success\",\n                    True,\n                    f\"{current_account}订阅跟单失败\"\n                )\n                allure.attach(\n                    json.dumps(subscribe_data, indent=2),\n                    name=f\"{current_account}订阅数据\",\n                    attachment_type=allure.attachment_type.JSON\n                )\n    \n            # 步骤7：校验订阅结果\n            with allure.step(f\"7. 校验{current_account}的订阅记录\"):\n                params = {\n                    \"_t\": current_timestamp_seconds,\n                    \"account\": current_account,\n                    \"pageNo\": 1,\n                    \"pageSize\": 100,\n                    \"status\": \"NORMAL,AUDIT\"\n                }\n                verify_response = self.send_get_request(\n                    logged_session,\n                    '/online/cgreport/api/getColumnsAndData/1560189381093109761',\n                    params=params\n                )\n    \n                self.assert_json_value(\n                    verify_response,\n                    \"$.success\",\n                    True,\n                    f\"校验{current_account}订阅记录失败\"\n                )\n                result = self.json_utils.extract(\n                    verify_response.json(),\n                    \"$.result.data.records[*]\",\n                    multi_match=True,\n                    default=[]\n                )\n    \n                if not result:\n                    pytest.fail(f\"{current_account}未查询到订阅记录\")\n                else:\n                    follow_jeecg_rowkey = self.json_utils.extract(\n                        verify_response.json(),\n                        \"$.result.data.records[0].jeecg_row_key\"\n                    )\n                    var_manager.set_runtime_variable(f\"{var_prefix}_jeecg_rowkey\", follow_jeecg_rowkey)\n                    allure.attach(\"订阅记录存在\", name=f\"{current_account}订阅结果\")\n                    logging.info(f\"账号{current_account}订阅校验成功\")\n    \n        except Exception as e:\n            error_msg = f\"账号{current_account}执行失败：{str(e)[:200]}\"\n            allure.attach(error_msg, name=f\"{current_account}失败详情\",\n                          attachment_type=allure.attachment_type.TEXT)\n            logging.error(error_msg, exc_info=True)\n>           pytest.fail(error_msg)\nE           Failed: 账号301392109执行失败：未找到账号301392109的MT4审核ID！\nE             当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nE           assert None is not None\n\ntest_cloudTrader\\test_add_create.py:461: Failed",
+    "steps" : [ {
+      "name" : "1. 绑定账号：301392109",
+      "time" : {
+        "start" : 1758858008198,
+        "stop" : 1758858014854,
+        "duration" : 6656
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1758858008198,
+          "stop" : 1758858014848,
+          "duration" : 6650
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1758858008198,
+            "stop" : 1758858008199,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "28962e3f1221d761",
+            "name" : "请求URL",
+            "source" : "28962e3f1221d761.txt",
+            "type" : "text/plain",
+            "size" : 24
+          }, {
+            "uid" : "1d9921af4cd225a5",
+            "name" : "请求头",
+            "source" : "1d9921af4cd225a5.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "9b1ccd74a1e25988",
+            "name" : "请求体（JSON）",
+            "source" : "9b1ccd74a1e25988.json",
+            "type" : "application/json",
+            "size" : 273
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1758858011831,
+            "stop" : 1758858011833,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "d7a23910aa3c88a5",
+            "name" : "响应状态码",
+            "source" : "d7a23910aa3c88a5.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "47adc0e1e7d941a6",
+            "name" : "响应头",
+            "source" : "47adc0e1e7d941a6.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "1bf3c283be5fb0e5",
+            "name" : "响应体（JSON）",
+            "source" : "1bf3c283be5fb0e5.json",
+            "type" : "application/json",
+            "size" : 101
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 2,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 6
+      }, {
+        "name" : "断言JSON路径: $.success",
+        "time" : {
+          "start" : 1758858014852,
+          "stop" : 1758858014853,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "701a4cde49bf325b",
+          "name" : "请求URL",
+          "source" : "701a4cde49bf325b.txt",
+          "type" : "text/plain",
+          "size" : 55
+        }, {
+          "uid" : "52722090f9b5541b",
+          "name" : "预期值",
+          "source" : "52722090f9b5541b.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "ef342a94c6483077",
+          "name" : "实际值",
+          "source" : "ef342a94c6483077.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ {
+        "uid" : "8871848ac4282f56",
+        "name" : "301392109绑定请求数据",
+        "source" : "8871848ac4282f56.json",
+        "type" : "application/json",
+        "size" : 273
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 4,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 10
+    }, {
+      "name" : "2. 提取301392109的MT4审核ID",
+      "time" : {
+        "start" : 1758858014854,
+        "stop" : 1758858018464,
+        "duration" : 3610
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 未找到账号301392109的MT4审核ID！\n  当前审核列表中的账号：['301392109', '301392108', '301392107', '301392106']\nassert None is not None\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_add_create.py\", line 275, in test_follow_full_flow\n    assert current_pass_id is not None, (\n",
+      "steps" : [ {
+        "name" : "执行 GET 请求",
+        "time" : {
+          "start" : 1758858014854,
+          "stop" : 1758858018453,
+          "duration" : 3599
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1758858014854,
+            "stop" : 1758858014854,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b008ff868ffd90c1",
+            "name" : "请求URL",
+            "source" : "b008ff868ffd90c1.txt",
+            "type" : "text/plain",
+            "size" : 59
+          }, {
+            "uid" : "fe0a8cefb3dde671",
+            "name" : "请求头",
+            "source" : "fe0a8cefb3dde671.json",
+            "type" : "application/json",
+            "size" : 429
+          }, {
+            "uid" : "35a2db1e287fabf5",
+            "name" : "请求体（表单/文件）",
+            "source" : "35a2db1e287fabf5.txt",
+            "type" : "text/plain",
+            "size" : 144
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1758858015441,
+            "stop" : 1758858015443,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "96b6717d262e3c33",
+            "name" : "响应状态码",
+            "source" : "96b6717d262e3c33.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "e3ffd90e95808218",
+            "name" : "响应头",
+            "source" : "e3ffd90e95808218.json",
+            "type" : "application/json",
+            "size" : 460
+          }, {
+            "uid" : "15ff73af37e0088d",
+            "name" : "响应体（JSON）",
+            "source" : "15ff73af37e0088d.json",
+            "type" : "application/json",
+            "size" : 8128
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 2,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 6
+      }, {
+        "name" : "断言JSON路径: $.success",
+        "time" : {
+          "start" : 1758858018458,
+          "stop" : 1758858018459,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "ee22751d5c632ed9",
+          "name" : "请求URL",
+          "source" : "ee22751d5c632ed9.txt",
+          "type" : "text/plain",
+          "size" : 200
+        }, {
+          "uid" : "63e664343c81ebc2",
+          "name" : "预期值",
+          "source" : "63e664343c81ebc2.txt",
+          "type" : "text/plain",
+          "size" : 15
+        }, {
+          "uid" : "240b7052c3dffb65",
+          "name" : "实际值",
+          "source" : "240b7052c3dffb65.txt",
+          "type" : "text/plain",
+          "size" : 15
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 4,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 9
+    } ],
+    "attachments" : [ {
+      "uid" : "cbb3b08e4262a684",
+      "name" : "301392109失败详情",
+      "source" : "cbb3b08e4262a684.txt",
+      "type" : "text/plain",
+      "size" : 183
+    }, {
+      "uid" : "36985e830816060c",
+      "name" : "log",
+      "source" : "36985e830816060c.txt",
+      "type" : "text/plain",
+      "size" : 1868
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 10,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 21
+  },
+  "afterStages" : [ {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1758858028696,
+      "stop" : 1758858028696,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1758858028697,
+      "stop" : 1758858028697,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1758858028698,
+      "stop" : 1758858028698,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "绑定跟随者账号（多账号批量版）"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_add_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_follow_batch"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "32144-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_add_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ {
+    "name" : "follow_acc",
+    "value" : "{'account': 301392109, 'password': 'an0emxc'}"
+  } ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "686113704dceaed.json",
+  "parameterValues" : [ "{'account': 301392109, 'password': 'an0emxc'}" ]
+}

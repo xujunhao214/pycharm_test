@@ -111,7 +111,7 @@ class Test_proportionall:
                 var_manager.set_runtime_variable("follow_fixed_proportion", follow_fixed_proportion)
 
         @allure.title("公共方法-MT4开仓操作")
-        def test_run_mt4open(self, var_manager, logged_session):
+        def test_run_mt4open(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
@@ -119,6 +119,8 @@ class Test_proportionall:
             public_front.test_mt4_login(var_manager)
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
+            # 提跟单订单号
+            public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=20)
@@ -211,35 +213,6 @@ class Test_proportionall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @allure.title("数据库提取数据-开仓时间差")
-        def test_dbquery_openorder(self, var_manager, db_transaction):
-            with allure.step("1. 查询数据库验证是否新增成功"):
-                ticket_open = var_manager.get_variable("ticket_open")
-
-                # 优化后的数据库查询
-                db_data = self.query_database(
-                    db_transaction,
-                    f"SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s",
-                    (ticket_open,),
-                )
-
-                # 提取数据库中的值
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
-
-            with allure.step("2. 提取数据库中的值"):
-                slave_ticket = db_data[0]["slave_ticket"]
-                print(f"输出：{slave_ticket}")
-                logging.info(f"跟单账号订单号: {slave_ticket}")
-                var_manager.set_runtime_variable("slave_ticket", slave_ticket)
-
-                open_time_difference = db_data[0]["open_time_difference"]
-                print(f"输出：{open_time_difference}")
-                logging.info(f"开仓时间差（毫秒）: {open_time_difference}")
-                var_manager.set_runtime_variable("open_time_difference", open_time_difference)
-                allure.attach(f"开仓时间差（毫秒）: {open_time_difference}", "开仓时间差")
-
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
@@ -308,8 +281,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -1044,8 +1017,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -1275,14 +1248,16 @@ class Test_proportionall:
                 var_manager.set_runtime_variable("follow_fixed_proportion", follow_fixed_proportion)
 
         @allure.title("公共方法-MT4开仓操作")
-        def test_run_mt4open(self, var_manager, logged_session):
+        def test_run_mt4open(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # 登录MT4账号获取token
             public_front.test_mt4_login(var_manager)
             # MT4平台开仓操作
-            public_front.test_mt4_open2(var_manager)
+            public_front.test_mt4_open(var_manager)
+            # 提跟单订单号
+            public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=20)
@@ -1375,35 +1350,6 @@ class Test_proportionall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @allure.title("数据库提取数据-开仓时间差")
-        def test_dbquery_openorder(self, var_manager, db_transaction):
-            with allure.step("1. 查询数据库验证是否新增成功"):
-                ticket_open = var_manager.get_variable("ticket_open")
-
-                # 优化后的数据库查询
-                db_data = self.query_database(
-                    db_transaction,
-                    f"SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s",
-                    (ticket_open,),
-                )
-
-                # 提取数据库中的值
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
-
-            with allure.step("2. 提取数据库中的值"):
-                slave_ticket = db_data[0]["slave_ticket"]
-                print(f"输出：{slave_ticket}")
-                logging.info(f"跟单账号订单号: {slave_ticket}")
-                var_manager.set_runtime_variable("slave_ticket", slave_ticket)
-
-                open_time_difference = db_data[0]["open_time_difference"]
-                print(f"输出：{open_time_difference}")
-                logging.info(f"开仓时间差（毫秒）: {open_time_difference}")
-                var_manager.set_runtime_variable("open_time_difference", open_time_difference)
-                allure.attach(f"开仓时间差（毫秒）: {open_time_difference}", "开仓时间差")
-
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
@@ -1472,8 +1418,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -2009,8 +1955,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -2278,7 +2224,7 @@ class Test_proportionall:
                 var_manager.set_runtime_variable("follow_fixed_proportion", follow_fixed_proportion)
 
         @allure.title("公共方法-MT4开仓操作")
-        def test_run_mt4open(self, var_manager, logged_session):
+        def test_run_mt4open(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
@@ -2286,6 +2232,8 @@ class Test_proportionall:
             public_front.test_mt4_login(var_manager)
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
+            # 提跟单订单号
+            public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=20)
@@ -2378,35 +2326,6 @@ class Test_proportionall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @allure.title("数据库提取数据-开仓时间差")
-        def test_dbquery_openorder(self, var_manager, db_transaction):
-            with allure.step("1. 查询数据库验证是否新增成功"):
-                ticket_open = var_manager.get_variable("ticket_open")
-
-                # 优化后的数据库查询
-                db_data = self.query_database(
-                    db_transaction,
-                    f"SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s",
-                    (ticket_open,),
-                )
-
-                # 提取数据库中的值
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
-
-            with allure.step("2. 提取数据库中的值"):
-                slave_ticket = db_data[0]["slave_ticket"]
-                print(f"输出：{slave_ticket}")
-                logging.info(f"跟单账号订单号: {slave_ticket}")
-                var_manager.set_runtime_variable("slave_ticket", slave_ticket)
-
-                open_time_difference = db_data[0]["open_time_difference"]
-                print(f"输出：{open_time_difference}")
-                logging.info(f"开仓时间差（毫秒）: {open_time_difference}")
-                var_manager.set_runtime_variable("open_time_difference", open_time_difference)
-                allure.attach(f"开仓时间差（毫秒）: {open_time_difference}", "开仓时间差")
-
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
@@ -2475,8 +2394,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -3012,8 +2931,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -3281,7 +3200,7 @@ class Test_proportionall:
                 var_manager.set_runtime_variable("follow_fixed_proportion", follow_fixed_proportion)
 
         @allure.title("公共方法-MT4开仓操作")
-        def test_run_mt4open(self, var_manager, logged_session):
+        def test_run_mt4open(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
@@ -3289,6 +3208,8 @@ class Test_proportionall:
             public_front.test_mt4_login(var_manager)
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
+            # 提跟单订单号
+            public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=20)
@@ -3395,35 +3316,6 @@ class Test_proportionall:
                         logger.info(f"喊单者方向：{type}")
                         allure.attach("0:buy  1:sell", "方向解释", allure.attachment_type.TEXT)
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @allure.title("数据库提取数据-开仓时间差")
-        def test_dbquery_openorder(self, var_manager, db_transaction):
-            with allure.step("1. 查询数据库验证是否新增成功"):
-                ticket_open = var_manager.get_variable("ticket_open")
-
-                # 优化后的数据库查询
-                db_data = self.query_database(
-                    db_transaction,
-                    f"SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s",
-                    (ticket_open,),
-                )
-
-                # 提取数据库中的值
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
-
-            with allure.step("2. 提取数据库中的值"):
-                slave_ticket = db_data[0]["slave_ticket"]
-                print(f"输出：{slave_ticket}")
-                logging.info(f"跟单账号订单号: {slave_ticket}")
-                var_manager.set_runtime_variable("slave_ticket", slave_ticket)
-
-                open_time_difference = db_data[0]["open_time_difference"]
-                print(f"输出：{open_time_difference}")
-                logging.info(f"开仓时间差（毫秒）: {open_time_difference}")
-                var_manager.set_runtime_variable("open_time_difference", open_time_difference)
-                allure.attach(f"开仓时间差（毫秒）: {open_time_difference}", "开仓时间差")
-
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
@@ -3492,8 +3384,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -4042,8 +3934,8 @@ class Test_proportionall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",

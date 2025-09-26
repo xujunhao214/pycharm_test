@@ -259,7 +259,7 @@ class Test_openandclouseall:
                     logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
-        @allure.title("数据库提取数据-开仓时间差")
+        @allure.title("数据库提取数据-提取跟单订单号")
         def test_dbquery_openorder(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否新增成功"):
                 ticket_open = var_manager.get_variable("ticket_open")
@@ -281,11 +281,7 @@ class Test_openandclouseall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-                open_time_difference = db_data[0]["open_time_difference"]
-                print(f"输出：{open_time_difference}")
-                logging.info(f"开仓时间差（毫秒）: {open_time_difference}")
-                var_manager.set_runtime_variable("open_time_difference", open_time_difference)
-                allure.attach(f"开仓时间差（毫秒）: {open_time_difference}", "开仓时间差")
+
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单账号ID查询-开仓后")
@@ -356,8 +352,8 @@ class Test_openandclouseall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=master_order_no,
-                        expected_value=ticket_open,
+                        actual_value=ticket_open,
+                        expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -368,8 +364,8 @@ class Test_openandclouseall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=slave_ticket,
-                        expected_value=order_no,
+                        actual_value=order_no,
+                        expected_value=slave_ticket,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -527,8 +523,8 @@ class Test_openandclouseall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=slave_ticket,
-                        expected_value=order_no,
+                        actual_value=order_no,
+                        expected_value=slave_ticket,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -666,8 +662,8 @@ class Test_openandclouseall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=slave_ticket,
-                        expected_value=order_no,
+                        actual_value=order_no,
+                        expected_value=slave_ticket,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",

@@ -329,9 +329,32 @@ class PublicUtils(APITestBase):
             else:
                 logging.info("开仓成功")
 
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库提取数据-提取跟单订单号")
+    def test_dbquery_openorder(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            ticket_open = var_manager.get_variable("ticket_open")
+
+            # 优化后的数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s",
+                (ticket_open,),
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+        with allure.step("2. 提取数据库中的值"):
+            slave_ticket = db_data[0]["slave_ticket"]
+            print(f"输出：{slave_ticket}")
+            logging.info(f"跟单账号订单号: {slave_ticket}")
+            var_manager.set_runtime_variable("slave_ticket", slave_ticket)
+
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4平台平仓操作")
-    def test_mt4_close(self, var_manager):
+    def test_mt4_close(self, var_manager, db_transaction, ):
         with allure.step("发送平仓请求"):
             max_attempts = 3  # 最大总尝试次数
             retry_interval = 10  # 每次尝试间隔时间(秒)
@@ -396,6 +419,9 @@ class PublicUtils(APITestBase):
                     # 重新开仓
                     with allure.step(f"准备第{attempt + 2}次尝试，重新开仓"):
                         self.test_mt4_open(var_manager)
+                    # 重新提取跟单订单号
+                    with allure.step(f"准备第{attempt + 2}次尝试，重新提取跟单订单号"):
+                        self.test_dbquery_openorder(var_manager, db_transaction)
 
             # 所有尝试结束后仍失败，标记用例失败
             if ticket_close is None:
