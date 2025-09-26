@@ -208,7 +208,7 @@ class PublicUtils(APITestBase):
 
     @allure.title("登录MT4账号获取token")
     def test_mt4_login(self, var_manager):
-        with allure.step("发生登录请求"):
+        with allure.step("MT4发生登录请求"):
             global token_mt4, headers
             max_retries = 5  # 最大重试次数
             retry_interval = 5  # 重试间隔（秒）
@@ -273,7 +273,7 @@ class PublicUtils(APITestBase):
 
     @allure.title("MT4平台开仓操作")
     def test_mt4_open(self, var_manager):
-        with allure.step("发送开仓请求"):
+        with allure.step("MT4发送开仓请求"):
             symbol = var_manager.get_variable("symbol")
             url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
 
@@ -302,7 +302,7 @@ class PublicUtils(APITestBase):
 
     @allure.title("MT4平台开仓操作")
     def test_mt4_open2(self, var_manager):
-        with allure.step("发送开仓请求"):
+        with allure.step("MT4发送开仓请求"):
             symbol = var_manager.get_variable("symbol")
             url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.2&placedType=Client&price=0.00"
 
@@ -332,7 +332,7 @@ class PublicUtils(APITestBase):
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4平台平仓操作")
     def test_mt4_close(self, var_manager):
-        with allure.step("发送平仓请求"):
+        with allure.step("MT4发送平仓请求"):
             max_attempts = 3  # 最大总尝试次数
             retry_interval = 10  # 每次尝试间隔时间(秒)
             global token_mt4, headers  # 声明使用全局变量

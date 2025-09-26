@@ -329,14 +329,14 @@ class Test_createTD:
             :return: 格式化字符串
             """
             output = f"""
-    {time_type}时间分析:
-    总耗时(ms): {stats['total_time_ms']}
-    最小时间差(ms): {stats['min_time_ms']}
-    最大时间差(ms): {stats['max_time_ms']}
-    平均时间差(ms): {stats['avg_time_ms']}
-    四分位(ms): {stats['quartiles_ms']}
-    有效记录数量: {stats['valid_record_count']}条
-    无效记录数量: {stats['invalid_record_count']}条（含null值）
+{time_type}时间分析:
+总耗时(ms): {stats['total_time_ms']}
+最小时间差(ms): {stats['min_time_ms']}
+最大时间差(ms): {stats['max_time_ms']}
+平均时间差(ms): {stats['avg_time_ms']}
+四分位(ms): {stats['quartiles_ms']}
+有效记录数量: {stats['valid_record_count']}条
+无效记录数量: {stats['invalid_record_count']}条（含null值）
                     """
             # 日志输出（便于调试）
             logging.info(f"\n{output}")
