@@ -2642,7 +2642,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于1
     - 预期结果：平仓的订单类型功能正确
     """)
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestcloudtradingOrders9(APITestBase):
         @allure.title("公共方法-MT4开仓")
         def test_run_public(self, var_manager):

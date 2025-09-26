@@ -103,9 +103,9 @@ class vps_PublicUtils(APITestBase):
             lots_open = self.json_utils.extract(self.response, "$.lots")
             var_manager.set_runtime_variable("vps_ticket_open", vps_ticket_open)
             var_manager.set_runtime_variable("lots_open", lots_open)
-            print(vps_ticket_open, lots_open)
+            print(f"ticket: {vps_ticket_open},lots_open:{lots_open}")
             logging.info(f"ticket: {vps_ticket_open},lots_open:{lots_open}")
-            if lots_open is None:
+            if lots_open is None or vps_ticket_open is None:
                 logging.info("开仓失败")
                 # 重新开仓
                 self.test_mt4_open(var_manager)

@@ -291,9 +291,9 @@ class PublicUtils(APITestBase):
             lots_open = self.json_utils.extract(self.response, "$.lots")
             var_manager.set_runtime_variable("ticket_open", ticket_open)
             var_manager.set_runtime_variable("lots_open", lots_open)
-            print(ticket_open, lots_open)
+            print(f"ticket: {ticket_open},lots_open:{lots_open}")
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
-            if lots_open is None:
+            if lots_open is None or ticket_open is None:
                 logging.info("开仓失败")
                 # 重新开仓
                 self.test_mt4_open(var_manager)
@@ -351,7 +351,7 @@ class PublicUtils(APITestBase):
                 if db_data:  # 如果查询到数据
                     with allure.step("2. 提取数据库中的值"):
                         slave_ticket = db_data[0]["slave_ticket"]
-                        print(f"输出：{slave_ticket}")
+                        print(f"跟单账号订单号：{slave_ticket}")
                         logging.info(f"跟单账号订单号: {slave_ticket}")
                         var_manager.set_runtime_variable("slave_ticket", slave_ticket)
                     return  # 成功获取后退出函数

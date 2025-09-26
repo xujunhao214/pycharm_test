@@ -103,9 +103,9 @@ class cloud_PublicUtils(APITestBase):
             cloud_lots_open = self.json_utils.extract(self.response, "$.lots")
             var_manager.set_runtime_variable("cloud_ticket_open", cloud_ticket_open)
             var_manager.set_runtime_variable("cloud_lots_open", cloud_lots_open)
-            print(cloud_ticket_open, cloud_lots_open)
+            print(f"ticket: {cloud_ticket_open},cloud_lots_open:{cloud_lots_open}")
             logging.info(f"ticket: {cloud_ticket_open},cloud_lots_open:{cloud_lots_open}")
-            if cloud_lots_open is None:
+            if cloud_lots_open is None or cloud_ticket_open is None:
                 logging.info("开仓失败")
                 # 重新开仓
                 self.test_mt4_open(var_manager)

@@ -1035,7 +1035,7 @@ class TestVPSOrderType:
       4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
     - 预期结果：平仓的订单类型功能正确
     """)
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT4ExternalOrderClose(APITestBase):
         @allure.title("公共方法-MT4开仓")
         def test_run_public(self, var_manager):

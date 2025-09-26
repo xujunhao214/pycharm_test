@@ -27,15 +27,15 @@ class Test_delete(APITestBase):
 
         # 按顺序调用
         # 登录获取 token
-        public_front.test_login(var_manager)
+        # public_front.test_login(var_manager)
         # 平仓喊单账号
-        public_front.test_close_trader(var_manager)
+        # public_front.test_close_trader(var_manager)
         # 平仓跟单账号
-        public_front.test_close_follow(var_manager)
+        # public_front.test_close_follow(var_manager)
         public_front.test_mt4_login(var_manager)
         public_front.test_mt4_open(var_manager)
         # 提跟单订单号
-        public_front.test_dbquery_openorder(var_manager, db_transaction)
+        # public_front.test_dbquery_openorder(var_manager, db_transaction)
         public_front.test_mt4_close(var_manager, db_transaction)
 
     # @allure.story("开仓/平仓时间差数据统计")

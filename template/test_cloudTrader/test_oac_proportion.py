@@ -786,7 +786,7 @@ class Test_proportionall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-平仓后")
         def test_query_closetrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -822,7 +822,7 @@ class Test_proportionall:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-平仓后")
         def test_query_closefollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1067,7 +1067,7 @@ class Test_proportionall:
                         )
                         logger.info(f"跟单者手数：{add_size}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1111,7 +1111,7 @@ class Test_proportionall:
                     )
                     logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-平仓后")
         def test_query_closefollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

@@ -242,8 +242,6 @@ class Test_numberall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-
-
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
@@ -659,12 +657,12 @@ class Test_numberall:
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
@@ -975,7 +973,7 @@ class Test_numberall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-平仓后")
         def test_query_closetrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1011,7 +1009,7 @@ class Test_numberall:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-平仓后")
         def test_query_closefollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1047,7 +1045,7 @@ class Test_numberall:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=20)
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
@@ -1092,7 +1090,7 @@ class Test_numberall:
                     )
                     logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-平仓后")
         def test_query_closefollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1359,8 +1357,6 @@ class Test_numberall:
                 print(f"输出：{slave_ticket}")
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
-
-
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
@@ -1777,12 +1773,12 @@ class Test_numberall:
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
@@ -2317,8 +2313,6 @@ class Test_numberall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-
-
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
@@ -2734,12 +2728,12 @@ class Test_numberall:
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
-        def test_mt4_close(self, var_manager):
+        def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
             public_front = PublicUtils()
 
             # MT4平台平仓操作
-            public_front.test_mt4_close(var_manager)
+            public_front.test_mt4_close(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")

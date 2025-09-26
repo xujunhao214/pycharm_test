@@ -1288,7 +1288,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend6(APITestBase):
         @allure.title("公共方法-MT4开仓")
         def test_run_public(self, var_manager):
