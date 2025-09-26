@@ -226,7 +226,7 @@ class Test_delete(APITestBase):
             for i in status_list:
                 assert i == "UNBIND", f"跟随者账号解绑失败，实际状态为: {i}"
                 logging.info(f"跟随者账号解绑成功")
-                allure.attach(status_list, "跟随者账号解绑成功", allure.attachment_type.TEXT)
+                allure.attach(str(status_list), "跟随者账号解绑成功", allure.attachment_type.TEXT)
 
     @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("跟单社区后台-账号管理-交易员账号-解绑账户")
@@ -266,4 +266,4 @@ class Test_delete(APITestBase):
             for i in status_list:
                 assert i == "UNBIND", f"交易员账号解绑失败，实际状态为: {i}"
                 logging.info(f"交易员账号解绑成功")
-                allure.attach(status_list, "交易员账号解绑成功", allure.attachment_type.TEXT)
+                allure.attach(str(status_list), "交易员账号解绑成功", allure.attachment_type.TEXT)
