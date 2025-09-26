@@ -322,8 +322,8 @@ class Test_numberall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -495,8 +495,8 @@ class Test_numberall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -835,8 +835,8 @@ class Test_numberall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -907,8 +907,8 @@ class Test_numberall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -1438,8 +1438,8 @@ class Test_numberall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -1611,8 +1611,8 @@ class Test_numberall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -1951,8 +1951,8 @@ class Test_numberall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -2023,8 +2023,8 @@ class Test_numberall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -2393,8 +2393,8 @@ class Test_numberall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -2566,8 +2566,8 @@ class Test_numberall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -2906,8 +2906,8 @@ class Test_numberall:
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",
@@ -2978,8 +2978,8 @@ class Test_numberall:
                 for idx, slave_ticket in enumerate(slave_ticket_list):
                     order_no = var_manager.get_variable("order_no")
                     self.verify_data(
-                        actual_value=order_no,
-                        expected_value=slave_ticket,
+                        actual_value=slave_ticket,
+                        expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
