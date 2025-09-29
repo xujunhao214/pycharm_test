@@ -236,7 +236,7 @@ class PublicUtils(APITestBase):
                         'Connection': 'keep-alive'
                     }
 
-                    with allure.step(f"第{attempt + 1 / max_retries}次尝试"):
+                    with allure.step(f"第{attempt + 1}/{max_retries}次尝试"):
                         response = requests.request("GET", url, headers=headers, data={})
                         allure.attach(url, "请求URL", allure.attachment_type.TEXT)
                         headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
@@ -244,24 +244,24 @@ class PublicUtils(APITestBase):
                         # 去除可能的空白字符
                         response_text = response.text.strip()
 
-                        logging.info(f"第{attempt + 1 / max_retries}次登录尝试 - 响应内容: {response_text}")
+                        logging.info(f"第{attempt + 1}/{max_retries}次登录尝试 - 响应内容: {response_text}")
                         allure.attach(response_text, "响应内容", allure.attachment_type.TEXT)
 
                         # 验证响应是否为有效的UUID格式token
                         if uuid_pattern.match(response_text):
                             token_mt4 = response_text
-                            logging.info(f"第{attempt + 1 / max_retries}次尝试成功 - 获取到token: {token_mt4}")
+                            logging.info(f"第{attempt + 1}/{max_retries}次尝试成功 - 获取到token: {token_mt4}")
                             break
                         else:
                             logging.warning(
-                                f"第{attempt + 1 / max_retries}次尝试失败 - 无效的token格式: {response_text}")
+                                f"第{attempt + 1}/{max_retries}次尝试失败 - 无效的token格式: {response_text}")
 
                 except Exception as e:
-                    logging.error(f"第{attempt + 1 / max_retries}次尝试发生异常: {str(e)}")
+                    logging.error(f"第{attempt + 1}/{max_retries}次尝试发生异常: {str(e)}")
 
                 # 如果不是最后一次尝试，等待后重试
                 if attempt < max_retries - 1:
-                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2 / max_retries}次重试...")
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}/{max_retries}次重试...")
                     time.sleep(retry_interval)
 
             # 最终验证结果
@@ -380,7 +380,7 @@ class PublicUtils(APITestBase):
 
             for attempt in range(max_attempts):
                 try:
-                    with allure.step(f"1. 第{attempt + 1 / max_attempts}次尝试"):
+                    with allure.step(f"1. 第{attempt + 1}/{max_attempts}次尝试"):
                         ticket_open = var_manager.get_variable("ticket_open")
                         # 检查token是否有效，无效则重新登录
                         if not token_mt4 or not uuid_pattern.match(token_mt4):
@@ -391,7 +391,7 @@ class PublicUtils(APITestBase):
                         url = f"{MT4_URL}/OrderClose?id={token_mt4}&ticket={ticket_open}&price=0.00"
                         self.response = requests.request("GET", url, headers=headers)
                         self.response_json = self.response.json()
-                        logging.info(f"第{attempt + 1 / max_attempts}次平仓响应: {self.response_json}")
+                        logging.info(f"第{attempt + 1}/{max_attempts}次平仓响应: {self.response_json}")
 
                         allure.attach(url, "请求URL", allure.attachment_type.TEXT)
                         headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
@@ -417,23 +417,23 @@ class PublicUtils(APITestBase):
                                 f"开仓订单号和平仓订单号一致,开仓订单号：{ticket_open} 平仓订单号：{ticket_close}")
                         break  # 成功则跳出循环
                     else:
-                        logging.warning(f"第{attempt + 1 / max_attempts}次平仓失败，未获取到平仓订单号")
+                        logging.warning(f"第{attempt + 1}/{max_attempts}次平仓失败，未获取到平仓订单号")
 
                 except Exception as e:
-                    logging.error(f"第{attempt + 1 / max_attempts}次平仓发生异常: {str(e)}")
+                    logging.error(f"第{attempt + 1}/{max_attempts}次平仓发生异常: {str(e)}")
 
                 # 如果不是最后一次尝试，等待后重试
                 if attempt < max_attempts - 1:
-                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2 / max_attempts}次尝试...")
+                    logging.info(f"将在{retry_interval}秒后进行第{attempt + 2}/{max_attempts}次尝试...")
                     time.sleep(retry_interval)
                     # 主动重新登录获取新token
-                    with allure.step(f"准备第{attempt + 2 / max_attempts}次尝试，重新登录MT4"):
+                    with allure.step(f"准备第{attempt + 2}/{max_attempts}次尝试，重新登录MT4"):
                         self.test_mt4_login(var_manager)
                     # 重新开仓
-                    with allure.step(f"准备第{attempt + 2 / max_attempts}次尝试，重新开仓"):
+                    with allure.step(f"准备第{attempt + 2}/{max_attempts}次尝试，重新开仓"):
                         self.test_mt4_open(var_manager)
                     # 重新提取跟单订单号
-                    with allure.step(f"准备第{attempt + 2 / max_attempts}次尝试，重新提取跟单订单号"):
+                    with allure.step(f"准备第{attempt + 2}/{max_attempts}次尝试，重新提取跟单订单号"):
                         self.test_dbquery_openorder(var_manager, db_transaction)
 
             # 所有尝试结束后仍失败，标记用例失败
