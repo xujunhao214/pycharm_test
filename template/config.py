@@ -8,7 +8,7 @@ import pymysql
 ENV_CONFIG = {
     Environment.TEST: {
         "base_url": "https://dev.lgcopytrade.top/api",
-        # "vps_url": "http://39.99.136.49/vps",
+        "vps_url": "http://39.99.136.49/vps",
         "db_config": {
             "host": "39.99.146.95",
             "port": 3306,
@@ -29,7 +29,7 @@ ENV_CONFIG = {
     },
     Environment.UAT: {
         "base_url": "https://dev.lgcopytrade.top/api",
-        # "vps_url": "https://39.101.181.190/vps",
+        "vps_url": "https://39.101.181.190/vps",
         "db_config": {
             "host": "39.99.146.95",
             "port": 3306,

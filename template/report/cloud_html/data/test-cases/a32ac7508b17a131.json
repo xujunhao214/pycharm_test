@@ -1,0 +1,259 @@
+{
+  "uid" : "a32ac7508b17a131",
+  "name" : "跟单社区前端-我的账户-跟单账号解绑-未取消订阅",
+  "fullName" : "test_cloudTrader.test_delete.Test_delete#test_account_unbindfollowNO",
+  "historyId" : "7a503db77a82fcaecd0b47d704a39293",
+  "time" : {
+    "start" : 1759109858234,
+    "stop" : 1759109859171,
+    "duration" : 937
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON断言失败）",
+  "statusTrace" : "self = <template.test_cloudTrader.test_delete.Test_delete object at 0x000001C1AABDE250>\nresponse = <Response [200]>, json_path = '$.message'\nexpected_value = '解绑账户失败：请先取消订阅关系'\nerror_msg_prefix = '响应message字段应为:解绑账户失败：请先取消订阅关系'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n>           assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\nE               AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON路径值不匹配）\n\ncommons\\api_base.py:552: AssertionError\n\nThe above exception was the direct cause of the following exception:\n\nself = <template.test_cloudTrader.test_delete.Test_delete object at 0x000001C1AABDE250>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001C1AABF40A0>\n\n    @allure.title(\"跟单社区前端-我的账户-跟单账号解绑-未取消订阅\")\n    def test_account_unbindfollowNO(self, var_manager):\n        with allure.step(\"1. 发送解绑请求\"):\n            token_top = var_manager.get_variable(\"token_top\")\n            follow_pass_id = var_manager.get_variable(\"follow_pass_id\")\n            url = f\"{URL_TOP}/blockchain/account/unbind?traderId={follow_pass_id}\"\n    \n            payload = json.dumps({})\n            headers = {\n                'priority': 'u=1, i',\n                'x-access-token': token_top,\n                'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',\n                'content-type': 'application/json',\n                'Accept': '*/*',\n                'Host': 'dev.lgcopytrade.top',\n                'Connection': 'keep-alive'\n            }\n    \n            response = requests.request(\"POST\", url, headers=headers, data=payload)\n            allure.attach(url, \"请求URL\", allure.attachment_type.TEXT)\n            headers_json = json.dumps(headers, ensure_ascii=False, indent=2)\n            allure.attach(headers_json, \"请求头\", allure.attachment_type.JSON)\n            print(response.text)\n            logging.info(f\"登录返回信息：{response.text}\")\n            allure.attach(response.text, \"响应信息\", allure.attachment_type.JSON)\n    \n        with allure.step(\"2. 返回校验\"):\n>           self.assert_json_value(\n                response,\n                \"$.message\",\n                \"解绑账户失败：请先取消订阅关系\",\n                \"响应message字段应为:解绑账户失败：请先取消订阅关系\"\n            )\n\ntest_cloudTrader\\test_delete.py:86: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_delete.Test_delete object at 0x000001C1AABDE250>\nresponse = <Response [200]>, json_path = '$.message'\nexpected_value = '解绑账户失败：请先取消订阅关系'\nerror_msg_prefix = '响应message字段应为:解绑账户失败：请先取消订阅关系'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON断言失败）\n\ncommons\\api_base.py:561: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "environment",
+    "time" : {
+      "start" : 1759109835548,
+      "stop" : 1759109835548,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1759109835548,
+      "stop" : 1759109835548,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1759109835548,
+      "stop" : 1759109835549,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON断言失败）",
+    "statusTrace" : "self = <template.test_cloudTrader.test_delete.Test_delete object at 0x000001C1AABDE250>\nresponse = <Response [200]>, json_path = '$.message'\nexpected_value = '解绑账户失败：请先取消订阅关系'\nerror_msg_prefix = '响应message字段应为:解绑账户失败：请先取消订阅关系'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n>           assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\nE               AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON路径值不匹配）\n\ncommons\\api_base.py:552: AssertionError\n\nThe above exception was the direct cause of the following exception:\n\nself = <template.test_cloudTrader.test_delete.Test_delete object at 0x000001C1AABDE250>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x000001C1AABF40A0>\n\n    @allure.title(\"跟单社区前端-我的账户-跟单账号解绑-未取消订阅\")\n    def test_account_unbindfollowNO(self, var_manager):\n        with allure.step(\"1. 发送解绑请求\"):\n            token_top = var_manager.get_variable(\"token_top\")\n            follow_pass_id = var_manager.get_variable(\"follow_pass_id\")\n            url = f\"{URL_TOP}/blockchain/account/unbind?traderId={follow_pass_id}\"\n    \n            payload = json.dumps({})\n            headers = {\n                'priority': 'u=1, i',\n                'x-access-token': token_top,\n                'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',\n                'content-type': 'application/json',\n                'Accept': '*/*',\n                'Host': 'dev.lgcopytrade.top',\n                'Connection': 'keep-alive'\n            }\n    \n            response = requests.request(\"POST\", url, headers=headers, data=payload)\n            allure.attach(url, \"请求URL\", allure.attachment_type.TEXT)\n            headers_json = json.dumps(headers, ensure_ascii=False, indent=2)\n            allure.attach(headers_json, \"请求头\", allure.attachment_type.JSON)\n            print(response.text)\n            logging.info(f\"登录返回信息：{response.text}\")\n            allure.attach(response.text, \"响应信息\", allure.attachment_type.JSON)\n    \n        with allure.step(\"2. 返回校验\"):\n>           self.assert_json_value(\n                response,\n                \"$.message\",\n                \"解绑账户失败：请先取消订阅关系\",\n                \"响应message字段应为:解绑账户失败：请先取消订阅关系\"\n            )\n\ntest_cloudTrader\\test_delete.py:86: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <template.test_cloudTrader.test_delete.Test_delete object at 0x000001C1AABDE250>\nresponse = <Response [200]>, json_path = '$.message'\nexpected_value = '解绑账户失败：请先取消订阅关系'\nerror_msg_prefix = '响应message字段应为:解绑账户失败：请先取消订阅关系'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON断言失败）\n\ncommons\\api_base.py:561: AssertionError",
+    "steps" : [ {
+      "name" : "1. 发送解绑请求",
+      "time" : {
+        "start" : 1759109858234,
+        "stop" : 1759109859165,
+        "duration" : 931
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "23b4b8b44d8bc2fb",
+        "name" : "请求URL",
+        "source" : "23b4b8b44d8bc2fb.txt",
+        "type" : "text/plain",
+        "size" : 86
+      }, {
+        "uid" : "42b603f1adf92906",
+        "name" : "请求头",
+        "source" : "42b603f1adf92906.json",
+        "type" : "application/json",
+        "size" : 368
+      }, {
+        "uid" : "d1571f985b0167ea",
+        "name" : "响应信息",
+        "source" : "d1571f985b0167ea.json",
+        "type" : "application/json",
+        "size" : 111
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3
+    }, {
+      "name" : "2. 返回校验",
+      "time" : {
+        "start" : 1759109859165,
+        "stop" : 1759109859171,
+        "duration" : 6
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: Failed: 响应message字段应为:解绑账户失败：请先取消订阅关系（JSON断言失败）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\template\\test_cloudTrader\\test_delete.py\", line 86, in test_account_unbindfollowNO\n    self.assert_json_value(\n  File \"D:\\pycharm_test\\template\\commons\\api_base.py\", line 561, in assert_json_value\n    raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\n",
+      "steps" : [ {
+        "name" : "断言JSON路径: $.message",
+        "time" : {
+          "start" : 1759109859169,
+          "stop" : 1759109859170,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "3d825bb18b3f455e",
+          "name" : "请求URL",
+          "source" : "3d825bb18b3f455e.txt",
+          "type" : "text/plain",
+          "size" : 86
+        }, {
+          "uid" : "e404df9d37c5b78c",
+          "name" : "预期值",
+          "source" : "e404df9d37c5b78c.txt",
+          "type" : "text/plain",
+          "size" : 58
+        }, {
+          "uid" : "9e6d7b7c879a9ee0",
+          "name" : "实际值",
+          "source" : "9e6d7b7c879a9ee0.txt",
+          "type" : "text/plain",
+          "size" : 43
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      }, {
+        "name" : "JSON断言失败: $.message",
+        "time" : {
+          "start" : 1759109859170,
+          "stop" : 1759109859171,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "73265a71e6fb1c3d",
+          "name" : "JSON路径",
+          "source" : "73265a71e6fb1c3d.txt",
+          "type" : "text/plain",
+          "size" : 9
+        }, {
+          "uid" : "b87f55b5e2213091",
+          "name" : "预期值",
+          "source" : "b87f55b5e2213091.txt",
+          "type" : "text/plain",
+          "size" : 45
+        }, {
+          "uid" : "7c76e19a945313e6",
+          "name" : "响应内容",
+          "source" : "7c76e19a945313e6.txt",
+          "type" : "text/plain",
+          "size" : 111
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 6
+    } ],
+    "attachments" : [ {
+      "uid" : "cf45e14062e71d49",
+      "name" : "log",
+      "source" : "cf45e14062e71d49.txt",
+      "type" : "text/plain",
+      "size" : 789
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 4,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 10
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1759109865685,
+      "stop" : 1759109865686,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "账号管理-删除账号"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "Test_delete"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "5840-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "a32ac7508b17a131.json",
+  "parameterValues" : [ ]
+}
