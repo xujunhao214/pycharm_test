@@ -12,7 +12,7 @@ from enum import Enum
 # 环境枚举
 class Environment(Enum):
     TEST = "test"
-    UAT = "uat"
+    DEV = "dev"
 
 
 # 环境配置映射（使用有序字典确保配置内部顺序）
@@ -20,15 +20,15 @@ ENV_CONFIG = {
     Environment.TEST.value: {
         "test_environment": "测试环境",
         "browser_version": "跟单社区",
-        "base_url": "https://uat.atcp.top/api",
+        "base_url": "https://dev.lgcopytrade.top/api",
         # "vps_url": "http://39.99.136.49:9001",
         "db_host": "39.99.146.95",
         "db_port": 3306,
     },
-    Environment.UAT.value: {
-        "test_environment": "UAT环境",
+    Environment.DEV.value: {
+        "test_environment": "DEV环境",
         "browser_version": "跟单社区",
-        "base_url": "https://uat.atcp.top/api",
+        "base_url": "https://dev.lgcopytrade.top/api",
         # "vps_url": "https://39.101.181.190/vps",
         "db_host": "39.99.146.95",
         "db_port": 3306,

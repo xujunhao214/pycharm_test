@@ -33,7 +33,7 @@ def send_feishu_notification(
 
     Args:
         statistics: 测试统计数据
-        environment: 测试环境（如"test"、"uat"）
+        environment: 测试环境（如"test"、"dev"）
         failed_cases: 失败用例列表
         skipped_cases: 跳过用例列表
     """

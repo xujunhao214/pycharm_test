@@ -5,4 +5,4 @@ import pymysql
 
 class Environment(Enum):
     TEST = "test"
-    UAT = "uat"
+    DEV = "dev"

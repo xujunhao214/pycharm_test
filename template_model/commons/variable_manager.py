@@ -13,7 +13,7 @@ class VariableManager:
         初始化变量管理器（支持测试组隔离）
 
         Args:
-            env: 环境标识，可选"test"或"uat"
+            env: 环境标识，可选"test"或"dev"
             data_dir: 数据目录，默认"VAR"
             test_group: 测试组标识（如"vps"或"cloud"），用于隔离并行任务
         """
@@ -29,7 +29,7 @@ class VariableManager:
         """加载对应环境的静态变量文件"""
         static_files = {
             "test": os.path.join(self.data_dir, "test_data.json"),
-            "uat": os.path.join(self.data_dir, "uat_data.json")
+            "dev": os.path.join(self.data_dir, "dev_data.json")
         }
         file_path = static_files.get(self.env, os.path.join(self.data_dir, "test_data.json"))
 

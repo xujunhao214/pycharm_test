@@ -86,9 +86,9 @@ def logged_session(api_session, var_manager, request, environment):
     json_utils = JsonPathUtils()
     captcha_recognizer = UniversalCaptchaRecognizer()
 
-    # 3. 登录逻辑（按环境区分，新项目主要适配test/uat环境）
+    # 3. 登录逻辑（按环境区分，新项目主要适配test/dev环境）
     try:
-        if environment.value in ["test", "uat"]:
+        if environment.value in ["test", "dev"]:
             # 新项目登录：带验证码+重试机制
             max_retries = 5  # 最大重试次数
             retry_interval = 10  # 重试间隔（秒）
@@ -408,7 +408,7 @@ def pytest_addoption(parser):
         "--env",
         action="store",
         default="test",
-        choices=["test", "uat"],
+        choices=["test", "dev"],
         help="设置测试环境"
     )
 

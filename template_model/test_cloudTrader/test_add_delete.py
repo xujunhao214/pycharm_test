@@ -25,6 +25,7 @@ def get_follow_accounts_from_runtime_json():
         os.path.dirname(__file__),  # 当前脚本目录
         "../VAR/runtime_vars_cloud.json"  # 相对于当前脚本的JSON路径，需根据实际项目调整
     )
+    # 若当前脚本路径与VAR目录层级不同，可直接写绝对路径（如"D:/pycharm_test/template_model/VAR/runtime_vars_cloud.json"）
 
     try:
         with open(json_file_path, 'r', encoding='utf-8') as f:

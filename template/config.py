@@ -27,7 +27,7 @@ ENV_CONFIG = {
         },
         "data_source_dir": "template/VAR"
     },
-    Environment.UAT: {
+    Environment.DEV: {
         "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "https://39.101.181.190/vps",
         "db_config": {
