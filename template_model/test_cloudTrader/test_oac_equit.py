@@ -865,10 +865,10 @@ class Test_equitall:
                 )
 
                 for idx, slave_ticket in enumerate(slave_ticket_list):
-                    order_no = var_manager.get_variable("order_no")
+                    slave_ticket_json = var_manager.get_variable("slave_ticket")
                     self.verify_data(
                         actual_value=slave_ticket,
-                        expected_value=order_no,
+                        expected_value=slave_ticket_json,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -2416,10 +2416,10 @@ class Test_equitall:
                 )
 
                 for idx, slave_ticket in enumerate(slave_ticket_list):
-                    order_no = var_manager.get_variable("order_no")
+                    slave_ticket_json = var_manager.get_variable("slave_ticket")
                     self.verify_data(
                         actual_value=slave_ticket,
-                        expected_value=order_no,
+                        expected_value=slave_ticket_json,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -3590,10 +3590,10 @@ class Test_equitall:
                 )
 
                 for idx, slave_ticket in enumerate(slave_ticket_list):
-                    order_no = var_manager.get_variable("order_no")
+                    slave_ticket_json = var_manager.get_variable("slave_ticket")
                     self.verify_data(
                         actual_value=slave_ticket,
-                        expected_value=order_no,
+                        expected_value=slave_ticket_json,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
@@ -4763,10 +4763,10 @@ class Test_equitall:
                 )
 
                 for idx, slave_ticket in enumerate(slave_ticket_list):
-                    order_no = var_manager.get_variable("order_no")
+                    slave_ticket_json = var_manager.get_variable("slave_ticket")
                     self.verify_data(
                         actual_value=slave_ticket,
-                        expected_value=order_no,
+                        expected_value=slave_ticket_json,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的订单号应为{slave_ticket}",
