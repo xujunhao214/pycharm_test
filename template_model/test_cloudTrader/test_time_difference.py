@@ -61,7 +61,7 @@ class Test_createTD:
         }
 
         # 配置参数
-        TOTAL_CYCLES = 10  # 总循环次数
+        TOTAL_CYCLES = 50  # 总循环次数
         MAX_LOGIN_RETRIES = 5  # 登录最大重试次数
         LOGIN_RETRY_INTERVAL = 5  # 登录重试间隔(秒)
         MAX_TRADE_RETRIES = 3  # 交易操作最大重试次数
@@ -219,7 +219,7 @@ class Test_createTD:
             logging.error(f"第{cycle}次循环平仓失败，已尝试{self.MAX_TRADE_RETRIES}次，订单号: {ticket_open}")
 
         @allure.title(f"MT4平台开仓平仓循环测试（{TOTAL_CYCLES}次）")
-        @pytest.mark.order(1)
+        # @pytest.mark.order(1)
         def test_open_close_cycles(self, var_manager):
             """主测试用例：执行多次开仓平仓循环"""
 
