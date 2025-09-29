@@ -14,10 +14,10 @@ import requests
 from template_model.commons.api_base import APITestBase, CompareOp, logger
 
 
-@allure.feature("创建开平仓订单然后统计时间差")
+@allure.feature("创建订单然后统计时间差")
 class Test_createTD:
     # @pytest.mark.skip(reason="跳过此用例")
-    @allure.story("创建开平仓订单")
+    @allure.story("创建订单")
     class Test_create_order(APITestBase):
         # 工具类实例化
         json_utils = JsonPathUtils()

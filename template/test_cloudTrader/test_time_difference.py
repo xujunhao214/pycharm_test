@@ -14,15 +14,15 @@ import requests
 from template.commons.api_base import APITestBase, CompareOp, logger
 
 
-@allure.feature("创建开平仓订单然后统计时间差")
+@allure.feature("创建订单然后统计时间差")
 class Test_createTD:
     # @pytest.mark.skip(reason="跳过此用例")
-    @allure.story("创建开平仓订单")
+    @allure.story("创建订单")
     class Test_create_order(APITestBase):
         # 工具类实例化
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-修改订阅数据")
         def test_query_updata_editPa(self, var_manager, logged_session):
             with allure.step("1. 发送修改订阅数据请求"):
@@ -61,7 +61,7 @@ class Test_createTD:
         }
 
         # 配置参数
-        TOTAL_CYCLES = 10  # 总循环次数
+        TOTAL_CYCLES = 50  # 总循环次数
         MAX_LOGIN_RETRIES = 5  # 登录最大重试次数
         LOGIN_RETRY_INTERVAL = 5  # 登录重试间隔(秒)
         MAX_TRADE_RETRIES = 3  # 交易操作最大重试次数
@@ -117,11 +117,12 @@ class Test_createTD:
 
         @allure.title("登录MT4账号获取token")
         def test_mt4_login(self, var_manager):
-            """登录测试用例，确保初始Token有效"""
-            login_success = self.login_mt4(var_manager)
-            assert login_success, "MT4登录失败"
-            print(f"登录MT4账号获取token: {self.token_mt4}")
-            logging.info(f"登录MT4账号获取token: {self.token_mt4}")
+            with allure.step("MT4发送登录请求"):
+                """登录测试用例，确保初始Token有效"""
+                login_success = self.login_mt4(var_manager)
+                assert login_success, "MT4登录失败"
+                print(f"登录MT4账号获取token: {self.token_mt4}")
+                logging.info(f"登录MT4账号获取token: {self.token_mt4}")
 
         def open_position(self, var_manager, cycle):
             """执行开仓操作"""
@@ -218,7 +219,7 @@ class Test_createTD:
             # 平仓失败
             logging.error(f"第{cycle}次循环平仓失败，已尝试{self.MAX_TRADE_RETRIES}次，订单号: {ticket_open}")
 
-        @allure.title(f"MT4平台开仓平仓循环测试（{TOTAL_CYCLES}次）")
+        @allure.title(f"MT4平台开仓平仓循环创建订单（{TOTAL_CYCLES}次）")
         # @pytest.mark.order(1)
         def test_open_close_cycles(self, var_manager):
             """主测试用例：执行多次开仓平仓循环"""
@@ -234,13 +235,13 @@ class Test_createTD:
                 logging.info(f"\n===== 开始第{cycle}/{self.TOTAL_CYCLES}次循环 =====")
 
                 try:
-                    with allure.step(f"第{cycle}次：登录操作"):
+                    with allure.step(f"第{cycle}次：MT4登录操作"):
                         # 先执行登录
                         self.test_mt4_login(var_manager)
                         print(f"第{cycle}次循环登录MT4成功")
 
                     # 开仓操作
-                    with allure.step(f"第{cycle}次：开仓操作"):
+                    with allure.step(f"第{cycle}次：MT4开仓操作"):
                         ticket_open = self.open_position(var_manager, cycle)
                         print(f"第{cycle}次循环开仓成功 - 订单号: {ticket_open}")
 
@@ -248,7 +249,7 @@ class Test_createTD:
                     time.sleep(self.SYNC_WAIT_SECONDS)
 
                     # 平仓操作
-                    with allure.step(f"第{cycle}次：平仓操作（订单号：{ticket_open}）"):
+                    with allure.step(f"第{cycle}次：MT4平仓操作（订单号：{ticket_open}）"):
                         self.close_position(var_manager, cycle, ticket_open)
                         print(f"第{cycle}次循环平仓成功 - 订单号: {ticket_open}")
 

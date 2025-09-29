@@ -11,7 +11,7 @@ from template.commons.jsonpath_utils import JsonPathUtils
 from template.commons.random_generator import *
 
 
-@allure.story("创建开平仓订单")
+@allure.story("创建订单")
 class Test_createOD(APITestBase):
     # 工具类实例化
     json_utils = JsonPathUtils()
