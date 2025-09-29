@@ -62,7 +62,7 @@ class UniversalCaptchaRecognizer:
             with open(raw_save_path, "wb") as f:
                 f.write(img_data)
             # 强制打印+日志双输出，确保Jenkins能捕获
-            print(f"[强制调试] 原始验证码图片已保存至：{raw_save_path}（大小：{len(img_data)} 字节）")
+            print(f"原始验证码图片已保存至：{raw_save_path}（大小：{len(img_data)} 字节）")
             logging.info(f"原始验证码图片已保存：{raw_save_path}（大小：{len(img_data)} 字节）")
 
             # 解析为PIL图片
@@ -72,7 +72,7 @@ class UniversalCaptchaRecognizer:
         except Exception as e:
             # 新增：打印异常详情，便于定位解码失败原因
             error_msg = f"解析图片失败：{str(e)}"
-            print(f"[强制调试] {error_msg}")
+            print("解析图片失败")
             logging.error(error_msg)
             return "*" * CAPTCHA_LENGTH
 
@@ -124,17 +124,17 @@ class UniversalCaptchaRecognizer:
                 stderr_msg = result.stderr.decode('utf-8', errors='replace').strip()
                 if stderr_msg:  # 仅当有错误信息时打印
                     logging.error(f"Tesseract错误输出：{stderr_msg}")
-                    print(f"[强制调试] Tesseract错误输出：{stderr_msg}")
+                    print(f"Tesseract错误输出：{stderr_msg}")
 
             # 解析识别结果
             raw_result = result.stdout.decode('utf-8', errors='replace').strip()
             # 强制打印+日志双输出，确认识别结果
-            print(f"[强制调试] Tesseract原始识别结果：'{raw_result}'（长度：{len(raw_result)}）")
+            print(f"Tesseract原始识别结果：'{raw_result}'（长度：{len(raw_result)}）")
             logging.info(f"Tesseract原始识别结果：'{raw_result}'（长度：{len(raw_result)}）")
 
         except Exception as e:
             error_msg = f"OCR识别失败：{str(e)}"
-            print(f"[强制调试] {error_msg}")
+            print(f"{error_msg}")
             logging.error(error_msg)
             return "*" * CAPTCHA_LENGTH
 
@@ -157,7 +157,7 @@ class UniversalCaptchaRecognizer:
         valid_str = ''.join(valid_chars)
         final_result = valid_str.ljust(CAPTCHA_LENGTH, '*')[:CAPTCHA_LENGTH]
         # 新增：打印最终结果
-        print(f"[强制调试] 最终验证码结果：'{final_result}'（长度：{len(final_result)}）")
+        print(f"最终验证码结果：'{final_result}'（长度：{len(final_result)}）")
         logging.info(f"最终验证码结果：'{final_result}'（长度：{len(final_result)}，预期：{CAPTCHA_LENGTH}位）")
 
         return final_result
