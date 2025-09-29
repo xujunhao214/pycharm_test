@@ -274,7 +274,34 @@ class Test_create:
 
             with allure.step("3. 提取数据"):
                 jeecg_row_key = self.json_utils.extract(response.json(), "$.result.records[4].jeecg_row_key")
-                var_manager.set_runtime_variable("trader_jeecgrow_key", jeecg_row_key)
+                var_manager.set_runtime_variable("trader_jeecgrow_key", jeecg_row_key) @ allure.title(
+                    "任务中心-MT4绑定审核-提取数据")
+
+        @allure.title("任务中心-MT4绑定审核-提取vpsID")
+        def test_getRecordList(self, var_manager, logged_session):
+            with allure.step("1. 发送请求"):
+                params = {
+                    "_t": current_timestamp_seconds,
+                    "column": "name",
+                    "order": "asc"
+                }
+                response = self.send_get_request(
+                    logged_session,
+                    '/blockchain/followVps/getRecordList',
+                    params=params
+                )
+
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.optimizeCountSql",
+                    True,
+                    "响应optimizeCountSql字段应为true"
+                )
+
+            with allure.step("3. 提取数据"):
+                ipAddress = self.json_utils.extract(response.json(), "$.records[1].ipAddress")
+                var_manager.set_runtime_variable("vpsrunIpAddr", ipAddress)
 
         @allure.title("任务中心-MT4绑定审核-提取数据2")
         def test_api_getData0(self, var_manager, logged_session):

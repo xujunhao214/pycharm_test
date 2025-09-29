@@ -38,22 +38,28 @@ class Test_delete(APITestBase):
     #     # public_front.test_dbquery_openorder(var_manager, db_transaction)
     #     public_front.test_mt4_close(var_manager, db_transaction)
 
-    @allure.title("数据库查询-校验交易员账号是否解绑成功")
-    def test_dbbchain_trader(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库"):
-            trader_pass_id = var_manager.get_variable("trader_pass_id")
-            sql = f"SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE id = %s"
-            params = (trader_pass_id,)
-
-            db_data = self.query_database(
-                db_transaction=db_transaction,
-                sql=sql,
+    @allure.title("任务中心-MT4绑定审核-提取vpsID")
+    def test_getRecordList(self, var_manager, logged_session):
+        with allure.step("1. 发送请求"):
+            params = {
+                "_t": current_timestamp_seconds,
+                "column": "name",
+                "order": "asc"
+            }
+            response = self.send_get_request(
+                logged_session,
+                '/blockchain/followVps/getRecordList',
                 params=params
             )
 
-        with allure.step("2. 校验交易员账号是否解绑成功"):
-            status_list = [record["status"] for record in db_data]
-            for i in status_list:
-                assert i == "UNBIND", f"交易员账号解绑失败，实际状态为: {i}"
-                logging.info(f"交易员账号解绑成功")
-                allure.attach(str(status_list), "交易员账号解绑成功", allure.attachment_type.TEXT)
+        with allure.step("2. 返回校验"):
+            self.assert_json_value(
+                response,
+                "$.optimizeCountSql",
+                True,
+                "响应optimizeCountSql字段应为true"
+            )
+
+        with allure.step("3. 提取数据"):
+            ipAddress = self.json_utils.extract(response.json(), "$.records[1].ipAddress")
+            var_manager.set_runtime_variable("vpsrunIpAddr", ipAddress)
