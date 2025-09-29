@@ -44,7 +44,7 @@ class PublicUtils(APITestBase):
             allure.attach(url, "请求URL", allure.attachment_type.TEXT)
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            print(response.text)
+            # print(response.text)
             logging.info(f"登录返回信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
@@ -80,7 +80,7 @@ class PublicUtils(APITestBase):
             allure.attach(url, "请求URL", allure.attachment_type.TEXT)
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            print(response.text)
+            # print(response.text)
             logging.info(f"登录返回信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
@@ -102,7 +102,7 @@ class PublicUtils(APITestBase):
             allure.attach(url, "请求URL", allure.attachment_type.TEXT)
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            print(response.text)
+            # print(response.text)
             logging.info(f"登录返回信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
@@ -320,7 +320,7 @@ class PublicUtils(APITestBase):
             lots_open = self.json_utils.extract(self.response, "$.lots")
             var_manager.set_runtime_variable("ticket_open", ticket_open)
             var_manager.set_runtime_variable("lots_open", lots_open)
-            print(ticket_open, lots_open)
+            print(f"ticket: {ticket_open},lots_open:{lots_open}")
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
             if ticket_open is None:
                 logging.info("开仓失败")

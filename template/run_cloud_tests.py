@@ -42,9 +42,9 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_topup.py",
         # "test_cloudTrader/test_add_create.py",
         # "test_cloudTrader/test_time_difference.py",
-        # "test_cloudTrader/test_add_delete.py",
+        "test_cloudTrader/test_add_delete.py",
         # "test_cloudTrader/test_delete.py",
-        "test_cloudTrader/test_lianxi.py",
+        # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
 
         "--log-file=./Logs/cloud_pytest.log",

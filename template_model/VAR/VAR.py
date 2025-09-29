@@ -59,3 +59,15 @@ URL_TOP = "https://dev.lgcopytrade.top/api"
 
 # MT4URL
 MT4_URL = "https://mt4.mtapi.io"
+
+# 批量添加跟随者账号
+FOLLOW_ACCOUNT_LIST = [
+    {"account": "301392106", "password": "0sgsgtu"},
+    {"account": "301392107", "password": "zn1tald"},
+    {"account": "301392108", "password": "joj6vwd"},
+    {"account": "301392109", "password": "an0emxc"},
+    {"account": "301392289", "password": "2qgbfqc"}
+]
+
+target_accounts = ["301392106", "301392107", "301392108", "301392109", "301392289"]
+TRGET_ACCOUNTS = ["301392106", "301392107", "301392108", "301392109", "301392289"]

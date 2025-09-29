@@ -274,8 +274,7 @@ class Test_create:
 
             with allure.step("3. 提取数据"):
                 jeecg_row_key = self.json_utils.extract(response.json(), "$.result.records[4].jeecg_row_key")
-                var_manager.set_runtime_variable("trader_jeecgrow_key", jeecg_row_key) @ allure.title(
-                    "任务中心-MT4绑定审核-提取数据")
+                var_manager.set_runtime_variable("trader_jeecgrow_key", jeecg_row_key)
 
         @allure.title("任务中心-MT4绑定审核-提取vpsID")
         def test_getRecordList(self, var_manager, logged_session):

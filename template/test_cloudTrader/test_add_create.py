@@ -11,13 +11,7 @@ from template.commons.jsonpath_utils import *
 from template.commons.random_generator import *
 
 # -------------------------- 多账号配置 --------------------------
-FOLLOW_ACCOUNT_LIST = [
-    {"account": "301392106", "password": "0sgsgtu"},
-    {"account": "301392107", "password": "zn1tald"},
-    {"account": "301392108", "password": "joj6vwd"},
-    {"account": "301392109", "password": "an0emxc"},
-    {"account": "301392289", "password": "2qgbfqc"}
-]
+FOLLOW_ACCOUNT_LIST = FOLLOW_ACCOUNT_LIST
 
 
 @allure.story("绑定跟随者账号（多账号批量版）")

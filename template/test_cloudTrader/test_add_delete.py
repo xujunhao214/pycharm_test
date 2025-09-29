@@ -5,7 +5,7 @@ import pytest
 import json
 import requests
 import os
-from template.VAR.VAR import *  # 若URL_TOP等变量在VAR.py，需保留
+from template.VAR.VAR import *
 from template.commons.jsonpath_utils import *
 from template.public_function.proportion_public import PublicUtils
 
@@ -18,7 +18,7 @@ def get_follow_accounts_from_runtime_json():
     """
     # 1. 定义需要处理的账号列表（与JSON中的follow_XXX_xxx对应）
     # 可手动维护，或从JSON中自动匹配（下方有自动匹配方案）
-    target_accounts = ["301392106", "301392107", "301392108", "301392109", "301392289"]
+    target_accounts = TRGET_ACCOUNTS
 
     # 2. 读取统一JSON文件（runtime_vars_cloud.json）
     json_file_path = os.path.join(
