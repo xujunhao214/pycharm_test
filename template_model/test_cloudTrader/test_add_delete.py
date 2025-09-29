@@ -20,11 +20,38 @@ def get_follow_accounts_from_runtime_json():
     # 可手动维护，或从JSON中自动匹配（下方有自动匹配方案）
     target_accounts = TRGET_ACCOUNTS
 
-    # 2. 读取统一JSON文件（runtime_vars_cloud.json）
+    # 原有路径拼接逻辑
     json_file_path = os.path.join(
-        os.path.dirname(__file__),  # 当前脚本目录
-        "../VAR/runtime_vars_cloud.json"  # 相对于当前脚本的JSON路径，需根据实际项目调整
+        os.path.dirname(__file__),
+        "../VAR/runtime_vars_cloud.json"
     )
+
+    # 新增1：打印最终的绝对路径（关键！看Jenkins实际读的是哪个文件）
+    abs_json_path = os.path.abspath(json_file_path)
+    print(f"[DEBUG] 实际读取的JSON绝对路径：{abs_json_path}")
+    print(f"[DEBUG] JSON文件是否存在：{os.path.exists(abs_json_path)}")
+
+    # 新增2：若文件存在，打印文件大小和前50字符（判断是否为空或格式异常）
+    if os.path.exists(abs_json_path):
+        file_size = os.path.getsize(abs_json_path)
+        print(f"[DEBUG] JSON文件大小：{file_size} 字节（0字节表示空文件）")
+
+        # 读取前50字符预览（避免大文件卡顿）
+        with open(abs_json_path, 'r', encoding='utf-8') as f:
+            file_head = f.read(50).strip()  # 去除前后空白，看是否有有效内容
+            print(f"[DEBUG] JSON文件前50字符：{repr(file_head)}")  # repr()显示不可见字符
+
+    # 原有读取逻辑（保留异常捕获）
+    with open(abs_json_path, 'r', encoding='utf-8') as f:
+        try:
+            runtime_data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise ValueError(
+                f"JSON解析失败！\n"
+                f"文件路径：{abs_json_path}\n"
+                f"错误详情：{str(e)}\n"
+                f"文件前50字符：{repr(file_head)}"
+            ) from e
     # 若当前脚本路径与VAR目录层级不同，可直接写绝对路径（如"D:/pycharm_test/template_model/VAR/runtime_vars_cloud.json"）
 
     try:
