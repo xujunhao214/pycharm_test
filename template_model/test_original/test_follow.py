@@ -280,7 +280,7 @@ class Test_follow(APITestBase):
                 "响应success字段应为true"
             )
 
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("账号管理-跟随者账号-解绑账户")
     def test_account_unbindPa(self, logged_session):
         params = {
@@ -299,7 +299,7 @@ class Test_follow(APITestBase):
             "响应success字段应为true"
         )
 
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("数据库查询-校验跟随者账号是否解绑成功")
     def test_dbbchain_trader2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库"):

@@ -14,7 +14,7 @@ from template_model.commons.random_generator import *
 
 @allure.feature("账户管理-持仓订单")
 class Test_openandclouseall:
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     class Test_orderseng(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
@@ -94,7 +94,7 @@ class Test_openandclouseall:
             print(ticket_open, lots_open)
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
@@ -174,7 +174,7 @@ class Test_openandclouseall:
                         )
                         logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
         def test_query_openfollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -253,7 +253,7 @@ class Test_openandclouseall:
                         )
                         logger.info(f"跟单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager):
             with allure.step("1. 发送平仓请求"):
@@ -278,7 +278,7 @@ class Test_openandclouseall:
                 )
                 logger.info(f"开仓订单号和平仓订单号一致,开仓订单号：{ticket_open} 平仓订单号：{ticket_close}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=5)
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
@@ -356,7 +356,7 @@ class Test_openandclouseall:
                         )
                         logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-平仓后")
         def test_query_closefollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

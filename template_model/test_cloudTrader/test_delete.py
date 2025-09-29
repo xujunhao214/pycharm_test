@@ -187,7 +187,7 @@ class Test_delete(APITestBase):
                 "响应success字段应为true"
             )
 
-    @pytest.mark.skipif(True, reason="跳过此用例")
+    @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("跟单社区后台-账号管理-跟随者账号-解绑账户")
     def test_account_unbindPa_follow(self, var_manager, logged_session):
         follow_pass_id = var_manager.get_variable("follow_pass_id")
@@ -207,7 +207,7 @@ class Test_delete(APITestBase):
             "响应success字段应为true"
         )
 
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("数据库查询-校验跟随者账号是否解绑成功")
     def test_dbbchain_follow(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库"):
@@ -228,7 +228,7 @@ class Test_delete(APITestBase):
                 logging.info(f"跟随者账号解绑成功")
                 allure.attach(str(status_list), "跟随者账号解绑成功", allure.attachment_type.TEXT)
 
-    @pytest.mark.skipif(True, reason="跳过此用例")
+    @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("跟单社区后台-账号管理-交易员账号-解绑账户")
     def test_account_unbindPa_trader(self, var_manager, logged_session):
         trader_pass_id = var_manager.get_variable("trader_pass_id")

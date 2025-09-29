@@ -114,7 +114,7 @@ class PublicUtils(APITestBase):
                 "响应success字段应为true"
             )
 
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("账号管理-持仓订单-魔术号查询-开仓前")
     def test_query_magic(self, var_manager, logged_session):
         with allure.step("1. 跟单社区后台-账号管理-持仓订单-发送魔术号查询请求"):
@@ -160,7 +160,7 @@ class PublicUtils(APITestBase):
                     )
                     allure.attach(f"删除数据成功：{jeecg_row_key}", "删除结果", allure.attachment_type.TEXT)
 
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("账号管理-持仓订单-账号ID查询-开仓前")
     def test_query_follow_passid(self, var_manager, logged_session):
         with allure.step("1. 跟单社区后台-账号管理-持仓订单-发送账号ID查询请求"):
@@ -365,7 +365,7 @@ class PublicUtils(APITestBase):
         # 如果超过最大次数仍未查询到数据，抛出异常
         pytest.fail(f"超过最大查询次数（{max_attempts}次），未找到master_ticket={ticket_open}的订单数据")
 
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     @allure.title("MT4平台平仓操作")
     def test_mt4_close(self, var_manager, db_transaction):
         with allure.step("MT4发送平仓请求"):

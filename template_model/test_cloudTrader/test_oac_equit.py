@@ -32,12 +32,12 @@ class Test_equitall:
       10.跟单管理-VPS管理-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     class Test_orderseng1(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-修改订阅数据")
         def test_query_updata_editPa(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -63,7 +63,7 @@ class Test_equitall:
                     "响应success字段应为true"
                 )
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-订阅列表数据")
         def test_query_getColumnsAndData(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -213,7 +213,7 @@ class Test_equitall:
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=5)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
@@ -342,7 +342,7 @@ class Test_equitall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -478,7 +478,7 @@ class Test_equitall:
                     logger.info(f"跟单方向：{type}")
                     allure.attach("0:buy  1:sell", "方向解释", allure.attachment_type.TEXT)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-喊单账户查询-开仓后")
         def test_query_opentrader_getdata(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -565,7 +565,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-开仓后")
         def test_query_opentrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -698,7 +698,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-                # @pytest.mark.skipif(True, reason="跳过此用例")
+                # @pytest.mark.skipif(reason="跳过此用例")
 
         @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
@@ -746,7 +746,7 @@ class Test_equitall:
                     )
                     logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
         def test_query_openfollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -811,7 +811,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
@@ -820,7 +820,7 @@ class Test_equitall:
             # MT4平台平仓操作
             public_front.test_mt4_close(var_manager, db_transaction)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-平仓后")
         def test_query_closetrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -953,7 +953,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
         def test_query_trader_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1043,7 +1043,7 @@ class Test_equitall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-跟单MT4账户查询-平仓后")
         def test_query_follow_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1166,7 +1166,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{add_size}")
 
-        @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-平仓后")
         def test_query_closetrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1202,7 +1202,7 @@ class Test_equitall:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-平仓后")
         def test_query_closefollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1238,7 +1238,7 @@ class Test_equitall:
                 logging.info("查询结果符合预期：records为空列表")
                 allure.attach("查询结果为空，符合预期", 'text/plain')
 
-        @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=5)
         @allure.title("跟单管理-VPS管理-喊单者账号-平仓后")
         def test_query_closetrader_getRecordList(self, var_manager, logged_session):
@@ -1283,7 +1283,7 @@ class Test_equitall:
                     )
                     logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
 
-        @pytest.mark.skipif(True, reason="跳过此用例")
+        @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-平仓后")
         def test_query_closefollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1370,12 +1370,12 @@ class Test_equitall:
       8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     class Test_orderseng2(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-修改订阅数据")
         def test_query_updata_editPa(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1401,7 +1401,7 @@ class Test_equitall:
                     "响应success字段应为true"
                 )
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-订阅列表数据")
         def test_query_getColumnsAndData(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1551,7 +1551,7 @@ class Test_equitall:
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=5)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
@@ -1680,7 +1680,7 @@ class Test_equitall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1816,7 +1816,7 @@ class Test_equitall:
                     logger.info(f"跟单方向：{type}")
                     allure.attach("0:buy  1:sell", "方向解释", allure.attachment_type.TEXT)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-喊单账户查询-开仓后")
         def test_query_opentrader_getdata(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1903,7 +1903,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-开仓后")
         def test_query_opentrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2036,7 +2036,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-                # @pytest.mark.skipif(True, reason="跳过此用例")
+                # @pytest.mark.skipif(reason="跳过此用例")
 
         @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
@@ -2084,7 +2084,7 @@ class Test_equitall:
                     )
                     logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
         def test_query_openfollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2149,7 +2149,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
@@ -2158,7 +2158,7 @@ class Test_equitall:
             # MT4平台平仓操作
             public_front.test_mt4_close(var_manager, db_transaction)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
         def test_query_trader_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2248,7 +2248,7 @@ class Test_equitall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-跟单MT4账户查询-平仓后")
         def test_query_follow_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2371,7 +2371,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{add_size}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-平仓后")
         def test_query_closetrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2547,12 +2547,12 @@ class Test_equitall:
       8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     class Test_orderseng3(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-修改订阅数据")
         def test_query_updata_editPa(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2578,7 +2578,7 @@ class Test_equitall:
                     "响应success字段应为true"
                 )
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-订阅列表数据")
         def test_query_getColumnsAndData(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2728,7 +2728,7 @@ class Test_equitall:
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=5)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
@@ -2857,7 +2857,7 @@ class Test_equitall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2992,7 +2992,7 @@ class Test_equitall:
                     logger.info(f"跟单方向：{type}")
                     allure.attach("0:buy  1:sell", "方向解释", allure.attachment_type.TEXT)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-喊单账户查询-开仓后")
         def test_query_opentrader_getdata(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3079,7 +3079,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-开仓后")
         def test_query_opentrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3211,7 +3211,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-                # @pytest.mark.skipif(True, reason="跳过此用例")
+                # @pytest.mark.skipif(reason="跳过此用例")
 
         @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
@@ -3259,7 +3259,7 @@ class Test_equitall:
                     )
                     logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
         def test_query_openfollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3323,7 +3323,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
@@ -3332,7 +3332,7 @@ class Test_equitall:
             # MT4平台平仓操作
             public_front.test_mt4_close(var_manager, db_transaction)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
         def test_query_trader_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3422,7 +3422,7 @@ class Test_equitall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-跟单MT4账户查询-平仓后")
         def test_query_follow_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3545,7 +3545,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{add_size}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-平仓后")
         def test_query_closetrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3720,12 +3720,12 @@ class Test_equitall:
       8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     class Test_orderseng4(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-修改订阅数据")
         def test_query_updata_editPa(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3751,7 +3751,7 @@ class Test_equitall:
                     "响应success字段应为true"
                 )
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-订阅列表数据")
         def test_query_getColumnsAndData(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3901,7 +3901,7 @@ class Test_equitall:
             # MT4平台开仓操作
             public_front.test_mt4_open(var_manager)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @pytest.mark.retry(n=3, delay=5)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
@@ -4030,7 +4030,7 @@ class Test_equitall:
                 logging.info(f"跟单账号订单号: {slave_ticket}")
                 var_manager.set_runtime_variable("slave_ticket", slave_ticket)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-持仓订单-跟单账号ID查询-开仓后")
         def test_query_openfollow_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4165,7 +4165,7 @@ class Test_equitall:
                     logger.info(f"跟单方向：{type}")
                     allure.attach("0:buy  1:sell", "方向解释", allure.attachment_type.TEXT)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-喊单账户查询-开仓后")
         def test_query_opentrader_getdata(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4252,7 +4252,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-开仓后")
         def test_query_opentrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4384,7 +4384,7 @@ class Test_equitall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-                # @pytest.mark.skipif(True, reason="跳过此用例")
+                # @pytest.mark.skipif(reason="跳过此用例")
 
         @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
@@ -4432,7 +4432,7 @@ class Test_equitall:
                     )
                     logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
         def test_query_openfollow_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4496,7 +4496,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{totalLots}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager, db_transaction):
             # 实例化类
@@ -4505,7 +4505,7 @@ class Test_equitall:
             # MT4平台平仓操作
             public_front.test_mt4_close(var_manager, db_transaction)
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-喊单MT4账户查询-平仓后")
         def test_query_trader_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4595,7 +4595,7 @@ class Test_equitall:
                         )
                         logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("账号管理-历史订单-跟单MT4账户查询-平仓后")
         def test_query_follow_id(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4718,7 +4718,7 @@ class Test_equitall:
                         )
                         logger.info(f"跟单者手数：{add_size}")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-开仓日志-开平仓明细-平仓后")
         def test_query_closetrader_detail(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

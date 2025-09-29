@@ -22,7 +22,7 @@ class Test_createTD:
         # 工具类实例化
         json_utils = JsonPathUtils()
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("跟单管理-实时跟单-修改订阅数据")
         def test_query_updata_editPa(self, var_manager, logged_session):
             with allure.step("1. 发送修改订阅数据请求"):

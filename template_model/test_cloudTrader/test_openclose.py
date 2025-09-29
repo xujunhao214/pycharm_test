@@ -15,7 +15,7 @@ from template_model.commons.random_generator import *
 
 @allure.feature("账户管理-持仓订单")
 class Test_openandclouseall:
-    # @pytest.mark.skipif(True, reason="跳过此用例")
+    # @pytest.mark.skipif(reason="跳过此用例")
     class Test_orderseng(APITestBase):
         # 实例化JsonPath工具类（全局复用）
         json_utils = JsonPathUtils()
@@ -113,7 +113,7 @@ class Test_openandclouseall:
                 else:
                     logging.info("开仓成功")
 
-        # @pytest.mark.skipif(True, reason="跳过此用例")
+        # @pytest.mark.skipif(reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
         def test_mt4_close(self, var_manager):
             with allure.step("发送平仓请求"):
