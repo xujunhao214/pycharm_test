@@ -18,7 +18,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -30,7 +30,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -42,7 +42,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -54,7 +54,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -66,7 +66,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -78,7 +78,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -90,7 +90,7 @@ class Test_agent(APITestBase):
         {
             "_t": current_timestamp_seconds,
             "page": 1,
-            "limit": 20,
+            "limit": 50,
             "type": "",
             "status": "",
             "dividendTimeBegin": "",
@@ -138,7 +138,7 @@ class Test_agent(APITestBase):
 
     # 公共测试逻辑（抽取复用）
     def _run_test(self, case_params, logged_session):
-        with allure.step("1. 构造参数并发送GET请求"):
+        with allure.step("1. 发送GET请求"):
             response = self.send_get_request(
                 logged_session,
                 '/agent/agentLevelDividend/page',

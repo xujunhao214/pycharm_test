@@ -30,7 +30,7 @@ class Test_usr(APITestBase):
         global user_id
         target_email = "xujunhao@163.com"
 
-        with allure.step("1. 构造参数并发送GET请求"):
+        with allure.step("1. 发送GET请求"):
             params = {
                 "_t": current_timestamp_seconds,
                 "column": "createTime",

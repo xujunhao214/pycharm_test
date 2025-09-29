@@ -34,7 +34,7 @@ class Test_create:
         def test_user_list(self, var_manager, logged_session):
             target_email = "xujunhao@163.com"
 
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 params = {
                     "_t": current_timestamp_seconds,
                     "column": "createTime",
@@ -540,7 +540,7 @@ class Test_create:
         @allure.title("账号管理-跟随者账号-绑定跟随者-用户列表-提取用户id")
         def test_user_list(self, var_manager, logged_session):
             target_email = "xujunhao@163.com"
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 params = {
                     "_t": current_timestamp_seconds,
                     "column": "createTime",

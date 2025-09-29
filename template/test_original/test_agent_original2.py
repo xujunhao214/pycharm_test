@@ -23,7 +23,7 @@ class Test_create:
                     {
                         "_t": current_timestamp_seconds,
                         "page": 1,
-                        "limit": 20,
+                        "limit": 50,
                         "type": "",
                         "status": "",
                         "dividendTimeBegin": "",
@@ -38,7 +38,7 @@ class Test_create:
                     {
                         "_t": current_timestamp_seconds,
                         "page": 1,
-                        "limit": 20,
+                        "limit": 50,
                         "type": "",
                         "status": "",
                         "dividendTimeBegin": "",
@@ -53,7 +53,7 @@ class Test_create:
                     {
                         "_t": current_timestamp_seconds,
                         "page": 1,
-                        "limit": 20,
+                        "limit": 50,
                         "type": "",
                         "status": "",
                         "dividendTimeBegin": "2025-09-04",
@@ -68,7 +68,7 @@ class Test_create:
                     {
                         "_t": current_timestamp_seconds,
                         "page": 1,
-                        "limit": 20,
+                        "limit": 50,
                         "type": "",
                         "status": "",
                         "dividendTimeBegin": "2025-09-09",
@@ -84,7 +84,7 @@ class Test_create:
             # 动态设置用例标题（Allure报告中显示）
             allure.dynamic.title(case_title)
 
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 # 直接使用参数化的case_params，无需重复定义
                 response = self.send_get_request(
                     logged_session,

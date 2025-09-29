@@ -17,12 +17,12 @@ class Test_create:
 
         @allure.title("返佣管理-跟单分红-2级分红-USD币种")
         def test_user_list(self, var_manager, logged_session):
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 login_config = var_manager.get_variable("login_config")
                 params = {
                     "_t": current_timestamp_seconds,
                     "page": 1,
-                    "limit": 20,
+                    "limit": 50,
                     "type": "",
                     "status": "",
                     # "dividendTimeBegin": "2025-09-04",
@@ -243,12 +243,12 @@ class Test_create:
 
         @allure.title("返佣管理-跟单分红-4级分红-USD币种")
         def test_user_list2(self, var_manager, logged_session):
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 login_config = var_manager.get_variable("login_config")
                 params = {
                     "_t": current_timestamp_seconds,
                     "page": 1,
-                    "limit": 20,
+                    "limit": 50,
                     "type": "",
                     "status": "",
                     # "dividendTimeBegin": "2025-09-04",
@@ -469,12 +469,12 @@ class Test_create:
 
         @allure.title("返佣管理-跟单分红-4级分红-AUD币种")
         def test_user_list3(self, var_manager, logged_session):
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 login_config = var_manager.get_variable("login_config")
                 params = {
                     "_t": current_timestamp_seconds,
                     "page": 1,
-                    "limit": 20,
+                    "limit": 50,
                     "type": "",
                     "status": "",
                     "dividendTimeBegin": "2025-09-04",
@@ -695,12 +695,12 @@ class Test_create:
 
         @allure.title("返佣管理-跟单分红-没有代理-USD币种")
         def test_user_list4(self, var_manager, logged_session):
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 login_config = var_manager.get_variable("login_config")
                 params = {
                     "_t": current_timestamp_seconds,
                     "page": 1,
-                    "limit": 20,
+                    "limit": 50,
                     "type": "",
                     "status": "",
                     "dividendTimeBegin": "2025-09-09",

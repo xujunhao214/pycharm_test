@@ -222,7 +222,7 @@ class Test_topup:
         def test_cgform_api(self, var_manager, logged_session):
             payment_comment = "测试充值"
 
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 params = {
                     "_t": current_timestamp_seconds,
                     "column": "id",
@@ -276,7 +276,7 @@ class Test_topup:
 
         @allure.title("任务中心-充值审核-审核驳回")
         def test_wallet_aduitRecharge(self, var_manager, logged_session):
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 top_user_id = var_manager.get_variable("top_user_id")
                 data = {
                     "id": top_user_id,
@@ -590,7 +590,7 @@ class Test_topup:
         def test_cgform_api(self, var_manager, logged_session):
             payment_comment = "测试充值"
 
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 params = {
                     "_t": current_timestamp_seconds,
                     "column": "id",
@@ -644,7 +644,7 @@ class Test_topup:
 
         @allure.title("任务中心-充值审核-审核通过")
         def test_wallet_aduitRecharge(self, var_manager, logged_session):
-            with allure.step("1. 构造参数并发送GET请求"):
+            with allure.step("1. 发送GET请求"):
                 top_user_id = var_manager.get_variable("top_user_id")
                 data = {
                     "id": top_user_id,

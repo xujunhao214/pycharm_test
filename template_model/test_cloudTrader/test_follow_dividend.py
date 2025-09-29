@@ -20,7 +20,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 20,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": dividendTime_ago,
@@ -88,7 +88,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 20,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": dividendTime_now,
@@ -140,7 +140,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 20,
+                "limit": 50,
                 "type": status,
                 "status": "",
                 "dividendTimeBegin": "",
@@ -214,7 +214,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": status,
                 "dividendTimeBegin": "",
@@ -275,7 +275,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": "",
@@ -334,7 +334,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": "",
@@ -373,7 +373,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": "",
@@ -432,7 +432,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": "",
@@ -472,7 +472,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": "",
@@ -542,7 +542,7 @@ class Test_dividend(APITestBase):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
-                "limit": 100,
+                "limit": 50,
                 "type": "",
                 "status": "",
                 "dividendTimeBegin": "",
