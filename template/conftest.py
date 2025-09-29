@@ -358,7 +358,7 @@ class TestResultTracker:
         elif report.outcome == "skipped":
             self.skipped += 1
             self.skipped_test_names.append(report.nodeid)
-            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "该用例暂时跳过")
+            self.skipped_reasons[report.nodeid] = getattr(report, "reason", "跳过此用例")
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 

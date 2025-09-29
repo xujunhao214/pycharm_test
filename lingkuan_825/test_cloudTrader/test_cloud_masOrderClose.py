@@ -10,7 +10,7 @@ import requests
 from lingkuan_825.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("云策略-策略账号交易下单-平仓的功能校验")

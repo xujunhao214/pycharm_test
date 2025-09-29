@@ -91,7 +91,7 @@ def send_feishu_notification(
         markdown_content += "\n**跳过用例列表**:\n"
         skipped_reasons = statistics.get("skipped_reasons", {})
         for case in skipped_cases:
-            reason = skipped_reasons.get(case, "该用例暂时跳过")
+            reason = skipped_reasons.get(case, "跳过此用例")
             # markdown_content += f"- {case} (原因: {reason})\n"
             markdown_content += f"- {case}\n"
 

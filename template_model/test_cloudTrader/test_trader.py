@@ -14,7 +14,7 @@ class Test_trader_query(APITestBase):
     # 实例化JsonPath工具类（全局复用）
     json_utils = JsonPathUtils()
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("绑定时间查询")
     def test_query_create_time(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -81,7 +81,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的绑定时间校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("绑定时间查询-查询结果为空")
     def test_query_create_timeno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -118,7 +118,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("用户查询")
     def test_query_usrid(self, var_manager, logged_session):
         trader_user_id = var_manager.get_variable("trader_user_id")
@@ -169,7 +169,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"查询结果,用户是：{update_by}"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("策略名称查询-存在结果")
     def test_query_policy_name(self, var_manager, logged_session):
         valid_strategy_name = var_manager.get_variable("valid_strategy_name")
@@ -210,7 +210,7 @@ class Test_trader_query(APITestBase):
                 attachment_name=f"查询结果"
             )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("策略名称查询-查询结果为空")
     def test_query_policy_noname(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -323,7 +323,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"{status_desc}状态第 {idx + 1} 条记录校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4账号查询-存在结果")
     def test_query_MT4account(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -363,7 +363,7 @@ class Test_trader_query(APITestBase):
                 attachment_name=f"查询结果,MT4账号是：{account}"
             )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4账号查询-查询结果为空")
     def test_query_MT4accountNO(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -398,7 +398,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("经纪商查询")
     def test_query_broker_id(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -456,7 +456,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的broker_id校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("服务器查询")
     def test_query_server_id(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -514,7 +514,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的server_id校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("虚拟服务商查询")
     def test_query_virtual_server_name(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -572,7 +572,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"查询结果"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("订阅类型查询-手数-查询结果为空")
     def test_query_subscribe_fee_idsize(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -608,7 +608,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("订阅类型查询-月-查询结果为空")
     def test_query_subscribe_fee_idmonth(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -644,7 +644,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("订阅费查询")
     def test_query_subscribe_fee(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -701,7 +701,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的订阅费校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("订阅费查询-查询结果为空")
     def test_query_subscribe_feeno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -737,7 +737,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("等级查询")
     def test_query_level_id(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -793,7 +793,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的等级校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("等级查询-查询结果为空")
     def test_query_level_idno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -829,7 +829,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("是否连接查询-是")
     def test_query_connected(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -885,7 +885,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的连接校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("是否连接查询-否")
     def test_query_connectednot(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -941,7 +941,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的连接校验"
                 )
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("推荐人ID查询")
     def test_query_recommenders(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -999,7 +999,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的推荐人ID校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("推荐人ID查询-查询结果为空")
     def test_query_recommendersno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -1035,7 +1035,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("推荐人名字查询")
     def test_query_recommenders_name(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -1094,7 +1094,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的推荐人名字校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("推荐人名字查询-查询结果为空")
     def test_query_recommenders_nameno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -1130,7 +1130,7 @@ class Test_trader_query(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("组合查询")
     def test_query_combination(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -1191,7 +1191,7 @@ class Test_trader_query(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的推荐人ID校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("高级查询-策略名称查询")
     def test_query_superQueryParams_val(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):

@@ -13,7 +13,7 @@ class Test_dividend(APITestBase):
     # 实例化JsonPath工具类（全局复用）
     json_utils = JsonPathUtils()
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("分红时间查询")
     def test_query_dividendTime(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -81,7 +81,7 @@ class Test_dividend(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的分红时间校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("分红时间查询-查询结果为空")
     def test_query_dividendTimeno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -125,7 +125,7 @@ class Test_dividend(APITestBase):
         ("1", "代理分红")
     ]
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @pytest.mark.parametrize("status, status_desc", STATUS_PARAMS)
     @allure.title("分红类型查询：{status_desc}（{status}）")
     def test_query_create_time(self, var_manager, logged_session, status, status_desc):
@@ -199,7 +199,7 @@ class Test_dividend(APITestBase):
         ("3", "不分红")
     ]
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @pytest.mark.parametrize("status, status_desc", STATUS_PARAMS)
     @allure.title("分红状态查询：{status_desc}（{status}）")
     def test_query_status(self, var_manager, logged_session, status, status_desc):
@@ -266,7 +266,7 @@ class Test_dividend(APITestBase):
                     attachment_name=f"分红状态:{status_desc}第 {idx + 1} 条记录校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("跟单用户查询")
     def test_query_followerUser(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -327,7 +327,7 @@ class Test_dividend(APITestBase):
                     attachment_name=f"跟单用户:{followerUser}第 {idx + 1} 条记录校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("跟单用户查询-查询结果为空")
     def test_query_followerUserno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -365,7 +365,7 @@ class Test_dividend(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("跟单账号查询")
     def test_query_followerTa(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -425,7 +425,7 @@ class Test_dividend(APITestBase):
                     attachment_name=f"跟单账号:{followerTa}第 {idx + 1} 条记录校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("跟单账号查询-查询结果为空")
     def test_query_followerTaNO(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -463,7 +463,7 @@ class Test_dividend(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("分红用户查询")
     def test_query_dividendUser(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -535,7 +535,7 @@ class Test_dividend(APITestBase):
                 attachment_type="text/plain"
             )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("分红用户查询-查询结果为空")
     def test_query_dividendUserNO(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):

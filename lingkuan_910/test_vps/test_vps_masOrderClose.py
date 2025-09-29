@@ -9,7 +9,7 @@ import requests
 from lingkuan_910.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("VPS策略账号交易下单-平仓的功能校验")

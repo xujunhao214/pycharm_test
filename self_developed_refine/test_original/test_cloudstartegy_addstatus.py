@@ -10,7 +10,7 @@ from self_developed_refine.commons.api_base import *
 from self_developed_refine.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("交易下单-云策略复制下单-策略账号-策略状态关闭")

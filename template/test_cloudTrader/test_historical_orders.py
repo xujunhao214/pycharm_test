@@ -14,7 +14,7 @@ class Test_historical(APITestBase):
     # 实例化JsonPath工具类（全局复用）
     json_utils = JsonPathUtils()
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("订单查询")
     def test_query_order_no(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -71,7 +71,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的订单校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("订单查询-查询结果为空")
     def test_query_orderNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -184,7 +184,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"类型-{type_desc}：第 {idx + 1} 条记录校验"
                 )
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("开仓时间查询")
     def test_query_open_time(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -240,7 +240,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的开仓时间校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("开仓时间查询-查询结果为空")
     def test_query_open_timeNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -275,7 +275,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("平仓时间查询")
     def test_query_close_time(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -332,7 +332,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的平仓时间校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("平仓时间查询-查询结果为空")
     def test_query_close_timeNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -368,7 +368,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("交易品种查询")
     def test_query_symbol(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -425,7 +425,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的交易品种校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("交易品种查询-查询结果为空")
     def test_query_symbolNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -460,7 +460,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("注释查询")
     def test_query_comment(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -517,7 +517,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的注释校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("注释查询-查询结果为空")
     def test_query_commentNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -552,7 +552,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4账号查询")
     def test_query_trader_id(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -610,7 +610,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的MT4账号校验,MT4账号是{trader_account}"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("MT4账号查询-查询结果为空")
     def test_query_trader_idNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -645,7 +645,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("所属账户查询")
     def test_query_owning_userid(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -703,7 +703,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的所属账户校验,所属账户是{trader_audit_by}"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("所属账户查询-查询结果为空")
     def test_query_owning_useridNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -738,7 +738,7 @@ class Test_historical(APITestBase):
             logging.info("查询结果符合预期：records为空列表")
             allure.attach("查询结果为空，符合预期", 'text/plain')
 
-    @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("策略订单号查询")
     def test_query_master_orderno(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):
@@ -795,7 +795,7 @@ class Test_historical(APITestBase):
                     attachment_name=f"第 {idx + 1} 条记录的策略订单号校验"
                 )
 
-    # @pytest.mark.skipif(True, reason="该用例暂时跳过")
+    # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("策略订单号查询-查询结果为空")
     def test_query_master_ordernoNone(self, var_manager, logged_session):
         with allure.step("1. 发送请求"):

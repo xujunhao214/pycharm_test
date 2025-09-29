@@ -8,7 +8,7 @@ from lingkuan_828.conftest import var_manager
 from lingkuan_828.commons.api_base import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("云策略manager策略账号交易下单")

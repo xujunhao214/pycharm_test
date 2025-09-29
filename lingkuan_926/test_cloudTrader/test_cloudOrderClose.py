@@ -10,7 +10,7 @@ from lingkuan_926.commons.jsonpath_utils import JsonPathUtils
 from lingkuan_926.public_function.cloud_public import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 # ------------------------------------

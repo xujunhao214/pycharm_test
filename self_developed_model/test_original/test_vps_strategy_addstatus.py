@@ -9,7 +9,7 @@ from self_developed_model.commons.api_base import *
 from self_developed_model.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("VPS策略下单-关闭策略跟单状态")

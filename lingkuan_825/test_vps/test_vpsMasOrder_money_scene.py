@@ -7,7 +7,7 @@ from lingkuan_825.conftest import var_manager
 from lingkuan_825.commons.api_base import *
 
 logger = logging.getLogger(__name__)
-SKIP_REASON = "该用例暂时跳过"
+SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("跟单软件看板-vps数据-修改跟单账号")
