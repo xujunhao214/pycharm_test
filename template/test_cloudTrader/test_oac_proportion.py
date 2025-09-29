@@ -26,9 +26,9 @@ class Test_proportionall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-持仓订单-喊单和跟单数据校验
-      8.账号管理-历史订单-喊单和跟单数据校验
-      9.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-持仓订单-喊单和跟单数据校验
+      8. 账号管理-历史订单-喊单和跟单数据校验
+      9. 跟单管理-开仓日志-喊单和跟单数据校验
       10.跟单管理-VPS管理-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
@@ -123,7 +123,7 @@ class Test_proportionall:
             public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -546,7 +546,7 @@ class Test_proportionall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1165,8 +1165,8 @@ class Test_proportionall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-历史订单-喊单和跟单数据校验
-      8.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-历史订单-喊单和跟单数据校验
+      8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
@@ -1260,7 +1260,7 @@ class Test_proportionall:
             public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1683,7 +1683,7 @@ class Test_proportionall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2141,8 +2141,8 @@ class Test_proportionall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-历史订单-喊单和跟单数据校验
-      8.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-历史订单-喊单和跟单数据校验
+      8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确,手数最低是0.01
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
@@ -2236,7 +2236,7 @@ class Test_proportionall:
             public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2659,7 +2659,7 @@ class Test_proportionall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3117,8 +3117,8 @@ class Test_proportionall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-历史订单-喊单和跟单数据校验
-      8.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-历史订单-喊单和跟单数据校验
+      8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
@@ -3212,7 +3212,7 @@ class Test_proportionall:
             public_front.test_dbquery_openorder(var_manager, db_transaction)
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3662,7 +3662,7 @@ class Test_proportionall:
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

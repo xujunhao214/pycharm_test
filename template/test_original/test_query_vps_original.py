@@ -95,7 +95,7 @@ class Test_openandclouseall:
             logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

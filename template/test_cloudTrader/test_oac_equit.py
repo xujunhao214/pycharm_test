@@ -26,9 +26,9 @@ class Test_equitall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-持仓订单-喊单和跟单数据校验
-      8.账号管理-历史订单-喊单和跟单数据校验
-      9.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-持仓订单-喊单和跟单数据校验
+      8. 账号管理-历史订单-喊单和跟单数据校验
+      9. 跟单管理-开仓日志-喊单和跟单数据校验
       10.跟单管理-VPS管理-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
@@ -93,7 +93,7 @@ class Test_equitall:
                                                            "$.result.data.records[0].fixed_proportion")
                 var_manager.set_runtime_variable("fixed_proportion", fixed_proportion)
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-提取喊单者净值")
         def test_query_get_traderquit(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -700,7 +700,7 @@ class Test_equitall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -1366,8 +1366,8 @@ class Test_equitall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-历史订单-喊单和跟单数据校验
-      8.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-历史订单-喊单和跟单数据校验
+      8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
@@ -1431,7 +1431,7 @@ class Test_equitall:
                                                            "$.result.data.records[0].fixed_proportion")
                 var_manager.set_runtime_variable("fixed_proportion", fixed_proportion)
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-提取喊单者净值")
         def test_query_get_traderquit(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2038,7 +2038,7 @@ class Test_equitall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -2543,8 +2543,8 @@ class Test_equitall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-历史订单-喊单和跟单数据校验
-      8.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-历史订单-喊单和跟单数据校验
+      8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
@@ -2608,7 +2608,7 @@ class Test_equitall:
                                                            "$.result.data.records[0].fixed_proportion")
                 var_manager.set_runtime_variable("fixed_proportion", fixed_proportion)
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-提取喊单者净值")
         def test_query_get_traderquit(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3213,7 +3213,7 @@ class Test_equitall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -3716,8 +3716,8 @@ class Test_equitall:
       4. 跟单管理-开仓日志-喊单和跟单数据校验
       5. 跟单管理-VPS管理-喊单和跟单数据校验
       6. MT4进行平仓
-      7.账号管理-历史订单-喊单和跟单数据校验
-      8.跟单管理-开仓日志-喊单和跟单数据校验
+      7. 账号管理-历史订单-喊单和跟单数据校验
+      8. 跟单管理-开仓日志-喊单和跟单数据校验
     - 预期结果：喊单和跟单数据校验正确
     """)
     # @pytest.mark.skipif(True, reason="跳过此用例")
@@ -3781,7 +3781,7 @@ class Test_equitall:
                                                            "$.result.data.records[0].fixed_proportion")
                 var_manager.set_runtime_variable("fixed_proportion", fixed_proportion)
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-提取喊单者净值")
         def test_query_get_traderquit(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -4386,7 +4386,7 @@ class Test_equitall:
 
                 # @pytest.mark.skipif(True, reason="跳过此用例")
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

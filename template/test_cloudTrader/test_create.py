@@ -29,7 +29,7 @@ class Test_create:
                 brokerId = db_data[0]["id"]
                 var_manager.set_runtime_variable("trader_broker_id", brokerId)
 
-        @pytest.mark.retry(n=3, delay=20)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-交易员账号-绑定交易员-用户列表-提取用户id")
         def test_user_list(self, var_manager, logged_session):
             target_email = "xujunhao@163.com"
@@ -371,11 +371,9 @@ class Test_create:
                     params=params
                 )
             with allure.step("2. 提取数据"):
-                run_ip_addr = db_data[0]["run_ip_addr"]
                 equity = db_data[0]["equity"]
                 equity_init = db_data[0]["equity_init"]
                 audit_by = db_data[0]["audit_by"]
-                var_manager.set_runtime_variable("trader_run_ip_addr", run_ip_addr)
                 var_manager.set_runtime_variable("trader_equity", equity)
                 var_manager.set_runtime_variable("trader_equity_init", equity_init)
                 var_manager.set_runtime_variable("trader_audit_by", audit_by)
@@ -451,7 +449,7 @@ class Test_create:
         def test_update(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
                 trader_pass_id = var_manager.get_variable("trader_pass_id")
-                trader_run_ip_addr = var_manager.get_variable("trader_run_ip_addr")
+                vpsrunIpAddr = var_manager.get_variable("vpsrunIpAddr")
                 trader_equity_init = var_manager.get_variable("trader_equity_init")
                 trader_equity = var_manager.get_variable("trader_equity")
                 trader_audit_by = var_manager.get_variable("trader_audit_by")
@@ -464,7 +462,8 @@ class Test_create:
                     "strategy_introduce_cn": "中文",
                     "strategy_introduce_ch": "繁体",
                     "strategy_introduce_en": "English",
-                    "run_ip_addr": trader_run_ip_addr,
+                    "run_ip_addr": vpsrunIpAddr,
+                    "bind_ip_addr": vpsrunIpAddr,
                     "status_pass_time": DATETIME_NOW,
                     "subscribe_fee": 0,
                     "equity_init": trader_equity_init,
