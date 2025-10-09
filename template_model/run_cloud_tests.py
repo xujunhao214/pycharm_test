@@ -29,7 +29,7 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",
 
         # "test_cloudTrader/test_create.py",
-        "test_cloudTrader/test_openclose.py",
+        # "test_cloudTrader/test_openclose.py",
         # "test_cloudTrader/test_oac_proportion.py",
         # "test_cloudTrader/test_oac_number.py",
         # "test_cloudTrader/test_oac_equit.py",
@@ -44,7 +44,7 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_time_difference.py",
         # "test_cloudTrader/test_add_delete.py",
         # "test_cloudTrader/test_delete.py",
-        # "test_cloudTrader/test_lianxi.py",
+        "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
 
         "--log-file=./Logs/cloud_pytest.log",
