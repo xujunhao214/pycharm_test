@@ -23,13 +23,9 @@ class PublicUtils(APITestBase):
     def test_login(self, var_manager):
         with allure.step("1. 跟单社区前端-发送登录请求"):
             url = f"{URL_TOP}/sys/mLogin"
+            login_web = var_manager.get_variable("login_web")
 
-            payload = json.dumps({
-                "username": "xujunhao@163.com",
-                "password": "123456",
-                "lang": 0,
-                "orgCode": "A01"
-            })
+            payload = json.dumps(login_web)
             headers = {
                 'priority': 'u=1, i',
                 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NTgyNDY3ODIsInVzZXJuYW1lIjoiYW5vbnltb3VzIn0.lvI66l-hA0VqHCsfgODrPoH4KylpOpzVuSOOycls5gE',
