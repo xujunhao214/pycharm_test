@@ -136,7 +136,7 @@ class Test_dividend(APITestBase):
             attachment_type="text/plain"
         )
 
-        with allure.step("1. 发送请求：查询[{status_desc}]状态（{status}）"):
+        with allure.step(f"1. 发送请求：查询[{status_desc}]状态（{status}）"):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,
@@ -210,7 +210,7 @@ class Test_dividend(APITestBase):
             attachment_type="text/plain"
         )
 
-        with allure.step("1. 发送请求：查询[{status_desc}]状态（{status}）"):
+        with allure.step(f"1. 发送请求：查询[{status_desc}]状态（{status}）"):
             params = {
                 "_t": current_timestamp_seconds,
                 "page": 1,

@@ -45,7 +45,7 @@ class Test_delete(APITestBase):
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
             print(response.text)
-            logging.info(f"登录返回信息：{response.text}")
+            logging.info(f"响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
         with allure.step("2. 返回校验"):
@@ -79,7 +79,7 @@ class Test_delete(APITestBase):
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
             print(response.text)
-            logging.info(f"登录返回信息：{response.text}")
+            logging.info(f"响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
         with allure.step("2. 返回校验"):
@@ -142,7 +142,7 @@ class Test_delete(APITestBase):
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
             print(response.text)
-            logging.info(f"登录返回信息：{response.text}")
+            logging.info(f"响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
         with allure.step("2. 返回校验"):
@@ -176,7 +176,7 @@ class Test_delete(APITestBase):
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
             print(response.text)
-            logging.info(f"登录返回信息：{response.text}")
+            logging.info(f"响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
         with allure.step("2. 返回校验"):
