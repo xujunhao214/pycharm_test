@@ -23,13 +23,9 @@ class PublicUtils(APITestBase):
     def test_login(self, var_manager):
         with allure.step("1. 跟单社区前端-发送登录请求"):
             url = f"{URL_TOP}/sys/mLogin"
+            login_web = var_manager.get_variable("login_web")
 
-            payload = json.dumps({
-                "username": "xujunhao@163.com",
-                "password": "123456",
-                "lang": 0,
-                "orgCode": "A01"
-            })
+            payload = json.dumps(login_web)
             headers = {
                 'priority': 'u=1, i',
                 'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NTgyNDY3ODIsInVzZXJuYW1lIjoiYW5vbnltb3VzIn0.lvI66l-hA0VqHCsfgODrPoH4KylpOpzVuSOOycls5gE',
@@ -44,7 +40,7 @@ class PublicUtils(APITestBase):
             allure.attach(url, "请求URL", allure.attachment_type.TEXT)
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            # print(response.text)
+            # print(f"响应信息：{response.text}")
             logging.info(f"登录响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
@@ -80,7 +76,7 @@ class PublicUtils(APITestBase):
             allure.attach(url, "请求URL", allure.attachment_type.TEXT)
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            # print(response.text)
+            # print(f"响应信息：{response.text}")
             logging.info(f"喊单账号平仓响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
@@ -102,7 +98,7 @@ class PublicUtils(APITestBase):
             allure.attach(url, "请求URL", allure.attachment_type.TEXT)
             headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
             allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            # print(response.text)
+            # print(f"响应信息：{response.text}")
             logging.info(f"跟单账号平仓响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
