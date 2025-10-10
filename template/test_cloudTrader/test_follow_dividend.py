@@ -528,13 +528,6 @@ class Test_dividend(APITestBase):
                 f"所有返回值：{dividendUser_list}"
             )
 
-            allure.attach(
-                body=f"找到 {len(matched_records)} 条符合预期的记录：\n" + \
-                     "\n".join([f"第 {idx} 条：{user}" for idx, user in matched_records]),
-                name=f"符合预期的分红用户记录",
-                attachment_type="text/plain"
-            )
-
     # @pytest.mark.skipif(True, reason="跳过此用例")
     @allure.title("分红用户查询-查询结果为空")
     def test_query_dividendUserNO(self, var_manager, logged_session):

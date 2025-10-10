@@ -36,7 +36,7 @@ class Test_delete(APITestBase):
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'content-type': 'application/json',
                 'Accept': '*/*',
-                'Host': 'dev.lgcopytrade.top',
+                # 'Host': 'dev.lgcopytrade.top',
                 'Connection': 'keep-alive'
             }
 
@@ -70,7 +70,7 @@ class Test_delete(APITestBase):
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'content-type': 'application/json',
                 'Accept': '*/*',
-                'Host': 'dev.lgcopytrade.top',
+                # 'Host': 'dev.lgcopytrade.top',
                 'Connection': 'keep-alive'
             }
 
@@ -133,7 +133,7 @@ class Test_delete(APITestBase):
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'content-type': 'application/json',
                 'Accept': '*/*',
-                'Host': 'dev.lgcopytrade.top',
+                # 'Host': 'dev.lgcopytrade.top',
                 'Connection': 'keep-alive'
             }
 
@@ -167,7 +167,7 @@ class Test_delete(APITestBase):
                 'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
                 'content-type': 'application/json',
                 'Accept': '*/*',
-                'Host': 'dev.lgcopytrade.top',
+                # 'Host': 'dev.lgcopytrade.top',
                 'Connection': 'keep-alive'
             }
 

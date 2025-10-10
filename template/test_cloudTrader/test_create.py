@@ -32,7 +32,8 @@ class Test_create:
         @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-交易员账号-绑定交易员-用户列表-提取用户id")
         def test_user_list(self, var_manager, logged_session):
-            target_email = "xujunhao@163.com"
+            login_config = var_manager.get_variable("login_config")
+            target_email = login_config["username"]
 
             with allure.step("1. 发送GET请求"):
                 params = {
@@ -539,7 +540,8 @@ class Test_create:
 
         @allure.title("账号管理-跟随者账号-绑定跟随者-用户列表-提取用户id")
         def test_user_list(self, var_manager, logged_session):
-            target_email = "xujunhao@163.com"
+            login_config = var_manager.get_variable("login_config")
+            target_email = login_config["username"]
             with allure.step("1. 发送GET请求"):
                 params = {
                     "_t": current_timestamp_seconds,

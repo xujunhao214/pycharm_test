@@ -20,9 +20,9 @@ ENV_CONFIG = {
     Environment.TEST.value: {
         "test_environment": "测试环境",
         "browser_version": "跟单社区",
-        "base_url": "https://dev.lgcopytrade.top/api",
+        "base_url": "https://test.lgcopytrade.top/api",
         # "vps_url": "http://39.99.136.49:9001",
-        "db_host": "39.99.146.95",
+        "db_host": "39.103.138.2",
         "db_port": 3306,
     },
     Environment.DEV.value: {

@@ -7,13 +7,13 @@ import pymysql
 # 环境配置
 ENV_CONFIG = {
     Environment.TEST: {
-        "base_url": "https://dev.lgcopytrade.top/api",
+        "base_url": "https://test.lgcopytrade.top/api",
         "vps_url": "http://39.99.136.49/vps",
         "db_config": {
-            "host": "39.99.146.95",
+            "host": "39.103.138.2",
             "port": 3306,
-            "user": "root",
-            "password": "gQ9^sR7#tD5j",
+            "user": "junhao",
+            "password": "mB0iE0gO2hC1!!",
             "database": "copyglobal_v2_schema",
             "charset": "utf8mb4",
             "cursorclass": pymysql.cursors.DictCursor,

@@ -32,7 +32,7 @@ class PublicUtils(APITestBase):
                 'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NTc0OTMyMDMsInVzZXJuYW1lIjoiYWRtaW4ifQ.PkFLjsBa0NbCUF8ROtmIGABzYmUH2ldQfqz_ERvaKsY',
                 'content-type': 'application/json',
                 'Accept': '*/*',
-                'Host': 'dev.lgcopytrade.top',
+                # 'Host': 'dev.lgcopytrade.top',
                 'Connection': 'keep-alive'
             }
 
@@ -68,7 +68,7 @@ class PublicUtils(APITestBase):
                 'priority': 'u=1, i',
                 'X-Access-Token': token_top,
                 'Accept': '*/*',
-                'Host': 'dev.lgcopytrade.top',
+                # 'Host': 'dev.lgcopytrade.top',
                 'Connection': 'keep-alive'
             }
 

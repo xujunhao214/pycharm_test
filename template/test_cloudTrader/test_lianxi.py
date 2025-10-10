@@ -20,103 +20,69 @@ class Test_delete(APITestBase):
     # 实例化JsonPath工具类（全局复用）
     json_utils = JsonPathUtils()
 
-    @allure.title("公共方法-校验前操作")
-    def test_run_public(self, var_manager, logged_session, db_transaction):
-        # 实例化类
-        public_front = PublicUtils()
+    # @allure.title("公共方法-校验前操作")
+    # def test_run_public(self, var_manager, logged_session, db_transaction):
+    #     # 实例化类
+    #     public_front = PublicUtils()
+    #
+    #     # 登录MT4账号获取token
+    #     public_front.test_mt4_login(var_manager)
+    #     # MT4平台开仓操作
+    #     public_front.test_mt4_open(var_manager)
+    #     # 提跟单订单号
+    #     public_front.test_dbquery_openorder(var_manager, db_transaction)
+    #
+    #     public_front.test_mt4_close(var_manager, db_transaction)
 
-        # 登录MT4账号获取token
-        public_front.test_mt4_login(var_manager)
-        # MT4平台开仓操作
-        public_front.test_mt4_open(var_manager)
-        # 提跟单订单号
-        public_front.test_dbquery_openorder(var_manager, db_transaction)
+    @allure.title("数据库查询-提取数据")
+    def test_dbbchain_trader(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库"):
+            sql = f"SELECT id,name FROM bchain_trader_broker WHERE name = %s"
+            params = ("CPT Markets",)
+            db_data = self.query_database(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params
+            )
+        with allure.step("2. 提取数据"):
+            brokerId = db_data[0]["id"]
+            var_manager.set_runtime_variable("trader_broker_id", brokerId)
 
-        public_front.test_mt4_close(var_manager, db_transaction)
+    @allure.title("账号管理-交易员账号-绑定交易员-用户列表-提取用户id")
+    def test_user_list(self, var_manager, logged_session):
+        login_config = var_manager.get_variable("login_config")
+        target_email = login_config["username"]
 
-    # @allure.title("账号管理-交易员账号-绑定账户")
-    # def test_account_bind(self, var_manager, logged_session):
-    #     trader_account = var_manager.get_variable("trader_account")
-    #     trader_password = var_manager.get_variable("trader_password")
-    #     trader_user_id = var_manager.get_variable("trader_user_id")
-    #     trader_broker_id = var_manager.get_variable("trader_broker_id")
-    #     trader_server_id = var_manager.get_variable("trader_server_id")
-    #     data = {
-    #         "userId": trader_user_id,
-    #         "brokerId": trader_broker_id,
-    #         "serverId": trader_server_id,
-    #         "account": trader_account,
-    #         "password": trader_password,
-    #         "display": "PUBLIC",
-    #         "passwordType": "0",
-    #         "subscribeFee": "0",
-    #         "type": "MASTER_REAL",
-    #         "strategy": "",
-    #         "platform": "4"
-    #     }
-    #     response = self.send_post_request(
-    #         logged_session,
-    #         '/blockchain/account/bind',
-    #         json_data=data
-    #     )
-    #
-    #     self.assert_json_value(
-    #         response,
-    #         "$.success",
-    #         True,
-    #         "响应success字段应为true"
-    #     )
-    #
-    # @allure.title("账号管理-交易员账号-绑定交易员-提取服务器ID")
-    # def test_api_getData1(self, var_manager, logged_session):
-    #     target_server = "CPTMarkets-Demo"
-    #     trader_broker_id = var_manager.get_variable("trader_broker_id")
-    #     with allure.step("1. 发送请求"):
-    #         params = {
-    #             "_t": current_timestamp_seconds,
-    #             "broker_id": trader_broker_id,
-    #             "pageSize": "50"
-    #         }
-    #         response = self.send_get_request(
-    #             logged_session,
-    #             '/online/cgform/api/getData/402883917b2f2594017b335d3ddb0001',
-    #             params=params
-    #         )
-    #
-    #     with allure.step("2. 返回校验"):
-    #         self.assert_json_value(
-    #             response,
-    #             "$.success",
-    #             True,
-    #             "响应success字段应为true"
-    #         )
-    #
-    #     with allure.step("3. 提取服务器的ID"):
-    #         all_servers = self.json_utils.extract(
-    #             data=response.json(),
-    #             expression="$.result.records[*]",
-    #             multi_match=True,
-    #             default=[]
-    #         )
-    #
-    #         server_id = None
-    #         existing_servers = [server.get("server") for server in all_servers if server.get("server")]
-    #
-    #         for server in all_servers:
-    #             current_server = server.get("server")
-    #             if current_server == target_server:
-    #                 server_id = server.get("id")
-    #                 break
-    #
-    #         assert server_id is not None, (
-    #             f"未找到服务器[{target_server}]的ID！"
-    #             f"\n当前返回的服务器列表：{existing_servers}"
-    #             f"\n请检查：1. 服务器名称是否正确 2. 是否在当前分页（pageSize=50）"
-    #         )
-    #         logging.info(f"提取成功 | 服务器名称: {target_server} | server_id: {server_id}")
-    #         var_manager.set_runtime_variable("trader_server_id", server_id)
-    #         allure.attach(
-    #             name="服务器id",
-    #             body=str(server_id),
-    #             attachment_type=allure.attachment_type.TEXT
-    #         )
+        with allure.step("1. 发送GET请求"):
+            params = {
+                "_t": current_timestamp_seconds,
+                "username": target_email,
+                "column": "createTime",
+                "field": "id,,id,createTime,username,nickname,email,countryName,phone,avatar,realname,post_dictText,whiteLabelNameEn,invitationCode,agentLevel,agentLeader,isMfaVerified,orgCodeTxt,introduce,status_dictText,country,lang,trialPeriod,bufferDay,action",
+                "pageNo": "1",
+                "pageSize": "20",
+                "order": "desc"
+            }
+
+            response = self.send_get_request(
+                logged_session,
+                '/sys/user/list',
+                params=params
+            )
+
+        with allure.step("2. 返回校验"):
+            self.assert_json_value(
+                response,
+                "$.success",
+                True,
+                "响应success字段应为true"
+            )
+
+        with allure.step(f"3. 提取用户ID"):
+            user_id = self.json_utils.extract(response.json(), "$.result.records[0].id")
+            var_manager.set_runtime_variable("trader_user_id", user_id)
+            allure.attach(
+                name="用户ID",
+                body=str(user_id),
+                attachment_type=allure.attachment_type.TEXT
+            )

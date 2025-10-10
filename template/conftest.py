@@ -117,11 +117,11 @@ def logged_session(api_session, var_manager, request, environment):
                     # 新增：打印完整响应，关键！确认接口返回格式
                     # logger.info(f"验证码接口响应状态码: {captcha_response.status_code}")
                     # logger.info(f"验证码接口响应头: {captcha_response.headers}")
-                    # logger.info(f"验证码接口响应内容（前1000字符）: {captcha_response.text[:1000]}")
+                    logger.info(f"验证码接口响应内容: {captcha_response.text}")
 
                     try:
                         captcha_json = captcha_response.json()
-                        # logger.info(f"验证码接口JSON响应: {captcha_json}")
+                        logger.info(f"验证码接口JSON响应: {captcha_json}")
                     except Exception as e:
                         logger.error(f"解析验证码响应为JSON失败（可能返回图片流）: {str(e)}")
                         # 若返回图片流，直接将响应内容转为Base64
@@ -155,7 +155,7 @@ def logged_session(api_session, var_manager, request, environment):
                         'tenant_id': '0',
                         'content-type': 'application/json;charset=UTF-8',
                         'Accept': '*/*',
-                        'Host': 'dev.lgcopytrade.top',
+                        # 'Host': 'dev.lgcopytrade.top',
                         'Connection': 'keep-alive'
                     }
 
@@ -207,7 +207,7 @@ def logged_session(api_session, var_manager, request, environment):
         'tenant_id': '0',
         'content-type': 'application/json;charset=UTF-8',
         'Accept': '*/*',
-        'Host': 'dev.lgcopytrade.top',
+        # 'Host': 'dev.lgcopytrade.top',
         'Connection': 'keep-alive'
     })
 

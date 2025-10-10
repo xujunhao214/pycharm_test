@@ -24,7 +24,7 @@ class Test_agent(APITestBase):
             "dividendTimeBegin": "",
             "dividendTimeEnd": "",
             "followerUser": "xujunhao@163.com",
-            "followerTa": "301388048",
+            "followerTa": "301390775",
             "dividendUser": ""
         },
         {
@@ -36,7 +36,7 @@ class Test_agent(APITestBase):
             "dividendTimeBegin": "",
             "dividendTimeEnd": "",
             "followerUser": "xujunhao2@163.com",
-            "followerTa": "301387254",
+            "followerTa": "301390778",
             "dividendUser": ""
         },
         {
@@ -48,7 +48,7 @@ class Test_agent(APITestBase):
             "dividendTimeBegin": "",
             "dividendTimeEnd": "",
             "followerUser": "xujunhao3@163.com",
-            "followerTa": "301388062",
+            "followerTa": "301390780",
             "dividendUser": ""
         },
         {
@@ -60,7 +60,7 @@ class Test_agent(APITestBase):
             "dividendTimeBegin": "",
             "dividendTimeEnd": "",
             "followerUser": "xujunhao4@163.com",
-            "followerTa": "301388316",
+            "followerTa": "301390783",
             "dividendUser": ""
         },
         {
@@ -72,7 +72,19 @@ class Test_agent(APITestBase):
             "dividendTimeBegin": "",
             "dividendTimeEnd": "",
             "followerUser": "xujunhao5@163.com",
-            "followerTa": "301388532",
+            "followerTa": "301390785",
+            "dividendUser": ""
+        },
+        {
+            "_t": current_timestamp_seconds,
+            "page": 1,
+            "limit": 50,
+            "type": "",
+            "status": "",
+            "dividendTimeBegin": "",
+            "dividendTimeEnd": "",
+            "followerUser": "xujunhao6@163.com",
+            "followerTa": "301394553",
             "dividendUser": ""
         },
         {
@@ -126,13 +138,18 @@ class Test_agent(APITestBase):
     def test_agent_dividend_4level_usd(self, var_manager, logged_session, case_params):
         self._run_test(case_params, logged_session)
 
-    @allure.title("返佣管理-跟单分红-4级代理-AUD币种")
+    @allure.title("返佣管理-跟单分红-5级代理-USD币种")
     @pytest.mark.parametrize("case_params", [case_params_list[5]])
+    def test_agent_dividend_5level_usd(self, var_manager, logged_session, case_params):
+        self._run_test(case_params, logged_session)
+
+    @allure.title("返佣管理-跟单分红-4级代理-AUD币种")
+    @pytest.mark.parametrize("case_params", [case_params_list[6]])
     def test_agent_dividend_4level_aud(self, var_manager, logged_session, case_params):
         self._run_test(case_params, logged_session)
 
     @allure.title("返佣管理-跟单分红-4级代理-JPY币种")
-    @pytest.mark.parametrize("case_params", [case_params_list[6]])
+    @pytest.mark.parametrize("case_params", [case_params_list[7]])
     def test_agent_dividend_4level_jpy(self, var_manager, logged_session, case_params):
         self._run_test(case_params, logged_session)
 
@@ -240,6 +257,7 @@ class Test_agent(APITestBase):
                     allure.attachment_type.TEXT
                 )
             else:
+                expectDividend0 = 0.0
                 expectDividend1 = 0.0
                 expectDividend2 = 0.0
                 expectDividend3 = 0.0
@@ -288,7 +306,7 @@ class Test_agent(APITestBase):
                         dividendRate0 = self.json_utils.extract(response,
                                                                 "$.result.list[0].slaveRecords[0].dividendRate")
                         if not dividendRate0:
-                            pytest.fail("未提取到信号源分红利率（dividendRate0），无法验证预计分红金额")
+                            pytest.fail("未提取到信号源分红利率，无法验证预计分红金额")
                         dividend_rate = dividendRate0 / 100
                         expectDividend = round(float(periodProfitUsd) * dividend_rate, 1)
                         self.verify_data(
@@ -316,7 +334,7 @@ class Test_agent(APITestBase):
                         dividendRate4 = self.json_utils.extract(response,
                                                                 "$.result.list[0].slaveRecords[1].dividendRate")
                         if not all([expectDividendAmount4, dividendRate4]):
-                            pytest.fail(f"未提取到{agentLevel}的分红数据（expectDividendAmount4/dividendRate4）")
+                            pytest.fail(f"未提取到{agentLevel}的分红数据")
                         dividend_rate = dividendRate4 / 100
                         expectDividend4 = round(float(expectDividendAmount) * dividend_rate, 2)
                         self.verify_data(
@@ -344,7 +362,7 @@ class Test_agent(APITestBase):
                         dividendRate3 = self.json_utils.extract(response,
                                                                 "$.result.list[0].slaveRecords[2].dividendRate")
                         if not all([expectDividendAmount3, dividendRate3]):
-                            pytest.fail(f"未提取到{agentLevel2}的分红数据（expectDividendAmount3/dividendRate3）")
+                            pytest.fail(f"未提取到{agentLevel2}的分红数据")
                         dividend_rate = (dividendRate3 - dividendRate4) / 100
                         expectDividend3 = round(float(expectDividendAmount) * dividend_rate, 2)
                         self.verify_data(
@@ -372,7 +390,7 @@ class Test_agent(APITestBase):
                         dividendRate2 = self.json_utils.extract(response,
                                                                 "$.result.list[0].slaveRecords[3].dividendRate")
                         if not all([expectDividendAmount2, dividendRate2]):
-                            pytest.fail(f"未提取到{agentLevel3}的分红数据（expectDividendAmount2/dividendRate2）")
+                            pytest.fail(f"未提取到{agentLevel3}的分红数据")
                         dividend_rate = (dividendRate2 - dividendRate3) / 100
                         expectDividend2 = round(float(expectDividendAmount) * dividend_rate, 2)
                         self.verify_data(
@@ -400,7 +418,7 @@ class Test_agent(APITestBase):
                         dividendRate1 = self.json_utils.extract(response,
                                                                 "$.result.list[0].slaveRecords[4].dividendRate")
                         if not all([expectDividendAmount1, dividendRate1]):
-                            pytest.fail(f"未提取到{agentLevel4}的分红数据（expectDividendAmount1/dividendRate1）")
+                            pytest.fail(f"未提取到{agentLevel4}的分红数据")
                         dividend_rate = (dividendRate1 - dividendRate2) / 100
                         expectDividend1 = round(float(expectDividendAmount) * dividend_rate, 2)
                         self.verify_data(
@@ -413,23 +431,49 @@ class Test_agent(APITestBase):
                         )
                         logging.info(f"{agentLevel4}金额验证通过：{periodProfitUsd}")
 
+                agentLevel5 = self.json_utils.extract(response, "$.result.list[0].slaveRecords[5].agentLevel")
+                agentLevel5 = agentLevel5 if agentLevel5 is not None and agentLevel5 != "" else default_agent_level
+                with allure.step(f"验证{agentLevel5}金额是否正确"):
+                    if agentLevel5 == "分红":
+                        logging.info(f"{agentLevel5}代理不存在")
+                        allure.attach(f"{agentLevel5}代理不存在", "text/plain")
+                    elif periodProfitUsd < 0:
+                        logging.info("盈利金额小于0")
+                        allure.attach("盈利金额小于0,没有分红", "text/plain")
+                    else:
+                        expectDividendAmount0 = self.json_utils.extract(response,
+                                                                        "$.result.list[0].slaveRecords[5].expectDividendAmount")
+                        dividendRate0 = self.json_utils.extract(response,
+                                                                "$.result.list[0].slaveRecords[5].dividendRate")
+                        if not all([expectDividendAmount0, dividendRate0]):
+                            pytest.fail(f"未提取到{agentLevel5}的分红数据")
+                        dividend_rate = (dividendRate0 - dividendRate1) / 100
+                        expectDividend0 = round(float(expectDividendAmount) * dividend_rate, 2)
+                        self.verify_data(
+                            actual_value=float(expectDividendAmount0),
+                            expected_value=float(expectDividend0),
+                            op=CompareOp.EQ,
+                            rel_tol=1e-2,
+                            message=f"{agentLevel5}金额应符合预期",
+                            attachment_name=f"{agentLevel5}金额详情"
+                        )
+                        logging.info(f"{agentLevel5}金额验证通过：{periodProfitUsd}")
+
                 with allure.step("验证信号源分红金额是否正确"):
                     if periodProfitUsd < 0:
                         logging.info("盈利金额小于0")
                         allure.attach("盈利金额小于0,没有分红", "text/plain")
                     else:
-                        expectDividendAmount0 = self.json_utils.extract(response,
-                                                                        "$.result.list[0].slaveRecords[0].expectDividendAmount")
-                        if not expectDividendAmount0:
-                            pytest.fail("未提取到信号源分红金额（expectDividendAmount0）")
-                        expectDividend0 = round(
-                            float(expectDividendAmount) - float(expectDividend1) - float(expectDividend2) - float(
-                                expectDividend3) - float(expectDividend4),
-                            2
-                        )
+                        expectDividendAmountfen = self.json_utils.extract(response,
+                                                                          "$.result.list[0].slaveRecords[0].expectDividendAmount")
+                        if not expectDividendAmountfen:
+                            pytest.fail("未提取到信号源分红金额")
+                        expectDividendfen = round(
+                            float(expectDividendAmount) - float(expectDividend0) - float(expectDividend1) - float(
+                                expectDividend2) - float(expectDividend3) - float(expectDividend4), 2)
                         self.verify_data(
-                            actual_value=float(expectDividendAmount0),
-                            expected_value=float(expectDividend0),
+                            actual_value=float(expectDividendAmountfen),
+                            expected_value=float(expectDividendfen),
                             op=CompareOp.EQ,
                             rel_tol=1e-2,
                             message="信号源分红金额应符合预期",

@@ -4,8 +4,6 @@ import time
 import json
 import pytest
 import math
-import sys
-import os
 from typing import List, Dict, Any, Optional, Tuple
 import datetime
 from urllib.parse import urlencode
@@ -26,12 +24,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-# 定义自定义异常，用于标识业务错误导致的测试终止
-class BusinessErrorTerminateException(Exception):
-    """业务错误导致测试终止的异常"""
-    pass
-
-
 # 定义比较操作枚举，方便调用时清晰表达意图
 class CompareOp(Enum):
     EQ = "=="  # 相等
@@ -46,79 +38,6 @@ class CompareOp(Enum):
 
 class APITestBase:
     """API测试基础类，封装通用测试方法（Allure分层提示全覆盖：HTTP请求+数据库操作+异常处理）"""
-
-    # 新增：500错误处理方法
-    def handle_server_error(self, response: requests.Response):
-        """处理500系列服务器错误，终止所有测试用例执行"""
-        error_msg = (
-            f"检测到服务器内部错误 {response.status_code}！\n"
-            f"请求URL: {response.url}\n"
-            f"响应内容: {response.text[:500]}"
-        )
-
-        # 记录错误日志
-        logger.error(f"[{self._get_current_time()}] {error_msg}")
-
-        # 添加到Allure报告
-        with allure.step(f"服务器错误 {response.status_code} - 终止测试"):
-            allure.attach(error_msg, "错误详情", allure.attachment_type.TEXT)
-
-        # 抛出自定义异常，让上层捕获并终止测试
-        raise BusinessErrorTerminateException(error_msg)
-
-    def check_business_error(self, response: requests.Response):
-        """检查响应体中的业务错误码，遇到严重错误终止测试"""
-        try:
-            # 尝试解析JSON响应
-            response_json = response.json()
-
-            # 检查是否包含业务错误码字段
-            if "code" in response_json:
-                error_code = response_json["code"]
-                # 检测500系列业务错误码
-                if 500 <= error_code < 600:
-                    error_msg = (
-                        f"检测到业务逻辑错误 {error_code}！\n"
-                        f"请求URL: {response.url}\n"
-                        f"错误信息: {response_json.get('message', '无错误信息')}\n"
-                        f"完整响应: {json.dumps(response_json, ensure_ascii=False)[:500]}"
-                    )
-
-                    # 记录错误日志
-                    logger.error(f"[{self._get_current_time()}] {error_msg}")
-
-                    # 添加到Allure报告
-                    with allure.step(f"业务错误 {error_code} - 终止测试"):
-                        allure.attach(error_msg, "错误详情", allure.attachment_type.TEXT)
-
-                    # 抛出自定义异常，让上层捕获并终止测试
-                    raise BusinessErrorTerminateException(error_msg)
-
-            # 检查success字段为false的情况
-            if "success" in response_json and not response_json["success"]:
-                error_msg = (
-                    f"检测到业务操作失败！\n"
-                    f"请求URL: {response.url}\n"
-                    f"错误信息: {response_json.get('message', '无错误信息')}\n"
-                    f"错误码: {response_json.get('code', '未知')}\n"
-                    f"完整响应: {json.dumps(response_json, ensure_ascii=False)[:500]}"
-                )
-
-                # 记录错误日志
-                logger.error(f"[{self._get_current_time()}] {error_msg}")
-
-                # 添加到Allure报告
-                with allure.step("业务操作失败 - 终止测试"):
-                    allure.attach(error_msg, "错误详情", allure.attachment_type.TEXT)
-
-                # 抛出自定义异常，让上层捕获并终止测试
-                raise BusinessErrorTerminateException(error_msg)
-
-        except json.JSONDecodeError:
-            # 如果响应不是JSON格式，不处理业务错误码
-            logger.debug("响应不是JSON格式，跳过业务错误码检查")
-        except Exception as e:
-            logger.warning(f"检查业务错误码时发生异常: {str(e)}")
 
     def convert_decimal_to_float(self, data: Any) -> Any:
         """递归转换Decimal类型为float，处理datetime/date为字符串"""
@@ -289,26 +208,12 @@ class APITestBase:
                 # 3. 附加响应详情（原有逻辑不变）
                 self._attach_response_details(response)
 
-                # 新增：检查500系列错误
-                if 500 <= response.status_code < 600:
-                    self.handle_server_error(response)
-
-                # 新增：检查业务错误码
-                self.check_business_error(response)
-
                 # 4. 请求后等待（原有逻辑不变）
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
-
-            # 捕获自定义的业务错误终止异常
-            except BusinessErrorTerminateException as e:
-                # 记录错误并终止测试
-                logger.error(f"[{self._get_current_time()}] 业务错误导致测试终止: {str(e)}")
-                pytest.exit(f"业务错误导致测试终止: {str(e)}", returncode=1)
-                sys.exit(1)  # 双重保障
 
             # 5. 异常捕获与处理（新增params到异常详情）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
@@ -354,22 +259,9 @@ class APITestBase:
 
                 self._attach_response_details(response)
 
-                # 新增：检查500系列错误
-                if 500 <= response.status_code < 600:
-                    self.handle_server_error(response)
-
-                # 新增：检查业务错误码
-                self.check_business_error(response)
-
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
-
-            # 捕获自定义的业务错误终止异常
-            except BusinessErrorTerminateException as e:
-                logger.error(f"[{self._get_current_time()}] 业务错误导致测试终止: {str(e)}")
-                pytest.exit(f"业务错误导致测试终止: {str(e)}", returncode=1)
-                sys.exit(1)  # 双重保障
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
                 with allure.step(f"{method} 请求异常"):
@@ -439,24 +331,11 @@ class APITestBase:
                 # 附加响应详情到allure报告
                 self._attach_response_details(response)
 
-                # 新增：检查500系列错误
-                if 500 <= response.status_code < 600:
-                    self.handle_server_error(response)
-
-                # 新增：检查业务错误码
-                self.check_business_error(response)
-
                 # 请求后等待
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
 
                 return response
-
-            # 捕获自定义的业务错误终止异常
-            except BusinessErrorTerminateException as e:
-                logger.error(f"[{self._get_current_time()}] 业务错误导致测试终止: {str(e)}")
-                pytest.exit(f"业务错误导致测试终止: {str(e)}", returncode=1)
-                sys.exit(1)  # 双重保障
 
             except (SSLError, ConnectionError, Timeout) as e:
                 error_type = "网络层异常"
@@ -540,22 +419,9 @@ class APITestBase:
 
                 self._attach_response_details(response)
 
-                # 新增：检查500系列错误
-                if 500 <= response.status_code < 600:
-                    self.handle_server_error(response)
-
-                # 新增：检查业务错误码
-                self.check_business_error(response)
-
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
-
-            # 捕获自定义的业务错误终止异常
-            except BusinessErrorTerminateException as e:
-                logger.error(f"[{self._get_current_time()}] 业务错误导致测试终止: {str(e)}")
-                pytest.exit(f"业务错误导致测试终止: {str(e)}", returncode=1)
-                sys.exit(1)  # 双重保障
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
                 with allure.step(f"{method} 请求异常"):
@@ -594,24 +460,11 @@ class APITestBase:
 
                 self._attach_response_details(response)
 
-                # 新增：检查500系列错误
-                if 500 <= response.status_code < 600:
-                    self.handle_server_error(response)
-
-                # 新增：检查业务错误码
-                self.check_business_error(response)
-
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
-
-            # 捕获自定义的业务错误终止异常
-            except BusinessErrorTerminateException as e:
-                logger.error(f"[{self._get_current_time()}] 业务错误导致测试终止: {str(e)}")
-                pytest.exit(f"业务错误导致测试终止: {str(e)}", returncode=1)
-                sys.exit(1)  # 双重保障
 
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
                 with allure.step(f"{method} 请求异常"):
