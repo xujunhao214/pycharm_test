@@ -1,0 +1,275 @@
+{
+  "uid" : "aa66f34f286a95f9",
+  "name" : "跟单软件看板-VPS数据-删除策略账号",
+  "fullName" : "test_community_vps.test_delete.TestDeleteUser#test_delete_vpstrader",
+  "historyId" : "d4848c0b570593640f10508b0dc43f53",
+  "time" : {
+    "start" : 1760526347206,
+    "stop" : 1760526348392,
+    "duration" : 1186
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 删除策略账号失败（状态码不匹配）",
+  "statusTrace" : "self = <test_delete.TestDeleteUser object at 0x00000211AA3D6940>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x00000211AA5E0E20>\nlogged_vps = <template.commons.vps_session.EnvironmentSession_vps object at 0x00000211AA640160>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"跟单软件看板-VPS数据-删除策略账号\")\n    def test_delete_vpstrader(self, var_manager, logged_vps):\n        # 1. 发送删除策略账号请求\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        response = self.send_delete_request(\n            logged_vps,\n            '/subcontrol/trader',\n            json_data=[vps_trader_id]\n        )\n    \n        # 2. 验证响应状态码\n>       self.assert_response_status(\n            response,\n            200,\n            \"删除策略账号失败\"\n        )\n\ntest_community_vps\\test_delete.py:129: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_vpsbase.py:371: in assert_response_status\n    raise e\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <test_delete.TestDeleteUser object at 0x00000211AA3D6940>\nresponse = <Response [502]>, expected_status = 200\nerror_msg_prefix = '删除策略账号失败'\n\n    def assert_response_status(self, response, expected_status, error_msg_prefix):\n        \"\"\"断言响应状态码（分层提示优化）\"\"\"\n        with allure.step(\"断言响应状态码\"):\n            actual_status = response.status_code\n            allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n            allure.attach(f\"期望值: {expected_status}\", \"预期状态码\", allure.attachment_type.TEXT)\n            allure.attach(f\"实际值: {actual_status}\", \"实际状态码\", allure.attachment_type.TEXT)\n    \n        try:\n>           assert actual_status == expected_status, \\\n                f\"Failed: {error_msg_prefix}（状态码不匹配）\"\nE               AssertionError: Failed: 删除策略账号失败（状态码不匹配）\n\ncommons\\api_vpsbase.py:365: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "vpsapi_session",
+    "time" : {
+      "start" : 1760526347077,
+      "stop" : 1760526347077,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "logged_vps",
+    "time" : {
+      "start" : 1760526347077,
+      "stop" : 1760526347206,
+      "duration" : 129
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 删除策略账号失败（状态码不匹配）",
+    "statusTrace" : "self = <test_delete.TestDeleteUser object at 0x00000211AA3D6940>\nvar_manager = <template.commons.variable_manager.VariableManager object at 0x00000211AA5E0E20>\nlogged_vps = <template.commons.vps_session.EnvironmentSession_vps object at 0x00000211AA640160>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"跟单软件看板-VPS数据-删除策略账号\")\n    def test_delete_vpstrader(self, var_manager, logged_vps):\n        # 1. 发送删除策略账号请求\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        response = self.send_delete_request(\n            logged_vps,\n            '/subcontrol/trader',\n            json_data=[vps_trader_id]\n        )\n    \n        # 2. 验证响应状态码\n>       self.assert_response_status(\n            response,\n            200,\n            \"删除策略账号失败\"\n        )\n\ntest_community_vps\\test_delete.py:129: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_vpsbase.py:371: in assert_response_status\n    raise e\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <test_delete.TestDeleteUser object at 0x00000211AA3D6940>\nresponse = <Response [502]>, expected_status = 200\nerror_msg_prefix = '删除策略账号失败'\n\n    def assert_response_status(self, response, expected_status, error_msg_prefix):\n        \"\"\"断言响应状态码（分层提示优化）\"\"\"\n        with allure.step(\"断言响应状态码\"):\n            actual_status = response.status_code\n            allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n            allure.attach(f\"期望值: {expected_status}\", \"预期状态码\", allure.attachment_type.TEXT)\n            allure.attach(f\"实际值: {actual_status}\", \"实际状态码\", allure.attachment_type.TEXT)\n    \n        try:\n>           assert actual_status == expected_status, \\\n                f\"Failed: {error_msg_prefix}（状态码不匹配）\"\nE               AssertionError: Failed: 删除策略账号失败（状态码不匹配）\n\ncommons\\api_vpsbase.py:365: AssertionError",
+    "steps" : [ {
+      "name" : "执行 DELETE 请求",
+      "time" : {
+        "start" : 1760526347206,
+        "stop" : 1760526348391,
+        "duration" : 1185
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "请求详情",
+        "time" : {
+          "start" : 1760526347206,
+          "stop" : 1760526347208,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "6b90a305990f45e4",
+          "name" : "请求URL",
+          "source" : "6b90a305990f45e4.txt",
+          "type" : "text/plain",
+          "size" : 18
+        }, {
+          "uid" : "8858b3bba3497f6b",
+          "name" : "请求头",
+          "source" : "8858b3bba3497f6b.json",
+          "type" : "application/json",
+          "size" : 234
+        }, {
+          "uid" : "f4322591686726fb",
+          "name" : "请求体（JSON）",
+          "source" : "f4322591686726fb.json",
+          "type" : "application/json",
+          "size" : 11
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      }, {
+        "name" : "响应详情",
+        "time" : {
+          "start" : 1760526347383,
+          "stop" : 1760526347384,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "e9ff69d1a14a303c",
+          "name" : "响应状态码",
+          "source" : "e9ff69d1a14a303c.txt",
+          "type" : "text/plain",
+          "size" : 3
+        }, {
+          "uid" : "3df0ae830a64a2f0",
+          "name" : "响应头",
+          "source" : "3df0ae830a64a2f0.json",
+          "type" : "application/json",
+          "size" : 161
+        }, {
+          "uid" : "616a48039e5747f8",
+          "name" : "响应体（文本）",
+          "source" : "616a48039e5747f8.txt",
+          "type" : "text/plain",
+          "size" : 157
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 6
+    }, {
+      "name" : "断言响应状态码",
+      "time" : {
+        "start" : 1760526348391,
+        "stop" : 1760526348392,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "2a89f9fd6cc09722",
+        "name" : "请求URL",
+        "source" : "2a89f9fd6cc09722.txt",
+        "type" : "text/plain",
+        "size" : 42
+      }, {
+        "uid" : "6ce1a504247b7705",
+        "name" : "预期状态码",
+        "source" : "6ce1a504247b7705.txt",
+        "type" : "text/plain",
+        "size" : 14
+      }, {
+        "uid" : "fb79446e0dd14bb9",
+        "name" : "实际状态码",
+        "source" : "fb79446e0dd14bb9.txt",
+        "type" : "text/plain",
+        "size" : 14
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3
+    }, {
+      "name" : "状态码断言失败",
+      "time" : {
+        "start" : 1760526348392,
+        "stop" : 1760526348392,
+        "duration" : 0
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "9b962b9d3b74d47",
+        "name" : "断言结果",
+        "source" : "9b962b9d3b74d47.txt",
+        "type" : "text/plain",
+        "size" : 24
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 1
+    } ],
+    "attachments" : [ {
+      "uid" : "101eb351e9e7219",
+      "name" : "log",
+      "source" : "101eb351e9e7219.txt",
+      "type" : "text/plain",
+      "size" : 1244
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 5,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 11
+  },
+  "afterStages" : [ {
+    "name" : "vpsapi_session::0",
+    "time" : {
+      "start" : 1760526348535,
+      "stop" : 1760526348535,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "logged_vps::0",
+    "time" : {
+      "start" : 1760526348534,
+      "stop" : 1760526348534,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-删除跟单社区测试数据"
+  }, {
+    "name" : "tag",
+    "value" : "url('vps')"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_community_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestDeleteUser"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "20652-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_community_vps.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "url('vps')" ]
+  },
+  "source" : "aa66f34f286a95f9.json",
+  "parameterValues" : [ ]
+}

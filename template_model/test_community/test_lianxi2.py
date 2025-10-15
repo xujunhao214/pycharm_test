@@ -238,7 +238,7 @@ class Test_proportionall:
             pytest.fail(f"超过最大查询次数（{max_attempts}次），未找到master_ticket={ticket_open}的订单数据")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
-        @pytest.mark.retry(n=3, delay=10)
+        # @pytest.mark.retry(n=3, delay=10)
         @allure.title("账号管理-持仓订单-喊单者账号ID查询-开仓后")
         def test_query_opentrader_passid(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):
@@ -659,7 +659,7 @@ class Test_proportionall:
                     )
                     logger.info(f"交易币种验证通过: {master_symbol}")
 
-        @pytest.mark.retry(n=3, delay=10)
+        # @pytest.mark.retry(n=3, delay=10)
         @allure.title("跟单管理-VPS管理-喊单者账号-开仓后")
         def test_query_opentrader_getRecordList(self, var_manager, logged_session):
             with allure.step("1. 发送请求"):

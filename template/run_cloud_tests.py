@@ -42,10 +42,10 @@ def run_cloud_tests(env: str = "test"):
         # "test_community/test_agent.py",
         # "test_community/test_topup.py",
         # "test_community/test_add_create.py",
-        "test_community/test_time_difference.py",
+        # "test_community/test_time_difference.py",
         # "test_community/test_add_delete.py",
-        # "test_community/test_delete.py",
-        # "test_community_vps/test_delete.py",
+        "test_community/test_delete.py",
+        "test_community_vps/test_delete.py",
         # "test_community/test_lianxi.py",
         # "test_community/test_lianxi2.py",
 
