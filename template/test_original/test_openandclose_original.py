@@ -243,7 +243,7 @@ class Test_openandclouseall:
                     )
                     logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
-                with allure.step("手数校验-MT4开仓手数和持仓订单手数"):
+                with allure.step("手数校验-开仓手数和持仓订单手数"):
                     order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
                     logging.info(f"喊单者手数是: {order_size}")
 
@@ -256,7 +256,7 @@ class Test_openandclouseall:
                         message=f"手数符合预期",
                         attachment_name="手数详情"
                     )
-                    logger.info(f"喊单者手数：{order_size} MT4开仓手数：{lots_open}")
+                    logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库提取数据-提取跟单订单号")
@@ -352,8 +352,8 @@ class Test_openandclouseall:
                     ticket_open = var_manager.get_variable("ticket_open")
 
                     self.verify_data(
-                        actual_value=ticket_open,
-                        expected_value=master_order_no,
+                        actual_value=master_order_no,
+                        expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
                         message=f"订单号数据正确",

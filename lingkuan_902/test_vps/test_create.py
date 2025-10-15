@@ -128,7 +128,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
-    def test_dbquery__importuser(self, var_manager, db_transaction):
+    def test_dbquery_importuser(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             new_user = var_manager.get_variable("new_user")
 

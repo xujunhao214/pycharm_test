@@ -60,7 +60,6 @@ def send_feishu_notification(
     markdown_content = f"""
 **测试信息**:
 - **环境**: {env or "未指定"}
-- **测试组**: {test_group or "未指定"}
 - **开始时间**: {statistics.get("start_time", "未记录")}
 - **结束时间**: {statistics.get("end_time", "未记录")}
 - **执行耗时**: {duration}
@@ -87,13 +86,13 @@ def send_feishu_notification(
             markdown_content += f"- {case}\n"
 
     # 添加跳过用例列表
-    if skipped_cases and len(skipped_cases) > 0:
-        markdown_content += "\n**跳过用例列表**:\n"
-        skipped_reasons = statistics.get("skipped_reasons", {})
-        for case in skipped_cases:
-            reason = skipped_reasons.get(case, "跳过此用例")
-            # markdown_content += f"- {case} (原因: {reason})\n"
-            markdown_content += f"- {case}\n"
+    # if skipped_cases and len(skipped_cases) > 0:
+    #     markdown_content += "\n**跳过用例列表**:\n"
+    #     skipped_reasons = statistics.get("skipped_reasons", {})
+    #     for case in skipped_cases:
+    #         reason = skipped_reasons.get(case, "跳过此用例")
+    #         # markdown_content += f"- {case} (原因: {reason})\n"
+    #         markdown_content += f"- {case}\n"
 
     # 发送飞书消息前
     # print(f"准备发送飞书通知，总用例数: {total}, 跳过数: {skipped}")

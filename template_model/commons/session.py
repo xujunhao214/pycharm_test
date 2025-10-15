@@ -6,7 +6,7 @@ import json
 from template_model.VAR.VAR import *
 from typing import Dict, Any, Optional
 from pathlib import Path
-from logging.handlers import TimedRotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
 from requests.exceptions import (
     RequestException, ConnectionError, Timeout,
     HTTPError, SSLError
@@ -42,9 +42,6 @@ logger = logging.getLogger("requests.session")
 logger.propagate = False
 logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
-
-
-# logger.setLevel(logging.DEBUG)
 
 
 class EnvironmentSession(requests.Session):

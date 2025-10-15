@@ -2,7 +2,6 @@ import time
 from template.commons.api_base import APITestBase, CompareOp, logger
 import allure
 import logging
-import logging
 import datetime
 import re
 import json
@@ -22,6 +21,8 @@ class PublicUtils(APITestBase):
     @allure.title("跟单社区前端-登录")
     def test_login(self, var_manager):
         with allure.step("1. 跟单社区前端-发送登录请求"):
+            URL_TOP = var_manager.get_variable("URL_TOP")
+            Host = var_manager.get_variable("Hosttop")
             url = f"{URL_TOP}/sys/mLogin"
             login_web = var_manager.get_variable("login_web")
 
@@ -32,7 +33,7 @@ class PublicUtils(APITestBase):
                 'X-Access-Token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NTc0OTMyMDMsInVzZXJuYW1lIjoiYWRtaW4ifQ.PkFLjsBa0NbCUF8ROtmIGABzYmUH2ldQfqz_ERvaKsY',
                 'content-type': 'application/json',
                 'Accept': '*/*',
-                # 'Host': 'dev.lgcopytrade.top',
+                'Host': Host,
                 'Connection': 'keep-alive'
             }
 
@@ -62,13 +63,15 @@ class PublicUtils(APITestBase):
             global headers
             trader_pass_id = var_manager.get_variable("trader_pass_id")
             token_top = var_manager.get_variable("token_top")
+            URL_TOP = var_manager.get_variable("URL_TOP")
+            Host = var_manager.get_variable("Hosttop")
             url = f"{URL_TOP}/blockchain/account/closeAllOrder?traderId={trader_pass_id}&including=true"
 
             headers = {
                 'priority': 'u=1, i',
                 'X-Access-Token': token_top,
                 'Accept': '*/*',
-                # 'Host': 'dev.lgcopytrade.top',
+                'Host': Host,
                 'Connection': 'keep-alive'
             }
 
@@ -92,6 +95,7 @@ class PublicUtils(APITestBase):
     def test_close_follow(self, var_manager):
         with allure.step("1. 跟单社区前端-发送跟单账号平仓请求"):
             follow_pass_id = var_manager.get_variable("follow_pass_id")
+            URL_TOP = var_manager.get_variable("URL_TOP")
             url = f"{URL_TOP}/blockchain/account/closeAllOrder?traderId={follow_pass_id}&including=true"
 
             response = requests.request("GET", url, headers=headers, data={})
@@ -270,32 +274,55 @@ class PublicUtils(APITestBase):
 
     @allure.title("MT4平台开仓操作")
     def test_mt4_open(self, var_manager):
-        with allure.step("MT4发送开仓请求"):
-            symbol = var_manager.get_variable("symbol")
-            url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
+        max_retries = 3  # 最大重试次数
+        retry_interval = 10  # 重试间隔时间(秒)
+        retry_count = 0  # 当前重试次数
 
-            payload = ""
-            self.response = requests.request("GET", url, headers=headers, data=payload)
-            allure.attach(url, "请求URL", allure.attachment_type.TEXT)
-            headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
-            allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
-            self.json_utils = JsonPathUtils()
-            self.response = self.response.json()
-            allure.attach(json.dumps(self.response, ensure_ascii=False, indent=2), "响应内容",
-                          allure.attachment_type.JSON)
+        while retry_count < max_retries:
+            with allure.step(f"发送开仓请求(第{retry_count + 1}次)"):
+                symbol = var_manager.get_variable("symbol")
+                url = f"{MT4_URL}/OrderSend?id={token_mt4}&symbol={symbol}&operation=Buy&volume=0.01&placedType=Client&price=0.00"
 
-            ticket_open = self.json_utils.extract(self.response, "$.ticket")
-            lots_open = self.json_utils.extract(self.response, "$.lots")
-            var_manager.set_runtime_variable("ticket_open", ticket_open)
-            var_manager.set_runtime_variable("lots_open", lots_open)
-            print(f"ticket: {ticket_open},lots_open:{lots_open}")
-            logging.info(f"ticket: {ticket_open},lots_open:{lots_open}")
-            if lots_open is None or ticket_open is None:
-                logging.info("开仓失败")
-                # 重新开仓
-                self.test_mt4_open(var_manager)
-            else:
-                logging.info("开仓成功")
+                payload = ""
+                response = requests.request("GET", url, headers=headers, data=payload)
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+                headers_json = json.dumps(headers, ensure_ascii=False, indent=2)
+                allure.attach(headers_json, "请求头", allure.attachment_type.JSON)
+
+                self.json_utils = JsonPathUtils()
+                try:
+                    response_json = response.json()
+                    allure.attach(json.dumps(response_json, ensure_ascii=False, indent=2), "响应内容",
+                                  allure.attachment_type.JSON)
+
+                    ticket_open = self.json_utils.extract(response_json, "$.ticket")
+                    lots_open = self.json_utils.extract(response_json, "$.lots")
+
+                    if lots_open is not None:
+                        # 开仓成功，保存变量并退出循环
+                        var_manager.set_runtime_variable("ticket_open", ticket_open)
+                        var_manager.set_runtime_variable("lots_open", lots_open)
+                        logging.info(f"开仓成功 - ticket: {ticket_open}, lots_open: {lots_open}")
+                        self.response = response_json  # 保存响应供后续使用
+                        return
+                    else:
+                        logging.warning(f"第{retry_count + 1}次开仓失败，未获取到lots数据")
+
+                except json.JSONDecodeError:
+                    logging.error(f"第{retry_count + 1}次开仓请求响应不是有效的JSON格式")
+                    allure.attach(response.text, "无效的JSON响应", allure.attachment_type.TEXT)
+                except Exception as e:
+                    logging.error(f"第{retry_count + 1}次开仓请求发生异常: {str(e)}")
+
+                # 准备重试
+                retry_count += 1
+                if retry_count < max_retries:
+                    logging.info(f"将在{retry_interval}秒后进行第{retry_count + 1}/{max_retries}次重试")
+                    time.sleep(retry_interval)
+
+        # 达到最大重试次数仍失败
+        logging.error(f"已达到最大重试次数({max_retries}次)，开仓操作失败")
+        raise AssertionError(f"开仓失败，重试{max_retries}次后仍未成功")
 
     @allure.title("MT4平台开仓操作")
     def test_mt4_open2(self, var_manager):
@@ -325,6 +352,107 @@ class PublicUtils(APITestBase):
                 self.test_mt4_open(var_manager)
             else:
                 logging.info("开仓成功")
+
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-策略开仓")
+    def test_trader_orderSend(self, var_manager, logged_vps):
+        # 1. 发送策略开仓请求
+        with allure.step("1. 发送策略开仓请求"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            vps_trader_id = var_manager.get_variable("vps_trader_id")
+            data = {
+                "symbol": trader_ordersend["symbol"],
+                "placedType": 0,
+                "remark": "gendanshequ",
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": trader_ordersend["totalNum"],
+                "totalSzie": trader_ordersend["totalSzie"],
+                "startSize": trader_ordersend["startSize"],
+                "endSize": trader_ordersend["endSize"],
+                "traderId": vps_trader_id
+            }
+            response = self.send_post_request(
+                logged_vps,
+                '/subcontrol/trader/orderSend',
+                json_data=data,
+            )
+        with allure.step("2. 验证响应"):
+            # 2. 验证响应状态码和内容
+            self.assert_response_status(
+                response,
+                200,
+                "策略开仓失败"
+            )
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+    @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
+    def test_dbquery_orderSend(self, var_manager, dbvps_transaction):
+        with allure.step("1. 数据库提取订单号和手数"):
+            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+            sql = f"""
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.send_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
+            params = (
+                '0',
+                vps_user_accounts_1,
+                "gendanshequ"
+            )
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.query_database_with_time_with_timezone(
+                dbvps_transaction=dbvps_transaction,
+                sql=sql,
+                params=params,
+                time_field="fod.open_time"
+            )
+        with allure.step("2. 提取数据库数据"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            if not db_data:
+                pytest.fail("数据库查询结果为空，无法提取数据")
+
+            master_order = db_data[0]["master_order"]
+
+            with allure.step("验证订单状态"):
+                status = db_data[0]["status"]
+                self.verify_data(
+                    actual_value=status,
+                    expected_value=(0, 1),
+                    op=CompareOp.IN,
+                    message="订单状态应为0或1",
+                    attachment_name="订单状态详情"
+                )
+                logging.info(f"订单状态验证通过: {status}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库提取数据-提取跟单订单号")

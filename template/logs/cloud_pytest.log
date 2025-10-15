@@ -1,330 +1,822 @@
-INFO     - 2025-10-10 09:23:36 - [conftest:342] - [2025-10-10 09:23:35] 测试会话开始: 2025-10-10 09:23:36, 测试组: cloud
-INFO     - 2025-10-10 09:23:36 - [variable_manager:40] - [2025-10-10 09:23:35] 成功加载静态变量: VAR\dev_data.json
-INFO     - 2025-10-10 09:23:36 - [variable_manager:64] - [2025-10-10 09:23:35] 成功加载运行时变量: VAR\runtime_vars_cloud.json
-INFO     - 2025-10-10 09:23:36 - [conftest:72] - [2025-10-10 09:23:36] 用例  开始登录，环境: dev
-DEBUG    - 2025-10-10 09:23:36 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
-DEBUG    - 2025-10-10 09:23:37 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/randomImage/1760059416209?_t=1760059416 HTTP/11" 200 None
-INFO     - 2025-10-10 09:23:37 - [conftest:120] - 验证码接口响应内容: {"success":true,"message":"","code":0,"result":"data:image/jpg;base64,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","timestamp":1760059416956}
-INFO     - 2025-10-10 09:23:37 - [conftest:124] - 验证码接口JSON响应: {'success': True, 'message': '', 'code': 0, 'result': 'data:image/jpg;base64,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', 'timestamp': 1760059416956}
-INFO     - 2025-10-10 09:23:37 - [conftest:141] - 第1次尝试 - 验证码识别结果: BVLL
-DEBUG    - 2025-10-10 09:23:37 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/login HTTP/11" 200 None
-ERROR    - 2025-10-10 09:23:37 - [conftest:189] - 第1次登录失败: 验证码错误: 验证码错误
-DEBUG    - 2025-10-10 09:23:48 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/randomImage/1760059427775?_t=1760059427 HTTP/11" 200 None
-INFO     - 2025-10-10 09:23:48 - [conftest:120] - 验证码接口响应内容: {"success":true,"message":"","code":0,"result":"data:image/jpg;base64,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","timestamp":1760059428195}
-INFO     - 2025-10-10 09:23:48 - [conftest:124] - 验证码接口JSON响应: {'success': True, 'message': '', 'code': 0, 'result': 'data:image/jpg;base64,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', 'timestamp': 1760059428195}
-INFO     - 2025-10-10 09:23:48 - [conftest:141] - 第2次尝试 - 验证码识别结果: Z2R6
-DEBUG    - 2025-10-10 09:23:49 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/login HTTP/11" 200 None
-INFO     - 2025-10-10 09:23:49 - [conftest:184] - dev环境登录成功（第2次尝试）
-INFO     - 2025-10-10 09:23:49 - [variable_manager:111] - [2025-10-10 09:23:35] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_cloud.json
-DEBUG    - 2025-10-10 09:23:49 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao%40163.com&followerTa=301390775&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:23:49 - [api_base:258] - [2025-10-10 09:23:49] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao@163.com', 'followerTa': '301390775', 'dividendUser': ''}
-INFO     - 2025-10-10 09:23:52 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710910, '2025-10-10 09:10:01'), (10710657, '2025-09-30 23:40:01')], 排序后(Id, endEquityTime)=[(10710910, '2025-10-10 09:10:01'), (10710657, '2025-09-30 23:40:01')]
-INFO     - 2025-10-10 09:23:52 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[0], 排序后dividendType=[0]
-INFO     - 2025-10-10 09:23:52 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: 0.0
-操作: ==
-预期: 0.0
-
-INFO     - 2025-10-10 09:23:52 - [test_agent:289] - 期间盈利验证通过: 0.00
-INFO     - 2025-10-10 09:23:52 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: 0.0
-操作: ==
-预期: 0.0
-
-INFO     - 2025-10-10 09:23:52 - [test_agent:299] - 币种的转换验证通过：0.0
-INFO     - 2025-10-10 09:23:52 - [api_base:1434] - 校验通过: 预计分红金额应符合预期
-
-实际: 0.0
-操作: ==
-预期: 0.0
-
-INFO     - 2025-10-10 09:23:52 - [test_agent:320] - 预计分红金额验证通过：0.0
-INFO     - 2025-10-10 09:23:52 - [test_agent:326] - 分红代理不存在
-INFO     - 2025-10-10 09:23:52 - [test_agent:354] - 分红代理不存在
-INFO     - 2025-10-10 09:23:52 - [test_agent:382] - 分红代理不存在
-INFO     - 2025-10-10 09:23:52 - [test_agent:410] - 分红代理不存在
-INFO     - 2025-10-10 09:23:52 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:23:52 - [api_base:1434] - 校验通过: 信号源分红金额应符合预期
-
-实际: 0.0
-操作: ==
-预期: 0.0
-
-INFO     - 2025-10-10 09:23:52 - [test_agent:482] - 信号源分红金额验证通过：0.0
-DEBUG    - 2025-10-10 09:23:53 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao2%40163.com&followerTa=301390778&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:23:53 - [api_base:258] - [2025-10-10 09:23:53] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao2@163.com', 'followerTa': '301390778', 'dividendUser': ''}
-INFO     - 2025-10-10 09:23:56 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710913, '2025-10-10 09:15:00'), (10710660, '2025-09-30 23:40:00')], 排序后(Id, endEquityTime)=[(10710913, '2025-10-10 09:15:00'), (10710660, '2025-09-30 23:40:00')]
-INFO     - 2025-10-10 09:23:56 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 0], 排序后dividendType=[0, 1]
-INFO     - 2025-10-10 09:23:56 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: 8441.87
-操作: ==
-预期: 8441.87
-
-INFO     - 2025-10-10 09:23:56 - [test_agent:289] - 期间盈利验证通过: 8441.87
-INFO     - 2025-10-10 09:23:56 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: 8441.87
-操作: ==
-预期: 8441.87
-
-INFO     - 2025-10-10 09:23:56 - [test_agent:299] - 币种的转换验证通过：8441.87
-INFO     - 2025-10-10 09:23:56 - [api_base:1434] - 校验通过: 预计分红金额应符合预期
-
-实际: 4220.93
-操作: ==
-预期: 4220.9
-
-INFO     - 2025-10-10 09:23:56 - [test_agent:320] - 预计分红金额验证通过：8441.87
-INFO     - 2025-10-10 09:23:56 - [api_base:1434] - 校验通过: 一级分红金额应符合预期
-
-实际: 1097.44
-操作: ==
-预期: 1097.44
-
-INFO     - 2025-10-10 09:23:56 - [test_agent:348] - 一级分红金额验证通过：8441.87
-INFO     - 2025-10-10 09:23:56 - [test_agent:354] - 分红代理不存在
-INFO     - 2025-10-10 09:23:56 - [test_agent:382] - 分红代理不存在
-INFO     - 2025-10-10 09:23:56 - [test_agent:410] - 分红代理不存在
-INFO     - 2025-10-10 09:23:56 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:23:56 - [api_base:1434] - 校验通过: 信号源分红金额应符合预期
-
-实际: 3123.49
-操作: ==
-预期: 3123.49
-
-INFO     - 2025-10-10 09:23:56 - [test_agent:482] - 信号源分红金额验证通过：8441.87
-DEBUG    - 2025-10-10 09:23:57 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao3%40163.com&followerTa=301390780&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:23:57 - [api_base:258] - [2025-10-10 09:23:57] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao3@163.com', 'followerTa': '301390780', 'dividendUser': ''}
-INFO     - 2025-10-10 09:24:00 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710917, '2025-10-10 09:10:00'), (10710664, '2025-09-30 23:40:00')], 排序后(Id, endEquityTime)=[(10710917, '2025-10-10 09:10:00'), (10710664, '2025-09-30 23:40:00')]
-INFO     - 2025-10-10 09:24:00 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 1, 0], 排序后dividendType=[0, 1, 1]
-INFO     - 2025-10-10 09:24:00 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: -1967.3
-操作: ==
-预期: -1967.3
-
-INFO     - 2025-10-10 09:24:00 - [test_agent:289] - 期间盈利验证通过: -1967.30
-INFO     - 2025-10-10 09:24:00 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: -1967.3
-操作: ==
-预期: -1967.3
-
-INFO     - 2025-10-10 09:24:00 - [test_agent:299] - 币种的转换验证通过：-1967.3
-INFO     - 2025-10-10 09:24:00 - [test_agent:303] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:00 - [test_agent:329] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:00 - [test_agent:357] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:00 - [test_agent:382] - 分红代理不存在
-INFO     - 2025-10-10 09:24:00 - [test_agent:410] - 分红代理不存在
-INFO     - 2025-10-10 09:24:00 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:24:00 - [test_agent:464] - 盈利金额小于0
-DEBUG    - 2025-10-10 09:24:00 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao4%40163.com&followerTa=301390783&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:24:00 - [api_base:258] - [2025-10-10 09:24:00] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao4@163.com', 'followerTa': '301390783', 'dividendUser': ''}
-INFO     - 2025-10-10 09:24:03 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710922, '2025-10-10 09:10:00'), (10710669, '2025-09-30 23:40:00')], 排序后(Id, endEquityTime)=[(10710922, '2025-10-10 09:10:00'), (10710669, '2025-09-30 23:40:00')]
-INFO     - 2025-10-10 09:24:03 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 1, 1, 0], 排序后dividendType=[0, 1, 1, 1]
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: 9918.69
-操作: ==
-预期: 9918.69
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:289] - 期间盈利验证通过: 9918.69
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: 9918.69
-操作: ==
-预期: 9918.69
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:299] - 币种的转换验证通过：9918.69
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 预计分红金额应符合预期
-
-实际: 4959.36
-操作: ==
-预期: 4959.3
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:320] - 预计分红金额验证通过：9918.69
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 三级分红金额应符合预期
-
-实际: 1091.06
-操作: ==
-预期: 1091.06
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:348] - 三级分红金额验证通过：9918.69
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 二级分红金额应符合预期
-
-实际: 99.19
-操作: ==
-预期: 99.19
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:376] - 3级分红金额验证通过：9918.69
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 一级分红金额应符合预期
-
-实际: 99.19
-操作: ==
-预期: 99.19
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:404] - 一级分红金额验证通过：9918.69
-INFO     - 2025-10-10 09:24:03 - [test_agent:410] - 分红代理不存在
-INFO     - 2025-10-10 09:24:03 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:24:03 - [api_base:1434] - 校验通过: 信号源分红金额应符合预期
-
-实际: 3669.92
-操作: ==
-预期: 3669.92
-
-INFO     - 2025-10-10 09:24:03 - [test_agent:482] - 信号源分红金额验证通过：9918.69
-DEBUG    - 2025-10-10 09:24:04 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao5%40163.com&followerTa=301390785&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:24:04 - [api_base:258] - [2025-10-10 09:24:04] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao5@163.com', 'followerTa': '301390785', 'dividendUser': ''}
-INFO     - 2025-10-10 09:24:07 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710928, '2025-10-10 09:10:01'), (10710675, '2025-09-30 23:40:00')], 排序后(Id, endEquityTime)=[(10710928, '2025-10-10 09:10:01'), (10710675, '2025-09-30 23:40:00')]
-INFO     - 2025-10-10 09:24:07 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 1, 1, 1, 0], 排序后dividendType=[0, 1, 1, 1, 1]
-INFO     - 2025-10-10 09:24:07 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: -8709.03
-操作: ==
-预期: -8709.03
-
-INFO     - 2025-10-10 09:24:07 - [test_agent:289] - 期间盈利验证通过: -8709.03
-INFO     - 2025-10-10 09:24:07 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: -8709.03
-操作: ==
-预期: -8709.03
-
-INFO     - 2025-10-10 09:24:07 - [test_agent:299] - 币种的转换验证通过：-8709.03
-INFO     - 2025-10-10 09:24:07 - [test_agent:303] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:07 - [test_agent:329] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:07 - [test_agent:357] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:07 - [test_agent:385] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:07 - [test_agent:413] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:07 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:24:07 - [test_agent:464] - 盈利金额小于0
-DEBUG    - 2025-10-10 09:24:08 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao6%40163.com&followerTa=301394553&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:24:08 - [api_base:258] - [2025-10-10 09:24:08] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao6@163.com', 'followerTa': '301394553', 'dividendUser': ''}
-INFO     - 2025-10-10 09:24:11 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710951, '2025-10-10 09:10:00')], 排序后(Id, endEquityTime)=[(10710951, '2025-10-10 09:10:00')]
-INFO     - 2025-10-10 09:24:11 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 1, 1, 1, 1, 0], 排序后dividendType=[0, 1, 1, 1, 1, 1]
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: 833.76
-操作: ==
-预期: 833.76
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:289] - 期间盈利验证通过: 833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: 833.76
-操作: ==
-预期: 833.76
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:299] - 币种的转换验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 预计分红金额应符合预期
-
-实际: 416.88
-操作: ==
-预期: 416.9
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:320] - 预计分红金额验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 五级分红金额应符合预期
-
-实际: 41.69
-操作: ==
-预期: 41.69
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:348] - 五级分红金额验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 四级分红金额应符合预期
-
-实际: 25.01
-操作: ==
-预期: 25.01
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:376] - 3级分红金额验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 三级分红金额应符合预期
-
-实际: 25.01
-操作: ==
-预期: 25.01
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:404] - 三级分红金额验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 二级分红金额应符合预期
-
-实际: 4.17
-操作: ==
-预期: 4.17
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:432] - 二级分红金额验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 一级分红金额应符合预期
-
-实际: 12.51
-操作: ==
-预期: 12.51
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:460] - 一级分红金额验证通过：833.76
-INFO     - 2025-10-10 09:24:11 - [api_base:1434] - 校验通过: 信号源分红金额应符合预期
-
-实际: 308.49
-操作: ==
-预期: 308.49
-
-INFO     - 2025-10-10 09:24:11 - [test_agent:482] - 信号源分红金额验证通过：833.76
-DEBUG    - 2025-10-10 09:24:11 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao5%40163.com&followerTa=2088767546&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:24:11 - [api_base:258] - [2025-10-10 09:24:11] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao5@163.com', 'followerTa': '2088767546', 'dividendUser': ''}
-INFO     - 2025-10-10 09:24:14 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710882, '2025-10-10 09:10:01'), (10710683, '2025-09-30 23:40:00'), (10710527, '2025-09-15 17:25:00'), (10710489, '2025-09-11 14:45:00')], 排序后(Id, endEquityTime)=[(10710882, '2025-10-10 09:10:01'), (10710683, '2025-09-30 23:40:00'), (10710527, '2025-09-15 17:25:00'), (10710489, '2025-09-11 14:45:00')]
-INFO     - 2025-10-10 09:24:14 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 1, 1, 1, 0], 排序后dividendType=[0, 1, 1, 1, 1]
-INFO     - 2025-10-10 09:24:14 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: -7083.36
-操作: ==
-预期: -7083.36
-
-INFO     - 2025-10-10 09:24:14 - [test_agent:289] - 期间盈利验证通过: -7083.36
-INFO     - 2025-10-10 09:24:14 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: -4427.81
-操作: ==
-预期: -4427.81
-
-INFO     - 2025-10-10 09:24:14 - [test_agent:299] - 币种的转换验证通过：-4427.81
-INFO     - 2025-10-10 09:24:14 - [test_agent:303] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:14 - [test_agent:329] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:14 - [test_agent:357] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:14 - [test_agent:385] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:14 - [test_agent:413] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:14 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:24:14 - [test_agent:464] - 盈利金额小于0
-DEBUG    - 2025-10-10 09:24:15 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/agent/agentLevelDividend/page?_t=1760059415&page=1&limit=50&type=&status=&dividendTimeBegin=&dividendTimeEnd=&followerUser=xujunhao5%40163.com&followerTa=2088767545&dividendUser= HTTP/11" 200 None
-INFO     - 2025-10-10 09:24:15 - [api_base:258] - [2025-10-10 09:24:15] GET请求: /agent/agentLevelDividend/page | 参数: {'_t': 1760059415, 'page': 1, 'limit': 50, 'type': '', 'status': '', 'dividendTimeBegin': '', 'dividendTimeEnd': '', 'followerUser': 'xujunhao5@163.com', 'followerTa': '2088767545', 'dividendUser': ''}
-INFO     - 2025-10-10 09:24:18 - [test_agent:207] - 外层 result.list 排序完成（按endEquityTime倒序）：原顺序(Id, endEquityTime)=[(10710590, '2025-09-15 17:10:00'), (10710503, '2025-09-12 16:40:00'), (10710483, '2025-09-11 14:40:00')], 排序后(Id, endEquityTime)=[(10710590, '2025-09-15 17:10:00'), (10710503, '2025-09-12 16:40:00'), (10710483, '2025-09-11 14:40:00')]
-INFO     - 2025-10-10 09:24:18 - [test_agent:232] - slaveRecords排序完成：原顺序dividendType=[1, 1, 1, 1, 0], 排序后dividendType=[0, 1, 1, 1, 1]
-INFO     - 2025-10-10 09:24:18 - [api_base:1434] - 校验通过: 期间盈利应符合预期
-
-实际: -560234.78
-操作: ==
-预期: -560234.78
-
-INFO     - 2025-10-10 09:24:18 - [test_agent:289] - 期间盈利验证通过: -560234.78
-INFO     - 2025-10-10 09:24:18 - [api_base:1434] - 校验通过: 币种的转换应符合预期
-
-实际: -3764.78
-操作: ==
-预期: -3764.78
-
-INFO     - 2025-10-10 09:24:18 - [test_agent:299] - 币种的转换验证通过：-3764.78
-INFO     - 2025-10-10 09:24:18 - [test_agent:303] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:18 - [test_agent:329] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:18 - [test_agent:357] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:18 - [test_agent:385] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:18 - [test_agent:413] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:18 - [test_agent:438] - 分红代理不存在
-INFO     - 2025-10-10 09:24:18 - [test_agent:464] - 盈利金额小于0
-INFO     - 2025-10-10 09:24:18 - [conftest:223] - [2025-10-10 09:24:18] 用例  执行完毕
-INFO     - 2025-10-10 09:24:18 - [variable_manager:111] - [2025-10-10 09:23:35] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_cloud.json
-INFO     - 2025-10-10 09:24:18 - [conftest:369] - [2025-10-10 09:23:35] 测试会话结束，总耗时: 42.00秒
-INFO     - 2025-10-10 09:24:18 - [feishu_notification:131] - [2025-10-10 09:23:35] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
-DEBUG    - 2025-10-10 09:24:18 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
-DEBUG    - 2025-10-10 09:24:19 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
-INFO     - 2025-10-10 09:24:19 - [feishu_notification:139] - [2025-10-10 09:23:35] 飞书响应状态码: 200
-INFO     - 2025-10-10 09:24:19 - [feishu_notification:140] - [2025-10-10 09:23:35] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
-INFO     - 2025-10-10 09:24:19 - [feishu_notification:145] - [2025-10-10 09:23:35] [FEISHU] 消息发送成功
-INFO     - 2025-10-10 09:24:19 - [conftest:381] - [2025-10-10 09:23:35] 飞书通知发送成功
+INFO     - 2025-10-15 18:23:49 - [conftest:517] - [2025-10-15 18:23:49] 测试会话开始: 2025-10-15 18:23:49, 测试组: community
+INFO     - 2025-10-15 18:23:49 - [variable_manager:40] - [2025-10-15 18:23:49] 成功加载静态变量: VAR\dev_data.json
+INFO     - 2025-10-15 18:23:49 - [variable_manager:64] - [2025-10-15 18:23:49] 成功加载运行时变量: VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:23:49 - [conftest:248] - [2025-10-15 18:23:49] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params0] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:23:49 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:23:49 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:49 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:23:49 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:23:49 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:23:49 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:23:50 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:50 - [api_base:209] - [2025-10-15 18:23:50] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_1', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:23:50 - [api_base:230] - [2025-10-15 18:23:50] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:23:53 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:53 - [api_base:209] - [2025-10-15 18:23:53] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:23:53 - [api_base:230] - [2025-10-15 18:23:53] 请求后等待 1 秒
+INFO     - 2025-10-15 18:23:54 - [test_time_difference:109] - 第1/50次循环执行成功
+INFO     - 2025-10-15 18:23:54 - [conftest:343] - [2025-10-15 18:23:54] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params0] 执行完毕
+INFO     - 2025-10-15 18:23:54 - [conftest:248] - [2025-10-15 18:23:54] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params1] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:23:54 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:23:54 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:54 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:23:54 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:23:54 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:23:54 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:23:55 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:55 - [api_base:209] - [2025-10-15 18:23:55] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_2', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:23:55 - [api_base:230] - [2025-10-15 18:23:55] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:23:58 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:58 - [api_base:209] - [2025-10-15 18:23:58] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:23:58 - [api_base:230] - [2025-10-15 18:23:58] 请求后等待 1 秒
+INFO     - 2025-10-15 18:23:59 - [test_time_difference:109] - 第2/50次循环执行成功
+INFO     - 2025-10-15 18:23:59 - [conftest:343] - [2025-10-15 18:23:59] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params1] 执行完毕
+INFO     - 2025-10-15 18:23:59 - [conftest:248] - [2025-10-15 18:23:59] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params2] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:23:59 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:23:59 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:59 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:23:59 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:23:59 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:23:59 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:23:59 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:23:59 - [api_base:209] - [2025-10-15 18:23:59] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_3', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:23:59 - [api_base:230] - [2025-10-15 18:23:59] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:02 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:02 - [api_base:209] - [2025-10-15 18:24:02] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:02 - [api_base:230] - [2025-10-15 18:24:02] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:03 - [test_time_difference:109] - 第3/50次循环执行成功
+INFO     - 2025-10-15 18:24:03 - [conftest:343] - [2025-10-15 18:24:03] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params2] 执行完毕
+INFO     - 2025-10-15 18:24:03 - [conftest:248] - [2025-10-15 18:24:03] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params3] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:03 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:03 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:03 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:03 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:03 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:03 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:04 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:04 - [api_base:209] - [2025-10-15 18:24:04] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_4', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:04 - [api_base:230] - [2025-10-15 18:24:04] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:07 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:07 - [api_base:209] - [2025-10-15 18:24:07] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:07 - [api_base:230] - [2025-10-15 18:24:07] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:08 - [test_time_difference:109] - 第4/50次循环执行成功
+INFO     - 2025-10-15 18:24:08 - [conftest:343] - [2025-10-15 18:24:08] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params3] 执行完毕
+INFO     - 2025-10-15 18:24:08 - [conftest:248] - [2025-10-15 18:24:08] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params4] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:08 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:08 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:08 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:08 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:08 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:08 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:08 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:08 - [api_base:209] - [2025-10-15 18:24:08] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_5', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:08 - [api_base:230] - [2025-10-15 18:24:08] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:12 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:12 - [api_base:209] - [2025-10-15 18:24:12] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:12 - [api_base:230] - [2025-10-15 18:24:12] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:13 - [test_time_difference:109] - 第5/50次循环执行成功
+INFO     - 2025-10-15 18:24:13 - [conftest:343] - [2025-10-15 18:24:13] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params4] 执行完毕
+INFO     - 2025-10-15 18:24:13 - [conftest:248] - [2025-10-15 18:24:13] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params5] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:13 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:13 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:13 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:13 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:13 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:13 - [api_base:209] - [2025-10-15 18:24:13] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_6', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:13 - [api_base:230] - [2025-10-15 18:24:13] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:16 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:16 - [api_base:209] - [2025-10-15 18:24:16] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:16 - [api_base:230] - [2025-10-15 18:24:16] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:17 - [test_time_difference:109] - 第6/50次循环执行成功
+INFO     - 2025-10-15 18:24:17 - [conftest:343] - [2025-10-15 18:24:17] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params5] 执行完毕
+INFO     - 2025-10-15 18:24:17 - [conftest:248] - [2025-10-15 18:24:17] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params6] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:17 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:18 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:18 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:18 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:18 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:18 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:18 - [api_base:209] - [2025-10-15 18:24:18] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_7', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:18 - [api_base:230] - [2025-10-15 18:24:18] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:21 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:21 - [api_base:209] - [2025-10-15 18:24:21] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:21 - [api_base:230] - [2025-10-15 18:24:21] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:22 - [test_time_difference:109] - 第7/50次循环执行成功
+INFO     - 2025-10-15 18:24:22 - [conftest:343] - [2025-10-15 18:24:22] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params6] 执行完毕
+INFO     - 2025-10-15 18:24:22 - [conftest:248] - [2025-10-15 18:24:22] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params7] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:22 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:23 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:23 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:23 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:23 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:23 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:23 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:23 - [api_base:209] - [2025-10-15 18:24:23] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_8', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:23 - [api_base:230] - [2025-10-15 18:24:23] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:26 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:26 - [api_base:209] - [2025-10-15 18:24:26] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:26 - [api_base:230] - [2025-10-15 18:24:26] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:27 - [test_time_difference:109] - 第8/50次循环执行成功
+INFO     - 2025-10-15 18:24:27 - [conftest:343] - [2025-10-15 18:24:27] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params7] 执行完毕
+INFO     - 2025-10-15 18:24:27 - [conftest:248] - [2025-10-15 18:24:27] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params8] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:27 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:27 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:27 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:27 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:27 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:27 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:28 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:28 - [api_base:209] - [2025-10-15 18:24:28] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_9', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:28 - [api_base:230] - [2025-10-15 18:24:28] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:31 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:31 - [api_base:209] - [2025-10-15 18:24:31] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:31 - [api_base:230] - [2025-10-15 18:24:31] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:32 - [test_time_difference:109] - 第9/50次循环执行成功
+INFO     - 2025-10-15 18:24:32 - [conftest:343] - [2025-10-15 18:24:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params8] 执行完毕
+INFO     - 2025-10-15 18:24:32 - [conftest:248] - [2025-10-15 18:24:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params9] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:32 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:32 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:32 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:33 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:33 - [api_base:209] - [2025-10-15 18:24:33] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_10', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:33 - [api_base:230] - [2025-10-15 18:24:33] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:36 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:36 - [api_base:209] - [2025-10-15 18:24:36] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:36 - [api_base:230] - [2025-10-15 18:24:36] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:37 - [test_time_difference:109] - 第10/50次循环执行成功
+INFO     - 2025-10-15 18:24:37 - [conftest:343] - [2025-10-15 18:24:37] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params9] 执行完毕
+INFO     - 2025-10-15 18:24:37 - [conftest:248] - [2025-10-15 18:24:37] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params10] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:37 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:37 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:37 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:37 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:37 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:37 - [api_base:209] - [2025-10-15 18:24:37] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_11', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:37 - [api_base:230] - [2025-10-15 18:24:37] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:40 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:40 - [api_base:209] - [2025-10-15 18:24:40] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:40 - [api_base:230] - [2025-10-15 18:24:40] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:41 - [test_time_difference:109] - 第11/50次循环执行成功
+INFO     - 2025-10-15 18:24:41 - [conftest:343] - [2025-10-15 18:24:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params10] 执行完毕
+INFO     - 2025-10-15 18:24:41 - [conftest:248] - [2025-10-15 18:24:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params11] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:41 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:41 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:41 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:41 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:42 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:42 - [api_base:209] - [2025-10-15 18:24:42] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_12', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:42 - [api_base:230] - [2025-10-15 18:24:42] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:45 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:45 - [api_base:209] - [2025-10-15 18:24:45] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:45 - [api_base:230] - [2025-10-15 18:24:45] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:46 - [test_time_difference:109] - 第12/50次循环执行成功
+INFO     - 2025-10-15 18:24:46 - [conftest:343] - [2025-10-15 18:24:46] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params11] 执行完毕
+INFO     - 2025-10-15 18:24:46 - [conftest:248] - [2025-10-15 18:24:46] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params12] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:46 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:46 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:46 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:46 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:46 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:46 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:46 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:46 - [api_base:209] - [2025-10-15 18:24:46] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_13', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:46 - [api_base:230] - [2025-10-15 18:24:46] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:49 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:49 - [api_base:209] - [2025-10-15 18:24:49] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:49 - [api_base:230] - [2025-10-15 18:24:49] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:50 - [test_time_difference:109] - 第13/50次循环执行成功
+INFO     - 2025-10-15 18:24:50 - [conftest:343] - [2025-10-15 18:24:50] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params12] 执行完毕
+INFO     - 2025-10-15 18:24:50 - [conftest:248] - [2025-10-15 18:24:50] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params13] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:50 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:51 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:51 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:51 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:51 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:51 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:51 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:51 - [api_base:209] - [2025-10-15 18:24:51] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_14', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:51 - [api_base:230] - [2025-10-15 18:24:51] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:54 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:54 - [api_base:209] - [2025-10-15 18:24:54] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:54 - [api_base:230] - [2025-10-15 18:24:54] 请求后等待 1 秒
+INFO     - 2025-10-15 18:24:55 - [test_time_difference:109] - 第14/50次循环执行成功
+INFO     - 2025-10-15 18:24:55 - [conftest:343] - [2025-10-15 18:24:55] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params13] 执行完毕
+INFO     - 2025-10-15 18:24:55 - [conftest:248] - [2025-10-15 18:24:55] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params14] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:24:55 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:24:55 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:55 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:24:55 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:24:55 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:24:55 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:24:56 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:56 - [api_base:209] - [2025-10-15 18:24:56] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_15', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:24:56 - [api_base:230] - [2025-10-15 18:24:56] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:24:59 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:24:59 - [api_base:209] - [2025-10-15 18:24:59] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:24:59 - [api_base:230] - [2025-10-15 18:24:59] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:00 - [test_time_difference:109] - 第15/50次循环执行成功
+INFO     - 2025-10-15 18:25:00 - [conftest:343] - [2025-10-15 18:25:00] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params14] 执行完毕
+INFO     - 2025-10-15 18:25:00 - [conftest:248] - [2025-10-15 18:25:00] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params15] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:00 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:00 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:00 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:00 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:00 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:00 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:00 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:00 - [api_base:209] - [2025-10-15 18:25:00] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_16', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:00 - [api_base:230] - [2025-10-15 18:25:00] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:03 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:03 - [api_base:209] - [2025-10-15 18:25:03] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:03 - [api_base:230] - [2025-10-15 18:25:03] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:04 - [test_time_difference:109] - 第16/50次循环执行成功
+INFO     - 2025-10-15 18:25:04 - [conftest:343] - [2025-10-15 18:25:04] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params15] 执行完毕
+INFO     - 2025-10-15 18:25:04 - [conftest:248] - [2025-10-15 18:25:04] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params16] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:04 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:04 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:04 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:04 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:04 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:04 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:05 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:05 - [api_base:209] - [2025-10-15 18:25:05] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_17', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:05 - [api_base:230] - [2025-10-15 18:25:05] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:08 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:08 - [api_base:209] - [2025-10-15 18:25:08] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:08 - [api_base:230] - [2025-10-15 18:25:08] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:09 - [test_time_difference:109] - 第17/50次循环执行成功
+INFO     - 2025-10-15 18:25:09 - [conftest:343] - [2025-10-15 18:25:09] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params16] 执行完毕
+INFO     - 2025-10-15 18:25:09 - [conftest:248] - [2025-10-15 18:25:09] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params17] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:09 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:09 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:09 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:09 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:09 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:09 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:09 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:09 - [api_base:209] - [2025-10-15 18:25:09] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_18', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:09 - [api_base:230] - [2025-10-15 18:25:09] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:13 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:13 - [api_base:209] - [2025-10-15 18:25:13] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:13 - [api_base:230] - [2025-10-15 18:25:13] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:14 - [test_time_difference:109] - 第18/50次循环执行成功
+INFO     - 2025-10-15 18:25:14 - [conftest:343] - [2025-10-15 18:25:14] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params17] 执行完毕
+INFO     - 2025-10-15 18:25:14 - [conftest:248] - [2025-10-15 18:25:14] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params18] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:14 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:14 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:14 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:14 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:14 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:14 - [api_base:209] - [2025-10-15 18:25:14] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_19', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:14 - [api_base:230] - [2025-10-15 18:25:14] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:17 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:17 - [api_base:209] - [2025-10-15 18:25:17] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:17 - [api_base:230] - [2025-10-15 18:25:17] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:18 - [test_time_difference:109] - 第19/50次循环执行成功
+INFO     - 2025-10-15 18:25:18 - [conftest:343] - [2025-10-15 18:25:18] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params18] 执行完毕
+INFO     - 2025-10-15 18:25:18 - [conftest:248] - [2025-10-15 18:25:18] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params19] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:18 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:18 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:18 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:18 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:19 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:19 - [api_base:209] - [2025-10-15 18:25:19] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_20', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:19 - [api_base:230] - [2025-10-15 18:25:19] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:22 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:22 - [api_base:209] - [2025-10-15 18:25:22] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:22 - [api_base:230] - [2025-10-15 18:25:22] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:23 - [test_time_difference:109] - 第20/50次循环执行成功
+INFO     - 2025-10-15 18:25:23 - [conftest:343] - [2025-10-15 18:25:23] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params19] 执行完毕
+INFO     - 2025-10-15 18:25:23 - [conftest:248] - [2025-10-15 18:25:23] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params20] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:23 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:23 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:23 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:23 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:23 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:23 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:23 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:23 - [api_base:209] - [2025-10-15 18:25:23] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_21', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:23 - [api_base:230] - [2025-10-15 18:25:23] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:26 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:26 - [api_base:209] - [2025-10-15 18:25:26] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:26 - [api_base:230] - [2025-10-15 18:25:26] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:27 - [test_time_difference:109] - 第21/50次循环执行成功
+INFO     - 2025-10-15 18:25:27 - [conftest:343] - [2025-10-15 18:25:27] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params20] 执行完毕
+INFO     - 2025-10-15 18:25:27 - [conftest:248] - [2025-10-15 18:25:27] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params21] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:27 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:28 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:28 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:28 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:28 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:28 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:28 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:28 - [api_base:209] - [2025-10-15 18:25:28] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_22', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:28 - [api_base:230] - [2025-10-15 18:25:28] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:31 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:31 - [api_base:209] - [2025-10-15 18:25:31] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:31 - [api_base:230] - [2025-10-15 18:25:31] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:32 - [test_time_difference:109] - 第22/50次循环执行成功
+INFO     - 2025-10-15 18:25:32 - [conftest:343] - [2025-10-15 18:25:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params21] 执行完毕
+INFO     - 2025-10-15 18:25:32 - [conftest:248] - [2025-10-15 18:25:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params22] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:32 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:32 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:32 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:32 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:32 - [api_base:209] - [2025-10-15 18:25:32] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_23', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:32 - [api_base:230] - [2025-10-15 18:25:32] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:35 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:35 - [api_base:209] - [2025-10-15 18:25:35] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:35 - [api_base:230] - [2025-10-15 18:25:35] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:36 - [test_time_difference:109] - 第23/50次循环执行成功
+INFO     - 2025-10-15 18:25:36 - [conftest:343] - [2025-10-15 18:25:36] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params22] 执行完毕
+INFO     - 2025-10-15 18:25:36 - [conftest:248] - [2025-10-15 18:25:36] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params23] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:36 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:37 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:37 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:37 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:37 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:37 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:37 - [api_base:209] - [2025-10-15 18:25:37] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_24', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:37 - [api_base:230] - [2025-10-15 18:25:37] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:40 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:40 - [api_base:209] - [2025-10-15 18:25:40] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:40 - [api_base:230] - [2025-10-15 18:25:40] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:41 - [test_time_difference:109] - 第24/50次循环执行成功
+INFO     - 2025-10-15 18:25:41 - [conftest:343] - [2025-10-15 18:25:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params23] 执行完毕
+INFO     - 2025-10-15 18:25:41 - [conftest:248] - [2025-10-15 18:25:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params24] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:41 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:41 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:41 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:41 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:41 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:41 - [api_base:209] - [2025-10-15 18:25:41] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_25', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:41 - [api_base:230] - [2025-10-15 18:25:41] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:45 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:45 - [api_base:209] - [2025-10-15 18:25:45] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:45 - [api_base:230] - [2025-10-15 18:25:45] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:46 - [test_time_difference:109] - 第25/50次循环执行成功
+INFO     - 2025-10-15 18:25:46 - [conftest:343] - [2025-10-15 18:25:46] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params24] 执行完毕
+INFO     - 2025-10-15 18:25:46 - [conftest:248] - [2025-10-15 18:25:46] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params25] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:46 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:46 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:46 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:46 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:46 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:46 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:46 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:46 - [api_base:209] - [2025-10-15 18:25:46] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_26', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:46 - [api_base:230] - [2025-10-15 18:25:46] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:49 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:49 - [api_base:209] - [2025-10-15 18:25:49] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:49 - [api_base:230] - [2025-10-15 18:25:49] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:50 - [test_time_difference:109] - 第26/50次循环执行成功
+INFO     - 2025-10-15 18:25:50 - [conftest:343] - [2025-10-15 18:25:50] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params25] 执行完毕
+INFO     - 2025-10-15 18:25:50 - [conftest:248] - [2025-10-15 18:25:50] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params26] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:50 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:50 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:50 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:50 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:50 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:50 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:51 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:51 - [api_base:209] - [2025-10-15 18:25:51] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_27', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:51 - [api_base:230] - [2025-10-15 18:25:51] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:54 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:54 - [api_base:209] - [2025-10-15 18:25:54] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:54 - [api_base:230] - [2025-10-15 18:25:54] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:55 - [test_time_difference:109] - 第27/50次循环执行成功
+INFO     - 2025-10-15 18:25:55 - [conftest:343] - [2025-10-15 18:25:55] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params26] 执行完毕
+INFO     - 2025-10-15 18:25:55 - [conftest:248] - [2025-10-15 18:25:55] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params27] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:55 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:25:55 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:55 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:25:55 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:25:55 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:25:55 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:25:55 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:55 - [api_base:209] - [2025-10-15 18:25:55] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_28', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:25:55 - [api_base:230] - [2025-10-15 18:25:55] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:25:58 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:25:58 - [api_base:209] - [2025-10-15 18:25:58] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:25:58 - [api_base:230] - [2025-10-15 18:25:58] 请求后等待 1 秒
+INFO     - 2025-10-15 18:25:59 - [test_time_difference:109] - 第28/50次循环执行成功
+INFO     - 2025-10-15 18:25:59 - [conftest:343] - [2025-10-15 18:25:59] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params27] 执行完毕
+INFO     - 2025-10-15 18:25:59 - [conftest:248] - [2025-10-15 18:25:59] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params28] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:25:59 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:00 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:00 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:00 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:00 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:00 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:00 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:00 - [api_base:209] - [2025-10-15 18:26:00] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_29', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:00 - [api_base:230] - [2025-10-15 18:26:00] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:03 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:03 - [api_base:209] - [2025-10-15 18:26:03] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:03 - [api_base:230] - [2025-10-15 18:26:03] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:04 - [test_time_difference:109] - 第29/50次循环执行成功
+INFO     - 2025-10-15 18:26:04 - [conftest:343] - [2025-10-15 18:26:04] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params28] 执行完毕
+INFO     - 2025-10-15 18:26:04 - [conftest:248] - [2025-10-15 18:26:04] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params29] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:04 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:04 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:04 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:04 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:04 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:04 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:04 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:04 - [api_base:209] - [2025-10-15 18:26:04] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_30', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:04 - [api_base:230] - [2025-10-15 18:26:04] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:08 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:08 - [api_base:209] - [2025-10-15 18:26:08] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:08 - [api_base:230] - [2025-10-15 18:26:08] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:09 - [test_time_difference:109] - 第30/50次循环执行成功
+INFO     - 2025-10-15 18:26:09 - [conftest:343] - [2025-10-15 18:26:09] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params29] 执行完毕
+INFO     - 2025-10-15 18:26:09 - [conftest:248] - [2025-10-15 18:26:09] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params30] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:09 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:09 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:09 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:09 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:09 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:09 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:09 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:09 - [api_base:209] - [2025-10-15 18:26:09] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_31', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:09 - [api_base:230] - [2025-10-15 18:26:09] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:12 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:12 - [api_base:209] - [2025-10-15 18:26:12] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:12 - [api_base:230] - [2025-10-15 18:26:12] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:13 - [test_time_difference:109] - 第31/50次循环执行成功
+INFO     - 2025-10-15 18:26:13 - [conftest:343] - [2025-10-15 18:26:13] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params30] 执行完毕
+INFO     - 2025-10-15 18:26:13 - [conftest:248] - [2025-10-15 18:26:13] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params31] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:13 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:13 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:13 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:13 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:14 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:14 - [api_base:209] - [2025-10-15 18:26:14] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_32', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:14 - [api_base:230] - [2025-10-15 18:26:14] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:17 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:17 - [api_base:209] - [2025-10-15 18:26:17] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:17 - [api_base:230] - [2025-10-15 18:26:17] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:18 - [test_time_difference:109] - 第32/50次循环执行成功
+INFO     - 2025-10-15 18:26:18 - [conftest:343] - [2025-10-15 18:26:18] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params31] 执行完毕
+INFO     - 2025-10-15 18:26:18 - [conftest:248] - [2025-10-15 18:26:18] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params32] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:18 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:18 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:18 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:18 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:18 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:18 - [api_base:209] - [2025-10-15 18:26:18] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_33', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:18 - [api_base:230] - [2025-10-15 18:26:18] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:21 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:21 - [api_base:209] - [2025-10-15 18:26:21] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:21 - [api_base:230] - [2025-10-15 18:26:21] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:22 - [test_time_difference:109] - 第33/50次循环执行成功
+INFO     - 2025-10-15 18:26:22 - [conftest:343] - [2025-10-15 18:26:22] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params32] 执行完毕
+INFO     - 2025-10-15 18:26:22 - [conftest:248] - [2025-10-15 18:26:22] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params33] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:22 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:23 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:23 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:23 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:23 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:23 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:23 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:23 - [api_base:209] - [2025-10-15 18:26:23] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_34', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:23 - [api_base:230] - [2025-10-15 18:26:23] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:26 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:26 - [api_base:209] - [2025-10-15 18:26:26] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:26 - [api_base:230] - [2025-10-15 18:26:26] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:27 - [test_time_difference:109] - 第34/50次循环执行成功
+INFO     - 2025-10-15 18:26:27 - [conftest:343] - [2025-10-15 18:26:27] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params33] 执行完毕
+INFO     - 2025-10-15 18:26:27 - [conftest:248] - [2025-10-15 18:26:27] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params34] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:27 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:27 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:27 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:27 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:27 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:27 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:27 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:27 - [api_base:209] - [2025-10-15 18:26:27] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_35', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:27 - [api_base:230] - [2025-10-15 18:26:27] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:31 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:31 - [api_base:209] - [2025-10-15 18:26:31] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:31 - [api_base:230] - [2025-10-15 18:26:31] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:32 - [test_time_difference:109] - 第35/50次循环执行成功
+INFO     - 2025-10-15 18:26:32 - [conftest:343] - [2025-10-15 18:26:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params34] 执行完毕
+INFO     - 2025-10-15 18:26:32 - [conftest:248] - [2025-10-15 18:26:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params35] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:32 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:32 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:32 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:32 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:32 - [api_base:209] - [2025-10-15 18:26:32] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_36', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:32 - [api_base:230] - [2025-10-15 18:26:32] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:35 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:35 - [api_base:209] - [2025-10-15 18:26:35] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:35 - [api_base:230] - [2025-10-15 18:26:35] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:36 - [test_time_difference:109] - 第36/50次循环执行成功
+INFO     - 2025-10-15 18:26:36 - [conftest:343] - [2025-10-15 18:26:36] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params35] 执行完毕
+INFO     - 2025-10-15 18:26:36 - [conftest:248] - [2025-10-15 18:26:36] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params36] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:36 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:36 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:36 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:36 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:36 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:36 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:37 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:37 - [api_base:209] - [2025-10-15 18:26:37] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_37', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:37 - [api_base:230] - [2025-10-15 18:26:37] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:40 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:40 - [api_base:209] - [2025-10-15 18:26:40] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:40 - [api_base:230] - [2025-10-15 18:26:40] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:41 - [test_time_difference:109] - 第37/50次循环执行成功
+INFO     - 2025-10-15 18:26:41 - [conftest:343] - [2025-10-15 18:26:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params36] 执行完毕
+INFO     - 2025-10-15 18:26:41 - [conftest:248] - [2025-10-15 18:26:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params37] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:41 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:41 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:41 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:41 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:41 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:41 - [api_base:209] - [2025-10-15 18:26:41] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_38', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:41 - [api_base:230] - [2025-10-15 18:26:41] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:45 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:45 - [api_base:209] - [2025-10-15 18:26:45] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:45 - [api_base:230] - [2025-10-15 18:26:45] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:46 - [test_time_difference:109] - 第38/50次循环执行成功
+INFO     - 2025-10-15 18:26:46 - [conftest:343] - [2025-10-15 18:26:46] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params37] 执行完毕
+INFO     - 2025-10-15 18:26:46 - [conftest:248] - [2025-10-15 18:26:46] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params38] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:46 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:46 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:46 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:46 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:46 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:46 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:46 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:46 - [api_base:209] - [2025-10-15 18:26:46] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_39', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:46 - [api_base:230] - [2025-10-15 18:26:46] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:49 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:49 - [api_base:209] - [2025-10-15 18:26:49] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:49 - [api_base:230] - [2025-10-15 18:26:49] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:50 - [test_time_difference:109] - 第39/50次循环执行成功
+INFO     - 2025-10-15 18:26:50 - [conftest:343] - [2025-10-15 18:26:50] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params38] 执行完毕
+INFO     - 2025-10-15 18:26:50 - [conftest:248] - [2025-10-15 18:26:50] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params39] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:50 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:50 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:50 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:50 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:50 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:50 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:51 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:51 - [api_base:209] - [2025-10-15 18:26:51] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_40', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:51 - [api_base:230] - [2025-10-15 18:26:51] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:54 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:54 - [api_base:209] - [2025-10-15 18:26:54] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:54 - [api_base:230] - [2025-10-15 18:26:54] 请求后等待 1 秒
+INFO     - 2025-10-15 18:26:55 - [test_time_difference:109] - 第40/50次循环执行成功
+INFO     - 2025-10-15 18:26:55 - [conftest:343] - [2025-10-15 18:26:55] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params39] 执行完毕
+INFO     - 2025-10-15 18:26:55 - [conftest:248] - [2025-10-15 18:26:55] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params40] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:26:55 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:26:55 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:55 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:26:55 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:26:55 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:26:55 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:26:55 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:55 - [api_base:209] - [2025-10-15 18:26:55] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_41', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:26:55 - [api_base:230] - [2025-10-15 18:26:55] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:26:59 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:26:59 - [api_base:209] - [2025-10-15 18:26:59] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:26:59 - [api_base:230] - [2025-10-15 18:26:59] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:00 - [test_time_difference:109] - 第41/50次循环执行成功
+INFO     - 2025-10-15 18:27:00 - [conftest:343] - [2025-10-15 18:27:00] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params40] 执行完毕
+INFO     - 2025-10-15 18:27:00 - [conftest:248] - [2025-10-15 18:27:00] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params41] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:00 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:00 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:00 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:00 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:00 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:00 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:00 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:00 - [api_base:209] - [2025-10-15 18:27:00] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_42', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:00 - [api_base:230] - [2025-10-15 18:27:00] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:03 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:03 - [api_base:209] - [2025-10-15 18:27:03] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:03 - [api_base:230] - [2025-10-15 18:27:03] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:04 - [test_time_difference:109] - 第42/50次循环执行成功
+INFO     - 2025-10-15 18:27:04 - [conftest:343] - [2025-10-15 18:27:04] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params41] 执行完毕
+INFO     - 2025-10-15 18:27:04 - [conftest:248] - [2025-10-15 18:27:04] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params42] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:04 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:04 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:04 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:04 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:04 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:04 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:05 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:05 - [api_base:209] - [2025-10-15 18:27:05] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_43', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:05 - [api_base:230] - [2025-10-15 18:27:05] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:08 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:08 - [api_base:209] - [2025-10-15 18:27:08] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:08 - [api_base:230] - [2025-10-15 18:27:08] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:09 - [test_time_difference:109] - 第43/50次循环执行成功
+INFO     - 2025-10-15 18:27:09 - [conftest:343] - [2025-10-15 18:27:09] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params42] 执行完毕
+INFO     - 2025-10-15 18:27:09 - [conftest:248] - [2025-10-15 18:27:09] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params43] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:09 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:09 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:09 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:09 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:09 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:09 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:09 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:09 - [api_base:209] - [2025-10-15 18:27:09] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_44', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:09 - [api_base:230] - [2025-10-15 18:27:09] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:12 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:12 - [api_base:209] - [2025-10-15 18:27:12] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:12 - [api_base:230] - [2025-10-15 18:27:12] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:13 - [test_time_difference:109] - 第44/50次循环执行成功
+INFO     - 2025-10-15 18:27:13 - [conftest:343] - [2025-10-15 18:27:13] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params43] 执行完毕
+INFO     - 2025-10-15 18:27:13 - [conftest:248] - [2025-10-15 18:27:13] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params44] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:14 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:14 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:14 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:14 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:14 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:14 - [api_base:209] - [2025-10-15 18:27:14] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_45', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:14 - [api_base:230] - [2025-10-15 18:27:14] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:17 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:17 - [api_base:209] - [2025-10-15 18:27:17] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:17 - [api_base:230] - [2025-10-15 18:27:17] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:18 - [test_time_difference:109] - 第45/50次循环执行成功
+INFO     - 2025-10-15 18:27:18 - [conftest:343] - [2025-10-15 18:27:18] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params44] 执行完毕
+INFO     - 2025-10-15 18:27:18 - [conftest:248] - [2025-10-15 18:27:18] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params45] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:18 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:18 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:18 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:18 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:19 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:19 - [api_base:209] - [2025-10-15 18:27:19] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_46', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:19 - [api_base:230] - [2025-10-15 18:27:19] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:22 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:22 - [api_base:209] - [2025-10-15 18:27:22] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:22 - [api_base:230] - [2025-10-15 18:27:22] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:23 - [test_time_difference:109] - 第46/50次循环执行成功
+INFO     - 2025-10-15 18:27:23 - [conftest:343] - [2025-10-15 18:27:23] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params45] 执行完毕
+INFO     - 2025-10-15 18:27:23 - [conftest:248] - [2025-10-15 18:27:23] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params46] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:23 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:23 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:23 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:23 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:23 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:23 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:23 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:23 - [api_base:209] - [2025-10-15 18:27:23] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_47', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:23 - [api_base:230] - [2025-10-15 18:27:23] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:26 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:26 - [api_base:209] - [2025-10-15 18:27:26] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:27 - [api_base:230] - [2025-10-15 18:27:27] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:28 - [test_time_difference:109] - 第47/50次循环执行成功
+INFO     - 2025-10-15 18:27:28 - [conftest:343] - [2025-10-15 18:27:28] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params46] 执行完毕
+INFO     - 2025-10-15 18:27:28 - [conftest:248] - [2025-10-15 18:27:28] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params47] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:28 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:28 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:28 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:28 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:28 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:28 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:28 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:28 - [api_base:209] - [2025-10-15 18:27:28] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_48', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:28 - [api_base:230] - [2025-10-15 18:27:28] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:31 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:31 - [api_base:209] - [2025-10-15 18:27:31] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:31 - [api_base:230] - [2025-10-15 18:27:31] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:32 - [test_time_difference:109] - 第48/50次循环执行成功
+INFO     - 2025-10-15 18:27:32 - [conftest:343] - [2025-10-15 18:27:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params47] 执行完毕
+INFO     - 2025-10-15 18:27:32 - [conftest:248] - [2025-10-15 18:27:32] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params48] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:32 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:32 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:32 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:33 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:33 - [api_base:209] - [2025-10-15 18:27:33] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_49', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:33 - [api_base:230] - [2025-10-15 18:27:33] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:36 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:36 - [api_base:209] - [2025-10-15 18:27:36] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:36 - [api_base:230] - [2025-10-15 18:27:36] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:37 - [test_time_difference:109] - 第49/50次循环执行成功
+INFO     - 2025-10-15 18:27:37 - [conftest:343] - [2025-10-15 18:27:37] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params48] 执行完毕
+INFO     - 2025-10-15 18:27:37 - [conftest:248] - [2025-10-15 18:27:37] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params49] 开始登录，环境: dev
+DEBUG    - 2025-10-15 18:27:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-15 18:27:37 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:37 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-15 18:27:37 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:37 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-15 18:27:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-15 18:27:37 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:37 - [api_base:209] - [2025-10-15 18:27:37] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ_loop_50', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12511}
+INFO     - 2025-10-15 18:27:37 - [api_base:230] - [2025-10-15 18:27:37] 请求后等待 1 秒
+DEBUG    - 2025-10-15 18:27:40 - [connectionpool:546] - http://39.98.109.212:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-15 18:27:40 - [api_base:209] - [2025-10-15 18:27:40] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12511, 'account': '301391174'}
+INFO     - 2025-10-15 18:27:40 - [api_base:230] - [2025-10-15 18:27:40] 请求后等待 1 秒
+INFO     - 2025-10-15 18:27:41 - [test_time_difference:109] - 第50/50次循环执行成功
+INFO     - 2025-10-15 18:27:41 - [conftest:343] - [2025-10-15 18:27:41] 用例 test_community/test_time_difference.py::Test_createTD::TestVPSOrdersend::test_trader_open_close_loop[params49] 执行完毕
+INFO     - 2025-10-15 18:27:42 - [api_base:604] - [2025-10-15 18:27:42] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE master_id = %s ORDER BY create_time DESC 
+参数: ('1978292601147535362',)
+INFO     - 2025-10-15 18:27:42 - [api_base:607] - [2025-10-15 18:27:42] 查询成功，结果数量: 147
+INFO     - 2025-10-15 18:27:42 - [api_base:619] - [2025-10-15 18:27:42] 查询结果: [{"id": "1978407407995195393", "master_id": "1978292601147535362", "master_ticket": 90125107, "master_type": 0, "master_open_time": "2025-10-15 13:27:37", "detected_open_time": "2025-10-15 18:27:37", "master_close_time": "2025-10-15 13:27:40", "detected_close_time": "2025-10-15 18:27:41", "master_lots": 0.01, "comment": "gendanshequ_loop_50", "master_profit": -0.41, "master_symbol": "XAUUSD", "slave_id": "1978292787940864001", "slave_ticket": 90125113, "slave_type": 1, "slave_open_time": "2025-1
+INFO     - 2025-10-15 18:27:42 - [test_time_difference:179] - 
+
+喊单账户开仓时间分析:
+总耗时(ms): 47614
+最小时间差(ms): 271
+最大时间差(ms): 439
+平均时间差(ms): 324
+四分位(ms): 312/319/334
+有效记录数量: 147条
+无效记录数量: 0条（含null值）
+                    
+INFO     - 2025-10-15 18:27:42 - [api_base:604] - [2025-10-15 18:27:42] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE slave_id = %s ORDER BY create_time DESC 
+参数: ('1978292787940864001',)
+INFO     - 2025-10-15 18:27:43 - [api_base:607] - [2025-10-15 18:27:43] 查询成功，结果数量: 147
+INFO     - 2025-10-15 18:27:43 - [api_base:619] - [2025-10-15 18:27:43] 查询结果: [{"id": "1978407407995195393", "master_id": "1978292601147535362", "master_ticket": 90125107, "master_type": 0, "master_open_time": "2025-10-15 13:27:37", "detected_open_time": "2025-10-15 18:27:37", "master_close_time": "2025-10-15 13:27:40", "detected_close_time": "2025-10-15 18:27:41", "master_lots": 0.01, "comment": "gendanshequ_loop_50", "master_profit": -0.41, "master_symbol": "XAUUSD", "slave_id": "1978292787940864001", "slave_ticket": 90125113, "slave_type": 1, "slave_open_time": "2025-1
+INFO     - 2025-10-15 18:27:43 - [test_time_difference:179] - 
+
+跟单账户开仓时间分析:
+总耗时(ms): 47614
+最小时间差(ms): 271
+最大时间差(ms): 439
+平均时间差(ms): 324
+四分位(ms): 312/319/334
+有效记录数量: 147条
+无效记录数量: 0条（含null值）
+                    
+INFO     - 2025-10-15 18:27:43 - [api_base:604] - [2025-10-15 18:27:43] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE master_id = %s ORDER BY create_time DESC 
+参数: ('1978292601147535362',)
+INFO     - 2025-10-15 18:27:43 - [api_base:607] - [2025-10-15 18:27:43] 查询成功，结果数量: 147
+INFO     - 2025-10-15 18:27:43 - [api_base:619] - [2025-10-15 18:27:43] 查询结果: [{"id": "1978407407995195393", "master_id": "1978292601147535362", "master_ticket": 90125107, "master_type": 0, "master_open_time": "2025-10-15 13:27:37", "detected_open_time": "2025-10-15 18:27:37", "master_close_time": "2025-10-15 13:27:40", "detected_close_time": "2025-10-15 18:27:41", "master_lots": 0.01, "comment": "gendanshequ_loop_50", "master_profit": -0.41, "master_symbol": "XAUUSD", "slave_id": "1978292787940864001", "slave_ticket": 90125113, "slave_type": 1, "slave_open_time": "2025-1
+INFO     - 2025-10-15 18:27:43 - [test_time_difference:179] - 
+
+喊单账户平仓时间分析:
+总耗时(ms): 47634
+最小时间差(ms): 271
+最大时间差(ms): 398
+平均时间差(ms): 324
+四分位(ms): 306/322/336
+有效记录数量: 147条
+无效记录数量: 0条（含null值）
+                    
+INFO     - 2025-10-15 18:27:44 - [api_base:604] - [2025-10-15 18:27:44] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE slave_id = %s ORDER BY create_time DESC 
+参数: ('1978292787940864001',)
+INFO     - 2025-10-15 18:27:44 - [api_base:607] - [2025-10-15 18:27:44] 查询成功，结果数量: 147
+INFO     - 2025-10-15 18:27:44 - [api_base:619] - [2025-10-15 18:27:44] 查询结果: [{"id": "1978407407995195393", "master_id": "1978292601147535362", "master_ticket": 90125107, "master_type": 0, "master_open_time": "2025-10-15 13:27:37", "detected_open_time": "2025-10-15 18:27:37", "master_close_time": "2025-10-15 13:27:40", "detected_close_time": "2025-10-15 18:27:41", "master_lots": 0.01, "comment": "gendanshequ_loop_50", "master_profit": -0.41, "master_symbol": "XAUUSD", "slave_id": "1978292787940864001", "slave_ticket": 90125113, "slave_type": 1, "slave_open_time": "2025-1
+INFO     - 2025-10-15 18:27:44 - [test_time_difference:179] - 
+
+跟单账户平仓时间分析:
+总耗时(ms): 47634
+最小时间差(ms): 271
+最大时间差(ms): 398
+平均时间差(ms): 324
+四分位(ms): 306/322/336
+有效记录数量: 147条
+无效记录数量: 0条（含null值）
+                    
+INFO     - 2025-10-15 18:27:44 - [variable_manager:111] - [2025-10-15 18:23:49] 运行时变量已保存到: D:\pycharm_test\template\VAR\runtime_vars_community.json
+INFO     - 2025-10-15 18:27:44 - [conftest:544] - [2025-10-15 18:23:49] 测试会话结束，总耗时: 235.00秒
+INFO     - 2025-10-15 18:27:44 - [feishu_notification:130] - [2025-10-15 18:23:49] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+DEBUG    - 2025-10-15 18:27:44 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
+DEBUG    - 2025-10-15 18:27:44 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
+INFO     - 2025-10-15 18:27:44 - [feishu_notification:138] - [2025-10-15 18:23:49] 飞书响应状态码: 200
+INFO     - 2025-10-15 18:27:44 - [feishu_notification:139] - [2025-10-15 18:23:49] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     - 2025-10-15 18:27:44 - [feishu_notification:144] - [2025-10-15 18:23:49] [FEISHU] 消息发送成功
+INFO     - 2025-10-15 18:27:44 - [conftest:556] - [2025-10-15 18:23:49] 飞书通知发送成功

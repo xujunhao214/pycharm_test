@@ -159,7 +159,7 @@ class Test_openandclouseall:
                         attachment_name=f"账号:{trader_account}第 {idx + 1} 条记录校验"
                     )
 
-                    with allure.step("手数校验-MT4开仓手数和持仓订单手数"):
+                    with allure.step("手数校验-开仓手数和持仓订单手数"):
                         totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
                         logging.info(f"手数是: {totalLots}")
 
@@ -172,7 +172,7 @@ class Test_openandclouseall:
                             message=f"手数符合预期",
                             attachment_name="手数详情"
                         )
-                        logger.info(f"喊单者手数：{totalLots} MT4开仓手数：{lots_open}")
+                        logger.info(f"喊单者手数：{totalLots} 开仓手数：{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("跟单管理-VPS管理-跟单者账号-开仓后")
@@ -238,7 +238,7 @@ class Test_openandclouseall:
                         attachment_name=f"账号:{follow_account}第 {idx + 1} 条记录校验"
                     )
 
-                    with allure.step("手数校验-MT4开仓手数和持仓订单手数"):
+                    with allure.step("手数校验-开仓手数和持仓订单手数"):
                         totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
                         logging.info(f"手数是: {totalLots}")
 
@@ -251,7 +251,7 @@ class Test_openandclouseall:
                             message=f"手数符合预期",
                             attachment_name="手数详情"
                         )
-                        logger.info(f"跟单者手数：{totalLots} MT4开仓手数：{lots_open}")
+                        logger.info(f"跟单者手数：{totalLots} 开仓手数：{lots_open}")
 
         # @pytest.mark.skipif(True, reason="跳过此用例")
         @allure.title("MT4平台平仓操作")
@@ -343,7 +343,7 @@ class Test_openandclouseall:
                         attachment_name=f"账号:{trader_account}第 {idx + 1} 条记录校验"
                     )
 
-                    with allure.step("手数校验-MT4开仓手数和持仓订单手数"):
+                    with allure.step("手数校验-开仓手数和持仓订单手数"):
                         totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
                         logging.info(f"手数是: {totalLots}")
 
@@ -420,7 +420,7 @@ class Test_openandclouseall:
                         attachment_name=f"账号:{follow_account}第 {idx + 1} 条记录校验"
                     )
 
-                    with allure.step("手数校验-MT4开仓手数和持仓订单手数"):
+                    with allure.step("手数校验-开仓手数和持仓订单手数"):
                         totalLots = self.json_utils.extract(response.json(), "$.records[0].totalLots")
                         logging.info(f"手数是: {totalLots}")
 

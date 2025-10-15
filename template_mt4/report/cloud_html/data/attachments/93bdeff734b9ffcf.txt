@@ -1,0 +1,19 @@
+INFO     root:test_add_delete.py:32 [数据读取] JSON文件路径：D:\pycharm_test\template_mt4\test_community\../VAR/runtime_vars_community.json，最后修改时间：2025-10-14 09:41:37
+INFO     root:test_add_delete.py:45 [数据读取] 示例账号 301392106 的最新jeecg_rowkey：1977912084...
+INFO     root:test_add_delete.py:110 
+[数据对比] 账号：301392106
+- 执行阶段最新jeecg_rowkey：1977912084579356673
+- 参数化阶段旧jeecg_rowkey：1977909696531402754
+DEBUG    urllib3.connectionpool:connectionpool.py:546 https://dev.lgcopytrade.top:443 "DELETE /api/blockchain/master-slave/deletePa?id=1977912084579356673 HTTP/11" 200 None
+INFO     template_mt4.commons.api_base:api_base.py:326 [2025-10-14 09:41:38] DELETE请求: /blockchain/master-slave/deletePa | 参数: {'id': '1977912084579356673'} | 数据: None | 状态码: 200
+DEBUG    urllib3.connectionpool:connectionpool.py:1051 Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    urllib3.connectionpool:connectionpool.py:546 https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbind?traderId=1977912009281187841 HTTP/11" 200 None
+INFO     template_mt4.commons.api_base:api_base.py:587 [2025-10-14 09:41:44] 执行SQL:
+                    SELECT status 
+                    FROM bchain_trader 
+                    WHERE id = %s 
+                 ORDER BY create_time DESC 
+参数: ('1977912009281187841',)
+INFO     template_mt4.commons.api_base:api_base.py:590 [2025-10-14 09:41:44] 查询成功，结果数量: 1
+INFO     template_mt4.commons.api_base:api_base.py:602 [2025-10-14 09:41:44] 查询结果: [{"status": "UNBIND"}]
+INFO     root:test_add_delete.py:183 账号[301392106]解绑完成，数据库状态校验通过

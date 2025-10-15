@@ -56,6 +56,23 @@ class APITestBase:
         else:
             return data
 
+    def convert_decimal_tovps_float(self, data: Any) -> Any:
+        """递归转换Decimal类型为float，处理datetime/date为字符串"""
+        if isinstance(data, Decimal):
+            return float(data)
+        elif isinstance(data, datetime.datetime):
+            return data.strftime("%Y-%m-%d %H:%M:%S")
+        elif isinstance(data, datetime.date):
+            return data.strftime("%Y-%m-%d")
+        elif isinstance(data, list):
+            return [self.convert_decimal_to_float(item) for item in data]
+        elif isinstance(data, dict):
+            return {key: self.convert_decimal_to_float(value) for key, value in data.items()}
+        elif isinstance(data, (tuple, set)):
+            return type(data)(self.convert_decimal_to_float(item) for item in data)
+        else:
+            return data
+
     def serialize_data(self, data: Any) -> str:
         """序列化数据为JSON（包含datetime处理）"""
         converted_data = self.convert_decimal_to_float(data)
@@ -645,6 +662,107 @@ class APITestBase:
 
         return [{k: convert_value(v) for k, v in row.items()} for row in result]
 
+    def _getvps_current_time(self) -> str:
+        """获取当前时间字符串（统一日志格式）"""
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # ------------------------------ 数据库操作（异常分层优化） ------------------------------
+    def serializevps_data(self, data: Any) -> str:
+        """序列化数据为JSON（包含datetime处理）"""
+        converted_data = self.convert_decimal_to_float(data)
+        try:
+            return json.dumps(converted_data, ensure_ascii=False, indent=2)
+        except json.JSONDecodeError as e:
+            with allure.step("数据序列化操作"):
+                allure.attach(f"序列化失败: {str(e)}", "失败原因", allure.attachment_type.TEXT)
+                allure.attach(str(converted_data), "原始数据", allure.attachment_type.TEXT)
+            logger.error(f"[{self._get_current_time()}] 数据序列化失败: {str(e)} | 原始数据: {converted_data}")
+            raise ValueError("Failed: 数据序列化失败") from e
+
+    def _convert_datevps_types(self, result: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """将结果中的日期和时间类型转换为字符串"""
+
+        def convert_value(value):
+            if isinstance(value, datetime.datetime):
+                return value.strftime("%Y-%m-%d %H:%M:%S")
+            elif isinstance(value, datetime.date):
+                return value.strftime("%Y-%m-%d")
+            return value
+
+        return [{k: convert_value(v) for k, v in row.items()} for row in result]
+
+    def queryvps_database(self, dbvps_transaction: pymysql.connections.Connection,
+                          sql: str,
+                          params: tuple = (),
+                          order_by: str = "create_time DESC",
+                          convert_decimal: bool = True,
+                          dictionary_cursor: bool = True,
+                          attach_to_allure: bool = True) -> List[Dict[str, Any]]:
+        """基础数据库查询（单次查询，带Allure分层提示）"""
+        sql_upper = sql.upper()
+        final_sql = sql
+
+        if order_by and "ORDER BY" not in sql_upper:
+            final_sql += f" ORDER BY {order_by}"
+        elif order_by:
+            logger.warning(f"[{self._getvps_current_time()}] SQL已包含ORDER BY，忽略传入的排序: {order_by}")
+
+        try:
+            with allure.step("执行数据库查询"):
+                allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+
+                cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
+                with dbvps_transaction.cursor(cursor_type) as cursor:
+                    logger.info(f"[{self._getvps_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
+                    cursor.execute(final_sql, params)
+                    result = cursor.fetchall()
+                    logger.info(
+                        f"[{self._getvps_current_time()}] 查询成功，结果数量: {len(result)}")
+
+                    if result:
+                        if convert_decimal:
+                            result = self.convert_decimal_tovps_float(result)
+                        result = self._convert_datevps_types(result)
+
+                    try:
+                        result_preview = json.dumps(result, ensure_ascii=False)
+                    except Exception as e:
+                        result_preview = f"无法序列化完整结果: {str(e)}"
+                    logger.info(f"[{self._getvps_current_time()}] 查询结果: {result_preview}")
+
+                    if attach_to_allure:
+                        display_count = min(len(result), 50)
+                        with allure.step("数据库查询结果"):
+                            allure.attach(
+                                self.serializevps_data(result[:display_count]),
+                                f"查询结果（共{len(result)}条，显示前50条）",
+                                allure.attachment_type.JSON
+                            )
+
+                return result
+
+        except pymysql.Error as e:
+            with allure.step("数据库查询异常（pymysql错误）"):
+                allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                allure.attach(f"错误码: {e.args[0]} | 信息: {str(e)}", "错误详情", allure.attachment_type.TEXT)
+            error_msg = (
+                f"[{self._getvps_current_time()}] 数据库错误 (错误码: {e.args[0]}): {str(e)} | "
+                f"SQL: {final_sql[:200]} | 参数: {params}"
+            )
+            logger.error(error_msg, exc_info=True)
+            raise pymysql.Error(f"Failed: 数据库查询错误（错误码: {e.args[0]}）") from e
+
+        except Exception as e:
+            with allure.step("数据库查询异常（未知错误）"):
+                allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
+            error_msg = f"[{self._getvps_current_time()}] 未知异常: {str(e)} | SQL: {final_sql[:200]}"
+            logger.error(error_msg, exc_info=True)
+            raise RuntimeError(f"Failed: 数据库查询异常") from e
+
     # ------------------------------ 核心：轮询版数据库查询（异常分层优化） ------------------------------
     def query_database_with_time(
             self,
@@ -1206,6 +1324,230 @@ class APITestBase:
                 allure.attach("不涉及时间字段转换", "时区处理", allure.attachment_type.TEXT)
                 return self.query_database(
                     db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    order_by=order_by,
+                    attach_to_allure=attach_to_allure
+                )
+
+    # ------------------------------ 带时区的轮询查询（异常分层优化） ------------------------------
+    def _isvps_result_stable(self, current: List[Dict], previous: List[Dict]) -> bool:
+        """判断两次查询结果是否稳定（自动识别唯一键）"""
+        with allure.step("判断结果稳定性"):
+            if previous is None or len(current) == 0:
+                allure.attach("首次查询或结果为空，无对比", "判断结果", allure.attachment_type.TEXT)
+                return False
+
+            # 1. 自动识别唯一键（按优先级匹配：可根据业务调整顺序）
+            candidate_keys = ['order_no', 'send_no', 'close_no', 'foi.order_no', 'fod.send_no',
+                              'fod.close_no', 'id']  # 优先级从高到低
+            unique_key = None
+            sample_item = current[0]  # 取第一条结果当样本
+            for key in candidate_keys:
+                if key in sample_item:
+                    unique_key = key
+                    break
+            # 若没有匹配到候选键，报错提示
+            if not unique_key:
+                err_msg = f"未识别到唯一键（候选键: {candidate_keys}，结果字段: {list(sample_item.keys())}）"
+                allure.attach(err_msg, "判断异常", allure.attachment_type.TEXT)
+                raise ValueError(err_msg)
+            allure.attach(f"自动识别唯一键: {unique_key}", "唯一键信息", allure.attachment_type.TEXT)
+
+            # 2. 后续逻辑和方案1一致（数量对比→唯一键映射→内容对比）
+            if len(current) != len(previous):
+                allure.attach(f"数量变化: 前{len(previous)}条 → 现{len(current)}条", "判断结果",
+                              allure.attachment_type.TEXT)
+                return False
+
+            current_map = {item[unique_key]: item for item in current}
+            previous_map = {item[unique_key]: item for item in previous}
+
+            if set(current_map.keys()) != set(previous_map.keys()):
+                added = current_map.keys() - previous_map.keys()
+                removed = previous_map.keys() - current_map.keys()
+                allure.attach(f"唯一键变化: 新增{added}，删除{removed}", "判断结果", allure.attachment_type.TEXT)
+                return False
+
+            ignore_fields = {'create_time', 'update_time', 'response_time', 'open_time', 'close_time'}
+            for key in current_map:
+                curr_item = current_map[key]
+                prev_item = previous_map[key]
+                for field in curr_item:
+                    if field in ignore_fields:
+                        continue
+                    if curr_item[field] != prev_item[field]:
+                        allure.attach(f"唯一键[{key}]的字段'{field}'变化: {prev_item[field]} → {curr_item[field]}",
+                                      "判断结果", allure.attachment_type.TEXT)
+                        return False
+
+            allure.attach("数量和内容均未变化，结果稳定", "判断结果", allure.attachment_type.TEXT)
+            return True
+
+    def queryvps_database_with_time_with_timezone(
+            self,
+            dbvps_transaction: pymysql.connections.Connection,
+            sql: str,
+            params: tuple = (),
+            time_field: Optional[str] = None,
+            time_range: int = MYSQL_TIME,
+            order_by: str = "create_time DESC",
+            timeout: int = WAIT_TIMEOUT,
+            poll_interval: int = POLL_INTERVAL,
+            stable_period: int = STBLE_PERIOD,
+            timezone_offset: int = TIMEZONE_OFFSET,
+            attach_to_allure: bool = True
+    ) -> List[Dict[str, Any]]:
+        """带时区转换的轮询查询（带Allure分层提示）"""
+        offset_str = f"{timezone_offset:+03d}:00"  # 转换为时区字符串（如+08:00）
+        start_time = time.time()
+        last_result = None
+        stable_start_time = None
+        final_result = None
+
+        # 生成固定时间范围（轮询开始时计算一次）
+        poll_start_datetime = datetime.datetime.now()
+        fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+
+        logger.info(f"[{self._getvps_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
+
+        with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
+            while time.time() - start_time < timeout:
+                try:
+                    dbvps_transaction.commit()
+                    # 执行带时区转换的单次查询
+                    result = self._execute_queryvps_with_timezone(
+                        dbvps_transaction=dbvps_transaction,
+                        sql=sql,
+                        params=params,
+                        time_field=time_field,
+                        order_by=order_by,
+                        fixed_time_start=fixed_time_start,  # 传递固定时间参数
+                        fixed_time_end=fixed_time_end,
+                        timezone_offset=offset_str,
+                        attach_to_allure=False
+                    )
+
+                    # 记录轮询状态
+                    elapsed = time.time() - start_time
+                    with allure.step(f"轮询中（已等待{elapsed:.1f}秒）"):
+                        allure.attach(f"结果数量: {len(result)}", "当前状态", allure.attachment_type.TEXT)
+                        allure.attach(f"剩余时间: {timeout - elapsed:.1f}秒", "超时倒计时",
+                                      allure.attachment_type.TEXT)
+
+                    # 复用数据稳定判断逻辑
+                    if len(result) > 0 and self._isvps_result_stable(result, last_result):
+                        if stable_start_time is None:
+                            stable_start_time = time.time()
+                            with allure.step("数据首次稳定"):
+                                allure.attach(f"开始稳定期计时（需保持{stable_period}秒）", "状态说明",
+                                              allure.attachment_type.TEXT)
+                        elif time.time() - stable_start_time >= stable_period:
+                            final_result = result
+                            logger.info(f"[{self._getvps_current_time()}] 数据稳定，轮询结束")
+                            with allure.step("数据稳定达标"):
+                                allure.attach(f"已稳定{stable_period}秒（总耗时{time.time() - start_time:.1f}秒）",
+                                              "结果说明", allure.attachment_type.TEXT)
+                            break
+                    else:
+                        stable_start_time = None
+                        with allure.step("数据发生变化"):
+                            allure.attach("重置稳定期计时器", "状态说明", allure.attachment_type.TEXT)
+
+                    last_result = result
+                    time.sleep(poll_interval)
+
+                except Exception as e:
+                    with allure.step("时区查询轮询异常"):
+                        allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                        allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                        allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
+                    logger.warning(f"[{self._getvps_current_time()}] 轮询异常: {str(e)} | 继续等待")
+                    time.sleep(poll_interval)
+
+            # 超时处理
+            if final_result is None:
+                with allure.step("时区查询轮询超时"):
+                    allure.attach(f"超过{timeout}秒未达到稳定状态，获取最终结果", "处理说明",
+                                  allure.attachment_type.TEXT)
+                final_result = self._execute_queryvps_with_timezone(
+                    dbvps_transaction=dbvps_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field=time_field,
+                    order_by=order_by,
+                    fixed_time_start=fixed_time_start,
+                    fixed_time_end=fixed_time_end,
+                    timezone_offset=offset_str,
+                    attach_to_allure=True
+                )
+
+            # 附加结果到报告
+            if final_result and attach_to_allure:
+                with allure.step("带时区查询最终结果"):
+                    allure.attach(self.serialize_data(final_result[:50]), "结果预览", allure.attachment_type.JSON)
+
+            if not final_result:
+                with allure.step("时区查询无结果"):
+                    allure.attach(f"轮询{timeout}秒后仍无查询结果", "异常详情", allure.attachment_type.TEXT)
+                raise TimeoutError(f"Failed: 时区查询超时（{timeout}秒）")
+            return final_result
+
+    def _execute_queryvps_with_timezone(
+            self,
+            dbvps_transaction: pymysql.connections.Connection,
+            sql: str,
+            params: tuple,
+            time_field: Optional[str],
+            order_by: str,
+            timezone_offset: str,
+            # 新增：接收固定时间参数
+            fixed_time_start: Optional[str] = None,
+            fixed_time_end: Optional[str] = None,
+            attach_to_allure: bool = True
+    ) -> List[Dict[str, Any]]:
+        """带时区转换的单次查询辅助方法（带Allure分层提示）"""
+        with allure.step(f"带时区转换查询（目标时区: {timezone_offset}）"):
+            if time_field and fixed_time_start and fixed_time_end:
+                # 转换时间字段时区（假设数据库存储UTC时间）
+                converted_time_field = f"CONVERT_TZ({time_field}, '+00:00', '{timezone_offset}')"
+                sql_upper = sql.upper()
+                final_sql = sql
+                final_params = list(params)
+
+                # 使用固定时间范围（已转换为时区对应的时间）
+                time_condition = f" {converted_time_field} BETWEEN %s AND %s "
+
+                if "WHERE" in sql_upper:
+                    final_sql += f" AND {time_condition}"
+                else:
+                    final_sql += f" WHERE {time_condition}"
+                final_params.extend([fixed_time_start, fixed_time_end])
+
+                allure.attach(f"时间字段转换: {time_field} (UTC → {timezone_offset})", "时区处理",
+                              allure.attachment_type.TEXT)
+                allure.attach(
+                    f"带时区固定时间范围: {converted_time_field} BETWEEN {fixed_time_start} AND {fixed_time_end}",
+                    "查询条件", allure.attachment_type.TEXT)
+                return self.queryvps_database(
+                    dbvps_transaction=dbvps_transaction,
+                    sql=final_sql,
+                    params=tuple(final_params),
+                    order_by=order_by,
+                    attach_to_allure=attach_to_allure
+                )
+            elif time_field:
+                # 异常处理：缺少固定时间参数
+                err_msg = f"使用time_field={time_field}时，必须传入fixed_time_start和fixed_time_end"
+                allure.attach(err_msg, "参数异常", allure.attachment_type.TEXT)
+                raise ValueError(err_msg)
+            else:
+                allure.attach("不涉及时间字段转换", "时区处理", allure.attachment_type.TEXT)
+                return self.queryvps_database(
+                    dbvps_transaction=dbvps_transaction,
                     sql=sql,
                     params=params,
                     order_by=order_by,

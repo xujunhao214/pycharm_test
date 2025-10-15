@@ -9,12 +9,24 @@ ENV_CONFIG = {
     Environment.TEST: {
         "base_url": "https://test.lgcopytrade.top/api",
         "vps_url": "http://39.99.136.49/vps",
+        "vpsbase_url": "http://39.99.136.49/api",
+        "docuvps_url": "http://39.98.109.212/vps",
         "db_config": {
             "host": "39.103.138.2",
             "port": 3306,
             "user": "junhao",
             "password": "mB0iE0gO2hC1!!",
             "database": "copyglobal_v2_schema",
+            "charset": "utf8mb4",
+            "cursorclass": pymysql.cursors.DictCursor,
+            "connect_timeout": 10
+        },
+        "vpsdb_config": {
+            "host": "39.99.136.49",
+            "port": 3306,
+            "user": "root",
+            "password": "xizcJWmXFkB5f4fm",
+            "database": "follow-order-cp",
             "charset": "utf8mb4",
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10
@@ -30,12 +42,24 @@ ENV_CONFIG = {
     Environment.DEV: {
         "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "https://39.101.181.190/vps",
+        "vpsbase_url": "http://39.99.136.49/api",
+        "docuvps_url": "http://39.98.109.212/vps",
         "db_config": {
             "host": "39.99.146.95",
             "port": 3306,
             "user": "root",
             "password": "gQ9^sR7#tD5j",
             "database": "copyglobal_v2_schema",
+            "charset": "utf8mb4",
+            "cursorclass": pymysql.cursors.DictCursor,
+            "connect_timeout": 10
+        },
+        "vpsdb_config": {
+            "host": "39.99.136.49",
+            "port": 3306,
+            "user": "root",
+            "password": "xizcJWmXFkB5f4fm",
+            "database": "follow-order-cp",
             "charset": "utf8mb4",
             "cursorclass": pymysql.cursors.DictCursor,
             "connect_timeout": 10

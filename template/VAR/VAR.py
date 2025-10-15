@@ -1,6 +1,10 @@
 import datetime
 import time
 
+# 加密密钥
+MT4 = "FOLLOWERSHIP4KEY"
+PASSWORD = "Test123456"
+
 # 飞书机器人WEBHOOK_URL
 WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
 
@@ -38,7 +42,7 @@ STBLE_PERIOD = 2  # 稳定期（秒）：数据连续2秒不变则认为加载�
 TIMEZONE_OFFSET = 5  # 时区偏移量（小时）
 
 # api基类执行完等待时间
-SLEEP_SECONDS = 3
+SLEEP_SECONDS = 1
 
 # 项目名称
 PROJECT_NAME = "跟单社区"
@@ -54,11 +58,11 @@ dividendTime_now = datetime.datetime.now().strftime("%Y-%m-%d")
 dividendTime_ago = datetime.datetime.now() - datetime.timedelta(days=3)
 dividendTime_ago = dividendTime_ago.strftime("%Y-%m-%d")
 
-# 跟单社区
-URL_TOP = "https://test.lgcopytrade.top/api"
-
 # MT4URL
 MT4_URL = "https://mt4.mtapi.io"
+
+# MFA登录生成新的验证码秘钥
+MFA_SECRET_KEY = "APVHUYXFWW4DZWT7L4HI3EO4Y7VY4J2VEXE4JGZNAVCYRSAOVNQQ"
 
 # 批量添加跟随者账号
 FOLLOW_ACCOUNT_LIST = [

@@ -119,6 +119,7 @@ class Test_delete_batch(APITestBase):
                 assert token_top, "未获取到前端token（token_top）"
 
                 # 构造请求
+                URL_TOP = var_manager.get_variable("URL_TOP")
                 url = f"{URL_TOP}/blockchain/account/unbind?traderId={pass_id}"
                 payload = json.dumps({})
                 headers = {

@@ -1,5 +1,3 @@
-
-
 import pytest
 import pymysql
 from template_model.VAR.VAR import *
@@ -15,10 +13,12 @@ import xml.etree.ElementTree as ET
 from pytest import Config
 from template_model.commons.mfa_key import generate_code
 from template_model.commons.session import EnvironmentSession
+from template_model.commons.vps_session import EnvironmentSession_vps
 from template_model.commons.variable_manager import VariableManager
 from template_model.commons.test_tracker import TestResultTracker
 from template_model.commons.feishu_notification import send_feishu_notification
 from template_model.commons.enums import Environment
+from template_model.commons.Encryption_and_decryption import *
 from template_model.config import ENV_CONFIG  # 仅导入配置数据
 from template_model.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
@@ -119,11 +119,11 @@ def logged_session(api_session, var_manager, request, environment):
                     # 新增：打印完整响应，关键！确认接口返回格式
                     # logger.info(f"验证码接口响应状态码: {captcha_response.status_code}")
                     # logger.info(f"验证码接口响应头: {captcha_response.headers}")
-                    # logger.info(f"验证码接口响应内容（前1000字符）: {captcha_response.text[:1000]}")
+                    logger.info(f"验证码接口响应内容: {captcha_response.text}")
 
                     try:
                         captcha_json = captcha_response.json()
-                        # logger.info(f"验证码接口JSON响应: {captcha_json}")
+                        logger.info(f"验证码接口JSON响应: {captcha_json}")
                     except Exception as e:
                         logger.error(f"解析验证码响应为JSON失败（可能返回图片流）: {str(e)}")
                         # 若返回图片流，直接将响应内容转为Base64
@@ -150,14 +150,14 @@ def logged_session(api_session, var_manager, request, environment):
                         "captcha": recognized_code,
                         "checkKey": f"{current_ms}"  # 与验证码对应的时间戳
                     }
-
+                    Host = var_manager.get_variable("Hosttop")
                     # 3.4 发送登录请求
                     login_headers = {
                         'priority': 'u=1, i',
                         'tenant_id': '0',
                         'content-type': 'application/json;charset=UTF-8',
                         'Accept': '*/*',
-                        'Host': 'dev.lgcopytrade.top',
+                        'Host': Host,
                         'Connection': 'keep-alive'
                     }
 
@@ -203,13 +203,14 @@ def logged_session(api_session, var_manager, request, environment):
 
     # 4. 设置全局认证信息
     var_manager.set_runtime_variable("access_token", access_token)
+    Host = var_manager.get_variable("Hosttop")
     api_session.headers.update({
         "X-Access-Token": access_token,
         'priority': 'u=1, i',
         'tenant_id': '0',
         'content-type': 'application/json;charset=UTF-8',
         'Accept': '*/*',
-        'Host': 'dev.lgcopytrade.top',
+        'Host': Host,
         'Connection': 'keep-alive'
     })
 
@@ -222,6 +223,123 @@ def logged_session(api_session, var_manager, request, environment):
     yield api_session  # 提供会话给用例
 
     # 6. 用例执行完毕清理
+    logger.info(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 用例 {request.node.nodeid} 执行完毕")
+
+
+@pytest.fixture(scope="function")  # 改为function作用域
+def vpsapi_session(environment) -> EnvironmentSession_vps:
+    """创建支持多URL的API会话（每个用例独立）"""
+    config = ENV_CONFIG[environment]
+    session = EnvironmentSession_vps(
+        environment=environment,
+        vpsbase_url=config["vpsbase_url"],
+        docuvps_url=config.get("docuvps_url")
+    )
+    yield session
+    session.close()
+
+
+@pytest.fixture(scope="function")
+def logged_vps(vpsapi_session, var_manager, request, environment):
+    """登录夹具：任何环境登录失败都直接终止用例执行"""
+    # 1. 初始化登录配置
+    vpsapi_session.use_vpsbase_url()
+    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    logger.info(f"[{current_time}] 用例 {request.node.nodeid} 开始登录，环境: {environment.value}")
+    print(f"环境: {environment.value}")
+
+    # 2. 获取登录基础数据
+    try:
+        login_data = var_manager.get_variable("login")
+    except Exception as e:
+        pytest.fail(f"获取登录数据失败: {str(e)}", pytrace=False)
+
+    access_token = None
+
+    # 3. 根据环境执行登录逻辑
+    try:
+        if environment.value == "test" or environment.value == "dev":
+            # 测试环境登录逻辑
+            response = vpsapi_session.post("/sys/auth/login", json=login_data)
+            if response.status_code != 200:
+                pytest.fail(
+                    f"测试环境登录失败 - 状态码: {response.status_code}, 响应: {response.text[:500]}",
+                    pytrace=False
+                )
+
+            response_json = response.json()
+            access_token = response_json.get("data", {}).get("access_token")
+            if not access_token:
+                pytest.fail("测试环境登录响应中未找到access_token", pytrace=False)
+
+            logger.info("测试环境登录成功")
+
+        elif environment.value == "uat":
+            # UAT环境登录逻辑（带重试）
+            max_retries = 5
+            retry_interval = 10
+            access_token = None
+
+            for attempt in range(max_retries):
+                try:
+                    mfa_code = generate_code(MFA_SECRET_KEY)
+                    logger.info(f"UAT登录尝试 {attempt + 1}/{max_retries}，MFA验证码: {mfa_code}")
+
+                    login_payload = {
+                        "username": login_data["username"],
+                        "password": login_data["password"],
+                        "captcha": "",
+                        "key": "",
+                        "secretKey": "",
+                        "code": mfa_code,
+                        "isMfaVerified": 1,
+                        "isStartMfaVerify": 1
+                    }
+
+                    response = vpsapi_session.post("/sys/auth/login", json=login_payload)
+                    response.raise_for_status()  # 触发HTTP错误异常
+                    response_json = response.json()
+
+                    if response_json.get("code") != 0:
+                        raise ValueError(f"登录失败: {response_json.get('msg')}")
+
+                    access_token = response_json["data"]["access_token"]
+                    if not access_token:
+                        raise ValueError("未返回access_token")
+
+                    logger.info(f"UAT登录成功（第{attempt + 1}次尝试）")
+                    break
+
+                except Exception as e:
+                    error_msg = f"第{attempt + 1}次登录失败: {str(e)}"
+                    logger.error(error_msg)
+                    if attempt == max_retries - 1:  # 最后一次尝试失败
+                        pytest.fail(f"UAT登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
+                    time.sleep(retry_interval)
+
+        else:
+            pytest.fail(f"不支持的环境类型: {environment.value}", pytrace=False)
+
+    except Exception as e:
+        # 捕获所有登录过程中的异常并终止
+        pytest.fail(f"登录过程发生未预期错误: {str(e)}", pytrace=False)
+
+    # 4. 设置认证信息
+    var_manager.set_runtime_variable("access_token", access_token)
+    vpsapi_session.headers.update({
+        "Authorization": f"{access_token}",
+        "x-sign": "417B110F1E71BD20FE96366E67849B0B"
+    })
+
+    # 5. 处理URL切换
+    url_marker = next(request.node.iter_markers(name="url"), None)
+    if url_marker and url_marker.args[0] == "vps":
+        vpsapi_session.use_docuvps_url()
+        logger.info(f"切换到VPS URL: {vpsapi_session.docuvps_url}")
+
+    yield vpsapi_session
+
+    # 6. 可选：会话清理逻辑（仅在登录成功时执行）
     logger.info(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 用例 {request.node.nodeid} 执行完毕")
 
 
@@ -254,7 +372,7 @@ def test_group(request):
         if "test_vps" in first_test_path:
             return "vps"
         elif "test_cloudTrader" in first_test_path:
-            return "cloud"
+            return "community"
 
     # 默认值（无隔离）
     return ""
@@ -314,7 +432,62 @@ def db_transaction(db):
     """数据库事务管理（每个用例独立）"""
     # 不需要手动begin()，pymysql默认自动提交模式
     yield db
-    # 用例结束后无需commit/rollback，因为每个用例使用独立连接，且执行完即关闭
+
+
+# 数据库相关夹具
+@pytest.fixture(scope="session")
+def vpsdb_config(environment) -> dict:
+    """获取对应环境的数据库配置"""
+    return ENV_CONFIG[environment]["vpsdb_config"]
+
+
+@pytest.fixture(scope="function")  # 保持function级别，每个用例独立连接
+def dbvps(vpsdb_config) -> pymysql.connections.Connection:
+    """数据库连接夹具（每个用例创建新连接，带有重试功能）"""
+    # 解析cursorclass字符串为实际类
+    if isinstance(vpsdb_config["cursorclass"], str):
+        module_name, class_name = vpsdb_config["cursorclass"].rsplit('.', 1)
+        module = __import__(module_name, fromlist=[class_name])
+        vpsdb_config["cursorclass"] = getattr(module, class_name)
+
+    # 重试配置
+    max_retries = 3  # 最大重试次数
+    retry_delay = 5  # 重试间隔时间（秒）
+    conn = None
+
+    # 带重试的连接逻辑
+    for attempt in range(max_retries):
+        try:
+            conn = pymysql.connect(**vpsdb_config)
+            # 连接成功，退出重试循环
+            break
+        except err.OperationalError as e:
+            # 如果是最后一次尝试，直接抛出异常
+            if attempt == max_retries - 1:
+                raise
+            # 打印重试信息
+            print(f"数据库连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
+            print(f"{retry_delay}秒后进行下一次尝试...")
+            time.sleep(retry_delay)
+        except Exception as e:
+            # 非连接性错误，直接抛出
+            raise
+
+    yield conn  # 用例执行期间使用该连接
+
+    # 用例结束后关闭连接
+    if conn and conn.open:
+        try:
+            conn.close()
+        except Exception as e:
+            print(f"关闭数据库连接时发生错误: {str(e)}")
+
+
+@pytest.fixture(scope="function")  # 每个用例独立事务
+def dbvps_transaction(dbvps):
+    """数据库事务管理（每个用例独立）"""
+    # 不需要手动begin()，pymysql默认自动提交模式
+    yield dbvps
 
 
 # ------------------------------
@@ -600,3 +773,12 @@ def parse_decimal_value(value):
     if isinstance(value, list) and len(value) == 2 and value[0] == 'java.math.BigDecimal':
         return float(value[1])
     return value
+
+
+@pytest.fixture
+def encrypted_password(request):
+    # 获取加密密钥
+    MT4_KEY = MT4
+    """夹具：对输入的明文密码进行加密"""
+    plain_password = PASSWORD
+    return aes_encrypt_str(plain_password, MT4_KEY)
