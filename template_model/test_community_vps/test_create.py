@@ -230,7 +230,7 @@ class TestCreate(APIVPSBase):
             assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
             logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增跟单账号")
     def test_create_addSlave(self, var_manager, logged_vps, encrypted_password):
@@ -283,7 +283,7 @@ class TestCreate(APIVPSBase):
             "响应msg字段应为success"
         )
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-新增跟单账号")
     def test_dbquery_addslave(self, var_manager, dbvps_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):

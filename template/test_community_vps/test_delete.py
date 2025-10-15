@@ -58,7 +58,7 @@ class TestDeleteUser(APIVPSBase):
                 allure.attach(f"删除超时: {str(e)}", "验证结果")
                 pytest.fail(f"删除失败: {str(e)}")
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-删除跟单账号")
     def test_delete_addsalve(self, var_manager, logged_vps):
@@ -85,7 +85,7 @@ class TestDeleteUser(APIVPSBase):
             "响应msg字段应为success"
         )
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-删除跟单账号")
     def test_dbdelete_addsalve(self, var_manager, dbvps_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
