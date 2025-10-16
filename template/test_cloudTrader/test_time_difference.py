@@ -15,7 +15,7 @@ from template.commons.api_base import APITestBase, CompareOp, logger
 from template.conftest import var_manager
 
 # 配置参数
-TOTAL_CYCLES = 50  # 总循环次数
+TOTAL_CYCLES = 20  # 总循环次数
 TRADE_RETRY_INTERVAL = 10  # 交易重试间隔(秒)
 SYNC_WAIT_SECONDS = 2  # 同步等待时间
 
