@@ -1,0 +1,24 @@
+INFO     root:test_add_delete.py:32 [数据读取] JSON文件路径：D:\pycharm_test\template\test_cloudTrader\../VAR/runtime_vars_cloud.json，最后修改时间：2025-10-16 13:45:43
+INFO     root:test_add_delete.py:45 [数据读取] 示例账号 301392106 的最新jeecg_rowkey：1978698282...
+INFO     root:test_add_delete.py:110 
+[数据对比] 账号：301392108
+- 执行阶段最新jeecg_rowkey：1978698534459674625
+- 参数化阶段旧jeecg_rowkey：1978696921410048001
+DEBUG    urllib3.connectionpool:connectionpool.py:546 https://dev.lgcopytrade.top:443 "DELETE /api/blockchain/master-slave/deletePa?id=1978698534459674625 HTTP/11" 200 None
+INFO     template.commons.api_base:api_base.py:343 [2025-10-16 13:46:01] DELETE请求: /blockchain/master-slave/deletePa | 参数: {'id': '1978698534459674625'} | 数据: None | 状态码: 200
+DEBUG    template.commons.variable_manager:variable_manager.py:131 [2025-10-16 13:46:04] 从运行时变量获取 | 变量: token_top | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTgzNDIsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.6aKdI8Ff8DQAqgAGgvUhbxF1aXhUmQqJySE5_y8ZzIk
+DEBUG    template.commons.variable_manager:variable_manager.py:202 [2025-10-16 13:46:04] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    template.commons.variable_manager:variable_manager.py:135 [2025-10-16 13:46:04] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    template.commons.variable_manager:variable_manager.py:202 [2025-10-16 13:46:04] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    template.commons.variable_manager:variable_manager.py:135 [2025-10-16 13:46:04] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    urllib3.connectionpool:connectionpool.py:1051 Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    urllib3.connectionpool:connectionpool.py:546 https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbind?traderId=1978698453889282050 HTTP/11" 200 None
+INFO     template.commons.api_base:api_base.py:604 [2025-10-16 13:46:07] 执行SQL: 
+                    SELECT status 
+                    FROM bchain_trader 
+                    WHERE id = %s 
+                 ORDER BY create_time DESC 
+参数: ('1978698453889282050',)
+INFO     template.commons.api_base:api_base.py:607 [2025-10-16 13:46:07] 查询成功，结果数量: 1
+INFO     template.commons.api_base:api_base.py:619 [2025-10-16 13:46:07] 查询结果: [{"status": "UNBIND"}]
+INFO     root:test_add_delete.py:183 账号[301392108]解绑完成，数据库状态校验通过
