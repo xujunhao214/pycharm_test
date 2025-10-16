@@ -1,108 +1,962 @@
-INFO     - 2025-10-15 19:14:53 - [conftest:517] - [2025-10-15 19:14:52] 测试会话开始: 2025-10-15 19:14:53, 测试组: community
-INFO     - 2025-10-15 19:14:53 - [variable_manager:40] - [2025-10-15 19:14:52] 成功加载静态变量: VAR\dev_data.json
-INFO     - 2025-10-15 19:14:53 - [variable_manager:64] - [2025-10-15 19:14:52] 成功加载运行时变量: VAR\runtime_vars_community.json
-INFO     - 2025-10-15 19:14:53 - [conftest:74] - [2025-10-15 19:14:53] 用例  开始登录，环境: dev
-DEBUG    - 2025-10-15 19:14:53 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
-DEBUG    - 2025-10-15 19:14:55 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/randomImage/1760526893387?_t=1760526893 HTTP/11" 200 None
-INFO     - 2025-10-15 19:14:55 - [conftest:122] - 验证码接口响应内容: {"success":true,"message":"","code":0,"result":"data:image/jpg;base64,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","timestamp":1760526894307}
-INFO     - 2025-10-15 19:14:55 - [conftest:126] - 验证码接口JSON响应: {'success': True, 'message': '', 'code': 0, 'result': 'data:image/jpg;base64,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', 'timestamp': 1760526894307}
-INFO     - 2025-10-15 19:14:55 - [conftest:143] - 第1次尝试 - 验证码识别结果: BGBB
-DEBUG    - 2025-10-15 19:14:55 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/login HTTP/11" 200 None
-INFO     - 2025-10-15 19:14:55 - [conftest:186] - dev环境登录成功（第1次尝试）
-INFO     - 2025-10-15 19:14:55 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-DEBUG    - 2025-10-15 19:14:55 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
-DEBUG    - 2025-10-15 19:14:57 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/mLogin HTTP/11" 200 None
-INFO     - 2025-10-15 19:14:57 - [proportion_public:45] - 登录响应信息：{"success":true,"message":"","code":200,"result":{"userInfo":{"id":"1962808746181640193","username":"xujunhao@163.com","realname":"徐","avatar":"https://followork.oss-cn-zhangjiakou.aliyuncs.com/saas/huichuang/img/default_avatar.png","agentIds":"e9ca23d68d884d4ebb19d07889727dae","birthday":null,"sex":1,"email":"xujunhao@163.com","phone":"1541561456156","orgCode":"A01","orgCodeTxt":null,"status":1,"delFlag":0,"workNo":null,"post":"employee","telephone":null,"createBy":"huangssj168@163.com","createTime":"2025-09-02 17:24:07","updateBy":"xujunhao@163.com","updateTime":"2025-09-10 14:03:13","activitiSync":1,"userIdentity":1,"departIds":"","relTenantIds":"","clientId":null,"country":null,"countryCode":"CN","countryName":"中国","invitationCode":"10595","agentLevel":"1767396755533766658","agentLevelLocking":true,"agentLeader":false,"address":null,"certificateType":null,"certificateNumber":null,"certificatePic":null,"introduce":null,"nickname":"徐","mt4Role":"MASTER_REAL,SLAVE_REAL","cashoutLimitDays":2,"updateAgentTime":"2025-09-10 09:54:38","whiteLabelId":null,"whiteLabelNameEn":null,"isMfaVerified":null,"lang":0,"trialPeriod":-37,"bufferDay":-29,"bufferStartTime":"2025-09-12 17:27:08","bufferEndTime":"2025-09-15 17:27:08"},"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExMzE2OTYsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.y0uqSiHo1CPypvvm3NpOZMgx0ZhZEd48nqo7JVhkbSI"},"timestamp":1760526896947}
-INFO     - 2025-10-15 19:14:57 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-DEBUG    - 2025-10-15 19:14:57 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
-DEBUG    - 2025-10-15 19:14:58 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbind?traderId=1978417646222094337 HTTP/11" 200 None
-INFO     - 2025-10-15 19:14:58 - [test_delete:50] - 响应信息：{"success":false,"message":"解绑账户失败：请先取消订阅关系","code":500,"result":null,"timestamp":1760526897913}
-DEBUG    - 2025-10-15 19:14:58 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
-DEBUG    - 2025-10-15 19:14:59 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbind?traderId=1978417755685040130 HTTP/11" 200 None
-INFO     - 2025-10-15 19:14:59 - [test_delete:86] - 响应信息：{"success":false,"message":"解绑账户失败：请先取消订阅关系","code":500,"result":null,"timestamp":1760526898877}
-DEBUG    - 2025-10-15 19:15:00 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "DELETE /api/blockchain/master-slave/deletePa?id=1978417959710625794 HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:00 - [api_base:343] - [2025-10-15 19:15:00] DELETE请求: /blockchain/master-slave/deletePa | 参数: {'id': '1978417959710625794'} | 数据: None | 状态码: 200
-DEBUG    - 2025-10-15 19:15:05 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbindPa?traderId=1978417755685040130 HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:05 - [api_base:220] - [2025-10-15 19:15:05] POST请求（表单+URL参数）: /blockchain/account/unbindPa | URL参数: {'traderId': '1978417755685040130'} | 表单数据: None
-INFO     - 2025-10-15 19:15:05 - [api_base:230] - [2025-10-15 19:15:05] 请求后等待 1 秒
-INFO     - 2025-10-15 19:15:06 - [api_base:604] - [2025-10-15 19:15:06] 执行SQL: SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE id = %s ORDER BY create_time DESC 
-参数: ('1978417755685040130',)
-INFO     - 2025-10-15 19:15:06 - [api_base:607] - [2025-10-15 19:15:06] 查询成功，结果数量: 1
-INFO     - 2025-10-15 19:15:06 - [api_base:619] - [2025-10-15 19:15:06] 查询结果: [{"id": "1978417755685040130", "server_id": "1821740479986667521", "broker_id": "1781213961048682529", "user_id": "1962808746181640193", "account": "301391176", "type": "SLAVE_REAL", "password": "Test123456", "display": "private", "meta_trader_platform_id": 4, "password_type": 0, "subscribe_fee": 0.0, "status": "UNBIND"}]
-INFO     - 2025-10-15 19:15:06 - [test_delete:237] - 跟随者账号解绑成功
-DEBUG    - 2025-10-15 19:15:10 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbindPa?traderId=1978417646222094337 HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:10 - [api_base:220] - [2025-10-15 19:15:10] POST请求（表单+URL参数）: /blockchain/account/unbindPa | URL参数: {'traderId': '1978417646222094337'} | 表单数据: None
-INFO     - 2025-10-15 19:15:10 - [api_base:230] - [2025-10-15 19:15:10] 请求后等待 1 秒
-INFO     - 2025-10-15 19:15:11 - [api_base:604] - [2025-10-15 19:15:11] 执行SQL: SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE id = %s ORDER BY create_time DESC 
-参数: ('1978417646222094337',)
-INFO     - 2025-10-15 19:15:11 - [api_base:607] - [2025-10-15 19:15:11] 查询成功，结果数量: 1
-INFO     - 2025-10-15 19:15:11 - [api_base:619] - [2025-10-15 19:15:11] 查询结果: [{"id": "1978417646222094337", "server_id": "1821740479986667521", "broker_id": "1781213961048682529", "user_id": "1962808746181640193", "account": "301391174", "type": "MASTER_REAL", "password": "Test123456", "display": "public", "meta_trader_platform_id": 4, "password_type": 0, "subscribe_fee": 0.0, "status": "UNBIND"}]
-INFO     - 2025-10-15 19:15:11 - [test_delete:277] - 交易员账号解绑成功
-INFO     - 2025-10-15 19:15:11 - [variable_manager:40] - [2025-10-15 19:14:52] 成功加载静态变量: VAR\dev_data.json
-INFO     - 2025-10-15 19:15:11 - [variable_manager:64] - [2025-10-15 19:14:52] 成功加载运行时变量: VAR\runtime_vars_community.json
-INFO     - 2025-10-15 19:15:11 - [conftest:248] - [2025-10-15 19:15:11] 用例 test_community_vps/test_delete.py::TestDeleteUser::test_delete_group 开始登录，环境: dev
-DEBUG    - 2025-10-15 19:15:11 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-10-15 19:15:11 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:11 - [conftest:275] - 测试环境登录成功
-INFO     - 2025-10-15 19:15:11 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-DEBUG    - 2025-10-15 19:15:12 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/group HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:12 - [api_vpsbase:239] - [2025-10-15 19:15:12] DELETE请求: /mascontrol/group | 数据: [548]
-INFO     - 2025-10-15 19:15:13 - [conftest:343] - [2025-10-15 19:15:13] 用例 test_community_vps/test_delete.py::TestDeleteUser::test_delete_group 执行完毕
-INFO     - 2025-10-15 19:15:13 - [api_vpsbase:786] - [2025-10-15 19:15:13] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_group WHERE name = %s | 超时: 5秒
-INFO     - 2025-10-15 19:15:13 - [api_vpsbase:448] - [2025-10-15 19:15:13] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+INFO     - 2025-10-16 11:47:35 - [conftest:517] - [2025-10-16 11:47:34] 测试会话开始: 2025-10-16 11:47:35, 测试组: cloud
+INFO     - 2025-10-16 11:47:35 - [variable_manager:59] - [2025-10-16 11:47:35] 静态变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\dev_data.json
+INFO     - 2025-10-16 11:47:35 - [variable_manager:90] - [2025-10-16 11:47:35] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:47:35 - [api_base:604] - [2025-10-16 11:47:35] 执行SQL: SELECT id,name FROM bchain_trader_broker WHERE name = %s ORDER BY create_time DESC 
+参数: ('CPT Markets',)
+INFO     - 2025-10-16 11:47:35 - [api_base:607] - [2025-10-16 11:47:35] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:47:35 - [api_base:619] - [2025-10-16 11:47:35] 查询结果: [{"id": "1781213961048682529", "name": "CPT Markets"}]
+INFO     - 2025-10-16 11:47:35 - [variable_manager:90] - [2025-10-16 11:47:35] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:47:35 - [variable_manager:223] - [2025-10-16 11:47:35] 变量值更新 | 变量: trader_broker_id | 旧值: 1781213961048682529 | 新值: 1781213961048682529
+INFO     - 2025-10-16 11:47:35 - [variable_manager:176] - [2025-10-16 11:47:35] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:47:35 - [variable_manager:161] - [2025-10-16 11:47:35] 运行时变量设置成功 | 变量: trader_broker_id | 值: 1781213961048682529
+INFO     - 2025-10-16 11:47:35 - [conftest:74] - [2025-10-16 11:47:35] 用例  开始登录，环境: dev
+DEBUG    - 2025-10-16 11:47:35 - [variable_manager:202] - [2025-10-16 11:47:35] 变量不存在（返回默认值） | 变量: login_config | 默认值: None
+DEBUG    - 2025-10-16 11:47:35 - [variable_manager:135] - [2025-10-16 11:47:35] 从静态变量获取 | 变量: login_config | 值: {'username': 'xujunhao@163.com', 'password': '123456', 'remember_me': True, 'captcha': 'zzaj', 'checkKey': 1756888824729}
+DEBUG    - 2025-10-16 11:47:35 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:47:36 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/randomImage/1760586455933?_t=1760586455 HTTP/11" 200 None
+INFO     - 2025-10-16 11:47:36 - [conftest:122] - 验证码接口响应内容: {"success":true,"message":"","code":0,"result":"data:image/jpg;base64,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","timestamp":1760586456562}
+INFO     - 2025-10-16 11:47:36 - [conftest:126] - 验证码接口JSON响应: {'success': True, 'message': '', 'code': 0, 'result': 'data:image/jpg;base64,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', 'timestamp': 1760586456562}
+INFO     - 2025-10-16 11:47:37 - [conftest:143] - 第1次尝试 - 验证码识别结果: BFES
+DEBUG    - 2025-10-16 11:47:37 - [variable_manager:202] - [2025-10-16 11:47:37] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:47:37 - [variable_manager:135] - [2025-10-16 11:47:37] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:47:37 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/login HTTP/11" 200 None
+ERROR    - 2025-10-16 11:47:37 - [conftest:191] - 第1次登录失败: 验证码错误: 验证码错误
+DEBUG    - 2025-10-16 11:47:48 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/randomImage/1760586467623?_t=1760586467 HTTP/11" 200 None
+INFO     - 2025-10-16 11:47:48 - [conftest:122] - 验证码接口响应内容: {"success":true,"message":"","code":0,"result":"data:image/jpg;base64,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","timestamp":1760586467848}
+INFO     - 2025-10-16 11:47:48 - [conftest:126] - 验证码接口JSON响应: {'success': True, 'message': '', 'code': 0, 'result': 'data:image/jpg;base64,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', 'timestamp': 1760586467848}
+INFO     - 2025-10-16 11:47:48 - [conftest:143] - 第2次尝试 - 验证码识别结果: uWbn
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:202] - [2025-10-16 11:47:48] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:135] - [2025-10-16 11:47:48] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:47:48 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:47:48 - [conftest:186] - dev环境登录成功（第2次尝试）
+INFO     - 2025-10-16 11:47:48 - [variable_manager:90] - [2025-10-16 11:47:48] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:223] - [2025-10-16 11:47:48] 变量值更新 | 变量: access_token | 旧值: 78690337e6a1419ea1ca1aadde78223b | 新值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEyNjgsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.wE4veIpIpqmFPCsQrD71lMHa2UC2B11nsozNWpRLKmc
+INFO     - 2025-10-16 11:47:48 - [variable_manager:176] - [2025-10-16 11:47:48] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:47:48 - [variable_manager:161] - [2025-10-16 11:47:48] 运行时变量设置成功 | 变量: access_token | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEyNjgsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.wE4veIpIpqmFPCsQrD71lMHa2UC2B11nsozNWpRLKmc
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:202] - [2025-10-16 11:47:48] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:135] - [2025-10-16 11:47:48] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:202] - [2025-10-16 11:47:48] 变量不存在（返回默认值） | 变量: login_config | 默认值: None
+DEBUG    - 2025-10-16 11:47:48 - [variable_manager:135] - [2025-10-16 11:47:48] 从静态变量获取 | 变量: login_config | 值: {'username': 'xujunhao@163.com', 'password': '123456', 'remember_me': True, 'captcha': 'zzaj', 'checkKey': 1756888824729}
+DEBUG    - 2025-10-16 11:47:49 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/user/list?_t=1760586454&column=createTime&field=id%2C%2Cusername%2Cnickname%2Cemail%2Cphone&pageNo=1&pageSize=20&order=desc HTTP/11" 200 None
+INFO     - 2025-10-16 11:47:49 - [api_base:275] - [2025-10-16 11:47:49] GET请求: /sys/user/list | 参数: {'_t': 1760586454, 'column': 'createTime', 'field': 'id,,username,nickname,email,phone', 'pageNo': '1', 'pageSize': '20', 'order': 'desc'}
+INFO     - 2025-10-16 11:47:52 - [test_create:81] - 提取用户ID成功 | email=xujunhao@163.com | user_id=1962808746181640193
+INFO     - 2025-10-16 11:47:52 - [variable_manager:90] - [2025-10-16 11:47:52] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:47:52 - [variable_manager:223] - [2025-10-16 11:47:52] 变量值更新 | 变量: trader_user_id | 旧值: 1962808746181640193 | 新值: 1962808746181640193
+INFO     - 2025-10-16 11:47:52 - [variable_manager:176] - [2025-10-16 11:47:52] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:47:52 - [variable_manager:161] - [2025-10-16 11:47:52] 运行时变量设置成功 | 变量: trader_user_id | 值: 1962808746181640193
+DEBUG    - 2025-10-16 11:47:52 - [variable_manager:131] - [2025-10-16 11:47:52] 从运行时变量获取 | 变量: trader_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:47:53 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883917b2f2594017b335d3ddb0001?_t=1760586454&broker_id=1781213961048682529&pageSize=50 HTTP/11" 200 None
+INFO     - 2025-10-16 11:47:53 - [api_base:275] - [2025-10-16 11:47:53] GET请求: /online/cgform/api/getData/402883917b2f2594017b335d3ddb0001 | 参数: {'_t': 1760586454, 'broker_id': '1781213961048682529', 'pageSize': '50'}
+INFO     - 2025-10-16 11:47:56 - [test_create:135] - 提取成功 | 服务器名称: CPTMarkets-Demo | server_id: 1821740479986667521
+INFO     - 2025-10-16 11:47:56 - [variable_manager:90] - [2025-10-16 11:47:56] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:223] - [2025-10-16 11:47:56] 变量值更新 | 变量: trader_server_id | 旧值: 1821740479986667521 | 新值: 1821740479986667521
+INFO     - 2025-10-16 11:47:56 - [variable_manager:176] - [2025-10-16 11:47:56] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:47:56 - [variable_manager:161] - [2025-10-16 11:47:56] 运行时变量设置成功 | 变量: trader_server_id | 值: 1821740479986667521
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:202] - [2025-10-16 11:47:56] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:135] - [2025-10-16 11:47:56] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:202] - [2025-10-16 11:47:56] 变量不存在（返回默认值） | 变量: trader_password | 默认值: None
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:135] - [2025-10-16 11:47:56] 从静态变量获取 | 变量: trader_password | 值: Test123456
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:131] - [2025-10-16 11:47:56] 从运行时变量获取 | 变量: trader_user_id | 值: 1962808746181640193
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:131] - [2025-10-16 11:47:56] 从运行时变量获取 | 变量: trader_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:47:56 - [variable_manager:131] - [2025-10-16 11:47:56] 从运行时变量获取 | 变量: trader_server_id | 值: 1821740479986667521
+DEBUG    - 2025-10-16 11:47:59 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/bind HTTP/11" 200 None
+INFO     - 2025-10-16 11:47:59 - [api_base:209] - [2025-10-16 11:47:59] POST请求（JSON+URL参数）: /blockchain/account/bind | URL参数: None | JSON数据: {'userId': '1962808746181640193', 'brokerId': '1781213961048682529', 'serverId': '1821740479986667521', 'account': '301391174', 'password': 'Test123456', 'display': 'PUBLIC', 'passwordType': '0', 'subscribeFee': '0', 'type': 'MASTER_REAL', 'strategy': '', 'platform': '4'}
+INFO     - 2025-10-16 11:47:59 - [api_base:230] - [2025-10-16 11:47:59] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:202] - [2025-10-16 11:48:02] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:135] - [2025-10-16 11:48:02] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:202] - [2025-10-16 11:48:02] 变量不存在（返回默认值） | 变量: trader_password | 默认值: None
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:135] - [2025-10-16 11:48:02] 从静态变量获取 | 变量: trader_password | 值: Test123456
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:131] - [2025-10-16 11:48:02] 从运行时变量获取 | 变量: trader_user_id | 值: 1962808746181640193
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:131] - [2025-10-16 11:48:02] 从运行时变量获取 | 变量: trader_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:48:02 - [variable_manager:131] - [2025-10-16 11:48:02] 从运行时变量获取 | 变量: trader_server_id | 值: 1821740479986667521
+DEBUG    - 2025-10-16 11:48:06 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/bind HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:06 - [api_base:209] - [2025-10-16 11:48:06] POST请求（JSON+URL参数）: /blockchain/account/bind | URL参数: None | JSON数据: {'userId': '1962808746181640193', 'brokerId': '1781213961048682529', 'serverId': '1821740479986667521', 'account': '301391174', 'password': 'Test123456', 'display': 'PUBLIC', 'passwordType': '0', 'subscribeFee': '0', 'type': 'MASTER_REAL', 'strategy': '', 'platform': '4'}
+INFO     - 2025-10-16 11:48:06 - [api_base:230] - [2025-10-16 11:48:06] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:48:10 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/4028839781b865e40181b87163350007?_t=1760586454&column=name&order=asc HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:10 - [api_base:275] - [2025-10-16 11:48:10] GET请求: /online/cgform/api/getData/4028839781b865e40181b87163350007 | 参数: {'_t': 1760586454, 'column': 'name', 'order': 'asc'}
+INFO     - 2025-10-16 11:48:13 - [variable_manager:90] - [2025-10-16 11:48:13] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:13 - [variable_manager:223] - [2025-10-16 11:48:13] 变量值更新 | 变量: trader_jeecgrow_key | 旧值: 1765999873808998401 | 新值: 1765999873808998401
+INFO     - 2025-10-16 11:48:13 - [variable_manager:176] - [2025-10-16 11:48:13] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:13 - [variable_manager:161] - [2025-10-16 11:48:13] 运行时变量设置成功 | 变量: trader_jeecgrow_key | 值: 1765999873808998401
+DEBUG    - 2025-10-16 11:48:13 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/blockchain/followVps/getRecordList?_t=1760586454&column=name&order=asc HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:13 - [api_base:275] - [2025-10-16 11:48:13] GET请求: /blockchain/followVps/getRecordList | 参数: {'_t': 1760586454, 'column': 'name', 'order': 'asc'}
+INFO     - 2025-10-16 11:48:16 - [variable_manager:90] - [2025-10-16 11:48:16] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:16 - [variable_manager:223] - [2025-10-16 11:48:16] 变量值更新 | 变量: vpsrunIpAddr | 旧值: 39.103.138.2 | 新值: 39.103.138.2
+INFO     - 2025-10-16 11:48:16 - [variable_manager:176] - [2025-10-16 11:48:16] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:16 - [variable_manager:161] - [2025-10-16 11:48:16] 运行时变量设置成功 | 变量: vpsrunIpAddr | 值: 39.103.138.2
+DEBUG    - 2025-10-16 11:48:16 - [variable_manager:202] - [2025-10-16 11:48:16] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:48:16 - [variable_manager:135] - [2025-10-16 11:48:16] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:48:17 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000?_t=1760586454&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and&status=PENDING%2CVERIFICATION HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:17 - [api_base:275] - [2025-10-16 11:48:17] GET请求: /online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000 | 参数: {'_t': 1760586454, 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and', 'status': 'PENDING,VERIFICATION'}
+INFO     - 2025-10-16 11:48:20 - [test_create:354] - 提取成功 | 账号的id: 301391174 | trader_pass_id: 1978669223629516802
+INFO     - 2025-10-16 11:48:20 - [variable_manager:90] - [2025-10-16 11:48:20] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:20 - [variable_manager:223] - [2025-10-16 11:48:20] 变量值更新 | 变量: trader_pass_id | 旧值: 1978667966122651650 | 新值: 1978669223629516802
+INFO     - 2025-10-16 11:48:20 - [variable_manager:176] - [2025-10-16 11:48:20] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:20 - [variable_manager:161] - [2025-10-16 11:48:20] 运行时变量设置成功 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:48:20 - [variable_manager:131] - [2025-10-16 11:48:20] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:48:20 - [variable_manager:131] - [2025-10-16 11:48:20] 从运行时变量获取 | 变量: trader_jeecgrow_key | 值: 1765999873808998401
+DEBUG    - 2025-10-16 11:48:20 - [variable_manager:131] - [2025-10-16 11:48:20] 从运行时变量获取 | 变量: vpsrunIpAddr | 值: 39.103.138.2
+DEBUG    - 2025-10-16 11:48:21 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/pass/1978669223629516802 HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:21 - [api_base:209] - [2025-10-16 11:48:21] POST请求（JSON+URL参数）: /blockchain/account/pass/1978669223629516802 | URL参数: None | JSON数据: {'pass': True, 'commission': False, 'planId': '1765999873808998401', 'toSynDate': '2025-10-16 11:47:34', 'bindIpAddr': '39.103.138.2'}
+INFO     - 2025-10-16 11:48:21 - [api_base:230] - [2025-10-16 11:48:21] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:48:24 - [variable_manager:202] - [2025-10-16 11:48:24] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:48:24 - [variable_manager:135] - [2025-10-16 11:48:24] 从静态变量获取 | 变量: trader_account | 值: 301391174
+INFO     - 2025-10-16 11:48:24 - [api_base:604] - [2025-10-16 11:48:24] 执行SQL: SELECT run_ip_addr,equity,equity_init,audit_by FROM bchain_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('301391174',)
+INFO     - 2025-10-16 11:48:24 - [api_base:607] - [2025-10-16 11:48:24] 查询成功，结果数量: 72
+INFO     - 2025-10-16 11:48:24 - [api_base:619] - [2025-10-16 11:48:24] 查询结果: [{"run_ip_addr": "39.103.138.2", "equity": 4999406.66, "equity_init": 4999406.66, "audit_by": "xujunhao@163.com"}, {"run_ip_addr": "", "equity": 4999407.08, "equity_init": 4999407.08, "audit_by": "xujunhao@163.com"}, {"run_ip_addr": "", "equity": 4999407.08, "equity_init": 4999407.08, "audit_by": "xujunhao@163.com"}, {"run_ip_addr": "", "equity": 4999407.08, "equity_init": 4999407.08, "audit_by": "xujunhao@163.com"}, {"run_ip_addr": "", "equity": 4999407.08, "equity_init": 4999405.49, "audit_by"
+INFO     - 2025-10-16 11:48:24 - [variable_manager:90] - [2025-10-16 11:48:24] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:24 - [variable_manager:223] - [2025-10-16 11:48:24] 变量值更新 | 变量: trader_equity | 旧值: 4999407.08 | 新值: 4999406.66
+INFO     - 2025-10-16 11:48:24 - [variable_manager:176] - [2025-10-16 11:48:24] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:24 - [variable_manager:161] - [2025-10-16 11:48:24] 运行时变量设置成功 | 变量: trader_equity | 值: 4999406.66
+INFO     - 2025-10-16 11:48:24 - [variable_manager:90] - [2025-10-16 11:48:24] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:24 - [variable_manager:223] - [2025-10-16 11:48:24] 变量值更新 | 变量: trader_equity_init | 旧值: 4999407.08 | 新值: 4999406.66
+INFO     - 2025-10-16 11:48:24 - [variable_manager:176] - [2025-10-16 11:48:24] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:24 - [variable_manager:161] - [2025-10-16 11:48:24] 运行时变量设置成功 | 变量: trader_equity_init | 值: 4999406.66
+INFO     - 2025-10-16 11:48:24 - [variable_manager:90] - [2025-10-16 11:48:24] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:24 - [variable_manager:223] - [2025-10-16 11:48:24] 变量值更新 | 变量: trader_audit_by | 旧值: xujunhao@163.com | 新值: xujunhao@163.com
+INFO     - 2025-10-16 11:48:24 - [variable_manager:176] - [2025-10-16 11:48:24] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:24 - [variable_manager:161] - [2025-10-16 11:48:24] 运行时变量设置成功 | 变量: trader_audit_by | 值: xujunhao@163.com
+DEBUG    - 2025-10-16 11:48:24 - [variable_manager:131] - [2025-10-16 11:48:24] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:48:25 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/duplicate/check?_t=True&tableName=bchain_trader&fieldName=policy_name&fieldVal=xjh86504&dataId=1978669223629516802 HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:25 - [api_base:275] - [2025-10-16 11:48:25] GET请求: /sys/duplicate/check | 参数: {'_t': True, 'tableName': 'bchain_trader', 'fieldName': 'policy_name', 'fieldVal': 'xjh86504', 'dataId': '1978669223629516802'}
+INFO     - 2025-10-16 11:48:28 - [variable_manager:90] - [2025-10-16 11:48:28] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:223] - [2025-10-16 11:48:28] 变量值更新 | 变量: valid_strategy_name | 旧值: xjhu6204 | 新值: xjh86504
+INFO     - 2025-10-16 11:48:28 - [variable_manager:176] - [2025-10-16 11:48:28] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:28 - [variable_manager:161] - [2025-10-16 11:48:28] 运行时变量设置成功 | 变量: valid_strategy_name | 值: xjh86504
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:131] - [2025-10-16 11:48:28] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:131] - [2025-10-16 11:48:28] 从运行时变量获取 | 变量: vpsrunIpAddr | 值: 39.103.138.2
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:131] - [2025-10-16 11:48:28] 从运行时变量获取 | 变量: trader_equity_init | 值: 4999406.66
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:131] - [2025-10-16 11:48:28] 从运行时变量获取 | 变量: trader_equity | 值: 4999406.66
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:131] - [2025-10-16 11:48:28] 从运行时变量获取 | 变量: trader_audit_by | 值: xujunhao@163.com
+DEBUG    - 2025-10-16 11:48:28 - [variable_manager:131] - [2025-10-16 11:48:28] 从运行时变量获取 | 变量: valid_strategy_name | 值: xjh86504
+DEBUG    - 2025-10-16 11:48:28 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "PUT /api/online/cgform/api/form/2c9a814a81d3a91b0181d3a91b250000 HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:28 - [api_base:435] - [2025-10-16 11:48:28] PUT请求: /online/cgform/api/form/2c9a814a81d3a91b0181d3a91b250000 | 数据: {'id': '1978669223629516802', 'policy_name': 'xjh86504', 'virtual_server_name': 'CPT Markets', 'virtual_status': 0, 'strategy_introduce_cn': '中文', 'strategy_introduce_ch': '繁体', 'strategy_introduce_en': 'English', 'run_ip_addr': '39.103.138.2', 'bind_ip_addr': '39.103.138.2', 'status_pass_time': '2025-10-16 11:47:34', 'subscribe_fee': 0, 'equity_init': 4999406.66, 'equity': 4999406.66, 'audit_by': 'xujunhao@163.com', 'dividend_ratio': 50}
+INFO     - 2025-10-16 11:48:32 - [api_base:604] - [2025-10-16 11:48:32] 执行SQL: SELECT id,name FROM bchain_trader_broker WHERE name = %s ORDER BY create_time DESC 
+参数: ('CPT Markets',)
+INFO     - 2025-10-16 11:48:32 - [api_base:607] - [2025-10-16 11:48:32] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:48:32 - [api_base:619] - [2025-10-16 11:48:32] 查询结果: [{"id": "1781213961048682529", "name": "CPT Markets"}]
+INFO     - 2025-10-16 11:48:32 - [variable_manager:90] - [2025-10-16 11:48:32] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:32 - [variable_manager:223] - [2025-10-16 11:48:32] 变量值更新 | 变量: follow_broker_id | 旧值: 1781213961048682529 | 新值: 1781213961048682529
+INFO     - 2025-10-16 11:48:32 - [variable_manager:176] - [2025-10-16 11:48:32] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:32 - [variable_manager:161] - [2025-10-16 11:48:32] 运行时变量设置成功 | 变量: follow_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:48:32 - [variable_manager:202] - [2025-10-16 11:48:32] 变量不存在（返回默认值） | 变量: login_config | 默认值: None
+DEBUG    - 2025-10-16 11:48:32 - [variable_manager:135] - [2025-10-16 11:48:32] 从静态变量获取 | 变量: login_config | 值: {'username': 'xujunhao@163.com', 'password': '123456', 'remember_me': True, 'captcha': 'zzaj', 'checkKey': 1756888824729}
+DEBUG    - 2025-10-16 11:48:32 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/sys/user/list?_t=1760586454&column=createTime&field=id%2C%2Cusername%2Cnickname%2Cemail%2Cphone&pageNo=1&pageSize=20&order=desc HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:32 - [api_base:275] - [2025-10-16 11:48:32] GET请求: /sys/user/list | 参数: {'_t': 1760586454, 'column': 'createTime', 'field': 'id,,username,nickname,email,phone', 'pageNo': '1', 'pageSize': '20', 'order': 'desc'}
+INFO     - 2025-10-16 11:48:35 - [test_create:588] - 提取用户ID成功 | email=xujunhao@163.com | user_id=1962808746181640193
+INFO     - 2025-10-16 11:48:35 - [variable_manager:90] - [2025-10-16 11:48:35] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:35 - [variable_manager:223] - [2025-10-16 11:48:35] 变量值更新 | 变量: follow_user_id | 旧值: 1962808746181640193 | 新值: 1962808746181640193
+INFO     - 2025-10-16 11:48:35 - [variable_manager:176] - [2025-10-16 11:48:35] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:35 - [variable_manager:161] - [2025-10-16 11:48:35] 运行时变量设置成功 | 变量: follow_user_id | 值: 1962808746181640193
+DEBUG    - 2025-10-16 11:48:35 - [variable_manager:131] - [2025-10-16 11:48:35] 从运行时变量获取 | 变量: follow_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:48:36 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883917b2f2594017b335d3ddb0001?_t=1760586454&broker_id=1781213961048682529&pageSize=50 HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:36 - [api_base:275] - [2025-10-16 11:48:36] GET请求: /online/cgform/api/getData/402883917b2f2594017b335d3ddb0001 | 参数: {'_t': 1760586454, 'broker_id': '1781213961048682529', 'pageSize': '50'}
+INFO     - 2025-10-16 11:48:39 - [test_create:642] - 提取成功 | 服务器名称: CPTMarkets-Demo | server_id: 1821740479986667521
+INFO     - 2025-10-16 11:48:39 - [variable_manager:90] - [2025-10-16 11:48:39] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:223] - [2025-10-16 11:48:39] 变量值更新 | 变量: follow_server_id | 旧值: 1821740479986667521 | 新值: 1821740479986667521
+INFO     - 2025-10-16 11:48:39 - [variable_manager:176] - [2025-10-16 11:48:39] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:39 - [variable_manager:161] - [2025-10-16 11:48:39] 运行时变量设置成功 | 变量: follow_server_id | 值: 1821740479986667521
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:202] - [2025-10-16 11:48:39] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:135] - [2025-10-16 11:48:39] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:202] - [2025-10-16 11:48:39] 变量不存在（返回默认值） | 变量: follow_password | 默认值: None
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:135] - [2025-10-16 11:48:39] 从静态变量获取 | 变量: follow_password | 值: Test123456
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:131] - [2025-10-16 11:48:39] 从运行时变量获取 | 变量: follow_user_id | 值: 1962808746181640193
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:131] - [2025-10-16 11:48:39] 从运行时变量获取 | 变量: follow_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:48:39 - [variable_manager:131] - [2025-10-16 11:48:39] 从运行时变量获取 | 变量: follow_server_id | 值: 1821740479986667521
+DEBUG    - 2025-10-16 11:48:43 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/bind HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:43 - [api_base:209] - [2025-10-16 11:48:43] POST请求（JSON+URL参数）: /blockchain/account/bind | URL参数: None | JSON数据: {'userId': '1962808746181640193', 'brokerId': '1781213961048682529', 'serverId': '1821740479986667521', 'account': '301391176', 'password': 'Test123456', 'display': 'PRIVATE', 'passwordType': '0', 'subscribeFee': '0', 'type': 'SLAVE_REAL', 'platform': '4'}
+INFO     - 2025-10-16 11:48:43 - [api_base:230] - [2025-10-16 11:48:43] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:202] - [2025-10-16 11:48:46] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:135] - [2025-10-16 11:48:46] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:202] - [2025-10-16 11:48:46] 变量不存在（返回默认值） | 变量: follow_password | 默认值: None
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:135] - [2025-10-16 11:48:46] 从静态变量获取 | 变量: follow_password | 值: Test123456
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:131] - [2025-10-16 11:48:46] 从运行时变量获取 | 变量: follow_user_id | 值: 1962808746181640193
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:131] - [2025-10-16 11:48:46] 从运行时变量获取 | 变量: follow_broker_id | 值: 1781213961048682529
+DEBUG    - 2025-10-16 11:48:46 - [variable_manager:131] - [2025-10-16 11:48:46] 从运行时变量获取 | 变量: follow_server_id | 值: 1821740479986667521
+DEBUG    - 2025-10-16 11:48:49 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/bind HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:49 - [api_base:209] - [2025-10-16 11:48:49] POST请求（JSON+URL参数）: /blockchain/account/bind | URL参数: None | JSON数据: {'userId': '1962808746181640193', 'brokerId': '1781213961048682529', 'serverId': '1821740479986667521', 'account': '301391176', 'password': 'Test123456', 'display': 'PRIVATE', 'passwordType': '0', 'subscribeFee': '0', 'type': 'SLAVE_REAL', 'platform': '4'}
+INFO     - 2025-10-16 11:48:49 - [api_base:230] - [2025-10-16 11:48:49] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:48:53 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/4028839781b865e40181b87163350007?_t=1760586454&column=name&order=asc HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:53 - [api_base:275] - [2025-10-16 11:48:53] GET请求: /online/cgform/api/getData/4028839781b865e40181b87163350007 | 参数: {'_t': 1760586454, 'column': 'name', 'order': 'asc'}
+INFO     - 2025-10-16 11:48:56 - [variable_manager:90] - [2025-10-16 11:48:56] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:48:56 - [variable_manager:223] - [2025-10-16 11:48:56] 变量值更新 | 变量: follow_jeecgrow_key | 旧值: 1765999873808998401 | 新值: 1765999873808998401
+INFO     - 2025-10-16 11:48:56 - [variable_manager:176] - [2025-10-16 11:48:56] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:48:56 - [variable_manager:161] - [2025-10-16 11:48:56] 运行时变量设置成功 | 变量: follow_jeecgrow_key | 值: 1765999873808998401
+DEBUG    - 2025-10-16 11:48:56 - [variable_manager:202] - [2025-10-16 11:48:56] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:48:56 - [variable_manager:135] - [2025-10-16 11:48:56] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:48:57 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000?_t=1760586454&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and&status=PENDING%2CVERIFICATION HTTP/11" 200 None
+INFO     - 2025-10-16 11:48:57 - [api_base:275] - [2025-10-16 11:48:57] GET请求: /online/cgform/api/getData/2c9a814a81d3a91b0181d3a91b250000 | 参数: {'_t': 1760586454, 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and', 'status': 'PENDING,VERIFICATION'}
+INFO     - 2025-10-16 11:49:00 - [test_create:795] - 提取成功 | 账号的id: 301391176 | trader_pass_id: 1978669405108662274
+INFO     - 2025-10-16 11:49:00 - [variable_manager:90] - [2025-10-16 11:49:00] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:00 - [variable_manager:223] - [2025-10-16 11:49:00] 变量值更新 | 变量: follow_pass_id | 旧值: 1978668147727626241 | 新值: 1978669405108662274
+INFO     - 2025-10-16 11:49:00 - [variable_manager:176] - [2025-10-16 11:49:00] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:00 - [variable_manager:161] - [2025-10-16 11:49:00] 运行时变量设置成功 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:49:00 - [variable_manager:131] - [2025-10-16 11:49:00] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:49:00 - [variable_manager:131] - [2025-10-16 11:49:00] 从运行时变量获取 | 变量: follow_jeecgrow_key | 值: 1765999873808998401
+DEBUG    - 2025-10-16 11:49:00 - [variable_manager:131] - [2025-10-16 11:49:00] 从运行时变量获取 | 变量: vpsrunIpAddr | 值: 39.103.138.2
+DEBUG    - 2025-10-16 11:49:00 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/pass/1978669405108662274 HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:00 - [api_base:209] - [2025-10-16 11:49:00] POST请求（JSON+URL参数）: /blockchain/account/pass/1978669405108662274 | URL参数: None | JSON数据: {'pass': True, 'commission': False, 'planId': '1765999873808998401', 'toSynDate': '2025-10-16 11:47:34', 'bindIpAddr': '39.103.138.2'}
+INFO     - 2025-10-16 11:49:00 - [api_base:230] - [2025-10-16 11:49:00] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:49:03 - [variable_manager:202] - [2025-10-16 11:49:03] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:49:03 - [variable_manager:135] - [2025-10-16 11:49:03] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:49:04 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgreport/api/getColumnsAndData/1560189381093109761?_t=1760586454&account=301391176&pageNo=1&pageSize=100&status=NORMAL%2CAUDIT HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:04 - [api_base:275] - [2025-10-16 11:49:04] GET请求: /online/cgreport/api/getColumnsAndData/1560189381093109761 | 参数: {'_t': 1760586454, 'account': '301391176', 'pageNo': 1, 'pageSize': 100, 'status': 'NORMAL,AUDIT'}
+INFO     - 2025-10-16 11:49:07 - [test_create:859] - 无订阅信息
+DEBUG    - 2025-10-16 11:49:07 - [variable_manager:131] - [2025-10-16 11:49:07] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:49:07 - [variable_manager:131] - [2025-10-16 11:49:07] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:49:09 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/master-slave/admin/add HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:09 - [api_base:209] - [2025-10-16 11:49:09] POST请求（JSON+URL参数）: /blockchain/master-slave/admin/add | URL参数: None | JSON数据: {'masterId': '1978669223629516802', 'slaveId': '1978669405108662274', 'direction': 'FORWARD', 'followingMode': '2', 'fixedProportion': '100', 'fixedLots': None, 'order': {'paymentAccount': '', 'paymentMethod': ''}}
+INFO     - 2025-10-16 11:49:09 - [api_base:230] - [2025-10-16 11:49:09] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:49:12 - [variable_manager:202] - [2025-10-16 11:49:12] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:49:12 - [variable_manager:135] - [2025-10-16 11:49:12] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:49:12 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgreport/api/getColumnsAndData/1560189381093109761?_t=1760586454&account=301391176&pageNo=1&pageSize=100&status=NORMAL%2CAUDIT HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:12 - [api_base:275] - [2025-10-16 11:49:12] GET请求: /online/cgreport/api/getColumnsAndData/1560189381093109761 | 参数: {'_t': 1760586454, 'account': '301391176', 'pageNo': 1, 'pageSize': 100, 'status': 'NORMAL,AUDIT'}
+INFO     - 2025-10-16 11:49:15 - [variable_manager:90] - [2025-10-16 11:49:15] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:15 - [variable_manager:223] - [2025-10-16 11:49:15] 变量值更新 | 变量: follow_jeecg_rowkey | 旧值: 1978668253082161153 | 新值: 1978669509301374978
+INFO     - 2025-10-16 11:49:15 - [variable_manager:176] - [2025-10-16 11:49:15] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:15 - [variable_manager:161] - [2025-10-16 11:49:15] 运行时变量设置成功 | 变量: follow_jeecg_rowkey | 值: 1978669509301374978
+INFO     - 2025-10-16 11:49:15 - [test_create:941] - 有订阅信息
+INFO     - 2025-10-16 11:49:15 - [variable_manager:59] - [2025-10-16 11:49:15] 静态变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\dev_data.json
+INFO     - 2025-10-16 11:49:15 - [variable_manager:90] - [2025-10-16 11:49:15] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:202] - [2025-10-16 11:49:16] 变量不存在（返回默认值） | 变量: new_user | 默认值: None
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:135] - [2025-10-16 11:49:16] 从静态变量获取 | 变量: new_user | 值: {'account': '301391174', 'password': 'Test123456', 'accountType': '0', 'symbol': 'XAUUSD', 'template_modelId': 1, 'serverNode': '185.96.247.214:2333', 'remarkimport': '参数化新增跟单社区账号', 'platform': 'CPTMarkets-Demo'}
+INFO     - 2025-10-16 11:49:16 - [api_vpsbase:448] - [2025-10-16 11:49:16] 执行SQL: SELECT * FROM follow_platform WHERE server = %s ORDER BY create_time DESC 
+参数: ('CPTMarkets-Demo',)
+INFO     - 2025-10-16 11:49:16 - [api_vpsbase:451] - [2025-10-16 11:49:16] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:49:16 - [api_vpsbase:463] - [2025-10-16 11:49:16] 查询结果: [{"id": 218, "broker_name": "CPTMarkets", "platform_type": 0, "server": "CPTMarkets-Demo", "server_node": "185.96.247.214:2333", "remark": "1008611", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2024-11-25 10:47:45", "updater": 10088, "update_time": "2025-10-15 16:17:55", "logo": null, "max_lots": null, "suffix_cfd": null, "suffix_forex": null, "suffix_enabled": 0}]
+INFO     - 2025-10-16 11:49:16 - [test_create:33] - 平台ID: 218
+INFO     - 2025-10-16 11:49:16 - [variable_manager:90] - [2025-10-16 11:49:16] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:223] - [2025-10-16 11:49:16] 变量值更新 | 变量: platformId | 旧值: 218 | 新值: 218
+INFO     - 2025-10-16 11:49:16 - [variable_manager:176] - [2025-10-16 11:49:16] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:16 - [variable_manager:161] - [2025-10-16 11:49:16] 运行时变量设置成功 | 变量: platformId | 值: 218
+INFO     - 2025-10-16 11:49:16 - [conftest:248] - [2025-10-16 11:49:16] 用例 test_cloudTrader_vps/test_create.py::TestCreate::test_create_importuser 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:202] - [2025-10-16 11:49:16] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:135] - [2025-10-16 11:49:16] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:49:16 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:49:16 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:16 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:49:16 - [variable_manager:90] - [2025-10-16 11:49:16] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:223] - [2025-10-16 11:49:16] 变量值更新 | 变量: access_token | 旧值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEyNjgsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.wE4veIpIpqmFPCsQrD71lMHa2UC2B11nsozNWpRLKmc | 新值: 9105774d1136442c84b4a862445d9df0
+INFO     - 2025-10-16 11:49:16 - [variable_manager:176] - [2025-10-16 11:49:16] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:16 - [variable_manager:161] - [2025-10-16 11:49:16] 运行时变量设置成功 | 变量: access_token | 值: 9105774d1136442c84b4a862445d9df0
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:202] - [2025-10-16 11:49:16] 变量不存在（返回默认值） | 变量: adduser | 默认值: None
+DEBUG    - 2025-10-16 11:49:16 - [variable_manager:135] - [2025-10-16 11:49:16] 从静态变量获取 | 变量: adduser | 值: {'csv_user_path': './Files/test/账号列表数据.csv'}
+DEBUG    - 2025-10-16 11:49:34 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/mascontrol/user/import HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:34 - [api_vpsbase:149] - [2025-10-16 11:49:34] POST请求（带文件）: /mascontrol/user/import | 表单数据: None
+INFO     - 2025-10-16 11:49:34 - [api_vpsbase:160] - [2025-10-16 11:49:34] 请求后等待 3 秒
+INFO     - 2025-10-16 11:49:37 - [conftest:343] - [2025-10-16 11:49:37] 用例 test_cloudTrader_vps/test_create.py::TestCreate::test_create_importuser 执行完毕
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:202] - [2025-10-16 11:49:37] 变量不存在（返回默认值） | 变量: new_user | 默认值: None
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:135] - [2025-10-16 11:49:37] 从静态变量获取 | 变量: new_user | 值: {'account': '301391174', 'password': 'Test123456', 'accountType': '0', 'symbol': 'XAUUSD', 'template_modelId': 1, 'serverNode': '185.96.247.214:2333', 'remarkimport': '参数化新增跟单社区账号', 'platform': 'CPTMarkets-Demo'}
+INFO     - 2025-10-16 11:49:37 - [api_vpsbase:448] - [2025-10-16 11:49:37] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE remark = %s ORDER BY account ASC 
+参数: ('参数化新增跟单社区账号',)
+INFO     - 2025-10-16 11:49:37 - [api_vpsbase:451] - [2025-10-16 11:49:37] 查询成功，结果数量: 2
+INFO     - 2025-10-16 11:49:37 - [api_vpsbase:463] - [2025-10-16 11:49:37] 查询结果: [{"id": 7863, "account": "301391174", "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 218, "platform": "CPTMarkets-Demo", "account_type": null, "server_node": "185.96.247.214:2333", "group_name": null, "group_id": null, "sort": 100, "status": 0, "remark": "参数化新增跟单社区账号", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2025-10-16 11:49:34", "updater": 10000, "update_time": "2025-10-16 11:49:34", "platform_type": 0}, {"id": 7864, "account": "301391176", "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 218, "platform": "CPTMarkets-Demo", "account_type": null, "server_node": "185.96.247.214:2333", "group_name": null, "group_id": null, "sort": 100, "status": 0, "remark": "参数化新增跟单社区账号", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2025-10-16 11:49:34", "updater": 10000, "update_time": "2025-10-16 11:49:34", "platform_type": 0}]
+INFO     - 2025-10-16 11:49:37 - [variable_manager:90] - [2025-10-16 11:49:37] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:223] - [2025-10-16 11:49:37] 变量值更新 | 变量: vps_user_ids_1 | 旧值: 7861 | 新值: 7863
+INFO     - 2025-10-16 11:49:37 - [variable_manager:176] - [2025-10-16 11:49:37] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:37 - [variable_manager:161] - [2025-10-16 11:49:37] 运行时变量设置成功 | 变量: vps_user_ids_1 | 值: 7863
+INFO     - 2025-10-16 11:49:37 - [variable_manager:90] - [2025-10-16 11:49:37] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:223] - [2025-10-16 11:49:37] 变量值更新 | 变量: vps_user_accounts_1 | 旧值: 301391174 | 新值: 301391174
+INFO     - 2025-10-16 11:49:37 - [variable_manager:176] - [2025-10-16 11:49:37] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:37 - [variable_manager:161] - [2025-10-16 11:49:37] 运行时变量设置成功 | 变量: vps_user_accounts_1 | 值: 301391174
+INFO     - 2025-10-16 11:49:37 - [variable_manager:90] - [2025-10-16 11:49:37] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:223] - [2025-10-16 11:49:37] 变量值更新 | 变量: vps_user_ids_2 | 旧值: 7862 | 新值: 7864
+INFO     - 2025-10-16 11:49:37 - [variable_manager:176] - [2025-10-16 11:49:37] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:37 - [variable_manager:161] - [2025-10-16 11:49:37] 运行时变量设置成功 | 变量: vps_user_ids_2 | 值: 7864
+INFO     - 2025-10-16 11:49:37 - [variable_manager:90] - [2025-10-16 11:49:37] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:223] - [2025-10-16 11:49:37] 变量值更新 | 变量: vps_user_accounts_2 | 旧值: 301391176 | 新值: 301391176
+INFO     - 2025-10-16 11:49:37 - [variable_manager:176] - [2025-10-16 11:49:37] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:37 - [variable_manager:161] - [2025-10-16 11:49:37] 运行时变量设置成功 | 变量: vps_user_accounts_2 | 值: 301391176
+INFO     - 2025-10-16 11:49:37 - [variable_manager:90] - [2025-10-16 11:49:37] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:223] - [2025-10-16 11:49:37] 变量值更新 | 变量: vps_user_count | 旧值: 2 | 新值: 2
+INFO     - 2025-10-16 11:49:37 - [variable_manager:176] - [2025-10-16 11:49:37] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:37 - [variable_manager:161] - [2025-10-16 11:49:37] 运行时变量设置成功 | 变量: vps_user_count | 值: 2
+INFO     - 2025-10-16 11:49:37 - [conftest:248] - [2025-10-16 11:49:37] 用例 test_cloudTrader_vps/test_create.py::TestCreate::test_create_vpsgroup 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:202] - [2025-10-16 11:49:37] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:49:37 - [variable_manager:135] - [2025-10-16 11:49:37] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:49:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:49:38 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:38 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:49:38 - [variable_manager:90] - [2025-10-16 11:49:38] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:38 - [variable_manager:223] - [2025-10-16 11:49:38] 变量值更新 | 变量: access_token | 旧值: 9105774d1136442c84b4a862445d9df0 | 新值: 1e928ebd52674c36a5cfa533c73fba13
+INFO     - 2025-10-16 11:49:38 - [variable_manager:176] - [2025-10-16 11:49:38] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:38 - [variable_manager:161] - [2025-10-16 11:49:38] 运行时变量设置成功 | 变量: access_token | 值: 1e928ebd52674c36a5cfa533c73fba13
+DEBUG    - 2025-10-16 11:49:38 - [variable_manager:202] - [2025-10-16 11:49:38] 变量不存在（返回默认值） | 变量: add_vpsgroup | 默认值: None
+DEBUG    - 2025-10-16 11:49:38 - [variable_manager:135] - [2025-10-16 11:49:38] 从静态变量获取 | 变量: add_vpsgroup | 值: {'name': '跟单社区测试vps', 'color': '#EF7979', 'sort': 10, 'type': 1}
+DEBUG    - 2025-10-16 11:49:38 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/mascontrol/group HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:38 - [api_vpsbase:152] - [2025-10-16 11:49:38] POST请求（JSON）: /mascontrol/group | 数据: {'name': '跟单社区测试vps', 'color': '#EF7979', 'sort': 10, 'type': 1}
+INFO     - 2025-10-16 11:49:38 - [api_vpsbase:160] - [2025-10-16 11:49:38] 请求后等待 3 秒
+INFO     - 2025-10-16 11:49:41 - [conftest:343] - [2025-10-16 11:49:41] 用例 test_cloudTrader_vps/test_create.py::TestCreate::test_create_vpsgroup 执行完毕
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:202] - [2025-10-16 11:49:41] 变量不存在（返回默认值） | 变量: add_vpsgroup | 默认值: None
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:135] - [2025-10-16 11:49:41] 从静态变量获取 | 变量: add_vpsgroup | 值: {'name': '跟单社区测试vps', 'color': '#EF7979', 'sort': 10, 'type': 1}
+INFO     - 2025-10-16 11:49:41 - [api_vpsbase:448] - [2025-10-16 11:49:41] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
 参数: ('跟单社区测试vps',)
-INFO     - 2025-10-15 19:15:13 - [api_vpsbase:451] - [2025-10-15 19:15:13] 查询成功，结果数量: 0
-INFO     - 2025-10-15 19:15:13 - [api_vpsbase:463] - [2025-10-15 19:15:13] 查询结果: []
-INFO     - 2025-10-15 19:15:13 - [api_vpsbase:819] - [2025-10-15 19:15:13] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_group WHERE name = %s
-INFO     - 2025-10-15 19:15:13 - [conftest:248] - [2025-10-15 19:15:13] 用例 test_community_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 开始登录，环境: dev
-DEBUG    - 2025-10-15 19:15:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-10-15 19:15:13 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:13 - [conftest:275] - 测试环境登录成功
-INFO     - 2025-10-15 19:15:13 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-INFO     - 2025-10-15 19:15:13 - [conftest:338] - 切换到VPS URL: http://39.98.109.212/vps
-DEBUG    - 2025-10-15 19:15:13 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
-DEBUG    - 2025-10-15 19:15:13 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:13 - [api_vpsbase:239] - [2025-10-15 19:15:13] DELETE请求: /subcontrol/trader | 数据: [12564]
-INFO     - 2025-10-15 19:15:14 - [conftest:343] - [2025-10-15 19:15:14] 用例 test_community_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 执行完毕
-INFO     - 2025-10-15 19:15:14 - [test_delete:148] - 查询条件: table=follow_trader, account=301391174
-INFO     - 2025-10-15 19:15:14 - [api_vpsbase:786] - [2025-10-15 19:15:14] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
-INFO     - 2025-10-15 19:15:15 - [api_vpsbase:448] - [2025-10-15 19:15:15] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+INFO     - 2025-10-16 11:49:41 - [api_vpsbase:451] - [2025-10-16 11:49:41] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:49:41 - [api_vpsbase:463] - [2025-10-16 11:49:41] 查询结果: [{"id": 559, "name": "跟单社区测试vps", "number": 0, "color": "#EF7979", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2025-10-16 11:49:38", "updater": 10000, "update_time": "2025-10-16 11:49:38", "sort": 10.0, "type": 1}]
+INFO     - 2025-10-16 11:49:41 - [test_create:156] - 新增VPS组别ID: 559
+INFO     - 2025-10-16 11:49:41 - [variable_manager:90] - [2025-10-16 11:49:41] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:223] - [2025-10-16 11:49:41] 变量值更新 | 变量: vps_group_id | 旧值: 558 | 新值: 559
+INFO     - 2025-10-16 11:49:41 - [variable_manager:176] - [2025-10-16 11:49:41] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:41 - [variable_manager:161] - [2025-10-16 11:49:41] 运行时变量设置成功 | 变量: vps_group_id | 值: 559
+INFO     - 2025-10-16 11:49:41 - [conftest:248] - [2025-10-16 11:49:41] 用例 test_cloudTrader_vps/test_create.py::TestCreate::test_add_trader 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:202] - [2025-10-16 11:49:41] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:135] - [2025-10-16 11:49:41] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:49:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:49:41 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:41 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:49:41 - [variable_manager:90] - [2025-10-16 11:49:41] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:223] - [2025-10-16 11:49:41] 变量值更新 | 变量: access_token | 旧值: 1e928ebd52674c36a5cfa533c73fba13 | 新值: f5f640aa5110470c840b486f883a7d12
+INFO     - 2025-10-16 11:49:41 - [variable_manager:176] - [2025-10-16 11:49:41] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:41 - [variable_manager:161] - [2025-10-16 11:49:41] 运行时变量设置成功 | 变量: access_token | 值: f5f640aa5110470c840b486f883a7d12
+INFO     - 2025-10-16 11:49:41 - [conftest:338] - 切换到VPS URL: http://39.99.131.255/vps
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:202] - [2025-10-16 11:49:41] 变量不存在（返回默认值） | 变量: new_user | 默认值: None
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:135] - [2025-10-16 11:49:41] 从静态变量获取 | 变量: new_user | 值: {'account': '301391174', 'password': 'Test123456', 'accountType': '0', 'symbol': 'XAUUSD', 'template_modelId': 1, 'serverNode': '185.96.247.214:2333', 'remarkimport': '参数化新增跟单社区账号', 'platform': 'CPTMarkets-Demo'}
+DEBUG    - 2025-10-16 11:49:41 - [variable_manager:131] - [2025-10-16 11:49:41] 从运行时变量获取 | 变量: vps_user_accounts_1 | 值: 301391174
+DEBUG    - 2025-10-16 11:49:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.131.255:80
+DEBUG    - 2025-10-16 11:49:45 - [connectionpool:546] - http://39.99.131.255:80 "POST /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:45 - [api_vpsbase:152] - [2025-10-16 11:49:45] POST请求（JSON）: /subcontrol/trader | 数据: {'type': 0, 'account': '301391174', 'password': 'fa1af751c83d311f091c9393a364068c', 'platform': 'CPTMarkets-Demo', 'remark': '', 'platformId': '', 'template_modelId': 1, 'followStatus': 1, 'cfd': '', 'forex': '', 'followOrderRemark': 1, 'fixedComment': '', 'commentType': '', 'digits': '', 'platformType': 0}
+INFO     - 2025-10-16 11:49:45 - [api_vpsbase:160] - [2025-10-16 11:49:45] 请求后等待 3 秒
+INFO     - 2025-10-16 11:49:48 - [conftest:343] - [2025-10-16 11:49:48] 用例 test_cloudTrader_vps/test_create.py::TestCreate::test_add_trader 执行完毕
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:131] - [2025-10-16 11:49:48] 从运行时变量获取 | 变量: vps_user_accounts_1 | 值: 301391174
+INFO     - 2025-10-16 11:49:48 - [api_vpsbase:448] - [2025-10-16 11:49:48] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
 参数: ('301391174',)
-INFO     - 2025-10-15 19:15:15 - [api_vpsbase:451] - [2025-10-15 19:15:15] 查询成功，结果数量: 0
-INFO     - 2025-10-15 19:15:15 - [api_vpsbase:463] - [2025-10-15 19:15:15] 查询结果: []
-INFO     - 2025-10-15 19:15:15 - [api_vpsbase:819] - [2025-10-15 19:15:15] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-10-15 19:15:15 - [conftest:248] - [2025-10-15 19:15:15] 用例 test_community_vps/test_delete.py::TestDeleteUser::test_delete_userlist 开始登录，环境: dev
-DEBUG    - 2025-10-15 19:15:15 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-10-15 19:15:15 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:15 - [conftest:275] - 测试环境登录成功
-INFO     - 2025-10-15 19:15:15 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-DEBUG    - 2025-10-15 19:15:15 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:15 - [api_vpsbase:239] - [2025-10-15 19:15:15] DELETE请求: /mascontrol/user | 数据: [7843]
-INFO     - 2025-10-15 19:15:16 - [test_delete:202] - 第1个账号（ID: 7843）删除接口调用成功
-DEBUG    - 2025-10-15 19:15:16 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-10-15 19:15:16 - [api_vpsbase:239] - [2025-10-15 19:15:16] DELETE请求: /mascontrol/user | 数据: [7844]
-INFO     - 2025-10-15 19:15:17 - [test_delete:202] - 第2个账号（ID: 7844）删除接口调用成功
-INFO     - 2025-10-15 19:15:17 - [conftest:343] - [2025-10-15 19:15:17] 用例 test_community_vps/test_delete.py::TestDeleteUser::test_delete_userlist 执行完毕
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:786] - [2025-10-15 19:15:17] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:448] - [2025-10-15 19:15:17] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+INFO     - 2025-10-16 11:49:48 - [api_vpsbase:451] - [2025-10-16 11:49:48] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:49:48 - [api_vpsbase:463] - [2025-10-16 11:49:48] 查询结果: [{"id": 12583, "account": "301391174", "is_demo": 1, "type": 0, "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 218, "platform": "CPTMarkets-Demo", "status": 0, "status_extra": "启动成功", "ip_addr": "39.99.131.255", "server_id": 908, "server_name": "39.99.131.255", "euqit": 4999406.66, "balance": 4999406.66, "free_margin": 4999406.66, "margin_proportion": 0.0, "leverage": 100, "profit_loss": 0.0, "multiple": 0.0, "diff": 3, "version": 0, "remark": "", "deleted": 0, "creator": 10000, "create_time": "2025-10-16 11:49:45", "updater": 10000, "update_time": "2025-10-16 11:49:45", "template_model_id": 1, "follow_status": 1, "is_first_sync": 1, "login_node": "185.96.247.214:2333", "cfd": "", "forex": "", "node_type": 0, "login_last_time": "2025-10-16 11:49:45", "ab_remark": null, "follow_order_remark": 1, "fixed_comment": "", "comment_type": null, "digits": 0, "platform_type": 0}]
+INFO     - 2025-10-16 11:49:48 - [test_create:221] - 新增策略账号ID: 12583
+INFO     - 2025-10-16 11:49:48 - [variable_manager:90] - [2025-10-16 11:49:48] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:223] - [2025-10-16 11:49:48] 变量值更新 | 变量: vps_trader_id | 旧值: 12582 | 新值: 12583
+INFO     - 2025-10-16 11:49:48 - [variable_manager:176] - [2025-10-16 11:49:48] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:48 - [variable_manager:161] - [2025-10-16 11:49:48] 运行时变量设置成功 | 变量: vps_trader_id | 值: 12583
+INFO     - 2025-10-16 11:49:48 - [test_create:227] - 新增策略账号状态status应为0（正常），实际状态为: 0
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:202] - [2025-10-16 11:49:48] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:135] - [2025-10-16 11:49:48] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:202] - [2025-10-16 11:49:48] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:135] - [2025-10-16 11:49:48] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:202] - [2025-10-16 11:49:48] 变量不存在（返回默认值） | 变量: login_web | 默认值: None
+DEBUG    - 2025-10-16 11:49:48 - [variable_manager:135] - [2025-10-16 11:49:48] 从静态变量获取 | 变量: login_web | 值: {'username': 'xujunhao@163.com', 'password': '123456', 'lang': 0, 'orgCode': 'A01'}
+DEBUG    - 2025-10-16 11:49:48 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:49:49 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/mLogin HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:49 - [proportion_public:45] - 登录响应信息：{"success":true,"message":"","code":200,"result":{"userInfo":{"id":"1962808746181640193","username":"xujunhao@163.com","realname":"徐","avatar":"https://followork.oss-cn-zhangjiakou.aliyuncs.com/saas/huichuang/img/default_avatar.png","agentIds":"e9ca23d68d884d4ebb19d07889727dae","birthday":null,"sex":1,"email":"xujunhao@163.com","phone":"1541561456156","orgCode":"A01","orgCodeTxt":null,"status":1,"delFlag":0,"workNo":null,"post":"employee","telephone":null,"createBy":"huangssj168@163.com","createTime":"2025-09-02 17:24:07","updateBy":"xujunhao@163.com","updateTime":"2025-09-10 14:03:13","activitiSync":1,"userIdentity":1,"departIds":"","relTenantIds":"","clientId":null,"country":null,"countryCode":"CN","countryName":"中国","invitationCode":"10595","agentLevel":"1767396755533766658","agentLevelLocking":true,"agentLeader":false,"address":null,"certificateType":null,"certificateNumber":null,"certificatePic":null,"introduce":null,"nickname":"徐","mt4Role":"MASTER_REAL,SLAVE_REAL","cashoutLimitDays":2,"updateAgentTime":"2025-09-10 09:54:38","whiteLabelId":null,"whiteLabelNameEn":null,"isMfaVerified":null,"lang":0,"trialPeriod":-37,"bufferDay":-29,"bufferStartTime":"2025-09-12 17:27:08","bufferEndTime":"2025-09-15 17:27:08"},"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEzODksInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.0m2rl5Su7TrDc5lBJFp0OLBpp1QrlBCy88VKJ7koQGM"},"timestamp":1760586589089}
+INFO     - 2025-10-16 11:49:49 - [variable_manager:90] - [2025-10-16 11:49:49] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:223] - [2025-10-16 11:49:49] 变量值更新 | 变量: token_top | 旧值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTExOTQsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.j99ywGHcA1Op8oal-wSHXlW1raIReVl5BrQ10KeihOc | 新值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEzODksInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.0m2rl5Su7TrDc5lBJFp0OLBpp1QrlBCy88VKJ7koQGM
+INFO     - 2025-10-16 11:49:49 - [variable_manager:176] - [2025-10-16 11:49:49] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:49:49 - [variable_manager:161] - [2025-10-16 11:49:49] 运行时变量设置成功 | 变量: token_top | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEzODksInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.0m2rl5Su7TrDc5lBJFp0OLBpp1QrlBCy88VKJ7koQGM
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:131] - [2025-10-16 11:49:49] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:131] - [2025-10-16 11:49:49] 从运行时变量获取 | 变量: token_top | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEzODksInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.0m2rl5Su7TrDc5lBJFp0OLBpp1QrlBCy88VKJ7koQGM
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:202] - [2025-10-16 11:49:49] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:135] - [2025-10-16 11:49:49] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:202] - [2025-10-16 11:49:49] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:49:49 - [variable_manager:135] - [2025-10-16 11:49:49] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:49:49 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:49:50 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/blockchain/account/closeAllOrder?traderId=1978669223629516802&including=true HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:50 - [proportion_public:83] - 喊单账号平仓响应信息：{"success":true,"message":"平仓信号发送成功……","code":0,"result":true,"timestamp":1760586590025}
+DEBUG    - 2025-10-16 11:49:50 - [variable_manager:131] - [2025-10-16 11:49:50] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:49:50 - [variable_manager:202] - [2025-10-16 11:49:50] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    - 2025-10-16 11:49:50 - [variable_manager:135] - [2025-10-16 11:49:50] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    - 2025-10-16 11:49:50 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:49:51 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/blockchain/account/closeAllOrder?traderId=1978669405108662274&including=true HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:51 - [proportion_public:106] - 跟单账号平仓响应信息：{"success":true,"message":"平仓信号发送成功……","code":0,"result":true,"timestamp":1760586590923}
+DEBUG    - 2025-10-16 11:49:51 - [variable_manager:202] - [2025-10-16 11:49:51] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:49:51 - [variable_manager:135] - [2025-10-16 11:49:51] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:49:51 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000?_t=1760586454&magic=301391174&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:51 - [api_base:275] - [2025-10-16 11:49:51] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9caff0000 | 参数: {'_t': 1760586454, 'magic': '301391174', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+DEBUG    - 2025-10-16 11:49:54 - [variable_manager:131] - [2025-10-16 11:49:54] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:49:55 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000?_t=1760586454&trader_id=1978669223629516802&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:55 - [api_base:275] - [2025-10-16 11:49:55] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9caff0000 | 参数: {'_t': 1760586454, 'trader_id': '1978669223629516802', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+DEBUG    - 2025-10-16 11:49:58 - [variable_manager:131] - [2025-10-16 11:49:58] 从运行时变量获取 | 变量: follow_jeecg_rowkey | 值: 1978669509301374978
+DEBUG    - 2025-10-16 11:49:59 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "PUT /api/blockchain/master-slave/editPa HTTP/11" 200 None
+INFO     - 2025-10-16 11:49:59 - [api_base:435] - [2025-10-16 11:49:59] PUT请求: /blockchain/master-slave/editPa | 数据: {'id': '1978669509301374978', 'direction': 'FORWARD', 'followingMode': 2, 'fixedProportion': 100, 'fixedLots': None}
+DEBUG    - 2025-10-16 11:50:02 - [variable_manager:202] - [2025-10-16 11:50:02] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:02 - [variable_manager:135] - [2025-10-16 11:50:02] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:50:02 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgreport/api/getColumnsAndData/1560189381093109761?_t=1760586454&account=301391176&pageNo=1&pageSize=20&status=NORMAL%2CAUDIT HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:02 - [api_base:275] - [2025-10-16 11:50:02] GET请求: /online/cgreport/api/getColumnsAndData/1560189381093109761 | 参数: {'_t': 1760586454, 'account': '301391176', 'pageNo': '1', 'pageSize': '20', 'status': 'NORMAL,AUDIT'}
+INFO     - 2025-10-16 11:50:05 - [variable_manager:90] - [2025-10-16 11:50:05] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:223] - [2025-10-16 11:50:05] 变量值更新 | 变量: follow_fixed_proportion | 旧值: 100 | 新值: 100
+INFO     - 2025-10-16 11:50:05 - [variable_manager:176] - [2025-10-16 11:50:05] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:05 - [variable_manager:161] - [2025-10-16 11:50:05] 运行时变量设置成功 | 变量: follow_fixed_proportion | 值: 100
+INFO     - 2025-10-16 11:50:05 - [conftest:248] - [2025-10-16 11:50:05] 用例 test_cloudTrader/test_lianxi2.py::Test_proportionall::Test_orderseng1::test_trader_openorderSend 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:202] - [2025-10-16 11:50:05] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:135] - [2025-10-16 11:50:05] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:50:05 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:50:05 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:05 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:50:05 - [variable_manager:90] - [2025-10-16 11:50:05] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:223] - [2025-10-16 11:50:05] 变量值更新 | 变量: access_token | 旧值: f5f640aa5110470c840b486f883a7d12 | 新值: 0355782236c44a968a882c1f1ff6f107
+INFO     - 2025-10-16 11:50:05 - [variable_manager:176] - [2025-10-16 11:50:05] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:05 - [variable_manager:161] - [2025-10-16 11:50:05] 运行时变量设置成功 | 变量: access_token | 值: 0355782236c44a968a882c1f1ff6f107
+INFO     - 2025-10-16 11:50:05 - [conftest:338] - 切换到VPS URL: http://39.99.131.255/vps
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:202] - [2025-10-16 11:50:05] 变量不存在（返回默认值） | 变量: trader_ordersend | 默认值: None
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:135] - [2025-10-16 11:50:05] 从静态变量获取 | 变量: trader_ordersend | 值: {'symbol': 'XAUUSD', 'remark': 'ces', 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'totalSzie2': '0.2', 'startSize2': '0.2', 'endSize2': '0.2', 'type': '0'}
+DEBUG    - 2025-10-16 11:50:05 - [variable_manager:131] - [2025-10-16 11:50:05] 从运行时变量获取 | 变量: vps_trader_id | 值: 12583
+DEBUG    - 2025-10-16 11:50:05 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.131.255:80
+DEBUG    - 2025-10-16 11:50:06 - [connectionpool:546] - http://39.99.131.255:80 "POST /vps/subcontrol/trader/orderSend HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:06 - [api_base:209] - [2025-10-16 11:50:06] POST请求（JSON+URL参数）: /subcontrol/trader/orderSend | URL参数: None | JSON数据: {'symbol': 'XAUUSD', 'placedType': 0, 'remark': 'gendanshequ', 'intervalTime': 100, 'type': 0, 'totalNum': '1', 'totalSzie': '0.01', 'startSize': '0.01', 'endSize': '0.01', 'traderId': 12583}
+INFO     - 2025-10-16 11:50:06 - [api_base:230] - [2025-10-16 11:50:06] 请求后等待 3 秒
+INFO     - 2025-10-16 11:50:09 - [conftest:343] - [2025-10-16 11:50:09] 用例 test_cloudTrader/test_lianxi2.py::Test_proportionall::Test_orderseng1::test_trader_openorderSend 执行完毕
+DEBUG    - 2025-10-16 11:50:09 - [variable_manager:131] - [2025-10-16 11:50:09] 从运行时变量获取 | 变量: vps_user_accounts_1 | 值: 301391174
+INFO     - 2025-10-16 11:50:09 - [api_base:1415] - [2025-10-16 11:50:09] 开始轮询（时区+05:00）| 超时: 30秒
+INFO     - 2025-10-16 11:50:09 - [api_base:717] - [2025-10-16 11:50:09] 执行SQL: 
+                            SELECT 
+                                fod.size,
+                                fod.comment,
+                                fod.send_no,
+                                fod.magical,
+                                fod.open_price,
+                                fod.symbol,
+                                fod.order_no,
+                                foi.true_total_lots,
+                                foi.order_no,
+                                foi.operation_type,
+                                foi.create_time,
+                                foi.status,
+                                foi.total_lots,
+                                foi.total_orders
+                            FROM 
+                                follow_order_detail fod
+                            INNER JOIN 
+                                follow_order_instruct foi 
+                            ON 
+                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                            WHERE foi.operation_type = %s
+                                AND fod.account = %s
+                                AND fod.comment = %s
+                                 AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
+参数: ('0', '301391174', 'gendanshequ', '2025-10-16 11:49:09', '2025-10-16 11:51:09')
+INFO     - 2025-10-16 11:50:10 - [api_base:720] - [2025-10-16 11:50:10] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:50:10 - [api_base:732] - [2025-10-16 11:50:10] 查询结果: [{"size": 0.01, "comment": "gendanshequ", "send_no": "0228966124558", "magical": 87605, "open_price": 4233.34, "symbol": "XAUUSD", "order_no": 90338169, "true_total_lots": 0.01, "foi.order_no": "0228966124558", "operation_type": 0, "create_time": "2025-10-16 11:50:06", "status": 1, "total_lots": 0.01, "total_orders": 1}]
+INFO     - 2025-10-16 11:50:12 - [api_base:717] - [2025-10-16 11:50:12] 执行SQL: 
+                            SELECT 
+                                fod.size,
+                                fod.comment,
+                                fod.send_no,
+                                fod.magical,
+                                fod.open_price,
+                                fod.symbol,
+                                fod.order_no,
+                                foi.true_total_lots,
+                                foi.order_no,
+                                foi.operation_type,
+                                foi.create_time,
+                                foi.status,
+                                foi.total_lots,
+                                foi.total_orders
+                            FROM 
+                                follow_order_detail fod
+                            INNER JOIN 
+                                follow_order_instruct foi 
+                            ON 
+                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                            WHERE foi.operation_type = %s
+                                AND fod.account = %s
+                                AND fod.comment = %s
+                                 AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
+参数: ('0', '301391174', 'gendanshequ', '2025-10-16 11:49:09', '2025-10-16 11:51:09')
+INFO     - 2025-10-16 11:50:12 - [api_base:720] - [2025-10-16 11:50:12] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:50:12 - [api_base:732] - [2025-10-16 11:50:12] 查询结果: [{"size": 0.01, "comment": "gendanshequ", "send_no": "0228966124558", "magical": 87605, "open_price": 4233.34, "symbol": "XAUUSD", "order_no": 90338169, "true_total_lots": 0.01, "foi.order_no": "0228966124558", "operation_type": 0, "create_time": "2025-10-16 11:50:06", "status": 1, "total_lots": 0.01, "total_orders": 1}]
+INFO     - 2025-10-16 11:50:14 - [api_base:717] - [2025-10-16 11:50:14] 执行SQL: 
+                            SELECT 
+                                fod.size,
+                                fod.comment,
+                                fod.send_no,
+                                fod.magical,
+                                fod.open_price,
+                                fod.symbol,
+                                fod.order_no,
+                                foi.true_total_lots,
+                                foi.order_no,
+                                foi.operation_type,
+                                foi.create_time,
+                                foi.status,
+                                foi.total_lots,
+                                foi.total_orders
+                            FROM 
+                                follow_order_detail fod
+                            INNER JOIN 
+                                follow_order_instruct foi 
+                            ON 
+                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                            WHERE foi.operation_type = %s
+                                AND fod.account = %s
+                                AND fod.comment = %s
+                                 AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
+参数: ('0', '301391174', 'gendanshequ', '2025-10-16 11:49:09', '2025-10-16 11:51:09')
+INFO     - 2025-10-16 11:50:14 - [api_base:720] - [2025-10-16 11:50:14] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:50:14 - [api_base:732] - [2025-10-16 11:50:14] 查询结果: [{"size": 0.01, "comment": "gendanshequ", "send_no": "0228966124558", "magical": 87605, "open_price": 4233.34, "symbol": "XAUUSD", "order_no": 90338169, "true_total_lots": 0.01, "foi.order_no": "0228966124558", "operation_type": 0, "create_time": "2025-10-16 11:50:06", "status": 1, "total_lots": 0.01, "total_orders": 1}]
+INFO     - 2025-10-16 11:50:14 - [api_base:1450] - [2025-10-16 11:50:14] 数据稳定，轮询结束
+INFO     - 2025-10-16 11:50:14 - [variable_manager:90] - [2025-10-16 11:50:14] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:14 - [variable_manager:223] - [2025-10-16 11:50:14] 变量值更新 | 变量: ticket_open | 旧值: 90337778 | 新值: 90338169
+INFO     - 2025-10-16 11:50:14 - [variable_manager:176] - [2025-10-16 11:50:14] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:14 - [variable_manager:161] - [2025-10-16 11:50:14] 运行时变量设置成功 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:14 - [variable_manager:90] - [2025-10-16 11:50:14] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:14 - [variable_manager:223] - [2025-10-16 11:50:14] 变量值更新 | 变量: lots_open | 旧值: 0.01 | 新值: 0.01
+INFO     - 2025-10-16 11:50:14 - [variable_manager:176] - [2025-10-16 11:50:14] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:14 - [variable_manager:161] - [2025-10-16 11:50:14] 运行时变量设置成功 | 变量: lots_open | 值: 0.01
+DEBUG    - 2025-10-16 11:50:15 - [variable_manager:131] - [2025-10-16 11:50:15] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:15 - [api_base:787] - [2025-10-16 11:50:15] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-10-16 11:50:15 - [api_base:604] - [2025-10-16 11:50:15] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s ORDER BY create_time DESC 
+参数: (90338169,)
+INFO     - 2025-10-16 11:50:15 - [api_base:607] - [2025-10-16 11:50:15] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:50:15 - [api_base:619] - [2025-10-16 11:50:15] 查询结果: [{"id": "1978669760066228226", "master_id": "1978669223629516802", "master_ticket": 90338169, "master_type": 0, "master_open_time": "2025-10-16 06:50:06", "detected_open_time": "2025-10-16 11:50:07", "master_close_time": null, "detected_close_time": null, "master_lots": 0.01, "comment": "gendanshequ", "master_profit": null, "master_symbol": "XAUUSD", "slave_id": "1978669405108662274", "slave_ticket": 90338170, "slave_type": 0, "slave_open_time": "2025-10-16 11:50:07", "slave_receive_time": "2025
+INFO     - 2025-10-16 11:50:17 - [api_base:604] - [2025-10-16 11:50:17] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s ORDER BY create_time DESC 
+参数: (90338169,)
+INFO     - 2025-10-16 11:50:17 - [api_base:607] - [2025-10-16 11:50:17] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:50:17 - [api_base:619] - [2025-10-16 11:50:17] 查询结果: [{"id": "1978669760066228226", "master_id": "1978669223629516802", "master_ticket": 90338169, "master_type": 0, "master_open_time": "2025-10-16 06:50:06", "detected_open_time": "2025-10-16 11:50:07", "master_close_time": null, "detected_close_time": null, "master_lots": 0.01, "comment": "gendanshequ", "master_profit": null, "master_symbol": "XAUUSD", "slave_id": "1978669405108662274", "slave_ticket": 90338170, "slave_type": 0, "slave_open_time": "2025-10-16 11:50:07", "slave_receive_time": "2025
+INFO     - 2025-10-16 11:50:19 - [api_base:604] - [2025-10-16 11:50:19] 执行SQL: SELECT * FROM bchain_trader_subscribe_order WHERE master_ticket = %s ORDER BY create_time DESC 
+参数: (90338169,)
+INFO     - 2025-10-16 11:50:19 - [api_base:607] - [2025-10-16 11:50:19] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:50:19 - [api_base:619] - [2025-10-16 11:50:19] 查询结果: [{"id": "1978669760066228226", "master_id": "1978669223629516802", "master_ticket": 90338169, "master_type": 0, "master_open_time": "2025-10-16 06:50:06", "detected_open_time": "2025-10-16 11:50:07", "master_close_time": null, "detected_close_time": null, "master_lots": 0.01, "comment": "gendanshequ", "master_profit": null, "master_symbol": "XAUUSD", "slave_id": "1978669405108662274", "slave_ticket": 90338170, "slave_type": 0, "slave_open_time": "2025-10-16 11:50:07", "slave_receive_time": "2025
+INFO     - 2025-10-16 11:50:19 - [api_base:824] - [2025-10-16 11:50:19] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-10-16 11:50:19 - [test_lianxi2:228] - 跟单账号订单号: 90338170
+INFO     - 2025-10-16 11:50:19 - [variable_manager:90] - [2025-10-16 11:50:19] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:19 - [variable_manager:223] - [2025-10-16 11:50:19] 变量值更新 | 变量: slave_ticket | 旧值: 90337779 | 新值: 90338170
+INFO     - 2025-10-16 11:50:19 - [variable_manager:176] - [2025-10-16 11:50:19] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:19 - [variable_manager:161] - [2025-10-16 11:50:19] 运行时变量设置成功 | 变量: slave_ticket | 值: 90338170
+DEBUG    - 2025-10-16 11:50:19 - [variable_manager:131] - [2025-10-16 11:50:19] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:50:19 - [variable_manager:202] - [2025-10-16 11:50:19] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:19 - [variable_manager:135] - [2025-10-16 11:50:19] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:50:20 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000?_t=1760586454&trader_id=1978669223629516802&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:20 - [api_base:275] - [2025-10-16 11:50:20] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9caff0000 | 参数: {'_t': 1760586454, 'trader_id': '1978669223629516802', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+INFO     - 2025-10-16 11:50:23 - [test_lianxi2:272] - 喊单者手数是: 0.01
+INFO     - 2025-10-16 11:50:23 - [variable_manager:90] - [2025-10-16 11:50:23] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:23 - [variable_manager:223] - [2025-10-16 11:50:23] 变量值更新 | 变量: order_size | 旧值: None | 新值: 0.01
+INFO     - 2025-10-16 11:50:23 - [variable_manager:176] - [2025-10-16 11:50:23] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:23 - [variable_manager:161] - [2025-10-16 11:50:23] 运行时变量设置成功 | 变量: order_size | 值: 0.01
+INFO     - 2025-10-16 11:50:23 - [api_base:1776] - 校验通过: 第 1 条记录的账号ID应为1978669223629516802
+
+实际: 1978669223629516802
+操作: ==
+预期: 1978669223629516802
+
+DEBUG    - 2025-10-16 11:50:23 - [variable_manager:131] - [2025-10-16 11:50:23] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:23 - [api_base:1776] - 校验通过: 订单号数据正确
+
+实际: 90338169
+操作: ==
+预期: 90338169
+
+INFO     - 2025-10-16 11:50:23 - [test_lianxi2:319] - 喊单者手数是: 0.01
+DEBUG    - 2025-10-16 11:50:23 - [variable_manager:131] - [2025-10-16 11:50:23] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+INFO     - 2025-10-16 11:50:23 - [api_base:1776] - 校验通过: 手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:23 - [variable_manager:131] - [2025-10-16 11:50:23] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:50:23 - [variable_manager:202] - [2025-10-16 11:50:23] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:23 - [variable_manager:135] - [2025-10-16 11:50:23] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:50:23 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9caff0000?_t=1760586454&trader_id=1978669405108662274&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:23 - [api_base:275] - [2025-10-16 11:50:23] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9caff0000 | 参数: {'_t': 1760586454, 'trader_id': '1978669405108662274', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+INFO     - 2025-10-16 11:50:26 - [variable_manager:90] - [2025-10-16 11:50:26] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:223] - [2025-10-16 11:50:26] 变量值更新 | 变量: order_no | 旧值: 90337779 | 新值: 90338170
+INFO     - 2025-10-16 11:50:26 - [variable_manager:176] - [2025-10-16 11:50:26] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:26 - [variable_manager:161] - [2025-10-16 11:50:26] 运行时变量设置成功 | 变量: order_no | 值: 90338170
+INFO     - 2025-10-16 11:50:26 - [api_base:1776] - 校验通过: 第 1 条记录的账号ID应为1978669405108662274
+
+实际: 1978669405108662274
+操作: ==
+预期: 1978669405108662274
+
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:131] - [2025-10-16 11:50:26] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:26 - [api_base:1776] - 校验通过: 订单号数据正确
+
+实际: 90338169
+操作: ==
+预期: 90338169
+
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:131] - [2025-10-16 11:50:26] 从运行时变量获取 | 变量: slave_ticket | 值: 90338170
+INFO     - 2025-10-16 11:50:26 - [api_base:1776] - 校验通过: 订单号数据正确
+
+实际: 90338170
+操作: ==
+预期: 90338170
+
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:131] - [2025-10-16 11:50:26] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:131] - [2025-10-16 11:50:26] 从运行时变量获取 | 变量: follow_fixed_proportion | 值: 100
+INFO     - 2025-10-16 11:50:26 - [api_base:1776] - 校验通过: 手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:202] - [2025-10-16 11:50:26] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:26 - [variable_manager:135] - [2025-10-16 11:50:26] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:50:27 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/2c934301834efb6801834efbe1ba0002?_t=1760586454&master_account=301391174&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:27 - [api_base:275] - [2025-10-16 11:50:27] GET请求: /online/cgform/api/getData/2c934301834efb6801834efbe1ba0002 | 参数: {'_t': 1760586454, 'master_account': '301391174', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+DEBUG    - 2025-10-16 11:50:30 - [variable_manager:131] - [2025-10-16 11:50:30] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:30 - [api_base:1776] - 校验通过: 第 1 条记录的订单号应为90338169
+
+实际: 90338169
+操作: ==
+预期: 90338169
+
+DEBUG    - 2025-10-16 11:50:30 - [variable_manager:131] - [2025-10-16 11:50:30] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+INFO     - 2025-10-16 11:50:30 - [api_base:1776] - 校验通过: 喊单者手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:30 - [variable_manager:202] - [2025-10-16 11:50:30] 变量不存在（返回默认值） | 变量: symbol | 默认值: None
+DEBUG    - 2025-10-16 11:50:30 - [variable_manager:135] - [2025-10-16 11:50:30] 从静态变量获取 | 变量: symbol | 值: XAUUSD
+INFO     - 2025-10-16 11:50:30 - [api_base:1776] - 校验通过: 交易币种符合预期
+
+实际: XAUUSD
+操作: ==
+预期: XAUUSD
+
+DEBUG    - 2025-10-16 11:50:30 - [variable_manager:131] - [2025-10-16 11:50:30] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+DEBUG    - 2025-10-16 11:50:31 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgreport/api/getColumnsAndData/1568899025974796289?_t=1760586454&pageNo=1&pageSize=20&self_master_ticket=90338169 HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:31 - [api_base:275] - [2025-10-16 11:50:31] GET请求: /online/cgreport/api/getColumnsAndData/1568899025974796289 | 参数: {'_t': 1760586454, 'pageNo': 1, 'pageSize': 20, 'self_master_ticket': 90338169}
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:202] - [2025-10-16 11:50:34] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:135] - [2025-10-16 11:50:34] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:131] - [2025-10-16 11:50:34] 从运行时变量获取 | 变量: order_no | 值: 90338170
+INFO     - 2025-10-16 11:50:34 - [api_base:1776] - 校验通过: 第 1 条记录的订单号应为90338170
+
+实际: 90338170
+操作: ==
+预期: 90338170
+
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:131] - [2025-10-16 11:50:34] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:34 - [api_base:1776] - 校验通过: 喊单者订单号符合预期
+
+实际: 90338169
+操作: ==
+预期: 90338169
+
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:131] - [2025-10-16 11:50:34] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+INFO     - 2025-10-16 11:50:34 - [api_base:1776] - 校验通过: 喊单者手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:131] - [2025-10-16 11:50:34] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:131] - [2025-10-16 11:50:34] 从运行时变量获取 | 变量: follow_fixed_proportion | 值: 100
+INFO     - 2025-10-16 11:50:34 - [api_base:1776] - 校验通过: 跟单手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:202] - [2025-10-16 11:50:34] 变量不存在（返回默认值） | 变量: symbol | 默认值: None
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:135] - [2025-10-16 11:50:34] 从静态变量获取 | 变量: symbol | 值: XAUUSD
+INFO     - 2025-10-16 11:50:34 - [api_base:1776] - 校验通过: 交易币种符合预期
+
+实际: XAUUSD
+操作: ==
+预期: XAUUSD
+
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:202] - [2025-10-16 11:50:34] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:135] - [2025-10-16 11:50:34] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:50:34 - [variable_manager:131] - [2025-10-16 11:50:34] 从运行时变量获取 | 变量: vpsrunIpAddr | 值: 39.103.138.2
+DEBUG    - 2025-10-16 11:50:34 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/blockchain/account/getRecordList?_t=1760586454&pageNo=1&pageSize=50&accountLike=301391174&serverNameLike=&connectTraderLike=&connected=&runIpAddr=39.103.138.2 HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:34 - [api_base:275] - [2025-10-16 11:50:34] GET请求: /blockchain/account/getRecordList | 参数: {'_t': 1760586454, 'pageNo': '1', 'pageSize': '50', 'accountLike': '301391174', 'serverNameLike': '', 'connectTraderLike': '', 'connected': '', 'runIpAddr': '39.103.138.2'}
+INFO     - 2025-10-16 11:50:37 - [test_lianxi2:695] - 手数是: 0.01
+DEBUG    - 2025-10-16 11:50:37 - [variable_manager:131] - [2025-10-16 11:50:37] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+INFO     - 2025-10-16 11:50:37 - [api_base:1776] - 校验通过: 手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:37 - [variable_manager:202] - [2025-10-16 11:50:37] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:37 - [variable_manager:135] - [2025-10-16 11:50:37] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:50:37 - [variable_manager:131] - [2025-10-16 11:50:37] 从运行时变量获取 | 变量: vpsrunIpAddr | 值: 39.103.138.2
+DEBUG    - 2025-10-16 11:50:38 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/blockchain/account/getRecordList?_t=1760586454&pageNo=1&pageSize=50&accountLike=301391176&serverNameLike=&connectTraderLike=&connected=&runIpAddr=39.103.138.2 HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:38 - [api_base:275] - [2025-10-16 11:50:38] GET请求: /blockchain/account/getRecordList | 参数: {'_t': 1760586454, 'pageNo': '1', 'pageSize': '50', 'accountLike': '301391176', 'serverNameLike': '', 'connectTraderLike': '', 'connected': '', 'runIpAddr': '39.103.138.2'}
+INFO     - 2025-10-16 11:50:41 - [test_lianxi2:741] - 手数是: 0.01
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:131] - [2025-10-16 11:50:41] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:131] - [2025-10-16 11:50:41] 从运行时变量获取 | 变量: follow_fixed_proportion | 值: 100
+INFO     - 2025-10-16 11:50:41 - [api_base:1776] - 校验通过: 手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+INFO     - 2025-10-16 11:50:41 - [conftest:248] - [2025-10-16 11:50:41] 用例 test_cloudTrader/test_lianxi2.py::Test_proportionall::Test_orderseng1::test_trader_orderclose 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:202] - [2025-10-16 11:50:41] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:135] - [2025-10-16 11:50:41] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:50:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:50:41 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:41 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:50:41 - [variable_manager:90] - [2025-10-16 11:50:41] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:223] - [2025-10-16 11:50:41] 变量值更新 | 变量: access_token | 旧值: 0355782236c44a968a882c1f1ff6f107 | 新值: a0dbd3420cc142f79dfed24ef0dbf48f
+INFO     - 2025-10-16 11:50:41 - [variable_manager:176] - [2025-10-16 11:50:41] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:41 - [variable_manager:161] - [2025-10-16 11:50:41] 运行时变量设置成功 | 变量: access_token | 值: a0dbd3420cc142f79dfed24ef0dbf48f
+INFO     - 2025-10-16 11:50:41 - [conftest:338] - 切换到VPS URL: http://39.99.131.255/vps
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:131] - [2025-10-16 11:50:41] 从运行时变量获取 | 变量: vps_trader_id | 值: 12583
+DEBUG    - 2025-10-16 11:50:41 - [variable_manager:131] - [2025-10-16 11:50:41] 从运行时变量获取 | 变量: vps_user_accounts_1 | 值: 301391174
+DEBUG    - 2025-10-16 11:50:41 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.131.255:80
+DEBUG    - 2025-10-16 11:50:41 - [connectionpool:546] - http://39.99.131.255:80 "POST /vps/subcontrol/trader/orderClose HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:41 - [api_base:209] - [2025-10-16 11:50:41] POST请求（JSON+URL参数）: /subcontrol/trader/orderClose | URL参数: None | JSON数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderId': 12583, 'account': '301391174'}
+INFO     - 2025-10-16 11:50:41 - [api_base:230] - [2025-10-16 11:50:41] 请求后等待 3 秒
+INFO     - 2025-10-16 11:50:44 - [conftest:343] - [2025-10-16 11:50:44] 用例 test_cloudTrader/test_lianxi2.py::Test_proportionall::Test_orderseng1::test_trader_orderclose 执行完毕
+DEBUG    - 2025-10-16 11:50:44 - [variable_manager:131] - [2025-10-16 11:50:44] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+DEBUG    - 2025-10-16 11:50:45 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgreport/api/getColumnsAndData/1568899025974796289?_t=1760586454&pageNo=1&pageSize=20&self_master_ticket=90338169 HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:45 - [api_base:275] - [2025-10-16 11:50:45] GET请求: /online/cgreport/api/getColumnsAndData/1568899025974796289 | 参数: {'_t': 1760586454, 'pageNo': 1, 'pageSize': 20, 'self_master_ticket': 90338169}
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:202] - [2025-10-16 11:50:48] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:135] - [2025-10-16 11:50:48] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:131] - [2025-10-16 11:50:48] 从运行时变量获取 | 变量: slave_ticket | 值: 90338170
+INFO     - 2025-10-16 11:50:48 - [api_base:1776] - 校验通过: 第 1 条记录的订单号应为90338170
+
+实际: 90338170
+操作: ==
+预期: 90338170
+
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:131] - [2025-10-16 11:50:48] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:50:48 - [api_base:1776] - 校验通过: 喊单者订单号符合预期
+
+实际: 90338169
+操作: ==
+预期: 90338169
+
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:131] - [2025-10-16 11:50:48] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+INFO     - 2025-10-16 11:50:48 - [api_base:1776] - 校验通过: 喊单者手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:131] - [2025-10-16 11:50:48] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:131] - [2025-10-16 11:50:48] 从运行时变量获取 | 变量: follow_fixed_proportion | 值: 100
+INFO     - 2025-10-16 11:50:48 - [api_base:1776] - 校验通过: 跟单手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:202] - [2025-10-16 11:50:48] 变量不存在（返回默认值） | 变量: symbol | 默认值: None
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:135] - [2025-10-16 11:50:48] 从静态变量获取 | 变量: symbol | 值: XAUUSD
+INFO     - 2025-10-16 11:50:48 - [api_base:1776] - 校验通过: 交易币种符合预期
+
+实际: XAUUSD
+操作: ==
+预期: XAUUSD
+
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:131] - [2025-10-16 11:50:48] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:202] - [2025-10-16 11:50:48] 变量不存在（返回默认值） | 变量: trader_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:48 - [variable_manager:135] - [2025-10-16 11:50:48] 从静态变量获取 | 变量: trader_account | 值: 301391174
+DEBUG    - 2025-10-16 11:50:48 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9d0960001?_t=1760586454&trader_id=1978669223629516802&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:48 - [api_base:275] - [2025-10-16 11:50:48] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9d0960001 | 参数: {'_t': 1760586454, 'trader_id': '1978669223629516802', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+INFO     - 2025-10-16 11:50:51 - [test_lianxi2:1028] - 喊单者手数是: None
+INFO     - 2025-10-16 11:50:51 - [variable_manager:90] - [2025-10-16 11:50:51] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:51 - [variable_manager:223] - [2025-10-16 11:50:51] 变量值更新 | 变量: order_size | 旧值: 0.01 | 新值: None
+INFO     - 2025-10-16 11:50:51 - [variable_manager:176] - [2025-10-16 11:50:51] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:51 - [variable_manager:161] - [2025-10-16 11:50:51] 运行时变量设置成功 | 变量: order_size | 值: None
+DEBUG    - 2025-10-16 11:50:51 - [variable_manager:131] - [2025-10-16 11:50:51] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:50:51 - [variable_manager:202] - [2025-10-16 11:50:51] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:50:51 - [variable_manager:135] - [2025-10-16 11:50:51] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:50:52 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9d0960001?_t=1760586454&trader_id=1978669405108662274&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:50:52 - [api_base:275] - [2025-10-16 11:50:52] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9d0960001 | 参数: {'_t': 1760586454, 'trader_id': '1978669405108662274', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+INFO     - 2025-10-16 11:50:55 - [variable_manager:90] - [2025-10-16 11:50:55] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:50:55 - [variable_manager:223] - [2025-10-16 11:50:55] 变量值更新 | 变量: order_no | 旧值: 90338170 | 新值: 86786826
+INFO     - 2025-10-16 11:50:55 - [variable_manager:176] - [2025-10-16 11:50:55] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:50:55 - [variable_manager:161] - [2025-10-16 11:50:55] 运行时变量设置成功 | 变量: order_no | 值: 86786826
+INFO     - 2025-10-16 11:50:55 - [api_base:1776] - 校验通过: 第 1 条记录的账号ID应为1978669405108662274
+
+实际: 1978669405108662274
+操作: ==
+预期: 1978669405108662274
+
+DEBUG    - 2025-10-16 11:50:55 - [variable_manager:131] - [2025-10-16 11:50:55] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+DEBUG    - 2025-10-16 11:51:00 - [variable_manager:131] - [2025-10-16 11:51:00] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:51:00 - [variable_manager:202] - [2025-10-16 11:51:00] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:51:00 - [variable_manager:135] - [2025-10-16 11:51:00] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:51:01 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9d0960001?_t=1760586454&trader_id=1978669405108662274&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:01 - [api_base:275] - [2025-10-16 11:51:01] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9d0960001 | 参数: {'_t': 1760586454, 'trader_id': '1978669405108662274', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+INFO     - 2025-10-16 11:51:04 - [variable_manager:90] - [2025-10-16 11:51:04] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:51:04 - [variable_manager:223] - [2025-10-16 11:51:04] 变量值更新 | 变量: order_no | 旧值: 86786826 | 新值: 89376780
+INFO     - 2025-10-16 11:51:04 - [variable_manager:176] - [2025-10-16 11:51:04] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:04 - [variable_manager:161] - [2025-10-16 11:51:04] 运行时变量设置成功 | 变量: order_no | 值: 89376780
+INFO     - 2025-10-16 11:51:04 - [api_base:1776] - 校验通过: 第 1 条记录的账号ID应为1978669405108662274
+
+实际: 1978669405108662274
+操作: ==
+预期: 1978669405108662274
+
+DEBUG    - 2025-10-16 11:51:04 - [variable_manager:131] - [2025-10-16 11:51:04] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+DEBUG    - 2025-10-16 11:51:09 - [variable_manager:131] - [2025-10-16 11:51:09] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:51:09 - [variable_manager:202] - [2025-10-16 11:51:09] 变量不存在（返回默认值） | 变量: follow_account | 默认值: None
+DEBUG    - 2025-10-16 11:51:09 - [variable_manager:135] - [2025-10-16 11:51:09] 从静态变量获取 | 变量: follow_account | 值: 301391176
+DEBUG    - 2025-10-16 11:51:10 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "GET /api/online/cgform/api/getData/402883977b38c9ca017b38c9d0960001?_t=1760586454&trader_id=1978669405108662274&column=id&order=desc&pageNo=1&pageSize=20&superQueryMatchType=and HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:10 - [api_base:275] - [2025-10-16 11:51:10] GET请求: /online/cgform/api/getData/402883977b38c9ca017b38c9d0960001 | 参数: {'_t': 1760586454, 'trader_id': '1978669405108662274', 'column': 'id', 'order': 'desc', 'pageNo': 1, 'pageSize': 20, 'superQueryMatchType': 'and'}
+INFO     - 2025-10-16 11:51:13 - [variable_manager:90] - [2025-10-16 11:51:13] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:223] - [2025-10-16 11:51:13] 变量值更新 | 变量: order_no | 旧值: 89376780 | 新值: 90338170
+INFO     - 2025-10-16 11:51:13 - [variable_manager:176] - [2025-10-16 11:51:13] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:13 - [variable_manager:161] - [2025-10-16 11:51:13] 运行时变量设置成功 | 变量: order_no | 值: 90338170
+INFO     - 2025-10-16 11:51:13 - [api_base:1776] - 校验通过: 第 1 条记录的账号ID应为1978669405108662274
+
+实际: 1978669405108662274
+操作: ==
+预期: 1978669405108662274
+
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:131] - [2025-10-16 11:51:13] 从运行时变量获取 | 变量: ticket_open | 值: 90338169
+INFO     - 2025-10-16 11:51:13 - [api_base:1776] - 校验通过: 订单号数据正确
+
+实际: 90338169
+操作: ==
+预期: 90338169
+
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:131] - [2025-10-16 11:51:13] 从运行时变量获取 | 变量: slave_ticket | 值: 90338170
+INFO     - 2025-10-16 11:51:13 - [api_base:1776] - 校验通过: 订单号数据正确
+
+实际: 90338170
+操作: ==
+预期: 90338170
+
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:131] - [2025-10-16 11:51:13] 从运行时变量获取 | 变量: lots_open | 值: 0.01
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:131] - [2025-10-16 11:51:13] 从运行时变量获取 | 变量: follow_fixed_proportion | 值: 100
+INFO     - 2025-10-16 11:51:13 - [api_base:1776] - 校验通过: 手数符合预期
+
+实际: 0.01
+操作: ==
+预期: 0.01
+
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:202] - [2025-10-16 11:51:13] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:135] - [2025-10-16 11:51:13] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:202] - [2025-10-16 11:51:13] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:135] - [2025-10-16 11:51:13] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:202] - [2025-10-16 11:51:13] 变量不存在（返回默认值） | 变量: login_web | 默认值: None
+DEBUG    - 2025-10-16 11:51:13 - [variable_manager:135] - [2025-10-16 11:51:13] 从静态变量获取 | 变量: login_web | 值: {'username': 'xujunhao@163.com', 'password': '123456', 'lang': 0, 'orgCode': 'A01'}
+DEBUG    - 2025-10-16 11:51:13 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:51:14 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/sys/mLogin HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:14 - [proportion_public:45] - 登录响应信息：{"success":true,"message":"","code":200,"result":{"userInfo":{"id":"1962808746181640193","username":"xujunhao@163.com","realname":"徐","avatar":"https://followork.oss-cn-zhangjiakou.aliyuncs.com/saas/huichuang/img/default_avatar.png","agentIds":"e9ca23d68d884d4ebb19d07889727dae","birthday":null,"sex":1,"email":"xujunhao@163.com","phone":"1541561456156","orgCode":"A01","orgCodeTxt":null,"status":1,"delFlag":0,"workNo":null,"post":"employee","telephone":null,"createBy":"huangssj168@163.com","createTime":"2025-09-02 17:24:07","updateBy":"xujunhao@163.com","updateTime":"2025-09-10 14:03:13","activitiSync":1,"userIdentity":1,"departIds":"","relTenantIds":"","clientId":null,"country":null,"countryCode":"CN","countryName":"中国","invitationCode":"10595","agentLevel":"1767396755533766658","agentLevelLocking":true,"agentLeader":false,"address":null,"certificateType":null,"certificateNumber":null,"certificatePic":null,"introduce":null,"nickname":"徐","mt4Role":"MASTER_REAL,SLAVE_REAL","cashoutLimitDays":2,"updateAgentTime":"2025-09-10 09:54:38","whiteLabelId":null,"whiteLabelNameEn":null,"isMfaVerified":null,"lang":0,"trialPeriod":-37,"bufferDay":-29,"bufferStartTime":"2025-09-12 17:27:08","bufferEndTime":"2025-09-15 17:27:08"},"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTE0NzMsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.F6tpbWM9xQ0jJHKY5SVVrvPmiDEkSlrGrpdQ6RbEzAI"},"timestamp":1760586673688}
+INFO     - 2025-10-16 11:51:14 - [variable_manager:90] - [2025-10-16 11:51:14] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:223] - [2025-10-16 11:51:14] 变量值更新 | 变量: token_top | 旧值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTEzODksInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.0m2rl5Su7TrDc5lBJFp0OLBpp1QrlBCy88VKJ7koQGM | 新值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTE0NzMsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.F6tpbWM9xQ0jJHKY5SVVrvPmiDEkSlrGrpdQ6RbEzAI
+INFO     - 2025-10-16 11:51:14 - [variable_manager:176] - [2025-10-16 11:51:14] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:14 - [variable_manager:161] - [2025-10-16 11:51:14] 运行时变量设置成功 | 变量: token_top | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTE0NzMsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.F6tpbWM9xQ0jJHKY5SVVrvPmiDEkSlrGrpdQ6RbEzAI
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:131] - [2025-10-16 11:51:14] 从运行时变量获取 | 变量: token_top | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTE0NzMsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.F6tpbWM9xQ0jJHKY5SVVrvPmiDEkSlrGrpdQ6RbEzAI
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:131] - [2025-10-16 11:51:14] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:202] - [2025-10-16 11:51:14] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:135] - [2025-10-16 11:51:14] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:202] - [2025-10-16 11:51:14] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:51:14 - [variable_manager:135] - [2025-10-16 11:51:14] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:51:14 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:51:15 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbind?traderId=1978669223629516802 HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:15 - [test_delete:50] - 响应信息：{"success":false,"message":"解绑账户失败：请先取消订阅关系","code":500,"result":null,"timestamp":1760586674659}
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:131] - [2025-10-16 11:51:15] 从运行时变量获取 | 变量: token_top | 值: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NjExOTE0NzMsInVzZXJuYW1lIjoieHVqdW5oYW9AMTYzLmNvbSJ9.F6tpbWM9xQ0jJHKY5SVVrvPmiDEkSlrGrpdQ6RbEzAI
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:131] - [2025-10-16 11:51:15] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:202] - [2025-10-16 11:51:15] 变量不存在（返回默认值） | 变量: URL_TOP | 默认值: None
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:135] - [2025-10-16 11:51:15] 从静态变量获取 | 变量: URL_TOP | 值: https://dev.lgcopytrade.top/api
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:202] - [2025-10-16 11:51:15] 变量不存在（返回默认值） | 变量: Hosttop | 默认值: None
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:135] - [2025-10-16 11:51:15] 从静态变量获取 | 变量: Hosttop | 值: dev.lgcopytrade.top
+DEBUG    - 2025-10-16 11:51:15 - [connectionpool:1051] - Starting new HTTPS connection (1): dev.lgcopytrade.top:443
+DEBUG    - 2025-10-16 11:51:15 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbind?traderId=1978669405108662274 HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:15 - [test_delete:86] - 响应信息：{"success":false,"message":"解绑账户失败：请先取消订阅关系","code":500,"result":null,"timestamp":1760586675581}
+DEBUG    - 2025-10-16 11:51:15 - [variable_manager:131] - [2025-10-16 11:51:15] 从运行时变量获取 | 变量: follow_jeecg_rowkey | 值: 1978669509301374978
+DEBUG    - 2025-10-16 11:51:16 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "DELETE /api/blockchain/master-slave/deletePa?id=1978669509301374978 HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:16 - [api_base:343] - [2025-10-16 11:51:16] DELETE请求: /blockchain/master-slave/deletePa | 参数: {'id': '1978669509301374978'} | 数据: None | 状态码: 200
+DEBUG    - 2025-10-16 11:51:19 - [variable_manager:131] - [2025-10-16 11:51:19] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+DEBUG    - 2025-10-16 11:51:22 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbindPa?traderId=1978669405108662274 HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:22 - [api_base:220] - [2025-10-16 11:51:22] POST请求（表单+URL参数）: /blockchain/account/unbindPa | URL参数: {'traderId': '1978669405108662274'} | 表单数据: None
+INFO     - 2025-10-16 11:51:22 - [api_base:230] - [2025-10-16 11:51:22] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:51:25 - [variable_manager:131] - [2025-10-16 11:51:25] 从运行时变量获取 | 变量: follow_pass_id | 值: 1978669405108662274
+INFO     - 2025-10-16 11:51:25 - [api_base:604] - [2025-10-16 11:51:25] 执行SQL: SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE id = %s ORDER BY create_time DESC 
+参数: ('1978669405108662274',)
+INFO     - 2025-10-16 11:51:25 - [api_base:607] - [2025-10-16 11:51:25] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:51:25 - [api_base:619] - [2025-10-16 11:51:25] 查询结果: [{"id": "1978669405108662274", "server_id": "1821740479986667521", "broker_id": "1781213961048682529", "user_id": "1962808746181640193", "account": "301391176", "type": "SLAVE_REAL", "password": "Test123456", "display": "private", "meta_trader_platform_id": 4, "password_type": 0, "subscribe_fee": 0.0, "status": "UNBIND"}]
+INFO     - 2025-10-16 11:51:25 - [test_delete:237] - 跟随者账号解绑成功
+DEBUG    - 2025-10-16 11:51:25 - [variable_manager:131] - [2025-10-16 11:51:25] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+DEBUG    - 2025-10-16 11:51:29 - [connectionpool:546] - https://dev.lgcopytrade.top:443 "POST /api/blockchain/account/unbindPa?traderId=1978669223629516802 HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:29 - [api_base:220] - [2025-10-16 11:51:29] POST请求（表单+URL参数）: /blockchain/account/unbindPa | URL参数: {'traderId': '1978669223629516802'} | 表单数据: None
+INFO     - 2025-10-16 11:51:29 - [api_base:230] - [2025-10-16 11:51:29] 请求后等待 3 秒
+DEBUG    - 2025-10-16 11:51:32 - [variable_manager:131] - [2025-10-16 11:51:32] 从运行时变量获取 | 变量: trader_pass_id | 值: 1978669223629516802
+INFO     - 2025-10-16 11:51:32 - [api_base:604] - [2025-10-16 11:51:32] 执行SQL: SELECT id,server_id,broker_id,user_id,account,type,password,display,meta_trader_platform_id,password_type,subscribe_fee,status FROM bchain_trader WHERE id = %s ORDER BY create_time DESC 
+参数: ('1978669223629516802',)
+INFO     - 2025-10-16 11:51:32 - [api_base:607] - [2025-10-16 11:51:32] 查询成功，结果数量: 1
+INFO     - 2025-10-16 11:51:32 - [api_base:619] - [2025-10-16 11:51:32] 查询结果: [{"id": "1978669223629516802", "server_id": "1821740479986667521", "broker_id": "1781213961048682529", "user_id": "1962808746181640193", "account": "301391174", "type": "MASTER_REAL", "password": "Test123456", "display": "public", "meta_trader_platform_id": 4, "password_type": 0, "subscribe_fee": 0.0, "status": "UNBIND"}]
+INFO     - 2025-10-16 11:51:32 - [test_delete:277] - 交易员账号解绑成功
+INFO     - 2025-10-16 11:51:32 - [variable_manager:59] - [2025-10-16 11:51:32] 静态变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\dev_data.json
+INFO     - 2025-10-16 11:51:32 - [variable_manager:90] - [2025-10-16 11:51:32] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:32 - [conftest:248] - [2025-10-16 11:51:32] 用例 test_cloudTrader_vps/test_delete.py::TestDeleteUser::test_delete_group 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:51:32 - [variable_manager:202] - [2025-10-16 11:51:32] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:51:32 - [variable_manager:135] - [2025-10-16 11:51:32] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:51:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:51:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:32 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:51:32 - [variable_manager:90] - [2025-10-16 11:51:32] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:51:32 - [variable_manager:223] - [2025-10-16 11:51:32] 变量值更新 | 变量: access_token | 旧值: a0dbd3420cc142f79dfed24ef0dbf48f | 新值: 69c478ea7a7f46918e60eda1706d24bc
+INFO     - 2025-10-16 11:51:32 - [variable_manager:176] - [2025-10-16 11:51:32] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:32 - [variable_manager:161] - [2025-10-16 11:51:32] 运行时变量设置成功 | 变量: access_token | 值: 69c478ea7a7f46918e60eda1706d24bc
+DEBUG    - 2025-10-16 11:51:32 - [variable_manager:131] - [2025-10-16 11:51:32] 从运行时变量获取 | 变量: vps_group_id | 值: 559
+DEBUG    - 2025-10-16 11:51:32 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/group HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:32 - [api_vpsbase:239] - [2025-10-16 11:51:32] DELETE请求: /mascontrol/group | 数据: [559]
+INFO     - 2025-10-16 11:51:35 - [conftest:343] - [2025-10-16 11:51:35] 用例 test_cloudTrader_vps/test_delete.py::TestDeleteUser::test_delete_group 执行完毕
+DEBUG    - 2025-10-16 11:51:36 - [variable_manager:202] - [2025-10-16 11:51:36] 变量不存在（返回默认值） | 变量: add_vpsgroup | 默认值: None
+DEBUG    - 2025-10-16 11:51:36 - [variable_manager:135] - [2025-10-16 11:51:36] 从静态变量获取 | 变量: add_vpsgroup | 值: {'name': '跟单社区测试vps', 'color': '#EF7979', 'sort': 10, 'type': 1}
+INFO     - 2025-10-16 11:51:36 - [api_vpsbase:786] - [2025-10-16 11:51:36] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_group WHERE name = %s | 超时: 5秒
+INFO     - 2025-10-16 11:51:36 - [api_vpsbase:448] - [2025-10-16 11:51:36] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+参数: ('跟单社区测试vps',)
+INFO     - 2025-10-16 11:51:36 - [api_vpsbase:451] - [2025-10-16 11:51:36] 查询成功，结果数量: 0
+INFO     - 2025-10-16 11:51:36 - [api_vpsbase:463] - [2025-10-16 11:51:36] 查询结果: []
+INFO     - 2025-10-16 11:51:36 - [api_vpsbase:819] - [2025-10-16 11:51:36] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_group WHERE name = %s
+INFO     - 2025-10-16 11:51:36 - [conftest:248] - [2025-10-16 11:51:36] 用例 test_cloudTrader_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:51:36 - [variable_manager:202] - [2025-10-16 11:51:36] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:51:36 - [variable_manager:135] - [2025-10-16 11:51:36] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:51:36 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:51:36 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:36 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:51:36 - [variable_manager:90] - [2025-10-16 11:51:36] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:51:36 - [variable_manager:223] - [2025-10-16 11:51:36] 变量值更新 | 变量: access_token | 旧值: 69c478ea7a7f46918e60eda1706d24bc | 新值: a9968674947b4701b466a44ca03831f3
+INFO     - 2025-10-16 11:51:36 - [variable_manager:176] - [2025-10-16 11:51:36] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:36 - [variable_manager:161] - [2025-10-16 11:51:36] 运行时变量设置成功 | 变量: access_token | 值: a9968674947b4701b466a44ca03831f3
+INFO     - 2025-10-16 11:51:36 - [conftest:338] - 切换到VPS URL: http://39.99.131.255/vps
+DEBUG    - 2025-10-16 11:51:36 - [variable_manager:131] - [2025-10-16 11:51:36] 从运行时变量获取 | 变量: vps_trader_id | 值: 12583
+DEBUG    - 2025-10-16 11:51:36 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.131.255:80
+DEBUG    - 2025-10-16 11:51:37 - [connectionpool:546] - http://39.99.131.255:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:37 - [api_vpsbase:239] - [2025-10-16 11:51:37] DELETE请求: /subcontrol/trader | 数据: [12583]
+INFO     - 2025-10-16 11:51:40 - [conftest:343] - [2025-10-16 11:51:40] 用例 test_cloudTrader_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 执行完毕
+DEBUG    - 2025-10-16 11:51:40 - [variable_manager:131] - [2025-10-16 11:51:40] 从运行时变量获取 | 变量: vps_user_accounts_1 | 值: 301391174
+INFO     - 2025-10-16 11:51:40 - [test_delete:148] - 查询条件: table=follow_trader, account=301391174
+INFO     - 2025-10-16 11:51:40 - [api_vpsbase:786] - [2025-10-16 11:51:40] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-16 11:51:40 - [api_vpsbase:448] - [2025-10-16 11:51:40] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
 参数: ('301391174',)
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:451] - [2025-10-15 19:15:17] 查询成功，结果数量: 0
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:463] - [2025-10-15 19:15:17] 查询结果: []
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:819] - [2025-10-15 19:15:17] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:786] - [2025-10-15 19:15:17] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:448] - [2025-10-15 19:15:17] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+INFO     - 2025-10-16 11:51:40 - [api_vpsbase:451] - [2025-10-16 11:51:40] 查询成功，结果数量: 0
+INFO     - 2025-10-16 11:51:40 - [api_vpsbase:463] - [2025-10-16 11:51:40] 查询结果: []
+INFO     - 2025-10-16 11:51:40 - [api_vpsbase:819] - [2025-10-16 11:51:40] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-16 11:51:40 - [conftest:248] - [2025-10-16 11:51:40] 用例 test_cloudTrader_vps/test_delete.py::TestDeleteUser::test_delete_userlist 开始登录，环境: dev
+DEBUG    - 2025-10-16 11:51:40 - [variable_manager:202] - [2025-10-16 11:51:40] 变量不存在（返回默认值） | 变量: login | 默认值: None
+DEBUG    - 2025-10-16 11:51:40 - [variable_manager:135] - [2025-10-16 11:51:40] 从静态变量获取 | 变量: login | 值: {'username': 'admin', 'password': '04739db02172e04f63f5278211184deec745bad9d797882b343e7201898d8da1d9fced282f6b271d3815a5057482e62c6f6b88dacb642ba05632bd2ee348101c76cb1f86b70f91695fd1cff11fce76246f044ace477cdbfa1e3e1521b19b023b14c7165e82c5'}
+DEBUG    - 2025-10-16 11:51:40 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-16 11:51:41 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:41 - [conftest:275] - 测试环境登录成功
+INFO     - 2025-10-16 11:51:41 - [variable_manager:90] - [2025-10-16 11:51:41] 运行时变量加载成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+DEBUG    - 2025-10-16 11:51:41 - [variable_manager:223] - [2025-10-16 11:51:41] 变量值更新 | 变量: access_token | 旧值: a9968674947b4701b466a44ca03831f3 | 新值: d9f2656c53fb4d47b0db6eadf958ff32
+INFO     - 2025-10-16 11:51:41 - [variable_manager:176] - [2025-10-16 11:51:41] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:41 - [variable_manager:161] - [2025-10-16 11:51:41] 运行时变量设置成功 | 变量: access_token | 值: d9f2656c53fb4d47b0db6eadf958ff32
+DEBUG    - 2025-10-16 11:51:41 - [variable_manager:131] - [2025-10-16 11:51:41] 从运行时变量获取 | 变量: vps_user_count | 值: 2
+DEBUG    - 2025-10-16 11:51:41 - [variable_manager:131] - [2025-10-16 11:51:41] 从运行时变量获取 | 变量: vps_user_ids_1 | 值: 7863
+DEBUG    - 2025-10-16 11:51:41 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:41 - [api_vpsbase:239] - [2025-10-16 11:51:41] DELETE请求: /mascontrol/user | 数据: [7863]
+INFO     - 2025-10-16 11:51:44 - [test_delete:202] - 第1个账号（ID: 7863）删除接口调用成功
+DEBUG    - 2025-10-16 11:51:44 - [variable_manager:131] - [2025-10-16 11:51:44] 从运行时变量获取 | 变量: vps_user_ids_2 | 值: 7864
+DEBUG    - 2025-10-16 11:51:44 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-16 11:51:44 - [api_vpsbase:239] - [2025-10-16 11:51:44] DELETE请求: /mascontrol/user | 数据: [7864]
+INFO     - 2025-10-16 11:51:47 - [test_delete:202] - 第2个账号（ID: 7864）删除接口调用成功
+INFO     - 2025-10-16 11:51:47 - [conftest:343] - [2025-10-16 11:51:47] 用例 test_cloudTrader_vps/test_delete.py::TestDeleteUser::test_delete_userlist 执行完毕
+DEBUG    - 2025-10-16 11:51:47 - [variable_manager:131] - [2025-10-16 11:51:47] 从运行时变量获取 | 变量: vps_user_count | 值: 2
+DEBUG    - 2025-10-16 11:51:47 - [variable_manager:131] - [2025-10-16 11:51:47] 从运行时变量获取 | 变量: vps_user_accounts_1 | 值: 301391174
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:786] - [2025-10-16 11:51:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:448] - [2025-10-16 11:51:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('301391174',)
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:451] - [2025-10-16 11:51:47] 查询成功，结果数量: 0
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:463] - [2025-10-16 11:51:47] 查询结果: []
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:819] - [2025-10-16 11:51:47] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+DEBUG    - 2025-10-16 11:51:47 - [variable_manager:131] - [2025-10-16 11:51:47] 从运行时变量获取 | 变量: vps_user_accounts_2 | 值: 301391176
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:786] - [2025-10-16 11:51:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:448] - [2025-10-16 11:51:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
 参数: ('301391176',)
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:451] - [2025-10-15 19:15:17] 查询成功，结果数量: 0
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:463] - [2025-10-15 19:15:17] 查询结果: []
-INFO     - 2025-10-15 19:15:17 - [api_vpsbase:819] - [2025-10-15 19:15:17] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-10-15 19:15:17 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-INFO     - 2025-10-15 19:15:17 - [conftest:226] - [2025-10-15 19:15:17] 用例  执行完毕
-INFO     - 2025-10-15 19:15:17 - [variable_manager:111] - [2025-10-15 19:14:52] 运行时变量已保存到: D:\pycharm_test\template_model\VAR\runtime_vars_community.json
-INFO     - 2025-10-15 19:15:17 - [conftest:544] - [2025-10-15 19:14:52] 测试会话结束，总耗时: 24.00秒
-INFO     - 2025-10-15 19:15:17 - [feishu_notification:130] - [2025-10-15 19:14:52] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
-DEBUG    - 2025-10-15 19:15:17 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
-DEBUG    - 2025-10-15 19:15:18 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
-INFO     - 2025-10-15 19:15:18 - [feishu_notification:138] - [2025-10-15 19:14:52] 飞书响应状态码: 200
-INFO     - 2025-10-15 19:15:18 - [feishu_notification:139] - [2025-10-15 19:14:52] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
-INFO     - 2025-10-15 19:15:18 - [feishu_notification:144] - [2025-10-15 19:14:52] [FEISHU] 消息发送成功
-INFO     - 2025-10-15 19:15:18 - [conftest:556] - [2025-10-15 19:14:52] 飞书通知发送成功
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:451] - [2025-10-16 11:51:47] 查询成功，结果数量: 0
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:463] - [2025-10-16 11:51:47] 查询结果: []
+INFO     - 2025-10-16 11:51:47 - [api_vpsbase:819] - [2025-10-16 11:51:47] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-16 11:51:47 - [variable_manager:176] - [2025-10-16 11:51:47] 运行时变量保存成功 | 文件: D:\pycharm_test\template_model\VAR\runtime_vars_cloud.json
+INFO     - 2025-10-16 11:51:47 - [conftest:544] - [2025-10-16 11:47:34] 测试会话结束，总耗时: 252.00秒
+INFO     - 2025-10-16 11:51:47 - [feishu_notification:130] - [2025-10-16 11:47:34] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+DEBUG    - 2025-10-16 11:51:47 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
+DEBUG    - 2025-10-16 11:51:48 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
+INFO     - 2025-10-16 11:51:48 - [feishu_notification:138] - [2025-10-16 11:47:34] 飞书响应状态码: 200
+INFO     - 2025-10-16 11:51:48 - [feishu_notification:139] - [2025-10-16 11:47:34] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     - 2025-10-16 11:51:48 - [feishu_notification:144] - [2025-10-16 11:47:34] [FEISHU] 消息发送成功
+INFO     - 2025-10-16 11:51:48 - [conftest:556] - [2025-10-16 11:47:34] 飞书通知发送成功

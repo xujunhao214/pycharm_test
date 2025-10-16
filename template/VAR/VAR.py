@@ -9,7 +9,7 @@ PASSWORD = "Test123456"
 WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
 
 # Jenkins路径
-JENKINS = "http://172.96.192.137:8080/view/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/job/QA-Community-test/"
+JENKINS = "http://172.96.192.137:8080/view/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/job/QA-cloud-test/"
 JENKINS_USERNAME = "Test"
 JENKINS_PASSWORD = "28y6yyrcnfE3WSxF"
 
@@ -42,7 +42,7 @@ STBLE_PERIOD = 2  # 稳定期（秒）：数据连续2秒不变则认为加载�
 TIMEZONE_OFFSET = 5  # 时区偏移量（小时）
 
 # api基类执行完等待时间
-SLEEP_SECONDS = 1
+SLEEP_SECONDS = 3
 
 # 项目名称
 PROJECT_NAME = "跟单社区"

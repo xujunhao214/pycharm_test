@@ -372,7 +372,7 @@ def test_group(request):
         if "test_vps" in first_test_path:
             return "vps"
         elif "test_cloudTrader" in first_test_path:
-            return "community"
+            return "cloud"
 
     # 默认值（无隔离）
     return ""

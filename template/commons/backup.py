@@ -13,7 +13,7 @@ TESSERACT_PATH = r'/usr/bin/tesseract'  # 正确路径：可执行文件
 CAPTCHA_LENGTH = 4
 SUPPORTED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 # ！！！修复2：用绝对路径，避免 Jenkins 执行时相对路径混乱
-SAVE_DIR = '/www/python/jenkins/workspace/Community/template/Files/png'  # 绝对路径
+SAVE_DIR = '/www/python/jenkins/workspace/cloud/template/Files/png'  # 绝对路径
 SAVE_FILENAME = 'preprocessed_captcha.png'  # 固定文件名
 
 

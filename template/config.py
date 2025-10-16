@@ -10,7 +10,7 @@ ENV_CONFIG = {
         "base_url": "https://test.lgcopytrade.top/api",
         "vps_url": "http://39.99.136.49/vps",
         "vpsbase_url": "http://39.99.136.49/api",
-        "docuvps_url": "http://39.98.109.212/vps",
+        "docuvps_url": "http://39.99.131.255/vps",
         "db_config": {
             "host": "39.103.138.2",
             "port": 3306,
@@ -43,7 +43,7 @@ ENV_CONFIG = {
         "base_url": "https://dev.lgcopytrade.top/api",
         "vps_url": "https://39.101.181.190/vps",
         "vpsbase_url": "http://39.99.136.49/api",
-        "docuvps_url": "http://39.98.109.212/vps",
+        "docuvps_url": "http://39.99.131.255/vps",
         "db_config": {
             "host": "39.99.146.95",
             "port": 3306,
