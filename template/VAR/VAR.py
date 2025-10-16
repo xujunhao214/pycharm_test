@@ -42,7 +42,7 @@ STBLE_PERIOD = 2  # 稳定期（秒）：数据连续2秒不变则认为加载�
 TIMEZONE_OFFSET = 5  # 时区偏移量（小时）
 
 # api基类执行完等待时间
-SLEEP_SECONDS = 1
+SLEEP_SECONDS = 3
 
 # 项目名称
 PROJECT_NAME = "跟单社区"
