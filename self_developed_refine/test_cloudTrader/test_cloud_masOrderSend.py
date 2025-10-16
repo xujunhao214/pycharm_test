@@ -24,6 +24,7 @@ class TestCloudMasOrdersend:
     - 预期结果：账号的数据正确
     """)
     class TestCloudtradingOrders1(APITestBase):
+        @allure.title("云策略-云策略列表-修改云跟单")
         def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号，没有固定注释"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
