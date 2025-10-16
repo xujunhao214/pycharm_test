@@ -22,7 +22,7 @@ SYNC_WAIT_SECONDS = 2  # 同步等待时间
 
 @allure.feature("创建订单然后统计时间差")
 class Test_createTD:
-    @allure.feature("VPS策略下单-复制下单")
+    @allure.story("VPS策略下单-复制下单")
     class TestVPSOrdersend(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓平仓循环执行")
