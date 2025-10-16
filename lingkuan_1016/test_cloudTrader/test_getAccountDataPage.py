@@ -2,9 +2,9 @@ import time
 import allure
 import logging
 import pytest
-from lingkuan_919.conftest import var_manager
-from lingkuan_919.commons.api_base import *
-from lingkuan_919.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import *
+from lingkuan_1016.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"

@@ -3,7 +3,7 @@ import datetime
 import requests
 import json
 from logging.handlers import TimedRotatingFileHandler
-from lingkuan_919.VAR.VAR import *
+from lingkuan_1016.VAR.VAR import *
 from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
@@ -11,9 +11,9 @@ from requests.exceptions import (
     RequestException, ConnectionError, Timeout,
     HTTPError, SSLError
 )
-from lingkuan_919.commons.jsonpath_utils import JsonPathUtils
-from lingkuan_919.commons.enums import Environment
-from lingkuan_919.conftest import *
+from lingkuan_1016.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_1016.commons.enums import Environment
+from lingkuan_1016.conftest import *
 
 # 自动创建日志目录
 log_dir = Path(__file__).parent.parent / "logs"

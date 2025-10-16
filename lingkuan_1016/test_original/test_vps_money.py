@@ -1,12 +1,12 @@
-# lingkuan_919/tests/test_vps_ordersend.py
+# lingkuan_1016/tests/test_vps_ordersend.py
 import time
 import math
 import allure
 import logging
 import pytest
-from lingkuan_919.VAR.VAR import *
-from lingkuan_919.conftest import var_manager
-from lingkuan_919.commons.api_base import *
+from lingkuan_1016.VAR.VAR import *
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"

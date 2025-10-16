@@ -3,9 +3,9 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_919.VAR.VAR import *
-from lingkuan_919.conftest import var_manager
-from lingkuan_919.commons.api_base import *
+from lingkuan_1016.VAR.VAR import *
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"

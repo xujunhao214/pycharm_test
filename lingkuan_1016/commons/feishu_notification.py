@@ -2,8 +2,8 @@ import os
 import requests
 import logging
 from typing import Dict, List
-from lingkuan_919.VAR.VAR import *
-from lingkuan_919.commons.enums import Environment
+from lingkuan_1016.VAR.VAR import *
+from lingkuan_1016.commons.enums import Environment
 
 logger = logging.getLogger(__name__)
 
