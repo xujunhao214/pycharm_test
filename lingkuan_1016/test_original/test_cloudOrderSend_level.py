@@ -1,13 +1,13 @@
-# lingkuan_910/tests/test_云策略_ordersend.py
+# lingkuan_1016/tests/test_云策略_ordersend.py
 import allure
 import logging
 import pytest
 import time
 import math
-from lingkuan_910.VAR.VAR import *
-from lingkuan_910.conftest import var_manager
-from lingkuan_910.commons.api_base import *
-from lingkuan_910.commons.redis_utils import *
+from lingkuan_1016.VAR.VAR import *
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import *
+from lingkuan_1016.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"

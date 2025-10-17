@@ -3,11 +3,11 @@ import math
 import allure
 import logging
 import pytest
-from lingkuan_910.VAR.VAR import *
-from lingkuan_910.conftest import var_manager
-from lingkuan_910.commons.api_base import *
+from lingkuan_1016.VAR.VAR import *
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import *
 import requests
-from lingkuan_910.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_1016.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"

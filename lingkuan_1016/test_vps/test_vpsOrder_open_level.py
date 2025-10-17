@@ -2,9 +2,9 @@ import allure
 import logging
 import pytest
 import time
-from lingkuan_910.conftest import var_manager
-from lingkuan_910.commons.api_base import *
-from lingkuan_910.commons.redis_utils import *
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import *
+from lingkuan_1016.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"

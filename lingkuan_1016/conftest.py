@@ -1,6 +1,6 @@
 import pytest
 import pymysql
-from lingkuan_910.VAR.VAR import *
+from lingkuan_1016.VAR.VAR import *
 import allure
 import logging
 import datetime
@@ -9,15 +9,15 @@ import os
 import time
 import xml.etree.ElementTree as ET
 from pytest import Config
-from lingkuan_910.commons.mfa_key import generate_code
-from lingkuan_910.commons.Encryption_and_decryption import aes_encrypt_str
-from lingkuan_910.commons.session import EnvironmentSession
-from lingkuan_910.commons.variable_manager import VariableManager
-from lingkuan_910.commons.test_tracker import TestResultTracker
-from lingkuan_910.commons.feishu_notification import send_feishu_notification
-from lingkuan_910.commons.enums import Environment
-from lingkuan_910.config import ENV_CONFIG  # 仅导入配置数据
-from lingkuan_910.commons.redis_utils import RedisClient, get_redis_client
+from lingkuan_1016.commons.mfa_key import generate_code
+from lingkuan_1016.commons.Encryption_and_decryption import aes_encrypt_str
+from lingkuan_1016.commons.session import EnvironmentSession
+from lingkuan_1016.commons.variable_manager import VariableManager
+from lingkuan_1016.commons.test_tracker import TestResultTracker
+from lingkuan_1016.commons.feishu_notification import send_feishu_notification
+from lingkuan_1016.commons.enums import Environment
+from lingkuan_1016.config import ENV_CONFIG  # 仅导入配置数据
+from lingkuan_1016.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys

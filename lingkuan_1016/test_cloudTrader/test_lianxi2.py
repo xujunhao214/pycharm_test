@@ -3,10 +3,10 @@ import math
 import allure
 import logging
 import pytest
-from lingkuan_910.VAR.VAR import *
-from lingkuan_910.conftest import var_manager
-from lingkuan_910.commons.api_base import APITestBase
-from lingkuan_910.commons.redis_utils import *
+from lingkuan_1016.VAR.VAR import *
+from lingkuan_1016.conftest import var_manager
+from lingkuan_1016.commons.api_base import APITestBase
+from lingkuan_1016.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
