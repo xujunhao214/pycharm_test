@@ -3,10 +3,10 @@ import logging
 import pytest
 import time
 import re
-from lingkuan_1016.conftest import var_manager
-from lingkuan_1016.commons.api_base import *
+from lingkuan_910.conftest import var_manager
+from lingkuan_910.commons.api_base import *
 import requests
-from lingkuan_1016.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_910.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -2628,7 +2628,7 @@ class TestVPSMasOrderclose:
                     )
                     logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
-        time.sleep(30)
+        # time.sleep(30)
 
     @allure.story("场景9：平仓的订单类型功能校验-外部订单")
     @allure.description("""

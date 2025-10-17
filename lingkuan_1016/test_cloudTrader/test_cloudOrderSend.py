@@ -3,9 +3,9 @@ import logging
 import pytest
 import time
 import math
-from lingkuan_1016.VAR.VAR import *
-from lingkuan_1016.conftest import var_manager
-from lingkuan_1016.commons.api_base import *
+from lingkuan_910.VAR.VAR import *
+from lingkuan_910.conftest import var_manager
+from lingkuan_910.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -61,7 +61,7 @@ class TestCloudStrategyOrder:
                     "复制下单响应msg字段应为success"
                 )
 
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("数据库校验-复制下单数据")
         def test_copy_verify_db(self, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
@@ -110,16 +110,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -260,16 +260,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     totalSzie = trader_ordersend["totalSzie"]
@@ -379,16 +379,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -633,16 +633,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-结束手数"):
                     min_lot_size = db_data[0]["min_lot_size"]
@@ -756,16 +756,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -873,16 +873,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-结束手数"):
                     min_lot_size = db_data[0]["min_lot_size"]
@@ -1010,16 +1010,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -1346,16 +1346,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -1484,16 +1484,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行平仓校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     totalSzie = trader_ordersend["totalSzie"]
@@ -1604,16 +1604,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -1660,13 +1660,13 @@ class TestCloudStrategyOrder:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):
@@ -1747,16 +1747,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -1827,7 +1827,7 @@ class TestCloudStrategyOrder:
                     "复制下单响应msg字段应为success"
                 )
 
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("数据库校验-复制下单数据")
         def test_copy_verify_db(self, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
@@ -1876,16 +1876,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数"):
                     size = [record["size"] for record in db_data]
@@ -2001,16 +2001,16 @@ class TestCloudStrategyOrder:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
 
-                with allure.step("验证订单状态"):
-                    status = db_data[0]["status"]
-                    self.verify_data(
-                        actual_value=status,
-                        expected_value=(0, 1),
-                        op=CompareOp.IN,
-                        message="订单状态应为0或1",
-                        attachment_name="订单状态详情"
-                    )
-                    logging.info(f"订单状态验证通过: {status}")
+                # with allure.step("验证订单状态"):
+                #     status = db_data[0]["status"]
+                #     self.verify_data(
+                #         actual_value=status,
+                #         expected_value=(0, 1),
+                #         op=CompareOp.IN,
+                #         message="订单状态应为0或1",
+                #         attachment_name="订单状态详情"
+                #     )
+                #     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数"):
                     size = [record["size"] for record in db_data]

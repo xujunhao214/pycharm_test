@@ -3,10 +3,10 @@ import allure
 import logging
 import pytest
 import re
-from lingkuan_1016.conftest import var_manager
-from lingkuan_1016.commons.api_base import *
+from lingkuan_910.conftest import var_manager
+from lingkuan_910.commons.api_base import *
 import requests
-from lingkuan_1016.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_910.commons.jsonpath_utils import JsonPathUtils
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -102,7 +102,7 @@ class TestVPSCoreFunctionality:
                 )
 
         @pytest.mark.url("vps")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("平仓停止功能验证")
         def test_trader_stopOrder(self, var_manager, logged_session):
             with allure.step("1. 发送停止平仓请求"):
@@ -1015,7 +1015,7 @@ class TestVPSOrderQuantityControl:
                 )
                 logging.info(f"{new_user['account']}暂无可平仓订单")
 
-        time.sleep(30)
+        # time.sleep(30)
 
 
 # ------------------------------------

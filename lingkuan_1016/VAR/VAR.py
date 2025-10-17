@@ -8,9 +8,9 @@ PASSWORD = "Test123456"
 WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
 
 # Jenkins路径
-JENKINS = "http://39.108.0.84:8080/job/Documentatio_Test/"
-JENKINS_USERNAME = "admin"
-JENKINS_PASSWORD = "admin"
+JENKINS = "http://172.96.192.137:8080/view/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/"
+JENKINS_USERNAME = "Test"
+JENKINS_PASSWORD = "28y6yyrcnfE3WSxF"
 
 # 优化时间格式：
 DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
@@ -23,7 +23,7 @@ future_time = current_time + datetime.timedelta(days=30)
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 
 # mysql查询语句，查询最近时间的数据
-MYSQL_TIME = 1.5  # 时间范围（分钟）
+MYSQL_TIME = 1  # 时间范围（分钟）
 WAIT_TIMEOUT = 30  # 数据库查询等待超时时间（秒）
 DELETE_WAIT_TIMEOUT = 5  # 数据库删除查询超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）

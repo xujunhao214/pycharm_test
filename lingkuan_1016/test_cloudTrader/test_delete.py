@@ -3,9 +3,9 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_1016.VAR.VAR import *
-from lingkuan_1016.conftest import var_manager
-from lingkuan_1016.commons.api_base import *
+from lingkuan_910.VAR.VAR import *
+from lingkuan_910.conftest import var_manager
+from lingkuan_910.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -57,7 +57,7 @@ class TestDelete_cloudTrader(APITestBase):
                 logger.info(f"[{DATETIME_NOW}] 第{i}个跟单账号（ID: {slave_id}）删除成功")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.retry(n=0, delay=0)
     @allure.title("数据库校验-云策略列表-批量删除云跟单账号")
     def test_dbdelete_cloudBatchDelete(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有ID

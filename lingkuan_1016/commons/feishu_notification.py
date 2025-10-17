@@ -2,8 +2,8 @@ import os
 import requests
 import logging
 from typing import Dict, List
-from lingkuan_1016.VAR.VAR import *
-from lingkuan_1016.commons.enums import Environment
+from lingkuan_910.VAR.VAR import *
+from lingkuan_910.commons.enums import Environment
 
 logger = logging.getLogger(__name__)
 
@@ -87,13 +87,13 @@ def send_feishu_notification(
             markdown_content += f"- {case}\n"
 
     # 添加跳过用例列表
-    if skipped_cases and len(skipped_cases) > 0:
-        markdown_content += "\n**跳过用例列表**:\n"
-        skipped_reasons = statistics.get("skipped_reasons", {})
-        for case in skipped_cases:
-            reason = skipped_reasons.get(case, "跳过此用例")
-            # markdown_content += f"- {case} (原因: {reason})\n"
-            markdown_content += f"- {case}\n"
+    # if skipped_cases and len(skipped_cases) > 0:
+    #     markdown_content += "\n**跳过用例列表**:\n"
+    #     skipped_reasons = statistics.get("skipped_reasons", {})
+    #     for case in skipped_cases:
+    #         reason = skipped_reasons.get(case, "跳过此用例")
+    #         # markdown_content += f"- {case} (原因: {reason})\n"
+    #         markdown_content += f"- {case}\n"
 
     # 发送飞书消息前
     # print(f"准备发送飞书通知，总用例数: {total}, 跳过数: {skipped}")

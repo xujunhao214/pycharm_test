@@ -2,8 +2,7 @@ import os
 import datetime
 import requests
 import json
-from logging.handlers import TimedRotatingFileHandler
-from lingkuan_1016.VAR.VAR import *
+from lingkuan_910.VAR.VAR import *
 from typing import Dict, Any, Optional
 from pathlib import Path
 import logging.handlers
@@ -11,9 +10,9 @@ from requests.exceptions import (
     RequestException, ConnectionError, Timeout,
     HTTPError, SSLError
 )
-from lingkuan_1016.commons.jsonpath_utils import JsonPathUtils
-from lingkuan_1016.commons.enums import Environment
-from lingkuan_1016.conftest import *
+from lingkuan_910.commons.jsonpath_utils import JsonPathUtils
+from lingkuan_910.commons.enums import Environment
+from lingkuan_910.conftest import *
 
 # 自动创建日志目录
 log_dir = Path(__file__).parent.parent / "logs"
@@ -21,27 +20,20 @@ log_dir.mkdir(parents=True, exist_ok=True)
 log_file = log_dir / "requests.log"
 
 # 按天轮转日志，保留1天
-file_handler = TimedRotatingFileHandler(
-    log_file,
-    when="midnight",  # 每天午夜轮转
-    interval=1,  # 间隔1天
-    backupCount=1,  # 保留1个备份（即只保留昨天的日志）
-    encoding="utf-8",
-    utc=False  # 使用本地时间
+file_handler = logging.handlers.TimedRotatingFileHandler(
+    log_file, when="D", interval=1, backupCount=10, encoding="utf-8"
+    # log_file, when="H", interval=1, backupCount=10, encoding="utf-8"
 )
 
-# 日志格式包含级别、时间、所在模块名和消息
-formatter = logging.Formatter(
-    "%(levelname)-8s - %(asctime)s - [%(module)s:%(lineno)d] - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
+# 日志格式包含时间、级别、环境标识和消息
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - [%(env)s] - %(message)s")
 file_handler.setFormatter(formatter)
 
 # 配置基础logger（支持info级别）
 logger = logging.getLogger("requests.session")
 logger.propagate = False
 logger.addHandler(file_handler)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class EnvironmentSession(requests.Session):

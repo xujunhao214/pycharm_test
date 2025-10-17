@@ -3,10 +3,10 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_1016.VAR.VAR import *
-from lingkuan_1016.commons.jsonpath_utils import *
-from lingkuan_1016.conftest import var_manager
-from lingkuan_1016.commons.api_base import *
+from lingkuan_910.VAR.VAR import *
+from lingkuan_910.commons.jsonpath_utils import *
+from lingkuan_910.conftest import var_manager
+from lingkuan_910.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -480,7 +480,7 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增策略账号id是：{cloudTrader_traderList_2}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.retry(n=0, delay=0)
     @allure.title("云策略-云策略列表-新增manager策略账号")
     def test_manager_cloudTrader(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
