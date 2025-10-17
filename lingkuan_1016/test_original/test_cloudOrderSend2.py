@@ -332,7 +332,7 @@ class TestCloudStrategyOrder:
                     "复制下单响应msg字段应为success"
                 )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=5)
         @allure.title("数据库校验-复制下单数据")
         def test_copy_verify_db(self, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""

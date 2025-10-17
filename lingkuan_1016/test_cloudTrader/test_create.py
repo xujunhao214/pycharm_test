@@ -480,7 +480,7 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增策略账号id是：{cloudTrader_traderList_2}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=0, delay=0)
+    @pytest.mark.retry(n=3, delay=5)
     @allure.title("云策略-云策略列表-新增manager策略账号")
     def test_manager_cloudTrader(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求

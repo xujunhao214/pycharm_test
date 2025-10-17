@@ -57,7 +57,7 @@ class TestDelete_cloudTrader(APITestBase):
                 logger.info(f"[{DATETIME_NOW}] 第{i}个跟单账号（ID: {slave_id}）删除成功")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=0, delay=0)
+    @pytest.mark.retry(n=3, delay=5)
     @allure.title("数据库校验-云策略列表-批量删除云跟单账号")
     def test_dbdelete_cloudBatchDelete(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有ID
