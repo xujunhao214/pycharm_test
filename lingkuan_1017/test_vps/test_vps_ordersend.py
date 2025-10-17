@@ -2476,13 +2476,13 @@ class TestVPSOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -3806,13 +3806,13 @@ class TestVPSOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景11：复制下单-手数范围0.01-1，总手数0.3")
@@ -4266,13 +4266,13 @@ class TestVPSOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景12：复制下单-手数范围0.01-1，总手数0.01")
