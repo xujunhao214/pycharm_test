@@ -86,7 +86,7 @@ class TestVPSMasOrderclose:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=0, delay=0)
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
