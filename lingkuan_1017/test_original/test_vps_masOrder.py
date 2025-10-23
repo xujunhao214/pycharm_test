@@ -90,7 +90,7 @@ class TestVPStradingOrders(APITestBase):
 
             # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
             logger.info(f"订单状态验证通过: {status}")
 
             # 手数范围校验
@@ -186,7 +186,7 @@ class TestVPStradingOrders(APITestBase):
 
             # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
             logger.info(f"平仓订单状态验证通过: {status}")
 
             # 平仓总手数校验
@@ -270,7 +270,7 @@ class TestVPStradingOrders(APITestBase):
 
             # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
             logger.info(f"订单状态验证通过: {status}")
 
             # 手数范围校验
@@ -366,7 +366,7 @@ class TestVPStradingOrders(APITestBase):
 
             # 订单状态校验
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
             logger.info(f"平仓订单状态验证通过: {status}")
 
             # 平仓总手数校验

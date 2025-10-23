@@ -9,8 +9,7 @@ import numpy as np
 
 # ---------------------- 通用配置 ----------------------
 # ！！！修复1：TESSERACT_PATH 指向 tesseract 可执行文件，而非 tessdata 目录
-# TESSERACT_PATH = r'/usr/bin/tesseract'  # 正确路径：可执行文件
-TESSERACT_PATH = r'/www/python/tesseract-5.5.0'  # 正确路径：可执行文件
+TESSERACT_PATH = r'/usr/bin/tesseract'  # 正确路径：可执行文件
 CAPTCHA_LENGTH = 4
 SUPPORTED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 # ！！！修复2：用绝对路径，避免 Jenkins 执行时相对路径混乱
@@ -29,8 +28,7 @@ class UniversalCaptchaRecognizer:
         # 配置 pytesseract 路径（若用 subprocess 调用，此配置不影响，但保留避免其他问题）
         pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
         # ！！！修复3：强制设置 TESSDATA_PREFIX，避免语言包加载失败
-        # os.environ["TESSDATA_PREFIX"] = '/usr/bin/tesseract/tessdata/'
-        os.environ["TESSDATA_PREFIX"] = '/www/python/tesseract-5.5.0/tessdata/'
+        os.environ["TESSDATA_PREFIX"] = '/usr/bin/tesseract/tessdata/'
         logging.info(f"TESSDATA_PREFIX 已设置：{os.getenv('TESSDATA_PREFIX')}")
 
     def minimal_preprocess(self, image: Image.Image) -> Image.Image:

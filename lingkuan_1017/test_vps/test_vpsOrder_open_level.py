@@ -38,6 +38,7 @@ class TestLeakageopen_level:
                 "platform": add_Slave["platform"],
                 "account": vps_user_accounts_1,
                 "password": encrypted_password,
+                "platformType": 0,
                 "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
@@ -50,7 +51,7 @@ class TestLeakageopen_level:
                 "followClose": 1,
                 "followRep": 0,
                 "fixedComment": "",
-                "commentType": 2,
+                "commentType": None,
                 "digits": 0,
                 "cfd": "@",
                 "forex": "",
@@ -181,27 +182,27 @@ class TestLeakageopen_level:
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -307,13 +308,11 @@ class TestLeakageopen_level:
                            SELECT * 
                            FROM follow_order_detail 
                            WHERE symbol LIKE %s 
-                             AND source_user = %s
                              AND account = %s
                              AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
-                    new_user["account"],
                     new_user["account"],
                     "changjing1"
                 )
@@ -532,16 +531,16 @@ class TestLeakageopen_level:
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     totalSzie = trader_ordersend["totalSzie"]
@@ -642,16 +641,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -720,16 +719,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -780,6 +779,7 @@ class TestLeakageopen_level:
                 "platform": add_Slave["platform"],
                 "account": add_Slave["account"],
                 "password": encrypted_password,
+                "platformType": 0,
                 "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
@@ -792,7 +792,7 @@ class TestLeakageopen_level:
                 "followClose": 0,
                 "followRep": 0,
                 "fixedComment": "",
-                "commentType": 2,
+                "commentType": None,
                 "digits": 0,
                 "cfd": "@",
                 "forex": "",
@@ -930,16 +930,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -1038,16 +1038,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -1150,16 +1150,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -1179,7 +1179,6 @@ class TestLeakageopen_level:
         def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
-                new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 symbol = trader_ordersend["symbol"]
 
@@ -1187,13 +1186,11 @@ class TestLeakageopen_level:
                         SELECT * 
                         FROM follow_order_detail 
                         WHERE symbol LIKE %s 
-                          AND source_user = %s
                           AND account = %s
                           AND comment = %s
                         """
                 params = (
                     f"%{symbol}%",
-                    new_user["account"],
                     vps_user_accounts_1,
                     "changjing2"
                 )
@@ -1225,13 +1222,11 @@ class TestLeakageopen_level:
                            SELECT * 
                            FROM follow_order_detail 
                            WHERE symbol LIKE %s 
-                             AND source_user = %s
                              AND account = %s
                              AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
-                    new_user["account"],
                     new_user["account"],
                     "changjing2"
                 )
@@ -1458,16 +1453,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -1520,6 +1515,7 @@ class TestLeakageopen_level:
                     "account": new_user["account"],
                     "password": encrypted_password,
                     "platform": new_user["platform"],
+                    "platformType": 0,
                     "remark": "",
                     "platformId": platformId,
                     "templateId": 1,
@@ -1615,13 +1611,11 @@ class TestLeakageopen_level:
                            SELECT * 
                            FROM follow_order_detail 
                            WHERE symbol LIKE %s 
-                             AND source_user = %s
                              AND account = %s
                              AND comment = %s
                            """
                 params = (
                     f"%{symbol}%",
-                    new_user["account"],
                     new_user["account"],
                     "changjing3"
                 )
@@ -1791,13 +1785,11 @@ class TestLeakageopen_level:
                 sql = f"""
                     SELECT * FROM follow_order_detail
                     WHERE account = %s
-                        AND source_user = %s
                         AND trader_id = %s
                         AND comment = %s
                         """
                 params = (
                     vps_user_accounts_1,
-                    new_user["account"],
                     vps_addslave_id,
                     "changjing3"
                 )
@@ -1911,16 +1903,16 @@ class TestLeakageopen_level:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")

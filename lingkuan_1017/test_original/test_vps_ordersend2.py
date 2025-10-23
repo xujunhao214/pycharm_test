@@ -111,16 +111,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证手数范围-开始手数"):
                     max_lot_size = db_data[0]["max_lot_size"]
@@ -222,16 +222,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -362,16 +362,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -447,16 +447,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -578,16 +578,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数"):
                     size = [record["size"] for record in db_data]
@@ -674,16 +674,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数"):
                     size = db_data[0]["size"]
@@ -849,16 +849,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数"):
                     size = db_data[0]["size"]
@@ -935,16 +935,16 @@ class TestVPSOrderSend_newScenarios:
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
 
-                 # with allure.step("验证订单状态"):
-                #     status = db_data[0]["status"]
-                #     self.verify_data(
-                #         actual_value=status,
-                #         expected_value=(0, 1),
-                #         op=CompareOp.IN,
-                #         message="订单状态应为0或1",
-                #         attachment_name="订单状态详情"
-                #     )
-                #     logging.info(f"订单状态验证通过: {status}")
+                 with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数"):
                     size = db_data[0]["size"]

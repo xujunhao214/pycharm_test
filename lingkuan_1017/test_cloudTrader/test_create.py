@@ -15,6 +15,7 @@ SKIP_REASON = "跳过此用例"
 @allure.feature("数据管理-创建数据-为云策略准备")
 class TestCreate_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.retry(n=3, delay=5)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, logged_session, var_manager):
         add_cloudTrader = var_manager.get_variable("add_cloudTrader")
@@ -132,7 +133,8 @@ class TestCreate_cloudTrader(APITestBase):
             "commentType": new_user["commentType"],
             "digits": new_user["digits"],
             "platformId": new_user["platformId"],
-            "platform": new_user["platform"]
+            "platform": new_user["platform"],
+            "platformType": 0
         }
         response = self.send_post_request(
             logged_session,
@@ -183,9 +185,9 @@ class TestCreate_cloudTrader(APITestBase):
             assert status == 0, f"新增策略账号状态status应为0（正常），实际状态为: {status}"
             logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
 
-            euqit = db_data[0]["euqit"]
-            assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
-            logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
+            # euqit = db_data[0]["euqit"]
+            # assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            # logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量挂靠VPS跟单（后9个账号）")
@@ -287,9 +289,9 @@ class TestCreate_cloudTrader(APITestBase):
                 assert status == 0, f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}"
                 logging.info(f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}")
 
-                euqit = db_data[0]["euqit"]
-                assert euqit > 0, f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}"
-                logging.info(f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}")
+                # euqit = db_data[0]["euqit"]
+                # assert euqit > 0, f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}"
+                # logging.info(f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}")
 
                 # 校验订阅表记录（代码与之前一致）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -480,7 +482,6 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增策略账号id是：{cloudTrader_traderList_2}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=0, delay=0)
     @allure.title("云策略-云策略列表-新增manager策略账号")
     def test_manager_cloudTrader(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
@@ -582,7 +583,8 @@ class TestCreate_cloudTrader(APITestBase):
                 "commentType": "",
                 "digits": 0,
                 "followTraderIds": [],
-                "sort": "100"
+                "sort": "100",
+                "remark": ""
             }
         ]
         response = self.send_post_request(

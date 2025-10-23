@@ -93,6 +93,6 @@ def run_cloud_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
+    env = sys.argv[1] if len(sys.argv) > 1 else "test"
     exit_code, _ = run_cloud_tests(env)
     sys.exit(exit_code)

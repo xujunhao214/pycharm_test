@@ -44,6 +44,7 @@ class Testcloudtrader_moneyandscene:
                 "password": encrypted_password,
                 "platform": new_user["platform"],
                 "accountType": "0",
+                "platformType": 0,
                 "serverNode": new_user["serverNode"],
                 "remark": "参数化新增云策略账号",
                 "sort": 100,

@@ -34,6 +34,7 @@ class TestVPSMasOrder_money_scene:
                 "id": vps_trader_id,
                 "account": new_user["account"],
                 "password": encrypted_password,
+                "platformType": 0,
                 "remark": "",
                 "followStatus": 1,
                 "templateId": 1,

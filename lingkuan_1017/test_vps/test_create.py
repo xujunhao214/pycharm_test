@@ -22,7 +22,7 @@ class TestCreate(APITestBase):
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "accountType": "0",
+            "platformType": 0,
             "serverNode": new_user["serverNode"],
             "remark": new_user["remark"],
             "sort": "12",
@@ -478,6 +478,7 @@ class TestCreate(APITestBase):
             "platform": new_user["platform"],
             "remark": new_user["remark"],
             "platformId": new_user["platformId"],
+            "platformType": 0,
             "type": 0,
             "templateId": 1,
             "followStatus": 1,
@@ -567,7 +568,8 @@ class TestCreate(APITestBase):
             "digits": 0,
             "cfd": "",
             "forex": "",
-            "abRemark": ""
+            "abRemark": "",
+            "platformType": 0
         }
         response = self.send_post_request(
             logged_session,

@@ -144,7 +144,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
                     actual_value=status,
                     expected_value=(0, 1),
                     op=CompareOp.IN,
-                    message="订单状态应为0或1",
+                    message="订单状态应为0或1或3",
                     attachment_name="订单状态详情"
                 )
                 logging.info(f"订单状态验证通过: {status}")
@@ -250,7 +250,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
                     actual_value=status,
                     expected_value=(0, 1),
                     op=CompareOp.IN,
-                    message="订单状态应为0或1",
+                    message="订单状态应为0或1或3",
                     attachment_name="订单状态详情"
                 )
                 logging.info(f"订单状态验证通过: {status}")
@@ -326,7 +326,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
 
             # 验证订单状态
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
             logger.info(f"平仓状态验证通过: {status}")
 
             # 验证总手数
@@ -393,7 +393,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
 
             # 验证订单状态
             status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1，实际为: {status}"
+            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
             logger.info(f"平仓状态验证通过: {status}")
 
             # 验证手数一致性
