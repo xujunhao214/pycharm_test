@@ -9,24 +9,27 @@ from lingkuan_MT5.commons.redis_utils import *
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
+
 @allure.feature("VPS策略下单-开仓的场景校验")
 class TestVPSOrdersend(APITestBase):
-    @allure.title("出现漏开-redis数据和数据库的数据做比对")
-    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
+    @allure.title("出现漏平-redis数据和数据库的数据做比对")
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_close):
         with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
             symbol = trader_ordersend["symbol"]
 
             sql = f"""
-                              SELECT * 
-                              FROM follow_order_detail 
-                              WHERE symbol LIKE %s 
-                                AND account = %s
-                              """
+                               SELECT * 
+                               FROM follow_order_detail 
+                               WHERE symbol LIKE %s 
+                                 AND account = %s
+                                 AND comment = %s
+                               """
             params = (
                 f"%{symbol}%",
                 new_user["account"],
+                "changjing2"
             )
 
             # 调用轮询等待方法（带时间范围过滤）
@@ -35,19 +38,19 @@ class TestVPSOrdersend(APITestBase):
                 sql=sql,
                 params=params,
                 time_field="create_time",
-                time_range=10
+                time_range=30
             )
 
         with allure.step("2. 转换Redis数据为可比较格式"):
-            if not redis_order_data_send:
+            if not redis_order_data_close:
                 pytest.fail("Redis中未查询到订单数据")
 
             # 转换Redis数据为与数据库一致的格式
-            MT5vps_redis_comparable_list_open = convert_redis_orders_to_comparable_list(redis_order_data_send)
-            logging.info(f"转换后的Redis数据: {MT5vps_redis_comparable_list_open}")
+            MT5vps_redis_comparable_list_level = convert_redis_orders_to_comparable_list(redis_order_data_close)
+            logging.info(f"转换后的Redis数据: {MT5vps_redis_comparable_list_level}")
 
             # 将转换后的数据存入变量管理器
-            var_manager.set_runtime_variable("MT5vps_redis_comparable_list_open", MT5vps_redis_comparable_list_open)
+            var_manager.set_runtime_variable("MT5vps_redis_comparable_list_level", MT5vps_redis_comparable_list_level)
 
         with allure.step("3. 比较Redis与数据库数据"):
             # 假设db_data是之前从数据库查询的结果
@@ -68,7 +71,7 @@ class TestVPSOrdersend(APITestBase):
             logging.info(f"数据库转换后: {db_comparable_list}")
             # 比较两个列表（可根据需要调整比较逻辑）
             self.assert_data_lists_equal(
-                actual=MT5vps_redis_comparable_list_open,
+                actual=MT5vps_redis_comparable_list_level,
                 expected=db_comparable_list,
                 fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
                 tolerance=1e-6

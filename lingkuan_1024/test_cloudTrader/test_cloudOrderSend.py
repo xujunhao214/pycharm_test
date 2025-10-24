@@ -1780,7 +1780,6 @@ class TestCloudStrategyOrder:
                 )
 
             with allure.step("执行复制下单数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
@@ -2079,8 +2078,8 @@ class TestCloudStrategyOrder:
         def test_allocation_verify_close_db(self, var_manager, db_transaction):
             """验证分配下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询平仓订单数据"):
-                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
-                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_1 = var_manager.get_variable("cloudTrader_vps_ids_1")
 
                 sql = """
                         SELECT 
@@ -2112,7 +2111,7 @@ class TestCloudStrategyOrder:
                             AND fod.trader_id = %s
                             AND fod.comment = %s
                     """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing6")
+                params = ('1', cloudTrader_user_accounts_2, cloudTrader_vps_ids_1, "changjing6")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -2155,8 +2154,8 @@ class TestCloudStrategyOrder:
         def test_allocation_verify_close_dbadd(self, var_manager, db_transaction):
             """验证分配下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询平仓订单数据"):
-                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
-                cloudTrader_vps_ids_1 = var_manager.get_variable("cloudTrader_vps_ids_1")
+                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = """
                         SELECT 
@@ -2188,7 +2187,7 @@ class TestCloudStrategyOrder:
                             AND fod.trader_id = %s
                             AND fod.comment = %s
                             """
-                params = ('1', cloudTrader_user_accounts_2, cloudTrader_vps_ids_1, "changjing6")
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing6")
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(

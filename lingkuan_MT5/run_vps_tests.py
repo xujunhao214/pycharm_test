@@ -13,8 +13,8 @@ def run_MT5vps_tests(env: str = "test"):
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
 
-    report_dir = os.path.join(project_root, "report", "MT5vps_results")
-    html_dir = os.path.join(project_root, "report", "MT5vps_html")
+    report_dir = os.path.join(project_root, "report", "vps_results")
+    html_dir = os.path.join(project_root, "report", "vps_html")
     os.makedirs(report_dir, exist_ok=True)
 
     print(f"当前脚本绝对路径: {os.path.abspath(__file__)}")
@@ -28,19 +28,19 @@ def run_MT5vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "test_vps/test_create.py",
+        # "test_vps/test_create.py",
         # "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
         # "test_vps/test_getAccountDataPage.py",
-        # "test_vps/test_MT5vps_ordersend.py",
-        # "test_vps/test_MT5vps_orderclose.py",
-        # "test_vps/test_MT5vps_masOrderSend.py",
-        # "test_vps/test_MT5vps_masOrderClose.py",
+        # "test_vps/test_vps_ordersend.py",
+        # "test_vps/test_vps_orderclose.py",
+        # "test_vps/test_vps_masOrderSend.py",
+        # "test_vps/test_vps_masOrderClose.py",
         # "test_vps/test_vpsOrder_open_level.py",
         # "test_vps/test_vpsfixed_annotations.py",
         # "test_vps/test_create_scene.py",
         # "test_vps/test_vpsMasOrder_money_scene.py",
-        # "test_vps/test_delete.py",
+        "test_vps/test_delete.py",
 
         "--log-file=./Logs/MT5vps_pytest.log",
         "--log-file-level=debug",

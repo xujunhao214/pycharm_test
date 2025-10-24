@@ -24,6 +24,7 @@ class TestLeakageopen_level:
           5. 进行补单操作，然后平仓
         - 预期结果：vps跟单账号开仓-关闭，有漏单数据
         """)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
@@ -40,7 +41,7 @@ class TestLeakageopen_level:
                 "password": encrypted_password,
                 "platformType": 1,
                 "remark": "",
-                "followDirection": 1,
+                "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
                 "followParam": 1,
@@ -400,7 +401,7 @@ class TestLeakageopen_level:
                 "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
                 "remark": "",
-                "followDirection": 1,
+                "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
                 "followParam": 1,
@@ -766,6 +767,7 @@ class TestLeakageopen_level:
           5. 修改vps跟单账号平仓-开启
         - 预期结果：vps跟单账号平仓-关闭，有漏单数据
         """)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏平）")
@@ -781,7 +783,7 @@ class TestLeakageopen_level:
                 "password": encrypted_password,
                 "platformType": 1,
                 "remark": "",
-                "followDirection": 1,
+                "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
                 "followParam": 1,
@@ -1288,7 +1290,7 @@ class TestLeakageopen_level:
                 "account": add_Slave["account"],
                 "password": encrypted_password,
                 "remark": "",
-                "followDirection": 1,
+                "followDirection": 0,
                 "followMode": 1,
                 "remainder": 0,
                 "followParam": 1,
@@ -1500,6 +1502,7 @@ class TestLeakageopen_level:
       5. 进行补单操作，然后平仓
     - 预期结果：vps策略跟单状态为关闭，有漏单数据
     """)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")

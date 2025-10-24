@@ -1,0 +1,397 @@
+{
+  "uid" : "2185ff2bf980f3e",
+  "name" : "数据库校验-VPS数据-批量删除跟单账号",
+  "fullName" : "test_vps.test_delete.TestDeleteUser#test_dbdelete_addsalvelist",
+  "historyId" : "e550712698990bee4d24b19f48ded267",
+  "time" : {
+    "start" : 1761296806066,
+    "stop" : 1761296806211,
+    "duration" : 145
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 第1个账号（31492）的订阅表记录未删除，残留数据：[{'id': 7388, 'master_id': 13104, 'slave_id': 13105, 'master_account': '31491', 'slave_account': '31492', 'follow_mode': 1, 'follow_param': 1.0, 'follow_status': 1, 'follow_open': 1, 'follow_close': 1, 'follow_rep': 0, 'placed_type': 0, 'tp_sl': 0, 'follow_direction': 0, 'pause': 0, 'remark': '', 'order_num': 0, 'version': 0, 'deleted': 0, 'creator': None, 'create_time': '2025-10-24 17:00:06', 'updater': None, 'update_time': '2025-10-24 17:00:06', 'remainder': 0, 'fixed_comment': '', 'comment_type': None, 'digits': 0}]\nassert not [{'comment_type': None, 'create_time': '2025-10-24 17:00:06', 'creator': None, 'deleted': 0, ...}]",
+  "statusTrace" : "self = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFFA0>\nvar_manager = <lingkuan_MT4DE.commons.variable_manager.VariableManager object at 0x000002258F7B7280>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F732130>\n\n    @allure.title(\"数据库校验-VPS数据-批量删除跟单账号\")\n    def test_dbdelete_addsalvelist(self, var_manager, db_transaction):\n        # 1. 获取账号总数和所有账号信息\n        vps_addslave_count = var_manager.get_variable(\"vps_addslave_count\", 0)\n        if vps_addslave_count <= 0:\n            pytest.fail(\"未找到需要验证的账号数量，请检查前置步骤\")\n    \n        # 2. 循环验证每个账号的删除状态\n        for i in range(1, vps_addslave_count + 1):\n            with allure.step(f\"验证第{i}个账号是否删除成功\"):\n                # 获取单个账号（与删除的ID对应）\n                account = var_manager.get_variable(f\"vps_user_accounts_{i}\")\n                if not account:\n                    pytest.fail(f\"未找到需要验证的账号：vps_user_accounts_{i}\")\n    \n                # 查询数据库（检查删除标记或记录是否存在）\n                sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n                # 调用轮询等待方法（带时间范围过滤）\n                try:\n                    self.wait_for_database_deletion(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=(account,)\n                    )\n                    allure.attach(f\"跟单账号 {account} 已成功从数据库删除\", \"验证结果\")\n                except TimeoutError as e:\n                    allure.attach(f\"删除超时: {str(e)}\", \"验证结果\")\n                    pytest.fail(f\"删除失败: {str(e)}\")\n    \n                # 验证订阅表是否同步删除\n                sql_sub = f\"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s\"\n                db_data_sub = self.query_database(db_transaction, sql_sub, (account,))\n>               assert not db_data_sub, (\n                    f\"第{i}个账号（{account}）的订阅表记录未删除，\"\n                    f\"残留数据：{db_data_sub}\"\n                )\nE               AssertionError: 第1个账号（31492）的订阅表记录未删除，残留数据：[{'id': 7388, 'master_id': 13104, 'slave_id': 13105, 'master_account': '31491', 'slave_account': '31492', 'follow_mode': 1, 'follow_param': 1.0, 'follow_status': 1, 'follow_open': 1, 'follow_close': 1, 'follow_rep': 0, 'placed_type': 0, 'tp_sl': 0, 'follow_direction': 0, 'pause': 0, 'remark': '', 'order_num': 0, 'version': 0, 'deleted': 0, 'creator': None, 'create_time': '2025-10-24 17:00:06', 'updater': None, 'update_time': '2025-10-24 17:00:06', 'remainder': 0, 'fixed_comment': '', 'comment_type': None, 'digits': 0}]\nE               assert not [{'comment_type': None, 'create_time': '2025-10-24 17:00:06', 'creator': None, 'deleted': 0, ...}]\n\ntest_vps\\test_delete.py:313: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1761296806066,
+      "stop" : 1761296806066,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761296780041,
+      "stop" : 1761296780041,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761296745525,
+      "stop" : 1761296745525,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1761296805838,
+      "stop" : 1761296806066,
+      "duration" : 228
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761296745525,
+      "stop" : 1761296745525,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1761296745525,
+      "stop" : 1761296745525,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 第1个账号（31492）的订阅表记录未删除，残留数据：[{'id': 7388, 'master_id': 13104, 'slave_id': 13105, 'master_account': '31491', 'slave_account': '31492', 'follow_mode': 1, 'follow_param': 1.0, 'follow_status': 1, 'follow_open': 1, 'follow_close': 1, 'follow_rep': 0, 'placed_type': 0, 'tp_sl': 0, 'follow_direction': 0, 'pause': 0, 'remark': '', 'order_num': 0, 'version': 0, 'deleted': 0, 'creator': None, 'create_time': '2025-10-24 17:00:06', 'updater': None, 'update_time': '2025-10-24 17:00:06', 'remainder': 0, 'fixed_comment': '', 'comment_type': None, 'digits': 0}]\nassert not [{'comment_type': None, 'create_time': '2025-10-24 17:00:06', 'creator': None, 'deleted': 0, ...}]",
+    "statusTrace" : "self = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFFA0>\nvar_manager = <lingkuan_MT4DE.commons.variable_manager.VariableManager object at 0x000002258F7B7280>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F732130>\n\n    @allure.title(\"数据库校验-VPS数据-批量删除跟单账号\")\n    def test_dbdelete_addsalvelist(self, var_manager, db_transaction):\n        # 1. 获取账号总数和所有账号信息\n        vps_addslave_count = var_manager.get_variable(\"vps_addslave_count\", 0)\n        if vps_addslave_count <= 0:\n            pytest.fail(\"未找到需要验证的账号数量，请检查前置步骤\")\n    \n        # 2. 循环验证每个账号的删除状态\n        for i in range(1, vps_addslave_count + 1):\n            with allure.step(f\"验证第{i}个账号是否删除成功\"):\n                # 获取单个账号（与删除的ID对应）\n                account = var_manager.get_variable(f\"vps_user_accounts_{i}\")\n                if not account:\n                    pytest.fail(f\"未找到需要验证的账号：vps_user_accounts_{i}\")\n    \n                # 查询数据库（检查删除标记或记录是否存在）\n                sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n                # 调用轮询等待方法（带时间范围过滤）\n                try:\n                    self.wait_for_database_deletion(\n                        db_transaction=db_transaction,\n                        sql=sql,\n                        params=(account,)\n                    )\n                    allure.attach(f\"跟单账号 {account} 已成功从数据库删除\", \"验证结果\")\n                except TimeoutError as e:\n                    allure.attach(f\"删除超时: {str(e)}\", \"验证结果\")\n                    pytest.fail(f\"删除失败: {str(e)}\")\n    \n                # 验证订阅表是否同步删除\n                sql_sub = f\"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s\"\n                db_data_sub = self.query_database(db_transaction, sql_sub, (account,))\n>               assert not db_data_sub, (\n                    f\"第{i}个账号（{account}）的订阅表记录未删除，\"\n                    f\"残留数据：{db_data_sub}\"\n                )\nE               AssertionError: 第1个账号（31492）的订阅表记录未删除，残留数据：[{'id': 7388, 'master_id': 13104, 'slave_id': 13105, 'master_account': '31491', 'slave_account': '31492', 'follow_mode': 1, 'follow_param': 1.0, 'follow_status': 1, 'follow_open': 1, 'follow_close': 1, 'follow_rep': 0, 'placed_type': 0, 'tp_sl': 0, 'follow_direction': 0, 'pause': 0, 'remark': '', 'order_num': 0, 'version': 0, 'deleted': 0, 'creator': None, 'create_time': '2025-10-24 17:00:06', 'updater': None, 'update_time': '2025-10-24 17:00:06', 'remainder': 0, 'fixed_comment': '', 'comment_type': None, 'digits': 0}]\nE               assert not [{'comment_type': None, 'create_time': '2025-10-24 17:00:06', 'creator': None, 'deleted': 0, ...}]\n\ntest_vps\\test_delete.py:313: AssertionError",
+    "steps" : [ {
+      "name" : "验证第1个账号是否删除成功",
+      "time" : {
+        "start" : 1761296806066,
+        "stop" : 1761296806210,
+        "duration" : 144
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 第1个账号（31492）的订阅表记录未删除，残留数据：[{'id': 7388, 'master_id': 13104, 'slave_id': 13105, 'master_account': '31491', 'slave_account': '31492', 'follow_mode': 1, 'follow_param': 1.0, 'follow_status': 1, 'follow_open': 1, 'follow_close': 1, 'follow_rep': 0, 'placed_type': 0, 'tp_sl': 0, 'follow_direction': 0, 'pause': 0, 'remark': '', 'order_num': 0, 'version': 0, 'deleted': 0, 'creator': None, 'create_time': '2025-10-24 17:00:06', 'updater': None, 'update_time': '2025-10-24 17:00:06', 'remainder': 0, 'fixed_comment': '', 'comment_type': None, 'digits': 0}]\nassert not [{'comment_type': None, 'create_time': '2025-10-24 17:00:06', 'creator': None, 'deleted': 0, ...}]\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_MT4DE\\test_vps\\test_delete.py\", line 313, in test_dbdelete_addsalvelist\n    assert not db_data_sub, (\n",
+      "steps" : [ {
+        "name" : "等待数据库记录删除（超时: 5秒）",
+        "time" : {
+          "start" : 1761296806066,
+          "stop" : 1761296806163,
+          "duration" : 97
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "执行数据库查询",
+          "time" : {
+            "start" : 1761296806113,
+            "stop" : 1761296806162,
+            "duration" : 49
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "11b7f45ce134be32",
+            "name" : "执行SQL",
+            "source" : "11b7f45ce134be32.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "cf91f3b238a944bd",
+            "name" : "SQL参数",
+            "source" : "cf91f3b238a944bd.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "等待中（已等待0.1秒）",
+          "time" : {
+            "start" : 1761296806162,
+            "stop" : 1761296806163,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ad867777331bd6d7",
+            "name" : "当前状态",
+            "source" : "ad867777331bd6d7.txt",
+            "type" : "text/plain",
+            "size" : 18
+          }, {
+            "uid" : "fb408775e8a5e5bd",
+            "name" : "超时倒计时",
+            "source" : "fb408775e8a5e5bd.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "删除验证成功",
+          "time" : {
+            "start" : 1761296806163,
+            "stop" : 1761296806163,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4837e35f5402a78e",
+            "name" : "结果说明",
+            "source" : "4837e35f5402a78e.txt",
+            "type" : "text/plain",
+            "size" : 30
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ {
+          "uid" : "67190093badb168f",
+          "name" : "执行SQL",
+          "source" : "67190093badb168f.txt",
+          "type" : "text/plain",
+          "size" : 46
+        }, {
+          "uid" : "690deb093a142b35",
+          "name" : "SQL参数",
+          "source" : "690deb093a142b35.txt",
+          "type" : "text/plain",
+          "size" : 10
+        }, {
+          "uid" : "e4e37c0d5d6adf29",
+          "name" : "查询时间窗口",
+          "source" : "e4e37c0d5d6adf29.txt",
+          "type" : "text/plain",
+          "size" : 61
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 3,
+        "hasContent" : true,
+        "attachmentsCount" : 8,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1761296806163,
+          "stop" : 1761296806210,
+          "duration" : 47
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1761296806209,
+            "stop" : 1761296806210,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4fd156ec8661fc32",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "4fd156ec8661fc32.json",
+            "type" : "application/json",
+            "size" : 640
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ {
+          "uid" : "b8e6efb8f862b140",
+          "name" : "执行SQL",
+          "source" : "b8e6efb8f862b140.txt",
+          "type" : "text/plain",
+          "size" : 88
+        }, {
+          "uid" : "81e7ddf0e28375a2",
+          "name" : "SQL参数",
+          "source" : "81e7ddf0e28375a2.txt",
+          "type" : "text/plain",
+          "size" : 10
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "hasContent" : true,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ {
+        "uid" : "c3851c7cbc969c6c",
+        "name" : "验证结果",
+        "source" : "c3851c7cbc969c6c.attach",
+        "type" : "text/plain",
+        "size" : 46
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 6,
+      "hasContent" : true,
+      "attachmentsCount" : 12,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "dc3de12ccf7eaf7b",
+      "name" : "log",
+      "source" : "dc3de12ccf7eaf7b.txt",
+      "type" : "text/plain",
+      "size" : 1660
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 7,
+    "hasContent" : true,
+    "attachmentsCount" : 13,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1761296806216,
+      "stop" : 1761296806216,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761296856024,
+      "stop" : 1761296856025,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1761296806217,
+      "stop" : 1761296806217,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-删除VPS测试数据"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestDeleteUser"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "45372-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "2185ff2bf980f3e.json",
+  "parameterValues" : [ ]
+}

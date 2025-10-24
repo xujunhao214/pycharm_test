@@ -1,0 +1,513 @@
+{
+  "uid" : "e7fb19c482a889a9",
+  "name" : "数据库校验-VPS数据-删除策略账号",
+  "fullName" : "test_vps.test_delete.TestDeleteUser#test_dbdelete_vpstrader",
+  "historyId" : "89155531c2b282e5d687866eb818525d",
+  "time" : {
+    "start" : 1761296809689,
+    "stop" : 1761296816103,
+    "duration" : 6414
+  },
+  "status" : "failed",
+  "statusMessage" : "Failed: 删除失败: Failed: 等待记录删除超时（5秒）",
+  "statusTrace" : "self = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFF40>\nvar_manager = <lingkuan_MT4DE.commons.variable_manager.VariableManager object at 0x000002258F7B7280>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F94DF10>\n\n    @allure.title(\"数据库校验-VPS数据-删除策略账号\")\n    def test_dbdelete_vpstrader(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否删除成功\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            logging.info(f\"查询条件: table=follow_trader, account={new_user['account']}\")\n    \n            sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n            params = (new_user[\"account\"],)\n            try:\n>               self.wait_for_database_deletion(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params\n                )\n\ntest_vps\\test_delete.py:355: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFF40>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F94DF10>\nsql = 'SELECT * FROM follow_trader WHERE account = %s', params = ('31491',)\ntime_field = None, time_range = 1, order_by = 'create_time DESC', timeout = 5\npoll_interval = 2\n\n    def wait_for_database_deletion(self, db_transaction: pymysql.connections.Connection,\n                                   sql: str,\n                                   params: tuple = (),\n                                   time_field: Optional[str] = None,\n                                   time_range: int = MYSQL_TIME,\n                                   order_by: str = \"create_time DESC\",\n                                   timeout: int = DELETE_WAIT_TIMEOUT,\n                                   poll_interval: int = POLL_INTERVAL) -> None:\n        \"\"\"轮询等待数据库记录删除（带Allure分层提示）\"\"\"\n        start_time = time.time()\n    \n        # 生成固定时间范围（轮询开始时计算一次）\n        poll_start_datetime = datetime.datetime.now()\n        fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(\n            \"%Y-%m-%d %H:%M:%S\")\n        fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(\n            \"%Y-%m-%d %H:%M:%S\")\n    \n        logger.info(f\"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒\")\n    \n        with allure.step(f\"等待数据库记录删除（超时: {timeout}秒）\"):\n            allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n            allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n            allure.attach(f\"固定时间范围: {fixed_time_start} ~ {fixed_time_end}\", \"查询时间窗口\",\n                          allure.attachment_type.TEXT)\n    \n            while time.time() - start_time < timeout:\n                try:\n                    db_transaction.commit()\n    \n                    if time_field:\n                        result = self._execute_query(\n                            db_transaction=db_transaction,\n                            sql=sql,\n                            params=params,\n                            time_field=time_field,\n                            order_by=order_by,\n                            fixed_time_start=fixed_time_start,\n                            fixed_time_end=fixed_time_end,\n                            attach_to_allure=False\n                        )\n                    else:\n                        result = self.query_database(\n                            db_transaction=db_transaction,\n                            sql=sql,\n                            params=params,\n                            order_by=order_by,\n                            attach_to_allure=False\n                        )\n    \n                    elapsed = time.time() - start_time\n                    with allure.step(f\"等待中（已等待{elapsed:.1f}秒）\"):\n                        allure.attach(f\"剩余记录数: {len(result)}\", \"当前状态\", allure.attachment_type.TEXT)\n                        allure.attach(f\"剩余时间: {timeout - elapsed:.1f}秒\", \"超时倒计时\", allure.attachment_type.TEXT)\n    \n                    if not result:\n                        logger.info(\n                            f\"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）| SQL: {sql[:200]}\")\n                        with allure.step(\"删除验证成功\"):\n                            allure.attach(f\"耗时{time.time() - start_time:.1f}秒，记录已删除\", \"结果说明\",\n                                          allure.attachment_type.TEXT)\n                        return\n    \n                    logger.info(\n                        f\"[{self._get_current_time()}] 记录仍存在（已等待{elapsed:.1f}秒）| 剩余时间: {timeout - elapsed:.1f}秒 | 结果数: {len(result)}\")\n                    time.sleep(poll_interval)\n    \n                except Exception as e:\n                    with allure.step(\"删除等待异常\"):\n                        allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n                        allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                        allure.attach(str(e), \"错误详情\", allure.attachment_type.TEXT)\n                    logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                    time.sleep(poll_interval)\n    \n            # 超时处理\n            db_transaction.commit()\n            if time_field:\n                final_result = self._execute_query(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    time_field=time_field,\n                    order_by=order_by,\n                    fixed_time_start=fixed_time_start,\n                    fixed_time_end=fixed_time_end,\n                    attach_to_allure=True\n                )\n            else:\n                final_result = self.query_database(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    order_by=order_by,\n                    attach_to_allure=True\n                )\n    \n            display_count = min(len(final_result), 50)\n            with allure.step(\"等待删除超时\"):\n                allure.attach(f\"超过{timeout}秒仍有{len(final_result)}条记录未删除\", \"超时说明\",\n                              allure.attachment_type.TEXT)\n                allure.attach(\n                    self.serialize_data(final_result[:display_count]),\n                    f\"剩余记录（共{len(final_result)}条）\",\n                    allure.attachment_type.JSON\n                )\n    \n>           raise TimeoutError(f\"Failed: 等待记录删除超时（{timeout}秒）\")\nE           TimeoutError: Failed: 等待记录删除超时（5秒）\n\ncommons\\api_base.py:887: TimeoutError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFF40>\nvar_manager = <lingkuan_MT4DE.commons.variable_manager.VariableManager object at 0x000002258F7B7280>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F94DF10>\n\n    @allure.title(\"数据库校验-VPS数据-删除策略账号\")\n    def test_dbdelete_vpstrader(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否删除成功\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            logging.info(f\"查询条件: table=follow_trader, account={new_user['account']}\")\n    \n            sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n            params = (new_user[\"account\"],)\n            try:\n                self.wait_for_database_deletion(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params\n                )\n                allure.attach(f\"策略账号 {new_user['account']} 已成功从数据库删除\", \"验证结果\")\n            except TimeoutError as e:\n                allure.attach(f\"删除超时: {str(e)}\", \"验证结果\")\n>               pytest.fail(f\"删除失败: {str(e)}\")\nE               Failed: 删除失败: Failed: 等待记录删除超时（5秒）\n\ntest_vps\\test_delete.py:363: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761296780041,
+      "stop" : 1761296780041,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761296745525,
+      "stop" : 1761296745525,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1761296809689,
+      "stop" : 1761296809689,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1761296809461,
+      "stop" : 1761296809688,
+      "duration" : 227
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761296745525,
+      "stop" : 1761296745525,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1761296745525,
+      "stop" : 1761296745525,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "Failed: 删除失败: Failed: 等待记录删除超时（5秒）",
+    "statusTrace" : "self = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFF40>\nvar_manager = <lingkuan_MT4DE.commons.variable_manager.VariableManager object at 0x000002258F7B7280>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F94DF10>\n\n    @allure.title(\"数据库校验-VPS数据-删除策略账号\")\n    def test_dbdelete_vpstrader(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否删除成功\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            logging.info(f\"查询条件: table=follow_trader, account={new_user['account']}\")\n    \n            sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n            params = (new_user[\"account\"],)\n            try:\n>               self.wait_for_database_deletion(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params\n                )\n\ntest_vps\\test_delete.py:355: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFF40>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F94DF10>\nsql = 'SELECT * FROM follow_trader WHERE account = %s', params = ('31491',)\ntime_field = None, time_range = 1, order_by = 'create_time DESC', timeout = 5\npoll_interval = 2\n\n    def wait_for_database_deletion(self, db_transaction: pymysql.connections.Connection,\n                                   sql: str,\n                                   params: tuple = (),\n                                   time_field: Optional[str] = None,\n                                   time_range: int = MYSQL_TIME,\n                                   order_by: str = \"create_time DESC\",\n                                   timeout: int = DELETE_WAIT_TIMEOUT,\n                                   poll_interval: int = POLL_INTERVAL) -> None:\n        \"\"\"轮询等待数据库记录删除（带Allure分层提示）\"\"\"\n        start_time = time.time()\n    \n        # 生成固定时间范围（轮询开始时计算一次）\n        poll_start_datetime = datetime.datetime.now()\n        fixed_time_start = (poll_start_datetime - datetime.timedelta(minutes=time_range)).strftime(\n            \"%Y-%m-%d %H:%M:%S\")\n        fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(\n            \"%Y-%m-%d %H:%M:%S\")\n    \n        logger.info(f\"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒\")\n    \n        with allure.step(f\"等待数据库记录删除（超时: {timeout}秒）\"):\n            allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n            allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n            allure.attach(f\"固定时间范围: {fixed_time_start} ~ {fixed_time_end}\", \"查询时间窗口\",\n                          allure.attachment_type.TEXT)\n    \n            while time.time() - start_time < timeout:\n                try:\n                    db_transaction.commit()\n    \n                    if time_field:\n                        result = self._execute_query(\n                            db_transaction=db_transaction,\n                            sql=sql,\n                            params=params,\n                            time_field=time_field,\n                            order_by=order_by,\n                            fixed_time_start=fixed_time_start,\n                            fixed_time_end=fixed_time_end,\n                            attach_to_allure=False\n                        )\n                    else:\n                        result = self.query_database(\n                            db_transaction=db_transaction,\n                            sql=sql,\n                            params=params,\n                            order_by=order_by,\n                            attach_to_allure=False\n                        )\n    \n                    elapsed = time.time() - start_time\n                    with allure.step(f\"等待中（已等待{elapsed:.1f}秒）\"):\n                        allure.attach(f\"剩余记录数: {len(result)}\", \"当前状态\", allure.attachment_type.TEXT)\n                        allure.attach(f\"剩余时间: {timeout - elapsed:.1f}秒\", \"超时倒计时\", allure.attachment_type.TEXT)\n    \n                    if not result:\n                        logger.info(\n                            f\"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）| SQL: {sql[:200]}\")\n                        with allure.step(\"删除验证成功\"):\n                            allure.attach(f\"耗时{time.time() - start_time:.1f}秒，记录已删除\", \"结果说明\",\n                                          allure.attachment_type.TEXT)\n                        return\n    \n                    logger.info(\n                        f\"[{self._get_current_time()}] 记录仍存在（已等待{elapsed:.1f}秒）| 剩余时间: {timeout - elapsed:.1f}秒 | 结果数: {len(result)}\")\n                    time.sleep(poll_interval)\n    \n                except Exception as e:\n                    with allure.step(\"删除等待异常\"):\n                        allure.attach(sql, \"执行SQL\", allure.attachment_type.TEXT)\n                        allure.attach(str(params), \"SQL参数\", allure.attachment_type.TEXT)\n                        allure.attach(str(e), \"错误详情\", allure.attachment_type.TEXT)\n                    logger.warning(f\"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...\")\n                    time.sleep(poll_interval)\n    \n            # 超时处理\n            db_transaction.commit()\n            if time_field:\n                final_result = self._execute_query(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    time_field=time_field,\n                    order_by=order_by,\n                    fixed_time_start=fixed_time_start,\n                    fixed_time_end=fixed_time_end,\n                    attach_to_allure=True\n                )\n            else:\n                final_result = self.query_database(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params,\n                    order_by=order_by,\n                    attach_to_allure=True\n                )\n    \n            display_count = min(len(final_result), 50)\n            with allure.step(\"等待删除超时\"):\n                allure.attach(f\"超过{timeout}秒仍有{len(final_result)}条记录未删除\", \"超时说明\",\n                              allure.attachment_type.TEXT)\n                allure.attach(\n                    self.serialize_data(final_result[:display_count]),\n                    f\"剩余记录（共{len(final_result)}条）\",\n                    allure.attachment_type.JSON\n                )\n    \n>           raise TimeoutError(f\"Failed: 等待记录删除超时（{timeout}秒）\")\nE           TimeoutError: Failed: 等待记录删除超时（5秒）\n\ncommons\\api_base.py:887: TimeoutError\n\nDuring handling of the above exception, another exception occurred:\n\nself = <lingkuan_MT4DE.test_vps.test_delete.TestDeleteUser object at 0x000002258F5CFF40>\nvar_manager = <lingkuan_MT4DE.commons.variable_manager.VariableManager object at 0x000002258F7B7280>\ndb_transaction = <pymysql.connections.Connection object at 0x000002258F94DF10>\n\n    @allure.title(\"数据库校验-VPS数据-删除策略账号\")\n    def test_dbdelete_vpstrader(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否删除成功\"):\n            new_user = var_manager.get_variable(\"new_user\")\n            logging.info(f\"查询条件: table=follow_trader, account={new_user['account']}\")\n    \n            sql = f\"SELECT * FROM follow_trader WHERE account = %s\"\n            params = (new_user[\"account\"],)\n            try:\n                self.wait_for_database_deletion(\n                    db_transaction=db_transaction,\n                    sql=sql,\n                    params=params\n                )\n                allure.attach(f\"策略账号 {new_user['account']} 已成功从数据库删除\", \"验证结果\")\n            except TimeoutError as e:\n                allure.attach(f\"删除超时: {str(e)}\", \"验证结果\")\n>               pytest.fail(f\"删除失败: {str(e)}\")\nE               Failed: 删除失败: Failed: 等待记录删除超时（5秒）\n\ntest_vps\\test_delete.py:363: Failed",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否删除成功",
+      "time" : {
+        "start" : 1761296809689,
+        "stop" : 1761296816102,
+        "duration" : 6413
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 删除失败: Failed: 等待记录删除超时（5秒）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_MT4DE\\test_vps\\test_delete.py\", line 363, in test_dbdelete_vpstrader\n    pytest.fail(f\"删除失败: {str(e)}\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "等待数据库记录删除（超时: 5秒）",
+        "time" : {
+          "start" : 1761296809689,
+          "stop" : 1761296816102,
+          "duration" : 6413
+        },
+        "status" : "broken",
+        "statusMessage" : "TimeoutError: Failed: 等待记录删除超时（5秒）\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_MT4DE\\commons\\api_base.py\", line 887, in wait_for_database_deletion\n    raise TimeoutError(f\"Failed: 等待记录删除超时（{timeout}秒）\")\n",
+        "steps" : [ {
+          "name" : "执行数据库查询",
+          "time" : {
+            "start" : 1761296809736,
+            "stop" : 1761296809787,
+            "duration" : 51
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "aea68330e871223c",
+            "name" : "执行SQL",
+            "source" : "aea68330e871223c.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "b8c9782cd2b50a09",
+            "name" : "SQL参数",
+            "source" : "b8c9782cd2b50a09.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "等待中（已等待0.1秒）",
+          "time" : {
+            "start" : 1761296809787,
+            "stop" : 1761296809788,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "91453ed57e51fb67",
+            "name" : "当前状态",
+            "source" : "91453ed57e51fb67.txt",
+            "type" : "text/plain",
+            "size" : 18
+          }, {
+            "uid" : "a13323f8f978cf3",
+            "name" : "超时倒计时",
+            "source" : "a13323f8f978cf3.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行数据库查询",
+          "time" : {
+            "start" : 1761296811845,
+            "stop" : 1761296811891,
+            "duration" : 46
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "357cbcd01f1a206f",
+            "name" : "执行SQL",
+            "source" : "357cbcd01f1a206f.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "b40a89f8860e4a38",
+            "name" : "SQL参数",
+            "source" : "b40a89f8860e4a38.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "等待中（已等待2.2秒）",
+          "time" : {
+            "start" : 1761296811892,
+            "stop" : 1761296811892,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b022b3c97dd105dd",
+            "name" : "当前状态",
+            "source" : "b022b3c97dd105dd.txt",
+            "type" : "text/plain",
+            "size" : 18
+          }, {
+            "uid" : "b60ce48b8705b9b5",
+            "name" : "超时倒计时",
+            "source" : "b60ce48b8705b9b5.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行数据库查询",
+          "time" : {
+            "start" : 1761296813951,
+            "stop" : 1761296813997,
+            "duration" : 46
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "7f717004870f8133",
+            "name" : "执行SQL",
+            "source" : "7f717004870f8133.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "8970eaa70cf3bcef",
+            "name" : "SQL参数",
+            "source" : "8970eaa70cf3bcef.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "等待中（已等待4.3秒）",
+          "time" : {
+            "start" : 1761296813997,
+            "stop" : 1761296813997,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "6f5a2dcb48075ebd",
+            "name" : "当前状态",
+            "source" : "6f5a2dcb48075ebd.txt",
+            "type" : "text/plain",
+            "size" : 18
+          }, {
+            "uid" : "7fec4b37e68633b9",
+            "name" : "超时倒计时",
+            "source" : "7fec4b37e68633b9.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行数据库查询",
+          "time" : {
+            "start" : 1761296816053,
+            "stop" : 1761296816101,
+            "duration" : 48
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "数据库查询结果",
+            "time" : {
+              "start" : 1761296816100,
+              "stop" : 1761296816101,
+              "duration" : 1
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "ca2befb0462e6dbc",
+              "name" : "查询结果（共1条，显示前50条）",
+              "source" : "ca2befb0462e6dbc.json",
+              "type" : "application/json",
+              "size" : 1064
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 1,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "da536d4cfb3d107e",
+            "name" : "执行SQL",
+            "source" : "da536d4cfb3d107e.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "a157e9a22d7f0460",
+            "name" : "SQL参数",
+            "source" : "a157e9a22d7f0460.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "等待删除超时",
+          "time" : {
+            "start" : 1761296816101,
+            "stop" : 1761296816102,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ce22e59bb8ed009e",
+            "name" : "超时说明",
+            "source" : "ce22e59bb8ed009e.txt",
+            "type" : "text/plain",
+            "size" : 35
+          }, {
+            "uid" : "9dc5cee245f0184a",
+            "name" : "剩余记录（共1条）",
+            "source" : "9dc5cee245f0184a.json",
+            "type" : "application/json",
+            "size" : 1064
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ {
+          "uid" : "c15dae09982d0409",
+          "name" : "执行SQL",
+          "source" : "c15dae09982d0409.txt",
+          "type" : "text/plain",
+          "size" : 46
+        }, {
+          "uid" : "a33bb59520d02f6a",
+          "name" : "SQL参数",
+          "source" : "a33bb59520d02f6a.txt",
+          "type" : "text/plain",
+          "size" : 10
+        }, {
+          "uid" : "7374cebabfb96626",
+          "name" : "查询时间窗口",
+          "source" : "7374cebabfb96626.txt",
+          "type" : "text/plain",
+          "size" : 61
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 9,
+        "hasContent" : true,
+        "attachmentsCount" : 20,
+        "shouldDisplayMessage" : true
+      } ],
+      "attachments" : [ {
+        "uid" : "c7a4efb5748f627c",
+        "name" : "验证结果",
+        "source" : "c7a4efb5748f627c.attach",
+        "type" : "text/plain",
+        "size" : 56
+      } ],
+      "parameters" : [ ],
+      "stepsCount" : 10,
+      "hasContent" : true,
+      "attachmentsCount" : 21,
+      "shouldDisplayMessage" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "c3455ab0a10f8192",
+      "name" : "log",
+      "source" : "c3455ab0a10f8192.txt",
+      "type" : "text/plain",
+      "size" : 5838
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 11,
+    "hasContent" : true,
+    "attachmentsCount" : 22,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761296856024,
+      "stop" : 1761296856025,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1761296816122,
+      "stop" : 1761296816122,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1761296816122,
+      "stop" : 1761296816123,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-删除VPS测试数据"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_delete"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestDeleteUser"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "45372-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_delete"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "e7fb19c482a889a9.json",
+  "parameterValues" : [ ]
+}

@@ -2114,7 +2114,7 @@ class TestVPSMasOrdersend:
                 print("order_no:", order_no)
 
         @allure.title("交易下单-停止操作")
-        def test_MT5cloudTrader_cloudStopOrder(self, logged_session, var_manager):
+        def test_cloudTrader_cloudStopOrder(self, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("发送停止操作请求"):
                 params = {

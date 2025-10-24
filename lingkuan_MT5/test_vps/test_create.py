@@ -26,7 +26,7 @@ class TestCreate(APITestBase):
             "serverNode": new_user["serverNode"],
             "remark": new_user["remark"],
             "sort": "12",
-            "vpsDescs": []
+            "vpsDescs": None
         }
         response = self.send_post_request(
             logged_session,
@@ -375,7 +375,7 @@ class TestCreate(APITestBase):
             "ipAddress": add_VPS["ipAddress"],
             "name": "测试",
             "expiryDate": DATETIME_ENDTIME,
-            "remark": "MT5测试vps",
+            "remark": "MT5测试VPS",
             "isOpen": 1,
             "isActive": 1,
             "roleList": MT5vps_user_data,
@@ -553,7 +553,7 @@ class TestCreate(APITestBase):
             "account": MT5vps_user_accounts_1,
             "password": encrypted_password,
             "remark": new_user["remark"],
-            "followDirection": 1,
+            "followDirection": 0,
             "followMode": 1,
             "remainder": 0,
             "followParam": 1,

@@ -184,6 +184,8 @@ class TestVPSCoreFunctionality:
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
+            time.sleep(10)
+
         @pytest.mark.url("vps")
         @allure.title("策略账号再次平仓操作")
         def test_trader_orderclose2(self, var_manager, logged_session):
@@ -525,7 +527,7 @@ class TestVPSFollowDirection:
                     "password": encrypted_password,
                     "platformType": 1,
                     "remark": "",
-                    "followDirection": 1,
+                    "followDirection": 0,
                     "followMode": 1,
                     "remainder": 0,
                     "followParam": 1,
@@ -1050,7 +1052,7 @@ class TestVPSOrderType:
 
             for attempt in range(max_retries):
                 try:
-                    url = "https://mt4.mtapi.io/Connect?user=300151&password=Test123456!&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+                    url = "https://mt4.mtapi.io/Connect?user=300151&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
 
                     headers = {
                         'Authorization': 'e5f9f574-fd0a-42bd-904b-3a7a088de27e',
@@ -1434,7 +1436,7 @@ class TestVPSCloseRemark:
                     "password": encrypted_password,
                     "platformType": 1,
                     "remark": "",
-                    "followDirection": 1,
+                    "followDirection": 0,
                     "followMode": 1,
                     "remainder": 0,
                     "followParam": 1,

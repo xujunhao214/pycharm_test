@@ -258,7 +258,8 @@ class TestCloudCoreFunctionality:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-订单不等于开仓总订单数量"):
@@ -532,7 +533,8 @@ class TestCloudFollowDirection:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-有订单"):
@@ -770,7 +772,8 @@ class TestCloudFollowDirection:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-有订单"):
@@ -1020,7 +1023,8 @@ class TestCloudOrderQuantityControl:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-有四个订单"):
@@ -1257,7 +1261,8 @@ class TestCloudOrderType:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
@@ -1520,7 +1525,8 @@ class TestCloudOrderType:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-有订单"):
@@ -1751,7 +1757,8 @@ class TestCloudOrderType:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
@@ -1992,7 +1999,8 @@ class TestCloudCloseRemark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
@@ -2319,7 +2327,8 @@ class TestCloudClose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
@@ -2634,7 +2643,8 @@ class TestCloudClose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
@@ -2769,7 +2779,8 @@ class TestCloudClose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
 
             with allure.step("执行复制平仓数据校验-2个订单"):
