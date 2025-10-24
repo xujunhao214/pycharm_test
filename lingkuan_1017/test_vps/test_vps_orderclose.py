@@ -184,6 +184,8 @@ class TestVPSCoreFunctionality:
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
+            time.sleep(10)
+
         @pytest.mark.url("vps")
         @allure.title("策略账号再次平仓操作")
         def test_trader_orderclose2(self, var_manager, logged_session):

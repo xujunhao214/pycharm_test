@@ -1,11 +1,10 @@
-import time
-import math
 import allure
 import logging
 import pytest
-from lingkuan_1017.VAR.VAR import *
+import time
 from lingkuan_1017.conftest import var_manager
 from lingkuan_1017.commons.api_base import *
+from lingkuan_1017.commons.redis_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -13,48 +12,67 @@ SKIP_REASON = "跳过此用例"
 
 @allure.feature("VPS策略下单-开仓的场景校验")
 class TestVPSOrdersend(APITestBase):
-    @pytest.mark.url("vps")
-    @allure.title("修改跟单账号-手数取余-取小数")
-    def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
-        with allure.step("1. 修改跟单账号"):
-            # remainder  0 : 四舍五入  1：取小数
+    @allure.title("出现漏平-redis数据和数据库的数据做比对")
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_close):
+        with allure.step("1. 获取订单详情表账号数据"):
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            platformId = var_manager.get_variable("platformId")
-            vps_template_id2 = var_manager.get_variable("vps_template_id2")
-            data = {
-                "traderId": vps_trader_id,
-                "platform": new_user["platform"],
-                "account": vps_user_accounts_1,
-                "password": encrypted_password,
-                "platformType": 0,
-                "remark": "",
-                "followDirection": 0,
-                "followMode": 1,
-                "remainder": 1,
-                "followParam": "0.25",
-                "placedType": 0,
-                "templateId": vps_template_id2,
-                "followStatus": 1,
-                "followOpen": 1,
-                "followClose": 1,
-                "followRep": 0,
-                "fixedComment": "",
-                "commentType": "",
-                "digits": 0,
-                "cfd": "",
-                "forex": "",
-                "abRemark": "",
-                "id": vps_addslave_id,
-                "platformId": platformId
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/follow/updateSlave',
-                json_data=data
+            symbol = trader_ordersend["symbol"]
+
+            sql = f"""
+                               SELECT * 
+                               FROM follow_order_detail 
+                               WHERE symbol LIKE %s 
+                                 AND account = %s
+                                 AND comment = %s
+                               """
+            params = (
+                f"%{symbol}%",
+                new_user["account"],
+                "changjing2"
             )
-        with allure.step("2. 验证响应状态码和内容"):
-            self.assert_response_status(response, 200, "修改跟单账号失败")
-            self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.query_database_with_time(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params,
+                time_field="create_time",
+                time_range=30
+            )
+
+        with allure.step("2. 转换Redis数据为可比较格式"):
+            if not redis_order_data_close:
+                pytest.fail("Redis中未查询到订单数据")
+
+            # 转换Redis数据为与数据库一致的格式
+            vps_redis_comparable_list_level = convert_redis_orders_to_comparable_list(redis_order_data_close)
+            logging.info(f"转换后的Redis数据: {vps_redis_comparable_list_level}")
+
+            # 将转换后的数据存入变量管理器
+            var_manager.set_runtime_variable("vps_redis_comparable_list_level", vps_redis_comparable_list_level)
+
+        with allure.step("3. 比较Redis与数据库数据"):
+            # 假设db_data是之前从数据库查询的结果
+            if not db_data:
+                pytest.fail("数据库中未查询到订单数据")
+
+            # 提取数据库中的关键字段（根据实际数据库表结构调整）
+            db_comparable_list = [
+                {
+                    "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
+                    "magical": record["magical"],  # 数据库magical → 统一字段magical
+                    "size": float(record["size"]),  # 数据库size → 统一字段size
+                    "open_price": float(record["open_price"]),
+                    "symbol": record["symbol"]
+                }
+                for record in db_data
+            ]
+            logging.info(f"数据库转换后: {db_comparable_list}")
+            # 比较两个列表（可根据需要调整比较逻辑）
+            self.assert_data_lists_equal(
+                actual=vps_redis_comparable_list_level,
+                expected=db_comparable_list,
+                fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                tolerance=1e-6
+            )

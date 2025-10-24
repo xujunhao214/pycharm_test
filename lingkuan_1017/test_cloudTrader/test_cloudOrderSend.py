@@ -180,7 +180,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-        @allure.title("数据库校验-云策略-复制下单数据")
+        @allure.title("数据库校验-云跟单-复制下单数据")
         def test_copy_verify_dbadd(self, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
@@ -1376,7 +1376,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-        @allure.title("数据库校验-云策略-复制下单数据")
+        @allure.title("数据库校验-云跟单-复制下单数据")
         def test_copy_verify_dbadd(self, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
@@ -1552,7 +1552,7 @@ class TestCloudStrategyOrder:
                     logging.info(f"详情总手数验证通过: {total}")
 
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
-        @allure.title("数据库校验-云策略-复制下单平仓数据")
+        @allure.title("数据库校验-云跟单-复制下单平仓数据")
         def test_copy_verify_close_dbadd(self, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
@@ -2151,7 +2151,7 @@ class TestCloudStrategyOrder:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-        @allure.title("数据库校验-云策略-分配下单平仓数据")
+        @allure.title("数据库校验-云跟单-分配下单平仓数据")
         def test_allocation_verify_close_dbadd(self, var_manager, db_transaction):
             """验证分配下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询平仓订单数据"):
