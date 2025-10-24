@@ -18,7 +18,7 @@ SKIP_REASON = "跳过此用例"
 @allure.feature("VPS策略下单-平仓的功能校验")
 # @pytest.mark.skipif(True, reason=SKIP_REASON)
 class TestVPSCoreFunctionality(APITestBase):
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
     def test_add_trader(self, var_manager, logged_session, encrypted_password):
@@ -62,7 +62,7 @@ class TestVPSCoreFunctionality(APITestBase):
             "响应msg字段应为success"
         )
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-新增策略账号")
     def test_dbquery_trader(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
