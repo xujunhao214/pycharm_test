@@ -1,0 +1,398 @@
+{
+  "uid" : "e259949320126aa0",
+  "name" : "跟单软件看板-VPS数据-策略开仓",
+  "fullName" : "test_vps.test_vps_ordersend.TestVPSOrderSend4#test_trader_orderSend",
+  "historyId" : "56237fff308a8c21835dbddbe9e49423",
+  "time" : {
+    "start" : 1761527793655,
+    "stop" : 1761527796905,
+    "duration" : 3250
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数0.01-1，总手数5\n      2. 校验账号的数据是否正确\n      3. 进行平仓\n      4. 校验账号的数据是否正确\n    - 预期结果：账号的数据正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有云策略和云跟单\n  1. 进行开仓，手数0.01-1，总手数5\n  2. 校验账号的数据是否正确\n  3. 进行平仓\n  4. 校验账号的数据是否正确\n- 预期结果：账号的数据正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 响应msg字段应为success（JSON断言失败）",
+  "statusTrace" : "self = <lingkuan_1024.test_vps.test_vps_ordersend.TestVPSOrdersend.TestVPSOrderSend4 object at 0x000001ABE07869D0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n>           assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\nE               AssertionError: Failed: 响应msg字段应为success（JSON路径值不匹配）\n\ncommons\\api_base.py:416: AssertionError\n\nThe above exception was the direct cause of the following exception:\n\nself = <lingkuan_1024.test_vps.test_vps_ordersend.TestVPSOrdersend.TestVPSOrderSend4 object at 0x000001ABE07869D0>\nvar_manager = <lingkuan_1024.commons.variable_manager.VariableManager object at 0x000001ABE01C5640>\nlogged_session = <lingkuan_1024.commons.session.EnvironmentSession object at 0x000001ABE01C5280>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"跟单软件看板-VPS数据-策略开仓\")\n    def test_trader_orderSend(self, var_manager, logged_session):\n        # 1. 发送策略开仓请求\n        trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        data = {\n            \"symbol\": trader_ordersend[\"symbol\"],\n            \"placedType\": 0,\n            \"remark\": \"changjing4\",\n            \"intervalTime\": 100,\n            \"type\": 0,\n            \"totalNum\": \"\",\n            \"totalSzie\": \"5\",\n            \"startSize\": \"0.01\",\n            \"endSize\": \"1\",\n            \"traderId\": vps_trader_id\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/subcontrol/trader/orderSend',\n            json_data=data,\n        )\n    \n        # 2. 验证响应状态码和内容\n        self.assert_response_status(\n            response,\n            200,\n            \"策略开仓失败\"\n        )\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_vps\\test_vps_ordersend.py:1460: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_1024.test_vps.test_vps_ordersend.TestVPSOrdersend.TestVPSOrderSend4 object at 0x000001ABE07869D0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 响应msg字段应为success（JSON断言失败）\n\ncommons\\api_base.py:425: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1761527793314,
+      "stop" : 1761527793314,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761527481945,
+      "stop" : 1761527481945,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761527481945,
+      "stop" : 1761527481945,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1761527793314,
+      "stop" : 1761527793655,
+      "duration" : 341
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761527481945,
+      "stop" : 1761527481946,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数0.01-1，总手数5\n      2. 校验账号的数据是否正确\n      3. 进行平仓\n      4. 校验账号的数据是否正确\n    - 预期结果：账号的数据正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 响应msg字段应为success（JSON断言失败）",
+    "statusTrace" : "self = <lingkuan_1024.test_vps.test_vps_ordersend.TestVPSOrdersend.TestVPSOrderSend4 object at 0x000001ABE07869D0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n>           assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\nE               AssertionError: Failed: 响应msg字段应为success（JSON路径值不匹配）\n\ncommons\\api_base.py:416: AssertionError\n\nThe above exception was the direct cause of the following exception:\n\nself = <lingkuan_1024.test_vps.test_vps_ordersend.TestVPSOrdersend.TestVPSOrderSend4 object at 0x000001ABE07869D0>\nvar_manager = <lingkuan_1024.commons.variable_manager.VariableManager object at 0x000001ABE01C5640>\nlogged_session = <lingkuan_1024.commons.session.EnvironmentSession object at 0x000001ABE01C5280>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"跟单软件看板-VPS数据-策略开仓\")\n    def test_trader_orderSend(self, var_manager, logged_session):\n        # 1. 发送策略开仓请求\n        trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n        vps_trader_id = var_manager.get_variable(\"vps_trader_id\")\n        data = {\n            \"symbol\": trader_ordersend[\"symbol\"],\n            \"placedType\": 0,\n            \"remark\": \"changjing4\",\n            \"intervalTime\": 100,\n            \"type\": 0,\n            \"totalNum\": \"\",\n            \"totalSzie\": \"5\",\n            \"startSize\": \"0.01\",\n            \"endSize\": \"1\",\n            \"traderId\": vps_trader_id\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/subcontrol/trader/orderSend',\n            json_data=data,\n        )\n    \n        # 2. 验证响应状态码和内容\n        self.assert_response_status(\n            response,\n            200,\n            \"策略开仓失败\"\n        )\n>       self.assert_json_value(\n            response,\n            \"$.msg\",\n            \"success\",\n            \"响应msg字段应为success\"\n        )\n\ntest_vps\\test_vps_ordersend.py:1460: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_1024.test_vps.test_vps_ordersend.TestVPSOrdersend.TestVPSOrderSend4 object at 0x000001ABE07869D0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '响应msg字段应为success'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 响应msg字段应为success（JSON断言失败）\n\ncommons\\api_base.py:425: AssertionError",
+    "steps" : [ {
+      "name" : "执行 POST 请求",
+      "time" : {
+        "start" : 1761527793655,
+        "stop" : 1761527796898,
+        "duration" : 3243
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "请求详情",
+        "time" : {
+          "start" : 1761527793655,
+          "stop" : 1761527793656,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "aab7dbe8f2b3952",
+          "name" : "请求URL",
+          "source" : "aab7dbe8f2b3952.txt",
+          "type" : "text/plain",
+          "size" : 28
+        }, {
+          "uid" : "24c5fb8e3f115122",
+          "name" : "请求头",
+          "source" : "24c5fb8e3f115122.json",
+          "type" : "application/json",
+          "size" : 234
+        }, {
+          "uid" : "471a229f41670d14",
+          "name" : "请求体（JSON）",
+          "source" : "471a229f41670d14.json",
+          "type" : "application/json",
+          "size" : 205
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      }, {
+        "name" : "响应详情",
+        "time" : {
+          "start" : 1761527793883,
+          "stop" : 1761527793884,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "4ed731e12a16f831",
+          "name" : "响应状态码",
+          "source" : "4ed731e12a16f831.txt",
+          "type" : "text/plain",
+          "size" : 3
+        }, {
+          "uid" : "1b62a0eba4306774",
+          "name" : "响应头",
+          "source" : "1b62a0eba4306774.json",
+          "type" : "application/json",
+          "size" : 526
+        }, {
+          "uid" : "6754c281a499588b",
+          "name" : "响应体（JSON）",
+          "source" : "6754c281a499588b.json",
+          "type" : "application/json",
+          "size" : 88
+        } ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 0,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "断言响应状态码",
+      "time" : {
+        "start" : 1761527796898,
+        "stop" : 1761527796899,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "9fbbba7fa61bc9d0",
+        "name" : "请求URL",
+        "source" : "9fbbba7fa61bc9d0.txt",
+        "type" : "text/plain",
+        "size" : 51
+      }, {
+        "uid" : "d26a11ae8f5c98fa",
+        "name" : "预期状态码",
+        "source" : "d26a11ae8f5c98fa.txt",
+        "type" : "text/plain",
+        "size" : 14
+      }, {
+        "uid" : "884927a834e28a7a",
+        "name" : "实际状态码",
+        "source" : "884927a834e28a7a.txt",
+        "type" : "text/plain",
+        "size" : 14
+      }, {
+        "uid" : "e6a5e51672712ff7",
+        "name" : "响应内容",
+        "source" : "e6a5e51672712ff7.txt",
+        "type" : "text/plain",
+        "size" : 75
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "断言JSON路径: $.msg",
+      "time" : {
+        "start" : 1761527796903,
+        "stop" : 1761527796904,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "e5503d5b8f517c1a",
+        "name" : "请求URL",
+        "source" : "e5503d5b8f517c1a.txt",
+        "type" : "text/plain",
+        "size" : 51
+      }, {
+        "uid" : "b91f88ed9a742405",
+        "name" : "预期值",
+        "source" : "b91f88ed9a742405.txt",
+        "type" : "text/plain",
+        "size" : 20
+      }, {
+        "uid" : "36e214608a8d32cd",
+        "name" : "实际值",
+        "source" : "36e214608a8d32cd.txt",
+        "type" : "text/plain",
+        "size" : 55
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "JSON断言失败: $.msg",
+      "time" : {
+        "start" : 1761527796904,
+        "stop" : 1761527796905,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "f482f6e3021ccc45",
+        "name" : "JSON路径",
+        "source" : "f482f6e3021ccc45.txt",
+        "type" : "text/plain",
+        "size" : 5
+      }, {
+        "uid" : "b8b68af997a7266d",
+        "name" : "预期值",
+        "source" : "b8b68af997a7266d.txt",
+        "type" : "text/plain",
+        "size" : 7
+      }, {
+        "uid" : "9d37cbdaa6e59c10",
+        "name" : "响应内容",
+        "source" : "9d37cbdaa6e59c10.txt",
+        "type" : "text/plain",
+        "size" : 75
+      } ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 0,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "e2eb31e5409e750d",
+      "name" : "log",
+      "source" : "e2eb31e5409e750d.txt",
+      "type" : "text/plain",
+      "size" : 1758
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 6,
+    "attachmentsCount" : 17,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1761527796941,
+      "stop" : 1761527796941,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1761527796941,
+      "stop" : 1761527796941,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761528373640,
+      "stop" : 1761528373641,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-开仓的场景校验"
+  }, {
+    "name" : "story",
+    "value" : "场景4：复制下单-手数0.01-1，总手数5"
+  }, {
+    "name" : "tag",
+    "value" : "url('vps')"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_ordersend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSOrdersend"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "31120-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vps_ordersend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ "url('vps')" ]
+  },
+  "source" : "e259949320126aa0.json",
+  "parameterValues" : [ ]
+}
