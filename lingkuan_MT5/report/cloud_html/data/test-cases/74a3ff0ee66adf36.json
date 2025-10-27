@@ -1,0 +1,696 @@
+{
+  "uid" : "74a3ff0ee66adf36",
+  "name" : "数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单",
+  "fullName" : "test_cloudTrader.test_lianxi.TestcloudtradingOrders6#test_dbquery_addsalve_orderSendclose",
+  "historyId" : "f5b70244a5d33eb8b4092c831d2d31e7",
+  "time" : {
+    "start" : 1761547846326,
+    "stop" : 1761547850645,
+    "duration" : 4319
+  },
+  "description" : "\n        ### 测试说明\n        - 前置条件：有云策略和云跟单\n          1. 进行开仓，手数范围：0.1-1，总订单数量4\n          2. 进行平仓-订单数量2\n          3. 校验平仓的订单数，应该等于2\n          4. 进行平仓-订单数量2\n          5. 校验平仓的订单数,等于4\n        - 预期结果：平仓的订单数量功能正确\n        ",
+  "descriptionHtml" : "<pre><code>    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围：0.1-1，总订单数量4\n      2. 进行平仓-订单数量2\n      3. 校验平仓的订单数，应该等于2\n      4. 进行平仓-订单数量2\n      5. 校验平仓的订单数,等于4\n    - 预期结果：平仓的订单数量功能正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "Failed: 校验失败: 平仓的订单数量功能正确，应该有2个平仓订单\n\n实际: 4\n操作: ==\n预期: 2",
+  "statusTrace" : "self = <lingkuan_MT5.test_cloudTrader.test_lianxi.TestCloudStrategyOrder.TestcloudtradingOrders6 object at 0x000002893AD2B5B0>\nvar_manager = <lingkuan_MT5.commons.variable_manager.VariableManager object at 0x000002893AD2B340>\ndb_transaction = <pymysql.connections.Connection object at 0x000002893AF3C610>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单\")\n    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            MT5cloudTrader_user_accounts_4 = var_manager.get_variable(\"MT5cloudTrader_user_accounts_4\")\n            MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable(\"MT5cloudTrader_MT5vps_ids_3\")\n            sql = f\"\"\"\n                       SELECT\n                           fod.size,\n                           fod.close_no,\n                           fod.magical,\n                           fod.open_price,\n                           fod.comment,\n                           fod.symbol,\n                           fod.order_no,\n                           fod.close_time,\n                           foi.true_total_lots,\n                           foi.order_no,\n                           foi.operation_type,\n                           foi.create_time,\n                           foi.status,\n                           foi.min_lot_size,\n                           foi.max_lot_size,\n                           foi.total_lots,\n                           foi.master_order,\n                           foi.total_orders\n                       FROM\n                           follow_order_detail fod\n                       INNER JOIN\n                           follow_order_instruct foi\n                       ON\n                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                       WHERE foi.operation_type = %s\n                           AND fod.account = %s\n                           AND fod.trader_id = %s\n                           AND fod.comment = %s\n                           \"\"\"\n            params = (\n                '1',\n                MT5cloudTrader_user_accounts_4,\n                MT5cloudTrader_MT5vps_ids_3,\n                'changjing6',\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n>           self.verify_data(\n                actual_value=len(db_data),\n                expected_value=2,\n                op=CompareOp.EQ,\n                message=f\"平仓的订单数量功能正确，应该有2个平仓订单\",\n                attachment_name=\"订单数量详情\"\n            )\n\ntest_cloudTrader\\test_lianxi.py:556: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_MT5.test_cloudTrader.test_lianxi.TestCloudStrategyOrder.TestcloudtradingOrders6 object at 0x000002893AD2B5B0>\nactual_value = 4, expected_value = 2, op = <CompareOp.EQ: '=='>\nmessage = '平仓的订单数量功能正确，应该有2个平仓订单', attachment_name = '订单数量详情'\nattachment_type = 'text/plain', use_isclose = True, rel_tol = 1e-09, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                pytest.fail(\n                    f\"校验类型错误: {str(e)}\\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}\")\n    \n            # 生成详细提示信息（包含容差参数）\n            detail_msg = (\n                f\"\\n实际: {actual_value}\\n\"\n                f\"操作: {op.value}\\n\"\n                f\"预期: {expected_value}\\n\"\n            )\n    \n            # 添加allure.attach，将信息写入报告\n            allure.attach(\n                detail_msg,  # 附件内容\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n>               pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\nE               Failed: 校验失败: 平仓的订单数量功能正确，应该有2个平仓订单\nE               \nE               实际: 4\nE               操作: ==\nE               预期: 2\n\ncommons\\api_base.py:1393: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1761547819113,
+      "stop" : 1761547819113,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761547815456,
+      "stop" : 1761547815456,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1761547846082,
+      "stop" : 1761547846325,
+      "duration" : 243
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761547815456,
+      "stop" : 1761547815457,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1761547846325,
+      "stop" : 1761547846325,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761547815456,
+      "stop" : 1761547815456,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n        ### 测试说明\n        - 前置条件：有云策略和云跟单\n          1. 进行开仓，手数范围：0.1-1，总订单数量4\n          2. 进行平仓-订单数量2\n          3. 校验平仓的订单数，应该等于2\n          4. 进行平仓-订单数量2\n          5. 校验平仓的订单数,等于4\n        - 预期结果：平仓的订单数量功能正确\n        ",
+    "status" : "failed",
+    "statusMessage" : "Failed: 校验失败: 平仓的订单数量功能正确，应该有2个平仓订单\n\n实际: 4\n操作: ==\n预期: 2",
+    "statusTrace" : "self = <lingkuan_MT5.test_cloudTrader.test_lianxi.TestCloudStrategyOrder.TestcloudtradingOrders6 object at 0x000002893AD2B5B0>\nvar_manager = <lingkuan_MT5.commons.variable_manager.VariableManager object at 0x000002893AD2B340>\ndb_transaction = <pymysql.connections.Connection object at 0x000002893AF3C610>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查-有2个订单\")\n    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            MT5cloudTrader_user_accounts_4 = var_manager.get_variable(\"MT5cloudTrader_user_accounts_4\")\n            MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable(\"MT5cloudTrader_MT5vps_ids_3\")\n            sql = f\"\"\"\n                       SELECT\n                           fod.size,\n                           fod.close_no,\n                           fod.magical,\n                           fod.open_price,\n                           fod.comment,\n                           fod.symbol,\n                           fod.order_no,\n                           fod.close_time,\n                           foi.true_total_lots,\n                           foi.order_no,\n                           foi.operation_type,\n                           foi.create_time,\n                           foi.status,\n                           foi.min_lot_size,\n                           foi.max_lot_size,\n                           foi.total_lots,\n                           foi.master_order,\n                           foi.total_orders\n                       FROM\n                           follow_order_detail fod\n                       INNER JOIN\n                           follow_order_instruct foi\n                       ON\n                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                       WHERE foi.operation_type = %s\n                           AND fod.account = %s\n                           AND fod.trader_id = %s\n                           AND fod.comment = %s\n                           \"\"\"\n            params = (\n                '1',\n                MT5cloudTrader_user_accounts_4,\n                MT5cloudTrader_MT5vps_ids_3,\n                'changjing6',\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"foi.create_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n>           self.verify_data(\n                actual_value=len(db_data),\n                expected_value=2,\n                op=CompareOp.EQ,\n                message=f\"平仓的订单数量功能正确，应该有2个平仓订单\",\n                attachment_name=\"订单数量详情\"\n            )\n\ntest_cloudTrader\\test_lianxi.py:556: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_MT5.test_cloudTrader.test_lianxi.TestCloudStrategyOrder.TestcloudtradingOrders6 object at 0x000002893AD2B5B0>\nactual_value = 4, expected_value = 2, op = <CompareOp.EQ: '=='>\nmessage = '平仓的订单数量功能正确，应该有2个平仓订单', attachment_name = '订单数量详情'\nattachment_type = 'text/plain', use_isclose = True, rel_tol = 1e-09, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                pytest.fail(\n                    f\"校验类型错误: {str(e)}\\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}\")\n    \n            # 生成详细提示信息（包含容差参数）\n            detail_msg = (\n                f\"\\n实际: {actual_value}\\n\"\n                f\"操作: {op.value}\\n\"\n                f\"预期: {expected_value}\\n\"\n            )\n    \n            # 添加allure.attach，将信息写入报告\n            allure.attach(\n                detail_msg,  # 附件内容\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n>               pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\nE               Failed: 校验失败: 平仓的订单数量功能正确，应该有2个平仓订单\nE               \nE               实际: 4\nE               操作: ==\nE               预期: 2\n\ncommons\\api_base.py:1393: Failed",
+    "steps" : [ {
+      "name" : "1. 获取订单详情表账号数据",
+      "time" : {
+        "start" : 1761547846326,
+        "stop" : 1761547850644,
+        "duration" : 4318
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1761547846326,
+          "stop" : 1761547850644,
+          "duration" : 4318
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1761547846375,
+            "stop" : 1761547846427,
+            "duration" : 52
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1761547846375,
+              "stop" : 1761547846427,
+              "duration" : 52
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "273180ac365aa762",
+              "name" : "执行SQL",
+              "source" : "273180ac365aa762.txt",
+              "type" : "text/plain",
+              "size" : 1487
+            }, {
+              "uid" : "23d4c757e7094851",
+              "name" : "SQL参数",
+              "source" : "23d4c757e7094851.txt",
+              "type" : "text/plain",
+              "size" : 84
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "681d1372b6437f25",
+            "name" : "查询条件",
+            "source" : "681d1372b6437f25.txt",
+            "type" : "text/plain",
+            "size" : 87
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待0.1秒）",
+          "time" : {
+            "start" : 1761547846427,
+            "stop" : 1761547846428,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "acd25434fa61bdeb",
+            "name" : "当前状态",
+            "source" : "acd25434fa61bdeb.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "3a074597c76b1bc6",
+            "name" : "超时倒计时",
+            "source" : "3a074597c76b1bc6.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1761547846428,
+            "stop" : 1761547846429,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "916bf6cd5407d004",
+            "name" : "判断结果",
+            "source" : "916bf6cd5407d004.txt",
+            "type" : "text/plain",
+            "size" : 39
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据发生变化",
+          "time" : {
+            "start" : 1761547846429,
+            "stop" : 1761547846429,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a7a81325ac699776",
+            "name" : "状态说明",
+            "source" : "a7a81325ac699776.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1761547848476,
+            "stop" : 1761547848527,
+            "duration" : 51
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1761547848476,
+              "stop" : 1761547848527,
+              "duration" : 51
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "dbf7b46c13798b79",
+              "name" : "执行SQL",
+              "source" : "dbf7b46c13798b79.txt",
+              "type" : "text/plain",
+              "size" : 1487
+            }, {
+              "uid" : "9fe0e3c572dda5b4",
+              "name" : "SQL参数",
+              "source" : "9fe0e3c572dda5b4.txt",
+              "type" : "text/plain",
+              "size" : 84
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "2187440a436cb577",
+            "name" : "查询条件",
+            "source" : "2187440a436cb577.txt",
+            "type" : "text/plain",
+            "size" : 87
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待2.2秒）",
+          "time" : {
+            "start" : 1761547848527,
+            "stop" : 1761547848528,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "37d44a656fbd49fb",
+            "name" : "当前状态",
+            "source" : "37d44a656fbd49fb.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "39a34dbd8dd7d01c",
+            "name" : "超时倒计时",
+            "source" : "39a34dbd8dd7d01c.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1761547848528,
+            "stop" : 1761547848529,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4c6eb513aee3ea3e",
+            "name" : "唯一键信息",
+            "source" : "4c6eb513aee3ea3e.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "5075e4f43d543512",
+            "name" : "判断结果",
+            "source" : "5075e4f43d543512.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据首次稳定",
+          "time" : {
+            "start" : 1761547848529,
+            "stop" : 1761547848529,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "3554fa37ed50a8e4",
+            "name" : "状态说明",
+            "source" : "3554fa37ed50a8e4.txt",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1761547850580,
+            "stop" : 1761547850642,
+            "duration" : 62
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1761547850581,
+              "stop" : 1761547850641,
+              "duration" : 60
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "d19402328cf51ad0",
+              "name" : "执行SQL",
+              "source" : "d19402328cf51ad0.txt",
+              "type" : "text/plain",
+              "size" : 1487
+            }, {
+              "uid" : "f3170a077a838c7",
+              "name" : "SQL参数",
+              "source" : "f3170a077a838c7.txt",
+              "type" : "text/plain",
+              "size" : 84
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "attachmentsCount" : 2,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "c4638bc81d58cda1",
+            "name" : "查询条件",
+            "source" : "c4638bc81d58cda1.txt",
+            "type" : "text/plain",
+            "size" : 87
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待4.3秒）",
+          "time" : {
+            "start" : 1761547850642,
+            "stop" : 1761547850642,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b85731f180f2648d",
+            "name" : "当前状态",
+            "source" : "b85731f180f2648d.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "ccd233d7225c6b6a",
+            "name" : "超时倒计时",
+            "source" : "ccd233d7225c6b6a.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1761547850642,
+            "stop" : 1761547850643,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "8500f30c7e43c1e6",
+            "name" : "唯一键信息",
+            "source" : "8500f30c7e43c1e6.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "2b4cc0ff8de0335e",
+            "name" : "判断结果",
+            "source" : "2b4cc0ff8de0335e.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据稳定达标",
+          "time" : {
+            "start" : 1761547850643,
+            "stop" : 1761547850643,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "5193ed7e18bdcc9b",
+            "name" : "结果说明",
+            "source" : "5193ed7e18bdcc9b.txt",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据库查询结果（最终稳定结果）",
+          "time" : {
+            "start" : 1761547850643,
+            "stop" : 1761547850644,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "3e655b5eecb38812",
+            "name" : "查询结果（共4条，显示前50条）",
+            "source" : "3e655b5eecb38812.json",
+            "type" : "application/json",
+            "size" : 2020
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ {
+          "uid" : "97fc430afc2af0a3",
+          "name" : "执行SQL",
+          "source" : "97fc430afc2af0a3.txt",
+          "type" : "text/plain",
+          "size" : 1421
+        }, {
+          "uid" : "b7ee8b441c250a24",
+          "name" : "SQL参数",
+          "source" : "b7ee8b441c250a24.txt",
+          "type" : "text/plain",
+          "size" : 38
+        }, {
+          "uid" : "d8ef483ce907811b",
+          "name" : "查询时间窗口",
+          "source" : "d8ef483ce907811b.txt",
+          "type" : "text/plain",
+          "size" : 61
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 16,
+        "hasContent" : true,
+        "attachmentsCount" : 27,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 17,
+      "hasContent" : true,
+      "attachmentsCount" : 27,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 数据校验",
+      "time" : {
+        "start" : 1761547850644,
+        "stop" : 1761547850644,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 校验失败: 平仓的订单数量功能正确，应该有2个平仓订单\n\n实际: 4\n操作: ==\n预期: 2\n\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_MT5\\test_cloudTrader\\test_lianxi.py\", line 556, in test_dbquery_addsalve_orderSendclose\n    self.verify_data(\n  File \"D:\\pycharm_test\\lingkuan_MT5\\commons\\api_base.py\", line 1393, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "校验: 平仓的订单数量功能正确，应该有2个平仓订单",
+        "time" : {
+          "start" : 1761547850644,
+          "stop" : 1761547850644,
+          "duration" : 0
+        },
+        "status" : "failed",
+        "statusMessage" : "Failed: 校验失败: 平仓的订单数量功能正确，应该有2个平仓订单\n\n实际: 4\n操作: ==\n预期: 2\n\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_MT5\\commons\\api_base.py\", line 1393, in verify_data\n    pytest.fail(f\"校验失败: {message}\\n{detail_msg}\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "9ca67a1942c20a28",
+          "name" : "订单数量详情",
+          "source" : "9ca67a1942c20a28.attach",
+          "type" : "text/plain",
+          "size" : 32
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "attachmentsCount" : 1,
+        "shouldDisplayMessage" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 1,
+      "hasContent" : true,
+      "attachmentsCount" : 1,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "de179ce30714ffa2",
+      "name" : "log",
+      "source" : "de179ce30714ffa2.txt",
+      "type" : "text/plain",
+      "size" : 10998
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 20,
+    "hasContent" : true,
+    "attachmentsCount" : 29,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1761547850662,
+      "stop" : 1761547850662,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761547863338,
+      "stop" : 1761547863340,
+      "duration" : 2
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1761547850661,
+      "stop" : 1761547850661,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景6：平仓的订单数量功能校验-4"
+  }, {
+    "name" : "feature",
+    "value" : "云策略复制下单-开仓的场景校验"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_lianxi"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCloudStrategyOrder"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "59312-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_lianxi"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "74a3ff0ee66adf36.json",
+  "parameterValues" : [ ]
+}

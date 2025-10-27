@@ -272,7 +272,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -641,7 +642,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1026,31 +1028,31 @@ class TestVPSMasOrderclose:
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 sql = f"""
-                                SELECT 
-                                    fod.size,
-                                    fod.comment,
-                                    fod.close_no,
-                                    fod.magical,
-                                    fod.open_price,
-                                    fod.symbol,
-                                    fod.order_no,
-                                    fod.close_time,
-                                    foi.true_total_lots,
-                                    foi.order_no,
-                                    foi.operation_type,
-                                    foi.create_time,
-                                    foi.status,
-                                    foi.total_orders
-                                FROM 
-                                    follow_order_detail fod
-                                INNER JOIN 
-                                    follow_order_instruct foi 
-                                ON 
-                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                                WHERE foi.operation_type = %s
-                                    AND fod.account = %s
-                                    AND fod.comment = %s
-                                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.close_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.symbol,
+                            fod.order_no,
+                            fod.close_time,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
@@ -1062,7 +1064,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1416,7 +1419,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1770,7 +1774,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2049,7 +2054,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2071,36 +2077,36 @@ class TestVPSMasOrderclose:
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
-                                 SELECT 
-                                     fod.size,
-                                     fod.close_no,
-                                     fod.magical,
-                                     fod.comment,
-                                     fod.open_price,
-                                     fod.symbol,
-                                     fod.order_no,
-                                     fod.close_time,
-                                     foi.true_total_lots,
-                                     foi.order_no,
-                                     foi.operation_type,
-                                     foi.create_time,
-                                     foi.status,
-                                     foi.min_lot_size,
-                                     foi.max_lot_size,
-                                     foi.total_lots,
-                                     foi.master_order,
-                                     foi.total_orders
-                                 FROM 
-                                     follow_order_detail fod
-                                 INNER JOIN 
-                                     follow_order_instruct foi 
-                                 ON 
-                                     foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                                 WHERE foi.operation_type = %s
-                                     AND fod.account = %s
-                                     AND fod.trader_id = %s
-                                     AND fod.comment = %s
-                                     """
+                         SELECT 
+                             fod.size,
+                             fod.close_no,
+                             fod.magical,
+                             fod.comment,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                         FROM 
+                             follow_order_detail fod
+                         INNER JOIN 
+                             follow_order_instruct foi 
+                         ON 
+                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                         WHERE foi.operation_type = %s
+                             AND fod.account = %s
+                             AND fod.trader_id = %s
+                             AND fod.comment = %s
+                             """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
@@ -2329,7 +2335,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2609,7 +2616,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2916,7 +2924,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 self.verify_data(
@@ -3184,7 +3193,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -3463,7 +3473,8 @@ class TestVPSMasOrderclose:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
