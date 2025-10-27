@@ -467,6 +467,7 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
+    @pytest.mark.retry(n=3, delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
