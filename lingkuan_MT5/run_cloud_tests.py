@@ -29,10 +29,11 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",
 
         # "test_cloudTrader/test_create.py",
-        "test_cloudTrader/test_lianxi.py",
+        # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
         # "test_cloudTrader/test_getAccountDataPage.py",
-        # "test_cloudTrader/test_cloudOrderSend.py",
+        # "test_cloudTrader/test_cloudOrderSendbuy.py",
+        # "test_cloudTrader/test_cloudOrderSendsell.py",
         # "test_cloudTrader/test_cloudOrderClose.py",
         # "test_cloudTrader/test_cloud_masOrderSend.py",
         # "test_cloudTrader/test_cloud_masOrderClose.py",

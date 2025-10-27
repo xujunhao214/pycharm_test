@@ -218,7 +218,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                         "cloudId": cloudMaster_id,
                         "masterId": MT5cloudTrader_traderList_2,
                         "masterAccount": MT5cloudTrader_user_accounts_2,
-                        "followDirection": 1,
+                        "followDirection": 0,
                         "followMode": param["followMode"],
                         "followParam": param["followParam"],
                         "remainder": 0,

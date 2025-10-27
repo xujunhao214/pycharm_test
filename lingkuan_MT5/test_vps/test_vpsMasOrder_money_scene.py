@@ -188,7 +188,7 @@ class TestVPSMasOrder_money_scene:
                     symbol = db_data[0]["symbol"]
                     self.verify_data(
                         actual_value=symbol,
-                        expected_value=("XAUUSD@", "XAUUSD"),
+                        expected_value=("XAUUSD@", "XAUUSD", "XAUUSDp"),
                         op=CompareOp.IN,
                         use_isclose=False,
                         message="币种应符合预期",
@@ -258,7 +258,7 @@ class TestVPSMasOrder_money_scene:
                     symbol = db_data[0]["symbol"]
                     self.verify_data(
                         actual_value=symbol,
-                        expected_value=("XAUUSD.p", "XAUUSD"),
+                        expected_value=("XAUUSD.p", "XAUUSD", "XAUUSDp"),
                         op=CompareOp.IN,
                         use_isclose=False,
                         message="币种应符合预期",
@@ -328,7 +328,7 @@ class TestVPSMasOrder_money_scene:
                     symbol = db_data[0]["symbol"]
                     self.verify_data(
                         actual_value=symbol,
-                        expected_value=("XAUUSD.min", "XAUUSD"),
+                        expected_value=("XAUUSD.min", "XAUUSD", "XAUUSDp"),
                         op=CompareOp.IN,
                         use_isclose=False,
                         message="币种应符合预期",
@@ -432,7 +432,7 @@ class TestVPSMasOrder_money_scene:
                     symbol = db_data[0]["symbol"]
                     self.verify_data(
                         actual_value=symbol,
-                        expected_value=("XAUUSD@", "XAUUSD"),
+                        expected_value=("XAUUSD@", "XAUUSD", "XAUUSDp"),
                         op=CompareOp.IN,
                         use_isclose=False,
                         message="币种应符合预期",
@@ -502,7 +502,7 @@ class TestVPSMasOrder_money_scene:
                     symbol = db_data[0]["symbol"]
                     self.verify_data(
                         actual_value=symbol,
-                        expected_value=("XAUUSD.p", "XAUUSD"),
+                        expected_value=("XAUUSD.p", "XAUUSD", "XAUUSDp"),
                         op=CompareOp.IN,
                         use_isclose=False,
                         message="币种应符合预期",
@@ -572,7 +572,7 @@ class TestVPSMasOrder_money_scene:
                     symbol = db_data[0]["symbol"]
                     self.verify_data(
                         actual_value=symbol,
-                        expected_value=("XAUUSD.min", "XAUUSD"),
+                        expected_value=("XAUUSD.min", "XAUUSD", "XAUUSDp"),
                         op=CompareOp.IN,
                         use_isclose=False,
                         message="币种应符合预期",

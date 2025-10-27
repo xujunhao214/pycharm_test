@@ -15,16 +15,16 @@ SKIP_REASON = "跳过此用例"
 class TestCloudStrategyOrder:
     @allure.story("场景5：平仓的订单方向功能校验-buy")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改跟单账号，跟单方向-正向
-          2. 进行开仓，手数范围：0.1-1，总订单数量4
-          3. 交易下单-跟单账号自己平仓-sell
-          4. 校验平仓的订单数，应该不等于4
-          5. 交易下单-跟单账号自己平仓-buy
-          6. 校验平仓的订单数,等于4
-        - 预期结果：平仓的订单方向功能正确
-        """)
+       ### 测试说明
+       - 前置条件：有云策略和云跟单
+         1. 修改跟单账号，跟单方向-正向
+         2. 进行开仓，手数范围：0.1-1，总订单数量4
+         3. 交易下单-跟单账号自己平仓-sell
+         4. 校验平仓的订单数，应该不等于4
+         5. 交易下单-跟单账号自己平仓-buy
+         6. 校验平仓的订单数,等于4
+       - 预期结果：平仓的订单方向功能正确
+       """)
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestcloudtradingOrders5(APITestBase):
         @allure.title("修改跟单账号为正向跟单")
@@ -140,35 +140,35 @@ class TestCloudStrategyOrder:
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 sql = f"""
-                            SELECT 
-                                 fod.size,
-                                 fod.comment,
-                                 fod.close_no,
-                                 fod.magical,
-                                 fod.open_price,
-                                 fod.symbol,
-                                 fod.order_no,
-                                 fod.close_time,
-                                 foi.true_total_lots,
-                                 foi.order_no,
-                                 foi.operation_type,
-                                 foi.create_time,
-                                 foi.status,
-                                 foi.min_lot_size,
-                                 foi.max_lot_size,
-                                 foi.total_lots,
-                                 foi.master_order,
-                                 foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                                AND fod.comment = %s
-                                """
+                           SELECT 
+                                fod.size,
+                                fod.comment,
+                                fod.close_no,
+                                fod.magical,
+                                fod.open_price,
+                                fod.symbol,
+                                fod.order_no,
+                                fod.close_time,
+                                foi.true_total_lots,
+                                foi.order_no,
+                                foi.operation_type,
+                                foi.create_time,
+                                foi.status,
+                                foi.min_lot_size,
+                                foi.max_lot_size,
+                                foi.total_lots,
+                                foi.master_order,
+                                foi.total_orders
+                           FROM 
+                               follow_order_detail fod
+                           INNER JOIN 
+                               follow_order_instruct foi 
+                           ON 
+                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                           WHERE foi.operation_type = %s
+                               AND fod.account = %s
+                               AND fod.comment = %s
+                               """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
@@ -226,36 +226,36 @@ class TestCloudStrategyOrder:
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
-                          SELECT 
-                              fod.size,
-                              fod.comment,
-                              fod.close_no,
-                              fod.magical,
-                              fod.open_price,
-                              fod.symbol,
-                              fod.order_no,
-                              fod.close_time,
-                              foi.true_total_lots,
-                              foi.order_no,
-                              foi.operation_type,
-                              foi.create_time,
-                              foi.status,
-                              foi.min_lot_size,
-                              foi.max_lot_size,
-                              foi.total_lots,
-                              foi.master_order,
-                              foi.total_orders
-                          FROM 
-                              follow_order_detail fod
-                          INNER JOIN 
-                              follow_order_instruct foi 
-                          ON 
-                              foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                          WHERE foi.operation_type = %s
-                              AND fod.account = %s
-                              AND fod.trader_id = %s
-                              AND fod.comment = %s
-                              """
+                         SELECT 
+                             fod.size,
+                             fod.comment,
+                             fod.close_no,
+                             fod.magical,
+                             fod.open_price,
+                             fod.symbol,
+                             fod.order_no,
+                             fod.close_time,
+                             foi.true_total_lots,
+                             foi.order_no,
+                             foi.operation_type,
+                             foi.create_time,
+                             foi.status,
+                             foi.min_lot_size,
+                             foi.max_lot_size,
+                             foi.total_lots,
+                             foi.master_order,
+                             foi.total_orders
+                         FROM 
+                             follow_order_detail fod
+                         INNER JOIN 
+                             follow_order_instruct foi 
+                         ON 
+                             foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                         WHERE foi.operation_type = %s
+                             AND fod.account = %s
+                             AND fod.trader_id = %s
+                             AND fod.comment = %s
+                             """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
@@ -316,31 +316,31 @@ class TestCloudStrategyOrder:
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 sql = f"""
-                            SELECT 
-                                fod.size,
-                                fod.comment,
-                                fod.close_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.close_time,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                                AND fod.comment = %s
-                                """
+                           SELECT 
+                               fod.size,
+                               fod.comment,
+                               fod.close_no,
+                               fod.magical,
+                               fod.open_price,
+                               fod.symbol,
+                               fod.order_no,
+                               fod.close_time,
+                               foi.true_total_lots,
+                               foi.order_no,
+                               foi.operation_type,
+                               foi.create_time,
+                               foi.status,
+                               foi.total_orders
+                           FROM 
+                               follow_order_detail fod
+                           INNER JOIN 
+                               follow_order_instruct foi 
+                           ON 
+                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                           WHERE foi.operation_type = %s
+                               AND fod.account = %s
+                               AND fod.comment = %s
+                               """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
@@ -371,15 +371,15 @@ class TestCloudStrategyOrder:
 
     @allure.story("场景6：平仓的订单数量功能校验-4")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围：0.1-1，总订单数量4
-          2. 进行平仓-订单数量2
-          3. 校验平仓的订单数，应该等于2
-          4. 进行平仓-订单数量2
-          5. 校验平仓的订单数,等于4
-        - 预期结果：平仓的订单数量功能正确
-        """)
+       ### 测试说明
+       - 前置条件：有云策略和云跟单
+         1. 进行开仓，手数范围：0.1-1，总订单数量4
+         2. 进行平仓-订单数量2
+         3. 校验平仓的订单数，应该等于2
+         4. 进行平仓-订单数量2
+         5. 校验平仓的订单数,等于4
+       - 预期结果：平仓的订单数量功能正确
+       """)
     class TestcloudtradingOrders6(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
@@ -449,36 +449,36 @@ class TestCloudStrategyOrder:
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 MT5cloudTrader_MT5vps_ids_1 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_1")
                 sql = f"""
-                               SELECT 
-                                   fod.size,
-                                   fod.close_no,
-                                   fod.magical,
-                                   fod.open_price,
-                                   fod.comment,
-                                   fod.symbol,
-                                   fod.order_no,
-                                   fod.close_time,
-                                   foi.true_total_lots,
-                                   foi.order_no,
-                                   foi.operation_type,
-                                   foi.create_time,
-                                   foi.status,
-                                   foi.min_lot_size,
-                                   foi.max_lot_size,
-                                   foi.total_lots,
-                                   foi.master_order,
-                                   foi.total_orders
-                               FROM 
-                                   follow_order_detail fod
-                               INNER JOIN 
-                                   follow_order_instruct foi 
-                               ON 
-                                   foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                               WHERE foi.operation_type = %s
-                                   AND fod.account = %s
-                                   AND fod.trader_id = %s
-                                   AND fod.comment = %s
-                                   """
+                              SELECT 
+                                  fod.size,
+                                  fod.close_no,
+                                  fod.magical,
+                                  fod.open_price,
+                                  fod.comment,
+                                  fod.symbol,
+                                  fod.order_no,
+                                  fod.close_time,
+                                  foi.true_total_lots,
+                                  foi.order_no,
+                                  foi.operation_type,
+                                  foi.create_time,
+                                  foi.status,
+                                  foi.min_lot_size,
+                                  foi.max_lot_size,
+                                  foi.total_lots,
+                                  foi.master_order,
+                                  foi.total_orders
+                              FROM 
+                                  follow_order_detail fod
+                              INNER JOIN 
+                                  follow_order_instruct foi 
+                              ON 
+                                  foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                              WHERE foi.operation_type = %s
+                                  AND fod.account = %s
+                                  AND fod.trader_id = %s
+                                  AND fod.comment = %s
+                                  """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
@@ -509,36 +509,36 @@ class TestCloudStrategyOrder:
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
-                           SELECT 
-                               fod.size,
-                               fod.close_no,
-                               fod.magical,
-                               fod.open_price,
-                               fod.comment,
-                               fod.symbol,
-                               fod.order_no,
-                               fod.close_time,
-                               foi.true_total_lots,
-                               foi.order_no,
-                               foi.operation_type,
-                               foi.create_time,
-                               foi.status,
-                               foi.min_lot_size,
-                               foi.max_lot_size,
-                               foi.total_lots,
-                               foi.master_order,
-                               foi.total_orders
-                           FROM 
-                               follow_order_detail fod
-                           INNER JOIN 
-                               follow_order_instruct foi 
-                           ON 
-                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                           WHERE foi.operation_type = %s
-                               AND fod.account = %s
-                               AND fod.trader_id = %s
-                               AND fod.comment = %s
-                               """
+                          SELECT 
+                              fod.size,
+                              fod.close_no,
+                              fod.magical,
+                              fod.open_price,
+                              fod.comment,
+                              fod.symbol,
+                              fod.order_no,
+                              fod.close_time,
+                              foi.true_total_lots,
+                              foi.order_no,
+                              foi.operation_type,
+                              foi.create_time,
+                              foi.status,
+                              foi.min_lot_size,
+                              foi.max_lot_size,
+                              foi.total_lots,
+                              foi.master_order,
+                              foi.total_orders
+                          FROM 
+                              follow_order_detail fod
+                          INNER JOIN 
+                              follow_order_instruct foi 
+                          ON 
+                              foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                          WHERE foi.operation_type = %s
+                              AND fod.account = %s
+                              AND fod.trader_id = %s
+                              AND fod.comment = %s
+                              """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
@@ -596,31 +596,31 @@ class TestCloudStrategyOrder:
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 sql = f"""
-                            SELECT 
-                                fod.size,
-                                fod.close_no,
-                                fod.magical,
-                                fod.comment,
-                                fod.open_price,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.close_time,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE foi.operation_type = %s
-                                AND fod.account = %s
-                                AND fod.comment = %s
-                                """
+                           SELECT 
+                               fod.size,
+                               fod.close_no,
+                               fod.magical,
+                               fod.comment,
+                               fod.open_price,
+                               fod.symbol,
+                               fod.order_no,
+                               fod.close_time,
+                               foi.true_total_lots,
+                               foi.order_no,
+                               foi.operation_type,
+                               foi.create_time,
+                               foi.status,
+                               foi.total_orders
+                           FROM 
+                               follow_order_detail fod
+                           INNER JOIN 
+                               follow_order_instruct foi 
+                           ON 
+                               foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                           WHERE foi.operation_type = %s
+                               AND fod.account = %s
+                               AND fod.comment = %s
+                               """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
@@ -655,36 +655,36 @@ class TestCloudStrategyOrder:
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
-                             SELECT 
-                                 fod.size,
-                                 fod.close_no,
-                                 fod.magical,
-                                 fod.comment,
-                                 fod.open_price,
-                                 fod.symbol,
-                                 fod.order_no,
-                                 fod.close_time,
-                                 foi.true_total_lots,
-                                 foi.order_no,
-                                 foi.operation_type,
-                                 foi.create_time,
-                                 foi.status,
-                                 foi.min_lot_size,
-                                 foi.max_lot_size,
-                                 foi.total_lots,
-                                 foi.master_order,
-                                 foi.total_orders
-                             FROM 
-                                 follow_order_detail fod
-                             INNER JOIN 
-                                 follow_order_instruct foi 
-                             ON 
-                                 foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                             WHERE foi.operation_type = %s
-                                 AND fod.account = %s
-                                 AND fod.trader_id = %s
-                                 AND fod.comment = %s
-                                 """
+                            SELECT 
+                                fod.size,
+                                fod.close_no,
+                                fod.magical,
+                                fod.comment,
+                                fod.open_price,
+                                fod.symbol,
+                                fod.order_no,
+                                fod.close_time,
+                                foi.true_total_lots,
+                                foi.order_no,
+                                foi.operation_type,
+                                foi.create_time,
+                                foi.status,
+                                foi.min_lot_size,
+                                foi.max_lot_size,
+                                foi.total_lots,
+                                foi.master_order,
+                                foi.total_orders
+                            FROM 
+                                follow_order_detail fod
+                            INNER JOIN 
+                                follow_order_instruct foi 
+                            ON 
+                                foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                            WHERE foi.operation_type = %s
+                                AND fod.account = %s
+                                AND fod.trader_id = %s
+                                AND fod.comment = %s
+                                """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
