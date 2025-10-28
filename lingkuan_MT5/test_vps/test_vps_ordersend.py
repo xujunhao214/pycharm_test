@@ -1306,7 +1306,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1755,7 +1756,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2212,7 +2214,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2668,7 +2671,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -3155,7 +3159,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -3701,7 +3706,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -4162,7 +4168,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -4623,7 +4630,8 @@ class TestVPSOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
