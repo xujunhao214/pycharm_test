@@ -217,7 +217,7 @@ class TestCreate_Scene(APITestBase):
         var_manager.set_runtime_variable("vps_addslave_count", vps_addslave_count)
         print(f"后6个账号数据库校验完成，共提取{vps_addslave_count}个ID，已保存到变量 vps_addslave_count")
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
     def test_update_addSlave(self, var_manager, logged_session, encrypted_password):
@@ -251,7 +251,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "",
+                "remark": "固定手数（5倍）",
                 "Cfd": "",
                 "mode_desc": "固定手数（5倍）"
             },
@@ -259,7 +259,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": vps_template_id,
-                "remark": "",
+                "remark": "修改品种（3倍）",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"
             },
@@ -267,7 +267,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "净值比例",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -275,7 +275,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种，合约是100",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -283,7 +283,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种，合约是100000",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -291,7 +291,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种，合约是10",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },

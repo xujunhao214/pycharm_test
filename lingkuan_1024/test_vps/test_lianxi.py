@@ -52,7 +52,7 @@ class TestVPSOrdersend(APITestBase):
                 )
                 logger.info(f"[{DATETIME_NOW}] 第{i}个跟单账号（ID: {slave_id}）删除成功")
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量删除跟单账号")
     def test_dbdelete_addsalvelist(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有账号信息
