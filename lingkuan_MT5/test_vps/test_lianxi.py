@@ -54,7 +54,7 @@ class TestVPSOrdersend:
                     "followClose": 1,
                     "followRep": 0,
                     "fixedComment": "",
-                    "commentType": "",
+                    "commentType": None,
                     "digits": 0,
                     "cfd": "",
                     "forex": "",
