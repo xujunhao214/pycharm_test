@@ -86,7 +86,7 @@ def send_feishu_notification(
         for case in failed_cases:
             markdown_content += f"- {case}\n"
 
-    # # 添加跳过用例列表
+    # 添加跳过用例列表
     # if skipped_cases and len(skipped_cases) > 0:
     #     markdown_content += "\n**跳过用例列表**:\n"
     #     skipped_reasons = statistics.get("skipped_reasons", {})

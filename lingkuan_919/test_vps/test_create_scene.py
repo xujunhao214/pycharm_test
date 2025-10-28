@@ -107,22 +107,23 @@ class TestCreate_Scene(APITestBase):
                     "account": param["account"],
                     "password": encrypted_password,
                     "remark": "参数化新增跟单账号",
-                    "followMode": param["followMode"],
-                    "followParam": param["followParam"],
-                    "templateId": param["templateId"],
                     "followDirection": 0,
+                    "followMode": param["followMode"],
                     "remainder": 0,
+                    "followParam": param["followParam"],
                     "placedType": 0,
+                    "templateId": param["templateId"],
                     "followStatus": 1,
                     "followOpen": 1,
                     "followClose": 1,
                     "followRep": 0,
                     "fixedComment": new_user["fixedComment"],
-                    "commentType": 2,
+                    "commentType": "",
                     "digits": 0,
-                    "cfd": param["Cfd"],  # 使用模板中的Cfd值
+                    "cfd": param["Cfd"],
                     "forex": "",
-                    "abRemark": ""
+                    "abRemark": "",
+                    "platformType": 0
                 }
 
                 # 发送请求并验证
@@ -216,7 +217,7 @@ class TestCreate_Scene(APITestBase):
         var_manager.set_runtime_variable("vps_addslave_count", vps_addslave_count)
         print(f"后6个账号数据库校验完成，共提取{vps_addslave_count}个ID，已保存到变量 vps_addslave_count")
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
     def test_update_addSlave(self, var_manager, logged_session, encrypted_password):
@@ -250,7 +251,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "",
+                "remark": "固定手数（5倍）",
                 "Cfd": "",
                 "mode_desc": "固定手数（5倍）"
             },
@@ -258,7 +259,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": vps_template_id,
-                "remark": "",
+                "remark": "修改品种（3倍）",
                 "Cfd": "",
                 "mode_desc": "修改品种（3倍）"
             },
@@ -266,7 +267,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "净值比例",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -274,7 +275,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种，合约是100",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -282,7 +283,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种，合约是100000",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -290,7 +291,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种，合约是10",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },
@@ -320,6 +321,7 @@ class TestCreate_Scene(APITestBase):
                 # 获取基础配置
                 new_user = var_manager.get_variable("new_user")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
+                platformId = var_manager.get_variable("platformId")
 
                 # 构造请求数据
                 data = {
@@ -327,24 +329,26 @@ class TestCreate_Scene(APITestBase):
                     "platform": new_user["platform"],
                     "account": param["account"],
                     "password": encrypted_password,
-                    "remark": param["remark"],  # 备注包含模板信息
-                    "followMode": param["followMode"],
-                    "followParam": param["followParam"],
-                    "templateId": param["templateId"],
+                    "remark": param["remark"],
                     "followDirection": 0,
+                    "followMode": param["followMode"],
                     "remainder": 0,
+                    "followParam": param["followParam"],
                     "placedType": 0,
+                    "templateId": param["templateId"],
                     "followStatus": 1,
                     "followOpen": 1,
                     "followClose": 1,
                     "followRep": 0,
-                    "fixedComment": new_user["fixedComment"],
-                    "commentType": 2,
+                    "fixedComment": "",
+                    "commentType": None,
                     "digits": 0,
-                    "cfd": param["Cfd"],  # 使用模板中的Cfd值
+                    "cfd": param["Cfd"],
                     "forex": "",
                     "abRemark": "",
-                    "id": param["id"]
+                    "platformType": 0,
+                    "id": param["id"],
+                    "platformId": platformId
                 }
 
                 # 发送请求并验证

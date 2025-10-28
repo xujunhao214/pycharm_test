@@ -76,7 +76,7 @@ def decrypt_str(encrypted_hex, key):
 if __name__ == "__main__":
     MT4_KEY = "FOLLOWERSHIP4KEY"
     # 加密
-    password = "test123456"
+    password = "Test123456"
     encrypted = aes_encrypt_str(password, MT4_KEY)
     print("Encrypted:", encrypted)
     # 解密

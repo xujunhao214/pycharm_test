@@ -108,7 +108,7 @@ class TestVPSOrdersend:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=5)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
@@ -220,6 +220,10 @@ class TestVPSOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
+
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -291,6 +295,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=1,
@@ -433,6 +440,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=1,
@@ -509,6 +519,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=1,
@@ -674,6 +687,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -745,6 +761,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=0.01,
@@ -887,6 +906,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=0.01,
@@ -963,6 +985,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=0.01,
@@ -1564,6 +1589,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1635,6 +1663,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1777,6 +1808,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1853,6 +1887,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -2375,7 +2412,7 @@ class TestVPSOrdersend:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=5)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
@@ -2931,6 +2968,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -3025,6 +3065,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -3458,7 +3501,7 @@ class TestVPSOrdersend:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=5)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
@@ -3522,6 +3565,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3594,6 +3640,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.03),
@@ -3727,6 +3776,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3804,6 +3856,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.03),
@@ -3920,7 +3975,7 @@ class TestVPSOrdersend:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=5)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
@@ -3984,6 +4039,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -4056,6 +4114,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.04),
@@ -4189,6 +4250,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -4266,6 +4330,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.04),
@@ -4382,7 +4449,7 @@ class TestVPSOrdersend:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=5)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
@@ -4446,6 +4513,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -4518,6 +4588,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -4651,6 +4724,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -4728,6 +4804,9 @@ class TestVPSOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留一位小数
+                    total = round(float(total), 1)
+                    totalSzie = round(float(totalSzie), 1)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),

@@ -19,15 +19,15 @@ class Environment(Enum):
 ENV_CONFIG = {
     Environment.TEST.value: {
         "test_environment": "测试环境",
-        "browser_version": "自研跟单1.4.2",
+        "browser_version": "自研跟单1.5.0",
         "base_url": "http://39.99.136.49:9000",
-        "vps_url": "http://39.99.136.49:9001",
+        "vps_url": "http://39.98.109.212:9001",
         "db_host": "39.99.136.49",
         "db_port": 3306,
     },
     Environment.UAT.value: {
         "test_environment": "UAT环境",
-        "browser_version": "自研跟单1.4.2",
+        "browser_version": "自研跟单1.5.0",
         "base_url": "https://uat.atcp.top/api",
         "vps_url": "https://39.101.181.190/vps",
         "db_host": "39.99.241.16",

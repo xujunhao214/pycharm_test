@@ -36,6 +36,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             json_data = {
                 "id": cloudTrader_traderList_2,
                 "cloudId": cloudMaster_id,
+                "platformType": 0,
                 "sourceType": 0,
                 "remark": "",
                 "runningStatus": 0,
@@ -75,6 +76,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "cloudId": f"{cloudMaster_id}",
                 "masterId": cloudTrader_traderList_2,
                 "masterAccount": cloudTrader_user_accounts_2,
+                "platformType": 0,
                 "followDirection": 0,
                 "followMode": 1,
                 "followParam": 1,
@@ -211,6 +213,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             json_data = {
                 "id": cloudTrader_traderList_2,
                 "cloudId": cloudMaster_id,
+                "platformType": 0,
                 "sourceType": 0,
                 "remark": "",
                 "runningStatus": 0,
@@ -250,6 +253,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "cloudId": f"{cloudMaster_id}",
                 "masterId": cloudTrader_traderList_2,
                 "masterAccount": cloudTrader_user_accounts_2,
+                "platformType": 0,
                 "followDirection": 0,
                 "followMode": 1,
                 "followParam": 1,
@@ -385,6 +389,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             json_data = {
                 "id": cloudTrader_traderList_2,
                 "cloudId": cloudMaster_id,
+                "platformType": 0,
                 "sourceType": 0,
                 "remark": "",
                 "runningStatus": 0,
@@ -424,6 +429,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "cloudId": f"{cloudMaster_id}",
                 "masterId": cloudTrader_traderList_2,
                 "masterAccount": cloudTrader_user_accounts_2,
+                "platformType": 0,
                 "followDirection": 0,
                 "followMode": 1,
                 "followParam": 1,

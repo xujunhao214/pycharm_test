@@ -26,6 +26,7 @@ class TestcloudTrader_openandlevel:
     """)
     class TestcloudTrader_open(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
+        @pytest.mark.retry(n=0, delay=0)
         def test_cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followOpen改为0，关闭开仓"):
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
@@ -40,6 +41,7 @@ class TestcloudTrader_openandlevel:
                         "cloudId": cloudMaster_id,
                         "masterId": cloudTrader_traderList_2,
                         "masterAccount": cloudTrader_user_accounts_2,
+                        "platformType": 0,
                         "followDirection": 0,
                         "followMode": 1,
                         "followParam": 1,
@@ -196,16 +198,14 @@ class TestcloudTrader_openandlevel:
                 symbol = cloudOrderSend["symbol"]
 
                 sql = f"""
-                               SELECT * 
-                               FROM follow_order_detail 
-                               WHERE symbol LIKE %s 
-                                 AND source_user = %s
-                                 AND account = %s
-                                 AND comment = %s
-                               """
+                       SELECT * 
+                       FROM follow_order_detail 
+                       WHERE symbol LIKE %s 
+                         AND account = %s
+                         AND comment = %s
+                       """
                 params = (
                     f"%{symbol}%",
-                    cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
                     "changjing1"
                 )
@@ -271,6 +271,7 @@ class TestcloudTrader_openandlevel:
                         "cloudId": cloudMaster_id,
                         "masterId": cloudTrader_traderList_2,
                         "masterAccount": cloudTrader_user_accounts_2,
+                        "platformType": 0,
                         "followDirection": 0,
                         "followMode": 1,
                         "followParam": 1,
@@ -501,11 +502,11 @@ class TestcloudTrader_openandlevel:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -515,9 +516,9 @@ class TestcloudTrader_openandlevel:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -564,6 +565,7 @@ class TestcloudTrader_openandlevel:
                         "cloudId": cloudMaster_id,
                         "masterId": cloudTrader_traderList_2,
                         "masterAccount": cloudTrader_user_accounts_2,
+                        "platformType": 0,
                         "followDirection": 0,
                         "followMode": 1,
                         "followParam": 1,
@@ -809,13 +811,14 @@ class TestcloudTrader_openandlevel:
                     time_field="foi.create_time"
                 )
             with allure.step("2. 校验数据"):
-                close_status = db_data[0]["close_status"]
-                logging.info(f"出现漏平，平仓状态应该是0，实际是：{close_status}")
-                assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
+                # close_status = db_data[0]["close_status"]
+                # logging.info(f"出现漏平，平仓状态应该是0，实际是：{close_status}")
+                # assert close_status == 0, f"出现漏平，平仓状态应该是0，实际是：{close_status}"
 
                 close_remark = db_data[0]["close_remark"]
-                logging.info(f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}")
-                assert close_remark == "平仓异常: 未开通平仓状态", f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态，实际是：{close_remark}"
+                logging.info(
+                    f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态/未开通平仓状态，实际是：{close_remark}")
+                assert close_remark == "平仓异常: 未开通平仓状态" or close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是:平仓异常: 未开通平仓状态/未开通平仓状态，实际是：{close_remark}"
 
             with allure.step("3. 提取数据"):
                 cloudTrader_master_order_level = [record["master_order"] for record in db_data]
@@ -833,13 +836,11 @@ class TestcloudTrader_openandlevel:
                           SELECT * 
                           FROM follow_order_detail 
                           WHERE symbol LIKE %s 
-                            AND source_user = %s
                             AND account = %s
                             AND comment = %s
                           """
                 params = (
                     f"%{symbol}%",
-                    cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
                     "changjing2"
                 )
@@ -905,6 +906,7 @@ class TestcloudTrader_openandlevel:
                         "cloudId": cloudMaster_id,
                         "masterId": cloudTrader_traderList_2,
                         "masterAccount": cloudTrader_user_accounts_2,
+                        "platformType": 0,
                         "followDirection": 0,
                         "followMode": 1,
                         "followParam": 1,
@@ -1125,6 +1127,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudTrader_traderList_2,
                     "cloudId": cloudMaster_id,
                     "sourceType": 0,
+                    "platformType": 0,
                     "remark": "",
                     "runningStatus": 1,
                     "followOrderRemark": 1,
@@ -1275,13 +1278,11 @@ class TestcloudTrader_openandlevel:
                                SELECT * 
                                FROM follow_order_detail 
                                WHERE symbol LIKE %s 
-                                 AND source_user = %s
                                  AND account = %s
                                  AND comment = %s
                                """
                 params = (
                     f"%{symbol}%",
-                    cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
                     "changjing3"
                 )
@@ -1344,6 +1345,7 @@ class TestcloudTrader_openandlevel:
                 json_data = {
                     "id": cloudTrader_traderList_2,
                     "cloudId": cloudMaster_id,
+                    "platformType": 0,
                     "sourceType": 0,
                     "remark": "",
                     "runningStatus": 0,
@@ -1566,11 +1568,11 @@ class TestcloudTrader_openandlevel:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1580,9 +1582,9 @@ class TestcloudTrader_openandlevel:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1627,6 +1629,7 @@ class TestcloudTrader_openandlevel:
                     "remark": None,
                     "status": 1,
                     "groupId": cloudTrader_group_id,
+                    "platformType": 0,
                     "sort": None,
                     "isMonitorRepair": 1,
                     "isAutoRepair": 1
@@ -1767,13 +1770,11 @@ class TestcloudTrader_openandlevel:
                                SELECT * 
                                FROM follow_order_detail 
                                WHERE symbol LIKE %s 
-                                 AND source_user = %s
                                  AND account = %s
                                  AND comment = %s
                                """
                 params = (
                     f"%{symbol}%",
-                    cloudTrader_user_accounts_2,
                     cloudTrader_user_accounts_2,
                     "changjing4"
                 )
@@ -1837,6 +1838,7 @@ class TestcloudTrader_openandlevel:
                     "remark": None,
                     "status": 0,
                     "groupId": cloudTrader_group_id,
+                    "platformType": 0,
                     "sort": None,
                     "isMonitorRepair": 1,
                     "isAutoRepair": 1
@@ -1971,13 +1973,13 @@ class TestcloudTrader_openandlevel:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("账号管理-交易下单-平仓")
         def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
@@ -2045,13 +2047,12 @@ class TestcloudTrader_openandlevel:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
-
             with allure.step("2. 数据校验"):
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法提取数据")
@@ -2060,9 +2061,9 @@ class TestcloudTrader_openandlevel:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")

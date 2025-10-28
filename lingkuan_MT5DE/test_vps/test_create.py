@@ -14,7 +14,7 @@ SKIP_REASON = "跳过此用例"
 @allure.feature("数据管理-创建数据-为VPS测试准备")
 class TestCreate(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.retry(n=0, delay=0)
     @allure.title("账号管理-账号列表-新增单个用户")
     def test_create_user(self, logged_session, var_manager, encrypted_password):
         # 1. 发送创建用户请求
@@ -325,7 +325,7 @@ class TestCreate(APITestBase):
             logging.info(f"新增品种id: {MT5vps_template_id2}")
             var_manager.set_runtime_variable("MT5vps_template_id2", MT5vps_template_id2)
 
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.retry(n=0, delay=0)
     @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")

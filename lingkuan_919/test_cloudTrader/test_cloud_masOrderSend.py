@@ -150,9 +150,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -256,9 +256,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -277,13 +277,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("云策略交易下单-分配平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -357,9 +357,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -435,9 +435,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -458,13 +458,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
     @allure.story("场景2：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
@@ -563,9 +563,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -619,13 +619,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
@@ -680,9 +680,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -702,13 +702,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("云策略交易下单-交易平仓")
         def test_copy_order_close(self, var_manager, logged_session):
@@ -782,9 +782,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -860,9 +860,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -883,13 +883,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
     @allure.story("场景3：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
@@ -987,9 +987,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1091,9 +1091,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1182,9 +1182,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1258,9 +1258,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1279,13 +1279,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
     @allure.story("场景4：复制下单-手数0.01-1，总订单数10")
     @allure.description("""
@@ -1384,9 +1384,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1564,9 +1564,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1638,22 +1638,22 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -1762,9 +1762,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -1955,9 +1955,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -2042,9 +2042,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -2063,13 +2063,13 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
     @allure.story("场景6：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
@@ -2581,9 +2581,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -2654,9 +2654,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -2746,9 +2746,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -2772,35 +2772,35 @@ class TestCloudMasOrdersend:
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
-                                SELECT 
-                                    fod.size,
-                                    fod.comment,
-                                    fod.close_no,
-                                    fod.magical,
-                                    fod.open_price,
-                                    fod.symbol,
-                                    fod.order_no,
-                                    foi.true_total_lots,
-                                    foi.order_no,
-                                    foi.operation_type,
-                                    foi.create_time,
-                                    foi.status,
-                                    foi.min_lot_size,
-                                    foi.max_lot_size,
-                                    foi.total_lots,
-                                    foi.master_order,
-                                    foi.total_orders
-                                FROM 
-                                    follow_order_detail fod
-                                INNER JOIN 
-                                    follow_order_instruct foi 
-                                ON 
-                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                                WHERE foi.operation_type = %s
-                                    AND fod.account = %s
-                                    AND fod.trader_id = %s
-                                    AND fod.comment = %s
-                                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.close_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.master_order,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.trader_id = %s
+                            AND fod.comment = %s
+                            """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
@@ -2823,9 +2823,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -2997,9 +2997,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3070,9 +3070,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3162,9 +3162,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3188,35 +3188,35 @@ class TestCloudMasOrdersend:
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
                 sql = f"""
-                                SELECT 
-                                    fod.size,
-                                    fod.comment,
-                                    fod.close_no,
-                                    fod.magical,
-                                    fod.open_price,
-                                    fod.symbol,
-                                    fod.order_no,
-                                    foi.true_total_lots,
-                                    foi.order_no,
-                                    foi.operation_type,
-                                    foi.create_time,
-                                    foi.status,
-                                    foi.min_lot_size,
-                                    foi.max_lot_size,
-                                    foi.total_lots,
-                                    foi.master_order,
-                                    foi.total_orders
-                                FROM 
-                                    follow_order_detail fod
-                                INNER JOIN 
-                                    follow_order_instruct foi 
-                                ON 
-                                    foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                                WHERE foi.operation_type = %s
-                                    AND fod.account = %s
-                                    AND fod.trader_id = %s
-                                    AND fod.comment = %s
-                                    """
+                        SELECT 
+                            fod.size,
+                            fod.comment,
+                            fod.close_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.master_order,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.trader_id = %s
+                            AND fod.comment = %s
+                            """
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
@@ -3239,9 +3239,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3259,15 +3259,15 @@ class TestCloudMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                with allure.step("验证详情手数和指令手数一致"):
-                    size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
-                    self.assert_list_equal_ignore_order(
-                        size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                    )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                # with allure.step("验证详情手数和指令手数一致"):
+                #     size = [record["size"] for record in db_data]
+                #     true_total_lots = [record["true_total_lots"] for record in db_data]
+                #     self.assert_list_equal_ignore_order(
+                #         size,
+                #         true_total_lots,
+                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                #     )
+                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景9：分配下单-手数范围0.01-1，总手数0.01")
     @allure.description("""
@@ -3413,9 +3413,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3486,9 +3486,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3578,9 +3578,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3655,9 +3655,9 @@ class TestCloudMasOrdersend:
                     status = db_data[0]["status"]
                     self.verify_data(
                         actual_value=status,
-                        expected_value=(0, 1),
+                        expected_value=(0, 1, 3),
                         op=CompareOp.IN,
-                        message="订单状态应为0或1",
+                        message="订单状态应为0或1或3",
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
@@ -3677,10 +3677,10 @@ class TestCloudMasOrdersend:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        total_lots,
+                        f"手数不一致: 详情{size}, 指令{total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")

@@ -102,7 +102,7 @@ class TestVPSCoreFunctionality:
                 )
 
         @pytest.mark.url("vps")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("平仓停止功能验证")
         def test_trader_stopOrder(self, var_manager, logged_session):
             with allure.step("1. 发送停止平仓请求"):
@@ -183,6 +183,8 @@ class TestVPSCoreFunctionality:
                         attachment_name="订单数量详情"
                     )
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
+
+            time.sleep(10)
 
         @pytest.mark.url("vps")
         @allure.title("策略账号再次平仓操作")
@@ -283,6 +285,7 @@ class TestVPSFollowDirection:
                     "platform": new_user["platform"],
                     "account": vps_user_accounts_1,
                     "password": encrypted_password,
+                    "platformType": 0,
                     "remark": "",
                     "followDirection": 1,
                     "followMode": 1,
@@ -522,6 +525,7 @@ class TestVPSFollowDirection:
                     "platform": new_user["platform"],
                     "account": vps_user_accounts_1,
                     "password": encrypted_password,
+                    "platformType": 0,
                     "remark": "",
                     "followDirection": 0,
                     "followMode": 1,
@@ -1015,7 +1019,7 @@ class TestVPSOrderQuantityControl:
                 )
                 logging.info(f"{new_user['account']}暂无可平仓订单")
 
-        time.sleep(30)
+        # time.sleep(30)
 
 
 # ------------------------------------
@@ -1430,6 +1434,7 @@ class TestVPSCloseRemark:
                     "platform": new_user["platform"],
                     "account": vps_user_accounts_1,
                     "password": encrypted_password,
+                    "platformType": 0,
                     "remark": "",
                     "followDirection": 0,
                     "followMode": 1,

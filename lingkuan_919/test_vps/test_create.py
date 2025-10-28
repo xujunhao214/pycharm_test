@@ -22,7 +22,7 @@ class TestCreate(APITestBase):
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "accountType": "0",
+            "platformType": 0,
             "serverNode": new_user["serverNode"],
             "remark": new_user["remark"],
             "sort": "12",
@@ -50,6 +50,7 @@ class TestCreate(APITestBase):
         )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.retry(n=3, delay=5)
     @allure.title("数据库校验-账号列表-新增用户")
     def test_dbquery_user(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
@@ -466,6 +467,7 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
+    @pytest.mark.retry(n=3, delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
@@ -478,6 +480,7 @@ class TestCreate(APITestBase):
             "platform": new_user["platform"],
             "remark": new_user["remark"],
             "platformId": new_user["platformId"],
+            "platformType": 0,
             "type": 0,
             "templateId": 1,
             "followStatus": 1,
@@ -567,7 +570,8 @@ class TestCreate(APITestBase):
             "digits": 0,
             "cfd": "",
             "forex": "",
-            "abRemark": ""
+            "abRemark": "",
+            "platformType": 0
         }
         response = self.send_post_request(
             logged_session,

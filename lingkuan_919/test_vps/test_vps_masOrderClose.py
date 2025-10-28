@@ -86,7 +86,7 @@ class TestVPSMasOrderclose:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
-        @pytest.mark.retry(n=3, delay=5)
+        @pytest.mark.retry(n=0, delay=0)
         def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -782,6 +782,7 @@ class TestVPSMasOrderclose:
                     "platform": new_user["platform"],
                     "account": vps_user_accounts_1,
                     "password": encrypted_password,
+                    "platformType": 0,
                     "remark": "",
                     "followDirection": 1,
                     "followMode": 1,
@@ -1139,6 +1140,7 @@ class TestVPSMasOrderclose:
                     "platform": new_user["platform"],
                     "account": vps_user_accounts_1,
                     "password": encrypted_password,
+                    "platformType": 0,
                     "remark": "",
                     "followDirection": 1,
                     "followMode": 1,
@@ -1493,6 +1495,7 @@ class TestVPSMasOrderclose:
                     "platform": new_user["platform"],
                     "account": vps_user_accounts_1,
                     "password": encrypted_password,
+                    "platformType": 0,
                     "remark": "",
                     "followDirection": 0,
                     "followMode": 1,
@@ -2662,7 +2665,7 @@ class TestVPSMasOrderclose:
                     )
                     logging.info(f"平仓的订单数量功能正确，应该有4个平仓订单，结果有{len(db_data)}个订单")
 
-        time.sleep(30)
+        # time.sleep(30)
 
     @allure.story("场景9：平仓的订单类型功能校验-外部订单")
     @allure.description("""

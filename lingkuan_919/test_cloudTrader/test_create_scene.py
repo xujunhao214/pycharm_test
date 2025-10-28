@@ -40,6 +40,7 @@ class TestCreate_importcloudTrader(APITestBase):
                         "cloudId": cloudMaster_id,
                         "masterId": cloudTrader_traderList_2,
                         "masterAccount": cloudTrader_user_accounts_2,
+                        "platformType": 0,
                         "followDirection": 0,
                         "followMode": 1,
                         "followParam": 1,
@@ -233,6 +234,7 @@ class TestCreate_importcloudTrader(APITestBase):
                         "followTraderIds": [],
                         "sort": "100",
                         "cfd": param["Cfd"],
+                        "platformType": 0,
                         "forex": ""
                     }
                 ]
