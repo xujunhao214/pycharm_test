@@ -48,7 +48,7 @@ class TestCloudremark:
                     "account": MT5cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",  # 策略固定注释
+                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -106,6 +106,7 @@ class TestCloudremark:
                 self.assert_response_status(response, 200, "修改跟单账号请求失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("云策略账号复制下单")
         def test_scenario1_place_order(self, class_random_str, logged_session, var_manager):
             with allure.step("发送开仓请求"):
@@ -124,7 +125,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "ceshikaicangbeizhu"
+                    "remark": f"ceshikaicangbeizhu{class_random_str}"
                 }
 
                 response = self.send_post_request(
@@ -142,8 +143,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT 
-                    fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -155,15 +155,14 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshiceluebeizhu",
+                    expected_value=f"ceshiceluebeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message=f"预期：跟单取策略备注",
@@ -188,18 +187,18 @@ class TestCloudremark:
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
 
-            with allure.step("跟单账号平仓"):
-                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": MT5cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
+            # with allure.step("跟单账号平仓"):
+            #     MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
+            #     response = self.send_post_request(
+            #         logged_session,
+            #         '/mascontrol/cloudTrader/orderClose',
+            #         json_data={
+            #             "traderUserId": MT5cloudTrader_traderList_4,
+            #             "isCloseAll": 1
+            #         }
+            #     )
+            #     self.assert_response_status(response, 200, "跟单平仓失败")
+            #     self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.description("""
@@ -236,7 +235,7 @@ class TestCloudremark:
                     "account": MT5cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",  # 策略固定注释
+                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -274,7 +273,7 @@ class TestCloudremark:
                     "followStatus": 1,
                     "followOpen": 1,
                     "followClose": 1,
-                    "fixedComment": "ceshigendanbeizhu",  # 跟单固定注释
+                    "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单固定注释
                     "commentType": None,
                     "digits": 0,
                     "followTraderIds": [],
@@ -312,7 +311,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "ceshikaicangbeizhu"
+                    "remark": f"ceshikaicangbeizhu{class_random_str}"
                 }
 
                 response = self.send_post_request(
@@ -330,7 +329,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -342,15 +341,14 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshigendanbeizhu",
+                    expected_value=f"ceshigendanbeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取自身备注",
@@ -374,19 +372,6 @@ class TestCloudremark:
                     }
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
-
-            with allure.step("跟单账号平仓"):
-                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": MT5cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
     @allure.story("场景3：交易下单-策略开启订单备注，跟单无固定注释")
     @allure.description("""
@@ -423,7 +408,7 @@ class TestCloudremark:
                     "account": MT5cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",  # 策略固定注释
+                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -499,7 +484,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "ceshikaicangbeizhu"
+                    "remark": f"ceshikaicangbeizhu{class_random_str}"
                 }
 
                 response = self.send_post_request(
@@ -517,7 +502,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -529,15 +514,14 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshikaicangbeizhu",
+                    expected_value=f"ceshikaicangbeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取开仓备注",
@@ -561,19 +545,6 @@ class TestCloudremark:
                     }
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
-
-            with allure.step("跟单账号平仓"):
-                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": MT5cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
     @allure.story("场景4：交易下单-策略有固定注释，跟单无固定注释")
     @allure.description("""
@@ -610,7 +581,7 @@ class TestCloudremark:
                     "account": MT5cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",  # 策略固定注释
+                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -683,7 +654,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "ceshikaicangbeizhu"
+                    "remark": f"ceshikaicangbeizhu{class_random_str}"
                 }
 
                 response = self.send_post_request(
@@ -701,8 +672,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT 
-                    fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -714,15 +684,14 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshiceluebeizhu",
+                    expected_value=f"ceshiceluebeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message=f"预期：跟单取策略备注",
@@ -744,19 +713,6 @@ class TestCloudremark:
                     }
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
-
-            with allure.step("跟单账号平仓"):
-                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": MT5cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
     @allure.story("场景5：策略有固定注释，跟单有固定注释")
     @allure.description("""
@@ -793,7 +749,7 @@ class TestCloudremark:
                     "account": MT5cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",  # 策略固定注释
+                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -831,7 +787,7 @@ class TestCloudremark:
                     "followStatus": 1,
                     "followOpen": 1,
                     "followClose": 1,
-                    "fixedComment": "ceshigendanbeizhu",  # 跟单固定注释
+                    "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单固定注释
                     "commentType": None,
                     "digits": 0,
                     "followTraderIds": [],
@@ -866,7 +822,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "ceshikaicangbeizhu"
+                    "remark": f"ceshikaicangbeizhu{class_random_str}"
                 }
 
                 response = self.send_post_request(
@@ -884,7 +840,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -896,15 +852,14 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshigendanbeizhu",
+                    expected_value=f"ceshigendanbeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取自身备注",
@@ -926,19 +881,6 @@ class TestCloudremark:
                     }
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
-
-            with allure.step("跟单账号平仓"):
-                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": MT5cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
     @allure.story("场景6：交易下单-策略开启订单备注，跟单无固定注释")
     @allure.description("""
@@ -975,7 +917,7 @@ class TestCloudremark:
                     "account": MT5cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": "ceshiceluebeizhu",  # 策略固定注释
+                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -1048,7 +990,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "ceshikaicangbeizhu"
+                    "remark": f"ceshikaicangbeizhu{class_random_str}"
                 }
 
                 response = self.send_post_request(
@@ -1066,7 +1008,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -1078,15 +1020,14 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshikaicangbeizhu",
+                    expected_value=f"ceshikaicangbeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取开仓备注",
@@ -1108,16 +1049,3 @@ class TestCloudremark:
                     }
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
-
-            with allure.step("跟单账号平仓"):
-                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": MT5cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")

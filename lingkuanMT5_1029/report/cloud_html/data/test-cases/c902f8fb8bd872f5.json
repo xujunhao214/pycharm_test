@@ -1,0 +1,808 @@
+{
+  "uid" : "c902f8fb8bd872f5",
+  "name" : "出现漏平-redis数据和数据库的数据做比对",
+  "fullName" : "test_cloudTrader.test_cloudOrder_open_level.TestMT5cloudTrader_level#test_dbquery_redis",
+  "historyId" : "caafd6ad562a55b192d9f89f619e9f3d",
+  "time" : {
+    "start" : 1761729623720,
+    "stop" : 1761729628116,
+    "duration" : 4396
+  },
+  "description" : "\n    ### 用例说明\n    - 前置条件：有云策略和云跟单\n    - 操作步骤：\n      1. 修改云跟单账号平仓-关闭\n      2. 进行开仓\n      3. 进行平仓\n      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验\n      5. 修改云跟单账号平仓-开启\n    - 预期结果：云跟单账号平仓-关闭，有漏单数据\n    ",
+  "descriptionHtml" : "<pre><code>### 用例说明\n- 前置条件：有云策略和云跟单\n- 操作步骤：\n  1. 修改云跟单账号平仓-关闭\n  2. 进行开仓\n  3. 进行平仓\n  4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验\n  5. 修改云跟单账号平仓-开启\n- 预期结果：云跟单账号平仓-关闭，有漏单数据\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 数据列表不匹配（字段 size 精度不匹配）",
+  "statusTrace" : "self = <lingkuanMT5_1029.test_cloudTrader.test_cloudOrder_open_level.TestMT5cloudTrader_openandlevel.TestMT5cloudTrader_level object at 0x0000015CAAACF880>\nclass_random_str = '9dn79548'\nvar_manager = <lingkuanMT5_1029.commons.variable_manager.VariableManager object at 0x0000015CAAAF97C0>\ndb_transaction = <pymysql.connections.Connection object at 0x0000015CAAA21D60>\nredis_MT5cloudTrader_data_close = [{'lots': 0.0, 'magic': 19577, 'openPrice': 4018.67, 'symbol': 'XAUUSDp', ...}]\n\n    @allure.title(\"出现漏平-redis数据和数据库的数据做比对\")\n    def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_MT5cloudTrader_data_close):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            MT5cloudTrader_user_accounts_2 = var_manager.get_variable(\"MT5cloudTrader_user_accounts_2\")\n            cloudOrderSend = var_manager.get_variable(\"cloudOrderSend\")\n            symbol = cloudOrderSend[\"symbol\"]\n    \n            sql = f\"\"\"\n                      SELECT *\n                      FROM follow_order_detail\n                      WHERE symbol LIKE %s\n                        AND account = %s\n                        AND comment = %s\n                      \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                MT5cloudTrader_user_accounts_2,\n                class_random_str\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"create_time\"\n            )\n    \n        with allure.step(\"2. 转换Redis数据为可比较格式\"):\n            if not redis_MT5cloudTrader_data_close:\n                pytest.fail(\"Redis中未查询到订单数据\")\n    \n            # 转换Redis数据为与数据库一致的格式\n            MT5cloudTrader_redis_comparable_levellist = convert_redis_orders_to_comparable_list(\n                redis_MT5cloudTrader_data_close)\n            logging.info(f\"转换后的Redis数据: {MT5cloudTrader_redis_comparable_levellist}\")\n    \n            # 将转换后的数据存入变量管理器\n            var_manager.set_runtime_variable(\"MT5cloudTrader_redis_comparable_levellist\",\n                                             MT5cloudTrader_redis_comparable_levellist)\n    \n        with allure.step(\"3. 比较Redis与数据库数据\"):\n            # 假设db_data是之前从数据库查询的结果\n            if not db_data:\n                pytest.fail(\"数据库中未查询到订单数据\")\n    \n            # 提取数据库中的关键字段（根据实际数据库表结构调整）\n            db_comparable_list = [\n                {\n                    \"order_no\": record[\"order_no\"],  # 数据库order_no → 统一字段order_no\n                    \"magical\": record[\"magical\"],  # 数据库magical → 统一字段magical\n                    \"size\": float(record[\"size\"]),  # 数据库size → 统一字段size\n                    \"open_price\": float(record[\"open_price\"]),\n                    \"symbol\": record[\"symbol\"]\n                }\n                for record in db_data\n            ]\n            logging.info(f\"数据库转换后: {db_comparable_list}\")\n            # 比较两个列表（可根据需要调整比较逻辑）\n>           self.assert_data_lists_equal(\n                actual=MT5cloudTrader_redis_comparable_levellist,\n                expected=db_comparable_list,\n                fields_to_compare=[\"order_no\", \"magical\", \"size\", \"open_price\", \"symbol\"],\n                tolerance=1e-6\n            )\n\ntest_cloudTrader\\test_cloudOrder_open_level.py:889: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:1312: in assert_data_lists_equal\n    raise e\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuanMT5_1029.test_cloudTrader.test_cloudOrder_open_level.TestMT5cloudTrader_openandlevel.TestMT5cloudTrader_level object at 0x0000015CAAACF880>\nactual = [{'magical': 19577, 'open_price': 4018.67, 'order_no': 2387575, 'size': 0.0, ...}]\nexpected = [{'magical': 19577, 'open_price': 4018.67, 'order_no': 2387575, 'size': 1.0, ...}]\nfields_to_compare = ['order_no', 'magical', 'size', 'open_price', 'symbol']\ntolerance = 1e-06, error_msg_prefix = '数据列表不匹配'\n\n    def assert_data_lists_equal(self, actual, expected, fields_to_compare, tolerance=1e-9,\n                                error_msg_prefix=\"数据列表不匹配\"):\n        \"\"\"断言两个数据列表的指定字段相等（带Allure分层提示）\"\"\"\n        actual_sorted = sorted(actual, key=lambda x: x[\"order_no\"])\n        expected_sorted = sorted(expected, key=lambda x: x[\"order_no\"])\n    \n        with allure.step(\"断言数据列表相等\"):\n            allure.attach(f\"比较字段: {fields_to_compare}\", \"比较维度\", allure.attachment_type.TEXT)\n            allure.attach(f\"浮点数容差: {tolerance}\", \"精度设置\", allure.attachment_type.TEXT)\n            allure.attach(self.serialize_data(actual_sorted), \"实际列表\", allure.attachment_type.JSON)\n            allure.attach(self.serialize_data(expected_sorted), \"预期列表\", allure.attachment_type.JSON)\n    \n        try:\n            assert len(actual_sorted) == len(expected_sorted), \\\n                f\"Failed: {error_msg_prefix}（长度不匹配）\"\n    \n            for a, e in zip(actual_sorted, expected_sorted):\n                for field in fields_to_compare:\n                    actual_val = a[field]\n                    expected_val = e[field]\n    \n                    if isinstance(actual_val, float) and isinstance(expected_val, float):\n>                       assert abs(actual_val - expected_val) <= tolerance, \\\n                            f\"Failed: {error_msg_prefix}（字段 {field} 精度不匹配）\"\nE                           AssertionError: Failed: 数据列表不匹配（字段 size 精度不匹配）\n\ncommons\\api_base.py:1304: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1761729622997,
+      "stop" : 1761729623227,
+      "duration" : 230
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "redis_client",
+    "time" : {
+      "start" : 1761729623227,
+      "stop" : 1761729623227,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761729504377,
+      "stop" : 1761729504377,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1761729623227,
+      "stop" : 1761729623227,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "class_random_str",
+    "time" : {
+      "start" : 1761729548798,
+      "stop" : 1761729548798,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761729504377,
+      "stop" : 1761729504377,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761729504377,
+      "stop" : 1761729504377,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "redis_MT5cloudTrader_data_close",
+    "time" : {
+      "start" : 1761729623227,
+      "stop" : 1761729623720,
+      "duration" : 493
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1761729506040,
+      "stop" : 1761729506040,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 用例说明\n    - 前置条件：有云策略和云跟单\n    - 操作步骤：\n      1. 修改云跟单账号平仓-关闭\n      2. 进行开仓\n      3. 进行平仓\n      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验\n      5. 修改云跟单账号平仓-开启\n    - 预期结果：云跟单账号平仓-关闭，有漏单数据\n    ",
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 数据列表不匹配（字段 size 精度不匹配）",
+    "statusTrace" : "self = <lingkuanMT5_1029.test_cloudTrader.test_cloudOrder_open_level.TestMT5cloudTrader_openandlevel.TestMT5cloudTrader_level object at 0x0000015CAAACF880>\nclass_random_str = '9dn79548'\nvar_manager = <lingkuanMT5_1029.commons.variable_manager.VariableManager object at 0x0000015CAAAF97C0>\ndb_transaction = <pymysql.connections.Connection object at 0x0000015CAAA21D60>\nredis_MT5cloudTrader_data_close = [{'lots': 0.0, 'magic': 19577, 'openPrice': 4018.67, 'symbol': 'XAUUSDp', ...}]\n\n    @allure.title(\"出现漏平-redis数据和数据库的数据做比对\")\n    def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_MT5cloudTrader_data_close):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            MT5cloudTrader_user_accounts_2 = var_manager.get_variable(\"MT5cloudTrader_user_accounts_2\")\n            cloudOrderSend = var_manager.get_variable(\"cloudOrderSend\")\n            symbol = cloudOrderSend[\"symbol\"]\n    \n            sql = f\"\"\"\n                      SELECT *\n                      FROM follow_order_detail\n                      WHERE symbol LIKE %s\n                        AND account = %s\n                        AND comment = %s\n                      \"\"\"\n            params = (\n                f\"%{symbol}%\",\n                MT5cloudTrader_user_accounts_2,\n                class_random_str\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"create_time\"\n            )\n    \n        with allure.step(\"2. 转换Redis数据为可比较格式\"):\n            if not redis_MT5cloudTrader_data_close:\n                pytest.fail(\"Redis中未查询到订单数据\")\n    \n            # 转换Redis数据为与数据库一致的格式\n            MT5cloudTrader_redis_comparable_levellist = convert_redis_orders_to_comparable_list(\n                redis_MT5cloudTrader_data_close)\n            logging.info(f\"转换后的Redis数据: {MT5cloudTrader_redis_comparable_levellist}\")\n    \n            # 将转换后的数据存入变量管理器\n            var_manager.set_runtime_variable(\"MT5cloudTrader_redis_comparable_levellist\",\n                                             MT5cloudTrader_redis_comparable_levellist)\n    \n        with allure.step(\"3. 比较Redis与数据库数据\"):\n            # 假设db_data是之前从数据库查询的结果\n            if not db_data:\n                pytest.fail(\"数据库中未查询到订单数据\")\n    \n            # 提取数据库中的关键字段（根据实际数据库表结构调整）\n            db_comparable_list = [\n                {\n                    \"order_no\": record[\"order_no\"],  # 数据库order_no → 统一字段order_no\n                    \"magical\": record[\"magical\"],  # 数据库magical → 统一字段magical\n                    \"size\": float(record[\"size\"]),  # 数据库size → 统一字段size\n                    \"open_price\": float(record[\"open_price\"]),\n                    \"symbol\": record[\"symbol\"]\n                }\n                for record in db_data\n            ]\n            logging.info(f\"数据库转换后: {db_comparable_list}\")\n            # 比较两个列表（可根据需要调整比较逻辑）\n>           self.assert_data_lists_equal(\n                actual=MT5cloudTrader_redis_comparable_levellist,\n                expected=db_comparable_list,\n                fields_to_compare=[\"order_no\", \"magical\", \"size\", \"open_price\", \"symbol\"],\n                tolerance=1e-6\n            )\n\ntest_cloudTrader\\test_cloudOrder_open_level.py:889: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:1312: in assert_data_lists_equal\n    raise e\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuanMT5_1029.test_cloudTrader.test_cloudOrder_open_level.TestMT5cloudTrader_openandlevel.TestMT5cloudTrader_level object at 0x0000015CAAACF880>\nactual = [{'magical': 19577, 'open_price': 4018.67, 'order_no': 2387575, 'size': 0.0, ...}]\nexpected = [{'magical': 19577, 'open_price': 4018.67, 'order_no': 2387575, 'size': 1.0, ...}]\nfields_to_compare = ['order_no', 'magical', 'size', 'open_price', 'symbol']\ntolerance = 1e-06, error_msg_prefix = '数据列表不匹配'\n\n    def assert_data_lists_equal(self, actual, expected, fields_to_compare, tolerance=1e-9,\n                                error_msg_prefix=\"数据列表不匹配\"):\n        \"\"\"断言两个数据列表的指定字段相等（带Allure分层提示）\"\"\"\n        actual_sorted = sorted(actual, key=lambda x: x[\"order_no\"])\n        expected_sorted = sorted(expected, key=lambda x: x[\"order_no\"])\n    \n        with allure.step(\"断言数据列表相等\"):\n            allure.attach(f\"比较字段: {fields_to_compare}\", \"比较维度\", allure.attachment_type.TEXT)\n            allure.attach(f\"浮点数容差: {tolerance}\", \"精度设置\", allure.attachment_type.TEXT)\n            allure.attach(self.serialize_data(actual_sorted), \"实际列表\", allure.attachment_type.JSON)\n            allure.attach(self.serialize_data(expected_sorted), \"预期列表\", allure.attachment_type.JSON)\n    \n        try:\n            assert len(actual_sorted) == len(expected_sorted), \\\n                f\"Failed: {error_msg_prefix}（长度不匹配）\"\n    \n            for a, e in zip(actual_sorted, expected_sorted):\n                for field in fields_to_compare:\n                    actual_val = a[field]\n                    expected_val = e[field]\n    \n                    if isinstance(actual_val, float) and isinstance(expected_val, float):\n>                       assert abs(actual_val - expected_val) <= tolerance, \\\n                            f\"Failed: {error_msg_prefix}（字段 {field} 精度不匹配）\"\nE                           AssertionError: Failed: 数据列表不匹配（字段 size 精度不匹配）\n\ncommons\\api_base.py:1304: AssertionError",
+    "steps" : [ {
+      "name" : "1. 获取订单详情表账号数据",
+      "time" : {
+        "start" : 1761729623720,
+        "stop" : 1761729628114,
+        "duration" : 4394
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1761729623720,
+          "stop" : 1761729628114,
+          "duration" : 4394
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1761729623786,
+            "stop" : 1761729623841,
+            "duration" : 55
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1761729623786,
+              "stop" : 1761729623841,
+              "duration" : 55
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "9df0f2d1fd607b66",
+              "name" : "执行SQL",
+              "source" : "9df0f2d1fd607b66.txt",
+              "type" : "text/plain",
+              "size" : 315
+            }, {
+              "uid" : "27045b1f6fea8385",
+              "name" : "SQL参数",
+              "source" : "27045b1f6fea8385.txt",
+              "type" : "text/plain",
+              "size" : 82
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "shouldDisplayMessage" : false,
+            "attachmentsCount" : 2
+          } ],
+          "attachments" : [ {
+            "uid" : "6ace169f97f7c0dd",
+            "name" : "查询条件",
+            "source" : "6ace169f97f7c0dd.txt",
+            "type" : "text/plain",
+            "size" : 83
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        }, {
+          "name" : "轮询中（已等待0.1秒）",
+          "time" : {
+            "start" : 1761729623841,
+            "stop" : 1761729623841,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "1df5c28ef3db3ec7",
+            "name" : "当前状态",
+            "source" : "1df5c28ef3db3ec7.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "c7b4a8243aeb497b",
+            "name" : "超时倒计时",
+            "source" : "c7b4a8243aeb497b.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1761729623841,
+            "stop" : 1761729623842,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "578fb62348a3d796",
+            "name" : "判断结果",
+            "source" : "578fb62348a3d796.txt",
+            "type" : "text/plain",
+            "size" : 39
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "数据发生变化",
+          "time" : {
+            "start" : 1761729623842,
+            "stop" : 1761729623842,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9ba3c59898bbd5f1",
+            "name" : "状态说明",
+            "source" : "9ba3c59898bbd5f1.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1761729625899,
+            "stop" : 1761729626001,
+            "duration" : 102
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1761729625899,
+              "stop" : 1761729626001,
+              "duration" : 102
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "fdae9b65cfc33c9b",
+              "name" : "执行SQL",
+              "source" : "fdae9b65cfc33c9b.txt",
+              "type" : "text/plain",
+              "size" : 315
+            }, {
+              "uid" : "9dfb44efbbe5c313",
+              "name" : "SQL参数",
+              "source" : "9dfb44efbbe5c313.txt",
+              "type" : "text/plain",
+              "size" : 82
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "shouldDisplayMessage" : false,
+            "attachmentsCount" : 2
+          } ],
+          "attachments" : [ {
+            "uid" : "4497ceb95e2e0409",
+            "name" : "查询条件",
+            "source" : "4497ceb95e2e0409.txt",
+            "type" : "text/plain",
+            "size" : 83
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        }, {
+          "name" : "轮询中（已等待2.3秒）",
+          "time" : {
+            "start" : 1761729626001,
+            "stop" : 1761729626002,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9991dc1bf051700b",
+            "name" : "当前状态",
+            "source" : "9991dc1bf051700b.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "e3fbaf9a4b7754e9",
+            "name" : "超时倒计时",
+            "source" : "e3fbaf9a4b7754e9.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1761729626002,
+            "stop" : 1761729626003,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "e1eec40c1672704e",
+            "name" : "唯一键信息",
+            "source" : "e1eec40c1672704e.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "4883888c41755016",
+            "name" : "判断结果",
+            "source" : "4883888c41755016.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "数据首次稳定",
+          "time" : {
+            "start" : 1761729626003,
+            "stop" : 1761729626003,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "eb3671daf49a3b5e",
+            "name" : "状态说明",
+            "source" : "eb3671daf49a3b5e.txt",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1761729628057,
+            "stop" : 1761729628111,
+            "duration" : 54
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1761729628058,
+              "stop" : 1761729628111,
+              "duration" : 53
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ {
+              "uid" : "62ff150d40b3b4bc",
+              "name" : "执行SQL",
+              "source" : "62ff150d40b3b4bc.txt",
+              "type" : "text/plain",
+              "size" : 315
+            }, {
+              "uid" : "10b4efc6c71790aa",
+              "name" : "SQL参数",
+              "source" : "10b4efc6c71790aa.txt",
+              "type" : "text/plain",
+              "size" : 82
+            } ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : true,
+            "shouldDisplayMessage" : false,
+            "attachmentsCount" : 2
+          } ],
+          "attachments" : [ {
+            "uid" : "3684274954ebf4c9",
+            "name" : "查询条件",
+            "source" : "3684274954ebf4c9.txt",
+            "type" : "text/plain",
+            "size" : 83
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        }, {
+          "name" : "轮询中（已等待4.4秒）",
+          "time" : {
+            "start" : 1761729628111,
+            "stop" : 1761729628111,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "18ba67993cdc97fb",
+            "name" : "当前状态",
+            "source" : "18ba67993cdc97fb.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "f140782ff41e2c9f",
+            "name" : "超时倒计时",
+            "source" : "f140782ff41e2c9f.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1761729628111,
+            "stop" : 1761729628112,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "4a12e2c8888e4056",
+            "name" : "唯一键信息",
+            "source" : "4a12e2c8888e4056.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "80ef510022b539a4",
+            "name" : "判断结果",
+            "source" : "80ef510022b539a4.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "数据稳定达标",
+          "time" : {
+            "start" : 1761729628112,
+            "stop" : 1761729628112,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "651f2042b13a5368",
+            "name" : "结果说明",
+            "source" : "651f2042b13a5368.txt",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "数据库查询结果（最终稳定结果）",
+          "time" : {
+            "start" : 1761729628112,
+            "stop" : 1761729628114,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "dfebffa5d6799397",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "dfebffa5d6799397.json",
+            "type" : "application/json",
+            "size" : 1863
+          }, {
+            "uid" : "1d74e7146594e73f",
+            "name" : "执行SQL",
+            "source" : "1d74e7146594e73f.txt",
+            "type" : "text/plain",
+            "size" : 253
+          }, {
+            "uid" : "20cd1282f7268d1c",
+            "name" : "SQL参数",
+            "source" : "20cd1282f7268d1c.txt",
+            "type" : "text/plain",
+            "size" : 36
+          }, {
+            "uid" : "f4db07f3fb30b9f4",
+            "name" : "查询时间窗口",
+            "source" : "f4db07f3fb30b9f4.txt",
+            "type" : "text/plain",
+            "size" : 61
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 4
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 16,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 27
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 17,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 27
+    }, {
+      "name" : "2. 转换Redis数据为可比较格式",
+      "time" : {
+        "start" : 1761729628114,
+        "stop" : 1761729628114,
+        "duration" : 0
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "3. 比较Redis与数据库数据",
+      "time" : {
+        "start" : 1761729628114,
+        "stop" : 1761729628116,
+        "duration" : 2
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: Failed: 数据列表不匹配（字段 size 精度不匹配）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuanMT5_1029\\test_cloudTrader\\test_cloudOrder_open_level.py\", line 889, in test_dbquery_redis\n    self.assert_data_lists_equal(\n  File \"D:\\pycharm_test\\lingkuanMT5_1029\\commons\\api_base.py\", line 1312, in assert_data_lists_equal\n    raise e\n  File \"D:\\pycharm_test\\lingkuanMT5_1029\\commons\\api_base.py\", line 1304, in assert_data_lists_equal\n    assert abs(actual_val - expected_val) <= tolerance, \\\n",
+      "steps" : [ {
+        "name" : "断言数据列表相等",
+        "time" : {
+          "start" : 1761729628114,
+          "stop" : 1761729628116,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "efac3a7184f9194d",
+          "name" : "比较维度",
+          "source" : "efac3a7184f9194d.txt",
+          "type" : "text/plain",
+          "size" : 69
+        }, {
+          "uid" : "d9755d6cd219f597",
+          "name" : "精度设置",
+          "source" : "d9755d6cd219f597.txt",
+          "type" : "text/plain",
+          "size" : 22
+        }, {
+          "uid" : "ebbf1f95838e1d5",
+          "name" : "实际列表",
+          "source" : "ebbf1f95838e1d5.json",
+          "type" : "application/json",
+          "size" : 126
+        }, {
+          "uid" : "b26b53ae11ae3cad",
+          "name" : "预期列表",
+          "source" : "b26b53ae11ae3cad.json",
+          "type" : "application/json",
+          "size" : 126
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 4
+      }, {
+        "name" : "数据列表断言失败",
+        "time" : {
+          "start" : 1761729628116,
+          "stop" : 1761729628116,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "c25e5e31cfb0140c",
+          "name" : "错误详情",
+          "source" : "c25e5e31cfb0140c.txt",
+          "type" : "text/plain",
+          "size" : 62
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 0,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 5
+    } ],
+    "attachments" : [ {
+      "uid" : "d92da652b33ac419",
+      "name" : "log",
+      "source" : "d92da652b33ac419.txt",
+      "type" : "text/plain",
+      "size" : 7734
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 22,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 33
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1761729628143,
+      "stop" : 1761729628143,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "redis_client::0",
+    "time" : {
+      "start" : 1761729628142,
+      "stop" : 1761729628142,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761729766564,
+      "stop" : 1761729766565,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1761729628143,
+      "stop" : 1761729628143,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略-策略账号交易下单-漏单场景"
+  }, {
+    "name" : "story",
+    "value" : "场景2：交易下单-云策略复制下单-漏平"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudOrder_open_level"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestMT5cloudTrader_openandlevel"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "80940-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudOrder_open_level"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "c902f8fb8bd872f5.json",
+  "parameterValues" : [ ]
+}

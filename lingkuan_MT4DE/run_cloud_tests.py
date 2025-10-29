@@ -29,17 +29,7 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",
 
         "test_cloudTrader/test_create.py",
-        # "test_cloudTrader/test_lianxi.py",
-        # "test_cloudTrader/test_lianxi2.py",
-        # "test_cloudTrader/test_getAccountDataPage.py",
-        # "test_cloudTrader/test_cloudOrderSend.py",
-        # "test_cloudTrader/test_cloudOrderClose.py",
-        # "test_cloudTrader/test_cloud_masOrderSend.py",
-        # "test_cloudTrader/test_cloud_masOrderClose.py",
-        # "test_cloudTrader/test_cloudOrder_open_level.py",
-        # "test_cloudTrader/test_cloudfixed_annotations.py",
         "test_cloudTrader/test_create_scene.py",
-        # "test_cloudTrader/test_cloudtrader_money_scene.py",
         "test_cloudTrader/test_delete.py",
 
         "--log-file=./Logs/cloud_pytest.log",

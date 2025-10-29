@@ -106,7 +106,7 @@ class TestCloudremark:
                 self.assert_response_status(response, 200, "修改跟单账号请求失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=3, delay=10)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("云策略账号复制下单")
         def test_scenario1_place_order(self, class_random_str, logged_session, var_manager):
             with allure.step("发送开仓请求"):
@@ -141,8 +141,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT 
-                    fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -154,8 +153,7 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
@@ -328,7 +326,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -340,8 +338,7 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
@@ -513,7 +510,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -525,8 +522,7 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
@@ -696,8 +692,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT 
-                    fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -709,8 +704,7 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
@@ -878,7 +872,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -890,8 +884,7 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):
@@ -1059,7 +1052,7 @@ class TestCloudremark:
             with allure.step("查询订单备注信息"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = """
-                    SELECT fod.comment 
+                    SELECT fod.account, fod.comment, foi.operation_type, foi.create_time 
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
@@ -1071,8 +1064,7 @@ class TestCloudremark:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time",
-                    order_by="fod.comment DESC"
+                    time_field="foi.create_time"
                 )
 
             with allure.step("验证备注信息"):

@@ -26,7 +26,7 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的品种功能正确
     """)
     class TestcloudtradingOrders1(APITestBase):
-        @pytest.mark.retry(n=3, delay=10)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略-策略账号交易下单-复制下单请求
@@ -1900,7 +1900,7 @@ class TestVPSMasOrderclose:
                     '1',
                     cloudTrader_user_accounts_2,
                     cloudTrader_vps_ids_1,
-                    'changjing6',
+                    class_random_str,
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1960,7 +1960,7 @@ class TestVPSMasOrderclose:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    'changjing6',
+                    class_random_str,
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

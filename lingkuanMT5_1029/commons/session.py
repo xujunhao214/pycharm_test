@@ -42,7 +42,7 @@ class EnvironmentSession(requests.Session):
     使用 ConnectionError 捕获包括 DNS 解析失败在内的所有连接异常
     """
 
-    def __init__(self, class_random_str, environment: Environment, base_url: str, MT5vps_url=None):
+    def __init__(self, environment: Environment, base_url: str, MT5vps_url=None):
         self.environment = environment
         self.base_url = base_url.rstrip('/')  # 移除base_url末尾的斜杠
         self.jsonpath_utils = JsonPathUtils()
@@ -69,14 +69,14 @@ class EnvironmentSession(requests.Session):
         self.logger.info(f"[{DATETIME_NOW}] 切换到VPS URL: {self.current_url}")
         return self
 
-    def register_url(self, class_random_str, name: str, url: str):
+    def register_url(self, name: str, url: str):
         """
         注册命名URL，支持后续通过名称快速调用
         """
         self.named_urls[name] = url.rstrip('/')  # 确保URL末尾无斜杠
         self.logger.info(f"[{DATETIME_NOW}] 注册命名URL: {name} -> {self.named_urls[name]}")
 
-    def build_url(self, class_random_str, path: str) -> str:
+    def build_url(self, path: str) -> str:
         """
         构建完整URL，支持三种优先级：
         1. 完整URL（http://或https://开头）
@@ -101,7 +101,7 @@ class EnvironmentSession(requests.Session):
         self.logger.info(f"[{DATETIME_NOW}] 构建相对URL: {self.current_url} + {path} -> {full_url}")
         return full_url
 
-    def request(self, class_random_str, method: str, url: str, *args, **kwargs) -> requests.Response:
+    def request(self, method: str, url: str, *args, **kwargs) -> requests.Response:
         """
         重写请求方法，使用 ConnectionError 统一处理连接相关异常
         """
@@ -172,7 +172,7 @@ class EnvironmentSession(requests.Session):
             raise
 
     def extract_jsonpath(
-            self, class_random_str,
+            self,
             expr: str,
             response: requests.Response = None,
             default: Any = None,
@@ -195,7 +195,7 @@ class EnvironmentSession(requests.Session):
             self.logger.error(f"[{DATETIME_NOW}] JSONPath提取失败: {str(e)} | 表达式: {expr}")
             return default
 
-    def info_response_encoding(self, class_random_str, response: requests.Response = None) -> None:
+    def info_response_encoding(self, response: requests.Response = None) -> None:
         """
         调试响应编码，帮助诊断中文显示问题
         """

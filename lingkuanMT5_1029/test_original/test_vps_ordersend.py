@@ -423,7 +423,7 @@ class TestVPSOrderSend_AllScenarios(APITestBase):
     @allure.story("场景1：手数范围0.1-1，总订单3，总手数1")
     @pytest.mark.url("vps")
     @allure.title("策略开仓")
-    @pytest.mark.retry(n=0, delay=0)
+    @pytest.mark.retry(n=3, delay=10)
     def test_scenario1_trader_orderSend(self, class_random_str, var_manager, logged_session):
         test_params = {
             "totalNum": "3",

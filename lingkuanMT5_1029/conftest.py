@@ -21,7 +21,7 @@ from lingkuanMT5_1029.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
-from lingkuanMT5_1029.commons.random_generator import *
+from lingkuanMT5_1029.commons.random_generator import generate_random_str
 
 logger = logging.getLogger(__name__)
 
@@ -269,16 +269,16 @@ class TestResultTracker:
         self.duration = "未知"
         self.test_group = None  # 新增：存储测试组信息
 
-    def pytest_sessionstart(self, class_random_str, session):
+    def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # 新增：获取 --test-group 参数
         self.test_group = session.config.getoption("--test-group", "未指定")
         logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}, 测试组: {self.test_group}")
 
-    def pytest_runtest_logreport(self, class_random_str, report):
+    def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果"""
-        if not hasattr(self, class_random_str, 'processed_test_ids'):
+        if not hasattr(self, 'processed_test_ids'):
             self.processed_test_ids = set()
 
         if report.when == "setup" and report.nodeid not in self.processed_test_ids:
@@ -295,7 +295,7 @@ class TestResultTracker:
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
-    def pytest_sessionfinish(self, class_random_str, session, exitstatus):
+    def pytest_sessionfinish(self, session, exitstatus):
         """测试会话结束时计算耗时并发送通知"""
         self.end_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         start = datetime.datetime.strptime(self.start_time, "%Y-%m-%d %H:%M:%S")

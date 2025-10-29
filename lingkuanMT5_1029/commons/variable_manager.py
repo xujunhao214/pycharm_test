@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class VariableManager:
-    def __init__(self, class_random_str, env: str = "test", data_dir: str = "VAR", test_group: str = ""):
+    def __init__(self, env: str = "test", data_dir: str = "VAR", test_group: str = ""):
         """
         初始化变量管理器（支持测试组隔离）
 
@@ -73,7 +73,7 @@ class VariableManager:
             # print(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
 
     def get_variable(
-            self, class_random_str,
+            self,
             name: str,
             from_runtime: bool = False,
             default: Optional[Any] = None
@@ -89,7 +89,7 @@ class VariableManager:
             # 再从静态变量获取
             return self._get_nested_variable(self.static_vars, name, default)
 
-    def set_runtime_variable(self, class_random_str, name: str, value: Any) -> None:
+    def set_runtime_variable(self, name: str, value: Any) -> None:
         """设置运行时变量并保存到文件（逻辑不变）"""
         self._set_nested_variable(self.runtime_vars, name, value)
         self.save_runtime_variables()
@@ -114,7 +114,7 @@ class VariableManager:
 
     # 以下方法（_get_nested_variable、_set_nested_variable等）保持不变
     def _get_nested_variable(
-            self, class_random_str,
+            self,
             data: Dict[str, Any],
             name: str,
             default: Optional[Any]
@@ -130,7 +130,7 @@ class VariableManager:
 
         return current
 
-    def _set_nested_variable(self, class_random_str, data: Dict[str, Any], name: str, value: Any) -> None:
+    def _set_nested_variable(self, data: Dict[str, Any], name: str, value: Any) -> None:
         parts = name.split(".")
         current = data
 
@@ -141,7 +141,7 @@ class VariableManager:
 
         current[parts[-1]] = value
 
-    def append_to_list(self, class_random_str, var_name: str, value: Any) -> None:
+    def append_to_list(self, var_name: str, value: Any) -> None:
         current_value = self.get_variable(var_name, from_runtime=True, default=[])
         if not isinstance(current_value, list):
             logger.warning(f"[{DATETIME_NOW}] 变量 {var_name} 不是列表类型，将重置为列表")
@@ -150,7 +150,7 @@ class VariableManager:
         self.set_runtime_variable(var_name, current_value)
         logger.info(f"[{DATETIME_NOW}] 向列表 {var_name} 追加值: {value}")
 
-    def get_variable_list(self, class_random_str, name: str, default: List[Any] = None) -> List[Any]:
+    def get_variable_list(self, name: str, default: List[Any] = None) -> List[Any]:
         default = default or []
         value = self.get_variable(name, from_runtime=True, default=default)
         if not isinstance(value, list):
@@ -158,13 +158,13 @@ class VariableManager:
             return default
         return value
 
-    def set_batch_variables(self, class_random_str, var_dict: Dict[str, Any]) -> None:
+    def set_batch_variables(self, var_dict: Dict[str, Any]) -> None:
         for var_name, value in var_dict.items():
             self.set_runtime_variable(var_name, value)
         self.save_runtime_variables()
         logger.info(f"[{DATETIME_NOW}] 批量设置 {len(var_dict)} 个运行时变量")
 
-    def delete_variable(self, class_random_str, name: str) -> None:
+    def delete_variable(self, name: str) -> None:
         parts = name.split(".")
         current = self.runtime_vars
 

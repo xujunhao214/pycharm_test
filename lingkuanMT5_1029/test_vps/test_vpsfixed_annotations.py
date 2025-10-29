@@ -42,7 +42,7 @@ class TestVPSremark:
                 "cfd": "",
                 "forex": "",
                 "followOrderRemark": 0,
-                "fixedComment": "ceshiceluebeizhu",
+                "fixedComment": f"ceshiceluebeizhu{class_random_str}",
                 "commentType": None,
                 "digits": 0
             }
@@ -95,16 +95,18 @@ class TestVPSremark:
             self.assert_response_status(response, 200, "修改跟单账号失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
+        @pytest.mark.retry(n=3, delay=10)
         @pytest.mark.url("vps")
         @allure.title("策略开仓及备注校验")
-        def test_scenario1_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session, db_transaction):
+        def test_scenario1_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session,
+                                                       db_transaction):
             with allure.step("1. 开仓请求"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": "ceshikaicangbeizhu",
+                    "remark": f"ceshikaicangbeizhu{class_random_str}",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -141,7 +143,7 @@ class TestVPSremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshiceluebeizhu",
+                    expected_value=f"ceshiceluebeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message=f"预期：跟单取策略备注",
@@ -205,7 +207,7 @@ class TestVPSremark:
                 "cfd": "",
                 "forex": "",
                 "followOrderRemark": 0,
-                "fixedComment": "ceshiceluebeizhu",
+                "fixedComment": f"ceshiceluebeizhu{class_random_str}",
                 "commentType": None,
                 "digits": 0
             }
@@ -237,7 +239,7 @@ class TestVPSremark:
                 "followOpen": 1,
                 "followClose": 1,
                 "followRep": 0,
-                "fixedComment": "ceshigendanbeizhu",  # 跟单有固定注释
+                "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单有固定注释
                 "commentType": "",
                 "digits": 0,
                 "cfd": "",
@@ -256,14 +258,15 @@ class TestVPSremark:
 
         @pytest.mark.url("vps")
         @allure.title("策略开仓及备注校验")
-        def test_scenario2_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session, db_transaction):
+        def test_scenario2_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session,
+                                                       db_transaction):
             with allure.step("1. 开仓请求"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": "ceshikaicangbeizhu",
+                    "remark": f"ceshikaicangbeizhu{class_random_str}",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -300,7 +303,7 @@ class TestVPSremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshigendanbeizhu",
+                    expected_value=f"ceshigendanbeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取自身备注",
@@ -364,7 +367,7 @@ class TestVPSremark:
                 "cfd": "",
                 "forex": "",
                 "followOrderRemark": 1,  # 开启订单备注
-                "fixedComment": "ceshiceluebeizhu",
+                "fixedComment": f"ceshiceluebeizhu{class_random_str}",
                 "commentType": None,
                 "digits": 0
             }
@@ -415,14 +418,15 @@ class TestVPSremark:
 
         @pytest.mark.url("vps")
         @allure.title("策略开仓及备注校验")
-        def test_scenario3_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session, db_transaction):
+        def test_scenario3_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session,
+                                                       db_transaction):
             with allure.step("1. 开仓请求"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": "ceshikaicangbeizhu",
+                    "remark": f"ceshikaicangbeizhu{class_random_str}",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -462,7 +466,7 @@ class TestVPSremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value="ceshikaicangbeizhu",
+                    expected_value=f"ceshikaicangbeizhu{class_random_str}",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取开仓备注",

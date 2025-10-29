@@ -26,7 +26,7 @@ class TestcloudTrader_openandlevel:
     """)
     class TestcloudTrader_open(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
-        @pytest.mark.retry(n=3, delay=10)
+        @pytest.mark.retry(n=0, delay=0)
         def test_cloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followOpen改为0，关闭开仓"):
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")

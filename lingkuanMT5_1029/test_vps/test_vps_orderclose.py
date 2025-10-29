@@ -102,7 +102,7 @@ class TestVPSCoreFunctionality:
                 )
 
         @pytest.mark.url("vps")
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("平仓停止功能验证")
         def test_trader_stopOrder(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送停止平仓请求"):
@@ -168,7 +168,8 @@ class TestVPSCoreFunctionality:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:

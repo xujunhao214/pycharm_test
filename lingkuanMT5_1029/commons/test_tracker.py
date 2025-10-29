@@ -24,12 +24,12 @@ class TestResultTracker:
         self.skipped_reasons = {}
         self.duration = "未知"  # 初始化duration属性
 
-    def pytest_sessionstart(self, class_random_str, session):
+    def pytest_sessionstart(self, session):
         """测试会话开始时记录时间"""
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}")
 
-    def pytest_runtest_logreport(self, class_random_str, report):
+    def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果（包括setup/teardown阶段）"""
         # 总用例数统计（每个用例只统计一次）
         if report.when == "setup" and report.nodeid not in self.processed_test_ids:
@@ -48,7 +48,7 @@ class TestResultTracker:
         elif report.outcome == "passed" and report.when == "call":
             self.passed += 1
 
-    def pytest_sessionfinish(self, class_random_str, session, exitstatus):
+    def pytest_sessionfinish(self, session, exitstatus):
         """测试会话结束时计算耗时并发送通知"""
         self.end_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         start = datetime.datetime.strptime(self.start_time, "%Y-%m-%d %H:%M:%S")

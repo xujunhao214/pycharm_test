@@ -6,7 +6,7 @@ from typing import Optional, Any, List, Dict, Union
 class JsonPathUtils:
     """JSONPath工具类，用于从JSON响应中提取数据"""
 
-    def extract(self, class_random_str, data: dict, expression: str, default: Any = None, multi_match: bool = False) -> Any:
+    def extract(self, data: dict, expression: str, default: Any = None, multi_match: bool = False) -> Any:
         """
         使用JSONPath表达式从数据中提取值
         :param data: JSON数据
@@ -32,12 +32,12 @@ class JsonPathUtils:
             logging.info(f"JSONPath解析错误: {e}")
             return default
 
-    def assert_value(self, class_random_str, data: dict, expression: str, expected: any) -> None:
+    def assert_value(self, data: dict, expression: str, expected: any) -> None:
         """断言JSONPath表达式提取的值与预期值相等"""
         actual = self.extract(data, expression)
         assert actual == expected, f"断言失败：预期值 '{expected}'，实际值 '{actual}'"
 
-    def assert_contains(self, class_random_str, data: dict, expression: str, expected: any) -> None:
+    def assert_contains(self, data: dict, expression: str, expected: any) -> None:
         """断言JSONPath表达式提取的值包含预期值"""
         actual = self.extract(data, expression)
         assert expected in actual, f"断言失败：'{actual}' 不包含 '{expected}'"

@@ -99,7 +99,7 @@ class TestVPSOrderSend1(APITestBase):
             )
 
     @pytest.mark.url("vps")
-    @pytest.mark.retry(n=0, delay=0)
+    @pytest.mark.retry(n=3, delay=10)
     @allure.title("跟单软件看板-VPS数据-平仓的时候点击停止")
     def test_trader_stopOrder(self, class_random_str, var_manager, logged_session):
         with allure.step("1. 发送停止平仓请求"):

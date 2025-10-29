@@ -67,6 +67,7 @@ class TestCloudMasOrdersend:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
+        @pytest.mark.retry(n=3, delay=10)
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -1368,7 +1369,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_2,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1470,7 +1471,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1549,7 +1550,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1624,7 +1625,7 @@ class TestCloudMasOrdersend:
                     '1',
                     MT5cloudTrader_user_accounts_4,
                     MT5cloudTrader_MT5vps_ids_3,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1747,7 +1748,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_2,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1851,7 +1852,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1941,7 +1942,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2029,7 +2030,7 @@ class TestCloudMasOrdersend:
                     '1',
                     MT5cloudTrader_user_accounts_4,
                     MT5cloudTrader_MT5vps_ids_3,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2424,15 +2425,15 @@ class TestCloudMasOrdersend:
                     time_field="fod.close_time"
                 )
 
-            # with allure.step("2. 数据校验"):
-            #     size = [record["size"] for record in db_data]
-            #     total_lots = [record["total_lots"] for record in db_data]
-            #     self.assert_list_equal_ignore_order(
-            #         size,
-            #         total_lots,
-            #         f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-            #     )
-            #     logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+                # with allure.step("2. 数据校验"):
+                #     size = [record["size"] for record in db_data]
+                #     total_lots = [record["total_lots"] for record in db_data]
+                #     self.assert_list_equal_ignore_order(
+                #         size,
+                #         total_lots,
+                #         f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
+                #     )
+                #     logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(

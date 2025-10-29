@@ -7,7 +7,7 @@ from lingkuanMT5_1029.commons.enums import Environment  # 导入现有枚举
 
 
 class RedisClient:
-    def __init__(self, class_random_str, host: str, port: int, db: int, password: str = None):
+    def __init__(self, host: str, port: int, db: int, password: str = None):
         self.host = host
         self.port = port
         self.db = db
@@ -27,7 +27,7 @@ class RedisClient:
         except redis.RedisError as e:
             raise ConnectionError(f"Redis连接失败: {str(e)}")
 
-    def get_hash_data(self, class_random_str, key: str) -> Dict[str, Any]:
+    def get_hash_data(self, key: str) -> Dict[str, Any]:
         """获取哈希类型数据并解析（二进制转字符串/JSON）"""
         try:
             data = self.client.hgetall(key)

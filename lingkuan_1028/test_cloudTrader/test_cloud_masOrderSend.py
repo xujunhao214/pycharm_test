@@ -1389,7 +1389,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1491,7 +1491,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1570,7 +1570,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1644,7 +1644,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1767,7 +1767,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1873,7 +1873,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1967,7 +1967,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2056,7 +2056,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
