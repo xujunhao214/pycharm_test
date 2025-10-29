@@ -55,7 +55,7 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式一：分配下单")
     @allure.title("数据库校验-分配下单开仓数据")
-    def test_allocation_open_verify(self, var_manager, db_transaction):
+    def test_allocation_open_verify(self, var_manager,   db_transaction):
         with allure.step("获取开仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = """
@@ -124,7 +124,7 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式一：分配下单")
     @allure.title("VPS分配下单平仓")
-    def test_allocation_order_close(self, var_manager, logged_session):
+    def test_allocation_order_close(self, var_manager,   logged_session):
         vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")
         # 发送平仓请求
         data = {
@@ -148,7 +148,7 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式一：分配下单")
     @allure.title("数据库校验-分配下单平仓数据")
-    def test_allocation_close_verify(self, var_manager, db_transaction):
+    def test_allocation_close_verify(self, var_manager,   db_transaction):
         with allure.step("获取平仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -235,7 +235,7 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式二：复制下单")
     @allure.title("数据库校验-复制下单开仓数据")
-    def test_copy_open_verify(self, var_manager, db_transaction):
+    def test_copy_open_verify(self, var_manager,   db_transaction):
         with allure.step("获取开仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = """
@@ -304,7 +304,7 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式二：复制下单")
     @allure.title("VPS复制下单平仓")
-    def test_copy_order_close(self, var_manager, logged_session):
+    def test_copy_order_close(self, var_manager,   logged_session):
         vps_user_ids_1 = var_manager.get_variable("vps_user_ids_1")
         # 发送平仓请求
         data = {
@@ -328,7 +328,7 @@ class TestVPStradingOrders(APITestBase):
 
     @allure.story("模式二：复制下单")
     @allure.title("数据库校验-复制下单平仓数据")
-    def test_copy_close_verify(self, var_manager, db_transaction):
+    def test_copy_close_verify(self, var_manager,   db_transaction):
         with allure.step("获取平仓订单数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")

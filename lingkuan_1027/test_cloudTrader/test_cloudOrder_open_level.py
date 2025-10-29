@@ -27,7 +27,7 @@ class TestcloudTrader_openandlevel:
     class TestcloudTrader_open(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
         @pytest.mark.retry(n=0, delay=0)
-        def test_cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):
+        def test_cloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followOpen改为0，关闭开仓"):
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -84,7 +84,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -102,7 +102,7 @@ class TestcloudTrader_openandlevel:
                 assert follow_open == 0, f"follow_open的状态应该是0，实际是：{follow_open}"
 
         @allure.title("账号管理-交易下单-云策略账号复制下单-出现漏开")
-        def test_bargain_masOrderSend(self, logged_session, var_manager):
+        def test_bargain_masOrderSend(self, class_random_str, logged_session, var_manager):
             # 1. 发送云策略复制下单请求
             global cloudTrader_user_ids_2
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -119,14 +119,13 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing1"
+                "remark": class_random_str
             }
 
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderSend',
-                json_data=data,
-                sleep_seconds=0
+                json_data=data
             )
 
             # 2. 判断云策略复制下单是否成功
@@ -138,7 +137,7 @@ class TestcloudTrader_openandlevel:
             )
 
         @allure.title("数据库校验-账号管理-交易下单-根据remark发现有漏单")
-        def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
+        def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
@@ -191,7 +190,7 @@ class TestcloudTrader_openandlevel:
                 # print(f"master_order的数据是：{cloudTrader_master_order_open}")
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_cloudTrader_data_send):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
@@ -207,7 +206,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -257,7 +256,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_cloudTrader_cloudBatchUpdate2(self, var_manager, logged_session):
+        def test_cloudTrader_cloudBatchUpdate2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followOpen改为1，开启开仓"):
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -314,7 +313,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -332,7 +331,7 @@ class TestcloudTrader_openandlevel:
                 assert follow_open == 1, f"follow_open的状态应该是1，实际是：{follow_open}"
 
         @allure.title("云策略-云策略列表-修改完之后进行开仓补全")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -363,7 +362,7 @@ class TestcloudTrader_openandlevel:
                     )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -439,7 +438,7 @@ class TestcloudTrader_openandlevel:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓")
-        def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -465,7 +464,7 @@ class TestcloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -500,7 +499,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -555,7 +554,7 @@ class TestcloudTrader_openandlevel:
     """)
     class TestcloudTrader_level(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):
+        def test_cloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followClose改为0，关闭平仓"):
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -612,7 +611,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -630,7 +629,7 @@ class TestcloudTrader_openandlevel:
                 assert follow_close == 0, f"follow_close的状态应该是0，实际是：{follow_close}"
 
         @allure.title("账号管理-交易下单-云策略账号复制下单")
-        def test_bargain_masOrderSend(self, logged_session, var_manager):
+        def test_bargain_masOrderSend(self, class_random_str, logged_session, var_manager):
             # 1. 发送云策略复制下单请求
             global cloudTrader_user_ids_2
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -647,14 +646,13 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing2"
+                "remark": class_random_str
             }
 
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderSend',
-                json_data=data,
-                sleep_seconds=0
+                json_data=data
             )
 
             # 2. 判断云策略复制下单是否成功
@@ -666,7 +664,7 @@ class TestcloudTrader_openandlevel:
             )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -700,7 +698,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -744,7 +742,7 @@ class TestcloudTrader_openandlevel:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓-出现漏平")
-        def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -770,7 +768,7 @@ class TestcloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
-        def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_clsesdetail(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
@@ -806,7 +804,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -832,7 +830,7 @@ class TestcloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("出现漏平-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_close):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_cloudTrader_data_close):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
@@ -848,7 +846,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -898,7 +896,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_cloudTrader_cloudBatchUpdate2(self, var_manager, logged_session):
+        def test_cloudTrader_cloudBatchUpdate2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followClose改为1，开启平仓"):
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -955,7 +953,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -973,7 +971,7 @@ class TestcloudTrader_openandlevel:
                 assert follow_close == 1, f"follow_close的状态应该是1，实际是：{follow_close}"
 
         @allure.title("云策略-云策略列表-修改完之后进行平仓补全")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送平仓补全请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -1005,7 +1003,7 @@ class TestcloudTrader_openandlevel:
                     )
 
         @allure.title("云策略-云策略列表-云跟单账号自己平仓")
-        def test_cloudTrader_cloudOrderClose2(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose2(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -1031,7 +1029,7 @@ class TestcloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1066,7 +1064,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1123,7 +1121,7 @@ class TestcloudTrader_openandlevel:
     """)
     class Testcloudstargy_addstatus(APITestBase):
         @allure.title("云策略-云策略列表-修改策略账号信息")
-        def test_mascontrol_cloudTrader(self, var_manager, logged_session, encrypted_password):
+        def test_mascontrol_cloudTrader(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 修改云策略 策略账号状态runningStatus为1，关闭策略状态
             with allure.step("发送修改云策略 策略账号状态的请求"):
                 new_user = var_manager.get_variable("new_user")
@@ -1170,7 +1168,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改策略账号是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
@@ -1187,7 +1185,7 @@ class TestcloudTrader_openandlevel:
                 assert running_status == 1, f"running_status的状态应该是1，实际是：{running_status}"
 
         @allure.title("账号管理-交易下单-云策略账号复制下单-出现漏开")
-        def test_bargain_masOrderSend(self, logged_session, var_manager):
+        def test_bargain_masOrderSend(self, class_random_str, logged_session, var_manager):
             # 1. 发送云策略复制下单请求
             global cloudTrader_user_ids_2
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -1204,14 +1202,13 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing3"
+                "remark": class_random_str
             }
 
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderSend',
-                json_data=data,
-                sleep_seconds=0
+                json_data=data
             )
 
             # 2. 判断云策略复制下单是否成功
@@ -1223,7 +1220,7 @@ class TestcloudTrader_openandlevel:
             )
 
         @allure.title("数据库校验-账号管理-交易下单-根据remark发现有漏单")
-        def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
+        def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
@@ -1276,7 +1273,7 @@ class TestcloudTrader_openandlevel:
                 # print(f"master_order的数据是：{cloudTrader_master_order_open}")
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_cloudTrader_data_send):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
@@ -1292,7 +1289,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1342,7 +1339,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("云策略-云策略列表-修改策略账号信息")
-        def test_mascontrol_cloudTrader2(self, var_manager, logged_session, encrypted_password):
+        def test_mascontrol_cloudTrader2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 修改云策略 策略账号状态runningStatus为0，开启策略状态
             with allure.step("发送修改云策略 策略账号状态的请求"):
                 new_user = var_manager.get_variable("new_user")
@@ -1389,7 +1386,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改策略账号是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
@@ -1406,7 +1403,7 @@ class TestcloudTrader_openandlevel:
                 assert running_status == 0, f"running_status的状态应该是0，实际是：{running_status}"
 
         @allure.title("云策略-云策略列表-修改完之后进行开仓补全")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -1437,7 +1434,7 @@ class TestcloudTrader_openandlevel:
                     )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1513,7 +1510,7 @@ class TestcloudTrader_openandlevel:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓")
-        def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -1539,7 +1536,7 @@ class TestcloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1574,7 +1571,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1629,7 +1626,7 @@ class TestcloudTrader_openandlevel:
     """)
     class Testcloudstargy_status(APITestBase):
         @allure.title("云策略-云策略列表-修改策略账号信息")
-        def test_mascontrol_cloudMaster(self, var_manager, logged_session, encrypted_password):
+        def test_mascontrol_cloudMaster(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 修改云策略状态status为1，关闭策略状态
             with allure.step("发送修改云策略的请求"):
                 cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
@@ -1667,7 +1664,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
                 params = ("自动化测试",)
@@ -1683,7 +1680,7 @@ class TestcloudTrader_openandlevel:
                 assert status == 1, f"status的状态应该是1，实际是：{status}"
 
         @allure.title("账号管理-交易下单-云策略账号复制下单-出现漏开")
-        def test_bargain_masOrderSend(self, logged_session, var_manager):
+        def test_bargain_masOrderSend(self, class_random_str, logged_session, var_manager):
             # 1. 发送云策略复制下单请求
             global cloudTrader_user_ids_2
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -1700,14 +1697,13 @@ class TestcloudTrader_openandlevel:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing4"
+                "remark": class_random_str
             }
 
             response = self.send_post_request(
                 logged_session,
                 '/bargain/masOrderSend',
-                json_data=data,
-                sleep_seconds=0
+                json_data=data
             )
 
             # 2. 判断云策略复制下单是否成功
@@ -1719,7 +1715,7 @@ class TestcloudTrader_openandlevel:
             )
 
         @allure.title("数据库校验-账号管理-交易下单-根据remark发现有漏单")
-        def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
+        def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
@@ -1772,7 +1768,7 @@ class TestcloudTrader_openandlevel:
                 # print(f"master_order的数据是：{cloudTrader_master_order_open}")
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_cloudTrader_data_send):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudOrderSend = var_manager.get_variable("cloudOrderSend")
@@ -1788,7 +1784,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     f"%{symbol}%",
                     cloudTrader_user_accounts_2,
-                    "changjing4"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1838,7 +1834,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("云策略-云策略列表-修改策略账号信息")
-        def test_mascontrol_cloudMaster2(self, var_manager, logged_session, encrypted_password):
+        def test_mascontrol_cloudMaster2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 修改云策略状态status为0，开启云策略状态
             with allure.step("发送修改云策略的请求"):
                 cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
@@ -1876,7 +1872,7 @@ class TestcloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-        def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudBatchUpdate2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
                 params = ("自动化测试",)
@@ -1892,7 +1888,7 @@ class TestcloudTrader_openandlevel:
                 assert status == 0, f"status的状态应该是0，实际是：{status}"
 
         @allure.title("云策略-云策略列表-修改完之后进行开仓补全")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -1923,7 +1919,7 @@ class TestcloudTrader_openandlevel:
                     )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1996,7 +1992,7 @@ class TestcloudTrader_openandlevel:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("账号管理-交易下单-平仓")
-        def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -2022,7 +2018,7 @@ class TestcloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbcloudTrader_cloudOrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -2057,7 +2053,7 @@ class TestcloudTrader_openandlevel:
                 params = (
                     '1',
                     cloudTrader_user_accounts_4,
-                    "changjing4"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

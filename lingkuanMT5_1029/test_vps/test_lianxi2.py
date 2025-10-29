@@ -52,6 +52,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
+        @pytest.mark.retry(n=0, delay=0)
         def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -302,7 +303,8 @@ class TestVPSMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    timezone_offset=0
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:

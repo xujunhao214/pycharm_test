@@ -32,14 +32,14 @@ class TestVPSCoreFunctionality:
     class TestStopCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing1",
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": "5",
@@ -69,7 +69,7 @@ class TestVPSCoreFunctionality:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号平仓-时间间隔30秒")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送全平订单平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -104,7 +104,7 @@ class TestVPSCoreFunctionality:
         @pytest.mark.url("vps")
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("平仓停止功能验证")
-        def test_trader_stopOrder(self, var_manager, logged_session):
+        def test_trader_stopOrder(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送停止平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 params = {
@@ -130,7 +130,7 @@ class TestVPSCoreFunctionality:
                 )
 
         @allure.title("数据库校验-停止平仓-平仓手数不等于开仓手数")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -160,7 +160,7 @@ class TestVPSCoreFunctionality:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -188,7 +188,7 @@ class TestVPSCoreFunctionality:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号再次平仓操作")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送全平订单平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -222,7 +222,7 @@ class TestVPSCoreFunctionality:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓操作")
-        def test_addtrader_orderclose(self, var_manager, logged_session):
+        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -272,7 +272,7 @@ class TestVPSFollowDirection:
     class TestReverseFollowClose_sell(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号为反向跟单")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单方向为反向"):
                 # 1. 修改跟单方向为反向followDirection 1:反向 0：正向
                 new_user = var_manager.get_variable("new_user")
@@ -317,7 +317,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -354,7 +354,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-币种错误")
-        def test_trader_symbol(self, var_manager, logged_session):
+        def test_trader_symbol(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求-币种错误"):
                 global new_user
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -392,7 +392,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-buy方向-预期失败")
-        def test_trader_orderclose1(self, var_manager, logged_session):
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求，订单方向是buy"):
                 global new_user
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -430,7 +430,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-sell方向-预期成功")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求，订单方向是sell"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -466,7 +466,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号平仓-buy方向-预期成功")
-        def test_trader_orderclose3(self, var_manager, logged_session):
+        def test_trader_orderclose3(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送策略账号平仓请求，订单方向是buy"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 data = {
@@ -512,7 +512,7 @@ class TestVPSFollowDirection:
     class TestReverseFollowClose_buy(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号为正向跟单")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单方向为正向"):
                 # 1. 修改跟单方向正向followDirection 1:反向 0：正向
                 new_user = var_manager.get_variable("new_user")
@@ -557,7 +557,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -594,7 +594,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-sell方向-预期失败")
-        def test_trader_orderclose1(self, var_manager, logged_session):
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求，订单方向是sell"):
                 global new_user
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -632,7 +632,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-buy方向-预期成功")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求，订单方向是buy"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -668,7 +668,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号平仓-buy方向-预期成功")
-        def test_trader_orderclose3(self, var_manager, logged_session):
+        def test_trader_orderclose3(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送策略账号平仓请求，订单方向是buy"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 data = {
@@ -714,7 +714,7 @@ class TestVPSFollowDirection:
     class TestReverseFollowClose_all(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -751,7 +751,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-sell方向-预期失败")
-        def test_trader_orderclose1(self, var_manager, logged_session):
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求，订单方向是sell"):
                 global new_user
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -789,7 +789,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-buy sell方向-预期成功")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求，订单方向是buy"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -825,7 +825,7 @@ class TestVPSFollowDirection:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号平仓-buy方向-预期成功")
-        def test_trader_orderclose3(self, var_manager, logged_session):
+        def test_trader_orderclose3(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送策略账号平仓请求，订单方向是buy"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 data = {
@@ -878,7 +878,7 @@ class TestVPSOrderQuantityControl:
     class TestBatchCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略开仓-订单数量为2")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -915,7 +915,7 @@ class TestVPSOrderQuantityControl:
 
         @pytest.mark.url("vps")
         @allure.title("策略平仓-第一次平仓-订单数量为1")
-        def test_trader_orderclose1(self, var_manager, logged_session):
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送平仓请求-订单数量为1"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -950,7 +950,7 @@ class TestVPSOrderQuantityControl:
 
         @pytest.mark.url("vps")
         @allure.title("策略平仓-第二次平仓-订单数量为1")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送平仓请求-订单数量为1"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -985,7 +985,7 @@ class TestVPSOrderQuantityControl:
 
         @pytest.mark.url("vps")
         @allure.title("策略平仓-第三次平仓-空单验证")
-        def test_trader_orderclose3(self, var_manager, logged_session):
+        def test_trader_orderclose3(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送平仓请求-订单数量为1-预期失败"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -1041,7 +1041,7 @@ class TestVPSOrderType:
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT4ExternalOrderClose(APITestBase):
         @allure.title("登录MT4账号获取token")
-        def test_mt4_login(self, var_manager):
+        def test_mt4_login(self, class_random_str, var_manager):
             global token_mt4, headers
             max_retries = 5  # 最大重试次数
             retry_interval = 5  # 重试间隔（秒）
@@ -1094,7 +1094,7 @@ class TestVPSOrderType:
                 logging.info(f"登录MT4账号获取token: {token_mt4}")
 
         @allure.title("MT4平台开仓操作")
-        def test_mt4_open(self, var_manager):
+        def test_mt4_open(self, class_random_str, var_manager):
             url = f"https://mt4.mtapi.io/OrderSend?id={token_mt4}&symbol=XAUUSD&operation=Buy&volume=1&placedType=Client&price=0.00"
 
             payload = ""
@@ -1107,7 +1107,7 @@ class TestVPSOrderType:
 
         @pytest.mark.url("vps")
         @allure.title("自研平台平仓-内部订单-预期失败")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送全平订单平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -1134,7 +1134,7 @@ class TestVPSOrderType:
 
         @pytest.mark.url("vps")
         @allure.title("自研平台平仓-外部订单-预期成功")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送全平订单平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 new_user = var_manager.get_variable("new_user")
@@ -1173,7 +1173,7 @@ class TestVPSOrderType:
         class TestInternalOrderClose(APITestBase):
             @pytest.mark.url("vps")
             @allure.title("策略开仓")
-            def test_trader_orderSend(self, var_manager, logged_session):
+            def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
                 # 1. 发送策略开仓请求
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1210,7 +1210,7 @@ class TestVPSOrderType:
 
             @pytest.mark.url("vps")
             @allure.title("vps策略平仓-外部订单-预期失败")
-            def test_trader_orderclose1(self, var_manager, logged_session):
+            def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
                 with allure.step("1. 发送平仓请求"):
                     vps_trader_id = var_manager.get_variable("vps_trader_id")
                     new_user = var_manager.get_variable("new_user")
@@ -1246,7 +1246,7 @@ class TestVPSOrderType:
 
             @pytest.mark.url("vps")
             @allure.title("vps策略平仓-内部订单-预期成功")
-            def test_trader_orderclose2(self, var_manager, logged_session):
+            def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
                 with allure.step("1. 发送平仓请求"):
                     vps_trader_id = var_manager.get_variable("vps_trader_id")
                     new_user = var_manager.get_variable("new_user")
@@ -1294,7 +1294,7 @@ class TestVPSOrderType:
         class TestAllOrderClose(APITestBase):
             @pytest.mark.url("vps")
             @allure.title("策略开仓")
-            def test_trader_orderSend(self, var_manager, logged_session):
+            def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
                 # 1. 发送策略开仓请求
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1331,7 +1331,7 @@ class TestVPSOrderType:
 
             @pytest.mark.url("vps")
             @allure.title("vps策略平仓-外部订单-预期失败")
-            def test_trader_orderclose1(self, var_manager, logged_session):
+            def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
                 with allure.step("1. 发送平仓请求"):
                     vps_trader_id = var_manager.get_variable("vps_trader_id")
                     new_user = var_manager.get_variable("new_user")
@@ -1367,7 +1367,7 @@ class TestVPSOrderType:
 
             @pytest.mark.url("vps")
             @allure.title("vps策略平仓-全部订单-预期成功")
-            def test_trader_orderclose2(self, var_manager, logged_session):
+            def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
                 with allure.step("1. 发送平仓请求-全部订单"):
                     vps_trader_id = var_manager.get_variable("vps_trader_id")
                     new_user = var_manager.get_variable("new_user")
@@ -1422,7 +1422,7 @@ class TestVPSCloseRemark:
     class TestFixedCommentMatching(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号固定注释")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号的固定注释为空"):
                 new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1466,7 +1466,7 @@ class TestVPSCloseRemark:
 
         @pytest.mark.url("vps")
         @allure.title("策略开仓-带固定备注")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送策略开仓请求"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1502,7 +1502,7 @@ class TestVPSCloseRemark:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-错误备注-预期失败")
-        def test_trader_orderclose1(self, var_manager, logged_session):
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求-错误备注"):
                 global new_user
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -1540,7 +1540,7 @@ class TestVPSCloseRemark:
 
         @pytest.mark.url("vps")
         @allure.title("跟单账号平仓-正确备注-预期成功")
-        def test_trader_orderclose2(self, var_manager, logged_session):
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送跟单账号平仓请求-正确备注"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1576,7 +1576,7 @@ class TestVPSCloseRemark:
 
         @pytest.mark.url("vps")
         @allure.title("策略账号平仓-正确备注")
-        def test_trader_orderclose3(self, var_manager, logged_session):
+        def test_trader_orderclose3(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送策略账号平仓请求"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 data = {

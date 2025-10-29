@@ -15,7 +15,7 @@ SKIP_REASON = "跳过此用例"
 class TestDeleteUser(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-删除VPS组别")
-    def test_delete_group(self, logged_session, var_manager):
+    def test_delete_group(self, class_random_str, logged_session, var_manager):
         # 1. 发送删除VPS组别请求
         vps_group_id = var_manager.get_variable("vps_group_id")
         response = self.send_delete_request(
@@ -40,9 +40,8 @@ class TestDeleteUser(APITestBase):
         )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=0, delay=0)
     @allure.title("数据库校验-组别列表-删除VPS组别")
-    def test_dbdelete_group(self, var_manager, db_transaction):
+    def test_dbdelete_group(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             add_vpsgroup = var_manager.get_variable("add_vpsgroup")
             sql = f"SELECT * FROM follow_group WHERE name = %s"
@@ -60,7 +59,7 @@ class TestDeleteUser(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-清空VPS数据")
-    def test_closeVps(self, logged_session, var_manager):
+    def test_closeVps(self, class_random_str, logged_session, var_manager):
         vps_list_id = var_manager.get_variable("vps_list_id")
         # 定义白名单（不可清空数据的ID列表）
         WHITE_LIST_IDS = var_manager.get_variable("WHITE_LIST")
@@ -93,7 +92,7 @@ class TestDeleteUser(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-删除VPS数据")
-    def test_delete_Vps(self, logged_session, var_manager):
+    def test_delete_Vps(self, class_random_str, logged_session, var_manager):
         vps_list_id = var_manager.get_variable("vps_list_id")
         # 定义白名单（不可删除数据的ID列表）
         WHITE_LIST_IDS = var_manager.get_variable("WHITE_LIST")
@@ -125,7 +124,7 @@ class TestDeleteUser(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-强制删除VPS")
-    def test_deleteVPS_forceDelete(self, logged_session, var_manager):
+    def test_deleteVPS_forceDelete(self, class_random_str, logged_session, var_manager):
         vps_list_id = var_manager.get_variable("vps_list_id")
         # 定义白名单（不可删除数据的ID列表）
         WHITE_LIST_IDS = var_manager.get_variable("WHITE_LIST")
@@ -164,7 +163,7 @@ class TestDeleteUser(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS列表列表-删除VPS")
-    def test_dbdelete_vps(self, var_manager, db_transaction):
+    def test_dbdelete_vps(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             add_VPS = var_manager.get_variable("add_VPS")
             logging.info(f"查询条件: ipAddress={add_VPS['ipAddress']}, deleted={add_VPS['deleted']}")
@@ -186,7 +185,7 @@ class TestDeleteUser(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-删除跟单账号")
-    def test_delete_addsalve(self, var_manager, logged_session):
+    def test_delete_addsalve(self, class_random_str, var_manager, logged_session):
         # 1. 发送删除跟单账号请求
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         response = self.send_delete_request(
@@ -212,7 +211,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-删除跟单账号")
-    def test_dbdelete_addsalve(self, var_manager, db_transaction):
+    def test_dbdelete_addsalve(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             logging.info(f"查询条件: table=follow_trader, account={vps_user_accounts_1}")
@@ -241,7 +240,7 @@ class TestDeleteUser(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-批量删除跟单账号")
-    def test_delete_addsalvelist(self, var_manager, logged_session):
+    def test_delete_addsalvelist(self, class_random_str, var_manager, logged_session):
         # 1. 获取账号总数和所有ID
         vps_addslave_count = var_manager.get_variable("vps_addslave_count", 0)
         if vps_addslave_count <= 0:
@@ -279,7 +278,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量删除跟单账号")
-    def test_dbdelete_addsalvelist(self, var_manager, db_transaction):
+    def test_dbdelete_addsalvelist(self, class_random_str, var_manager, db_transaction):
         # 1. 获取账号总数和所有账号信息
         vps_addslave_count = var_manager.get_variable("vps_addslave_count", 0)
         if vps_addslave_count <= 0:
@@ -318,7 +317,7 @@ class TestDeleteUser(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-删除策略账号")
-    def test_delete_vpstrader(self, var_manager, logged_session):
+    def test_delete_vpstrader(self, class_random_str, var_manager, logged_session):
         # 1. 发送删除策略账号请求
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         response = self.send_delete_request(
@@ -344,7 +343,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-删除策略账号")
-    def test_dbdelete_vpstrader(self, var_manager, db_transaction):
+    def test_dbdelete_vpstrader(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             new_user = var_manager.get_variable("new_user")
             logging.info(f"查询条件: table=follow_trader, account={new_user['account']}")
@@ -364,7 +363,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种")
-    def test_deleteTemplate(self, logged_session, var_manager):
+    def test_deleteTemplate(self, class_random_str, logged_session, var_manager):
         """测试删除用户接口"""
         # 1. 发送删除品种请求
         vps_template_id = var_manager.get_variable("vps_template_id")
@@ -391,7 +390,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-删除品种")
-    def test_dbdelete_template(self, var_manager, db_transaction):
+    def test_dbdelete_template(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             add_variety = var_manager.get_variable("add_variety")
             logging.info(f"查询条件: table=follow_variety, templateName2={add_variety['templateName']}")
@@ -411,7 +410,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种2")
-    def test_deleteTemplate2(self, logged_session, var_manager):
+    def test_deleteTemplate2(self, class_random_str, logged_session, var_manager):
         """测试删除用户接口"""
         # 1. 发送删除品种请求
         vps_template_id2 = var_manager.get_variable("vps_template_id2")
@@ -438,7 +437,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-删除品种2")
-    def test_dbdelete_template2(self, var_manager, db_transaction):
+    def test_dbdelete_template2(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             add_variety = var_manager.get_variable("add_variety")
             logging.info(f"查询条件: table=follow_variety, templateName2={add_variety['templateName3']}")
@@ -458,7 +457,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-删除账号")
-    def test_delete_user(self, logged_session, var_manager):
+    def test_delete_user(self, class_random_str, logged_session, var_manager):
         """测试删除用户接口"""
         # 1. 发送删除用户请求
         vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -485,7 +484,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-删除账号")
-    def test_dbdelete_user(self, var_manager, db_transaction):
+    def test_dbdelete_user(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             new_user = var_manager.get_variable("new_user")
             logging.info(f"查询条件: table=FOLLOW_TRADER_USER, name={new_user['account']}")
@@ -506,7 +505,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量删除账号")
-    def test_delete_userlist(self, logged_session, var_manager):
+    def test_delete_userlist(self, class_random_str, logged_session, var_manager):
         """测试批量删除用户接口"""
         # 1. 获取需要删除的账号总数（从新增阶段的变量获取，确保与新增数量一致）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
@@ -547,7 +546,7 @@ class TestDeleteUser(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量删除账号")
-    def test_dbdelete_userlist(self, var_manager, db_transaction):
+    def test_dbdelete_userlist(self, class_random_str, var_manager, db_transaction):
         """数据库校验批量删除结果"""
         # 1. 获取账号总数和数据库查询配置
         vps_user_count = var_manager.get_variable("vps_user_count", 0)

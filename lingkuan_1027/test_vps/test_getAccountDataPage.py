@@ -26,7 +26,7 @@ class TestVPSOrderSend_newScenarios:
         # @pytest.mark.skipif(True, reason="跳过")
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓-防止数据残留")
-        def test_trader_orderprevent_close(self, var_manager, logged_session):
+        def test_trader_orderprevent_close(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -59,7 +59,7 @@ class TestVPSOrderSend_newScenarios:
         @pytest.mark.url("vps")
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -95,7 +95,7 @@ class TestVPSOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略开仓-提取数据")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 global profit_sum, total, order_num, margin_proportion, free_margin, euqit
                 new_user = var_manager.get_variable("new_user")
@@ -159,7 +159,7 @@ class TestVPSOrderSend_newScenarios:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("仪表盘-账号数据校验")
-        def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
+        def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 vps_user_accounts = new_user["account"]
@@ -289,7 +289,7 @@ class TestVPSOrderSend_newScenarios:
         @pytest.mark.skipif(True, reason="跳过")
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -332,7 +332,7 @@ class TestVPSOrderSend_newScenarios:
         @pytest.mark.url("vps")
         @pytest.mark.skipif(True, reason="跳过")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -368,7 +368,7 @@ class TestVPSOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略开仓-提取数据")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 global profit_sum, total, order_num, margin_proportion, free_margin, euqit
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -431,7 +431,7 @@ class TestVPSOrderSend_newScenarios:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("仪表盘-账号数据校验")
-        def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
+        def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 params = {
@@ -559,7 +559,7 @@ class TestVPSOrderSend_newScenarios:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -591,7 +591,7 @@ class TestVPSOrderSend_newScenarios:
         @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, var_manager, logged_session):
+        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")

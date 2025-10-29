@@ -60,7 +60,7 @@ class TestMasOrderSend(APITestBase):
 
     @allure.story("分配下单场景")
     @allure.title("数据库校验-分配下单数据")
-    def test_allocation_verify_db(self, var_manager, db_transaction):
+    def test_allocation_verify_db(self, var_manager,   db_transaction):
         """验证分配下单后数据库中的订单数据正确性"""
         with allure.step("查询订单详情数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -169,7 +169,7 @@ class TestMasOrderSend(APITestBase):
 
     @allure.story("分配下单场景")
     @allure.title("数据库校验-分配下单平仓数据")
-    def test_allocation_verify_close_db(self, var_manager, db_transaction):
+    def test_allocation_verify_close_db(self, var_manager,   db_transaction):
         """验证分配下单平仓后数据库中的订单数据正确性"""
         with allure.step("查询平仓订单数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -273,7 +273,7 @@ class TestMasOrderSend(APITestBase):
 
     @allure.story("复制下单场景")
     @allure.title("数据库校验-复制下单数据")
-    def test_copy_verify_db(self, var_manager, db_transaction):
+    def test_copy_verify_db(self, var_manager,   db_transaction):
         """验证复制下单后数据库中的订单数据正确性"""
         with allure.step("查询复制订单详情数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -389,7 +389,7 @@ class TestMasOrderSend(APITestBase):
 
     @allure.story("复制下单场景")
     @allure.title("数据库校验-复制下单平仓数据")
-    def test_copy_verify_close_db(self, var_manager, db_transaction):
+    def test_copy_verify_close_db(self, var_manager,   db_transaction):
         """验证复制下单平仓后数据库中的订单数据正确性"""
         with allure.step("查询复制平仓订单数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")

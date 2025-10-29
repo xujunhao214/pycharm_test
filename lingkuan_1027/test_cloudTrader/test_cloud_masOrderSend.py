@@ -25,7 +25,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders1(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号，没有固定注释"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
@@ -68,7 +68,7 @@ class TestCloudMasOrdersend:
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
         @allure.title("云策略交易下单-分配下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -80,7 +80,7 @@ class TestCloudMasOrdersend:
                 "startSize": "0.10",
                 "endSize": "1.00",
                 "totalSzie": "1.00",
-                "remark": "changjing1"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -97,7 +97,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -131,7 +131,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -207,7 +207,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -239,7 +239,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -290,7 +290,7 @@ class TestCloudMasOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("云策略交易下单-分配平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -313,7 +313,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -343,7 +343,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -385,7 +385,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -423,7 +423,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -486,7 +486,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders2(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -501,7 +501,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing2"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -518,7 +518,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -552,7 +552,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -638,7 +638,7 @@ class TestCloudMasOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -670,7 +670,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -723,7 +723,7 @@ class TestCloudMasOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -746,7 +746,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -776,7 +776,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -818,7 +818,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -856,7 +856,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -919,7 +919,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders3(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -934,7 +934,7 @@ class TestCloudMasOrdersend:
                 "endSize": "0.01",
                 "totalNum": "",
                 "totalSzie": "0.01",
-                "remark": "changjing3"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -951,7 +951,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -985,7 +985,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1058,7 +1058,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1090,7 +1090,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1131,7 +1131,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -1154,7 +1154,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -1184,7 +1184,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1224,7 +1224,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -1262,7 +1262,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1323,7 +1323,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders4(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -1338,7 +1338,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "10",
                 "totalSzie": "",
-                "remark": "changjing4"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -1355,7 +1355,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -1389,7 +1389,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1459,7 +1459,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1491,7 +1491,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1517,7 +1517,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -1540,7 +1540,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -1570,7 +1570,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1606,7 +1606,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -1644,7 +1644,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    'changjing4'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1701,7 +1701,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders5(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -1716,7 +1716,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "5",
-                "remark": "changjing5"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -1733,7 +1733,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -1767,7 +1767,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1841,7 +1841,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1873,7 +1873,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1914,7 +1914,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -1937,7 +1937,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -1967,7 +1967,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2018,7 +2018,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -2056,7 +2056,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    'changjing5'
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2118,7 +2118,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders6(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -2133,7 +2133,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "5",
                 "totalSzie": "",
-                "remark": "changjing6"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -2150,7 +2150,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库查询-获取停止的order_no")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 global order_no
@@ -2185,7 +2185,7 @@ class TestCloudMasOrdersend:
                 print("order_no:", order_no)
 
         @allure.title("交易下单-停止操作")
-        def test_cloudTrader_cloudStopOrder(self, logged_session, var_manager):
+        def test_cloudTrader_cloudStopOrder(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("发送停止操作请求"):
                 params = {
@@ -2208,7 +2208,7 @@ class TestCloudMasOrdersend:
                 )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -2242,7 +2242,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2267,7 +2267,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -2299,7 +2299,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2325,7 +2325,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"开仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -2348,7 +2348,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -2378,7 +2378,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2403,7 +2403,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -2441,7 +2441,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2484,7 +2484,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders7(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号"):
                 # followMode  0 : 固定手数  1：手数比例 2：净值比例
                 # remainder  0 : 四舍五入  1：取小数
@@ -2530,7 +2530,7 @@ class TestCloudMasOrdersend:
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -2545,7 +2545,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "0.3",
-                "remark": "changjing7"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -2562,7 +2562,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -2596,7 +2596,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing7"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2638,7 +2638,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -2670,7 +2670,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing7"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2713,7 +2713,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -2736,7 +2736,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -2766,7 +2766,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing7"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2807,7 +2807,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -2845,7 +2845,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing7"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2908,7 +2908,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders8(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号"):
                 # followMode  0 : 固定手数  1：手数比例 2：净值比例
                 # remainder  0 : 四舍五入  1：取小数
@@ -2954,7 +2954,7 @@ class TestCloudMasOrdersend:
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -2969,7 +2969,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "0.3",
-                "remark": "changjing8"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -2986,7 +2986,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -3020,7 +3020,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing8"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3062,7 +3062,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -3094,7 +3094,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing8"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3137,7 +3137,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -3160,7 +3160,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -3190,7 +3190,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing8"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3231,7 +3231,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -3269,7 +3269,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing8"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3332,7 +3332,7 @@ class TestCloudMasOrdersend:
     """)
     class TestCloudtradingOrders9(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
-        def test_follow_updateSlave(self, var_manager, logged_session, encrypted_password):
+        def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号"):
                 # followMode  0 : 固定手数  1：手数比例 2：净值比例
                 # remainder  0 : 四舍五入  1：取小数
@@ -3378,7 +3378,7 @@ class TestCloudMasOrdersend:
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
         @allure.title("云策略交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -3393,7 +3393,7 @@ class TestCloudMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "0.01",
-                "remark": "changjing9"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -3410,7 +3410,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -3444,7 +3444,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
-                    "changjing9"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3486,7 +3486,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 sql = f"""
@@ -3518,7 +3518,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
-                    "changjing9"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3561,7 +3561,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("云策略交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -3584,7 +3584,7 @@ class TestCloudMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"""
@@ -3614,7 +3614,7 @@ class TestCloudMasOrdersend:
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    "changjing9"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3655,7 +3655,7 @@ class TestCloudMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -3693,7 +3693,7 @@ class TestCloudMasOrdersend:
                     '1',
                     cloudTrader_user_accounts_4,
                     cloudTrader_vps_ids_3,
-                    "changjing9"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

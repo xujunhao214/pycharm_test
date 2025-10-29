@@ -23,7 +23,7 @@ future_time = current_time + datetime.timedelta(days=30)
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 
 # mysql查询语句，查询最近时间的数据
-MYSQL_TIME = 1  # 时间范围（分钟）
+MYSQL_TIME = 3  # 时间范围（分钟）
 WAIT_TIMEOUT = 30  # 数据库查询等待超时时间（秒）
 DELETE_WAIT_TIMEOUT = 5  # 数据库删除查询超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）
@@ -31,7 +31,7 @@ STBLE_PERIOD = 2  # 稳定期（秒）：数据连续2秒不变则认为加载�
 TIMEZONE_OFFSET = 5  # 时区偏移量（小时）
 
 # api基类执行完等待时间
-SLEEP_SECONDS = 3
+SLEEP_SECONDS = 1
 
 # MFA登录生成新的验证码秘钥
 MFA_SECRET_KEY = "APVHUYXFWW4DZWT7L4HI3EO4Y7VY4J2VEXE4JGZNAVCYRSAOVNQQ"

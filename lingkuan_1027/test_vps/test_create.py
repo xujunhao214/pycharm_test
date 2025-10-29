@@ -15,7 +15,7 @@ SKIP_REASON = "跳过此用例"
 class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-新增单个用户")
-    def test_create_user(self, logged_session, var_manager, encrypted_password):
+    def test_create_user(self, class_random_str, logged_session, var_manager, encrypted_password):
         # 1. 发送创建用户请求
         new_user = var_manager.get_variable("new_user")
         data = {
@@ -52,7 +52,7 @@ class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.retry(n=3, delay=5)
     @allure.title("数据库校验-账号列表-新增用户")
-    def test_dbquery_user(self, var_manager, db_transaction):
+    def test_dbquery_user(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             new_user = var_manager.get_variable("new_user")
 
@@ -74,7 +74,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库查询-提取数据库平台ID数据")
-    def test_dbquery_platform(self, var_manager, db_transaction):
+    def test_dbquery_platform(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 提取数据库平台ID数据"):
             new_user = var_manager.get_variable("new_user")
             # 执行数据库查询
@@ -94,7 +94,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
-    def test_create_importuser(self, logged_session, var_manager):
+    def test_create_importuser(self, class_random_str, logged_session, var_manager):
         adduser = var_manager.get_variable("adduser")
         with open(adduser["csv_user_path"], 'rb') as f:
             csv_file = f.read()
@@ -128,7 +128,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
-    def test_dbquery_importuser(self, var_manager, db_transaction):
+    def test_dbquery_importuser(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             new_user = var_manager.get_variable("new_user")
 
@@ -163,7 +163,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-新增VPS组别")
-    def test_create_vpsgroup(self, logged_session, var_manager):
+    def test_create_vpsgroup(self, class_random_str, logged_session, var_manager):
         add_vpsgroup = var_manager.get_variable("add_vpsgroup")
         data = {
             "name": add_vpsgroup["name"],
@@ -196,7 +196,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-组别列表-新增VPS组别")
-    def test_dbquery_vpsgroup(self, var_manager, db_transaction):
+    def test_dbquery_vpsgroup(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_vpsgroup = var_manager.get_variable("add_vpsgroup")
             # 执行数据库查询
@@ -217,7 +217,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种")
-    def test_create_variety(self, logged_session, var_manager):
+    def test_create_variety(self, class_random_str, logged_session, var_manager):
         # 1. 读取CSV文件
         add_variety = var_manager.get_variable("add_variety")
         with open(add_variety["csv_variety_path"], 'rb') as f:
@@ -250,7 +250,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-添加品种")
-    def test_dbquery_variety(self, var_manager, db_transaction):
+    def test_dbquery_variety(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_variety = var_manager.get_variable("add_variety")
             # 从变量中获取表名和模板名
@@ -272,7 +272,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种2")
-    def test_create_variety2(self, logged_session, var_manager):
+    def test_create_variety2(self, class_random_str, logged_session, var_manager):
         # 1. 读取CSV文件
         add_variety = var_manager.get_variable("add_variety")
         with open(add_variety["csv_variety_path2"], 'rb') as f:
@@ -305,7 +305,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-添加品种2")
-    def test_dbquery_variety2(self, var_manager, db_transaction):
+    def test_dbquery_variety2(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_variety = var_manager.get_variable("add_variety")
             # 从变量中获取表名和模板名
@@ -327,7 +327,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-校验服务器IP是否可用")
-    def test_get_connect(self, logged_session, var_manager):
+    def test_get_connect(self, class_random_str, logged_session, var_manager):
         # 1. 校验服务器IP是否可用
         add_VPS = var_manager.get_variable("add_VPS")
         response = self.send_get_request(
@@ -353,7 +353,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-获取可见用户信息")
-    def test_get_user(self, logged_session, var_manager):
+    def test_get_user(self, class_random_str, logged_session, var_manager):
         # 1. 请求可见用户列表接口
         response = self.send_get_request(
             logged_session,
@@ -367,7 +367,7 @@ class TestCreate(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-新增vps")
-    def test_create_vps(self, logged_session, var_manager):
+    def test_create_vps(self, class_random_str, logged_session, var_manager):
         # 1. 发送新增vps请求
         add_VPS = var_manager.get_variable("add_VPS")
         vps_user_data = var_manager.get_variable("vps_user_data")
@@ -404,7 +404,7 @@ class TestCreate(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS列表-新增vps")
-    def test_dbquery_vps(self, var_manager, db_transaction):
+    def test_dbquery_vps(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_VPS = var_manager.get_variable("add_VPS")
 
@@ -425,7 +425,7 @@ class TestCreate(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-获取要复制的VPS的ID")
-    def test_get_vps_pageid(self, logged_session, var_manager):
+    def test_get_vps_pageid(self, class_random_str, logged_session, var_manager):
         # 1. 请求VPS列表接口
         list_query = var_manager.get_variable("list_query")
         response = self.send_get_request(
@@ -441,7 +441,7 @@ class TestCreate(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-复制默认节点")
-    def test_vps_copyDefaultNode(self, logged_session, var_manager):
+    def test_vps_copyDefaultNode(self, class_random_str, logged_session, var_manager):
         # 1. 请求VPS复制默认节点接口
         vps_page_id = var_manager.get_variable("vps_page_id")
         vps_list_id = var_manager.get_variable("vps_list_id")
@@ -471,7 +471,7 @@ class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
-    def test_add_trader(self, var_manager, logged_session, encrypted_password):
+    def test_add_trader(self, class_random_str, var_manager, logged_session, encrypted_password):
         # 1. 发送新增策略账号请求
         new_user = var_manager.get_variable("new_user")
         data = {
@@ -514,7 +514,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-新增策略账号")
-    def test_dbquery_trader(self, var_manager, db_transaction):
+    def test_dbquery_trader(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             new_user = var_manager.get_variable("new_user")
             # 执行数据库查询
@@ -544,7 +544,7 @@ class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增跟单账号")
-    def test_create_addSlave(self, var_manager, logged_session, encrypted_password):
+    def test_create_addSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
         # 1. 发送新增策略账号请求
         new_user = var_manager.get_variable("new_user")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -596,7 +596,7 @@ class TestCreate(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-新增跟单账号")
-    def test_dbquery_addslave(self, var_manager, db_transaction):
+    def test_dbquery_addslave(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             # 执行数据库查询

@@ -23,7 +23,7 @@ class TestVPSMasOrdersend:
     """)
     class TestVPStradingOrders1(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -35,7 +35,7 @@ class TestVPSMasOrdersend:
                 "startSize": "0.10",
                 "endSize": "1.00",
                 "totalSzie": "1.00",
-                "remark": "changjing1"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -53,7 +53,7 @@ class TestVPSMasOrdersend:
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
         @pytest.mark.retry(n=0, delay=0)
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -87,7 +87,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -163,7 +163,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -195,7 +195,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -246,7 +246,7 @@ class TestVPSMasOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("VPS交易下单-分配平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             # 发送平仓请求
             data = {
@@ -269,7 +269,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -299,7 +299,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -339,7 +339,7 @@ class TestVPSMasOrdersend:
                     logging.info(f'订单详情总手数是：{total}')
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -377,7 +377,7 @@ class TestVPSMasOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -439,7 +439,7 @@ class TestVPSMasOrdersend:
     """)
     class TestVPStradingOrders2(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -454,7 +454,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing2"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -471,7 +471,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -505,7 +505,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -591,7 +591,7 @@ class TestVPSMasOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -623,7 +623,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -676,7 +676,7 @@ class TestVPSMasOrdersend:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("VPS交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             # 发送平仓请求
             data = {
@@ -699,7 +699,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -729,7 +729,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -769,7 +769,7 @@ class TestVPSMasOrdersend:
                     logging.info(f'订单详情总手数是：{total}')
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -807,7 +807,7 @@ class TestVPSMasOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -870,7 +870,7 @@ class TestVPSMasOrdersend:
     """)
     class TestVPStradingOrders3(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -885,7 +885,7 @@ class TestVPSMasOrdersend:
                 "endSize": "0.01",
                 "totalNum": "",
                 "totalSzie": "0.01",
-                "remark": "changjing3"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -902,7 +902,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -936,7 +936,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1009,7 +1009,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -1041,7 +1041,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1082,7 +1082,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("VPS交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             # 发送平仓请求
             data = {
@@ -1105,7 +1105,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -1135,7 +1135,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1175,7 +1175,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -1213,7 +1213,7 @@ class TestVPSMasOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1274,7 +1274,7 @@ class TestVPSMasOrdersend:
     """)
     class TestVPStradingOrders4(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -1289,7 +1289,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "10",
                 "totalSzie": "",
-                "remark": "changjing4"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -1306,7 +1306,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -1340,7 +1340,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing4"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1410,7 +1410,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -1442,7 +1442,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing4"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1479,7 +1479,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("VPS交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             # 发送平仓请求
             data = {
@@ -1502,7 +1502,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -1532,7 +1532,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing4"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1568,7 +1568,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"应该有10个订单，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -1606,7 +1606,7 @@ class TestVPSMasOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing4"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1663,7 +1663,7 @@ class TestVPSMasOrdersend:
     """)
     class TestVPStradingOrders5(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -1678,7 +1678,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "",
                 "totalSzie": "5",
-                "remark": "changjing5"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -1695,7 +1695,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -1729,7 +1729,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing5"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1803,7 +1803,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -1835,7 +1835,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing5"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1876,7 +1876,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("VPS交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             # 发送平仓请求
             data = {
@@ -1899,7 +1899,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -1930,7 +1930,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing5"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1981,7 +1981,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -2019,7 +2019,7 @@ class TestVPSMasOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing5"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2081,7 +2081,7 @@ class TestVPSMasOrdersend:
     """)
     class TestVPStradingOrders6(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
@@ -2096,7 +2096,7 @@ class TestVPSMasOrdersend:
                 "endSize": "1.00",
                 "totalNum": "5",
                 "totalSzie": "",
-                "remark": "changjing6"
+                "remark": class_random_str
             }
             response = self.send_post_request(
                 logged_session,
@@ -2113,7 +2113,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库查询-获取停止的order_no")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 global order_no
@@ -2148,7 +2148,7 @@ class TestVPSMasOrdersend:
                 print("order_no:", order_no)
 
         @allure.title("交易下单-停止操作")
-        def test_cloudTrader_cloudStopOrder(self, logged_session, var_manager):
+        def test_cloudTrader_cloudStopOrder(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("发送停止操作请求"):
                 params = {
@@ -2171,7 +2171,7 @@ class TestVPSMasOrdersend:
                 )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -2205,7 +2205,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2230,7 +2230,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -2262,7 +2262,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2288,7 +2288,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("VPS交易下单-交易平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager, logged_session):
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             # 发送平仓请求
             data = {
@@ -2311,7 +2311,7 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -2341,7 +2341,7 @@ class TestVPSMasOrdersend:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2366,7 +2366,7 @@ class TestVPSMasOrdersend:
                     logging.info(f"平仓的订单数量应该不是5，结果有{len(db_data)}个订单")
 
         @allure.title("数据库校验-交易平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -2404,7 +2404,7 @@ class TestVPSMasOrdersend:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing6"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

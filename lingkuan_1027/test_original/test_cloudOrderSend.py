@@ -44,7 +44,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": "changjing1"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -63,7 +63,7 @@ class TestCloudStrategyOrder:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -95,7 +95,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing1")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -211,7 +211,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
+        def test_copy_verify_close_db(self, var_manager,   db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -247,7 +247,7 @@ class TestCloudStrategyOrder:
                         AND fod.trader_id = %s
                         AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing1")
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -319,7 +319,7 @@ class TestCloudStrategyOrder:
                     "endSize": "0.01",
                     "totalNum": "",
                     "totalSzie": "0.01",
-                    "remark": "changjing2"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -337,7 +337,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -369,7 +369,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing2")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -470,7 +470,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
+        def test_copy_verify_close_db(self, var_manager,   db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -506,7 +506,7 @@ class TestCloudStrategyOrder:
                         AND fod.trader_id = %s
                         AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing2")
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -576,7 +576,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "10",
                     "totalSzie": "",
-                    "remark": "changjing3"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -594,7 +594,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -626,7 +626,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing3")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -714,7 +714,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
+        def test_copy_verify_close_db(self, var_manager,   db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -750,7 +750,7 @@ class TestCloudStrategyOrder:
                         AND fod.trader_id = %s
                         AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing3")
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -816,7 +816,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "",
                     "totalSzie": "5",
-                    "remark": "changjing4"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -834,7 +834,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -866,7 +866,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing4")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -970,7 +970,7 @@ class TestCloudStrategyOrder:
 
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
+        def test_copy_verify_close_db(self, var_manager,   db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1006,7 +1006,7 @@ class TestCloudStrategyOrder:
                         AND fod.trader_id = %s
                         AND fod.comment = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing4")
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1077,7 +1077,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "5",
                     "totalSzie": "",
-                    "remark": "changjing5"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -1095,7 +1095,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库查询-获取停止的order_no")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 global order_no
@@ -1156,7 +1156,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db2(self, var_manager, db_transaction):
+        def test_copy_verify_db2(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1188,7 +1188,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing5")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1292,7 +1292,7 @@ class TestCloudStrategyOrder:
                     "startSize": "0.10",
                     "endSize": "1.00",
                     "totalSzie": "1.00",
-                    "remark": "changjing6",
+                    "remark": class_random_str,
                     "totalNum": 0
                 }
 
@@ -1311,7 +1311,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-分配下单数据")
-        def test_allocation_verify_db(self, var_manager, db_transaction):
+        def test_allocation_verify_db(self, var_manager,   db_transaction):
             """验证分配下单后数据库中的订单数据正确性"""
             with allure.step("查询订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1343,7 +1343,7 @@ class TestCloudStrategyOrder:
                             AND fod.account = %s
                             AND fod.comment = %s
                     """
-                params = ('0', cloudTrader_user_accounts_4, "changjing6")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1447,7 +1447,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-分配下单平仓数据")
-        def test_allocation_verify_close_db(self, var_manager, db_transaction):
+        def test_allocation_verify_close_db(self, var_manager,   db_transaction):
             """验证分配下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1483,7 +1483,7 @@ class TestCloudStrategyOrder:
                             AND fod.trader_id = %s
                             AND fod.comment = %s
                     """
-                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, "changjing6")
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1555,7 +1555,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "",
                     "totalSzie": "1.00",
-                    "remark": "changjing7"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -1573,7 +1573,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1605,7 +1605,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing7")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1713,7 +1713,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
+        def test_copy_verify_close_db(self, var_manager,   db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1749,7 +1749,7 @@ class TestCloudStrategyOrder:
                         AND fod.comment = %s
                         AND fod.trader_id = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, "changjing7", cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, class_random_str, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1826,7 +1826,7 @@ class TestCloudStrategyOrder:
                     "endSize": "1.00",
                     "totalNum": "1",
                     "totalSzie": "5.00",
-                    "remark": "changjing8"
+                    "remark": class_random_str
                 }
 
                 response = self.send_post_request(
@@ -1845,7 +1845,7 @@ class TestCloudStrategyOrder:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("数据库校验-复制下单数据")
-        def test_copy_verify_db(self, var_manager, db_transaction):
+        def test_copy_verify_db(self, var_manager,   db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
             with allure.step("查询复制订单详情数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -1877,7 +1877,7 @@ class TestCloudStrategyOrder:
                         AND fod.account = %s
                         AND fod.comment = %s
                 """
-                params = ('0', cloudTrader_user_accounts_4, "changjing8")
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(
@@ -1969,7 +1969,7 @@ class TestCloudStrategyOrder:
                 )
 
         @allure.title("数据库校验-复制下单平仓数据")
-        def test_copy_verify_close_db(self, var_manager, db_transaction):
+        def test_copy_verify_close_db(self, var_manager,   db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
             with allure.step("查询复制平仓订单数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -2005,7 +2005,7 @@ class TestCloudStrategyOrder:
                         AND fod.comment = %s
                         AND fod.trader_id = %s
                 """
-                params = ('1', cloudTrader_user_accounts_4, "changjing8", cloudTrader_vps_ids_3)
+                params = ('1', cloudTrader_user_accounts_4, class_random_str, cloudTrader_vps_ids_3)
 
                 # 轮询等待数据库记录
                 db_data = self.query_database_with_time_with_timezone(

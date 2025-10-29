@@ -21,6 +21,7 @@ from lingkuan_1027.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
+from lingkuan_1027.commons.random_generator import generate_random_str
 
 logger = logging.getLogger(__name__)
 
@@ -541,3 +542,11 @@ def parse_decimal_value(value):
     if isinstance(value, list) and len(value) == 2 and value[0] == 'java.math.BigDecimal':
         return float(value[1])
     return value
+
+
+@pytest.fixture(scope="class")  # 类级别：整个类共享一个实例
+def class_random_str():
+    # 调用你的随机数生成函数（可自定义参数，如长度、是否包含数字等）
+    random_str = generate_random_str(length=8)  # 生成8位随机字符串
+    print(f"\n【生成备注随机数】：{random_str}")  # 可选：打印生成的值，方便调试
+    return random_str

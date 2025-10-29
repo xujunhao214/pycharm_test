@@ -15,7 +15,7 @@ SKIP_REASON = "跳过此用例"
 class TestVPSOrderSend(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_orderSend(self, var_manager, logged_session):
+    def test_trader_orderSend(self, var_manager,   logged_session):
         # 1. 发送策略开仓请求
         trader_ordersend = var_manager.get_variable("trader_ordersend")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -51,7 +51,7 @@ class TestVPSOrderSend(APITestBase):
         )
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager, db_transaction):
+    def test_dbquery_orderSend(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             sql = f"""
@@ -135,7 +135,7 @@ class TestVPSOrderSend(APITestBase):
             logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
@@ -204,7 +204,7 @@ class TestVPSOrderSend(APITestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager, logged_session):
+    def test_trader_orderclose(self, var_manager,   logged_session):
         # 1. 发送全平订单平仓请求
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         new_user = var_manager.get_variable("new_user")
@@ -236,7 +236,7 @@ class TestVPSOrderSend(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
-    def test_addtrader_orderclose(self, var_manager, logged_session):
+    def test_addtrader_orderclose(self, var_manager,   logged_session):
         # 1. 发送全平订单平仓请求
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -266,7 +266,7 @@ class TestVPSOrderSend(APITestBase):
         )
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+    def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             sql = f"""
@@ -322,7 +322,7 @@ class TestVPSOrderSend(APITestBase):
             logging.info(f'订单详情总手数是：{total}')
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+    def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")

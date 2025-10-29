@@ -56,7 +56,7 @@ class TestCloudStrategyOrderSend(APITestBase):
 
     @allure.story("分配下单场景")
     @allure.title("数据库校验-分配下单开仓数据")
-    def test_allocation_verify_open_db(self, var_manager, db_transaction):
+    def test_allocation_verify_open_db(self, var_manager,   db_transaction):
         cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
         sql = """
             SELECT 
@@ -156,7 +156,7 @@ class TestCloudStrategyOrderSend(APITestBase):
 
     @allure.story("分配下单场景")
     @allure.title("数据库校验-分配下单平仓数据")
-    def test_allocation_verify_close_db(self, var_manager, db_transaction):
+    def test_allocation_verify_close_db(self, var_manager,   db_transaction):
         cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
         cloudTrader_vps_ids_2 = var_manager.get_variable("cloudTrader_vps_ids_2")
 
@@ -252,7 +252,7 @@ class TestCloudStrategyOrderSend(APITestBase):
 
     @allure.story("复制下单场景")
     @allure.title("数据库校验-复制下单开仓数据")
-    def test_copy_verify_open_db(self, var_manager, db_transaction):
+    def test_copy_verify_open_db(self, var_manager,   db_transaction):
         cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
         sql = """
             SELECT 
@@ -359,7 +359,7 @@ class TestCloudStrategyOrderSend(APITestBase):
 
     @allure.story("复制下单场景")
     @allure.title("数据库校验-复制下单平仓数据")
-    def test_copy_verify_close_db(self, var_manager, db_transaction):
+    def test_copy_verify_close_db(self, var_manager,   db_transaction):
         cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
         cloudTrader_vps_ids_2 = var_manager.get_variable("cloudTrader_vps_ids_2")
 

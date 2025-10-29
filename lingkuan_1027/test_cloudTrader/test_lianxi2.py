@@ -18,7 +18,7 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 @allure.feature("云策略策略下单-跟单修改模式、品种")
 class TestVPSOrderSend_Scence(APITestBase):
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
-    def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
+    def test_dbquery_redis(self, class_random_str, var_manager,   db_transaction, redis_cloudTrader_data_send):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
             cloudOrderSend = var_manager.get_variable("cloudOrderSend")
@@ -34,7 +34,7 @@ class TestVPSOrderSend_Scence(APITestBase):
             params = (
                 f"%{symbol}%",
                 cloudTrader_user_accounts_2,
-                "changjing1"
+                class_random_str
             )
 
             # 调用轮询等待方法（带时间范围过滤）

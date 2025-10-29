@@ -27,7 +27,7 @@ SKIP_REASON = "跳过此用例"
 class Testcloudtrader_money(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-修改用户")
-    def test_update_user(self, logged_session, var_manager, encrypted_password):
+    def test_update_user(self, logged_session, var_manager,   encrypted_password):
         # 1. 发送修改用户请求
         cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
         cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
@@ -93,7 +93,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-修改用户是否成功")
-    def test_dbupdate_user(self, var_manager, db_transaction):
+    def test_dbupdate_user(self, var_manager,   db_transaction):
         with allure.step("1. 查询数据库验证是否编辑成功"):
             cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
             sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
@@ -151,7 +151,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云跟单账号策略开仓-修改币种@")
-    def test_dbtrader_cfda(self, var_manager, db_transaction):
+    def test_dbtrader_cfda(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_8 = var_manager.get_variable("cloudTrader_user_accounts_8")
             sql = f"""
@@ -203,7 +203,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云跟单账号策略开仓-修改币种p")
-    def test_dbtrader_cfdp(self, var_manager, db_transaction):
+    def test_dbtrader_cfdp(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_9 = var_manager.get_variable("cloudTrader_user_accounts_9")
             sql = f"""
@@ -258,7 +258,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云跟单账号策略开仓-修改币种min")
-    def test_dbtrader_cfdmin(self, var_manager, db_transaction):
+    def test_dbtrader_cfdmin(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_10 = var_manager.get_variable("cloudTrader_user_accounts_10")
             sql = f"""
@@ -358,7 +358,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云跟单账号策略平仓-修改币种@")
-    def test_dbclose_cfda(self, var_manager, db_transaction):
+    def test_dbclose_cfda(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_8 = var_manager.get_variable("cloudTrader_user_accounts_8")
             sql = f"""
@@ -410,7 +410,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云跟单账号策略平仓-修改币种p")
-    def test_dbclose_cfdp(self, var_manager, db_transaction):
+    def test_dbclose_cfdp(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_9 = var_manager.get_variable("cloudTrader_user_accounts_9")
             sql = f"""
@@ -465,7 +465,7 @@ class Testcloudtrader_money(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云跟单账号策略平仓-修改币种min")
-    def test_dbclose_cfdmin(self, var_manager, db_transaction):
+    def test_dbclose_cfdmin(self, var_manager,   db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_10 = var_manager.get_variable("cloudTrader_user_accounts_10")
             sql = f"""

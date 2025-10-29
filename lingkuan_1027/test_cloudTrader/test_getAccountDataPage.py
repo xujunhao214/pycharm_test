@@ -25,7 +25,7 @@ class TestCloudOrderSend_newScenarios:
     class TestCloudOrderSend1(APITestBase):
         # @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配平仓-防止数据残留")
-        def test_copy_orderprevent_close(self, var_manager, logged_session):
+        def test_copy_orderprevent_close(self, class_random_str, var_manager,   logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -48,7 +48,7 @@ class TestCloudOrderSend_newScenarios:
             )
 
         @allure.title("云策略交易下单-分配下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -77,7 +77,7 @@ class TestCloudOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略开仓-提取数据")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager,   db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 global profit_sum, total, order_num, margin_proportion, free_margin, euqit
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
@@ -141,7 +141,7 @@ class TestCloudOrderSend_newScenarios:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("仪表盘-账号数据校验")
-        def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
+        def test_dashboard_getAccountDataPage(self, class_random_str, var_manager,   logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 params = {
@@ -270,7 +270,7 @@ class TestCloudOrderSend_newScenarios:
 
         @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager,   logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {
@@ -305,7 +305,7 @@ class TestCloudOrderSend_newScenarios:
     class TestCloudOrderSend2(APITestBase):
         @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配下单请求")
-        def test_copy_order_send(self, logged_session, var_manager):
+        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -334,7 +334,7 @@ class TestCloudOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略开仓-提取数据")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager,   db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 global profit_sum, total, order_num, margin_proportion, free_margin, euqit
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
@@ -398,7 +398,7 @@ class TestCloudOrderSend_newScenarios:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("仪表盘-账号数据校验")
-        def test_dashboard_getAccountDataPage(self, var_manager, logged_session):
+        def test_dashboard_getAccountDataPage(self, class_random_str, var_manager,   logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
                 params = {
@@ -526,7 +526,7 @@ class TestCloudOrderSend_newScenarios:
                     logging.info(f"净值符合预期，实际是{euqit}")
 
         @allure.title("云策略交易下单-分配平仓")
-        def test_copy_order_close(self, var_manager, logged_session):
+        def test_copy_order_close(self, class_random_str, var_manager,   logged_session):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 发送平仓请求
             data = {

@@ -17,7 +17,7 @@ class TestCreate_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.retry(n=3, delay=5)
     @allure.title("账号管理-账号列表-批量新增用户")
-    def test_create_importuser(self, logged_session, var_manager):
+    def test_create_importuser(self, class_random_str, logged_session, var_manager):
         add_cloudTrader = var_manager.get_variable("add_cloudTrader")
         with open(add_cloudTrader["csv_user_path"], 'rb') as f:
             csv_file = f.read()
@@ -51,7 +51,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
-    def test_dbquery_importuser(self, var_manager, db_transaction):
+    def test_dbquery_importuser(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_cloudTrader = var_manager.get_variable("add_cloudTrader")
 
@@ -89,7 +89,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库查询-获取VPSID")
-    def test_get_vpsID(self, var_manager, db_transaction):
+    def test_get_vpsID(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库数据"):
             ip_address = var_manager.get_variable("IP_ADDRESS")
 
@@ -115,7 +115,7 @@ class TestCreate_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
-    def test_add_trader(self, var_manager, logged_session, encrypted_password):
+    def test_add_trader(self, class_random_str, var_manager, logged_session, encrypted_password):
         # 1. 发送新增策略账号请求
         new_user = var_manager.get_variable("new_user")
         cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
@@ -159,7 +159,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-新增策略账号")
-    def test_dbquery_trader(self, var_manager, db_transaction):
+    def test_dbquery_trader(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_1 = var_manager.get_variable("cloudTrader_user_accounts_1")
 
@@ -191,7 +191,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量挂靠VPS跟单（后9个账号）")
-    def test_user_hangVps(self, var_manager, logged_session):
+    def test_user_hangVps(self, class_random_str, var_manager, logged_session):
         # 1. 获取后9个账号的ID（使用range直接循环索引1-9，对应第2到第10个账号）
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count")
         cloudTrader_user_ids_later9 = []
@@ -245,7 +245,7 @@ class TestCreate_cloudTrader(APITestBase):
             "响应msg字段应为success")
 
     @allure.title("数据库校验-批量挂靠VPS跟单（后9个账号）")
-    def test_dbimport_addSlave(self, var_manager, db_transaction):
+    def test_dbimport_addSlave(self, class_random_str, var_manager, db_transaction):
         # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）
         all_accounts_cloudTrader = []
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count")
@@ -317,7 +317,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-新增云策略组别")
-    def test_create_cloudgroup(self, logged_session, var_manager):
+    def test_create_cloudgroup(self, class_random_str, logged_session, var_manager):
         add_cloudgroup = var_manager.get_variable("add_cloudgroup")
         data = {
             "name": add_cloudgroup["name"],
@@ -350,7 +350,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-组别列表-新增云策略组别")
-    def test_dbquery_cloudgroup(self, var_manager, db_transaction):
+    def test_dbquery_cloudgroup(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_cloudgroup = var_manager.get_variable("add_cloudgroup")
 
@@ -372,7 +372,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增云策略")
-    def test_create_cloudMaster(self, var_manager, logged_session):
+    def test_create_cloudMaster(self, class_random_str, var_manager, logged_session):
         cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
         with allure.step("1. 发送新增云策略的请求接口"):
             data = {
@@ -401,7 +401,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云策略")
-    def test_dbcreate_cloudTrader(self, var_manager, db_transaction):
+    def test_dbcreate_cloudTrader(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             db_data = self.query_database(
                 db_transaction,
@@ -419,7 +419,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增策略账号")
-    def test_mascontrol_cloudTrader(self, var_manager, logged_session):
+    def test_mascontrol_cloudTrader(self, class_random_str, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         cloudTrader_vps_ids_1 = var_manager.get_variable("cloudTrader_vps_ids_1")
@@ -463,7 +463,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增策略账号")
-    def test_dbmascontrol_cloudTrader(self, var_manager, db_transaction):
+    def test_dbmascontrol_cloudTrader(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
@@ -483,7 +483,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增manager策略账号")
-    def test_manager_cloudTrader(self, var_manager, logged_session):
+    def test_manager_cloudTrader(self, class_random_str, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
@@ -529,7 +529,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增manager账号")
-    def test_dbmanager_trader(self, var_manager, db_transaction):
+    def test_dbmanager_trader(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_3 = var_manager.get_variable("cloudTrader_user_accounts_3")
 
@@ -556,7 +556,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增云跟单账号")
-    def test_cloudTrader_cloudBatchAdd(self, var_manager, logged_session):
+    def test_cloudTrader_cloudBatchAdd(self, class_random_str, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -610,7 +610,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云跟单账号")
-    def test_dbcloudTrader_cloudBatchAdd(self, var_manager, db_transaction):
+    def test_dbcloudTrader_cloudBatchAdd(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -631,7 +631,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种")
-    def test_create_variety(self, logged_session, var_manager):
+    def test_create_variety(self, class_random_str, logged_session, var_manager):
         # 1. 读取CSV文件
         add_variety = var_manager.get_variable("add_variety")
         with open(add_variety["csv_variety_path"], 'rb') as f:
@@ -664,7 +664,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-添加品种")
-    def test_dbquery_variety(self, var_manager, db_transaction):
+    def test_dbquery_variety(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_variety = var_manager.get_variable("add_variety")
             # 从变量中获取表名和模板名
@@ -686,7 +686,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-添加品种2")
-    def test_create_variety2(self, logged_session, var_manager):
+    def test_create_variety2(self, class_random_str, logged_session, var_manager):
         # 1. 读取CSV文件
         add_variety = var_manager.get_variable("add_variety")
         with open(add_variety["csv_variety_path2"], 'rb') as f:
@@ -719,7 +719,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-品种管理-添加品种2")
-    def test_dbquery_variety2(self, var_manager, db_transaction):
+    def test_dbquery_variety2(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             add_variety = var_manager.get_variable("add_variety")
             # 从变量中获取表名和模板名
@@ -740,7 +740,7 @@ class TestCreate_cloudTrader(APITestBase):
             var_manager.set_runtime_variable("cloudTrader_template_id2", cloudTrader_template_id2)
 
     @allure.title("云策略-云策略列表-新增云策略-手动下单")
-    def test_create_handcloudMaster(self, var_manager, logged_session):
+    def test_create_handcloudMaster(self, class_random_str, var_manager, logged_session):
         cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
         with allure.step("1. 发送新增云策略的请求接口"):
             data = {
@@ -770,7 +770,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云策略-手动下单")
-    def test_dbcreate_handcloudMaster(self, var_manager, db_transaction):
+    def test_dbcreate_handcloudMaster(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             db_data = self.query_database(
                 db_transaction,
@@ -787,7 +787,7 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增云策略账号id是：{cloudMaster_id_hand}")
 
     @allure.title("云策略-云策略列表-新增云跟单-手动下单")
-    def test_create_handcloudBatchAdd(self, var_manager, logged_session):
+    def test_create_handcloudBatchAdd(self, class_random_str, var_manager, logged_session):
         cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
         cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
         with allure.step("1. 发送新增云跟单的请求接口"):
@@ -833,7 +833,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云跟单-手动下单")
-    def test_dbcreate_handcloudBatchAdd(self, var_manager, db_transaction):
+    def test_dbcreate_handcloudBatchAdd(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")

@@ -27,7 +27,7 @@ class TestVPSMasOrder_money_scene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("账号管理-账号列表-修改用户")
-        def test_update_user(self, logged_session, var_manager, encrypted_password):
+        def test_update_user(self, class_random_str, logged_session, var_manager, encrypted_password):
             new_user = var_manager.get_variable("new_user")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
@@ -66,7 +66,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-账号列表-修改用户是否成功")
-        def test_dbupdate_user(self, var_manager, db_transaction):
+        def test_dbupdate_user(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否编辑成功"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -90,14 +90,14 @@ class TestVPSMasOrder_money_scene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing1",
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -127,7 +127,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-修改币种@")
-        def test_dbtrader_cfda(self, var_manager, db_transaction):
+        def test_dbtrader_cfda(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_5 = var_manager.get_variable("vps_user_accounts_5")
                 sql = f"""
@@ -155,7 +155,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_5,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -200,7 +200,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-修改币种p")
-        def test_dbtrader_cfdp(self, var_manager, db_transaction):
+        def test_dbtrader_cfdp(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_6 = var_manager.get_variable("vps_user_accounts_6")
 
@@ -229,7 +229,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_6,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -272,7 +272,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-修改币种min")
-        def test_dbtrader_cfdmin(self, var_manager, db_transaction):
+        def test_dbtrader_cfdmin(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_7 = var_manager.get_variable("vps_user_accounts_7")
 
@@ -301,7 +301,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_7,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -345,7 +345,7 @@ class TestVPSMasOrder_money_scene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -376,7 +376,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-修改币种@")
-        def test_dbclose_cfda(self, var_manager, db_transaction):
+        def test_dbclose_cfda(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_5 = var_manager.get_variable("vps_user_accounts_5")
 
@@ -405,7 +405,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     "1",
                     vps_user_accounts_5,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -450,7 +450,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-修改币种p")
-        def test_dbclose_cfdp(self, var_manager, db_transaction):
+        def test_dbclose_cfdp(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_6 = var_manager.get_variable("vps_user_accounts_6")
 
@@ -479,7 +479,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '1',
                     vps_user_accounts_6,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -522,7 +522,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-修改币种min")
-        def test_dbclose_cfdmin(self, var_manager, db_transaction):
+        def test_dbclose_cfdmin(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_7 = var_manager.get_variable("vps_user_accounts_7")
 
@@ -551,7 +551,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '1',
                     vps_user_accounts_7,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -608,14 +608,14 @@ class TestVPSMasOrder_money_scene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing2",
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -645,7 +645,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-跟单账号固定手数5")
-        def test_dbdetail_followParam5(self, var_manager, db_transaction):
+        def test_dbdetail_followParam5(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_2 = var_manager.get_variable("vps_user_accounts_2")
 
@@ -673,7 +673,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_2,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -701,7 +701,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-跟单账号修改品种")
-        def test_dbdetail_templateId3(self, var_manager, db_transaction):
+        def test_dbdetail_templateId3(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_3 = var_manager.get_variable("vps_user_accounts_3")
 
@@ -729,7 +729,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_3,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -760,7 +760,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库-获取主账号净值")
-        def test_vps_dbtrader_euqit(self, var_manager, db_transaction):
+        def test_vps_dbtrader_euqit(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取主账号净值"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
 
@@ -788,7 +788,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库-获取跟单账号净值")
-        def test_dbvps_addsalve_euqit(self, var_manager, db_transaction):
+        def test_dbvps_addsalve_euqit(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取跟单账号净值"):
                 vps_addslave_ids_3 = var_manager.get_variable("vps_addslave_ids_3")
 
@@ -814,7 +814,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-修改净值")
-        def test_vps_dbtrader_euqit2(self, var_manager, db_transaction):
+        def test_vps_dbtrader_euqit2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_4 = var_manager.get_variable("vps_user_accounts_4")
 
@@ -842,7 +842,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_4,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -881,7 +881,7 @@ class TestVPSMasOrder_money_scene:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -912,7 +912,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-跟单账号固定手数5")
-        def test_dbclose_followParam5(self, var_manager, db_transaction):
+        def test_dbclose_followParam5(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_2 = var_manager.get_variable("vps_user_accounts_2")
 
@@ -940,7 +940,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_2,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -968,7 +968,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-跟单账号修改品种")
-        def test_dbclose_templateId3(self, var_manager, db_transaction):
+        def test_dbclose_templateId3(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_3 = var_manager.get_variable("vps_user_accounts_3")
 
@@ -996,7 +996,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_3,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1027,7 +1027,7 @@ class TestVPSMasOrder_money_scene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-策略平仓-修改净值")
-        def test_dbclose_euqit(self, var_manager, db_transaction):
+        def test_dbclose_euqit(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_4 = var_manager.get_variable("vps_user_accounts_4")
 
@@ -1055,7 +1055,7 @@ class TestVPSMasOrder_money_scene:
                 params = (
                     '0',
                     vps_user_accounts_4,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

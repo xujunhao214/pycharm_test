@@ -26,7 +26,7 @@ class Testcloudtrader_moneyandscene:
     class Testcloudtrader_money(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("账号管理-账号列表-修改用户")
-        def test_update_user(self, logged_session, var_manager, encrypted_password):
+        def test_update_user(self, class_random_str, logged_session, var_manager, encrypted_password):
             # 1. 发送修改用户请求
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
@@ -96,7 +96,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-账号列表-修改用户是否成功")
-        def test_dbupdate_user(self, var_manager, db_transaction):
+        def test_dbupdate_user(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否编辑成功"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
@@ -118,7 +118,7 @@ class Testcloudtrader_moneyandscene:
                 assert cfd_value is None or cfd_value.strip() == "", f"修改个人信息失败（cfd字段应为空，实际值：{cfd_value}）"
 
         @allure.title("账号管理-交易下单-云策略账号复制下单")
-        def test_bargain_masOrderSend(self, logged_session, var_manager):
+        def test_bargain_masOrderSend(self, class_random_str, logged_session, var_manager):
             # 1. 发送云策略复制下单请求
             global cloudTrader_user_ids_2
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -135,7 +135,7 @@ class Testcloudtrader_moneyandscene:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing1"
+                "remark": class_random_str
             }
 
             response = self.send_post_request(
@@ -154,7 +154,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种@")
-        def test_dbtrader_cfda(self, var_manager, db_transaction):
+        def test_dbtrader_cfda(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_8 = var_manager.get_variable("cloudTrader_user_accounts_8")
                 sql = f"""
@@ -182,7 +182,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '0',
                     cloudTrader_user_accounts_8,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -227,7 +227,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种p")
-        def test_dbtrader_cfdp(self, var_manager, db_transaction):
+        def test_dbtrader_cfdp(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_9 = var_manager.get_variable("cloudTrader_user_accounts_9")
                 sql = f"""
@@ -255,7 +255,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '0',
                     cloudTrader_user_accounts_9,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -298,7 +298,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改币种min")
-        def test_dbtrader_cfdmin(self, var_manager, db_transaction):
+        def test_dbtrader_cfdmin(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_10 = var_manager.get_variable("cloudTrader_user_accounts_10")
                 sql = f"""
@@ -326,7 +326,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '0',
                     cloudTrader_user_accounts_10,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -368,7 +368,7 @@ class Testcloudtrader_moneyandscene:
                     logging.info(f"币种验证通过: {symbol}")
 
         @allure.title("账号管理-交易下单-云策略平仓")
-        def test_bargain_masOrderClose(self, logged_session, var_manager):
+        def test_bargain_masOrderClose(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -391,7 +391,7 @@ class Testcloudtrader_moneyandscene:
             )
 
         @allure.title("云策略-云策略列表-平仓")
-        def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             # 1. 发送平仓请求
             data = {
@@ -415,7 +415,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种@")
-        def test_dbclose_cfda(self, var_manager, db_transaction):
+        def test_dbclose_cfda(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_8 = var_manager.get_variable("cloudTrader_user_accounts_8")
                 sql = f"""
@@ -443,7 +443,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '1',
                     cloudTrader_user_accounts_8,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -488,7 +488,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种p")
-        def test_dbclose_cfdp(self, var_manager, db_transaction):
+        def test_dbclose_cfdp(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_9 = var_manager.get_variable("cloudTrader_user_accounts_9")
                 sql = f"""
@@ -516,7 +516,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '1',
                     cloudTrader_user_accounts_9,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -559,7 +559,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改币种min")
-        def test_dbclose_cfdmin(self, var_manager, db_transaction):
+        def test_dbclose_cfdmin(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_10 = var_manager.get_variable("cloudTrader_user_accounts_10")
                 sql = f"""
@@ -587,7 +587,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '1',
                     cloudTrader_user_accounts_10,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -642,7 +642,7 @@ class Testcloudtrader_moneyandscene:
     """)
     class Testcloudtrader_Scence(APITestBase):
         @allure.title("账号管理-交易下单-云策略账号复制下单")
-        def test_bargain_masOrderSend(self, logged_session, var_manager):
+        def test_bargain_masOrderSend(self, class_random_str, logged_session, var_manager):
             # 1. 发送云策略复制下单请求
             global cloudTrader_user_ids_2
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -659,7 +659,7 @@ class Testcloudtrader_moneyandscene:
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": "changjing2"
+                "remark": class_random_str
             }
 
             response = self.send_post_request(
@@ -678,7 +678,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-跟单账号固定手数")
-        def test_dbdetail_followParam5(self, var_manager, db_transaction):
+        def test_dbdetail_followParam5(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_5 = var_manager.get_variable("cloudTrader_user_accounts_5")
                 sql = f"""
@@ -705,7 +705,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '0',
                     cloudTrader_user_accounts_5,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -733,7 +733,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-跟单账号修改品种")
-        def test_dbdetail_templateId3(self, var_manager, db_transaction):
+        def test_dbdetail_templateId3(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_6 = var_manager.get_variable("cloudTrader_user_accounts_6")
 
@@ -761,7 +761,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '0',
                     cloudTrader_user_accounts_6,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -792,7 +792,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库-获取主账号净值")
-        def test_dbtrader_euqit(self, var_manager, db_transaction):
+        def test_dbtrader_euqit(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取主账号净值"):
                 cloudTrader_vps_ids_2 = var_manager.get_variable("cloudTrader_vps_ids_2")
 
@@ -820,7 +820,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库-获取跟单账号净值")
-        def test_dbaddsalve_euqit(self, var_manager, db_transaction):
+        def test_dbaddsalve_euqit(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取跟单账号净值"):
                 cloudTrader_vps_ids_6 = var_manager.get_variable("cloudTrader_vps_ids_6")
 
@@ -848,7 +848,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略开仓-修改净值")
-        def test_dbtrader_euqit2(self, var_manager, db_transaction):
+        def test_dbtrader_euqit2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_7 = var_manager.get_variable("cloudTrader_user_accounts_7")
 
@@ -876,7 +876,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '0',
                     cloudTrader_user_accounts_7,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -915,7 +915,7 @@ class Testcloudtrader_moneyandscene:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-云策略平仓")
-        def test_bargain_masOrderClose(self, logged_session, var_manager):
+        def test_bargain_masOrderClose(self, class_random_str, logged_session, var_manager):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -938,7 +938,7 @@ class Testcloudtrader_moneyandscene:
             )
 
         @allure.title("云策略-云策略列表-平仓")
-        def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             # 1. 发送平仓请求
             data = {
@@ -963,7 +963,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-跟单账号固定手数")
-        def test_dbclose_followParam5(self, var_manager, db_transaction):
+        def test_dbclose_followParam5(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_5 = var_manager.get_variable("cloudTrader_user_accounts_5")
                 sql = f"""
@@ -990,7 +990,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '1',
                     cloudTrader_user_accounts_5,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1021,7 +1021,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-跟单账号修改品种")
-        def test_dbclose_templateId3(self, var_manager, db_transaction):
+        def test_dbclose_templateId3(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_6 = var_manager.get_variable("cloudTrader_user_accounts_6")
 
@@ -1049,7 +1049,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '1',
                     cloudTrader_user_accounts_6,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1080,7 +1080,7 @@ class Testcloudtrader_moneyandscene:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-云跟单账号策略平仓-修改净值")
-        def test_dbclose_euqit(self, var_manager, db_transaction):
+        def test_dbclose_euqit(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_7 = var_manager.get_variable("cloudTrader_user_accounts_7")
 
@@ -1108,7 +1108,7 @@ class Testcloudtrader_moneyandscene:
                 params = (
                     '1',
                     cloudTrader_user_accounts_7,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

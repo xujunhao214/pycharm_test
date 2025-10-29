@@ -28,7 +28,7 @@ class TestLeakageopen_level:
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
-        def test_update_slave(self, var_manager, logged_session, encrypted_password):
+        def test_update_slave(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps跟单账号请求,修改followOpen：0关闭  1开启
             add_Slave = var_manager.get_variable("add_Slave")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -81,7 +81,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-VPS数据-修改跟单账号是否成功")
-        def test_dbquery_updateslave(self, var_manager, db_transaction):
+        def test_dbquery_updateslave(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -99,14 +99,14 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓-出现漏单")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing1",
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -135,7 +135,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -169,7 +169,7 @@ class TestLeakageopen_level:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -265,7 +265,7 @@ class TestLeakageopen_level:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("数据库校验-策略开仓-跟单开仓指令-根据status状态发现有漏单")
-        def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
+        def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -301,7 +301,7 @@ class TestLeakageopen_level:
                 assert status == 2, f"跟单失败，跟单状态status应该是2，实际是：{status}"
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_order_data_send):
             with allure.step("1. 获取订单详情表账号数据"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 new_user = var_manager.get_variable("new_user")
@@ -317,7 +317,7 @@ class TestLeakageopen_level:
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -366,7 +366,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-开仓补全")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -391,7 +391,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号")
-        def test_update_slave2(self, var_manager, logged_session, encrypted_password):
+        def test_update_slave2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps跟单账号请求,修改followOpen：0关闭  1开启
             add_Slave = var_manager.get_variable("add_Slave")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -443,7 +443,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-VPS数据-修改跟单账号是否成功")
-        def test_dbquery_updateslave2(self, var_manager, db_transaction):
+        def test_dbquery_updateslave2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -464,7 +464,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改完之后进行开仓补全")
-        def test_follow_repairSend2(self, var_manager, logged_session):
+        def test_follow_repairSend2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -488,7 +488,7 @@ class TestLeakageopen_level:
                 )
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -520,7 +520,7 @@ class TestLeakageopen_level:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -572,7 +572,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager, logged_session, db_transaction):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session, db_transaction):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -602,7 +602,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -632,7 +632,7 @@ class TestLeakageopen_level:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -674,7 +674,7 @@ class TestLeakageopen_level:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -712,7 +712,7 @@ class TestLeakageopen_level:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing1"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -779,7 +779,7 @@ class TestLeakageopen_level:
     class TestLeakagelevel(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏平）")
-        def test_update_slave(self, var_manager, logged_session, encrypted_password):
+        def test_update_slave(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps跟单账号请求,修改followClose：0关闭  1开启
             add_Slave = var_manager.get_variable("add_Slave")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -831,7 +831,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-VPS数据-修改跟单账号是否成功")
-        def test_dbquery_updateslave(self, var_manager, db_transaction):
+        def test_dbquery_updateslave(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -853,14 +853,14 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing2",
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -890,7 +890,7 @@ class TestLeakageopen_level:
 
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -925,7 +925,7 @@ class TestLeakageopen_level:
                 params = (
                     '0',
                     new_user["account"],
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1003,7 +1003,7 @@ class TestLeakageopen_level:
 
         # @pytest.mark.skipif(True, reason=SKIP_REASON)
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -1036,7 +1036,7 @@ class TestLeakageopen_level:
                 params = (
                     '0',
                     vps_user_accounts_1,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1089,7 +1089,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓-出现漏平")
-        def test_trader_orderclose(self, var_manager, logged_session):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -1119,7 +1119,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -1150,7 +1150,7 @@ class TestLeakageopen_level:
                 params = (
                     '1',
                     new_user["account"],
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1192,7 +1192,7 @@ class TestLeakageopen_level:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("数据库校验-策略平仓-检查平仓订单是否出现漏平")
-        def test_dbquery_addsalve_clsesdetail(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_clsesdetail(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1208,7 +1208,7 @@ class TestLeakageopen_level:
                 params = (
                     f"%{symbol}%",
                     vps_user_accounts_1,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1228,7 +1228,7 @@ class TestLeakageopen_level:
                 assert close_remark == "未开通平仓状态", f"出现漏平，平仓异常信息应该是未开通平仓状态，实际是：{close_remark}"
 
         @allure.title("出现漏平-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_close):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_order_data_close):
             with allure.step("1. 获取订单详情表账号数据"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 new_user = var_manager.get_variable("new_user")
@@ -1244,7 +1244,7 @@ class TestLeakageopen_level:
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1293,7 +1293,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏平）")
-        def test_update_slave2(self, var_manager, logged_session, encrypted_password):
+        def test_update_slave2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps跟单账号请求,修改followClose：0关闭  1开启
             add_Slave = var_manager.get_variable("add_Slave")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1344,7 +1344,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-VPS数据-修改跟单账号是否成功")
-        def test_dbquery_updateslave2(self, var_manager, db_transaction):
+        def test_dbquery_updateslave2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -1366,7 +1366,7 @@ class TestLeakageopen_level:
 
         @allure.title("跟单软件看板-VPS数据-修改完之后进行平仓补全")
         @pytest.mark.url("vps")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送平仓补全请求"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1391,7 +1391,7 @@ class TestLeakageopen_level:
 
         @allure.title("跟单软件看板-VPS数据-跟单账号自己平仓")
         @pytest.mark.url("vps")
-        def test_follow_orderClose(self, var_manager, logged_session):
+        def test_follow_orderClose(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送平仓请求"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1416,7 +1416,7 @@ class TestLeakageopen_level:
                 )
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -1455,7 +1455,7 @@ class TestLeakageopen_level:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing2"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1522,7 +1522,7 @@ class TestLeakageopen_level:
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
-        def test_subcontrol_trader(self, var_manager, logged_session, encrypted_password):
+        def test_subcontrol_trader(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
             with allure.step("发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
@@ -1567,7 +1567,7 @@ class TestLeakageopen_level:
                 )
 
         @allure.title("数据库校验-VPS数据-修改策略账号是否成功")
-        def test_dbquery_updateslave(self, var_manager, db_transaction):
+        def test_dbquery_updateslave(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -1584,14 +1584,14 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓-出现漏单")
-        def test_trader_orderSend(self, var_manager, logged_session):
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": "changjing3",
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
@@ -1620,7 +1620,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("出现漏开-redis数据和数据库的数据做比对")
-        def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
+        def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_order_data_send):
             with allure.step("1. 获取订单详情表账号数据"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 new_user = var_manager.get_variable("new_user")
@@ -1636,7 +1636,7 @@ class TestLeakageopen_level:
                 params = (
                     f"%{symbol}%",
                     new_user["account"],
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1685,7 +1685,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-开仓补全")
-        def test_follow_repairSend(self, var_manager, logged_session):
+        def test_follow_repairSend(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1710,7 +1710,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
-        def test_subcontrol_trader2(self, var_manager, logged_session, encrypted_password):
+        def test_subcontrol_trader2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
             with allure.step("发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
@@ -1754,7 +1754,7 @@ class TestLeakageopen_level:
                 )
 
         @allure.title("数据库校验-VPS数据-修改策略账号是否成功")
-        def test_dbquery_updateslave2(self, var_manager, db_transaction):
+        def test_dbquery_updateslave2(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -1772,7 +1772,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改完之后进行开仓补全")
-        def test_follow_repairSend2(self, var_manager, logged_session):
+        def test_follow_repairSend2(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 发送开仓补全请求"):
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -1796,7 +1796,7 @@ class TestLeakageopen_level:
                 )
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -1810,7 +1810,7 @@ class TestLeakageopen_level:
                 params = (
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1842,7 +1842,7 @@ class TestLeakageopen_level:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager, logged_session, db_transaction):
+        def test_trader_orderclose(self, class_random_str, var_manager, logged_session, db_transaction):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -1872,7 +1872,7 @@ class TestLeakageopen_level:
             )
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -1910,7 +1910,7 @@ class TestLeakageopen_level:
                     '1',
                     vps_user_accounts_1,
                     vps_addslave_id,
-                    "changjing3"
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
