@@ -171,7 +171,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景1：策略有固定注释，跟单无固定注释")
-    @allure.title("策略和平仓操作")
+    @allure.title("策略平仓操作")
     def test_scenario1_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -347,7 +347,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
-    @allure.title("策略和平仓操作")
+    @allure.title("策略平仓操作")
     def test_scenario2_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
@@ -523,7 +523,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             logger.info(f"备注验证通过: {comment}")
 
     @allure.story("场景3：策略开启订单备注，跟单无固定注释")
-    @allure.title("策略和平仓操作")
+    @allure.title("策略平仓操作")
     def test_scenario3_close_orders(self, logged_session, var_manager):
         with allure.step("策略账号平仓"):
             cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")

@@ -2,6 +2,8 @@ import allure
 import logging
 import time
 import json
+import pytest
+import math
 from typing import List, Dict, Any, Optional, Tuple
 import datetime
 from decimal import Decimal
@@ -12,8 +14,8 @@ from requests.exceptions import (
     HTTPError, SSLError
 )
 from jsonpath_ng import parse
-from lingkuan_820.VAR.VAR import *
-from lingkuan_820.commons.wait_utils import wait_for_condition
+from lingkuan_1028.VAR.VAR import *
+from lingkuan_1028.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

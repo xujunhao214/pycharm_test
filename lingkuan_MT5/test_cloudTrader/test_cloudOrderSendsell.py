@@ -34,7 +34,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -468,7 +468,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -867,7 +867,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -1248,7 +1248,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -1652,7 +1652,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 10000,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -1847,7 +1847,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 0,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
@@ -2252,7 +2252,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -2696,7 +2696,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 1,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -3152,7 +3152,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 0,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
@@ -3198,7 +3198,7 @@ class TestCloudStrategyOrdersell:
 
                 request_data = {
                     "id": cloudMaster_id,
-                    "type": 0,
+                    "type": 1,
                     "tradeType": 0,
                     "intervalTime": 100,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],

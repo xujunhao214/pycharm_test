@@ -14,8 +14,8 @@ from requests.exceptions import (
     HTTPError, SSLError
 )
 from jsonpath_ng import parse
-from lingkuan_821.VAR.VAR import *
-from lingkuan_821.commons.wait_utils import wait_for_condition
+from lingkuan_1028.VAR.VAR import *
+from lingkuan_1028.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -445,11 +445,11 @@ class APITestBase:
 
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
-                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} | 参数: {params}")
+                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
                     cursor.execute(final_sql, params)
                     result = cursor.fetchall()
                     logger.info(
-                        f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)} | SQL: {final_sql[:200]}")
+                        f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)}")
 
                     if result:
                         if convert_decimal:

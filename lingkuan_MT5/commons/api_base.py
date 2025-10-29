@@ -1028,12 +1028,6 @@ class APITestBase:
         logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"{timezone_offset}", "时区偏移量（小时）", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -1107,10 +1101,20 @@ class APITestBase:
             if final_result and attach_to_allure:
                 with allure.step("带时区查询最终结果"):
                     allure.attach(self.serialize_data(final_result[:50]), "结果预览", allure.attachment_type.JSON)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                    allure.attach(f"{timezone_offset}", "时区偏移量（小时）", allure.attachment_type.TEXT)
+                    allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                                  allure.attachment_type.TEXT)
 
             if not final_result:
                 with allure.step("时区查询无结果"):
                     allure.attach(f"轮询{timeout}秒后仍无查询结果", "异常详情", allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                    allure.attach(f"{timezone_offset}", "时区偏移量（小时）", allure.attachment_type.TEXT)
+                    allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                                  allure.attachment_type.TEXT)
                 raise TimeoutError(f"Failed: 时区查询超时（{timeout}秒）")
             return final_result
 
