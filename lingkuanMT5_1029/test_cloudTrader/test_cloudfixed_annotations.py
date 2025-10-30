@@ -15,15 +15,16 @@ SKIP_REASON = "跳过此用例"
 class TestCloudremark:
     @allure.story("场景1：云策略列表-策略有固定注释，跟单无固定注释")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改云策略信息-关闭跟单备注
-          2. 修改跟单账号-无固定注释
-          3. 云策略账号复制下单
-          4. 数据库校验-策略备注生效
-          5. 策略账号平仓
-        - 预期结果：跟单取策略备注
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改云策略信息-关闭跟单备注
+      2. 修改跟单账号-无固定注释
+      3. 云策略账号复制下单
+      4. 数据库校验-策略备注生效
+      5. 策略账号平仓
+    - 预期结果：跟单取策略备注
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark1(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario1_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -202,15 +203,16 @@ class TestCloudremark:
 
     @allure.story("场景2：策略有固定注释，跟单有固定注释")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改云策略信息-关闭跟单备注
-          2. 修改跟单账号-有固定注释
-          3. 云策略账号复制下单
-          4. 数据库校验-策略备注生效
-          5. 策略账号平仓
-        - 预期结果：跟单取自身备注
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改云策略信息-关闭跟单备注
+      2. 修改跟单账号-有固定注释
+      3. 云策略账号复制下单
+      4. 数据库校验-策略备注生效
+      5. 策略账号平仓
+    - 预期结果：跟单取自身备注
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark2(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario2_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -375,15 +377,16 @@ class TestCloudremark:
 
     @allure.story("场景3：交易下单-策略开启订单备注，跟单无固定注释")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改云策略信息-开启跟单备注
-          2. 修改跟单账号-无固定注释
-          3. 云策略账号复制下单
-          4. 数据库校验-策略备注生效
-          5. 策略账号平仓
-        - 预期结果：跟单取开仓备注
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改云策略信息-开启跟单备注
+      2. 修改跟单账号-无固定注释
+      3. 云策略账号复制下单
+      4. 数据库校验-策略备注生效
+      5. 策略账号平仓
+    - 预期结果：跟单取开仓备注
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark3(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")
         def test_scenario3_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -548,15 +551,16 @@ class TestCloudremark:
 
     @allure.story("场景4：交易下单-策略有固定注释，跟单无固定注释")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改云策略信息-关闭跟单备注
-          2. 修改跟单账号-无固定注释
-          3. 云策略账号复制下单
-          4. 数据库校验-策略备注生效
-          5. 策略账号平仓
-        - 预期结果：跟单取策略备注
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改云策略信息-关闭跟单备注
+      2. 修改跟单账号-无固定注释
+      3. 云策略账号复制下单
+      4. 数据库校验-策略备注生效
+      5. 策略账号平仓
+    - 预期结果：跟单取策略备注
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark4(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario1_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -716,15 +720,16 @@ class TestCloudremark:
 
     @allure.story("场景5：策略有固定注释，跟单有固定注释")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改云策略信息-关闭跟单备注
-          2. 修改跟单账号-有固定注释
-          3. 云策略账号复制下单
-          4. 数据库校验-策略备注生效
-          5. 策略账号平仓
-        - 预期结果：跟单取自身备注
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改云策略信息-关闭跟单备注
+      2. 修改跟单账号-有固定注释
+      3. 云策略账号复制下单
+      4. 数据库校验-策略备注生效
+      5. 策略账号平仓
+    - 预期结果：跟单取自身备注
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark5(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario2_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -884,15 +889,16 @@ class TestCloudremark:
 
     @allure.story("场景6：交易下单-策略开启订单备注，跟单无固定注释")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改云策略信息-开启跟单备注
-          2. 修改跟单账号-无固定注释
-          3. 云策略账号复制下单
-          4. 数据库校验-策略备注生效
-          5. 策略账号平仓
-        - 预期结果：跟单取开仓备注
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改云策略信息-开启跟单备注
+      2. 修改跟单账号-无固定注释
+      3. 云策略账号复制下单
+      4. 数据库校验-策略备注生效
+      5. 策略账号平仓
+    - 预期结果：跟单取开仓备注
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark6(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")
         def test_scenario3_update_strategy(self, class_random_str, var_manager, logged_session):

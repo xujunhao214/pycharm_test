@@ -22,6 +22,7 @@ class TestCloudOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend1(APITestBase):
         # @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配平仓-防止数据残留")
@@ -300,6 +301,7 @@ class TestCloudOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend2(APITestBase):
         @pytest.mark.skipif(True, reason="跳过")
         @allure.title("云策略交易下单-分配下单请求")

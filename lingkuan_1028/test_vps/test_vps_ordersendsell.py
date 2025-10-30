@@ -24,6 +24,7 @@ class TestVPSOrdersendsell:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend1(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号")
@@ -546,6 +547,7 @@ class TestVPSOrdersendsell:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend2(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -1007,6 +1009,7 @@ class TestVPSOrdersendsell:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend3(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -1442,6 +1445,7 @@ class TestVPSOrdersendsell:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend4(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -1904,6 +1908,7 @@ class TestVPSOrdersendsell:
       5. 校验账号的数据是否正确
     - 预期结果：云策略下单的停止功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend5(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -2356,6 +2361,7 @@ class TestVPSOrdersendsell:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确，权重正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend6(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -2824,6 +2830,7 @@ class TestVPSOrdersendsell:
       4. 校验账号的数据是否正确
     - 预期结果：权重正确，优先满足手数范围，然后是总手数
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend7(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -3307,16 +3314,17 @@ class TestVPSOrdersendsell:
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
 
+    @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
+    @allure.description("""
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数0.01
+      2. 预期下单失败：总手数不能低于最低手数
+    - 预期结果：提示正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders8(APITestBase):
-        @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
-        @allure.description("""
-        ### 测试说明
-        - 场景校验：手数范围>总手数>订单数量
-        - 前置条件：有vps策略和vps跟单
-          1. 进行开仓，手数范围0.1-1，总手数0.01
-          2. 预期下单失败：总手数不能低于最低手数
-        - 预期结果：提示正确
-        """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
@@ -3346,16 +3354,17 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为：总手数不能低于最低手数"
             )
 
+    @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
+    @allure.description("""
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数2
+      2. 预期下单失败：下单失败，请检查下单参数
+    - 预期结果：提示正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders9(APITestBase):
-        @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
-        @allure.description("""
-        ### 测试说明
-        - 场景校验：手数范围>总手数>订单数量
-        - 前置条件：有vps策略和vps跟单
-          1. 进行开仓，手数范围0.1-1，总手数2
-          2. 预期下单失败：下单失败，请检查下单参数
-        - 预期结果：提示正确
-        """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
@@ -3397,6 +3406,7 @@ class TestVPSOrdersendsell:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend10(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")
@@ -3866,6 +3876,7 @@ class TestVPSOrdersendsell:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend11(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")
@@ -4335,6 +4346,7 @@ class TestVPSOrdersendsell:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend12(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")

@@ -22,6 +22,7 @@ class TestVPSOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend1(APITestBase):
         # @pytest.mark.skipif(True, reason="跳过")
         @pytest.mark.url("vps")
@@ -326,6 +327,7 @@ class TestVPSOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend2(APITestBase):
         @pytest.mark.url("vps")
         @pytest.mark.skipif(True, reason="跳过")

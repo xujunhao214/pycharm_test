@@ -24,6 +24,7 @@ class TestMT5cloudTrader_openandlevel:
       5. 进行补单操作，然后平仓
     - 预期结果：云跟单账号开仓-关闭，有漏单数据
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT5cloudTrader_open(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -550,6 +551,7 @@ class TestMT5cloudTrader_openandlevel:
       5. 修改云跟单账号平仓-开启
     - 预期结果：云跟单账号平仓-关闭，有漏单数据
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT5cloudTrader_level(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -1115,6 +1117,7 @@ class TestMT5cloudTrader_openandlevel:
       5. 进行补单操作，然后平仓
     - 预期结果：云策略 策略状态为关闭，有漏单数据
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class Testcloudstargy_addstatus(APITestBase):
         @allure.title("云策略-云策略列表-修改策略账号信息")
@@ -1618,6 +1621,7 @@ class TestMT5cloudTrader_openandlevel:
       5. 进行补单操作，然后平仓
     - 预期结果：云策略 策略状态为关闭，有漏单数据
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class Testcloudstargy_status(APITestBase):
         @allure.title("云策略-云策略列表-修改策略账号信息")

@@ -23,7 +23,7 @@ class VPSOrderTestBase(APITestBase):
         "intervalTime": ""
     }
 
-    def _send_open_order(self, var_manager,   logged_session):
+    def _send_open_order(self, var_manager, logged_session):
         """发送开仓请求（公共方法）"""
         trader_ordersend = var_manager.get_variable("trader_ordersend")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -62,7 +62,7 @@ class VPSOrderTestBase(APITestBase):
             )
             return response
 
-    def _send_close_order(self, var_manager,   logged_session, trader_id, account):
+    def _send_close_order(self, var_manager, logged_session, trader_id, account):
         """发送平仓请求（公共方法）"""
         data = {
             "isCloseAll": 1,
@@ -92,7 +92,7 @@ class VPSOrderTestBase(APITestBase):
             )
             return response
 
-    def _verify_open_order_master(self, var_manager,   db_transaction):
+    def _verify_open_order_master(self, var_manager, db_transaction):
         """验证主指令开仓数据（公共方法）"""
         new_user = var_manager.get_variable("new_user")
 
@@ -185,24 +185,25 @@ class VPSOrderTestBase(APITestBase):
                 # 验证详情总手数
                 size = [record["size"] for record in db_data]
                 total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-                assert math.isclose(
-                    float(self.test_params["totalSzie"]),
-                    float(total),
-                    rel_tol=1e-9
-                ), f'详情总手数不符: 预期{self.test_params["totalSzie"]}, 实际{total}'
-                logger.info(f"详情总手数验证通过: {total}")
+                # 关键优化：四舍五入保留两位小数
+                total = round(float(total), 2)
+            assert math.isclose(
+                float(self.test_params["totalSzie"]),
+                float(total),
+                rel_tol=1e-9
+            ), f'详情总手数不符: 预期{self.test_params["totalSzie"]}, 实际{total}'
+            logger.info(f"详情总手数验证通过: {total}")
 
-        return db_data
+    return db_data
 
-    def _verify_open_order_slave(self, var_manager,   db_transaction):
-        """验证跟单指令开仓数据（公共方法）"""
-        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
 
-        # 1. 获取订单数据
-        with allure.step("1. 获取跟单指令开仓数据"):
-            sql = """
+def _verify_open_order_slave(self, var_manager, db_transaction):
+    """验证跟单指令开仓数据（公共方法）"""
+    vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+
+    # 1. 获取订单数据
+    with allure.step("1. 获取跟单指令开仓数据"):
+        sql = """
                 SELECT 
                     fod.size,
                     fod.send_no,
@@ -226,61 +227,63 @@ class VPSOrderTestBase(APITestBase):
                 WHERE foi.operation_type = %s
                     AND fod.account = %s
             """
-            params = ('0', vps_user_accounts_1)
+        params = ('0', vps_user_accounts_1)
 
-            db_data = self.query_database_with_time_with_timezone(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="fod.open_time"
-            )
+        db_data = self.query_database_with_time_with_timezone(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field="fod.open_time"
+        )
 
-        # 2. 数据校验
-        with allure.step("2. 验证跟单指令开仓数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+    # 2. 数据校验
+    with allure.step("2. 验证跟单指令开仓数据"):
+        if not db_data:
+            pytest.fail("数据库查询结果为空，无法提取数据")
 
-            # 验证订单状态
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
-            logger.info(f"订单状态验证通过: {status}")
+        # 验证订单状态
+        status = db_data[0]["status"]
+        assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
+        logger.info(f"订单状态验证通过: {status}")
 
-            # 验证手数一致性
-            size = [record["size"] for record in db_data]
-            total_lots = [record["total_lots"] for record in db_data]
-            self.assert_list_equal_ignore_order(
-                size,
-                total_lots,
-                f"手数不一致: 详情{size}, 指令{total_lots}"
-            )
-            logger.info("手数一致性验证通过")
+        # 验证手数一致性
+        size = [record["size"] for record in db_data]
+        total_lots = [record["total_lots"] for record in db_data]
+        self.assert_list_equal_ignore_order(
+            size,
+            total_lots,
+            f"手数不一致: 详情{size}, 指令{total_lots}"
+        )
+        logger.info("手数一致性验证通过")
 
-            # 验证总手数
-            if self.test_params["totalSzie"]:
-                total_sumlots = sum(total_lots)
-                total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-                assert math.isclose(
-                    float(self.test_params["totalSzie"]),
-                    float(total_sumlots),
-                    rel_tol=1e-9
-                ) and math.isclose(
-                    float(self.test_params["totalSzie"]),
-                    float(total),
-                    rel_tol=1e-9
-                ), f'总手数不符: 预期{self.test_params["totalSzie"]}, 指令{total_sumlots}, 详情{total}'
-                logger.info(f"总手数验证通过: {self.test_params['totalSzie']}")
+        # 验证总手数
+        if self.test_params["totalSzie"]:
+            total_sumlots = sum(total_lots)
+            total = sum(size)
+            # 关键优化：四舍五入保留两位小数
+            total = round(float(total), 2)
+        assert math.isclose(
+            float(self.test_params["totalSzie"]),
+            float(total_sumlots),
+            rel_tol=1e-9
+        ) and math.isclose(
+            float(self.test_params["totalSzie"]),
+            float(total),
+            rel_tol=1e-9
+        ), f'总手数不符: 预期{self.test_params["totalSzie"]}, 指令{total_sumlots}, 详情{total}'
+        logger.info(f"总手数验证通过: {self.test_params['totalSzie']}")
 
-        return db_data
 
-    def _verify_close_order_master(self, var_manager,   db_transaction):
-        """验证主指令平仓数据（公共方法）"""
-        new_user = var_manager.get_variable("new_user")
+return db_data
 
-        # 1. 获取订单数据
-        with allure.step("1. 获取主指令平仓数据"):
-            sql = """
+
+def _verify_close_order_master(self, var_manager, db_transaction):
+    """验证主指令平仓数据（公共方法）"""
+    new_user = var_manager.get_variable("new_user")
+
+    # 1. 获取订单数据
+    with allure.step("1. 获取主指令平仓数据"):
+        sql = """
                 SELECT 
                     fod.size,
                     fod.close_no,
@@ -302,48 +305,50 @@ class VPSOrderTestBase(APITestBase):
                 WHERE foi.operation_type = %s
                     AND fod.account = %s
             """
-            params = ('1', new_user["account"])
+        params = ('1', new_user["account"])
 
-            db_data = self.query_database_with_time_with_timezone(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="fod.close_time"
-            )
+        db_data = self.query_database_with_time_with_timezone(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field="fod.close_time"
+        )
 
-        # 2. 数据校验
-        with allure.step("2. 验证主指令平仓数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+    # 2. 数据校验
+    with allure.step("2. 验证主指令平仓数据"):
+        if not db_data:
+            pytest.fail("数据库查询结果为空，无法提取数据")
 
-            # 验证订单状态
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
-            logger.info(f"平仓状态验证通过: {status}")
+        # 验证订单状态
+        status = db_data[0]["status"]
+        assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
+        logger.info(f"平仓状态验证通过: {status}")
 
-            # 验证总手数
-            if self.test_params["totalSzie"]:
-                size = [record["size"] for record in db_data]
-                total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-                assert math.isclose(
-                    float(self.test_params["totalSzie"]),
-                    float(total),
-                    rel_tol=1e-9
-                ), f'平仓总手数不符: 预期{self.test_params["totalSzie"]}, 实际{total}'
-                logger.info(f"平仓总手数验证通过: {total}")
+        # 验证总手数
+        if self.test_params["totalSzie"]:
+            size = [record["size"] for record in db_data]
+            total = sum(size)
+            # 关键优化：四舍五入保留两位小数
+            total = round(float(total), 2)
+        assert math.isclose(
+            float(self.test_params["totalSzie"]),
+            float(total),
+            rel_tol=1e-9
+        ), f'平仓总手数不符: 预期{self.test_params["totalSzie"]}, 实际{total}'
+        logger.info(f"平仓总手数验证通过: {total}")
 
-        return db_data
 
-    def _verify_close_order_slave(self, var_manager,   db_transaction):
-        """验证跟单指令平仓数据（公共方法）"""
-        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-        vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+return db_data
 
-        # 1. 获取订单数据
-        with allure.step("1. 获取跟单指令平仓数据"):
-            sql = """
+
+def _verify_close_order_slave(self, var_manager, db_transaction):
+    """验证跟单指令平仓数据（公共方法）"""
+    vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+    vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+
+    # 1. 获取订单数据
+    with allure.step("1. 获取跟单指令平仓数据"):
+        sql = """
                 SELECT 
                     fod.size,
                     fod.close_no,
@@ -371,49 +376,50 @@ class VPSOrderTestBase(APITestBase):
                     AND fod.account = %s
                     AND fod.trader_id = %s
             """
-            params = ('1', vps_user_accounts_1, vps_addslave_id)
+        params = ('1', vps_user_accounts_1, vps_addslave_id)
 
-            db_data = self.query_database_with_time_with_timezone(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="fod.close_time"
-            )
+        db_data = self.query_database_with_time_with_timezone(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field="fod.close_time"
+        )
 
-        # 2. 数据校验
-        with allure.step("2. 验证跟单指令平仓数据"):
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+    # 2. 数据校验
+    with allure.step("2. 验证跟单指令平仓数据"):
+        if not db_data:
+            pytest.fail("数据库查询结果为空，无法提取数据")
 
-            # 验证订单状态
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
-            logger.info(f"平仓状态验证通过: {status}")
+        # 验证订单状态
+        status = db_data[0]["status"]
+        assert status in (0, 1), f"订单状态应为0或1或3，实际为: {status}"
+        logger.info(f"平仓状态验证通过: {status}")
 
-            # 验证手数一致性
-            size = [record["size"] for record in db_data]
-            total_lots = [record["total_lots"] for record in db_data]
-            self.assert_list_equal_ignore_order(
-                size,
-                total_lots,
-                f"手数不一致: 详情{size}, 指令{total_lots}"
-            )
-            logger.info("平仓手数一致性验证通过")
+        # 验证手数一致性
+        size = [record["size"] for record in db_data]
+        total_lots = [record["total_lots"] for record in db_data]
+        self.assert_list_equal_ignore_order(
+            size,
+            total_lots,
+            f"手数不一致: 详情{size}, 指令{total_lots}"
+        )
+        logger.info("平仓手数一致性验证通过")
 
-            # 验证总手数
-            if self.test_params["totalSzie"]:
-                total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-                assert math.isclose(
-                    float(self.test_params["totalSzie"]),
-                    float(total),
-                    rel_tol=1e-9
-                ), f'平仓总手数不符: 预期{self.test_params["totalSzie"]}, 实际{total}'
-                logger.info(f"平仓总手数验证通过: {total}")
+        # 验证总手数
+        if self.test_params["totalSzie"]:
+            total = sum(size)
+            # 关键优化：四舍五入保留两位小数
+            total = round(float(total), 2)
+        assert math.isclose(
+            float(self.test_params["totalSzie"]),
+            float(total),
+            rel_tol=1e-9
+        ), f'平仓总手数不符: 预期{self.test_params["totalSzie"]}, 实际{total}'
+        logger.info(f"平仓总手数验证通过: {total}")
 
-        time.sleep(25)
-        return db_data
+
+time.sleep(25)
+return db_data
 
 
 # @pytest.mark.skip(reason=SKIP_REASON)
@@ -443,38 +449,38 @@ class TestVPSOrderSend1(VPSOrderTestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_orderSend(self, var_manager,   logged_session):
-        self._send_open_order(var_manager,   logged_session)
+    def test_trader_orderSend(self, var_manager, logged_session):
+        self._send_open_order(var_manager, logged_session)
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_slave(var_manager, db_transaction)
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager,   logged_session):
+    def test_trader_orderclose(self, var_manager, logged_session):
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         new_user = var_manager.get_variable("new_user")
-        self._send_close_order(var_manager,   logged_session, vps_trader_id, new_user["account"])
+        self._send_close_order(var_manager, logged_session, vps_trader_id, new_user["account"])
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
-    def test_addtrader_orderclose(self, var_manager,   logged_session):
+    def test_addtrader_orderclose(self, var_manager, logged_session):
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-        self._send_close_order(var_manager,   logged_session, vps_addslave_id, vps_user_accounts_1)
+        self._send_close_order(var_manager, logged_session, vps_addslave_id, vps_user_accounts_1)
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_slave(var_manager, db_transaction)
 
 
 # @pytest.mark.skip(reason=SKIP_REASON)
@@ -504,38 +510,38 @@ class TestVPSOrderSend2(VPSOrderTestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_orderSend(self, var_manager,   logged_session):
-        self._send_open_order(var_manager,   logged_session)
+    def test_trader_orderSend(self, var_manager, logged_session):
+        self._send_open_order(var_manager, logged_session)
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_slave(var_manager, db_transaction)
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager,   logged_session):
+    def test_trader_orderclose(self, var_manager, logged_session):
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         new_user = var_manager.get_variable("new_user")
-        self._send_close_order(var_manager,   logged_session, vps_trader_id, new_user["account"])
+        self._send_close_order(var_manager, logged_session, vps_trader_id, new_user["account"])
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
-    def test_addtrader_orderclose(self, var_manager,   logged_session):
+    def test_addtrader_orderclose(self, var_manager, logged_session):
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-        self._send_close_order(var_manager,   logged_session, vps_addslave_id, vps_user_accounts_1)
+        self._send_close_order(var_manager, logged_session, vps_addslave_id, vps_user_accounts_1)
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_slave(var_manager, db_transaction)
 
 
 # @pytest.mark.skip(reason=SKIP_REASON)
@@ -565,38 +571,38 @@ class TestVPSOrderSend3(VPSOrderTestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_orderSend(self, var_manager,   logged_session):
-        self._send_open_order(var_manager,   logged_session)
+    def test_trader_orderSend(self, var_manager, logged_session):
+        self._send_open_order(var_manager, logged_session)
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_slave(var_manager, db_transaction)
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager,   logged_session):
+    def test_trader_orderclose(self, var_manager, logged_session):
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         new_user = var_manager.get_variable("new_user")
-        self._send_close_order(var_manager,   logged_session, vps_trader_id, new_user["account"])
+        self._send_close_order(var_manager, logged_session, vps_trader_id, new_user["account"])
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
-    def test_addtrader_orderclose(self, var_manager,   logged_session):
+    def test_addtrader_orderclose(self, var_manager, logged_session):
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-        self._send_close_order(var_manager,   logged_session, vps_addslave_id, vps_user_accounts_1)
+        self._send_close_order(var_manager, logged_session, vps_addslave_id, vps_user_accounts_1)
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_slave(var_manager, db_transaction)
 
 
 # @pytest.mark.skip(reason=SKIP_REASON)
@@ -626,38 +632,38 @@ class TestVPSOrderSend4(VPSOrderTestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_orderSend(self, var_manager,   logged_session):
-        self._send_open_order(var_manager,   logged_session)
+    def test_trader_orderSend(self, var_manager, logged_session):
+        self._send_open_order(var_manager, logged_session)
 
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
-        self._verify_open_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
+        self._verify_open_order_slave(var_manager, db_transaction)
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager,   logged_session):
+    def test_trader_orderclose(self, var_manager, logged_session):
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         new_user = var_manager.get_variable("new_user")
-        self._send_close_order(var_manager,   logged_session, vps_trader_id, new_user["account"])
+        self._send_close_order(var_manager, logged_session, vps_trader_id, new_user["account"])
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
-    def test_addtrader_orderclose(self, var_manager,   logged_session):
+    def test_addtrader_orderclose(self, var_manager, logged_session):
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-        self._send_close_order(var_manager,   logged_session, vps_addslave_id, vps_user_accounts_1)
+        self._send_close_order(var_manager, logged_session, vps_addslave_id, vps_user_accounts_1)
 
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_master(var_manager,   db_transaction)
+    def test_dbquery_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_master(var_manager, db_transaction)
 
     @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
-        self._verify_close_order_slave(var_manager,   db_transaction)
+    def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+        self._verify_close_order_slave(var_manager, db_transaction)
 
 
 # @pytest.mark.skip(reason=SKIP_REASON)
@@ -688,12 +694,12 @@ class TestVPSOrderSend5(VPSOrderTestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_orderSend(self, var_manager,   logged_session):
-        self._send_open_order(var_manager,   logged_session)
+    def test_trader_orderSend(self, var_manager, logged_session):
+        self._send_open_order(var_manager, logged_session)
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-停止功能校验")
-    def test_trader_stopOrder(self, var_manager,   logged_session):
+    def test_trader_stopOrder(self, var_manager, logged_session):
         # 1. 发送策略开仓停止请求
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         params = {
@@ -720,7 +726,7 @@ class TestVPSOrderSend5(VPSOrderTestBase):
         )
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
@@ -775,14 +781,14 @@ class TestVPSOrderSend5(VPSOrderTestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager,   logged_session):
+    def test_trader_orderclose(self, var_manager, logged_session):
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         new_user = var_manager.get_variable("new_user")
-        self._send_close_order(var_manager,   logged_session, vps_trader_id, new_user["account"])
+        self._send_close_order(var_manager, logged_session, vps_trader_id, new_user["account"])
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-跟单平仓")
-    def test_addtrader_orderclose(self, var_manager,   logged_session):
+    def test_addtrader_orderclose(self, var_manager, logged_session):
         vps_addslave_id = var_manager.get_variable("vps_addslave_id")
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-        self._send_close_order(var_manager,   logged_session, vps_addslave_id, vps_user_accounts_1)
+        self._send_close_order(var_manager, logged_session, vps_addslave_id, vps_user_accounts_1)

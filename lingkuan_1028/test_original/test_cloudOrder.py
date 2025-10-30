@@ -238,7 +238,7 @@ class TestMasOrderSend(APITestBase):
     @allure.title("云策略-复制下单操作")
     def test_copy_place_order(self, logged_session, var_manager):
         """执行云策略复制下单操作并验证请求结果"""
-        with allure.step("发送复制下单请求"):
+        with allure.step("1.发送复制下单请求"):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -263,7 +263,7 @@ class TestMasOrderSend(APITestBase):
                 json_data=request_data
             )
 
-        with allure.step("验证复制下单响应结果"):
+        with allure.step("2.验证复制下单响应结果"):
             self.assert_json_value(
                 response,
                 "$.msg",
@@ -362,7 +362,7 @@ class TestMasOrderSend(APITestBase):
     @allure.title("云策略-复制下单平仓操作")
     def test_copy_close_order(self, logged_session, var_manager):
         """执行复制下单的平仓操作并验证结果"""
-        with allure.step("发送复制下单平仓请求"):
+        with allure.step("1.发送复制下单平仓请求"):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -379,7 +379,7 @@ class TestMasOrderSend(APITestBase):
                 json_data=request_data
             )
 
-        with allure.step("验证复制平仓响应结果"):
+        with allure.step("2.验证复制平仓响应结果"):
             self.assert_json_value(
                 response,
                 "$.msg",

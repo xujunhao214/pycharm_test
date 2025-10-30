@@ -16,14 +16,15 @@ class TestCloudStrategyOrderbuy:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.1-1，总订单3，总手数1
-          2. 校验账号的数据是否正确
-          3. 进行平仓
-          4. 校验账号的数据是否正确
-        - 预期结果：账号的数据正确
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend1(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -458,6 +459,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend2(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -857,6 +859,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend3(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1238,6 +1241,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend4(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1642,6 +1646,7 @@ class TestCloudStrategyOrderbuy:
       5. 校验账号的数据是否正确
     - 预期结果：云策略下单的停止功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend5(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1837,6 +1842,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：云策略分配下单功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend6(APITestBase):
         @allure.title("云策略-分配下单操作")
         def test_allocation_place_order(self, class_random_str, logged_session, var_manager):
@@ -2242,6 +2248,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend7(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -2686,6 +2693,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：权重正确，优先满足手数范围，然后是总手数
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend8(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -3142,6 +3150,7 @@ class TestCloudStrategyOrderbuy:
       2. 预期下单失败：总手数不能低于最低手数
     - 预期结果：提示正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend9(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -3188,6 +3197,7 @@ class TestCloudStrategyOrderbuy:
       2. 预期下单失败：下单失败，请检查下单参数
     - 预期结果：提示正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend10(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):

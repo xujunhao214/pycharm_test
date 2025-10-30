@@ -730,8 +730,8 @@ class APITestBase:
                 return False
 
             # 1. 自动识别唯一键（按优先级匹配：可根据业务调整顺序）
-            candidate_keys = ['order_no', 'send_no', 'close_no', 'foi.order_no', 'fod.send_no',
-                              'fod.close_no', 'id']  # 优先级从高到低
+            candidate_keys = ['account', 'order_no', 'send_no', 'close_no', 'foi.order_no', 'fod.send_no',
+                              'fod.close_no', 'id', 'comment']  # 优先级从高到低
             unique_key = None
             sample_item = current[0]  # 取第一条结果当样本
             for key in candidate_keys:

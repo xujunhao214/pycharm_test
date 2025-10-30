@@ -23,6 +23,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders1(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -478,6 +479,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders2(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -904,6 +906,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders3(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -1301,6 +1304,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders4(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -1680,6 +1684,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders5(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -2088,6 +2093,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders6(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -2456,6 +2462,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders7(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -2873,6 +2880,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders8(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -3290,6 +3298,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders9(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):

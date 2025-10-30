@@ -15,14 +15,15 @@ SKIP_REASON = "跳过此用例"
 class TestCloudStrategyOrder:
     @allure.story("场景4：复制下单-手数0.01-1，总订单数10")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 进行开仓，手数范围0.01-1，总订单数10
-          2. 校验账号的数据是否正确
-          3. 进行平仓
-          4. 校验账号的数据是否正确
-        - 预期结果：账号的数据正确
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.01-1，总订单数10
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders4(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):

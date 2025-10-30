@@ -967,16 +967,16 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
 
+    @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
+    @allure.description("""
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数0.01
+      2. 预期下单失败：总手数不能低于最低手数
+    - 预期结果：提示正确
+    """)
     class TestVPStradingOrders8(APITestBase):
-        @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
-        @allure.description("""
-            ### 测试说明
-            - 场景校验：手数范围>总手数>订单数量
-            - 前置条件：有vps策略和vps跟单
-              1. 进行开仓，手数范围0.1-1，总手数0.01
-              2. 预期下单失败：总手数不能低于最低手数
-            - 预期结果：提示正确
-            """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
@@ -1006,16 +1006,16 @@ class TestVPSOrderSend_newScenarios:
                 "响应msg字段应为：总手数不能低于最低手数"
             )
 
+        @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
+        @allure.description("""
+        ### 测试说明
+        - 场景校验：手数范围>总手数>订单数量
+        - 前置条件：有vps策略和vps跟单
+          1. 进行开仓，手数范围0.1-1，总手数2
+          2. 预期下单失败：下单失败，请检查下单参数
+        - 预期结果：提示正确
+        """)
         class TestVPStradingOrders9(APITestBase):
-            @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
-            @allure.description("""
-            ### 测试说明
-            - 场景校验：手数范围>总手数>订单数量
-            - 前置条件：有vps策略和vps跟单
-              1. 进行开仓，手数范围0.1-1，总手数2
-              2. 预期下单失败：下单失败，请检查下单参数
-            - 预期结果：提示正确
-            """)
             @allure.title("VPS交易下单-分配下单请求")
             def test_copy_order_send(self, class_random_str, logged_session, var_manager):
                 # 发送VPS交易下单-复制下单请求

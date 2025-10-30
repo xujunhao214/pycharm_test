@@ -24,6 +24,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark1(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario1_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -106,7 +107,7 @@ class TestCloudremark:
                 self.assert_response_status(response, 200, "修改跟单账号请求失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=3, delay=10)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("云策略账号复制下单")
         def test_scenario1_place_order(self, class_random_str, logged_session, var_manager):
             with allure.step("发送开仓请求"):
@@ -145,9 +146,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4,f"ceshiceluebeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -185,18 +186,18 @@ class TestCloudremark:
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
 
-            with allure.step("跟单账号平仓"):
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
+            # with allure.step("跟单账号平仓"):
+            #     cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+            #     response = self.send_post_request(
+            #         logged_session,
+            #         '/mascontrol/cloudTrader/orderClose',
+            #         json_data={
+            #             "traderUserId": cloudTrader_traderList_4,
+            #             "isCloseAll": 1
+            #         }
+            #     )
+            #     self.assert_response_status(response, 200, "跟单平仓失败")
+            #     self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
 
     @allure.story("场景2：云策略列表-策略有固定注释，跟单有固定注释")
     @allure.description("""
@@ -209,6 +210,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark2(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario2_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -330,9 +332,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4,f"ceshigendanbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -370,19 +372,6 @@ class TestCloudremark:
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
 
-            with allure.step("跟单账号平仓"):
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
-
     @allure.story("场景3：云策略列表-策略开启订单备注，跟单无固定注释")
     @allure.description("""
     ### 测试说明
@@ -394,6 +383,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark3(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")
         def test_scenario3_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -514,9 +504,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4,f"ceshikaicangbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -554,19 +544,6 @@ class TestCloudremark:
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
 
-            with allure.step("跟单账号平仓"):
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
-
     @allure.story("场景4：交易下单-策略有固定注释，跟单无固定注释")
     @allure.description("""
     ### 测试说明
@@ -578,6 +555,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark4(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario1_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -696,9 +674,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4,f"ceshiceluebeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -734,19 +712,6 @@ class TestCloudremark:
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
 
-            with allure.step("跟单账号平仓"):
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
-
     @allure.story("场景5：策略有固定注释，跟单有固定注释")
     @allure.description("""
     ### 测试说明
@@ -758,6 +723,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark5(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario2_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -876,9 +842,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4,f"ceshigendanbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -914,19 +880,6 @@ class TestCloudremark:
                 )
                 self.assert_json_value(response, "$.msg", "success", "策略平仓失败")
 
-            with allure.step("跟单账号平仓"):
-                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/orderClose',
-                    json_data={
-                        "traderUserId": cloudTrader_traderList_4,
-                        "isCloseAll": 1
-                    }
-                )
-                self.assert_response_status(response, 200, "跟单平仓失败")
-                self.assert_json_value(response, "$.msg", "success", "跟单平仓响应错误")
-
     @allure.story("场景6：交易下单-策略开启订单备注，跟单无固定注释")
     @allure.description("""
     ### 测试说明
@@ -938,6 +891,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark6(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")
         def test_scenario3_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -1056,9 +1010,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4)
+                params = ('0', cloudTrader_user_accounts_4,f"ceshikaicangbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,

@@ -14,16 +14,17 @@ SKIP_REASON = "跳过此用例"
 class TestLeakageopen_level:
     @allure.story("场景1：VPS策略下单-漏开")
     @allure.description("""
-        ### 用例说明
-        - 前置条件：有vps策略和vps跟单
-        - 操作步骤：
-          1. 修改vps跟单账号开仓-关闭
-          2. 进行开仓
-          3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-          4. 修改vps跟单账号开仓-开启
-          5. 进行补单操作，然后平仓
-        - 预期结果：vps跟单账号开仓-关闭，有漏单数据
-        """)
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
@@ -757,16 +758,17 @@ class TestLeakageopen_level:
 
     @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
-        ### 用例说明
-        - 前置条件：有vps策略和vps跟单
-        - 操作步骤：
-          1. 修改vps跟单账号平仓-关闭
-          2. 进行开仓
-          3. 进行平仓
-          4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
-          5. 修改vps跟单账号平仓-开启
-        - 预期结果：vps跟单账号平仓-关闭，有漏单数据
-        """)
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
         @pytest.mark.url("vps")
@@ -1502,6 +1504,7 @@ class TestLeakageopen_level:
       5. 进行补单操作，然后平仓
     - 预期结果：vps策略跟单状态为关闭，有漏单数据
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")

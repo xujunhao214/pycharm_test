@@ -22,6 +22,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark1(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改策略账号信息")
@@ -187,6 +188,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark2(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改策略账号信息")
@@ -347,6 +349,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark3(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改策略账号信息-开启订单备注")

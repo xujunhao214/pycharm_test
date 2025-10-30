@@ -29,6 +29,7 @@ class TestCloudCoreFunctionality:
       5. 进行平仓
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend1(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -327,6 +328,7 @@ class TestCloudFollowDirection:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend2(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -567,6 +569,7 @@ class TestCloudFollowDirection:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend3(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -812,6 +815,7 @@ class TestCloudOrderQuantityControl:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend4(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1055,6 +1059,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend5(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1292,6 +1297,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend6(APITestBase):
         @allure.title("登录MT4账号获取token")
@@ -1551,6 +1557,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend7(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1793,6 +1800,7 @@ class TestCloudCloseRemark:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单备注功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend8(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -2037,6 +2045,7 @@ class TestCloudClose:
       7. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平策略功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend9(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -2358,6 +2367,7 @@ class TestCloudClose:
       7. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平订单功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend10(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -2670,6 +2680,7 @@ class TestCloudClose:
       3. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平订单功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend11(APITestBase):
         @allure.title("云策略-复制下单操作")

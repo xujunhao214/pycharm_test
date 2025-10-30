@@ -29,6 +29,7 @@ class TestVPSCoreFunctionality:
       4. 再次进行平仓
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestStopCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
@@ -270,6 +271,7 @@ class TestVPSFollowDirection:
       4. 策略账号buy方向进行平仓
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestReverseFollowClose_sell(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号为反向跟单")
@@ -510,6 +512,7 @@ class TestVPSFollowDirection:
       4. 策略账号buy方向进行平仓
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestReverseFollowClose_buy(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号为正向跟单")
@@ -712,6 +715,7 @@ class TestVPSFollowDirection:
     4. 策略账号buy方向进行平仓
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestReverseFollowClose_all(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")
@@ -876,6 +880,7 @@ class TestVPSOrderQuantityControl:
       4. 进行平仓，平仓一个，平仓失败，没有可平订单
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestBatchCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略开仓-订单数量为2")
@@ -1039,6 +1044,7 @@ class TestVPSOrderType:
       4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT4ExternalOrderClose(APITestBase):
         @allure.title("登录MT4账号获取token")
@@ -1159,48 +1165,118 @@ class TestVPSOrderType:
                 self.assert_response_status(response, 200, "平仓失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg字段应为success")
 
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    class TestVPSInternalOrderType:
-        @allure.story("场景7：平仓的订单类型功能验证-内部订单")
-        @allure.description("""
-        ### 用例说明
-        - 前置条件：有vps策略和vps跟单
-        - 操作步骤：
-          1. 进行开仓，开仓订单数量控制为1个
-          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
-          3. 进行平仓，平仓的订单类型-内部订单-平仓成功
-        - 预期结果：平仓的订单类型功能正确
-        """)
-        class TestInternalOrderClose(APITestBase):
-            @pytest.mark.url("vps")
-            @allure.title("策略开仓")
-            def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
-                # 1. 发送策略开仓请求
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
+    @allure.story("场景7：平仓的订单类型功能验证-内部订单")
+    @allure.description("""
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，开仓订单数量控制为1个
+      2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+      3. 进行平仓，平仓的订单类型-内部订单-平仓成功
+    - 预期结果：平仓的订单类型功能正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
+    class TestInternalOrderClose(APITestBase):
+        @pytest.mark.url("vps")
+        @allure.title("策略开仓")
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
+            # 1. 发送策略开仓请求
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+            data = {
+                "symbol": trader_ordersend["symbol"],
+                "placedType": 0,
+                "remark": trader_ordersend["remark"],
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": "1",
+                "totalSzie": "",
+                "startSize": "0.01",
+                "endSize": "1",
+                "traderId": MT5vps_trader_id
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderSend',
+                json_data=data,
+            )
+
+            # 2. 验证响应状态码和内容
+            self.assert_response_status(
+                response,
+                200,
+                "策略开仓失败"
+            )
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+        @pytest.mark.url("vps")
+        @allure.title("vps策略平仓-外部订单-预期失败")
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
+            with allure.step("1. 发送平仓请求"):
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
                 data = {
-                    "symbol": trader_ordersend["symbol"],
-                    "placedType": 0,
-                    "remark": trader_ordersend["remark"],
-                    "intervalTime": 100,
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "1",
+                    "closeType": 1,
+                    "remark": "",
+                    "symbol": new_user["symbol"],
                     "type": 0,
-                    "totalNum": "1",
-                    "totalSzie": "",
-                    "startSize": "0.01",
-                    "endSize": "1",
-                    "traderId": MT5vps_trader_id
+                    "traderId": MT5vps_trader_id,
+                    "account": new_user["account"]
                 }
                 response = self.send_post_request(
                     logged_session,
-                    '/subcontrol/trader/orderSend',
+                    '/subcontrol/trader/orderClose',
                     json_data=data,
                 )
-
-                # 2. 验证响应状态码和内容
+            with allure.step("2. 验证响应"):
                 self.assert_response_status(
                     response,
                     200,
-                    "策略开仓失败"
+                    "平仓失败"
+                )
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    f"{new_user['account']}暂无可平仓订单",
+                    f"{new_user['account']}暂无可平仓订单"
+                )
+                logging.info(f"{new_user['account']}暂无可平仓订单")
+
+        @pytest.mark.url("vps")
+        @allure.title("vps策略平仓-内部订单-预期成功")
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
+            with allure.step("1. 发送平仓请求"):
+                MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
+                data = {
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "1",
+                    "closeType": 0,
+                    "remark": "",
+                    "symbol": new_user["symbol"],
+                    "type": 0,
+                    "traderId": MT5vps_trader_id,
+                    "account": new_user["account"]
+                }
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data,
+                )
+            with allure.step("2. 验证响应"):
+                self.assert_response_status(
+                    response,
+                    200,
+                    "平仓失败"
                 )
                 self.assert_json_value(
                     response,
@@ -1209,119 +1285,118 @@ class TestVPSOrderType:
                     "响应msg字段应为success"
                 )
 
-            @pytest.mark.url("vps")
-            @allure.title("vps策略平仓-外部订单-预期失败")
-            def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
-                with allure.step("1. 发送平仓请求"):
-                    MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
-                    new_user = var_manager.get_variable("new_user")
-                    data = {
-                        "flag": 0,
-                        "intervalTime": 0,
-                        "num": "1",
-                        "closeType": 1,
-                        "remark": "",
-                        "symbol": new_user["symbol"],
-                        "type": 0,
-                        "traderId": MT5vps_trader_id,
-                        "account": new_user["account"]
-                    }
-                    response = self.send_post_request(
-                        logged_session,
-                        '/subcontrol/trader/orderClose',
-                        json_data=data,
-                    )
-                with allure.step("2. 验证响应"):
-                    self.assert_response_status(
-                        response,
-                        200,
-                        "平仓失败"
-                    )
-                    self.assert_json_value(
-                        response,
-                        "$.msg",
-                        f"{new_user['account']}暂无可平仓订单",
-                        f"{new_user['account']}暂无可平仓订单"
-                    )
-                    logging.info(f"{new_user['account']}暂无可平仓订单")
+    @allure.story("场景8：平仓的订单类型功能验证-全部订单")
+    @allure.description("""
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 进行开仓，开仓订单数量控制为1个
+      2. 进行平仓，平仓的订单类型-外部订单-平仓失败
+      3. 进行平仓，平仓的订单类型-全部订单-平仓成功
+    - 预期结果：平仓的订单类型功能正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
+    class TestAllOrderClose(APITestBase):
+        @pytest.mark.url("vps")
+        @allure.title("策略开仓")
+        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
+            # 1. 发送策略开仓请求
+            trader_ordersend = var_manager.get_variable("trader_ordersend")
+            MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+            data = {
+                "symbol": trader_ordersend["symbol"],
+                "placedType": 0,
+                "remark": trader_ordersend["remark"],
+                "intervalTime": 100,
+                "type": 0,
+                "totalNum": "1",
+                "totalSzie": "",
+                "startSize": "0.01",
+                "endSize": "1",
+                "traderId": MT5vps_trader_id
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/subcontrol/trader/orderSend',
+                json_data=data,
+            )
 
-            @pytest.mark.url("vps")
-            @allure.title("vps策略平仓-内部订单-预期成功")
-            def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
-                with allure.step("1. 发送平仓请求"):
-                    MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
-                    new_user = var_manager.get_variable("new_user")
-                    data = {
-                        "flag": 0,
-                        "intervalTime": 0,
-                        "num": "1",
-                        "closeType": 0,
-                        "remark": "",
-                        "symbol": new_user["symbol"],
-                        "type": 0,
-                        "traderId": MT5vps_trader_id,
-                        "account": new_user["account"]
-                    }
-                    response = self.send_post_request(
-                        logged_session,
-                        '/subcontrol/trader/orderClose',
-                        json_data=data,
-                    )
-                with allure.step("2. 验证响应"):
-                    self.assert_response_status(
-                        response,
-                        200,
-                        "平仓失败"
-                    )
-                    self.assert_json_value(
-                        response,
-                        "$.msg",
-                        "success",
-                        "响应msg字段应为success"
-                    )
+            # 2. 验证响应状态码和内容
+            self.assert_response_status(
+                response,
+                200,
+                "策略开仓失败"
+            )
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
 
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    class TestVPSAllOrderType:
-        @allure.story("场景8：平仓的订单类型功能验证-全部订单")
-        @allure.description("""
-        ### 用例说明
-        - 前置条件：有vps策略和vps跟单
-        - 操作步骤：
-          1. 进行开仓，开仓订单数量控制为1个
-          2. 进行平仓，平仓的订单类型-外部订单-平仓失败
-          3. 进行平仓，平仓的订单类型-全部订单-平仓成功
-        - 预期结果：平仓的订单类型功能正确
-        """)
-        class TestAllOrderClose(APITestBase):
-            @pytest.mark.url("vps")
-            @allure.title("策略开仓")
-            def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
-                # 1. 发送策略开仓请求
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
+        @pytest.mark.url("vps")
+        @allure.title("vps策略平仓-外部订单-预期失败")
+        def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
+            with allure.step("1. 发送平仓请求"):
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
                 data = {
-                    "symbol": trader_ordersend["symbol"],
-                    "placedType": 0,
-                    "remark": trader_ordersend["remark"],
-                    "intervalTime": 100,
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "1",
+                    "closeType": 1,
+                    "remark": "",
+                    "symbol": new_user["symbol"],
                     "type": 0,
-                    "totalNum": "1",
-                    "totalSzie": "",
-                    "startSize": "0.01",
-                    "endSize": "1",
-                    "traderId": MT5vps_trader_id
+                    "traderId": MT5vps_trader_id,
+                    "account": new_user["account"]
                 }
                 response = self.send_post_request(
                     logged_session,
-                    '/subcontrol/trader/orderSend',
+                    '/subcontrol/trader/orderClose',
                     json_data=data,
                 )
-
-                # 2. 验证响应状态码和内容
+            with allure.step("2. 验证响应"):
                 self.assert_response_status(
                     response,
                     200,
-                    "策略开仓失败"
+                    "平仓失败"
+                )
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    f"{new_user['account']}暂无可平仓订单",
+                    f"{new_user['account']}暂无可平仓订单"
+                )
+                logging.info(f"{new_user['account']}暂无可平仓订单")
+
+        @pytest.mark.url("vps")
+        @allure.title("vps策略平仓-全部订单-预期成功")
+        def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
+            with allure.step("1. 发送平仓请求-全部订单"):
+                MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+                new_user = var_manager.get_variable("new_user")
+                data = {
+                    "flag": 0,
+                    "intervalTime": 0,
+                    "num": "1",
+                    "closeType": 2,
+                    "remark": "",
+                    "symbol": new_user["symbol"],
+                    "type": 0,
+                    "traderId": MT5vps_trader_id,
+                    "account": new_user["account"]
+                }
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data,
+                )
+            with allure.step("2. 验证响应"):
+                self.assert_response_status(
+                    response,
+                    200,
+                    "平仓失败"
                 )
                 self.assert_json_value(
                     response,
@@ -1329,77 +1404,6 @@ class TestVPSOrderType:
                     "success",
                     "响应msg字段应为success"
                 )
-
-            @pytest.mark.url("vps")
-            @allure.title("vps策略平仓-外部订单-预期失败")
-            def test_trader_orderclose1(self, class_random_str, var_manager, logged_session):
-                with allure.step("1. 发送平仓请求"):
-                    MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
-                    new_user = var_manager.get_variable("new_user")
-                    data = {
-                        "flag": 0,
-                        "intervalTime": 0,
-                        "num": "1",
-                        "closeType": 1,
-                        "remark": "",
-                        "symbol": new_user["symbol"],
-                        "type": 0,
-                        "traderId": MT5vps_trader_id,
-                        "account": new_user["account"]
-                    }
-                    response = self.send_post_request(
-                        logged_session,
-                        '/subcontrol/trader/orderClose',
-                        json_data=data,
-                    )
-                with allure.step("2. 验证响应"):
-                    self.assert_response_status(
-                        response,
-                        200,
-                        "平仓失败"
-                    )
-                    self.assert_json_value(
-                        response,
-                        "$.msg",
-                        f"{new_user['account']}暂无可平仓订单",
-                        f"{new_user['account']}暂无可平仓订单"
-                    )
-                    logging.info(f"{new_user['account']}暂无可平仓订单")
-
-            @pytest.mark.url("vps")
-            @allure.title("vps策略平仓-全部订单-预期成功")
-            def test_trader_orderclose2(self, class_random_str, var_manager, logged_session):
-                with allure.step("1. 发送平仓请求-全部订单"):
-                    MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
-                    new_user = var_manager.get_variable("new_user")
-                    data = {
-                        "flag": 0,
-                        "intervalTime": 0,
-                        "num": "1",
-                        "closeType": 2,
-                        "remark": "",
-                        "symbol": new_user["symbol"],
-                        "type": 0,
-                        "traderId": MT5vps_trader_id,
-                        "account": new_user["account"]
-                    }
-                    response = self.send_post_request(
-                        logged_session,
-                        '/subcontrol/trader/orderClose',
-                        json_data=data,
-                    )
-                with allure.step("2. 验证响应"):
-                    self.assert_response_status(
-                        response,
-                        200,
-                        "平仓失败"
-                    )
-                    self.assert_json_value(
-                        response,
-                        "$.msg",
-                        "success",
-                        "响应msg字段应为success"
-                    )
 
 
 # ------------------------------------
@@ -1420,6 +1424,7 @@ class TestVPSCloseRemark:
       5. 策略账号进行平仓
     - 预期结果：平仓的备注功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestFixedCommentMatching(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号固定注释")

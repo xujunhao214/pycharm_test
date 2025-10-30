@@ -25,7 +25,7 @@ class TestVPSOrderSend_newScenarios:
     class TestVPSOrderSend6(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager,   logged_session):
+        def test_trader_orderSend(self, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -62,7 +62,7 @@ class TestVPSOrderSend_newScenarios:
 
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager,   db_transaction):
+        def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -176,7 +176,7 @@ class TestVPSOrderSend_newScenarios:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
+        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -256,7 +256,7 @@ class TestVPSOrderSend_newScenarios:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager,   logged_session):
+        def test_trader_orderclose(self, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -288,7 +288,7 @@ class TestVPSOrderSend_newScenarios:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, var_manager,   logged_session):
+        def test_addtrader_orderclose(self, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -318,7 +318,7 @@ class TestVPSOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -395,7 +395,7 @@ class TestVPSOrderSend_newScenarios:
                     logging.info(f"实际手数: {size}")
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -493,7 +493,7 @@ class TestVPSOrderSend_newScenarios:
     class TestVPSOrderSend7(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, var_manager,   logged_session):
+        def test_trader_orderSend(self, var_manager, logged_session):
             # 1. 发送策略开仓请求
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -529,7 +529,7 @@ class TestVPSOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, var_manager,   db_transaction):
+        def test_dbquery_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -627,7 +627,7 @@ class TestVPSOrderSend_newScenarios:
                     logging.info(f'订单详情总手数是：{total}')
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
+        def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 sql = f"""
@@ -748,7 +748,7 @@ class TestVPSOrderSend_newScenarios:
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, var_manager,   logged_session):
+        def test_trader_orderclose(self, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             new_user = var_manager.get_variable("new_user")
@@ -780,7 +780,7 @@ class TestVPSOrderSend_newScenarios:
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, var_manager,   logged_session):
+        def test_addtrader_orderclose(self, var_manager, logged_session):
             # 1. 发送全平订单平仓请求
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -810,7 +810,7 @@ class TestVPSOrderSend_newScenarios:
             )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSendclose(self, var_manager,   db_transaction):
+        def test_dbquery_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
                 sql = f"""
@@ -888,7 +888,7 @@ class TestVPSOrderSend_newScenarios:
                     logging.info(f"实际订单数量: {len(db_data)}")
 
         @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-        def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
+        def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 vps_addslave_id = var_manager.get_variable("vps_addslave_id")
@@ -973,16 +973,16 @@ class TestVPSOrderSend_newScenarios:
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
 
+    @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
+    @allure.description("""
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数0.01
+      2. 预期下单失败：总手数不能低于最低手数
+    - 预期结果：提示正确
+    """)
     class TestVPStradingOrders8(APITestBase):
-        @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
-        @allure.description("""
-            ### 测试说明
-            - 场景校验：手数范围>总手数>订单数量
-            - 前置条件：有vps策略和vps跟单
-              1. 进行开仓，手数范围0.1-1，总手数0.01
-              2. 预期下单失败：总手数不能低于最低手数
-            - 预期结果：提示正确
-            """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS交易下单-复制下单请求
@@ -1012,43 +1012,44 @@ class TestVPSOrderSend_newScenarios:
                 "响应msg字段应为：总手数不能低于最低手数"
             )
 
-        class TestVPStradingOrders9(APITestBase):
-            @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
-            @allure.description("""
-            ### 测试说明
-            - 场景校验：手数范围>总手数>订单数量
-            - 前置条件：有vps策略和vps跟单
-              1. 进行开仓，手数范围0.1-1，总手数2
-              2. 预期下单失败：下单失败，请检查下单参数
-            - 预期结果：提示正确
-            """)
-            @allure.title("VPS交易下单-分配下单请求")
-            def test_copy_order_send(self, logged_session, var_manager):
-                # 发送VPS交易下单-复制下单请求
-                masOrderSend = var_manager.get_variable("masOrderSend")
-                vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-                data = {
-                    "traderList": [vps_trader_user_id],
-                    "type": 0,
-                    "tradeType": 0,
-                    "symbol": masOrderSend["symbol"],
-                    "startSize": "0.10",
-                    "endSize": "1.00",
-                    "totalSzie": "2",
-                    "remark": "测试数据"
-                }
-                response = self.send_post_request(
-                    logged_session,
-                    '/bargain/masOrderSend',
-                    json_data=data
-                )
+    @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
+    @allure.description("""
+    ### 测试说明
+    - 场景校验：手数范围>总手数>订单数量
+    - 前置条件：有vps策略和vps跟单
+      1. 进行开仓，手数范围0.1-1，总手数2
+      2. 预期下单失败：下单失败，请检查下单参数
+    - 预期结果：提示正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
+    class TestVPStradingOrders9(APITestBase):
+        @allure.title("VPS交易下单-分配下单请求")
+        def test_copy_order_send(self, logged_session, var_manager):
+            # 发送VPS交易下单-复制下单请求
+            masOrderSend = var_manager.get_variable("masOrderSend")
+            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
+            data = {
+                "traderList": [vps_trader_user_id],
+                "type": 0,
+                "tradeType": 0,
+                "symbol": masOrderSend["symbol"],
+                "startSize": "0.10",
+                "endSize": "1.00",
+                "totalSzie": "2",
+                "remark": "测试数据"
+            }
+            response = self.send_post_request(
+                logged_session,
+                '/bargain/masOrderSend',
+                json_data=data
+            )
 
-                # 验证下单成功
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "下单失败，请检查下单参数",
-                    "响应msg字段应为：下单失败，请检查下单参数"
-                )
+            # 验证下单成功
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "下单失败，请检查下单参数",
+                "响应msg字段应为：下单失败，请检查下单参数"
+            )
 
-            time.sleep(30)
+        time.sleep(30)

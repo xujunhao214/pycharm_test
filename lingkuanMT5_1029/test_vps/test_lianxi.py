@@ -29,6 +29,7 @@ class TestVPSCoreFunctionality:
       4. 再次进行平仓
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestStopCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("策略账号开仓操作")

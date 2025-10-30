@@ -21,6 +21,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders1(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -429,6 +430,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders2(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -852,6 +854,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -1248,6 +1251,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders4(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -1637,6 +1641,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders5(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -2045,6 +2050,7 @@ class TestVPSMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders6(APITestBase):
         @allure.title("VPS交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
