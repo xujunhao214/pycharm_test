@@ -16,7 +16,7 @@ SKIP_REASON = "跳过此用例"
 class TestCreate_importcloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-批量新增云跟单账号")
-    def test_create_importcloudBatchAdd(self, class_random_str, var_manager, logged_session):
+    def test_create_importcloudBatchAdd(self, var_manager, logged_session):
         # 1. 获取账号总数和所有ID
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         cloudTrader_account = var_manager.get_variable("cloudTrader_account", 0)
@@ -81,7 +81,7 @@ class TestCreate_importcloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-批量新增云跟单账号")
-    def test_dbquery_cloudBatchAdd(self, class_random_str, var_manager, db_transaction):
+    def test_dbquery_cloudBatchAdd(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有账号信息
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 0:
@@ -119,7 +119,7 @@ class TestCreate_importcloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
-    def test_update_addSlave(self, class_random_str, var_manager, logged_session):
+    def test_update_addSlave(self, var_manager, logged_session):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 7:

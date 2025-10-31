@@ -23,6 +23,7 @@ class TestVPSMasOrder_money_scene:
       5. 判断三个账号的币种手数是否正确
     - 预期结果：三个账号的币种手数正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend_money(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
@@ -604,6 +605,7 @@ class TestVPSMasOrder_money_scene:
       5. 判断三个账号的手数是否正确
     - 预期结果：三个账号的手数正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend_Scence(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")

@@ -27,7 +27,7 @@ SKIP_REASON = "跳过此用例"
 class TestLeakageopen_addstatus(APITestBase):
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
-    def test_subcontrol_trader(self, var_manager,   logged_session, encrypted_password):
+    def test_subcontrol_trader(self, var_manager, logged_session, encrypted_password):
         # 1. 发送修改vps策略的请求(followStatus为0，关闭跟单状态)
         with allure.step("发送修改vps策略的请求"):
             new_user = var_manager.get_variable("new_user")
@@ -71,7 +71,7 @@ class TestLeakageopen_addstatus(APITestBase):
             )
 
     @allure.title("数据库校验-VPS数据-修改策略账号是否成功")
-    def test_dbquery_updateslave(self, var_manager,   db_transaction):
+    def test_dbquery_updateslave(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             new_user = var_manager.get_variable("new_user")
             sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -88,7 +88,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓-出现漏单")
-    def test_trader_orderSend(self, var_manager,   logged_session):
+    def test_trader_orderSend(self, var_manager, logged_session):
         # 1. 发送策略开仓请求
         trader_ordersend = var_manager.get_variable("trader_ordersend")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -124,7 +124,7 @@ class TestLeakageopen_addstatus(APITestBase):
         )
 
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
-    def test_dbquery_redis(self, var_manager,   db_transaction, redis_order_data_send):
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_order_data_send):
         with allure.step("1. 获取订单详情表账号数据"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             new_user = var_manager.get_variable("new_user")
@@ -189,7 +189,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-开仓补全")
-    def test_follow_repairSend(self, var_manager,   logged_session):
+    def test_follow_repairSend(self, var_manager, logged_session):
         with allure.step("1. 发送开仓补全请求"):
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -214,7 +214,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
-    def test_subcontrol_trader2(self, var_manager,   logged_session, encrypted_password):
+    def test_subcontrol_trader2(self, var_manager, logged_session, encrypted_password):
         # 1. 发送修改vps策略的请求(followStatus为1，开启跟单状态)
         with allure.step("发送修改vps策略的请求"):
             new_user = var_manager.get_variable("new_user")
@@ -258,7 +258,7 @@ class TestLeakageopen_addstatus(APITestBase):
             )
 
     @allure.title("数据库校验-VPS数据-修改策略账号是否成功")
-    def test_dbquery_updateslave2(self, var_manager,   db_transaction):
+    def test_dbquery_updateslave2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             new_user = var_manager.get_variable("new_user")
             sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -276,7 +276,7 @@ class TestLeakageopen_addstatus(APITestBase):
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-修改完之后进行开仓补全")
-    def test_follow_repairSend2(self, var_manager,   logged_session):
+    def test_follow_repairSend2(self, var_manager, logged_session):
         with allure.step("1. 发送开仓补全请求"):
             vps_addslave_id = var_manager.get_variable("vps_addslave_id")
             vps_trader_id = var_manager.get_variable("vps_trader_id")
@@ -300,7 +300,7 @@ class TestLeakageopen_addstatus(APITestBase):
             )
 
     @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSend(self, var_manager,   db_transaction):
+    def test_dbquery_addsalve_orderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             new_user = var_manager.get_variable("new_user")
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
@@ -332,49 +332,51 @@ class TestLeakageopen_addstatus(APITestBase):
             totalSzie = trader_ordersend["totalSzie"]
             size = [record["size"] for record in db_data]
             total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'订单详情总手数是：{total}')
+            # 关键优化：四舍五入保留两位小数
+            total = round(float(total), 2)
+        assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
+            f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
+        logging.info(f'订单详情总手数是：{total}')
 
-    @pytest.mark.url("vps")
-    @allure.title("跟单软件看板-VPS数据-策略平仓")
-    def test_trader_orderclose(self, var_manager,   logged_session, db_transaction):
-        # 1. 发送全平订单平仓请求
-        vps_trader_id = var_manager.get_variable("vps_trader_id")
-        new_user = var_manager.get_variable("new_user")
-        data = {
-            "isCloseAll": 1,
-            "intervalTime": 100,
-            "traderId": vps_trader_id,
-            "account": new_user["account"]
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/subcontrol/trader/orderClose',
-            json_data=data
-        )
 
-        # 2. 验证响应
-        self.assert_response_status(
-            response,
-            200,
-            "平仓失败"
-        )
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
+@pytest.mark.url("vps")
+@allure.title("跟单软件看板-VPS数据-策略平仓")
+def test_trader_orderclose(self, var_manager, logged_session, db_transaction):
+    # 1. 发送全平订单平仓请求
+    vps_trader_id = var_manager.get_variable("vps_trader_id")
+    new_user = var_manager.get_variable("new_user")
+    data = {
+        "isCloseAll": 1,
+        "intervalTime": 100,
+        "traderId": vps_trader_id,
+        "account": new_user["account"]
+    }
+    response = self.send_post_request(
+        logged_session,
+        '/subcontrol/trader/orderClose',
+        json_data=data
+    )
 
-    @allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
-    def test_dbquery_addsalve_orderSendclose(self, var_manager,   db_transaction):
-        with allure.step("1. 获取订单详情表账号数据"):
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            sql = f"""
+    # 2. 验证响应
+    self.assert_response_status(
+        response,
+        200,
+        "平仓失败"
+    )
+    self.assert_json_value(
+        response,
+        "$.msg",
+        "success",
+        "响应msg字段应为success"
+    )
+
+
+@allure.title("数据库校验-策略平仓-跟单指令及订单详情数据检查")
+def test_dbquery_addsalve_orderSendclose(self, var_manager, db_transaction):
+    with allure.step("1. 获取订单详情表账号数据"):
+        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+        vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+        sql = f"""
                 SELECT 
                     fod.size,
                     fod.close_no,
@@ -402,42 +404,43 @@ class TestLeakageopen_addstatus(APITestBase):
                     AND fod.account = %s
                     AND fod.trader_id = %s
                     """
-            params = (
-                '1',
-                vps_user_accounts_1,
-                vps_addslave_id,
-            )
+        params = (
+            '1',
+            vps_user_accounts_1,
+            vps_addslave_id,
+        )
 
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.query_database_with_time_with_timezone(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="fod.close_time"
-            )
-        with allure.step("2. 数据校验"):
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+        # 调用轮询等待方法（带时间范围过滤）
+        db_data = self.query_database_with_time_with_timezone(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field="fod.close_time"
+        )
+    with allure.step("2. 数据校验"):
+        trader_ordersend = var_manager.get_variable("trader_ordersend")
+        if not db_data:
+            pytest.fail("数据库查询结果为空，无法提取数据")
 
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+        status = db_data[0]["status"]
+        assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+        logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
 
-            totalSzie = trader_ordersend["totalSzie"]
-            size = [record["size"] for record in db_data]
-            total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'订单详情总手数是：{total}')
-            total_lots = [record["total_lots"] for record in db_data]
-            self.assert_list_equal_ignore_order(
-                size,
-                total_lots,
-                f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
-            )
-            logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+        totalSzie = trader_ordersend["totalSzie"]
+        size = [record["size"] for record in db_data]
+        total = sum(size)
+        # 关键优化：四舍五入保留两位小数
+        total = round(float(total), 2)
+    assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9), \
+        f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
+    logging.info(f'订单详情总手数是：{total}')
+    total_lots = [record["total_lots"] for record in db_data]
+    self.assert_list_equal_ignore_order(
+        size,
+        total_lots,
+        f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
+    )
+    logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
 
-        time.sleep(25)
+
+time.sleep(25)

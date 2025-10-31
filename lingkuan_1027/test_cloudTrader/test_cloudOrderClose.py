@@ -29,11 +29,12 @@ class TestCloudCoreFunctionality:
       5. 进行平仓
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend1(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -59,7 +60,7 @@ class TestCloudCoreFunctionality:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -70,7 +71,7 @@ class TestCloudCoreFunctionality:
         @allure.title("云策略-复制下单平仓操作-币种错误")
         def test_copy_close_symbol(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -90,7 +91,7 @@ class TestCloudCoreFunctionality:
                     '/mascontrol/cloudTrader/cloudOrderClose',
                     json_data=request_data
                 )
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -160,7 +161,7 @@ class TestCloudCoreFunctionality:
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -182,7 +183,7 @@ class TestCloudCoreFunctionality:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -278,7 +279,7 @@ class TestCloudCoreFunctionality:
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -300,7 +301,7 @@ class TestCloudCoreFunctionality:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -326,11 +327,12 @@ class TestCloudFollowDirection:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend2(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -355,7 +357,7 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -366,7 +368,7 @@ class TestCloudFollowDirection:
         @allure.title("云策略-复制下单平仓操作-sell-平仓失败")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -388,7 +390,7 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -458,7 +460,7 @@ class TestCloudFollowDirection:
         @allure.title("云策略-复制下单平仓操作-buy-平仓成功")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -480,7 +482,7 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -567,11 +569,12 @@ class TestCloudFollowDirection:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend3(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -596,7 +599,7 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -607,7 +610,7 @@ class TestCloudFollowDirection:
         @allure.title("云策略-复制下单平仓操作-sell-平仓失败")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -629,7 +632,7 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -698,7 +701,7 @@ class TestCloudFollowDirection:
         @allure.title("云策略-复制下单平仓操作-buy sell-平仓成功")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -720,7 +723,7 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -813,11 +816,12 @@ class TestCloudOrderQuantityControl:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend4(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -842,7 +846,7 @@ class TestCloudOrderQuantityControl:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -853,7 +857,7 @@ class TestCloudOrderQuantityControl:
         @allure.title("云策略-复制下单平仓操作-平仓两个订单")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -876,7 +880,7 @@ class TestCloudOrderQuantityControl:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -949,7 +953,7 @@ class TestCloudOrderQuantityControl:
         @allure.title("云策略-复制下单平仓操作-再次平仓两个订单")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -972,7 +976,7 @@ class TestCloudOrderQuantityControl:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1055,11 +1059,12 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend5(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -1084,7 +1089,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1095,7 +1100,7 @@ class TestCloudOrderType:
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1118,7 +1123,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1186,7 +1191,7 @@ class TestCloudOrderType:
         @allure.title("云策略-复制下单平仓操作-订单类型-内部订单")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1209,7 +1214,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1291,6 +1296,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend6(APITestBase):
         @allure.title("登录MT4账号获取token")
@@ -1360,7 +1366,7 @@ class TestCloudOrderType:
         @allure.title("云策略-复制下单平仓操作-订单类型-内部订单")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1383,7 +1389,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1450,7 +1456,7 @@ class TestCloudOrderType:
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1473,7 +1479,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1549,11 +1555,12 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend7(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -1578,7 +1585,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1589,7 +1596,7 @@ class TestCloudOrderType:
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1612,7 +1619,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1680,7 +1687,7 @@ class TestCloudOrderType:
         @allure.title("云策略-复制下单平仓操作-订单类型-全部订单")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1703,7 +1710,7 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1790,11 +1797,12 @@ class TestCloudCloseRemark:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单备注功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend8(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -1819,7 +1827,7 @@ class TestCloudCloseRemark:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1830,7 +1838,7 @@ class TestCloudCloseRemark:
         @allure.title("云策略-复制下单平仓操作-平仓备注-xxxxxxxxxx")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1853,7 +1861,7 @@ class TestCloudCloseRemark:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -1921,7 +1929,7 @@ class TestCloudCloseRemark:
         @allure.title("云策略-复制下单平仓操作-订单备注-ceshipingcangbeizhu")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -1944,7 +1952,7 @@ class TestCloudCloseRemark:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2033,11 +2041,12 @@ class TestCloudClose:
       7. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平策略功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend9(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -2062,7 +2071,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2073,7 +2082,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-全平策略")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
                 cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
 
@@ -2089,7 +2098,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2157,7 +2166,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-平仓1个")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
                 cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
                 new_user = var_manager.get_variable("new_user")
@@ -2180,7 +2189,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2248,7 +2257,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-平仓1个")
         def test_copy_close_order3(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 new_user = var_manager.get_variable("new_user")
@@ -2271,7 +2280,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2353,12 +2362,13 @@ class TestCloudClose:
       7. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平订单功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend10(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -2383,7 +2393,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2394,7 +2404,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-全平策略")
         def test_copy_close_order2(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
                 cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
 
@@ -2410,7 +2420,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2478,7 +2488,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-平仓1个")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
                 cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
                 new_user = var_manager.get_variable("new_user")
@@ -2501,7 +2511,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2569,7 +2579,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-全平订单")
         def test_copy_close_order3(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id_hand = var_manager.get_variable("cloudMaster_id_hand")
                 cloudTrader_traderList_handid = var_manager.get_variable("cloudTrader_traderList_handid")
 
@@ -2586,7 +2596,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2664,12 +2674,13 @@ class TestCloudClose:
       3. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平订单功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend11(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("发送复制下单请求"):
+            with allure.step("1.发送复制下单请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -2694,7 +2705,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制下单响应结果"):
+            with allure.step("2.验证复制下单响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
@@ -2705,7 +2716,7 @@ class TestCloudClose:
         @allure.title("云策略-复制下单平仓操作-全平策略")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
             """执行复制下单的平仓操作并验证结果"""
-            with allure.step("发送复制下单平仓请求"):
+            with allure.step("1.发送复制下单平仓请求"):
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
                 cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
 
@@ -2721,7 +2732,7 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("验证复制平仓响应结果"):
+            with allure.step("2.验证复制平仓响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",

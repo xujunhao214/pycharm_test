@@ -16,7 +16,7 @@ class TestCreate_Scene(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("新增跟单账号（仅使用后6个数据与模板匹配）")
-    def test_import_addSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
+    def test_import_addSlave(self, var_manager, logged_session, encrypted_password):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
         if vps_user_count < 7:
@@ -143,7 +143,7 @@ class TestCreate_Scene(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量新增跟单账号")
-    def test_dbimport_addSlave(self, class_random_str, var_manager, db_transaction):
+    def test_dbimport_addSlave(self, var_manager, db_transaction):
         # 1. 校验总用户数（需至少7个，才能取后6个）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
         if vps_user_count < 7:
@@ -220,7 +220,7 @@ class TestCreate_Scene(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
-    def test_update_addSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
+    def test_update_addSlave(self, var_manager, logged_session, encrypted_password):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
         if vps_user_count < 7:

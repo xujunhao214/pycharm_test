@@ -25,6 +25,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数
     - 预期结果：平仓的品种功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders1(APITestBase):
         @pytest.mark.retry(n=0, delay=0)
         @allure.title("云策略-策略账号交易下单-复制下单请求")
@@ -354,16 +355,17 @@ class TestVPSMasOrderclose:
 
     @allure.story("场景2：平仓的停止功能校验")
     @allure.description("""
-       ### 测试说明
-       - 前置条件：有云策略和云跟单
-         1. 进行开仓，手数范围0.1-1，总订单5
-         2. 进行平仓
-         3. 发送停止请求
-         4. 校验平仓的订单数，应该不等于5
-         5. 进行平仓-正常平仓
-         6. 校验平仓的订单数,等于5
-       - 预期结果：平仓的停止功能正确
-       """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+     1. 进行开仓，手数范围0.1-1，总订单5
+     2. 进行平仓
+     3. 发送停止请求
+     4. 校验平仓的订单数，应该不等于5
+     5. 进行平仓-正常平仓
+     6. 校验平仓的订单数,等于5
+    - 预期结果：平仓的停止功能正确
+    """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders2(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -733,6 +735,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):
         @allure.title("修改跟单账号为反向跟单")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -1090,6 +1093,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders4(APITestBase):
         @allure.title("修改跟单账号为反向跟单")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -1444,6 +1448,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders5(APITestBase):
         @allure.title("修改跟单账号为正向跟单")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -1797,6 +1802,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders6(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -2140,6 +2146,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders7(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -2420,6 +2427,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders8(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -2702,6 +2710,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于1
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestcloudtradingOrders9(APITestBase):
         @allure.title("登录MT4账号获取token")
@@ -2996,6 +3005,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders10(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -3275,6 +3285,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单备注功能正确
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders11(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):

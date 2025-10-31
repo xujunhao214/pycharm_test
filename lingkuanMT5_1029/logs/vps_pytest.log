@@ -1,1587 +1,264 @@
-INFO     - 2025-10-29 17:27:21 - [conftest:277] - [2025-10-29 17:27] 测试会话开始: 2025-10-29 17:27:21, 测试组: vps
-INFO     - 2025-10-29 17:27:21 - [variable_manager:40] - [2025-10-29 17:27] 成功加载静态变量: VAR\test_data.json
-INFO     - 2025-10-29 17:27:21 - [variable_manager:64] - [2025-10-29 17:27] 成功加载运行时变量: VAR\runtime_vars_vps.json
-INFO     - 2025-10-29 17:27:21 - [conftest:63] - [2025-10-29 17:27:21] 用例 test_vps/test_lianxi2.py::TestVPSMasOrdersend::TestVPStradingOrders1::test_copy_order_send 开始登录，环境: test
-DEBUG    - 2025-10-29 17:27:21 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-10-29 17:27:21 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-10-29 17:27:21 - [conftest:90] - 测试环境登录成功
-INFO     - 2025-10-29 17:27:21 - [variable_manager:111] - [2025-10-29 17:27] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
-DEBUG    - 2025-10-29 17:27:21 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/bargain/masOrderSend HTTP/11" 200 None
-INFO     - 2025-10-29 17:27:21 - [api_base:152] - [2025-10-29 17:27:21] POST请求（JSON）: /bargain/masOrderSend | 数据: {'traderList': [9072], 'type': 0, 'tradeType': 0, 'symbol': 'XAUUSD', 'startSize': '0.10', 'endSize': '1.00', 'totalSzie': '1.00', 'remark': '4e420041'}
-INFO     - 2025-10-29 17:27:21 - [api_base:160] - [2025-10-29 17:27:21] 请求后等待 1 秒
-INFO     - 2025-10-29 17:27:22 - [conftest:158] - [2025-10-29 17:27:22] 用例 test_vps/test_lianxi2.py::TestVPSMasOrdersend::TestVPStradingOrders1::test_copy_order_send 执行完毕
-INFO     - 2025-10-29 17:27:23 - [api_base:1029] - [2025-10-29 17:27:23] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     - 2025-10-29 17:27:23 - [api_base:451] - [2025-10-29 17:27:23] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.min_lot_size,
-                           foi.max_lot_size,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938911', '4e420041', '2025-10-29 17:24:23', '2025-10-29 17:30:23')
-INFO     - 2025-10-29 17:27:23 - [api_base:454] - [2025-10-29 17:27:23] 查询成功，结果数量: 1
-INFO     - 2025-10-29 17:27:23 - [api_base:466] - [2025-10-29 17:27:23] 查询结果: [{"size": 1.0, "send_no": "6107319353990", "magical": 2939, "open_price": 4017.8, "comment": "4e420041", "symbol": "XAUUSDp", "order_no": 2387601, "true_total_lots": 1.0, "foi.order_no": "6107319353990", "operation_type": 0, "create_time": "2025-10-29 17:27:22", "status": 1, "min_lot_size": 1.0, "max_lot_size": 0.1, "total_lots": 1.0, "total_orders": 0}]
-INFO     - 2025-10-29 17:27:25 - [api_base:451] - [2025-10-29 17:27:25] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.min_lot_size,
-                           foi.max_lot_size,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938911', '4e420041', '2025-10-29 17:24:23', '2025-10-29 17:30:23')
-INFO     - 2025-10-29 17:27:25 - [api_base:454] - [2025-10-29 17:27:25] 查询成功，结果数量: 1
-INFO     - 2025-10-29 17:27:25 - [api_base:466] - [2025-10-29 17:27:25] 查询结果: [{"size": 1.0, "send_no": "6107319353990", "magical": 2939, "open_price": 4017.8, "comment": "4e420041", "symbol": "XAUUSDp", "order_no": 2387601, "true_total_lots": 1.0, "foi.order_no": "6107319353990", "operation_type": 0, "create_time": "2025-10-29 17:27:22", "status": 1, "min_lot_size": 1.0, "max_lot_size": 0.1, "total_lots": 1.0, "total_orders": 0}]
-INFO     - 2025-10-29 17:27:27 - [api_base:451] - [2025-10-29 17:27:27] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.min_lot_size,
-                           foi.max_lot_size,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938911', '4e420041', '2025-10-29 17:24:23', '2025-10-29 17:30:23')
-INFO     - 2025-10-29 17:27:27 - [api_base:454] - [2025-10-29 17:27:27] 查询成功，结果数量: 1
-INFO     - 2025-10-29 17:27:27 - [api_base:466] - [2025-10-29 17:27:27] 查询结果: [{"size": 1.0, "send_no": "6107319353990", "magical": 2939, "open_price": 4017.8, "comment": "4e420041", "symbol": "XAUUSDp", "order_no": 2387601, "true_total_lots": 1.0, "foi.order_no": "6107319353990", "operation_type": 0, "create_time": "2025-10-29 17:27:22", "status": 1, "min_lot_size": 1.0, "max_lot_size": 0.1, "total_lots": 1.0, "total_orders": 0}]
-INFO     - 2025-10-29 17:27:27 - [api_base:1063] - [2025-10-29 17:27:27] 数据稳定，轮询结束
-INFO     - 2025-10-29 17:27:27 - [api_base:1399] - 校验通过: 订单状态应为0或1或3
-
-实际: 1
-操作: in
-预期: (0, 1, 3)
-
-INFO     - 2025-10-29 17:27:27 - [test_lianxi2:113] - 订单状态验证通过: 1
-INFO     - 2025-10-29 17:27:27 - [api_base:1399] - 校验通过: 开始手数应符合预期
-
-实际: 0.1
-操作: ==
-预期: 0.1
-
-INFO     - 2025-10-29 17:27:27 - [test_lianxi2:124] - 开始手数验证通过: 0.1
-INFO     - 2025-10-29 17:27:27 - [api_base:1399] - 校验通过: 结束手数应符合预期
-
-实际: 1.0
-操作: ==
-预期: 1.0
-
-INFO     - 2025-10-29 17:27:27 - [test_lianxi2:135] - 结束手数验证通过: 1.0
-INFO     - 2025-10-29 17:27:27 - [api_base:1399] - 校验通过: 指令总手数应符合预期
-
-实际: 1.0
-操作: ==
-预期: 1.0
-
-INFO     - 2025-10-29 17:27:27 - [test_lianxi2:147] - 指令总手数验证通过: 1.0
-INFO     - 2025-10-29 17:27:27 - [api_base:1399] - 校验通过: 详情总手数应符合预期
-
-实际: 1.0
-操作: ==
-预期: 1.0
-
-INFO     - 2025-10-29 17:27:27 - [test_lianxi2:160] - 详情总手数验证通过: 1.0
-INFO     - 2025-10-29 17:27:27 - [api_base:1029] - [2025-10-29 17:27:27] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     - 2025-10-29 17:27:27 - [api_base:451] - [2025-10-29 17:27:27] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:27 - [api_base:454] - [2025-10-29 17:27:27] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:27 - [api_base:466] - [2025-10-29 17:27:27] 查询结果: []
-INFO     - 2025-10-29 17:27:29 - [api_base:451] - [2025-10-29 17:27:29] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:29 - [api_base:454] - [2025-10-29 17:27:29] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:29 - [api_base:466] - [2025-10-29 17:27:29] 查询结果: []
-INFO     - 2025-10-29 17:27:31 - [api_base:451] - [2025-10-29 17:27:31] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:31 - [api_base:454] - [2025-10-29 17:27:31] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:31 - [api_base:466] - [2025-10-29 17:27:31] 查询结果: []
-INFO     - 2025-10-29 17:27:33 - [api_base:451] - [2025-10-29 17:27:33] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:33 - [api_base:454] - [2025-10-29 17:27:33] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:33 - [api_base:466] - [2025-10-29 17:27:33] 查询结果: []
-INFO     - 2025-10-29 17:27:36 - [api_base:451] - [2025-10-29 17:27:36] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:36 - [api_base:454] - [2025-10-29 17:27:36] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:36 - [api_base:466] - [2025-10-29 17:27:36] 查询结果: []
-INFO     - 2025-10-29 17:27:38 - [api_base:451] - [2025-10-29 17:27:38] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:38 - [api_base:454] - [2025-10-29 17:27:38] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:38 - [api_base:466] - [2025-10-29 17:27:38] 查询结果: []
-INFO     - 2025-10-29 17:27:40 - [api_base:451] - [2025-10-29 17:27:40] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:40 - [api_base:454] - [2025-10-29 17:27:40] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:40 - [api_base:466] - [2025-10-29 17:27:40] 查询结果: []
-INFO     - 2025-10-29 17:27:42 - [api_base:451] - [2025-10-29 17:27:42] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:42 - [api_base:454] - [2025-10-29 17:27:42] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:42 - [api_base:466] - [2025-10-29 17:27:42] 查询结果: []
-INFO     - 2025-10-29 17:27:44 - [api_base:451] - [2025-10-29 17:27:44] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:44 - [api_base:454] - [2025-10-29 17:27:44] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:44 - [api_base:466] - [2025-10-29 17:27:44] 查询结果: []
-INFO     - 2025-10-29 17:27:46 - [api_base:451] - [2025-10-29 17:27:46] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:46 - [api_base:454] - [2025-10-29 17:27:46] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:46 - [api_base:466] - [2025-10-29 17:27:46] 查询结果: []
-INFO     - 2025-10-29 17:27:48 - [api_base:451] - [2025-10-29 17:27:48] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:48 - [api_base:454] - [2025-10-29 17:27:48] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:48 - [api_base:466] - [2025-10-29 17:27:48] 查询结果: []
-INFO     - 2025-10-29 17:27:50 - [api_base:451] - [2025-10-29 17:27:50] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:50 - [api_base:454] - [2025-10-29 17:27:50] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:50 - [api_base:466] - [2025-10-29 17:27:50] 查询结果: []
-INFO     - 2025-10-29 17:27:52 - [api_base:451] - [2025-10-29 17:27:52] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:52 - [api_base:454] - [2025-10-29 17:27:52] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:52 - [api_base:466] - [2025-10-29 17:27:52] 查询结果: []
-INFO     - 2025-10-29 17:27:54 - [api_base:451] - [2025-10-29 17:27:54] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:55 - [api_base:454] - [2025-10-29 17:27:55] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:55 - [api_base:466] - [2025-10-29 17:27:55] 查询结果: []
-INFO     - 2025-10-29 17:27:57 - [api_base:451] - [2025-10-29 17:27:57] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:57 - [api_base:454] - [2025-10-29 17:27:57] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:57 - [api_base:466] - [2025-10-29 17:27:57] 查询结果: []
-INFO     - 2025-10-29 17:27:59 - [api_base:451] - [2025-10-29 17:27:59] 执行SQL: 
-                       SELECT 
-                           fod.size,
-                           fod.send_no,
-                           fod.magical,
-                           fod.open_price,
-                           fod.comment,
-                           fod.symbol,
-                           fod.order_no,
-                           foi.true_total_lots,
-                           foi.order_no,
-                           foi.operation_type,
-                           foi.create_time,
-                           foi.status,
-                           foi.total_lots,
-                           foi.total_orders
-                       FROM 
-                           follow_order_detail fod
-                       INNER JOIN 
-                           follow_order_instruct foi 
-                       ON 
-                           foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                       WHERE foi.operation_type = %s
-                           AND fod.account = %s
-                           AND fod.comment = %s
-                            AND  CONVERT_TZ(fod.open_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('0', '66938913', '4e420041', '2025-10-29 17:24:27', '2025-10-29 17:30:27')
-INFO     - 2025-10-29 17:27:59 - [api_base:454] - [2025-10-29 17:27:59] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:27:59 - [api_base:466] - [2025-10-29 17:27:59] 查询结果: []
-INFO     - 2025-10-29 17:27:59 - [conftest:63] - [2025-10-29 17:27:59] 用例 test_vps/test_lianxi2.py::TestVPSMasOrdersend::TestVPStradingOrders1::test_copy_order_close 开始登录，环境: test
-DEBUG    - 2025-10-29 17:27:59 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-10-29 17:27:59 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-10-29 17:27:59 - [conftest:90] - 测试环境登录成功
-INFO     - 2025-10-29 17:27:59 - [variable_manager:111] - [2025-10-29 17:27] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
-DEBUG    - 2025-10-29 17:27:59 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/bargain/masOrderClose HTTP/11" 200 None
-INFO     - 2025-10-29 17:27:59 - [api_base:152] - [2025-10-29 17:27:59] POST请求（JSON）: /bargain/masOrderClose | 数据: {'isCloseAll': 1, 'intervalTime': 100, 'traderList': [9072]}
-INFO     - 2025-10-29 17:27:59 - [api_base:160] - [2025-10-29 17:27:59] 请求后等待 1 秒
-INFO     - 2025-10-29 17:28:00 - [conftest:158] - [2025-10-29 17:28:00] 用例 test_vps/test_lianxi2.py::TestVPSMasOrdersend::TestVPStradingOrders1::test_copy_order_close 执行完毕
-INFO     - 2025-10-29 17:28:01 - [api_base:1029] - [2025-10-29 17:28:01] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     - 2025-10-29 17:28:01 - [api_base:451] - [2025-10-29 17:28:01] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:01 - [api_base:454] - [2025-10-29 17:28:01] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:01 - [api_base:466] - [2025-10-29 17:28:01] 查询结果: []
-INFO     - 2025-10-29 17:28:03 - [api_base:451] - [2025-10-29 17:28:03] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:03 - [api_base:454] - [2025-10-29 17:28:03] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:03 - [api_base:466] - [2025-10-29 17:28:03] 查询结果: []
-INFO     - 2025-10-29 17:28:05 - [api_base:451] - [2025-10-29 17:28:05] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:05 - [api_base:454] - [2025-10-29 17:28:05] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:05 - [api_base:466] - [2025-10-29 17:28:05] 查询结果: []
-INFO     - 2025-10-29 17:28:07 - [api_base:451] - [2025-10-29 17:28:07] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:07 - [api_base:454] - [2025-10-29 17:28:07] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:07 - [api_base:466] - [2025-10-29 17:28:07] 查询结果: []
-INFO     - 2025-10-29 17:28:09 - [api_base:451] - [2025-10-29 17:28:09] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:09 - [api_base:454] - [2025-10-29 17:28:09] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:09 - [api_base:466] - [2025-10-29 17:28:09] 查询结果: []
-INFO     - 2025-10-29 17:28:11 - [api_base:451] - [2025-10-29 17:28:11] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:11 - [api_base:454] - [2025-10-29 17:28:11] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:11 - [api_base:466] - [2025-10-29 17:28:11] 查询结果: []
-INFO     - 2025-10-29 17:28:13 - [api_base:451] - [2025-10-29 17:28:13] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:13 - [api_base:454] - [2025-10-29 17:28:13] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:13 - [api_base:466] - [2025-10-29 17:28:13] 查询结果: []
-INFO     - 2025-10-29 17:28:15 - [api_base:451] - [2025-10-29 17:28:15] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:15 - [api_base:454] - [2025-10-29 17:28:15] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:15 - [api_base:466] - [2025-10-29 17:28:15] 查询结果: []
-INFO     - 2025-10-29 17:28:17 - [api_base:451] - [2025-10-29 17:28:17] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:18 - [api_base:454] - [2025-10-29 17:28:18] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:18 - [api_base:466] - [2025-10-29 17:28:18] 查询结果: []
-INFO     - 2025-10-29 17:28:20 - [api_base:451] - [2025-10-29 17:28:20] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:20 - [api_base:454] - [2025-10-29 17:28:20] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:20 - [api_base:466] - [2025-10-29 17:28:20] 查询结果: []
-INFO     - 2025-10-29 17:28:22 - [api_base:451] - [2025-10-29 17:28:22] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:22 - [api_base:454] - [2025-10-29 17:28:22] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:22 - [api_base:466] - [2025-10-29 17:28:22] 查询结果: []
-INFO     - 2025-10-29 17:28:24 - [api_base:451] - [2025-10-29 17:28:24] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:24 - [api_base:454] - [2025-10-29 17:28:24] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:24 - [api_base:466] - [2025-10-29 17:28:24] 查询结果: []
-INFO     - 2025-10-29 17:28:26 - [api_base:451] - [2025-10-29 17:28:26] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:26 - [api_base:454] - [2025-10-29 17:28:26] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:26 - [api_base:466] - [2025-10-29 17:28:26] 查询结果: []
-INFO     - 2025-10-29 17:28:28 - [api_base:451] - [2025-10-29 17:28:28] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:28 - [api_base:454] - [2025-10-29 17:28:28] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:28 - [api_base:466] - [2025-10-29 17:28:28] 查询结果: []
-INFO     - 2025-10-29 17:28:30 - [api_base:451] - [2025-10-29 17:28:30] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:30 - [api_base:454] - [2025-10-29 17:28:30] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:30 - [api_base:466] - [2025-10-29 17:28:30] 查询结果: []
-INFO     - 2025-10-29 17:28:32 - [api_base:451] - [2025-10-29 17:28:32] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938911', '4e420041', '2025-10-29 17:25:01', '2025-10-29 17:31:01')
-INFO     - 2025-10-29 17:28:32 - [api_base:454] - [2025-10-29 17:28:32] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:32 - [api_base:466] - [2025-10-29 17:28:32] 查询结果: []
-INFO     - 2025-10-29 17:28:33 - [api_base:1029] - [2025-10-29 17:28:33] 开始轮询（时区+05:00）| 超时: 30秒
-INFO     - 2025-10-29 17:28:33 - [api_base:451] - [2025-10-29 17:28:33] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:33 - [api_base:454] - [2025-10-29 17:28:33] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:33 - [api_base:466] - [2025-10-29 17:28:33] 查询结果: []
-INFO     - 2025-10-29 17:28:35 - [api_base:451] - [2025-10-29 17:28:35] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:35 - [api_base:454] - [2025-10-29 17:28:35] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:35 - [api_base:466] - [2025-10-29 17:28:35] 查询结果: []
-INFO     - 2025-10-29 17:28:37 - [api_base:451] - [2025-10-29 17:28:37] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:37 - [api_base:454] - [2025-10-29 17:28:37] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:37 - [api_base:466] - [2025-10-29 17:28:37] 查询结果: []
-INFO     - 2025-10-29 17:28:39 - [api_base:451] - [2025-10-29 17:28:39] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:39 - [api_base:454] - [2025-10-29 17:28:39] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:39 - [api_base:466] - [2025-10-29 17:28:39] 查询结果: []
-INFO     - 2025-10-29 17:28:41 - [api_base:451] - [2025-10-29 17:28:41] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:41 - [api_base:454] - [2025-10-29 17:28:41] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:41 - [api_base:466] - [2025-10-29 17:28:41] 查询结果: []
-INFO     - 2025-10-29 17:28:43 - [api_base:451] - [2025-10-29 17:28:43] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:43 - [api_base:454] - [2025-10-29 17:28:43] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:43 - [api_base:466] - [2025-10-29 17:28:43] 查询结果: []
-INFO     - 2025-10-29 17:28:45 - [api_base:451] - [2025-10-29 17:28:45] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:46 - [api_base:454] - [2025-10-29 17:28:46] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:46 - [api_base:466] - [2025-10-29 17:28:46] 查询结果: []
-INFO     - 2025-10-29 17:28:48 - [api_base:451] - [2025-10-29 17:28:48] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:48 - [api_base:454] - [2025-10-29 17:28:48] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:48 - [api_base:466] - [2025-10-29 17:28:48] 查询结果: []
-INFO     - 2025-10-29 17:28:50 - [api_base:451] - [2025-10-29 17:28:50] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:50 - [api_base:454] - [2025-10-29 17:28:50] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:50 - [api_base:466] - [2025-10-29 17:28:50] 查询结果: []
-INFO     - 2025-10-29 17:28:52 - [api_base:451] - [2025-10-29 17:28:52] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:52 - [api_base:454] - [2025-10-29 17:28:52] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:52 - [api_base:466] - [2025-10-29 17:28:52] 查询结果: []
-INFO     - 2025-10-29 17:28:54 - [api_base:451] - [2025-10-29 17:28:54] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:54 - [api_base:454] - [2025-10-29 17:28:54] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:54 - [api_base:466] - [2025-10-29 17:28:54] 查询结果: []
-INFO     - 2025-10-29 17:28:56 - [api_base:451] - [2025-10-29 17:28:56] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:56 - [api_base:454] - [2025-10-29 17:28:56] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:56 - [api_base:466] - [2025-10-29 17:28:56] 查询结果: []
-INFO     - 2025-10-29 17:28:58 - [api_base:451] - [2025-10-29 17:28:58] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:28:58 - [api_base:454] - [2025-10-29 17:28:58] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:28:58 - [api_base:466] - [2025-10-29 17:28:58] 查询结果: []
-INFO     - 2025-10-29 17:29:00 - [api_base:451] - [2025-10-29 17:29:00] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:29:00 - [api_base:454] - [2025-10-29 17:29:00] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:29:00 - [api_base:466] - [2025-10-29 17:29:00] 查询结果: []
-INFO     - 2025-10-29 17:29:02 - [api_base:451] - [2025-10-29 17:29:02] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:29:03 - [api_base:454] - [2025-10-29 17:29:03] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:29:03 - [api_base:466] - [2025-10-29 17:29:03] 查询结果: []
-INFO     - 2025-10-29 17:29:05 - [api_base:451] - [2025-10-29 17:29:05] 执行SQL: 
-                        SELECT 
-                            fod.size,
-                            fod.close_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.master_order,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE foi.operation_type = %s
-                            AND fod.account = %s
-                            AND fod.trader_id = %s
-                            AND fod.comment = %s
-                             AND  CONVERT_TZ(fod.close_time, '+00:00', '+05:00') BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('1', '66938913', 13818, '4e420041', '2025-10-29 17:25:33', '2025-10-29 17:31:33')
-INFO     - 2025-10-29 17:29:05 - [api_base:454] - [2025-10-29 17:29:05] 查询成功，结果数量: 0
-INFO     - 2025-10-29 17:29:05 - [api_base:466] - [2025-10-29 17:29:05] 查询结果: []
-INFO     - 2025-10-29 17:29:05 - [variable_manager:111] - [2025-10-29 17:27] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
-INFO     - 2025-10-29 17:29:05 - [conftest:304] - [2025-10-29 17:27] 测试会话结束，总耗时: 104.00秒
-INFO     - 2025-10-29 17:29:05 - [feishu_notification:131] - [2025-10-29 17:27] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
-DEBUG    - 2025-10-29 17:29:05 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
-DEBUG    - 2025-10-29 17:29:05 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
-INFO     - 2025-10-29 17:29:05 - [feishu_notification:139] - [2025-10-29 17:27] 飞书响应状态码: 200
-INFO     - 2025-10-29 17:29:05 - [feishu_notification:140] - [2025-10-29 17:27] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
-INFO     - 2025-10-29 17:29:05 - [feishu_notification:145] - [2025-10-29 17:27] [FEISHU] 消息发送成功
-INFO     - 2025-10-29 17:29:05 - [conftest:316] - [2025-10-29 17:27] 飞书通知发送成功
+INFO     - 2025-10-31 09:15:11 - [conftest:277] - [2025-10-31 09:15] 测试会话开始: 2025-10-31 09:15:11, 测试组: vps
+INFO     - 2025-10-31 09:15:11 - [variable_manager:40] - [2025-10-31 09:15] 成功加载静态变量: VAR\test_data.json
+INFO     - 2025-10-31 09:15:11 - [variable_manager:64] - [2025-10-31 09:15] 成功加载运行时变量: VAR\runtime_vars_vps.json
+INFO     - 2025-10-31 09:15:11 - [conftest:63] - [2025-10-31 09:15:11] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:11 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:12 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:12 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:12 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+DEBUG    - 2025-10-31 09:15:12 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/group HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:12 - [api_base:239] - [2025-10-31 09:15:12] DELETE请求: /mascontrol/group | 数据: [685]
+INFO     - 2025-10-31 09:15:13 - [conftest:158] - [2025-10-31 09:15:13] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 执行完毕
+INFO     - 2025-10-31 09:15:13 - [api_base:796] - [2025-10-31 09:15:13] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_group WHERE name = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:13 - [api_base:451] - [2025-10-31 09:15:13] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+参数: ('MT5测试VPS',)
+INFO     - 2025-10-31 09:15:13 - [api_base:454] - [2025-10-31 09:15:13] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:13 - [api_base:466] - [2025-10-31 09:15:13] 查询结果: []
+INFO     - 2025-10-31 09:15:13 - [api_base:829] - [2025-10-31 09:15:13] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_group WHERE name = %s
+INFO     - 2025-10-31 09:15:14 - [conftest:63] - [2025-10-31 09:15:14] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:14 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:14 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:14 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+INFO     - 2025-10-31 09:15:14 - [conftest:153] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-31 09:15:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-31 09:15:15 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:15 - [api_base:239] - [2025-10-31 09:15:15] DELETE请求: /subcontrol/trader | 数据: [13818]
+INFO     - 2025-10-31 09:15:16 - [conftest:158] - [2025-10-31 09:15:16] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 执行完毕
+INFO     - 2025-10-31 09:15:17 - [test_delete:218] - 查询条件: table=follow_trader, account=66938913
+INFO     - 2025-10-31 09:15:17 - [api_base:796] - [2025-10-31 09:15:17] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:17 - [api_base:451] - [2025-10-31 09:15:17] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938913',)
+INFO     - 2025-10-31 09:15:17 - [api_base:454] - [2025-10-31 09:15:17] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:17 - [api_base:466] - [2025-10-31 09:15:17] 查询结果: []
+INFO     - 2025-10-31 09:15:17 - [api_base:829] - [2025-10-31 09:15:17] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:17 - [api_base:451] - [2025-10-31 09:15:17] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938913',)
+INFO     - 2025-10-31 09:15:17 - [api_base:454] - [2025-10-31 09:15:17] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:17 - [api_base:466] - [2025-10-31 09:15:17] 查询结果: []
+INFO     - 2025-10-31 09:15:17 - [conftest:63] - [2025-10-31 09:15:17] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:17 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:18 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:18 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:18 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+INFO     - 2025-10-31 09:15:18 - [conftest:153] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-31 09:15:18 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-31 09:15:18 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:18 - [api_base:239] - [2025-10-31 09:15:18] DELETE请求: /subcontrol/trader | 数据: [13179]
+INFO     - 2025-10-31 09:15:19 - [test_delete:278] - [2025-10-31 09:15] 第1个跟单账号（ID: 13179）删除成功
+DEBUG    - 2025-10-31 09:15:19 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:19 - [api_base:239] - [2025-10-31 09:15:19] DELETE请求: /subcontrol/trader | 数据: [13180]
+INFO     - 2025-10-31 09:15:20 - [test_delete:278] - [2025-10-31 09:15] 第2个跟单账号（ID: 13180）删除成功
+DEBUG    - 2025-10-31 09:15:20 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:20 - [api_base:239] - [2025-10-31 09:15:20] DELETE请求: /subcontrol/trader | 数据: [13181]
+INFO     - 2025-10-31 09:15:21 - [test_delete:278] - [2025-10-31 09:15] 第3个跟单账号（ID: 13181）删除成功
+DEBUG    - 2025-10-31 09:15:21 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:21 - [api_base:239] - [2025-10-31 09:15:21] DELETE请求: /subcontrol/trader | 数据: [13182]
+INFO     - 2025-10-31 09:15:22 - [test_delete:278] - [2025-10-31 09:15] 第4个跟单账号（ID: 13182）删除成功
+DEBUG    - 2025-10-31 09:15:22 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:22 - [api_base:239] - [2025-10-31 09:15:22] DELETE请求: /subcontrol/trader | 数据: [13183]
+INFO     - 2025-10-31 09:15:23 - [test_delete:278] - [2025-10-31 09:15] 第5个跟单账号（ID: 13183）删除成功
+DEBUG    - 2025-10-31 09:15:23 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:23 - [api_base:239] - [2025-10-31 09:15:23] DELETE请求: /subcontrol/trader | 数据: [13184]
+INFO     - 2025-10-31 09:15:25 - [test_delete:278] - [2025-10-31 09:15] 第6个跟单账号（ID: 13184）删除成功
+INFO     - 2025-10-31 09:15:25 - [conftest:158] - [2025-10-31 09:15:25] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 执行完毕
+INFO     - 2025-10-31 09:15:25 - [api_base:796] - [2025-10-31 09:15:25] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:25 - [api_base:451] - [2025-10-31 09:15:25] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938913',)
+INFO     - 2025-10-31 09:15:25 - [api_base:454] - [2025-10-31 09:15:25] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:25 - [api_base:466] - [2025-10-31 09:15:25] 查询结果: []
+INFO     - 2025-10-31 09:15:25 - [api_base:829] - [2025-10-31 09:15:25] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:25 - [api_base:451] - [2025-10-31 09:15:25] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938913',)
+INFO     - 2025-10-31 09:15:25 - [api_base:454] - [2025-10-31 09:15:25] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:25 - [api_base:466] - [2025-10-31 09:15:25] 查询结果: []
+INFO     - 2025-10-31 09:15:25 - [api_base:796] - [2025-10-31 09:15:25] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:25 - [api_base:451] - [2025-10-31 09:15:25] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938914',)
+INFO     - 2025-10-31 09:15:25 - [api_base:454] - [2025-10-31 09:15:25] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:25 - [api_base:466] - [2025-10-31 09:15:25] 查询结果: []
+INFO     - 2025-10-31 09:15:25 - [api_base:829] - [2025-10-31 09:15:25] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:25 - [api_base:451] - [2025-10-31 09:15:25] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938914',)
+INFO     - 2025-10-31 09:15:25 - [api_base:454] - [2025-10-31 09:15:25] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:25 - [api_base:466] - [2025-10-31 09:15:25] 查询结果: []
+INFO     - 2025-10-31 09:15:25 - [api_base:796] - [2025-10-31 09:15:25] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:25 - [api_base:451] - [2025-10-31 09:15:25] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938915',)
+INFO     - 2025-10-31 09:15:25 - [api_base:454] - [2025-10-31 09:15:25] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:25 - [api_base:466] - [2025-10-31 09:15:25] 查询结果: []
+INFO     - 2025-10-31 09:15:25 - [api_base:829] - [2025-10-31 09:15:25] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:25 - [api_base:451] - [2025-10-31 09:15:25] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938915',)
+INFO     - 2025-10-31 09:15:25 - [api_base:454] - [2025-10-31 09:15:25] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:25 - [api_base:466] - [2025-10-31 09:15:25] 查询结果: []
+INFO     - 2025-10-31 09:15:25 - [api_base:796] - [2025-10-31 09:15:25] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:26 - [api_base:451] - [2025-10-31 09:15:26] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938916',)
+INFO     - 2025-10-31 09:15:26 - [api_base:454] - [2025-10-31 09:15:26] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:26 - [api_base:466] - [2025-10-31 09:15:26] 查询结果: []
+INFO     - 2025-10-31 09:15:26 - [api_base:829] - [2025-10-31 09:15:26] 删除成功（耗时0.6秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:26 - [api_base:451] - [2025-10-31 09:15:26] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938916',)
+INFO     - 2025-10-31 09:15:26 - [api_base:454] - [2025-10-31 09:15:26] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:26 - [api_base:466] - [2025-10-31 09:15:26] 查询结果: []
+INFO     - 2025-10-31 09:15:26 - [api_base:796] - [2025-10-31 09:15:26] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:26 - [api_base:451] - [2025-10-31 09:15:26] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938917',)
+INFO     - 2025-10-31 09:15:26 - [api_base:454] - [2025-10-31 09:15:26] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:26 - [api_base:466] - [2025-10-31 09:15:26] 查询结果: []
+INFO     - 2025-10-31 09:15:26 - [api_base:829] - [2025-10-31 09:15:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:26 - [api_base:451] - [2025-10-31 09:15:26] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938917',)
+INFO     - 2025-10-31 09:15:26 - [api_base:454] - [2025-10-31 09:15:26] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:26 - [api_base:466] - [2025-10-31 09:15:26] 查询结果: []
+INFO     - 2025-10-31 09:15:26 - [api_base:796] - [2025-10-31 09:15:26] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:26 - [api_base:451] - [2025-10-31 09:15:26] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938918',)
+INFO     - 2025-10-31 09:15:26 - [api_base:454] - [2025-10-31 09:15:26] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:26 - [api_base:466] - [2025-10-31 09:15:26] 查询结果: []
+INFO     - 2025-10-31 09:15:26 - [api_base:829] - [2025-10-31 09:15:26] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:26 - [api_base:451] - [2025-10-31 09:15:26] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938918',)
+INFO     - 2025-10-31 09:15:26 - [api_base:454] - [2025-10-31 09:15:26] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:26 - [api_base:466] - [2025-10-31 09:15:26] 查询结果: []
+INFO     - 2025-10-31 09:15:26 - [conftest:63] - [2025-10-31 09:15:26] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:26 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:28 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:28 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:28 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+INFO     - 2025-10-31 09:15:28 - [conftest:153] - 切换到VPS URL: http://39.98.109.212/vps
+DEBUG    - 2025-10-31 09:15:28 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.109.212:80
+DEBUG    - 2025-10-31 09:15:28 - [connectionpool:546] - http://39.98.109.212:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:28 - [api_base:239] - [2025-10-31 09:15:28] DELETE请求: /subcontrol/trader | 数据: [13817]
+INFO     - 2025-10-31 09:15:29 - [conftest:158] - [2025-10-31 09:15:29] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 执行完毕
+INFO     - 2025-10-31 09:15:29 - [test_delete:350] - 查询条件: table=follow_trader, account=66938911
+INFO     - 2025-10-31 09:15:29 - [api_base:796] - [2025-10-31 09:15:29] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_trader WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:30 - [api_base:451] - [2025-10-31 09:15:30] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938911',)
+INFO     - 2025-10-31 09:15:30 - [api_base:454] - [2025-10-31 09:15:30] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:30 - [api_base:466] - [2025-10-31 09:15:30] 查询结果: []
+INFO     - 2025-10-31 09:15:30 - [api_base:829] - [2025-10-31 09:15:30] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_trader WHERE account = %s
+INFO     - 2025-10-31 09:15:30 - [conftest:63] - [2025-10-31 09:15:30] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:30 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:30 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:30 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:30 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+DEBUG    - 2025-10-31 09:15:31 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/variety/deleteTemplate HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:31 - [api_base:239] - [2025-10-31 09:15:31] DELETE请求: /mascontrol/variety/deleteTemplate | 数据: [57]
+INFO     - 2025-10-31 09:15:32 - [conftest:158] - [2025-10-31 09:15:32] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 执行完毕
+INFO     - 2025-10-31 09:15:32 - [test_delete:397] - 查询条件: table=follow_variety, templateName2=MT5自动化1
+INFO     - 2025-10-31 09:15:32 - [api_base:796] - [2025-10-31 09:15:32] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_variety WHERE template_name = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:32 - [api_base:451] - [2025-10-31 09:15:32] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('MT5自动化1',)
+INFO     - 2025-10-31 09:15:32 - [api_base:454] - [2025-10-31 09:15:32] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:32 - [api_base:466] - [2025-10-31 09:15:32] 查询结果: []
+INFO     - 2025-10-31 09:15:32 - [api_base:829] - [2025-10-31 09:15:32] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_variety WHERE template_name = %s
+INFO     - 2025-10-31 09:15:32 - [conftest:63] - [2025-10-31 09:15:32] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate2 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:32 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:32 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+DEBUG    - 2025-10-31 09:15:32 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/variety/deleteTemplate HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:32 - [api_base:239] - [2025-10-31 09:15:32] DELETE请求: /mascontrol/variety/deleteTemplate | 数据: [58]
+INFO     - 2025-10-31 09:15:33 - [conftest:158] - [2025-10-31 09:15:33] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate2 执行完毕
+INFO     - 2025-10-31 09:15:34 - [test_delete:444] - 查询条件: table=follow_variety, templateName2=MT5自动化3
+INFO     - 2025-10-31 09:15:34 - [api_base:796] - [2025-10-31 09:15:34] 开始等待数据库记录删除 | SQL: SELECT * FROM follow_variety WHERE template_name = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:34 - [api_base:451] - [2025-10-31 09:15:34] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('MT5自动化3',)
+INFO     - 2025-10-31 09:15:34 - [api_base:454] - [2025-10-31 09:15:34] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:34 - [api_base:466] - [2025-10-31 09:15:34] 查询结果: []
+INFO     - 2025-10-31 09:15:34 - [api_base:829] - [2025-10-31 09:15:34] 删除成功（耗时0.1秒）| SQL: SELECT * FROM follow_variety WHERE template_name = %s
+INFO     - 2025-10-31 09:15:34 - [conftest:63] - [2025-10-31 09:15:34] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:34 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:34 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:34 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:34 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+DEBUG    - 2025-10-31 09:15:35 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:35 - [api_base:239] - [2025-10-31 09:15:35] DELETE请求: /mascontrol/user | 数据: [9072]
+INFO     - 2025-10-31 09:15:36 - [conftest:158] - [2025-10-31 09:15:36] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 执行完毕
+INFO     - 2025-10-31 09:15:37 - [test_delete:491] - 查询条件: table=FOLLOW_TRADER_USER, name=66938911
+INFO     - 2025-10-31 09:15:37 - [api_base:796] - [2025-10-31 09:15:37] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:37 - [api_base:451] - [2025-10-31 09:15:37] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938911',)
+INFO     - 2025-10-31 09:15:37 - [api_base:454] - [2025-10-31 09:15:37] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:37 - [api_base:466] - [2025-10-31 09:15:37] 查询结果: []
+INFO     - 2025-10-31 09:15:37 - [api_base:829] - [2025-10-31 09:15:37] 删除成功（耗时0.2秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:37 - [conftest:63] - [2025-10-31 09:15:37] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 开始登录，环境: test
+DEBUG    - 2025-10-31 09:15:37 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
+DEBUG    - 2025-10-31 09:15:38 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:38 - [conftest:90] - 测试环境登录成功
+INFO     - 2025-10-31 09:15:38 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+DEBUG    - 2025-10-31 09:15:38 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:38 - [api_base:239] - [2025-10-31 09:15:38] DELETE请求: /mascontrol/user | 数据: [9077]
+INFO     - 2025-10-31 09:15:39 - [test_delete:546] - 第1个账号（ID: 9077）删除接口调用成功
+DEBUG    - 2025-10-31 09:15:39 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:39 - [api_base:239] - [2025-10-31 09:15:39] DELETE请求: /mascontrol/user | 数据: [9078]
+INFO     - 2025-10-31 09:15:41 - [test_delete:546] - 第2个账号（ID: 9078）删除接口调用成功
+DEBUG    - 2025-10-31 09:15:41 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:41 - [api_base:239] - [2025-10-31 09:15:41] DELETE请求: /mascontrol/user | 数据: [9073]
+INFO     - 2025-10-31 09:15:42 - [test_delete:546] - 第3个账号（ID: 9073）删除接口调用成功
+DEBUG    - 2025-10-31 09:15:42 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:42 - [api_base:239] - [2025-10-31 09:15:42] DELETE请求: /mascontrol/user | 数据: [9075]
+INFO     - 2025-10-31 09:15:43 - [test_delete:546] - 第4个账号（ID: 9075）删除接口调用成功
+DEBUG    - 2025-10-31 09:15:43 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:43 - [api_base:239] - [2025-10-31 09:15:43] DELETE请求: /mascontrol/user | 数据: [9079]
+INFO     - 2025-10-31 09:15:44 - [test_delete:546] - 第5个账号（ID: 9079）删除接口调用成功
+DEBUG    - 2025-10-31 09:15:44 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:44 - [api_base:239] - [2025-10-31 09:15:44] DELETE请求: /mascontrol/user | 数据: [9076]
+INFO     - 2025-10-31 09:15:45 - [test_delete:546] - 第6个账号（ID: 9076）删除接口调用成功
+DEBUG    - 2025-10-31 09:15:45 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-10-31 09:15:45 - [api_base:239] - [2025-10-31 09:15:45] DELETE请求: /mascontrol/user | 数据: [9074]
+INFO     - 2025-10-31 09:15:46 - [test_delete:546] - 第7个账号（ID: 9074）删除接口调用成功
+INFO     - 2025-10-31 09:15:46 - [conftest:158] - [2025-10-31 09:15:46] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 执行完毕
+INFO     - 2025-10-31 09:15:47 - [api_base:796] - [2025-10-31 09:15:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:47 - [api_base:451] - [2025-10-31 09:15:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938913',)
+INFO     - 2025-10-31 09:15:47 - [api_base:454] - [2025-10-31 09:15:47] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:47 - [api_base:466] - [2025-10-31 09:15:47] 查询结果: []
+INFO     - 2025-10-31 09:15:47 - [api_base:829] - [2025-10-31 09:15:47] 删除成功（耗时0.3秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:47 - [api_base:796] - [2025-10-31 09:15:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:47 - [api_base:451] - [2025-10-31 09:15:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938914',)
+INFO     - 2025-10-31 09:15:47 - [api_base:454] - [2025-10-31 09:15:47] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:47 - [api_base:466] - [2025-10-31 09:15:47] 查询结果: []
+INFO     - 2025-10-31 09:15:47 - [api_base:829] - [2025-10-31 09:15:47] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:47 - [api_base:796] - [2025-10-31 09:15:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:47 - [api_base:451] - [2025-10-31 09:15:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938915',)
+INFO     - 2025-10-31 09:15:47 - [api_base:454] - [2025-10-31 09:15:47] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:47 - [api_base:466] - [2025-10-31 09:15:47] 查询结果: []
+INFO     - 2025-10-31 09:15:47 - [api_base:829] - [2025-10-31 09:15:47] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:47 - [api_base:796] - [2025-10-31 09:15:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:47 - [api_base:451] - [2025-10-31 09:15:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938916',)
+INFO     - 2025-10-31 09:15:47 - [api_base:454] - [2025-10-31 09:15:47] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:47 - [api_base:466] - [2025-10-31 09:15:47] 查询结果: []
+INFO     - 2025-10-31 09:15:47 - [api_base:829] - [2025-10-31 09:15:47] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:47 - [api_base:796] - [2025-10-31 09:15:47] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:47 - [api_base:451] - [2025-10-31 09:15:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938917',)
+INFO     - 2025-10-31 09:15:48 - [api_base:454] - [2025-10-31 09:15:48] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:48 - [api_base:466] - [2025-10-31 09:15:48] 查询结果: []
+INFO     - 2025-10-31 09:15:48 - [api_base:829] - [2025-10-31 09:15:48] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:48 - [api_base:796] - [2025-10-31 09:15:48] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:48 - [api_base:451] - [2025-10-31 09:15:48] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938918',)
+INFO     - 2025-10-31 09:15:48 - [api_base:454] - [2025-10-31 09:15:48] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:48 - [api_base:466] - [2025-10-31 09:15:48] 查询结果: []
+INFO     - 2025-10-31 09:15:48 - [api_base:829] - [2025-10-31 09:15:48] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:48 - [api_base:796] - [2025-10-31 09:15:48] 开始等待数据库记录删除 | SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s | 超时: 5秒
+INFO     - 2025-10-31 09:15:48 - [api_base:451] - [2025-10-31 09:15:48] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938919',)
+INFO     - 2025-10-31 09:15:48 - [api_base:454] - [2025-10-31 09:15:48] 查询成功，结果数量: 0
+INFO     - 2025-10-31 09:15:48 - [api_base:466] - [2025-10-31 09:15:48] 查询结果: []
+INFO     - 2025-10-31 09:15:48 - [api_base:829] - [2025-10-31 09:15:48] 删除成功（耗时0.1秒）| SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
+INFO     - 2025-10-31 09:15:48 - [variable_manager:111] - [2025-10-31 09:15] 运行时变量已保存到: D:\pycharm_test\lingkuanMT5_1029\VAR\runtime_vars_vps.json
+INFO     - 2025-10-31 09:15:48 - [conftest:304] - [2025-10-31 09:15] 测试会话结束，总耗时: 37.00秒
+INFO     - 2025-10-31 09:15:48 - [feishu_notification:131] - [2025-10-31 09:15] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+DEBUG    - 2025-10-31 09:15:48 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
+DEBUG    - 2025-10-31 09:15:48 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
+INFO     - 2025-10-31 09:15:48 - [feishu_notification:139] - [2025-10-31 09:15] 飞书响应状态码: 200
+INFO     - 2025-10-31 09:15:48 - [feishu_notification:140] - [2025-10-31 09:15] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     - 2025-10-31 09:15:48 - [feishu_notification:145] - [2025-10-31 09:15] [FEISHU] 消息发送成功
+INFO     - 2025-10-31 09:15:48 - [conftest:316] - [2025-10-31 09:15] 飞书通知发送成功

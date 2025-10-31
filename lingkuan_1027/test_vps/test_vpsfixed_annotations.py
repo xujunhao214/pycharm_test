@@ -22,6 +22,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark1(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改策略账号信息")
@@ -106,7 +107,7 @@ class TestVPSremark:
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": "ceshikaicangbeizhu",
+                    "remark": f"ceshikaicangbeizhu{class_random_str}",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -130,9 +131,9 @@ class TestVPSremark:
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                WHERE foi.operation_type = %s AND fod.account = %s
+                WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', vps_user_accounts_1)
+            params = ('0', vps_user_accounts_1, f"ceshiceluebeizhu{class_random_str}")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -166,15 +167,15 @@ class TestVPSremark:
             self.assert_response_status(response, 200, "策略平仓失败")
 
             # 跟单平仓
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
-                           "account": vps_user_accounts_1}
-            )
-            self.assert_response_status(response, 200, "跟单平仓失败")
+            # vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+            # vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+            # response = self.send_post_request(
+            #     logged_session,
+            #     '/subcontrol/trader/orderClose',
+            #     json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
+            #                "account": vps_user_accounts_1}
+            # )
+            # self.assert_response_status(response, 200, "跟单平仓失败")
 
     @allure.story("场景2：VPS看板-策略有固定注释，跟单有固定注释")
     @allure.description("""
@@ -187,6 +188,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark2(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改策略账号信息")
@@ -289,9 +291,9 @@ class TestVPSremark:
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                WHERE foi.operation_type = %s AND fod.account = %s
+                WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', vps_user_accounts_1)
+            params = ('0', vps_user_accounts_1, f"ceshigendanbeizhu{class_random_str}")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -325,17 +327,6 @@ class TestVPSremark:
             )
             self.assert_response_status(response, 200, "策略平仓失败")
 
-            # 跟单平仓
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
-                           "account": vps_user_accounts_1}
-            )
-            self.assert_response_status(response, 200, "跟单平仓失败")
-
     @allure.story("场景3：VPS看板-策略开启订单备注，跟单无固定注释")
     @allure.description("""
     ### 测试说明
@@ -347,6 +338,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark3(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改策略账号信息-开启订单备注")
@@ -450,9 +442,9 @@ class TestVPSremark:
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                WHERE foi.operation_type = %s AND fod.account = %s
+                WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', vps_user_accounts_1)
+            params = ('0', vps_user_accounts_1, f"ceshikaicangbeizhu{class_random_str}")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -487,14 +479,3 @@ class TestVPSremark:
                            "account": new_user["account"]}
             )
             self.assert_response_status(response, 200, "策略平仓失败")
-
-            # 跟单平仓
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
-                           "account": vps_user_accounts_1}
-            )
-            self.assert_response_status(response, 200, "跟单平仓失败")

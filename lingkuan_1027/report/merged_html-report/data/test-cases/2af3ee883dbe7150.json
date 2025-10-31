@@ -1,0 +1,307 @@
+{
+  "uid" : "2af3ee883dbe7150",
+  "name" : "数据库校验-VPS数据-新增跟单账号",
+  "fullName" : "test_vps.test_create.TestCreate#test_dbquery_addslave",
+  "historyId" : "bd69e492cc9af84e28c31c8e3d2f9dd8",
+  "time" : {
+    "start" : 1761821818106,
+    "stop" : 1761821818158,
+    "duration" : 52
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 账号 31492 净值异常：预期euqit≠0，实际=0.0\nassert 0.0 > 0",
+  "statusTrace" : "self = <lingkuan_1027.test_vps.test_create.TestCreate object at 0x000001AB08E2FDC0>\nclass_random_str = 'cqhu1719'\nvar_manager = <lingkuan_1027.commons.variable_manager.VariableManager object at 0x000001AB08E513D0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001AB090B1820>\n\n    @allure.title(\"数据库校验-VPS数据-新增跟单账号\")\n    def test_dbquery_addslave(self, class_random_str, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            # 执行数据库查询\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader WHERE account = %s\",\n                (vps_user_accounts_1,)\n            )\n    \n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            vps_addslave_id = db_data[0][\"id\"]\n            logging.info(f\"新增跟单账号ID: {vps_addslave_id}\")\n            var_manager.set_runtime_variable(\"vps_addslave_id\", vps_addslave_id)\n    \n        with allure.step(\"2. 校验账号状态和净值\"):\n            status = db_data[0][\"status\"]\n            assert status == 0, f\"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}\"\n            logging.info(f\"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}\")\n    \n            euqit = db_data[0][\"euqit\"]\n>           assert euqit > 0, f\"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}\"\nE           AssertionError: 账号 31492 净值异常：预期euqit≠0，实际=0.0\nE           assert 0.0 > 0\n\ntest_vps\\test_create.py:622: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761821719765,
+      "stop" : 1761821719766,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "class_random_str",
+    "time" : {
+      "start" : 1761821719766,
+      "stop" : 1761821719766,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1761821721320,
+      "stop" : 1761821721320,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761821719765,
+      "stop" : 1761821719765,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761821719764,
+      "stop" : 1761821719764,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1761821817854,
+      "stop" : 1761821818106,
+      "duration" : 252
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1761821818106,
+      "stop" : 1761821818106,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 账号 31492 净值异常：预期euqit≠0，实际=0.0\nassert 0.0 > 0",
+    "statusTrace" : "self = <lingkuan_1027.test_vps.test_create.TestCreate object at 0x000001AB08E2FDC0>\nclass_random_str = 'cqhu1719'\nvar_manager = <lingkuan_1027.commons.variable_manager.VariableManager object at 0x000001AB08E513D0>\ndb_transaction = <pymysql.connections.Connection object at 0x000001AB090B1820>\n\n    @allure.title(\"数据库校验-VPS数据-新增跟单账号\")\n    def test_dbquery_addslave(self, class_random_str, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            vps_user_accounts_1 = var_manager.get_variable(\"vps_user_accounts_1\")\n            # 执行数据库查询\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader WHERE account = %s\",\n                (vps_user_accounts_1,)\n            )\n    \n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，无法提取数据\")\n    \n            vps_addslave_id = db_data[0][\"id\"]\n            logging.info(f\"新增跟单账号ID: {vps_addslave_id}\")\n            var_manager.set_runtime_variable(\"vps_addslave_id\", vps_addslave_id)\n    \n        with allure.step(\"2. 校验账号状态和净值\"):\n            status = db_data[0][\"status\"]\n            assert status == 0, f\"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}\"\n            logging.info(f\"账号 {vps_user_accounts_1} 状态异常：预期status=0，实际={status}\")\n    \n            euqit = db_data[0][\"euqit\"]\n>           assert euqit > 0, f\"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}\"\nE           AssertionError: 账号 31492 净值异常：预期euqit≠0，实际=0.0\nE           assert 0.0 > 0\n\ntest_vps\\test_create.py:622: AssertionError",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否新增成功",
+      "time" : {
+        "start" : 1761821818106,
+        "stop" : 1761821818158,
+        "duration" : 52
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1761821818106,
+          "stop" : 1761821818158,
+          "duration" : 52
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1761821818157,
+            "stop" : 1761821818158,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b666573653a7f0a5",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "b666573653a7f0a5.json",
+            "type" : "application/json",
+            "size" : 1048
+          }, {
+            "uid" : "b5195a1ee1a43056",
+            "name" : "执行SQL",
+            "source" : "b5195a1ee1a43056.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "4e28dec78b1d6df6",
+            "name" : "SQL参数",
+            "source" : "4e28dec78b1d6df6.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 1,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 2,
+      "hasContent" : true
+    }, {
+      "name" : "2. 校验账号状态和净值",
+      "time" : {
+        "start" : 1761821818158,
+        "stop" : 1761821818158,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 账号 31492 净值异常：预期euqit≠0，实际=0.0\nassert 0.0 > 0\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_1027\\test_vps\\test_create.py\", line 622, in test_dbquery_addslave\n    assert euqit > 0, f\"账号 {vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "3e2ea6b14ecfa598",
+      "name" : "log",
+      "source" : "3e2ea6b14ecfa598.txt",
+      "type" : "text/plain",
+      "size" : 1583
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 4,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 4,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761822026977,
+      "stop" : 1761822026979,
+      "duration" : 2
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1761821818269,
+      "stop" : 1761821818269,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1761821818268,
+      "stop" : 1761821818268,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-创建数据-为VPS测试准备"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "65780-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "2af3ee883dbe7150.json",
+  "parameterValues" : [ ]
+}
