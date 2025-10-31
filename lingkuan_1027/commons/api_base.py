@@ -839,7 +839,7 @@ class APITestBase:
                         return
 
                     logger.info(
-                        f"[{self._get_current_time()}] 记录仍存在（已等待{elapsed:.1f}秒）\n剩余时间: {timeout - elapsed:.1f}秒 \n结果数: {len(result)}")
+                        f"[{self._get_current_time()}] 记录仍存在（已等待{elapsed:.1f}秒）| 剩余时间: {timeout - elapsed:.1f}秒 | 结果数: {len(result)}")
                     time.sleep(poll_interval)
 
                 except Exception as e:

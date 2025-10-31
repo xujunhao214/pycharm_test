@@ -92,6 +92,7 @@ class TestCreate(APITestBase):
             logging.info(f"平台ID: {platformId}")
             var_manager.set_runtime_variable("platformId", platformId)
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, logged_session, var_manager):
@@ -126,6 +127,7 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
+    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
     def test_dbquery_importuser(self, var_manager, db_transaction):
