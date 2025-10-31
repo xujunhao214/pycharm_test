@@ -107,7 +107,7 @@ class TestCloudremark:
                 self.assert_response_status(response, 200, "修改跟单账号请求失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=3, delay=10)
+        @pytest.mark.retry(n=0, delay=0)
         @allure.title("云策略账号复制下单")
         def test_scenario1_place_order(self, class_random_str, logged_session, var_manager):
             with allure.step("发送开仓请求"):

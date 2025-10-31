@@ -96,7 +96,7 @@ class TestVPSremark:
             self.assert_response_status(response, 200, "修改跟单账号失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=3, delay=10)
+        @pytest.mark.retry(n=0, delay=0)
         @pytest.mark.url("vps")
         @allure.title("策略开仓及备注校验")
         def test_scenario1_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session,
