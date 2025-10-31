@@ -270,7 +270,6 @@ class TestCreate_cloudTrader(APITestBase):
                     sql=sql,
                     params=params,
                     order_by="account ASC"
-
                 )
                 print(f"验证第{idx}个账号（{cloudTrader_account}）的数据库记录")
 

@@ -128,7 +128,7 @@ class TestCreate_Scene(APITestBase):
 
                 # 发送请求并验证
                 response = self.send_post_request(
-                    logged_session, '/subcontrol/follow/addSlave', json_data=data
+                    logged_session, '/subcontrol/follow/addSlave', json_data=data, sleep_seconds=3
                 )
 
                 self.assert_response_status(
@@ -217,7 +217,7 @@ class TestCreate_Scene(APITestBase):
         var_manager.set_runtime_variable("vps_addslave_count", vps_addslave_count)
         print(f"后6个账号数据库校验完成，共提取{vps_addslave_count}个ID，已保存到变量 vps_addslave_count")
 
-    @pytest.mark.skip(reason=SKIP_REASON)
+    # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
     def test_update_addSlave(self, var_manager, logged_session, encrypted_password):
@@ -353,7 +353,7 @@ class TestCreate_Scene(APITestBase):
 
                 # 发送请求并验证
                 response = self.send_post_request(
-                    logged_session, '/subcontrol/follow/updateSlave', json_data=data
+                    logged_session, '/subcontrol/follow/updateSlave', json_data=data, sleep_seconds=3
                 )
 
                 self.assert_response_status(
