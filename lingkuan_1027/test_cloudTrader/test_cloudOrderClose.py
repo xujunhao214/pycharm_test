@@ -31,6 +31,57 @@ class TestCloudCoreFunctionality:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend1(APITestBase):
+        @allure.title("云策略列表-修改云跟单")
+        def test_update_cloudtrader(self, class_random_str, logged_session, var_manager):
+            """执行云策略复制下单操作并验证请求结果"""
+            with allure.step("1.发送修改云跟单请求"):
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+
+                request_data = [
+                    {
+                        "traderList": [
+                            cloudTrader_traderList_4
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": cloudTrader_traderList_2,
+                        "masterAccount": cloudTrader_user_accounts_2,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": "1",
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": None,
+                        "commentType": None,
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": 100,
+                        "remark": "",
+                        "cfd": None,
+                        "forex": None
+                    }
+                ]
+
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudBatchUpdate',
+                    json_data=request_data
+                )
+
+            with allure.step("2.验证复制下单响应结果"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "复制下单响应msg字段应为success"
+                )
+
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""

@@ -548,5 +548,5 @@ def parse_decimal_value(value):
 def class_random_str():
     # 调用你的随机数生成函数（可自定义参数，如长度、是否包含数字等）
     random_str = generate_random_str(length=8)  # 生成8位随机字符串
-    print(f"\n【生成备注随机数】：{random_str}")  # 可选：打印生成的值，方便调试
+    # print(f"\n【生成备注随机数】：{random_str}")  # 可选：打印生成的值，方便调试
     return random_str
