@@ -15,7 +15,7 @@ SKIP_REASON = "跳过此用例"
 @allure.feature("数据管理-创建数据-为云策略准备")
 class TestCreate_cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, logged_session, var_manager):
         add_cloudTrader = var_manager.get_variable("add_cloudTrader")
@@ -244,7 +244,7 @@ class TestCreate_cloudTrader(APITestBase):
             "success",
             "响应msg字段应为success")
 
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     @allure.title("数据库校验-批量挂靠VPS跟单（后9个账号）")
     def test_dbimport_addSlave(self, var_manager, db_transaction):
         # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）

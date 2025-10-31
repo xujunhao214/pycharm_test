@@ -50,7 +50,7 @@ class TestCreate(APITestBase):
         )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     @allure.title("数据库校验-账号列表-新增用户")
     def test_dbquery_user(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
@@ -467,7 +467,7 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    @pytest.mark.retry(n=3, delay=5)
+    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
