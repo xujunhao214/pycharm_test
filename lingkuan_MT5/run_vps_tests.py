@@ -5,7 +5,7 @@ import subprocess
 import io
 
 
-def run_MT5vps_tests(env: str = "test"):
+def run_vps_tests(env: str = "test"):
     # 设置标准输出为utf-8编码（解决print中文乱码）
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
@@ -94,5 +94,5 @@ def run_MT5vps_tests(env: str = "test"):
 
 if __name__ == "__main__":
     env = sys.argv[1] if len(sys.argv) > 1 else "test"
-    exit_code, _ = run_MT5vps_tests(env)
+    exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)
