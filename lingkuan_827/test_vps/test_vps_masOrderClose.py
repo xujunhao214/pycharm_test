@@ -26,9 +26,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的品种功能正确
     """)
     class TestVPStradingOrders1(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -365,9 +365,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的停止功能正确
     """)
     class TestVPStradingOrders2(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -811,9 +811,9 @@ class TestVPSMasOrderclose:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -1168,9 +1168,9 @@ class TestVPSMasOrderclose:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -1522,9 +1522,9 @@ class TestVPSMasOrderclose:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -1831,9 +1831,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的订单数量功能正确
     """)
     class TestVPStradingOrders6(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -2114,9 +2114,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的订单数量功能正确
     """)
     class TestVPStradingOrders7(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -2394,9 +2394,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的订单类型功能正确
     """)
     class TestVPStradingOrders8(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -2969,9 +2969,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的订单类型功能正确
     """)
     class TestVPStradingOrders10(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -3248,9 +3248,9 @@ class TestVPSMasOrderclose:
     - 预期结果：平仓的订单备注功能正确
     """)
     class TestVPStradingOrders11(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]

@@ -3289,7 +3289,7 @@ class TestVPSOrdersendbuy:
         """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -3328,7 +3328,7 @@ class TestVPSOrdersendbuy:
         """)
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {

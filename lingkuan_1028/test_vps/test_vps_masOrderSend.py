@@ -25,7 +25,7 @@ class TestVPSMasOrdersend:
     class TestVPStradingOrders1(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -440,9 +440,9 @@ class TestVPSMasOrdersend:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders2(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -872,9 +872,9 @@ class TestVPSMasOrdersend:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -1277,9 +1277,9 @@ class TestVPSMasOrdersend:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders4(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -1667,9 +1667,9 @@ class TestVPSMasOrdersend:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders5(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {
@@ -2086,9 +2086,9 @@ class TestVPSMasOrdersend:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders6(APITestBase):
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
             vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
             data = {

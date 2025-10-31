@@ -69,9 +69,9 @@ class TestVPSOrderSend_newScenarios:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
@@ -419,9 +419,9 @@ class TestVPSOrderSend_newScenarios:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @allure.title("VPS交易下单-复制下单请求")
+        @allure.title("VPS策略账号交易下单-复制下单")
         def test_copy_order_send(self, logged_session, var_manager):
-            # 发送VPS交易下单-复制下单请求
+            # 发送VPS策略账号交易下单-复制下单
             global symbol
             masOrderSend = var_manager.get_variable("masOrderSend")
             symbol = masOrderSend["symbol"]
