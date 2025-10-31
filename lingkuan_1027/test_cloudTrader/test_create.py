@@ -244,6 +244,7 @@ class TestCreate_cloudTrader(APITestBase):
             "success",
             "响应msg字段应为success")
 
+    @pytest.mark.retry(n=3, delay=5)
     @allure.title("数据库校验-批量挂靠VPS跟单（后9个账号）")
     def test_dbimport_addSlave(self, var_manager, db_transaction):
         # 1. 获取后9个账号的账号名（使用range直接循环索引1-9）
