@@ -61,7 +61,8 @@ class TestCreate_importcloudTrader(APITestBase):
                 response = self.send_post_request(
                     logged_session,
                     '/mascontrol/cloudTrader/cloudBatchAdd',
-                    json_data=data
+                    json_data=data,
+                    sleep_seconds=3
                 )
 
                 # 2. 验证响应状态码
@@ -241,7 +242,7 @@ class TestCreate_importcloudTrader(APITestBase):
 
                 # 发送请求并验证
                 response = self.send_post_request(
-                    logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data
+                    logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data, sleep_seconds=3
                 )
                 print(f"修改云跟单账号数据：{param['traderList']}")
 
