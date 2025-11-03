@@ -2078,7 +2078,7 @@ class TestCloudMasOrdersend:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")

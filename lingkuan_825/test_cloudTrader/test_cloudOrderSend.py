@@ -58,7 +58,7 @@ class TestCloudStrategyOrder:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @pytest.mark.retry(n=3, delay=5)
@@ -327,7 +327,7 @@ class TestCloudStrategyOrder:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-复制下单数据")
@@ -578,7 +578,7 @@ class TestCloudStrategyOrder:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-复制下单数据")
@@ -816,7 +816,7 @@ class TestCloudStrategyOrder:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-复制下单数据")
@@ -1071,7 +1071,7 @@ class TestCloudStrategyOrder:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库查询-获取停止的order_no")
@@ -1132,7 +1132,7 @@ class TestCloudStrategyOrder:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-复制下单数据")

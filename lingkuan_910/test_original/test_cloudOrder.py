@@ -268,7 +268,7 @@ class TestMasOrderSend(APITestBase):
                 response,
                 "$.msg",
                 "success",
-                "复制下单响应msg字段应为success"
+                "响应msg字段应为success"
             )
 
     @allure.story("复制下单场景")

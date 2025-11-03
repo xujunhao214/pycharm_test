@@ -72,12 +72,12 @@ class TestCloudStrategyOrderbuy:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单操作")
@@ -108,12 +108,12 @@ class TestCloudStrategyOrderbuy:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @pytest.mark.retry(n=0, delay=0)

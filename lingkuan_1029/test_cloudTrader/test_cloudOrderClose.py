@@ -74,12 +74,12 @@ class TestCloudCoreFunctionality:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单操作")
@@ -111,12 +111,12 @@ class TestCloudCoreFunctionality:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-币种错误")
@@ -408,12 +408,12 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-sell-平仓失败")
@@ -650,12 +650,12 @@ class TestCloudFollowDirection:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-sell-平仓失败")
@@ -897,12 +897,12 @@ class TestCloudOrderQuantityControl:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-平仓两个订单")
@@ -1140,12 +1140,12 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
@@ -1636,12 +1636,12 @@ class TestCloudOrderType:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
@@ -1878,12 +1878,12 @@ class TestCloudCloseRemark:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-平仓备注-xxxxxxxxxx")
@@ -2122,12 +2122,12 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-全平策略")
@@ -2444,12 +2444,12 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-全平策略")
@@ -2756,12 +2756,12 @@ class TestCloudClose:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-全平策略")

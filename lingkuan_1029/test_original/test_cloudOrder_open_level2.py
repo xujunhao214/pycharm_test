@@ -131,12 +131,12 @@ class TestcloudTrader_openandlevel:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-云策略列表-根据remark发现有漏单")
@@ -666,12 +666,12 @@ class TestcloudTrader_openandlevel:
                     json_data=request_data
                 )
 
-            with allure.step("2.验证复制下单响应结果"):
+            with allure.step("2.验证响应结果"):
                 self.assert_json_value(
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("数据库校验-云策略列表-指令及订单详情数据检查")

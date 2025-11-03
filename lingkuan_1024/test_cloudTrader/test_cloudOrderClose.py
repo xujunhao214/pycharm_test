@@ -64,7 +64,7 @@ class TestCloudCoreFunctionality:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-币种错误")
@@ -360,7 +360,7 @@ class TestCloudFollowDirection:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-sell-平仓失败")
@@ -599,7 +599,7 @@ class TestCloudFollowDirection:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-sell-平仓失败")
@@ -843,7 +843,7 @@ class TestCloudOrderQuantityControl:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-平仓两个订单")
@@ -1085,7 +1085,7 @@ class TestCloudOrderType:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
@@ -1579,7 +1579,7 @@ class TestCloudOrderType:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-订单类型-外部订单")
@@ -1820,7 +1820,7 @@ class TestCloudCloseRemark:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-平仓备注-xxxxxxxxxx")
@@ -2063,7 +2063,7 @@ class TestCloudClose:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-全平策略")
@@ -2384,7 +2384,7 @@ class TestCloudClose:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-全平策略")
@@ -2695,7 +2695,7 @@ class TestCloudClose:
                     response,
                     "$.msg",
                     "success",
-                    "复制下单响应msg字段应为success"
+                    "响应msg字段应为success"
                 )
 
         @allure.title("云策略-复制下单平仓操作-全平策略")
