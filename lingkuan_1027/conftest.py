@@ -6,6 +6,7 @@ import logging
 import datetime
 from pymysql import err
 import os
+import json
 import time
 import xml.etree.ElementTree as ET
 from pytest import Config
@@ -83,6 +84,11 @@ def logged_session(api_session, var_manager, request, environment):
                 )
 
             response_json = response.json()
+            headers_json = json.dumps(login_data, ensure_ascii=False, indent=2)
+            allure.attach(headers_json, "请求体", allure.attachment_type.JSON)
+            # print(f"响应信息：{response.text}")
+            logging.info(f"登录响应信息：{response.text}")
+            allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
             access_token = response_json.get("data", {}).get("access_token")
             if not access_token:
                 pytest.fail("测试环境登录响应中未找到access_token", pytrace=False)
@@ -114,6 +120,11 @@ def logged_session(api_session, var_manager, request, environment):
                     response = api_session.post("/sys/auth/login", json=login_payload)
                     response.raise_for_status()  # 触发HTTP错误异常
                     response_json = response.json()
+                    headers_json = json.dumps(login_payload, ensure_ascii=False, indent=2)
+                    allure.attach(headers_json, "请求体", allure.attachment_type.JSON)
+                    # print(f"响应信息：{response.text}")
+                    logging.info(f"登录响应信息：{response.text}")
+                    allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
                     if response_json.get("code") != 0:
                         raise ValueError(f"登录失败: {response_json.get('msg')}")
