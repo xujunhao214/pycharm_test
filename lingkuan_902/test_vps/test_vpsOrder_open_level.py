@@ -1512,7 +1512,7 @@ class TestLeakageopen_level:
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
         def test_subcontrol_trader(self, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
-            with allure.step("发送修改vps策略的请求"):
+            with allure.step("1.发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 platformId = var_manager.get_variable("platformId")
@@ -1701,7 +1701,7 @@ class TestLeakageopen_level:
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
         def test_subcontrol_trader2(self, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
-            with allure.step("发送修改vps策略的请求"):
+            with allure.step("1.发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
                 vps_trader_id = var_manager.get_variable("vps_trader_id")
                 platformId = var_manager.get_variable("platformId")

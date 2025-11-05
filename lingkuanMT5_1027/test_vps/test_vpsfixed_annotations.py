@@ -96,7 +96,7 @@ class TestVPSremark:
             self.assert_response_status(response, 200, "修改跟单账号失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @pytest.mark.url("vps")
         @allure.title("策略开仓及备注校验")
         def test_scenario1_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session,
@@ -131,9 +131,9 @@ class TestVPSremark:
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                WHERE foi.operation_type = %s AND fod.account = %s
+                WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', MT5vps_user_accounts_1)
+            params = ('0', MT5vps_user_accounts_1, f"ceshiceluebeizhu{class_random_str}")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -291,9 +291,9 @@ class TestVPSremark:
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                WHERE foi.operation_type = %s AND fod.account = %s
+                WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', MT5vps_user_accounts_1)
+            params = ('0', MT5vps_user_accounts_1, f"ceshigendanbeizhu{class_random_str}")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -453,9 +453,9 @@ class TestVPSremark:
                 FROM follow_order_detail fod
                 INNER JOIN follow_order_instruct foi 
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                WHERE foi.operation_type = %s AND fod.account = %s
+                WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', MT5vps_user_accounts_1)
+            params = ('0', MT5vps_user_accounts_1, f"ceshikaicangbeizhu{class_random_str}")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,

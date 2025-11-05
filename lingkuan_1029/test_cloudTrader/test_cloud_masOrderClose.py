@@ -27,7 +27,7 @@ class TestVPSMasOrderclose:
     """)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders1(APITestBase):
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略-策略账号交易下单-复制下单请求

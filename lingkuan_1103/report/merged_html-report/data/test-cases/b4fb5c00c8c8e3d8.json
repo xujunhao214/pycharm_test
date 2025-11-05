@@ -1,0 +1,937 @@
+{
+  "uid" : "b4fb5c00c8c8e3d8",
+  "name" : "修改跟单账号（仅使用后6个数据与模板匹配）",
+  "fullName" : "test_cloudTrader.test_create_scene.TestCreate_importcloudTrader#test_update_addSlave",
+  "historyId" : "c8be5d3653baacab767e7f484097b488",
+  "time" : {
+    "start" : 1761886368234,
+    "stop" : 1761886381280,
+    "duration" : 13046
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 账号6421响应异常（JSON断言失败）",
+  "statusTrace" : "self = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F8E0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '账号6421响应异常'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n>           assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\nE               AssertionError: Failed: 账号6421响应异常（JSON路径值不匹配）\n\ncommons\\api_base.py:416: AssertionError\n\nThe above exception was the direct cause of the following exception:\n\nself = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F8E0>\nvar_manager = <lingkuan_1103.commons.variable_manager.VariableManager object at 0x0000020B7F1D3490>\nlogged_session = <lingkuan_1103.commons.session.EnvironmentSession object at 0x0000020B7F39FD60>\n\n    @allure.title(\"修改跟单账号（仅使用后6个数据与模板匹配）\")\n    def test_update_addSlave(self, var_manager, logged_session):\n        # 1. 获取总用户数（需确保至少有7个，才能取后6个）\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count < 7:\n            pytest.fail(f\"用户总数需至少为7，当前为{cloudTrader_user_count}，无法提取后6个数据\")\n    \n        all_ids = []\n        for i in range(5, cloudTrader_user_count + 1):\n            addslave_id = var_manager.get_variable(f\"cloudTrader_traderList_{i}\")\n            if not addslave_id:\n                pytest.fail(f\"未找到第{i}个账号（变量：cloudTrader_traderList_{i}）\")\n            all_ids.append(addslave_id)\n        print(f\"已提取后6个账号id：{all_ids}\")\n    \n        cloudTrader_template_id1 = var_manager.get_variable(\"cloudTrader_template_id1\")\n    \n        # 3. 定义6个模板（与账号一一对应）\n        templates: List[Dict[str, Any]] = [\n            {\n                \"followMode\": 0,\n                \"followParam\": \"5.00\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"\",\n                \"mode_desc\": \"固定手数（5倍）\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": cloudTrader_template_id1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"\",\n                \"mode_desc\": \"修改品种（3倍）\"\n            },\n            {\n                \"followMode\": 2,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"\",\n                \"mode_desc\": \"净值比例\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"@\",\n                \"mode_desc\": \"修改币种，合约是100\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \".p\",\n                \"mode_desc\": \"修改币种，合约是100000\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \".min\",\n                \"mode_desc\": \"修改币种，合约是10\"\n            },\n        ]\n    \n        # 4. 生成参数化数据（后6个账号与6个模板一一对应）\n        parametrize_data = []\n        for i in range(len(all_ids)):\n            traderList = all_ids[i]\n            template = templates[i]  # 直接一一对应（账号1→模板1，账号2→模板2，...）\n            parametrize_data.append({\n                \"followMode\": template[\"followMode\"],\n                \"followParam\": template[\"followParam\"],\n                \"templateId\": template[\"templateId\"],\n                \"remark\": template[\"remark\"],  # 修改备注\n                \"Cfd\": template[\"Cfd\"],  # 修改Cfd参数\n                \"traderList\": traderList,\n            })\n        print(f\"生成{len(parametrize_data)}条参数化测试数据（后6个账号）\")\n    \n        # 5. 循环执行后6个账号的修改操作\n        for param in parametrize_data:\n            with (allure.step(f\"1. 对数据进行参数化修改\")):\n                # 获取基础配置\n                cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n                cloudTrader_traderList_2 = var_manager.get_variable(\"cloudTrader_traderList_2\")\n                cloudTrader_user_accounts_2 = var_manager.get_variable(\"cloudTrader_user_accounts_2\")\n                # 构造请求数据\n                data = [\n                    {\n                        \"traderList\": [\n                            param[\"traderList\"]\n                        ],\n                        \"cloudId\": cloudMaster_id,\n                        \"masterId\": cloudTrader_traderList_2,\n                        \"masterAccount\": cloudTrader_user_accounts_2,\n                        \"followDirection\": 0,\n                        \"followMode\": param[\"followMode\"],\n                        \"followParam\": param[\"followParam\"],\n                        \"remainder\": 0,\n                        \"placedType\": 0,\n                        \"templateId\": param[\"templateId\"],\n                        \"followStatus\": 1,\n                        \"followOpen\": 1,\n                        \"followClose\": 1,\n                        \"remark\": param[\"remark\"],\n                        \"fixedComment\": \"\",\n                        \"commentType\": \"\",\n                        \"digits\": 0,\n                        \"followTraderIds\": [],\n                        \"sort\": \"100\",\n                        \"cfd\": param[\"Cfd\"],\n                        \"platformType\": 0,\n                        \"forex\": \"\"\n                    }\n                ]\n    \n                # 发送请求并验证\n                response = self.send_post_request(\n                    logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data, sleep_seconds=3\n                )\n                print(f\"修改云跟单账号数据：{param['traderList']}\")\n    \n                self.assert_response_status(\n                    response, 200,\n                    f\"账号{param['traderList']}修改失败\"\n                )\n>               self.assert_json_value(\n                    response, \"$.msg\", \"success\",\n                    f\"账号{param['traderList']}响应异常\"\n                )\n\ntest_cloudTrader\\test_create_scene.py:253: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F8E0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '账号6421响应异常'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} \\n路径: {json_path} \\n响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 账号6421响应异常（JSON断言失败）\n\ncommons\\api_base.py:425: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761885982015,
+      "stop" : 1761885982015,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761886222324,
+      "stop" : 1761886222325,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1761886367515,
+      "stop" : 1761886367515,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761885982015,
+      "stop" : 1761885982015,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1761886367515,
+      "stop" : 1761886368233,
+      "duration" : 718
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 账号6421响应异常（JSON断言失败）",
+    "statusTrace" : "self = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F8E0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '账号6421响应异常'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n>           assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\nE               AssertionError: Failed: 账号6421响应异常（JSON路径值不匹配）\n\ncommons\\api_base.py:416: AssertionError\n\nThe above exception was the direct cause of the following exception:\n\nself = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F8E0>\nvar_manager = <lingkuan_1103.commons.variable_manager.VariableManager object at 0x0000020B7F1D3490>\nlogged_session = <lingkuan_1103.commons.session.EnvironmentSession object at 0x0000020B7F39FD60>\n\n    @allure.title(\"修改跟单账号（仅使用后6个数据与模板匹配）\")\n    def test_update_addSlave(self, var_manager, logged_session):\n        # 1. 获取总用户数（需确保至少有7个，才能取后6个）\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count < 7:\n            pytest.fail(f\"用户总数需至少为7，当前为{cloudTrader_user_count}，无法提取后6个数据\")\n    \n        all_ids = []\n        for i in range(5, cloudTrader_user_count + 1):\n            addslave_id = var_manager.get_variable(f\"cloudTrader_traderList_{i}\")\n            if not addslave_id:\n                pytest.fail(f\"未找到第{i}个账号（变量：cloudTrader_traderList_{i}）\")\n            all_ids.append(addslave_id)\n        print(f\"已提取后6个账号id：{all_ids}\")\n    \n        cloudTrader_template_id1 = var_manager.get_variable(\"cloudTrader_template_id1\")\n    \n        # 3. 定义6个模板（与账号一一对应）\n        templates: List[Dict[str, Any]] = [\n            {\n                \"followMode\": 0,\n                \"followParam\": \"5.00\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"\",\n                \"mode_desc\": \"固定手数（5倍）\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": cloudTrader_template_id1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"\",\n                \"mode_desc\": \"修改品种（3倍）\"\n            },\n            {\n                \"followMode\": 2,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"\",\n                \"mode_desc\": \"净值比例\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \"@\",\n                \"mode_desc\": \"修改币种，合约是100\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \".p\",\n                \"mode_desc\": \"修改币种，合约是100000\"\n            },\n            {\n                \"followMode\": 1,\n                \"followParam\": \"1\",\n                \"templateId\": 1,\n                \"remark\": \"云跟单账号测试数据\",\n                \"Cfd\": \".min\",\n                \"mode_desc\": \"修改币种，合约是10\"\n            },\n        ]\n    \n        # 4. 生成参数化数据（后6个账号与6个模板一一对应）\n        parametrize_data = []\n        for i in range(len(all_ids)):\n            traderList = all_ids[i]\n            template = templates[i]  # 直接一一对应（账号1→模板1，账号2→模板2，...）\n            parametrize_data.append({\n                \"followMode\": template[\"followMode\"],\n                \"followParam\": template[\"followParam\"],\n                \"templateId\": template[\"templateId\"],\n                \"remark\": template[\"remark\"],  # 修改备注\n                \"Cfd\": template[\"Cfd\"],  # 修改Cfd参数\n                \"traderList\": traderList,\n            })\n        print(f\"生成{len(parametrize_data)}条参数化测试数据（后6个账号）\")\n    \n        # 5. 循环执行后6个账号的修改操作\n        for param in parametrize_data:\n            with (allure.step(f\"1. 对数据进行参数化修改\")):\n                # 获取基础配置\n                cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n                cloudTrader_traderList_2 = var_manager.get_variable(\"cloudTrader_traderList_2\")\n                cloudTrader_user_accounts_2 = var_manager.get_variable(\"cloudTrader_user_accounts_2\")\n                # 构造请求数据\n                data = [\n                    {\n                        \"traderList\": [\n                            param[\"traderList\"]\n                        ],\n                        \"cloudId\": cloudMaster_id,\n                        \"masterId\": cloudTrader_traderList_2,\n                        \"masterAccount\": cloudTrader_user_accounts_2,\n                        \"followDirection\": 0,\n                        \"followMode\": param[\"followMode\"],\n                        \"followParam\": param[\"followParam\"],\n                        \"remainder\": 0,\n                        \"placedType\": 0,\n                        \"templateId\": param[\"templateId\"],\n                        \"followStatus\": 1,\n                        \"followOpen\": 1,\n                        \"followClose\": 1,\n                        \"remark\": param[\"remark\"],\n                        \"fixedComment\": \"\",\n                        \"commentType\": \"\",\n                        \"digits\": 0,\n                        \"followTraderIds\": [],\n                        \"sort\": \"100\",\n                        \"cfd\": param[\"Cfd\"],\n                        \"platformType\": 0,\n                        \"forex\": \"\"\n                    }\n                ]\n    \n                # 发送请求并验证\n                response = self.send_post_request(\n                    logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data, sleep_seconds=3\n                )\n                print(f\"修改云跟单账号数据：{param['traderList']}\")\n    \n                self.assert_response_status(\n                    response, 200,\n                    f\"账号{param['traderList']}修改失败\"\n                )\n>               self.assert_json_value(\n                    response, \"$.msg\", \"success\",\n                    f\"账号{param['traderList']}响应异常\"\n                )\n\ntest_cloudTrader\\test_create_scene.py:253: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F8E0>\nresponse = <Response [200]>, json_path = '$.msg', expected_value = 'success'\nerror_msg_prefix = '账号6421响应异常'\n\n    def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):\n        \"\"\"断言JSON路径对应的值（分层提示优化）\"\"\"\n        try:\n            actual_value = self.extract_jsonpath(response, json_path)\n            if isinstance(actual_value, list) and len(actual_value) == 1:\n                actual_value = actual_value[0]\n    \n            with allure.step(f\"断言JSON路径: {json_path}\"):\n                allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n                allure.attach(f\"期望值: {self.serialize_data(expected_value)}\", \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(f\"实际值: {self.serialize_data(actual_value)}\", \"实际值\", allure.attachment_type.TEXT)\n    \n            assert actual_value == expected_value, \\\n                f\"Failed: {error_msg_prefix}（JSON路径值不匹配）\"\n        except Exception as e:\n            with allure.step(f\"JSON断言失败: {json_path}\"):\n                allure.attach(json_path, \"JSON路径\", allure.attachment_type.TEXT)\n                allure.attach(str(expected_value), \"预期值\", allure.attachment_type.TEXT)\n                allure.attach(response.text[:500], \"响应内容\", allure.attachment_type.TEXT)\n            logger.error(\n                f\"[{self._get_current_time()}] JSON断言失败: {str(e)} \\n路径: {json_path} \\n响应: {response.text[:500]}\")\n>           raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\nE           AssertionError: Failed: 账号6421响应异常（JSON断言失败）\n\ncommons\\api_base.py:425: AssertionError",
+    "steps" : [ {
+      "name" : "1. 对数据进行参数化修改",
+      "time" : {
+        "start" : 1761886368234,
+        "stop" : 1761886371618,
+        "duration" : 3384
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1761886368234,
+          "stop" : 1761886371611,
+          "duration" : 3377
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1761886368234,
+            "stop" : 1761886368235,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "3508bdc8493f8124",
+            "name" : "请求URL",
+            "source" : "3508bdc8493f8124.txt",
+            "type" : "text/plain",
+            "size" : 40
+          }, {
+            "uid" : "346d301c65fe39b8",
+            "name" : "请求头",
+            "source" : "346d301c65fe39b8.json",
+            "type" : "application/json",
+            "size" : 234
+          }, {
+            "uid" : "30d3206713cf9d48",
+            "name" : "请求体（JSON）",
+            "source" : "30d3206713cf9d48.json",
+            "type" : "application/json",
+            "size" : 533
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1761886368609,
+            "stop" : 1761886368610,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9573ea40ac8e6d08",
+            "name" : "响应状态码",
+            "source" : "9573ea40ac8e6d08.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "91d794d990f24ae9",
+            "name" : "响应头",
+            "source" : "91d794d990f24ae9.json",
+            "type" : "application/json",
+            "size" : 526
+          }, {
+            "uid" : "a0bc964947f6d707",
+            "name" : "响应体（JSON）",
+            "source" : "a0bc964947f6d707.json",
+            "type" : "application/json",
+            "size" : 51
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 2
+      }, {
+        "name" : "断言响应状态码",
+        "time" : {
+          "start" : 1761886371611,
+          "stop" : 1761886371612,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "24ff965f58f3c540",
+          "name" : "请求URL",
+          "source" : "24ff965f58f3c540.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "dc1e6462f2dbfe03",
+          "name" : "预期状态码",
+          "source" : "dc1e6462f2dbfe03.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "b2ac00f26806ca",
+          "name" : "实际状态码",
+          "source" : "b2ac00f26806ca.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "7f0026a5279f2d9d",
+          "name" : "响应内容",
+          "source" : "7f0026a5279f2d9d.txt",
+          "type" : "text/plain",
+          "size" : 38
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 4,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      }, {
+        "name" : "断言JSON路径: $.msg",
+        "time" : {
+          "start" : 1761886371617,
+          "stop" : 1761886371618,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "9145b4feab9f3f72",
+          "name" : "请求URL",
+          "source" : "9145b4feab9f3f72.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "aeb06e629a507c76",
+          "name" : "预期值",
+          "source" : "aeb06e629a507c76.txt",
+          "type" : "text/plain",
+          "size" : 20
+        }, {
+          "uid" : "1a78a149a514aa98",
+          "name" : "实际值",
+          "source" : "1a78a149a514aa98.txt",
+          "type" : "text/plain",
+          "size" : 20
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 13,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true,
+      "stepsCount" : 5
+    }, {
+      "name" : "1. 对数据进行参数化修改",
+      "time" : {
+        "start" : 1761886371618,
+        "stop" : 1761886375008,
+        "duration" : 3390
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1761886371618,
+          "stop" : 1761886375001,
+          "duration" : 3383
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1761886371618,
+            "stop" : 1761886371619,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "e77fbe44a0dcec06",
+            "name" : "请求URL",
+            "source" : "e77fbe44a0dcec06.txt",
+            "type" : "text/plain",
+            "size" : 40
+          }, {
+            "uid" : "439048080470682f",
+            "name" : "请求头",
+            "source" : "439048080470682f.json",
+            "type" : "application/json",
+            "size" : 234
+          }, {
+            "uid" : "f0667a5c05f85882",
+            "name" : "请求体（JSON）",
+            "source" : "f0667a5c05f85882.json",
+            "type" : "application/json",
+            "size" : 531
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1761886371996,
+            "stop" : 1761886371998,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "14c5043d59bfc4ba",
+            "name" : "响应状态码",
+            "source" : "14c5043d59bfc4ba.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "6bb1b92077fb1b29",
+            "name" : "响应头",
+            "source" : "6bb1b92077fb1b29.json",
+            "type" : "application/json",
+            "size" : 526
+          }, {
+            "uid" : "d28b323d624ec65c",
+            "name" : "响应体（JSON）",
+            "source" : "d28b323d624ec65c.json",
+            "type" : "application/json",
+            "size" : 51
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 2
+      }, {
+        "name" : "断言响应状态码",
+        "time" : {
+          "start" : 1761886375001,
+          "stop" : 1761886375002,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "a4d3331aed51816",
+          "name" : "请求URL",
+          "source" : "a4d3331aed51816.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "319fb47c219f73c9",
+          "name" : "预期状态码",
+          "source" : "319fb47c219f73c9.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "86c93e3776fa3544",
+          "name" : "实际状态码",
+          "source" : "86c93e3776fa3544.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "3d269447ea3070e8",
+          "name" : "响应内容",
+          "source" : "3d269447ea3070e8.txt",
+          "type" : "text/plain",
+          "size" : 38
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 4,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      }, {
+        "name" : "断言JSON路径: $.msg",
+        "time" : {
+          "start" : 1761886375007,
+          "stop" : 1761886375008,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "21a68da6b03c40b5",
+          "name" : "请求URL",
+          "source" : "21a68da6b03c40b5.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "d7251c20dfd8fcf0",
+          "name" : "预期值",
+          "source" : "d7251c20dfd8fcf0.txt",
+          "type" : "text/plain",
+          "size" : 20
+        }, {
+          "uid" : "943c51c2e25943f3",
+          "name" : "实际值",
+          "source" : "943c51c2e25943f3.txt",
+          "type" : "text/plain",
+          "size" : 20
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 13,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true,
+      "stepsCount" : 5
+    }, {
+      "name" : "1. 对数据进行参数化修改",
+      "time" : {
+        "start" : 1761886375008,
+        "stop" : 1761886378196,
+        "duration" : 3188
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1761886375008,
+          "stop" : 1761886378190,
+          "duration" : 3182
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1761886375008,
+            "stop" : 1761886375009,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "f398d1e03ae58a27",
+            "name" : "请求URL",
+            "source" : "f398d1e03ae58a27.txt",
+            "type" : "text/plain",
+            "size" : 40
+          }, {
+            "uid" : "2dbf94874f1bedb7",
+            "name" : "请求头",
+            "source" : "2dbf94874f1bedb7.json",
+            "type" : "application/json",
+            "size" : 234
+          }, {
+            "uid" : "7ba9a2b20166f002",
+            "name" : "请求体（JSON）",
+            "source" : "7ba9a2b20166f002.json",
+            "type" : "application/json",
+            "size" : 530
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1761886375176,
+            "stop" : 1761886375177,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "13df6c861f5620d7",
+            "name" : "响应状态码",
+            "source" : "13df6c861f5620d7.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "5d79bd5ee52da610",
+            "name" : "响应头",
+            "source" : "5d79bd5ee52da610.json",
+            "type" : "application/json",
+            "size" : 526
+          }, {
+            "uid" : "21ea822ae4aa590",
+            "name" : "响应体（JSON）",
+            "source" : "21ea822ae4aa590.json",
+            "type" : "application/json",
+            "size" : 51
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 2
+      }, {
+        "name" : "断言响应状态码",
+        "time" : {
+          "start" : 1761886378190,
+          "stop" : 1761886378191,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "7026f8765ab86c21",
+          "name" : "请求URL",
+          "source" : "7026f8765ab86c21.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "7b99af897de9d4d9",
+          "name" : "预期状态码",
+          "source" : "7b99af897de9d4d9.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "ea1dd456ba827259",
+          "name" : "实际状态码",
+          "source" : "ea1dd456ba827259.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "9b073e39763c7d37",
+          "name" : "响应内容",
+          "source" : "9b073e39763c7d37.txt",
+          "type" : "text/plain",
+          "size" : 38
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 4,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      }, {
+        "name" : "断言JSON路径: $.msg",
+        "time" : {
+          "start" : 1761886378195,
+          "stop" : 1761886378196,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "cfbf7b31e7f4228b",
+          "name" : "请求URL",
+          "source" : "cfbf7b31e7f4228b.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "4433cf46fb207ca4",
+          "name" : "预期值",
+          "source" : "4433cf46fb207ca4.txt",
+          "type" : "text/plain",
+          "size" : 20
+        }, {
+          "uid" : "f0aaa7d1b9c9cc3f",
+          "name" : "实际值",
+          "source" : "f0aaa7d1b9c9cc3f.txt",
+          "type" : "text/plain",
+          "size" : 20
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 13,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true,
+      "stepsCount" : 5
+    }, {
+      "name" : "1. 对数据进行参数化修改",
+      "time" : {
+        "start" : 1761886378196,
+        "stop" : 1761886381279,
+        "duration" : 3083
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: Failed: 账号6421响应异常（JSON断言失败）\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_1103\\test_cloudTrader\\test_create_scene.py\", line 253, in test_update_addSlave\n    self.assert_json_value(\n  File \"D:\\pycharm_test\\lingkuan_1103\\commons\\api_base.py\", line 425, in assert_json_value\n    raise AssertionError(f\"Failed: {error_msg_prefix}（JSON断言失败）\") from e\n",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1761886378196,
+          "stop" : 1761886381272,
+          "duration" : 3076
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1761886378196,
+            "stop" : 1761886378197,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "d0e8ef0cd86201c9",
+            "name" : "请求URL",
+            "source" : "d0e8ef0cd86201c9.txt",
+            "type" : "text/plain",
+            "size" : 40
+          }, {
+            "uid" : "c9225adf01e30bed",
+            "name" : "请求头",
+            "source" : "c9225adf01e30bed.json",
+            "type" : "application/json",
+            "size" : 234
+          }, {
+            "uid" : "ef23e5ee35f590fd",
+            "name" : "请求体（JSON）",
+            "source" : "ef23e5ee35f590fd.json",
+            "type" : "application/json",
+            "size" : 531
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        }, {
+          "name" : "响应详情",
+          "time" : {
+            "start" : 1761886378260,
+            "stop" : 1761886378261,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "50e36248632ae1e1",
+            "name" : "响应状态码",
+            "source" : "50e36248632ae1e1.txt",
+            "type" : "text/plain",
+            "size" : 3
+          }, {
+            "uid" : "f3f5130bef2ba5fa",
+            "name" : "响应头",
+            "source" : "f3f5130bef2ba5fa.json",
+            "type" : "application/json",
+            "size" : 526
+          }, {
+            "uid" : "271fbaaa9ec0dddd",
+            "name" : "响应体（JSON）",
+            "source" : "271fbaaa9ec0dddd.json",
+            "type" : "application/json",
+            "size" : 79
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 6,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 2
+      }, {
+        "name" : "断言响应状态码",
+        "time" : {
+          "start" : 1761886381272,
+          "stop" : 1761886381273,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "334c2adb71f24220",
+          "name" : "请求URL",
+          "source" : "334c2adb71f24220.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "4473640eaa35f13a",
+          "name" : "预期状态码",
+          "source" : "4473640eaa35f13a.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "cba3dc889763b023",
+          "name" : "实际状态码",
+          "source" : "cba3dc889763b023.txt",
+          "type" : "text/plain",
+          "size" : 14
+        }, {
+          "uid" : "9760fe9154c0f6af",
+          "name" : "响应内容",
+          "source" : "9760fe9154c0f6af.txt",
+          "type" : "text/plain",
+          "size" : 66
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 4,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      }, {
+        "name" : "断言JSON路径: $.msg",
+        "time" : {
+          "start" : 1761886381278,
+          "stop" : 1761886381278,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "9d75c8ce2535aa40",
+          "name" : "请求URL",
+          "source" : "9d75c8ce2535aa40.txt",
+          "type" : "text/plain",
+          "size" : 63
+        }, {
+          "uid" : "304b043f0315cb5a",
+          "name" : "预期值",
+          "source" : "304b043f0315cb5a.txt",
+          "type" : "text/plain",
+          "size" : 20
+        }, {
+          "uid" : "15142827937abb1",
+          "name" : "实际值",
+          "source" : "15142827937abb1.txt",
+          "type" : "text/plain",
+          "size" : 46
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      }, {
+        "name" : "JSON断言失败: $.msg",
+        "time" : {
+          "start" : 1761886381278,
+          "stop" : 1761886381279,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "6f36999f6dea9ac1",
+          "name" : "JSON路径",
+          "source" : "6f36999f6dea9ac1.txt",
+          "type" : "text/plain",
+          "size" : 5
+        }, {
+          "uid" : "76f0d066bec29e2e",
+          "name" : "预期值",
+          "source" : "76f0d066bec29e2e.txt",
+          "type" : "text/plain",
+          "size" : 7
+        }, {
+          "uid" : "1df451a742631862",
+          "name" : "响应内容",
+          "source" : "1df451a742631862.txt",
+          "type" : "text/plain",
+          "size" : 66
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 0
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 16,
+      "shouldDisplayMessage" : true,
+      "hasContent" : true,
+      "stepsCount" : 6
+    } ],
+    "attachments" : [ {
+      "uid" : "b31c736aacec7421",
+      "name" : "log",
+      "source" : "b31c736aacec7421.txt",
+      "type" : "text/plain",
+      "size" : 17503
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 56,
+    "shouldDisplayMessage" : true,
+    "hasContent" : true,
+    "stepsCount" : 25
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761886482112,
+      "stop" : 1761886482113,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1761886381311,
+      "stop" : 1761886381311,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1761886381310,
+      "stop" : 1761886381310,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略-云策略列表-批量新增云跟单账号"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_importcloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "40584-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ {
+      "uid" : "d46a4e5a95bc50f1",
+      "status" : "failed",
+      "statusDetails" : "AssertionError: Failed: 账号6421响应异常（JSON断言失败）",
+      "time" : {
+        "start" : 1761886348152,
+        "stop" : 1761886362475,
+        "duration" : 14323
+      }
+    }, {
+      "uid" : "183b7657a08fa6ae",
+      "status" : "failed",
+      "statusDetails" : "AssertionError: Failed: 账号6421响应异常（JSON断言失败）",
+      "time" : {
+        "start" : 1761886329241,
+        "stop" : 1761886342443,
+        "duration" : 13202
+      }
+    }, {
+      "uid" : "e088420b46746721",
+      "status" : "failed",
+      "statusDetails" : "AssertionError: Failed: 账号6421响应异常（JSON断言失败）",
+      "time" : {
+        "start" : 1761886309492,
+        "stop" : 1761886323794,
+        "duration" : 14302
+      }
+    } ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "b4fb5c00c8c8e3d8.json",
+  "parameterValues" : [ ]
+}

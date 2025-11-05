@@ -68,7 +68,7 @@ class TestCloudMasOrdersend:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -349,8 +349,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -776,8 +775,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1178,8 +1176,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1562,8 +1559,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1955,8 +1951,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2364,8 +2359,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -2751,8 +2745,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -3169,8 +3162,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -3587,8 +3579,7 @@ class TestCloudMasOrdersend:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    timezone_offset=0
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:

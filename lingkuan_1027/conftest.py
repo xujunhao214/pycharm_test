@@ -387,21 +387,6 @@ def pytest_configure(config):
     )
 
 
-# 处理retry标记，关联到插件配置
-def pytest_collection_modifyitems(items):
-    for item in items:
-        # 获取用例上的retry标记
-        retry_mark = item.get_closest_marker("retry")
-        if retry_mark:
-            # 从标记中提取参数（默认值可根据需求调整）
-            reruns = retry_mark.kwargs.get("n", 3)  # 重试次数
-            reruns_delay = retry_mark.kwargs.get("delay", 5)  # 间隔秒数
-
-            # 动态设置当前用例的重试参数
-            item.config.option.reruns = reruns
-            item.config.option.reruns_delay = reruns_delay
-
-
 def pytest_unconfigure(config):
     """测试会话结束时取消注册追踪器"""
     tracker = getattr(config, "_test_result_tracker", None)

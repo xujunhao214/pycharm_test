@@ -109,7 +109,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
         def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):

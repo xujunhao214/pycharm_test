@@ -150,7 +150,7 @@ class TestCloudCoreFunctionality:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_dbsymbol(self, class_random_str, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -449,7 +449,7 @@ class TestCloudFollowDirection:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -939,7 +939,7 @@ class TestCloudOrderQuantityControl:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""

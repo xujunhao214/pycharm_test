@@ -107,7 +107,7 @@ class TestCloudremark:
                 self.assert_response_status(response, 200, "修改跟单账号请求失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.retry(n=0, delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略账号复制下单")
         def test_scenario1_place_order(self, class_random_str, logged_session, var_manager):
             with allure.step("发送开仓请求"):
@@ -148,9 +148,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', MT5cloudTrader_user_accounts_4)
+                params = ('0', MT5cloudTrader_user_accounts_4, f"ceshiceluebeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -335,9 +335,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', MT5cloudTrader_user_accounts_4)
+                params = ('0', MT5cloudTrader_user_accounts_4, f"ceshigendanbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -509,9 +509,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', MT5cloudTrader_user_accounts_4)
+                params = ('0', MT5cloudTrader_user_accounts_4, f"ceshikaicangbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -680,9 +680,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', MT5cloudTrader_user_accounts_4)
+                params = ('0', MT5cloudTrader_user_accounts_4, f"ceshiceluebeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -849,9 +849,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', MT5cloudTrader_user_accounts_4)
+                params = ('0', MT5cloudTrader_user_accounts_4, f"ceshigendanbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -1018,9 +1018,9 @@ class TestCloudremark:
                     FROM follow_order_detail fod
                     INNER JOIN follow_order_instruct foi 
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                    WHERE foi.operation_type = %s AND fod.account = %s
+                    WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', MT5cloudTrader_user_accounts_4)
+                params = ('0', MT5cloudTrader_user_accounts_4, f"ceshikaicangbeizhu{class_random_str}")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,

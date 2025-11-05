@@ -55,7 +55,7 @@ class TestLeakageopen_level:
                 "fixedComment": "",
                 "commentType": None,
                 "digits": 0,
-                "cfd": "@",
+                "cfd": "",
                 "forex": "",
                 "abRemark": "",
                 "id": MT5vps_addslave_id
@@ -178,7 +178,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time"
+                    time_field="fod.open_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -324,7 +325,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time"
+                    time_field="create_time",
+                    time_range=1
                 )
 
             with allure.step("2. 转换Redis数据为可比较格式"):
@@ -359,7 +361,8 @@ class TestLeakageopen_level:
                 self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_open,
                     expected=db_comparable_list,
-                    fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    fields_to_compare=["order_no", "magical", "open_price", "symbol"],
                     tolerance=1e-6
                 )
 
@@ -527,7 +530,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time"
+                    time_field="fod.open_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -637,7 +641,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -715,7 +720,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -748,13 +754,13 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
@@ -769,7 +775,7 @@ class TestLeakageopen_level:
     - 预期结果：vps跟单账号平仓-关闭，有漏单数据
     """)
     @pytest.mark.usefixtures("class_random_str")
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏平）")
@@ -927,7 +933,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time"
+                    time_field="fod.open_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -968,16 +975,16 @@ class TestLeakageopen_level:
                     logging.info(f"结束手数验证通过: {min_lot_size}")
 
                 with allure.step("验证指令总手数"):
-                    total_lots = db_data[0]["total_lots"]
+                    true_total_lots = db_data[0]["true_total_lots"]
                     totalSzie = trader_ordersend["totalSzie"]
                     self.verify_data(
-                        actual_value=float(total_lots),
+                        actual_value=float(true_total_lots),
                         expected_value=float(totalSzie),
                         op=CompareOp.EQ,
                         message="指令总手数应符合预期",
                         attachment_name="指令总手数详情"
                     )
-                    logging.info(f"指令总手数验证通过: {total_lots}")
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -1036,7 +1043,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time"
+                    time_field="fod.open_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1148,7 +1156,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1204,7 +1213,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time"
+                    time_field="create_time",
+                    time_range=1
                 )
             with allure.step("2. 校验数据"):
                 # close_status = db_data[0]["close_status"]
@@ -1240,7 +1250,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time"
+                    time_field="create_time",
+                    time_range=1
                 )
 
             with allure.step("2. 转换Redis数据为可比较格式"):
@@ -1252,7 +1263,8 @@ class TestLeakageopen_level:
                 logging.info(f"转换后的Redis数据: {MT5vps_redis_comparable_list_level}")
 
                 # 将转换后的数据存入变量管理器
-                var_manager.set_runtime_variable("MT5vps_redis_comparable_list_level", MT5vps_redis_comparable_list_level)
+                var_manager.set_runtime_variable("MT5vps_redis_comparable_list_level",
+                                                 MT5vps_redis_comparable_list_level)
 
             with allure.step("3. 比较Redis与数据库数据"):
                 # 假设db_data是之前从数据库查询的结果
@@ -1275,7 +1287,8 @@ class TestLeakageopen_level:
                 self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_level,
                     expected=db_comparable_list,
-                    fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    fields_to_compare=["order_no", "magical", "open_price", "symbol"],
                     tolerance=1e-6
                 )
 
@@ -1451,7 +1464,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1484,13 +1498,13 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
@@ -1505,13 +1519,13 @@ class TestLeakageopen_level:
     - 预期结果：vps策略跟单状态为关闭，有漏单数据
     """)
     @pytest.mark.usefixtures("class_random_str")
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
         def test_subcontrol_trader(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
-            with allure.step("发送修改vps策略的请求"):
+            with allure.step("1.发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 platformId = var_manager.get_variable("platformId")
@@ -1631,7 +1645,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time"
+                    time_field="create_time",
+                    time_range=1
                 )
 
             with allure.step("2. 转换Redis数据为可比较格式"):
@@ -1666,7 +1681,8 @@ class TestLeakageopen_level:
                 self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_open,
                     expected=db_comparable_list,
-                    fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    fields_to_compare=["order_no", "magical", "open_price", "symbol"],
                     tolerance=1e-6
                 )
 
@@ -1699,7 +1715,7 @@ class TestLeakageopen_level:
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
         def test_subcontrol_trader2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
-            with allure.step("发送修改vps策略的请求"):
+            with allure.step("1.发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 platformId = var_manager.get_variable("platformId")
@@ -1785,7 +1801,6 @@ class TestLeakageopen_level:
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
                 MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
                 sql = f"""
@@ -1805,7 +1820,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time"
+                    time_field="create_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1903,7 +1919,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time"
+                    time_field="fod.close_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:

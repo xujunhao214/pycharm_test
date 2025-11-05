@@ -438,7 +438,7 @@ return db_data
 @allure.story("场景1：手数范围0.1-1，总订单3，总手数1")
 @pytest.mark.url("vps")
 @allure.title("策略开仓")
-@pytest.mark.retry(n=0, delay=0)
+@pytest.mark.flaky(reruns=0, reruns_delay=0)
 def test_scenario1_trader_orderSend(self, var_manager, logged_session):
     test_params = {
         "totalNum": "3",

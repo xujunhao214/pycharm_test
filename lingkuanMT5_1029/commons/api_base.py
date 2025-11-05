@@ -63,7 +63,7 @@ class APITestBase:
             with allure.step("数据序列化操作"):
                 allure.attach(f"序列化失败: {str(e)}", "失败原因", allure.attachment_type.TEXT)
                 allure.attach(str(converted_data), "原始数据", allure.attachment_type.TEXT)
-            logger.error(f"[{self._get_current_time()}] 数据序列化失败: {str(e)} | 原始数据: {converted_data}")
+            logger.error(f"[{self._get_current_time()}] 数据序列化失败: {str(e)} \n原始数据: {converted_data}")
             raise ValueError("Failed: 数据序列化失败") from e
 
     def deserialize_data(self, json_str: str) -> Any:
@@ -75,7 +75,7 @@ class APITestBase:
                 allure.attach(f"反序列化失败: {str(e)}", "失败原因", allure.attachment_type.TEXT)
                 allure.attach(json_str[:500] + "..." if len(json_str) > 500 else json_str,
                               "原始JSON字符串", allure.attachment_type.TEXT)
-            logger.error(f"[{self._get_current_time()}] JSON反序列化失败: {str(e)} | 原始字符串: {json_str[:500]}")
+            logger.error(f"[{self._get_current_time()}] JSON反序列化失败: {str(e)} \n原始字符串: {json_str[:500]}")
             raise ValueError("Failed: JSON反序列化失败") from e
 
     def _get_current_time(self) -> str:
@@ -146,13 +146,13 @@ class APITestBase:
 
                 if files:
                     response = logged_session.post(url, data=data, files=files)
-                    logger.info(f"[{self._get_current_time()}] POST请求（带文件）: {url} | 表单数据: {data}")
+                    logger.info(f"[{self._get_current_time()}] POST请求（带文件）: {url} \n表单数据: {data}")
                 elif json_data:
                     response = logged_session.post(url, json=json_data)
-                    logger.info(f"[{self._get_current_time()}] POST请求（JSON）: {url} | 数据: {json_data}")
+                    logger.info(f"[{self._get_current_time()}] POST请求（JSON）: {url} \n数据: {json_data}")
                 else:
                     response = logged_session.post(url, data=data)
-                    logger.info(f"[{self._get_current_time()}] POST请求（表单）: {url} | 数据: {data}")
+                    logger.info(f"[{self._get_current_time()}] POST请求（表单）: {url} \n数据: {data}")
 
                 self._attach_response_details(response)
 
@@ -178,7 +178,7 @@ class APITestBase:
                         f"请求体: {json_data if json_data else data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_get_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
@@ -195,7 +195,7 @@ class APITestBase:
                 )
 
                 response = logged_session.get(url, params=params)
-                logger.info(f"[{self._get_current_time()}] GET请求: {url} | 参数: {params}")
+                logger.info(f"[{self._get_current_time()}] GET请求: {url} \n参数: {params}")
 
                 self._attach_response_details(response)
 
@@ -219,7 +219,7 @@ class APITestBase:
                         f"请求参数: {params}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_delete_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
@@ -236,7 +236,7 @@ class APITestBase:
                 )
 
                 response = logged_session.delete(url, json=json_data)
-                logger.info(f"[{self._get_current_time()}] DELETE请求: {url} | 数据: {json_data}")
+                logger.info(f"[{self._get_current_time()}] DELETE请求: {url} \n数据: {json_data}")
 
                 self._attach_response_details(response)
 
@@ -260,7 +260,7 @@ class APITestBase:
                         f"请求体: {json_data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_put_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
@@ -277,7 +277,7 @@ class APITestBase:
                 )
 
                 response = logged_session.put(url, json=json_data)
-                logger.info(f"[{self._get_current_time()}] PUT请求: {url} | 数据: {json_data}")
+                logger.info(f"[{self._get_current_time()}] PUT请求: {url} \n数据: {json_data}")
 
                 self._attach_response_details(response)
 
@@ -301,7 +301,7 @@ class APITestBase:
                         f"请求体: {json_data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_options_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
@@ -318,7 +318,7 @@ class APITestBase:
                 )
 
                 response = logged_session.options(url, params=params)
-                logger.info(f"[{self._get_current_time()}] OPTIONS请求: {url} | 参数: {params}")
+                logger.info(f"[{self._get_current_time()}] OPTIONS请求: {url} \n参数: {params}")
 
                 self._attach_response_details(response)
 
@@ -344,13 +344,13 @@ class APITestBase:
                         f"请求参数: {params}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def _log_response(self, response):
         """记录响应日志（分级日志）"""
-        logger.info(f"[{self._get_current_time()}] 响应状态码: {response.status_code} | URL: {response.url}")
-        logger.info(f"[{self._get_current_time()}] 响应详情: 头信息={response.headers} | 内容={response.text[:1000]}")
+        logger.info(f"[{self._get_current_time()}] 响应状态码: {response.status_code} \nURL: {response.url}")
+        logger.info(f"[{self._get_current_time()}] 响应详情: 头信息={response.headers} \n内容={response.text[:1000]}")
 
     # ------------------------------ 断言方法（异常分层优化） ------------------------------
     def assert_response_status(self, response, expected_status, error_msg_prefix):
@@ -398,7 +398,7 @@ class APITestBase:
                 allure.attach(json_path, "解析路径", allure.attachment_type.TEXT)
                 allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
                 allure.attach(str(e), "解析错误", allure.attachment_type.TEXT)
-            logger.error(f"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}")
+            logger.error(f"JSONPath解析失败: {json_path} \n响应: {response.text[:500]}")
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
 
     def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):
@@ -421,7 +421,7 @@ class APITestBase:
                 allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
                 allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
             logger.error(
-                f"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}")
+                f"[{self._get_current_time()}] JSON断言失败: {str(e)} \n路径: {json_path} \n响应: {response.text[:500]}")
             raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
 
     # ------------------------------ 数据库操作（异常分层优化） ------------------------------
@@ -443,9 +443,6 @@ class APITestBase:
 
         try:
             with allure.step("执行数据库查询"):
-                allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
-                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
                     logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
@@ -463,15 +460,18 @@ class APITestBase:
                         result_preview = json.dumps(result, ensure_ascii=False)
                     except Exception as e:
                         result_preview = f"无法序列化完整结果: {str(e)}"
-                    logger.info(f"[{self._get_current_time()}] 查询结果: {result_preview}")
+                    logger.info(f"[{self._get_current_time()}] 查询结果: {result_preview[:500]}")
 
                     if attach_to_allure:
                         display_count = min(len(result), 50)
-                        allure.attach(
-                            self.serialize_data(result[:display_count]),
-                            f"查询结果（共{len(result)}条，显示前50条）",
-                            allure.attachment_type.JSON
-                        )
+                        with allure.step("数据库查询结果"):
+                            allure.attach(
+                                self.serialize_data(result[:display_count]),
+                                f"查询结果（共{len(result)}条，显示前50条）",
+                                allure.attachment_type.JSON
+                            )
+                            allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
 
                 return result
 
@@ -479,10 +479,10 @@ class APITestBase:
             with allure.step("数据库查询异常（pymysql错误）"):
                 allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
                 allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-                allure.attach(f"错误码: {e.args[0]} | 信息: {str(e)}", "错误详情", allure.attachment_type.TEXT)
+                allure.attach(f"错误码: {e.args[0]} \n信息: {str(e)}", "错误详情", allure.attachment_type.TEXT)
             error_msg = (
-                f"[{self._get_current_time()}] 数据库错误 (错误码: {e.args[0]}): {str(e)} | "
-                f"SQL: {final_sql[:200]} | 参数: {params}"
+                f"[{self._get_current_time()}] 数据库错误 (错误码: {e.args[0]}): {str(e)} \n"
+                f"SQL: {final_sql[:200]} \n参数: {params}"
             )
             logger.error(error_msg, exc_info=True)
             raise pymysql.Error(f"Failed: 数据库查询错误（错误码: {e.args[0]}）") from e
@@ -492,7 +492,7 @@ class APITestBase:
                 allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
                 allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                 allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
-            error_msg = f"[{self._get_current_time()}] 未知异常: {str(e)} | SQL: {final_sql[:200]}"
+            error_msg = f"[{self._get_current_time()}] 未知异常: {str(e)} \nSQL: {final_sql[:200]}"
             logger.error(error_msg, exc_info=True)
             raise RuntimeError(f"Failed: 数据库查询异常") from e
 
@@ -608,7 +608,7 @@ class APITestBase:
                         allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
                                       allure.attachment_type.TEXT)
                         allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
-                    logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...")
+                    logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} \n继续等待...")
                     time.sleep(poll_interval)
 
             # 超时处理：获取最终结果（仍使用固定时间范围）
@@ -696,7 +696,7 @@ class APITestBase:
                 # Allure和日志展示固定时间范围
                 allure.attach(f"固定时间范围: {time_field} BETWEEN {fixed_time_start} AND {fixed_time_end}",
                               "查询条件", allure.attachment_type.TEXT)
-                logger.debug(f"执行单次查询（固定时间）: SQL={final_sql[:200]} | 参数={final_params}")
+                logger.debug(f"执行单次查询（固定时间）: SQL={final_sql[:200]} \n参数={final_params}")
                 return self.query_database(
                     db_transaction=db_transaction,
                     sql=final_sql,
@@ -712,7 +712,7 @@ class APITestBase:
             else:
                 # 不限制时间范围（原有逻辑不变）
                 allure.attach("不限制时间范围", "查询条件", allure.attachment_type.TEXT)
-                logger.debug(f"执行单次查询（无时间限制）: SQL={sql[:200]} | 参数={params}")
+                logger.debug(f"执行单次查询（无时间限制）: SQL={sql[:200]} \n参数={params}")
                 return self.query_database(
                     db_transaction=db_transaction,
                     sql=sql,
@@ -729,8 +729,8 @@ class APITestBase:
                 return False
 
             # 1. 自动识别唯一键（按优先级匹配：可根据业务调整顺序）
-            candidate_keys = ['order_no', 'send_no', 'close_no', 'foi.order_no', 'fod.send_no',
-                              'fod.close_no', 'id']  # 优先级从高到低
+            candidate_keys = ['account', 'order_no', 'send_no', 'close_no', 'foi.order_no', 'fod.send_no',
+                              'fod.close_no', 'id', 'comment']  # 优先级从高到低
             unique_key = None
             sample_item = current[0]  # 取第一条结果当样本
             for key in candidate_keys:
@@ -793,9 +793,14 @@ class APITestBase:
         fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
             "%Y-%m-%d %H:%M:%S")
 
-        logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒")
+        logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 \nSQL: {sql[:200]} \n超时: {timeout}秒")
 
         with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
+            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                          allure.attachment_type.TEXT)
+
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -827,13 +832,9 @@ class APITestBase:
 
                     if not result:
                         logger.info(
-                            f"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）| SQL: {sql[:200]}")
+                            f"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）\nSQL: {sql[:200]}")
                         with allure.step("删除验证成功"):
                             allure.attach(f"耗时{time.time() - start_time:.1f}秒，记录已删除", "结果说明",
-                                          allure.attachment_type.TEXT)
-                            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-                            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
                                           allure.attachment_type.TEXT)
                         return
 
@@ -846,7 +847,7 @@ class APITestBase:
                         allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
                         allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
-                    logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} | 继续等待...")
+                    logger.warning(f"[{self._get_current_time()}] 轮询查询异常: {str(e)} \n继续等待...")
                     time.sleep(poll_interval)
 
             # 超时处理
@@ -880,10 +881,6 @@ class APITestBase:
                     f"剩余记录（共{len(final_result)}条）",
                     allure.attachment_type.JSON
                 )
-                allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-                allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                              allure.attachment_type.TEXT)
 
             raise TimeoutError(f"Failed: 等待记录删除超时（{timeout}秒）")
 
@@ -915,11 +912,16 @@ class APITestBase:
             "%Y-%m-%d %H:%M:%S")
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询等待无记录 | "
-            f"SQL: {sql[:200]} | 超时: {timeout}秒 | 稳定期: {stable_period}秒"
+            f"[{self._get_current_time()}] 开始轮询等待无记录 \n"
+            f"SQL: {sql[:200]} \n超时: {timeout}秒 \n稳定期: {stable_period}秒"
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):
+            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                          allure.attachment_type.TEXT)
+
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -954,11 +956,6 @@ class APITestBase:
                             if attach_to_allure:
                                 with allure.step("无记录状态稳定"):
                                     allure.attach(f"无记录稳定{stable_period}秒", "结果说明",
-                                                  allure.attachment_type.TEXT)
-                                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-                                    allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}",
-                                                  "查询时间窗口",
                                                   allure.attachment_type.TEXT)
                             return result  # 无记录，返回空列表
                     else:
@@ -1026,7 +1023,7 @@ class APITestBase:
         fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
             "%Y-%m-%d %H:%M:%S")
 
-        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
+        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）\n超时: {timeout}秒")
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
             while time.time() - start_time < timeout:
@@ -1078,7 +1075,7 @@ class APITestBase:
                         allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
                         allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
-                    logger.warning(f"[{self._get_current_time()}] 轮询异常: {str(e)} | 继续等待")
+                    logger.warning(f"[{self._get_current_time()}] 轮询异常: {str(e)} \n继续等待")
                     time.sleep(poll_interval)
 
             # 超时处理
@@ -1208,7 +1205,7 @@ class APITestBase:
                 with allure.step("API条件检查异常"):
                     allure.attach(f"{method} {url}", "请求地址", allure.attachment_type.TEXT)
                     allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] API请求异常: {str(e)} | URL: {url}")
+                logger.error(f"[{self._get_current_time()}] API请求异常: {str(e)} \nURL: {url}")
                 return False
 
         try:
@@ -1239,7 +1236,7 @@ class APITestBase:
             assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
         except AssertionError as e:
             with allure.step("列表元素断言失败"):
-                allure.attach(f"实际: {list1[:10]}... | 预期: {list2[:10]}...", "断言结果",
+                allure.attach(f"实际: {list1[:10]}... \n预期: {list2[:10]}...", "断言结果",
                               attachment_type="text/plain")
             raise e
 

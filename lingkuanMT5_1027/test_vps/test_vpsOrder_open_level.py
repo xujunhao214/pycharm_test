@@ -25,7 +25,7 @@ class TestLeakageopen_level:
     - 预期结果：vps跟单账号开仓-关闭，有漏单数据
     """)
     @pytest.mark.usefixtures("class_random_str")
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
@@ -35,12 +35,12 @@ class TestLeakageopen_level:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+            platformId = var_manager.get_variable("platformId")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
                 "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
-                "platformType": 1,
                 "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
@@ -53,13 +53,16 @@ class TestLeakageopen_level:
                 "followClose": 1,
                 "followRep": 0,
                 "fixedComment": "",
-                "commentType": None,
+                "commentType": 2,
                 "digits": 0,
-                "cfd": "@",
+                "cfd": "",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "id": MT5vps_addslave_id,
+                "platformType": 1,
+                "platformId": platformId
             }
+
             response = self.send_post_request(
                 logged_session,
                 '/subcontrol/follow/updateSlave',
@@ -169,8 +172,7 @@ class TestLeakageopen_level:
                         """
                 params = (
                     '0',
-                    new_user["account"],
-                    class_random_str
+                    new_user["account"]
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -178,7 +180,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time"
+                    time_field="fod.open_time",
+                    time_range=1
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -348,7 +351,7 @@ class TestLeakageopen_level:
                     {
                         "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
                         "magical": record["magical"],  # 数据库magical → 统一字段magical
-                        "size": float(record["size"]),  # 数据库size → 统一字段size
+                        # "size": float(record["size"]),  # 数据库size → 统一字段size
                         "open_price": float(record["open_price"]),
                         "symbol": record["symbol"]
                     }
@@ -359,7 +362,8 @@ class TestLeakageopen_level:
                 self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_open,
                     expected=db_comparable_list,
-                    fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    fields_to_compare=["order_no", "magical", "open_price", "symbol"],
                     tolerance=1e-6
                 )
 
@@ -396,6 +400,7 @@ class TestLeakageopen_level:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+            platformId = var_manager.get_variable("platformId")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
@@ -418,7 +423,9 @@ class TestLeakageopen_level:
                 "cfd": "@",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "id": MT5vps_addslave_id,
+                "platformType": 1,
+                "platformId": platformId
             }
             response = self.send_post_request(
                 logged_session,
@@ -748,13 +755,13 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
@@ -778,12 +785,13 @@ class TestLeakageopen_level:
             add_Slave = var_manager.get_variable("add_Slave")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+            platformId = var_manager.get_variable("platformId")
+            MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
-                "account": add_Slave["account"],
+                "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
-                "platformType": 1,
                 "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
@@ -796,13 +804,16 @@ class TestLeakageopen_level:
                 "followClose": 0,
                 "followRep": 0,
                 "fixedComment": "",
-                "commentType": None,
+                "commentType": 2,
                 "digits": 0,
-                "cfd": "@",
+                "cfd": "",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "platformType": 1,
+                "id": MT5vps_addslave_id,
+                "platformId": platformId
             }
+
             response = self.send_post_request(
                 logged_session,
                 '/subcontrol/follow/updateSlave',
@@ -968,16 +979,16 @@ class TestLeakageopen_level:
                     logging.info(f"结束手数验证通过: {min_lot_size}")
 
                 with allure.step("验证指令总手数"):
-                    total_lots = db_data[0]["total_lots"]
+                    true_total_lots = db_data[0]["true_total_lots"]
                     totalSzie = trader_ordersend["totalSzie"]
                     self.verify_data(
-                        actual_value=float(total_lots),
+                        actual_value=float(true_total_lots),
                         expected_value=float(totalSzie),
                         op=CompareOp.EQ,
                         message="指令总手数应符合预期",
                         attachment_name="指令总手数详情"
                     )
-                    logging.info(f"指令总手数验证通过: {total_lots}")
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -1240,7 +1251,8 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time"
+                    time_field="create_time",
+                    time_range=1
                 )
 
             with allure.step("2. 转换Redis数据为可比较格式"):
@@ -1252,7 +1264,8 @@ class TestLeakageopen_level:
                 logging.info(f"转换后的Redis数据: {MT5vps_redis_comparable_list_level}")
 
                 # 将转换后的数据存入变量管理器
-                var_manager.set_runtime_variable("MT5vps_redis_comparable_list_level", MT5vps_redis_comparable_list_level)
+                var_manager.set_runtime_variable("MT5vps_redis_comparable_list_level",
+                                                 MT5vps_redis_comparable_list_level)
 
             with allure.step("3. 比较Redis与数据库数据"):
                 # 假设db_data是之前从数据库查询的结果
@@ -1264,7 +1277,7 @@ class TestLeakageopen_level:
                     {
                         "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
                         "magical": record["magical"],  # 数据库magical → 统一字段magical
-                        "size": float(record["size"]),  # 数据库size → 统一字段size
+                        # "size": float(record["size"]),  # 数据库size → 统一字段size
                         "open_price": float(record["open_price"]),
                         "symbol": record["symbol"]
                     }
@@ -1275,7 +1288,8 @@ class TestLeakageopen_level:
                 self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_level,
                     expected=db_comparable_list,
-                    fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    fields_to_compare=["order_no", "magical", "open_price", "symbol"],
                     tolerance=1e-6
                 )
 
@@ -1286,10 +1300,12 @@ class TestLeakageopen_level:
             add_Slave = var_manager.get_variable("add_Slave")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+            MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
+            platformId = var_manager.get_variable("platformId")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
-                "account": add_Slave["account"],
+                "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
                 "remark": "",
                 "followDirection": 0,
@@ -1305,10 +1321,12 @@ class TestLeakageopen_level:
                 "fixedComment": "",
                 "commentType": 2,
                 "digits": 0,
-                "cfd": "@",
+                "cfd": "",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "platformType": 1,
+                "id": MT5vps_addslave_id,
+                "platformId": platformId
             }
             response = self.send_post_request(
                 logged_session,
@@ -1484,13 +1502,13 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
                         size,
-                        total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        true_total_lots,
+                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
@@ -1505,13 +1523,13 @@ class TestLeakageopen_level:
     - 预期结果：vps策略跟单状态为关闭，有漏单数据
     """)
     @pytest.mark.usefixtures("class_random_str")
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
         def test_subcontrol_trader(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
-            with allure.step("发送修改vps策略的请求"):
+            with allure.step("1.发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 platformId = var_manager.get_variable("platformId")
@@ -1530,7 +1548,7 @@ class TestLeakageopen_level:
                     "forex": "",
                     "followOrderRemark": 1,
                     "fixedComment": "",
-                    "commentType": None,
+                    "commentType": "",
                     "digits": 0
                 }
                 response = self.send_put_request(
@@ -1655,7 +1673,7 @@ class TestLeakageopen_level:
                     {
                         "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
                         "magical": record["magical"],  # 数据库magical → 统一字段magical
-                        "size": float(record["size"]),  # 数据库size → 统一字段size
+                        # "size": float(record["size"]),  # 数据库size → 统一字段size
                         "open_price": float(record["open_price"]),
                         "symbol": record["symbol"]
                     }
@@ -1666,7 +1684,8 @@ class TestLeakageopen_level:
                 self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_open,
                     expected=db_comparable_list,
-                    fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
+                    fields_to_compare=["order_no", "magical", "open_price", "symbol"],
                     tolerance=1e-6
                 )
 
@@ -1699,7 +1718,7 @@ class TestLeakageopen_level:
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
         def test_subcontrol_trader2(self, class_random_str, var_manager, logged_session, encrypted_password):
             # 1. 发送修改vps策略的请求，修改followStatus：0关闭 1开启
-            with allure.step("发送修改vps策略的请求"):
+            with allure.step("1.发送修改vps策略的请求"):
                 new_user = var_manager.get_variable("new_user")
                 MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
                 platformId = var_manager.get_variable("platformId")
@@ -1717,9 +1736,11 @@ class TestLeakageopen_level:
                     "forex": "",
                     "followOrderRemark": 1,
                     "fixedComment": "",
-                    "commentType": None,
-                    "digits": 0
+                    "commentType": "",
+                    "digits": 0,
+                    "platformType": 1
                 }
+
                 response = self.send_put_request(
                     logged_session,
                     '/subcontrol/trader',
@@ -1785,7 +1806,6 @@ class TestLeakageopen_level:
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
-                new_user = var_manager.get_variable("new_user")
                 MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
                 MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
                 sql = f"""

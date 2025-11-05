@@ -1,21 +1,430 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Mon Nov 03 09:37:05 CST 2025","Mon Nov 03 09:37:05 CST 2025","139","test_vps","test_delete","TestDeleteUser","","","数据库校验-品种管理-删除品种2",""
-"failed","Mon Nov 03 09:36:15 CST 2025","Mon Nov 03 09:36:29 CST 2025","14114","test_vps","test_delete","TestDeleteUser","","","跟单软件看板-VPS数据-删除跟单账号",""
-"failed","Mon Nov 03 09:36:47 CST 2025","Mon Nov 03 09:37:01 CST 2025","14098","test_vps","test_delete","TestDeleteUser","","","跟单软件看板-VPS数据-删除策略账号",""
-"skipped","Mon Nov 03 09:36:15 CST 2025","Mon Nov 03 09:36:15 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","VPS管理-VPS列表列表-删除VPS数据",""
-"failed","Mon Nov 03 09:36:30 CST 2025","Mon Nov 03 09:36:45 CST 2025","15039","test_vps","test_delete","TestDeleteUser","","","跟单软件看板-VPS数据-批量删除跟单账号",""
-"passed","Mon Nov 03 09:37:01 CST 2025","Mon Nov 03 09:37:01 CST 2025","109","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS数据-删除策略账号",""
-"passed","Mon Nov 03 09:37:03 CST 2025","Mon Nov 03 09:37:04 CST 2025","1118","test_vps","test_delete","TestDeleteUser","","","平台管理-品种管理-删除品种2","测试删除用户接口"
-"passed","Mon Nov 03 09:37:03 CST 2025","Mon Nov 03 09:37:03 CST 2025","138","test_vps","test_delete","TestDeleteUser","","","数据库校验-品种管理-删除品种",""
-"passed","Mon Nov 03 09:37:05 CST 2025","Mon Nov 03 09:37:06 CST 2025","1078","test_vps","test_delete","TestDeleteUser","","","账号管理-账号列表-删除账号","测试删除用户接口"
-"passed","Mon Nov 03 09:36:15 CST 2025","Mon Nov 03 09:36:15 CST 2025","94","test_vps","test_delete","TestDeleteUser","","","数据库校验-组别列表-删除VPS组别",""
-"passed","Mon Nov 03 09:37:06 CST 2025","Mon Nov 03 09:37:06 CST 2025","105","test_vps","test_delete","TestDeleteUser","","","数据库校验-账号列表-删除账号",""
-"skipped","Mon Nov 03 09:36:15 CST 2025","Mon Nov 03 09:36:15 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS列表列表-删除VPS",""
-"passed","Mon Nov 03 09:37:02 CST 2025","Mon Nov 03 09:37:03 CST 2025","1101","test_vps","test_delete","TestDeleteUser","","","平台管理-品种管理-删除品种","测试删除用户接口"
-"skipped","Mon Nov 03 09:36:15 CST 2025","Mon Nov 03 09:36:15 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","VPS管理-VPS列表列表-清空VPS数据",""
-"passed","Mon Nov 03 09:37:14 CST 2025","Mon Nov 03 09:37:15 CST 2025","717","test_vps","test_delete","TestDeleteUser","","","数据库校验-账号列表-批量删除账号","数据库校验批量删除结果"
-"skipped","Mon Nov 03 09:36:15 CST 2025","Mon Nov 03 09:36:15 CST 2025","0","test_vps","test_delete","TestDeleteUser","","","VPS管理-VPS列表列表-强制删除VPS",""
-"passed","Mon Nov 03 09:36:30 CST 2025","Mon Nov 03 09:36:30 CST 2025","149","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS数据-删除跟单账号",""
-"passed","Mon Nov 03 09:36:13 CST 2025","Mon Nov 03 09:36:15 CST 2025","1082","test_vps","test_delete","TestDeleteUser","","","账号管理-组别列表-删除VPS组别",""
-"passed","Mon Nov 03 09:36:45 CST 2025","Mon Nov 03 09:36:46 CST 2025","909","test_vps","test_delete","TestDeleteUser","","","数据库校验-VPS数据-批量删除跟单账号",""
-"passed","Mon Nov 03 09:37:07 CST 2025","Mon Nov 03 09:37:14 CST 2025","7594","test_vps","test_delete","TestDeleteUser","","","账号管理-账号列表-批量删除账号","测试批量删除用户接口"
+"broken","Mon Nov 03 16:32:20 CST 2025","Mon Nov 03 16:33:07 CST 2025","46518","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:47 CST 2025","Mon Nov 03 16:34:48 CST 2025","1410","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改完之后进行平仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:16 CST 2025","Mon Nov 03 16:34:20 CST 2025","4334","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:21 CST 2025","Mon Nov 03 16:34:23 CST 2025","1277","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略平仓-出现漏平","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:32:03 CST 2025","Mon Nov 03 16:32:08 CST 2025","4322","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","出现漏开-redis数据和数据库的数据做比对","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:35:09 CST 2025","Mon Nov 03 16:35:10 CST 2025","1272","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改策略账号信息","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:31:46 CST 2025","Mon Nov 03 16:31:50 CST 2025","4331","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:28 CST 2025","Mon Nov 03 16:34:32 CST 2025","4323","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-检查平仓订单是否出现漏平","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:11 CST 2025","Mon Nov 03 16:34:15 CST 2025","4326","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-主指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"broken","Mon Nov 03 16:36:05 CST 2025","Mon Nov 03 16:36:51 CST 2025","46595","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:33:10 CST 2025","Mon Nov 03 16:33:14 CST 2025","4304","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-主指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:41 CST 2025","Mon Nov 03 16:34:45 CST 2025","4300","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:58 CST 2025","Mon Nov 03 16:34:58 CST 2025","54","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改策略账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:31:53 CST 2025","Mon Nov 03 16:31:57 CST 2025","4326","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-主指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:35:10 CST 2025","Mon Nov 03 16:35:10 CST 2025","57","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改策略账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:02 CST 2025","Mon Nov 03 16:34:04 CST 2025","1290","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号（漏平）","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:39 CST 2025","Mon Nov 03 16:34:41 CST 2025","1278","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号（漏平）","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:33:08 CST 2025","Mon Nov 03 16:33:10 CST 2025","1257","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略平仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:36:03 CST 2025","Mon Nov 03 16:36:04 CST 2025","1263","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略平仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:33 CST 2025","Mon Nov 03 16:34:37 CST 2025","4327","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","出现漏平-redis数据和数据库的数据做比对","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:35:06 CST 2025","Mon Nov 03 16:35:08 CST 2025","1260","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-开仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:35:01 CST 2025","Mon Nov 03 16:35:05 CST 2025","4318","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","出现漏开-redis数据和数据库的数据做比对","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:31:51 CST 2025","Mon Nov 03 16:31:53 CST 2025","1325","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略开仓-出现漏单","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:49 CST 2025","Mon Nov 03 16:34:50 CST 2025","1261","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-跟单账号自己平仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:09 CST 2025","Mon Nov 03 16:34:11 CST 2025","1324","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略开仓","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:51 CST 2025","Mon Nov 03 16:34:55 CST 2025","4310","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:31:44 CST 2025","Mon Nov 03 16:31:45 CST 2025","1289","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号（漏开）","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:32:11 CST 2025","Mon Nov 03 16:32:13 CST 2025","1277","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改跟单账号","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"broken","Mon Nov 03 16:33:15 CST 2025","Mon Nov 03 16:34:01 CST 2025","46435","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:56 CST 2025","Mon Nov 03 16:34:57 CST 2025","1280","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改策略账号信息","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"failed","Mon Nov 03 16:35:12 CST 2025","Mon Nov 03 16:35:13 CST 2025","1251","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改完之后进行开仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:32:13 CST 2025","Mon Nov 03 16:32:17 CST 2025","4320","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:59 CST 2025","Mon Nov 03 16:35:00 CST 2025","1332","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-策略开仓-出现漏单","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"broken","Mon Nov 03 16:35:14 CST 2025","Mon Nov 03 16:36:00 CST 2025","46445","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps策略跟单状态为关闭
+      2. 进行开仓
+      3. 跟单账号跟单失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps策略跟单状态为开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps策略跟单状态为关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:31:58 CST 2025","Mon Nov 03 16:32:03 CST 2025","4663","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略开仓-跟单开仓指令-根据status状态发现有漏单","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:32:09 CST 2025","Mon Nov 03 16:32:10 CST 2025","1255","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-开仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:23 CST 2025","Mon Nov 03 16:34:27 CST 2025","4309","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-策略平仓-主指令及订单详情数据检查","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "
+"failed","Mon Nov 03 16:32:19 CST 2025","Mon Nov 03 16:32:20 CST 2025","1277","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","跟单软件看板-VPS数据-修改完之后进行开仓补全","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号开仓-关闭
+      2. 进行开仓
+      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      4. 修改vps跟单账号开仓-开启
+      5. 进行补单操作，然后平仓
+    - 预期结果：vps跟单账号开仓-关闭，有漏单数据
+    "
+"passed","Mon Nov 03 16:34:04 CST 2025","Mon Nov 03 16:34:08 CST 2025","4319","test_vps","test_vpsOrder_open_level","TestLeakageopen_level","","","数据库校验-VPS数据-修改跟单账号是否成功","
+    ### 用例说明
+    - 前置条件：有vps策略和vps跟单
+    - 操作步骤：
+      1. 修改vps跟单账号平仓-关闭
+      2. 进行开仓
+      3. 进行平仓
+      4. 跟单账号平仓失败，有漏单数据，把redis数据和MySQL数据进行校验
+      5. 修改vps跟单账号平仓-开启
+    - 预期结果：vps跟单账号平仓-关闭，有漏单数据
+    "

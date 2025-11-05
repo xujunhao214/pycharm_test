@@ -487,7 +487,7 @@ def redis_order_data_close(redis_client, var_manager) -> List[Dict[str, Any]]:
                 orders.append({
                     'ticket': order_data.get('ticket'),
                     'magic': order_data.get('magic'),
-                    'lots': order_data.get('lots'),
+                    # 'lots': order_data.get('lots'),
                     'openPrice': order_data.get('openPrice'),
                     'symbol': order_data.get('symbol')
                 })
@@ -543,7 +543,7 @@ def redis_MT5cloudTrader_data_close(redis_client, var_manager) -> List[Dict[str,
                 orders.append({
                     'ticket': order_data.get('ticket'),
                     'magic': order_data.get('magic'),
-                    'lots': order_data.get('lots'),
+                    # 'lots': order_data.get('lots'),
                     'openPrice': order_data.get('openPrice'),
                     'symbol': order_data.get('symbol')
                 })

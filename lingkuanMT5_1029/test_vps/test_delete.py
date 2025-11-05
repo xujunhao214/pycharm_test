@@ -40,7 +40,7 @@ class TestDeleteUser(APITestBase):
         )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.retry(n=0, delay=0)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @allure.title("数据库校验-组别列表-删除VPS组别")
     def test_dbdelete_group(self, class_random_str, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):

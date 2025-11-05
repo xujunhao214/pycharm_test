@@ -1,0 +1,466 @@
+{
+  "uid" : "4777e18d499fcbe5",
+  "name" : "数据库校验-云策略列表-批量新增云跟单账号",
+  "fullName" : "test_cloudTrader.test_create_scene.TestCreate_importcloudTrader#test_dbquery_cloudBatchAdd",
+  "historyId" : "08561cdffd354361ff860906130d7580",
+  "time" : {
+    "start" : 1761886285811,
+    "stop" : 1761886286233,
+    "duration" : 422
+  },
+  "status" : "failed",
+  "statusMessage" : "Failed: 数据库查询结果为空，新增云跟单账号失败",
+  "statusTrace" : "self = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F700>\nvar_manager = <lingkuan_1103.commons.variable_manager.VariableManager object at 0x0000020B7F1D3490>\ndb_transaction = <pymysql.connections.Connection object at 0x0000020B7F2BCAC0>\n\n    @allure.title(\"数据库校验-云策略列表-批量新增云跟单账号\")\n    def test_dbquery_cloudBatchAdd(self, var_manager, db_transaction):\n        # 1. 获取账号总数和所有账号信息\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count < 0:\n            pytest.fail(\"未找到需要验证的账号数量，请检查前置步骤\")\n        # 2. 初始化ID列表和计数器\n        cloudTrader_all_count_ids = []\n        cloudTrader_add_count = 0\n        # 3. 提取后6个账号（对应cloudTrader_user_accounts_5到cloudTrader_user_accounts_10）\n        for i in range(5, cloudTrader_user_count + 1):\n            with allure.step(f\"1. 获取第{i}个跟单账号的account是否新增成功\"):\n                usr_account = var_manager.get_variable(f\"cloudTrader_user_accounts_{i}\")\n                if not usr_account:\n                    pytest.fail(f\"第{i}个跟单账号的account为空\")\n    \n                db_data = self.query_database(\n                    db_transaction,\n                    f\"SELECT * FROM follow_cloud_trader WHERE account = %s\",\n                    (usr_account,),\n                    order_by=\"account ASC\"\n                )\n                print(f\"获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}\")\n    \n                if not db_data:\n>                   pytest.fail(\"数据库查询结果为空，新增云跟单账号失败\")\nE                   Failed: 数据库查询结果为空，新增云跟单账号失败\n\ntest_cloudTrader\\test_create_scene.py:109: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1761886285811,
+      "stop" : 1761886285811,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1761885987553,
+      "stop" : 1761885987553,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1761885982015,
+      "stop" : 1761885982015,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1761886222324,
+      "stop" : 1761886222325,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1761885982015,
+      "stop" : 1761885982015,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1761886285558,
+      "stop" : 1761886285811,
+      "duration" : 253
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "Failed: 数据库查询结果为空，新增云跟单账号失败",
+    "statusTrace" : "self = <lingkuan_1103.test_cloudTrader.test_create_scene.TestCreate_importcloudTrader object at 0x0000020B7F29F700>\nvar_manager = <lingkuan_1103.commons.variable_manager.VariableManager object at 0x0000020B7F1D3490>\ndb_transaction = <pymysql.connections.Connection object at 0x0000020B7F2BCAC0>\n\n    @allure.title(\"数据库校验-云策略列表-批量新增云跟单账号\")\n    def test_dbquery_cloudBatchAdd(self, var_manager, db_transaction):\n        # 1. 获取账号总数和所有账号信息\n        cloudTrader_user_count = var_manager.get_variable(\"cloudTrader_user_count\", 0)\n        if cloudTrader_user_count < 0:\n            pytest.fail(\"未找到需要验证的账号数量，请检查前置步骤\")\n        # 2. 初始化ID列表和计数器\n        cloudTrader_all_count_ids = []\n        cloudTrader_add_count = 0\n        # 3. 提取后6个账号（对应cloudTrader_user_accounts_5到cloudTrader_user_accounts_10）\n        for i in range(5, cloudTrader_user_count + 1):\n            with allure.step(f\"1. 获取第{i}个跟单账号的account是否新增成功\"):\n                usr_account = var_manager.get_variable(f\"cloudTrader_user_accounts_{i}\")\n                if not usr_account:\n                    pytest.fail(f\"第{i}个跟单账号的account为空\")\n    \n                db_data = self.query_database(\n                    db_transaction,\n                    f\"SELECT * FROM follow_cloud_trader WHERE account = %s\",\n                    (usr_account,),\n                    order_by=\"account ASC\"\n                )\n                print(f\"获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}\")\n    \n                if not db_data:\n>                   pytest.fail(\"数据库查询结果为空，新增云跟单账号失败\")\nE                   Failed: 数据库查询结果为空，新增云跟单账号失败\n\ntest_cloudTrader\\test_create_scene.py:109: Failed",
+    "steps" : [ {
+      "name" : "1. 获取第5个跟单账号的account是否新增成功",
+      "time" : {
+        "start" : 1761886285811,
+        "stop" : 1761886285865,
+        "duration" : 54
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1761886285811,
+          "stop" : 1761886285864,
+          "duration" : 53
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1761886285862,
+            "stop" : 1761886285864,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a7c16d400089a615",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "a7c16d400089a615.json",
+            "type" : "application/json",
+            "size" : 952
+          }, {
+            "uid" : "66bea7f231bdfe3",
+            "name" : "执行SQL",
+            "source" : "66bea7f231bdfe3.txt",
+            "type" : "text/plain",
+            "size" : 73
+          }, {
+            "uid" : "c559cd3fb6994c00",
+            "name" : "SQL参数",
+            "source" : "c559cd3fb6994c00.txt",
+            "type" : "text/plain",
+            "size" : 11
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 1
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true,
+      "stepsCount" : 2
+    }, {
+      "name" : "1. 获取第6个跟单账号的account是否新增成功",
+      "time" : {
+        "start" : 1761886285865,
+        "stop" : 1761886286121,
+        "duration" : 256
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1761886285865,
+          "stop" : 1761886286120,
+          "duration" : 255
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1761886286118,
+            "stop" : 1761886286120,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c72eb2b3f03d47c6",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "c72eb2b3f03d47c6.json",
+            "type" : "application/json",
+            "size" : 952
+          }, {
+            "uid" : "a2cf26014dede9fb",
+            "name" : "执行SQL",
+            "source" : "a2cf26014dede9fb.txt",
+            "type" : "text/plain",
+            "size" : 73
+          }, {
+            "uid" : "1e6a4c0ccb3aeea0",
+            "name" : "SQL参数",
+            "source" : "1e6a4c0ccb3aeea0.txt",
+            "type" : "text/plain",
+            "size" : 11
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 1
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true,
+      "stepsCount" : 2
+    }, {
+      "name" : "1. 获取第7个跟单账号的account是否新增成功",
+      "time" : {
+        "start" : 1761886286121,
+        "stop" : 1761886286173,
+        "duration" : 52
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1761886286121,
+          "stop" : 1761886286172,
+          "duration" : 51
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1761886286171,
+            "stop" : 1761886286172,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "1ca2c565dda968fb",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "1ca2c565dda968fb.json",
+            "type" : "application/json",
+            "size" : 952
+          }, {
+            "uid" : "da407d0603760783",
+            "name" : "执行SQL",
+            "source" : "da407d0603760783.txt",
+            "type" : "text/plain",
+            "size" : 73
+          }, {
+            "uid" : "2f46606f103e9b94",
+            "name" : "SQL参数",
+            "source" : "2f46606f103e9b94.txt",
+            "type" : "text/plain",
+            "size" : 11
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 1
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true,
+      "stepsCount" : 2
+    }, {
+      "name" : "1. 获取第8个跟单账号的account是否新增成功",
+      "time" : {
+        "start" : 1761886286173,
+        "stop" : 1761886286232,
+        "duration" : 59
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 数据库查询结果为空，新增云跟单账号失败\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_1103\\test_cloudTrader\\test_create_scene.py\", line 109, in test_dbquery_cloudBatchAdd\n    pytest.fail(\"数据库查询结果为空，新增云跟单账号失败\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1761886286173,
+          "stop" : 1761886286232,
+          "duration" : 59
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1761886286231,
+            "stop" : 1761886286232,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "df6cc151ad9825cc",
+            "name" : "查询结果（共0条，显示前50条）",
+            "source" : "df6cc151ad9825cc.json",
+            "type" : "application/json",
+            "size" : 2
+          }, {
+            "uid" : "4324728a4ecf8805",
+            "name" : "执行SQL",
+            "source" : "4324728a4ecf8805.txt",
+            "type" : "text/plain",
+            "size" : 73
+          }, {
+            "uid" : "f93829d205852094",
+            "name" : "SQL参数",
+            "source" : "f93829d205852094.txt",
+            "type" : "text/plain",
+            "size" : 11
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true,
+          "stepsCount" : 0
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true,
+        "stepsCount" : 1
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : true,
+      "hasContent" : true,
+      "stepsCount" : 2
+    } ],
+    "attachments" : [ {
+      "uid" : "86ed1dd8fb0f0c8f",
+      "name" : "log",
+      "source" : "86ed1dd8fb0f0c8f.txt",
+      "type" : "text/plain",
+      "size" : 7717
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 13,
+    "shouldDisplayMessage" : true,
+    "hasContent" : true,
+    "stepsCount" : 12
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1761886286236,
+      "stop" : 1761886286236,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1761886482112,
+      "stop" : 1761886482113,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1761886286237,
+      "stop" : 1761886286237,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false,
+    "stepsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "云策略-云策略列表-批量新增云跟单账号"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create_scene"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_importcloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "40584-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create_scene"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "4777e18d499fcbe5.json",
+  "parameterValues" : [ ]
+}
