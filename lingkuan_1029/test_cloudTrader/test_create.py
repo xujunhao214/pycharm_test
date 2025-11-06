@@ -224,7 +224,8 @@ class TestCreate_cloudTrader(APITestBase):
             "fixedComment": "",
             "commentType": "",
             "digits": 0,
-            "traderUserIds": cloudTrader_user_ids_later9  # 传入后9个账号ID
+            "traderUserIds": cloudTrader_user_ids_later9,
+            "platformType": 0
         }
 
         response = self.send_post_request(
@@ -584,7 +585,8 @@ class TestCreate_cloudTrader(APITestBase):
                 "digits": 0,
                 "followTraderIds": [],
                 "sort": "100",
-                "remark": ""
+                "remark": "",
+                "platformType": 0
             }
         ]
         response = self.send_post_request(
@@ -813,7 +815,8 @@ class TestCreate_cloudTrader(APITestBase):
                     "digits": 0,
                     "followTraderIds": [],
                     "sort": "100",
-                    "remark": "测试手动下单"
+                    "remark": "测试手动下单",
+                    "platformType": 0
                 }
             ]
             response = self.send_post_request(
