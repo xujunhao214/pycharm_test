@@ -1496,7 +1496,6 @@ class TestCloudStrategyOrderbuy:
                 )
 
             with allure.step("执行复制下单数据校验"):
-                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 

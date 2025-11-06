@@ -615,6 +615,8 @@ class TestVPSOrderSend_newScenarios:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -709,6 +711,8 @@ class TestVPSOrderSend_newScenarios:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,

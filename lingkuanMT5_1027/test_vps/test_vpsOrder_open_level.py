@@ -24,8 +24,9 @@ class TestLeakageopen_level:
       5. 进行补单操作，然后平仓
     - 预期结果：vps跟单账号开仓-关闭，有漏单数据
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
@@ -247,6 +248,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -555,6 +558,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -666,6 +671,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -744,6 +751,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -775,6 +784,7 @@ class TestLeakageopen_level:
       5. 修改vps跟单账号平仓-开启
     - 预期结果：vps跟单账号平仓-关闭，有漏单数据
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
@@ -995,6 +1005,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1069,6 +1081,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1181,6 +1195,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1491,6 +1507,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1522,8 +1540,9 @@ class TestLeakageopen_level:
       5. 进行补单操作，然后平仓
     - 预期结果：vps策略跟单状态为关闭，有漏单数据
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
@@ -1836,6 +1855,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1945,6 +1966,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),

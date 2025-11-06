@@ -23,6 +23,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders1(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -68,7 +69,6 @@ class TestCloudMasOrdersend:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -197,6 +197,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -268,6 +270,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=1,
@@ -371,6 +375,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -449,6 +455,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -478,6 +486,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders2(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -611,6 +620,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -694,6 +705,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -797,6 +810,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -875,6 +890,8 @@ class TestCloudMasOrdersend:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -904,6 +921,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders3(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -1034,6 +1052,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -1105,6 +1125,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -1196,6 +1218,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -1272,6 +1296,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -1301,6 +1327,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders4(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -1680,6 +1707,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders5(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -1811,6 +1839,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1868,6 +1898,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证指令总手数"):
                     total_lots = [record["total_lots"] for record in db_data]
                     total_lotssum = sum(total_lots)
+                    # 关键优化：四舍五入保留两位小数
+                    total_lotssum = round(float(total_lotssum), 2)
                     self.verify_data(
                         actual_value=float(total_lotssum),
                         expected_value=float(5),
@@ -1880,6 +1912,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1982,6 +2016,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -2058,6 +2094,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -2088,6 +2126,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders6(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -2456,6 +2495,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders7(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
@@ -2600,6 +2640,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -2673,6 +2715,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.03),
@@ -2765,6 +2809,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -2842,6 +2888,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.03),
@@ -2873,6 +2921,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders8(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
@@ -3017,6 +3066,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3090,6 +3141,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.04),
@@ -3182,6 +3235,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3259,6 +3314,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.04),
@@ -3290,6 +3347,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders9(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
@@ -3434,6 +3492,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -3507,6 +3567,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -3599,6 +3661,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -3676,6 +3740,8 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),

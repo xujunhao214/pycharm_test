@@ -24,7 +24,7 @@ DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 
 # mysql查询语句，查询最近时间的数据
 MYSQL_TIME = 3  # 时间范围（分钟）
-WAIT_TIMEOUT = 45  # 数据库查询等待超时时间（秒）
+WAIT_TIMEOUT = 30  # 数据库查询等待超时时间（秒）
 DELETE_WAIT_TIMEOUT = 5  # 数据库删除查询超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）
 STBLE_PERIOD = 2  # 稳定期（秒）：数据连续2秒不变则认为加载完成

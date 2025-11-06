@@ -172,6 +172,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -256,6 +258,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -361,6 +365,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -438,6 +444,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -590,6 +598,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -660,6 +670,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -762,6 +774,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -837,6 +851,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -1371,6 +1387,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1442,6 +1460,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1546,6 +1566,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1621,6 +1643,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(5),
@@ -1971,6 +1995,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -2043,6 +2069,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -2147,6 +2175,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -2223,6 +2253,8 @@ class TestCloudStrategyOrdersell:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -2810,6 +2842,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -2903,6 +2937,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -3028,6 +3064,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -3125,6 +3163,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=5,
@@ -3275,8 +3315,8 @@ class TestCloudStrategyOrdersell:
                         "followTraderIds": [],
                         "sort": 100,
                         "remark": "",
-                        "cfd": "p",
-                        "forex": "p"
+                        "cfd": None,
+                        "forex": None,
                     }
                 ]
 
@@ -3426,6 +3466,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3497,6 +3539,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.03),
@@ -3601,6 +3645,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3677,6 +3723,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.03),
@@ -3733,8 +3781,8 @@ class TestCloudStrategyOrdersell:
                         "followTraderIds": [],
                         "sort": 100,
                         "remark": "",
-                        "cfd": "p",
-                        "forex": "p"
+                        "cfd": None,
+                        "forex": None,
                     }
                 ]
 
@@ -3884,6 +3932,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -3955,6 +4005,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.04),
@@ -4059,6 +4111,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.3),
@@ -4135,6 +4189,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.04),
@@ -4191,8 +4247,8 @@ class TestCloudStrategyOrdersell:
                         "followTraderIds": [],
                         "sort": 100,
                         "remark": "",
-                        "cfd": "p",
-                        "forex": "p"
+                        "cfd": None,
+                        "forex": None,
                     }
                 ]
 
@@ -4342,6 +4398,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -4413,6 +4471,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -4517,6 +4577,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),
@@ -4593,6 +4655,8 @@ class TestCloudStrategyOrdersell:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(0.01),

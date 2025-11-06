@@ -1138,7 +1138,7 @@ class APITestBase:
             assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
         except AssertionError as e:
             with allure.step("列表元素断言失败"):
-                allure.attach(f"实际: {list1[:10]}... | 预期: {list2[:10]}...", "断言结果",
+                allure.attach(f"实际: {list1[:30]} | 预期: {list2[:30]}", "断言结果",
                               attachment_type="text/plain")
             raise e
 

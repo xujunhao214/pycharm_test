@@ -24,6 +24,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestCloudStrategyOrderRemark1(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario1_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -212,6 +213,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestCloudStrategyOrderRemark2(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
         def test_scenario2_update_strategy(self, class_random_str, var_manager, logged_session):
@@ -399,6 +401,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestCloudStrategyOrderRemark3(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")
         def test_scenario3_update_strategy(self, class_random_str, var_manager, logged_session):

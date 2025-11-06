@@ -1136,7 +1136,7 @@ class APITestBase:
             assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
         except AssertionError as e:
             with allure.step("列表元素断言失败"):
-                allure.attach(f"实际: {list1[:10]}... | 预期: {list2[:10]}...", "断言结果", allure.attachment_type.TEXT)
+                allure.attach(f"实际: {list1[:30]} | 预期: {list2[:30]}", "断言结果", allure.attachment_type.TEXT)
             raise e
 
     def assert_dict_subset(self, subset_dict, full_dict, error_msg_prefix="子字典不匹配"):

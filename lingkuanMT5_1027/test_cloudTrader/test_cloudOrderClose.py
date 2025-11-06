@@ -29,8 +29,61 @@ class TestCloudCoreFunctionality:
       5. 进行平仓
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend1(APITestBase):
+        @allure.title("云策略-修改云跟单")
+        def test_update_trader(self, class_random_str, logged_session, var_manager):
+            """执行云策略复制下单操作并验证请求结果"""
+            with allure.step("1.发送修改云跟单请求"):
+                MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                MT5cloudTrader_template_id2 = var_manager.get_variable("MT5cloudTrader_template_id2")
+                MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
+                MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
+
+                request_data = [
+                    {
+                        "traderList": [
+                            MT5cloudTrader_traderList_4
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": MT5cloudTrader_traderList_2,
+                        "masterAccount": MT5cloudTrader_user_accounts_2,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": "1",
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": None,
+                        "commentType": None,
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": 100,
+                        "remark": "",
+                        "cfd": None,
+                        "forex": None,
+                    }
+                ]
+
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudBatchUpdate',
+                    json_data=request_data
+                )
+
+            with allure.step("2.验证响应结果"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
+
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
@@ -99,7 +152,6 @@ class TestCloudCoreFunctionality:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_dbsymbol(self, class_random_str, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -327,6 +379,7 @@ class TestCloudFollowDirection:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend2(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -398,7 +451,6 @@ class TestCloudFollowDirection:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -546,6 +598,8 @@ class TestCloudFollowDirection:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -567,6 +621,7 @@ class TestCloudFollowDirection:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend3(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -785,6 +840,8 @@ class TestCloudFollowDirection:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -812,6 +869,7 @@ class TestCloudOrderQuantityControl:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend4(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -884,7 +942,6 @@ class TestCloudOrderQuantityControl:
                     "复制平仓响应msg字段应为success"
                 )
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-复制下单平仓数据-数据校验")
         def test_copy_verify_close_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单平仓后数据库中的订单数据正确性"""
@@ -1055,6 +1112,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend5(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -1292,6 +1350,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend6(APITestBase):
@@ -1551,6 +1610,7 @@ class TestCloudOrderType:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend7(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -1793,6 +1853,7 @@ class TestCloudCloseRemark:
       5. 校验订单数据是否正确
     - 预期结果：平仓的订单备注功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend8(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -2037,6 +2098,7 @@ class TestCloudClose:
       7. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平策略功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend9(APITestBase):
         @allure.title("云策略-复制下单操作")
@@ -2358,6 +2420,7 @@ class TestCloudClose:
       7. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平订单功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend10(APITestBase):
@@ -2670,6 +2733,7 @@ class TestCloudClose:
       3. 校验订单数据是否正确
     - 预期结果：平仓的功能校验-全平订单功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMasOrderSend11(APITestBase):

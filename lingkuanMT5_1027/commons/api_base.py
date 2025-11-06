@@ -917,11 +917,6 @@ class APITestBase:
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -991,6 +986,10 @@ class APITestBase:
                 with allure.step("超时后最终结果"):
                     allure.attach(f"超时{timeout}秒，查到{len(final_result)}条记录", "结果说明",
                                   allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                    allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                                  allure.attachment_type.TEXT)
 
             return final_result  # 超时后返回实际查询结果（可能非空）
 
@@ -1023,7 +1022,7 @@ class APITestBase:
         fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
             "%Y-%m-%d %H:%M:%S")
 
-        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）\n超时: {timeout}秒")
+        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
             while time.time() - start_time < timeout:
@@ -1236,7 +1235,7 @@ class APITestBase:
             assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
         except AssertionError as e:
             with allure.step("列表元素断言失败"):
-                allure.attach(f"实际: {list1[:10]}... \n预期: {list2[:10]}...", "断言结果",
+                allure.attach(f"实际: {list1[:30]} \n预期: {list2[:30]}", "断言结果",
                               attachment_type="text/plain")
             raise e
 

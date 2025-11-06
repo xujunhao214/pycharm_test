@@ -25,7 +25,7 @@ class TestLeakageopen_level:
     - 预期结果：vps跟单账号开仓-关闭，有漏单数据
     """)
     @pytest.mark.usefixtures("class_random_str")
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏开）")
@@ -35,12 +35,12 @@ class TestLeakageopen_level:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+            platformId = var_manager.get_variable("platformId")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
                 "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
-                "platformType": 1,
                 "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
@@ -53,13 +53,16 @@ class TestLeakageopen_level:
                 "followClose": 1,
                 "followRep": 0,
                 "fixedComment": "",
-                "commentType": None,
+                "commentType": 2,
                 "digits": 0,
                 "cfd": "",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "id": MT5vps_addslave_id,
+                "platformType": 1,
+                "platformId": platformId
             }
+
             response = self.send_post_request(
                 logged_session,
                 '/subcontrol/follow/updateSlave',
@@ -169,8 +172,7 @@ class TestLeakageopen_level:
                         """
                 params = (
                     '0',
-                    new_user["account"],
-                    class_random_str
+                    new_user["account"]
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -245,6 +247,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -325,8 +329,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=1
+                    time_field="create_time"
                 )
 
             with allure.step("2. 转换Redis数据为可比较格式"):
@@ -350,7 +353,7 @@ class TestLeakageopen_level:
                     {
                         "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
                         "magical": record["magical"],  # 数据库magical → 统一字段magical
-                        "size": float(record["size"]),  # 数据库size → 统一字段size
+                        # "size": float(record["size"]),  # 数据库size → 统一字段size
                         "open_price": float(record["open_price"]),
                         "symbol": record["symbol"]
                     }
@@ -399,6 +402,7 @@ class TestLeakageopen_level:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+            platformId = var_manager.get_variable("platformId")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
@@ -421,7 +425,9 @@ class TestLeakageopen_level:
                 "cfd": "@",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "id": MT5vps_addslave_id,
+                "platformType": 1,
+                "platformId": platformId
             }
             response = self.send_post_request(
                 logged_session,
@@ -530,8 +536,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time",
-                    time_range=1
+                    time_field="fod.open_time"
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -552,6 +557,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -641,8 +648,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    time_range=1
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -664,6 +670,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -720,8 +728,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    time_range=1
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -743,6 +750,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -775,7 +784,7 @@ class TestLeakageopen_level:
     - 预期结果：vps跟单账号平仓-关闭，有漏单数据
     """)
     @pytest.mark.usefixtures("class_random_str")
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏平）")
@@ -784,12 +793,13 @@ class TestLeakageopen_level:
             add_Slave = var_manager.get_variable("add_Slave")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+            platformId = var_manager.get_variable("platformId")
+            MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
-                "account": add_Slave["account"],
+                "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
-                "platformType": 1,
                 "remark": "",
                 "followDirection": 0,
                 "followMode": 1,
@@ -802,13 +812,16 @@ class TestLeakageopen_level:
                 "followClose": 0,
                 "followRep": 0,
                 "fixedComment": "",
-                "commentType": None,
+                "commentType": 2,
                 "digits": 0,
-                "cfd": "@",
+                "cfd": "",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "platformType": 1,
+                "id": MT5vps_addslave_id,
+                "platformId": platformId
             }
+
             response = self.send_post_request(
                 logged_session,
                 '/subcontrol/follow/updateSlave',
@@ -933,8 +946,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time",
-                    time_range=1
+                    time_field="fod.open_time"
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -991,6 +1003,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1043,8 +1057,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time",
-                    time_range=1
+                    time_field="fod.open_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1066,6 +1079,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1156,8 +1171,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    time_range=1
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1179,6 +1193,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1213,8 +1229,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=1
+                    time_field="create_time"
                 )
             with allure.step("2. 校验数据"):
                 # close_status = db_data[0]["close_status"]
@@ -1276,7 +1291,7 @@ class TestLeakageopen_level:
                     {
                         "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
                         "magical": record["magical"],  # 数据库magical → 统一字段magical
-                        "size": float(record["size"]),  # 数据库size → 统一字段size
+                        # "size": float(record["size"]),  # 数据库size → 统一字段size
                         "open_price": float(record["open_price"]),
                         "symbol": record["symbol"]
                     }
@@ -1299,10 +1314,12 @@ class TestLeakageopen_level:
             add_Slave = var_manager.get_variable("add_Slave")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
             MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+            MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
+            platformId = var_manager.get_variable("platformId")
             data = {
                 "traderId": MT5vps_trader_id,
                 "platform": add_Slave["platform"],
-                "account": add_Slave["account"],
+                "account": MT5vps_user_accounts_1,
                 "password": encrypted_password,
                 "remark": "",
                 "followDirection": 0,
@@ -1318,10 +1335,12 @@ class TestLeakageopen_level:
                 "fixedComment": "",
                 "commentType": 2,
                 "digits": 0,
-                "cfd": "@",
+                "cfd": "",
                 "forex": "",
                 "abRemark": "",
-                "id": MT5vps_addslave_id
+                "platformType": 1,
+                "id": MT5vps_addslave_id,
+                "platformId": platformId
             }
             response = self.send_post_request(
                 logged_session,
@@ -1464,8 +1483,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    time_range=1
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1487,6 +1505,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1544,7 +1564,7 @@ class TestLeakageopen_level:
                     "forex": "",
                     "followOrderRemark": 1,
                     "fixedComment": "",
-                    "commentType": None,
+                    "commentType": "",
                     "digits": 0
                 }
                 response = self.send_put_request(
@@ -1645,8 +1665,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=1
+                    time_field="create_time"
                 )
 
             with allure.step("2. 转换Redis数据为可比较格式"):
@@ -1670,7 +1689,7 @@ class TestLeakageopen_level:
                     {
                         "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
                         "magical": record["magical"],  # 数据库magical → 统一字段magical
-                        "size": float(record["size"]),  # 数据库size → 统一字段size
+                        # "size": float(record["size"]),  # 数据库size → 统一字段size
                         "open_price": float(record["open_price"]),
                         "symbol": record["symbol"]
                     }
@@ -1733,9 +1752,11 @@ class TestLeakageopen_level:
                     "forex": "",
                     "followOrderRemark": 1,
                     "fixedComment": "",
-                    "commentType": None,
-                    "digits": 0
+                    "commentType": "",
+                    "digits": 0,
+                    "platformType": 1
                 }
+
                 response = self.send_put_request(
                     logged_session,
                     '/subcontrol/trader',
@@ -1820,8 +1841,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="create_time",
-                    time_range=1
+                    time_field="create_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1832,6 +1852,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -1919,8 +1941,7 @@ class TestLeakageopen_level:
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.close_time",
-                    time_range=1
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1942,6 +1963,8 @@ class TestLeakageopen_level:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),

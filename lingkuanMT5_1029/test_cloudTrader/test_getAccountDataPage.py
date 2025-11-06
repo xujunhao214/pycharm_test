@@ -118,6 +118,8 @@ class TestCloudOrderSend_newScenarios:
 
                 size = [record["size"] for record in db_data]
                 total = sum(size)
+                # 关键优化：四舍五入保留两位小数
+                total = round(float(total), 2)
 
                 order_num = len(db_data)
 
@@ -374,6 +376,8 @@ class TestCloudOrderSend_newScenarios:
 
                 size = [record["size"] for record in db_data]
                 total = sum(size)
+                # 关键优化：四舍五入保留两位小数
+                total = round(float(total), 2)
 
                 order_num = len(db_data)
 

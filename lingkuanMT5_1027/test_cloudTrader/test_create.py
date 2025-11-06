@@ -12,10 +12,10 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=5)
 @allure.feature("数据管理-创建数据-为云策略准备")
 class TestCreate_MT5cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, class_random_str, logged_session, var_manager):
         add_MT5cloudTrader = var_manager.get_variable("add_MT5cloudTrader")

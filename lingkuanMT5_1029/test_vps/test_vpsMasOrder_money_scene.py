@@ -176,6 +176,8 @@ class TestVPSMasOrder_money_scene:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -246,6 +248,8 @@ class TestVPSMasOrder_money_scene:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=(0.02, 0.03, 1.0),
@@ -316,6 +320,8 @@ class TestVPSMasOrder_money_scene:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=(10, 1.0),
@@ -420,6 +426,8 @@ class TestVPSMasOrder_money_scene:
                     totalSzie = trader_ordersend["totalSzie"]
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(totalSzie),
@@ -490,6 +498,8 @@ class TestVPSMasOrder_money_scene:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=(0.02, 0.03, 1.0),
@@ -560,6 +570,8 @@ class TestVPSMasOrder_money_scene:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=(10, 1.0),
@@ -737,6 +749,8 @@ class TestVPSMasOrder_money_scene:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(3),
@@ -848,6 +862,8 @@ class TestVPSMasOrder_money_scene:
                 MT5vps_addsalve_size_euqit = [record["size"] for record in db_data]
                 var_manager.set_runtime_variable("MT5vps_addsalve_size_euqit", MT5vps_addsalve_size_euqit)
                 total = sum(MT5vps_addsalve_size_euqit)
+                # 关键优化：四舍五入保留两位小数
+                total = round(float(total), 2)
                 MT5vps_dbtrader_euqit = var_manager.get_variable("MT5vps_dbtrader_euqit")
                 MT5vps_addsalve_euqit = var_manager.get_variable("MT5vps_addsalve_euqit")
                 # 校验除数非零
@@ -1002,6 +1018,8 @@ class TestVPSMasOrder_money_scene:
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
                     total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
                     self.verify_data(
                         actual_value=float(total),
                         expected_value=float(3),
