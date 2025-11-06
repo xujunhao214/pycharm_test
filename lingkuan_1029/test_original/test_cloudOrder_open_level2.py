@@ -24,6 +24,7 @@ class TestcloudTrader_openandlevel:
       5. 进行补单操作，然后平仓
     - 预期结果：云跟单账号开仓-关闭，有漏单数据
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestcloudTrader_open5(APITestBase):
@@ -560,6 +561,7 @@ class TestcloudTrader_openandlevel:
       5. 修改云跟单账号平仓-开启
     - 预期结果：云跟单账号平仓-关闭，有漏单数据
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestcloudTrader_level6(APITestBase):

@@ -2352,6 +2352,8 @@ class TestVPSOrdersendbuy:
                     )
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
+            time.sleep(30)
+
     @allure.story("场景6：VPS策略下单-手数范围0.6-1，总手数1")
     @allure.description("""
     ### 测试说明

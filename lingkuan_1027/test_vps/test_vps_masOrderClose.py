@@ -25,6 +25,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数
     - 预期结果：平仓的品种功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders1(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -87,7 +88,6 @@ class TestVPSMasOrderclose:
             )
 
         @allure.title("数据库校验-交易平仓-主指令及订单详情数据检查-没有订单")
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -365,6 +365,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于5
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders2(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -768,6 +769,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):
         @pytest.mark.url("vps")
@@ -1127,6 +1129,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders4(APITestBase):
         @pytest.mark.url("vps")
@@ -1483,6 +1486,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders5(APITestBase):
         @pytest.mark.url("vps")
@@ -1838,6 +1842,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders6(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -2122,6 +2127,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders7(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -2403,6 +2409,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders8(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -2686,6 +2693,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于1
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPStradingOrders9(APITestBase):
@@ -2981,6 +2989,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders10(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -3261,6 +3270,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单备注功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders11(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")

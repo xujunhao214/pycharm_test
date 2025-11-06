@@ -24,6 +24,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark1(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
@@ -107,7 +108,6 @@ class TestCloudremark:
                 self.assert_response_status(response, 200, "修改跟单账号请求失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略账号复制下单")
         def test_scenario1_place_order(self, class_random_str, logged_session, var_manager):
             with allure.step("发送开仓请求"):
@@ -210,6 +210,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark2(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
@@ -383,6 +384,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark3(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")
@@ -555,6 +557,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark4(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
@@ -723,6 +726,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark5(APITestBase):
         @allure.title("修改云策略信息-关闭跟单备注")
@@ -891,6 +895,7 @@ class TestCloudremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudStrategyOrderRemark6(APITestBase):
         @allure.title("修改云策略信息-开启跟单备注")

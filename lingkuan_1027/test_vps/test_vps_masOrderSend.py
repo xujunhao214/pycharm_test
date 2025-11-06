@@ -21,6 +21,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders1(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
@@ -53,7 +54,6 @@ class TestVPSMasOrdersend:
             )
 
         @allure.title("数据库校验-交易下单-主指令及订单详情数据检查")
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 new_user = var_manager.get_variable("new_user")
@@ -438,6 +438,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders2(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -870,6 +871,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -1275,6 +1277,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders4(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -1665,6 +1668,7 @@ class TestVPSMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders5(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")
@@ -2084,6 +2088,7 @@ class TestVPSMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders6(APITestBase):
         @allure.title("VPS策略账号交易下单-复制下单")

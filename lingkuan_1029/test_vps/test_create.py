@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=5)
 @allure.feature("数据管理-创建数据-为VPS测试准备")
 class TestCreate(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -50,7 +51,6 @@ class TestCreate(APITestBase):
         )
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     @allure.title("数据库校验-账号列表-新增用户")
     def test_dbquery_user(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
@@ -92,7 +92,6 @@ class TestCreate(APITestBase):
             logging.info(f"平台ID: {platformId}")
             var_manager.set_runtime_variable("platformId", platformId)
 
-    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, logged_session, var_manager):
@@ -127,7 +126,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-账号列表-批量新增用户")
     def test_dbquery_importuser(self, var_manager, db_transaction):
@@ -469,7 +467,6 @@ class TestCreate(APITestBase):
             "响应msg字段应为success"
         )
 
-    @pytest.mark.flaky(reruns=3, reruns_delay=5)
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")

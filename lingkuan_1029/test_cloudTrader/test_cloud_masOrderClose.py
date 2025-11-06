@@ -25,9 +25,9 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数
     - 预期结果：平仓的品种功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders1(APITestBase):
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略-策略账号交易下单-复制下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略-策略账号交易下单-复制下单请求
@@ -365,6 +365,7 @@ class TestVPSMasOrderclose:
      6. 校验平仓的订单数,等于5
     - 预期结果：平仓的停止功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders2(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
@@ -735,6 +736,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):
         @allure.title("修改跟单账号为反向跟单")
@@ -1093,6 +1095,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders4(APITestBase):
         @allure.title("修改跟单账号为反向跟单")
@@ -1448,6 +1451,7 @@ class TestVPSMasOrderclose:
       6. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单方向功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders5(APITestBase):
         @allure.title("修改跟单账号为正向跟单")
@@ -1802,6 +1806,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders6(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
@@ -2146,6 +2151,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单数量功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders7(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
@@ -2427,6 +2433,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders8(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
@@ -2710,6 +2717,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于1
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestcloudtradingOrders9(APITestBase):
@@ -3005,6 +3013,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单类型功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders10(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
@@ -3285,6 +3294,7 @@ class TestVPSMasOrderclose:
       5. 校验平仓的订单数,等于4
     - 预期结果：平仓的订单备注功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestcloudtradingOrders11(APITestBase):
         @allure.title("云策略-策略账号交易下单-复制下单请求")
