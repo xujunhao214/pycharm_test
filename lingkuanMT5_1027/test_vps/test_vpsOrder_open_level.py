@@ -173,7 +173,8 @@ class TestLeakageopen_level:
                         """
                 params = (
                     '0',
-                    new_user["account"]
+                    new_user["account"],
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

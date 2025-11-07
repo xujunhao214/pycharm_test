@@ -141,23 +141,23 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "固定手数5倍",
                 "Cfd": "",
-                "mode_desc": "固定手数（5倍）"
+                "mode_desc": "固定手数5倍"
             },
             {
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": MT5cloudTrader_template_id1,
-                "remark": "云跟单账号测试数据",
+                "remark": "品种3倍",
                 "Cfd": "",
-                "mode_desc": "修改品种（3倍）"
+                "mode_desc": "品种3倍"
             },
             {
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "净值比例",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -165,7 +165,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "修改币种",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -173,7 +173,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "修改币种",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -181,7 +181,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "修改币种",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },

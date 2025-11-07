@@ -39,14 +39,14 @@ class TestCreate_Scene(APITestBase):
                 "followParam": "5.00",
                 "templateId": 1,
                 "Cfd": "",
-                "mode_desc": "固定手数（5倍）"
+                "mode_desc": "固定手数5倍"
             },
             {
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": vps_template_id,
                 "Cfd": "",
-                "mode_desc": "修改品种（3倍）"
+                "mode_desc": "品种3倍"
             },
             {
                 "followMode": 2,
@@ -253,7 +253,7 @@ class TestCreate_Scene(APITestBase):
                 "templateId": 1,
                 "remark": "",
                 "Cfd": "",
-                "mode_desc": "固定手数（5倍）"
+                "mode_desc": "固定手数5倍"
             },
             {
                 "followMode": 1,
@@ -261,7 +261,7 @@ class TestCreate_Scene(APITestBase):
                 "templateId": vps_template_id,
                 "remark": "",
                 "Cfd": "",
-                "mode_desc": "修改品种（3倍）"
+                "mode_desc": "品种3倍"
             },
             {
                 "followMode": 2,

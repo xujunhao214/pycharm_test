@@ -208,89 +208,113 @@ def test_group(request):
     return ""
 
 
-# 数据库相关夹具
 # 全局连接池
 db_pool = None
 
 
 # --------------------------
-# 1. 初始化数据库连接池（session级别）
+# 1. 数据库配置夹具（兼容旧版本 pymysql）
+# --------------------------
+@pytest.fixture(scope="session")
+def db_config(environment) -> dict:
+    """获取数据库配置，过滤不支持的参数"""
+    raw_config = ENV_CONFIG[environment]["db_config"]
+
+    # 解析 cursorclass（字符串转实际类）
+    if isinstance(raw_config.get("cursorclass"), str):
+        module_name, class_name = raw_config["cursorclass"].rsplit('.', 1)
+        module = __import__(module_name, fromlist=[class_name])
+        raw_config["cursorclass"] = getattr(module, class_name)
+
+    # 仅保留 pymysql 旧版本支持的核心参数
+    supported_params = [
+        "host", "port", "user", "password", "database", "charset",
+        "cursorclass", "connect_timeout", "read_timeout", "write_timeout"
+    ]
+    conn_config = {k: v for k, v in raw_config.items() if k in supported_params}
+    conn_config["autocommit"] = False  # 强制关闭自动提交
+    return conn_config
+
+
+# --------------------------
+# 2. 初始化数据库连接池（兼容 DBUtils 1.4）
 # --------------------------
 @pytest.fixture(scope="session", autouse=True)
-def init_db_pool(environment):
+def init_db_pool(db_config):
     global db_pool
-    # 获取环境对应的数据库配置
-    db_config = ENV_CONFIG[environment]["db_config"]
 
-    # 解析cursorclass字符串为实际类
-    if isinstance(db_config["cursorclass"], str):
-        module_name, class_name = db_config["cursorclass"].rsplit('.', 1)
-        module = __import__(module_name, fromlist=[class_name])
-        db_config["cursorclass"] = getattr(module, class_name)
+    # 自定义创建连接：含隔离级别设置（SQL 方式）
+    def create_connection():
+        """创建连接 + 用 SQL 设置隔离级别（兼容所有 pymysql 版本）"""
+        conn = pymysql.connect(**db_config)
+        # 设置 READ COMMITTED 隔离级别（通过 SQL 语句，无版本限制）
+        with conn.cursor() as cursor:
+            cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;")
+        return conn
 
-    # 初始化连接池（适配并行场景）
+    # 初始化连接池（仅用 DBUtils 1.4 支持的参数）
     db_pool = PooledDB(
-        creator=pymysql,
-        maxconnections=4,  # 并行任务数（如 pytest -n 4），根据实际调整
-        mincached=2,  # 初始空闲连接数
+        creator=create_connection,
+        maxconnections=4,  # 并行任务数
+        mincached=2,  # 初始空闲连接数（避免空缓存）
         maxcached=4,  # 最大空闲连接数
-        blocking=True,  # 连接耗尽时阻塞等待（避免报错）
-        isolation_level="READ COMMITTED",  # 读已提交级别，平衡一致性和并发
-        autocommit=False,  # 关闭自动提交，交给事务控制
-        **db_config
+        blocking=True,  # 连接耗尽时阻塞等待
+        maxshared=0,  # 禁止共享连接（并行安全）
+        reset=True,  # 归还时重置连接状态
+        failures=(err.OperationalError, err.InterfaceError),  # 连接异常重试
+        ping=1,  # 获取连接时 ping 数据库
     )
-    print("数据库连接池初始化成功")
+    # print("数据库连接池初始化成功（无兼容性问题）")
 
 
 # --------------------------
-# 2. 数据库连接夹具（function级别，从池获取）
+# 3. 数据库连接夹具（修复 open 属性错误）
 # --------------------------
 @pytest.fixture(scope="function")
 def db(init_db_pool) -> pymysql.connections.Connection:
-    """每个用例从连接池获取独立连接，自带重试逻辑"""
+    """每个用例获取独立连接，用 ping() 判断连接有效性"""
     max_retries = 3
     retry_delay = 5
     conn = None
 
     for attempt in range(max_retries):
         try:
-            conn = db_pool.connection()  # 从连接池获取连接
-            if conn.open:
-                break
-        except err.OperationalError as e:
+            conn = db_pool.connection()  # 从连接池获取包装后的连接
+            # 修复：用 ping() 替代 conn.open 判断连接有效性
+            conn.ping(reconnect=True)  # 若连接失效，自动重连
+            break
+        except (err.OperationalError, err.InterfaceError, IndexError) as e:
             if attempt == max_retries - 1:
                 raise
-            print(f"获取数据库连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
+            print(f"获取连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
             time.sleep(retry_delay)
         except Exception as e:
             raise
 
     yield conn
 
-    # 用例结束后归还连接到池
-    if conn and conn.open:
+    # 归还连接（修复：判断连接有效性的方式）
+    if conn:
         try:
-            conn.rollback()  # 回滚未提交操作
-            conn.close()  # 归还连接（连接池复用）
+            conn.rollback()  # 回滚未提交事务
+            conn.close()  # 归还到连接池（非真正关闭）
         except Exception as e:
-            print(f"关闭数据库连接失败: {str(e)}")
+            print(f"归还连接失败: {str(e)}")
 
 
 # --------------------------
-# 3. 事务管理夹具（function级别，自动回滚）
+# 4. 事务管理夹具（保持不变）
 # --------------------------
 @pytest.fixture(scope="function")
 def db_transaction(db):
-    """每个用例独立事务，执行完自动回滚"""
+    """每个用例独立事务，自动回滚"""
     try:
         yield db
     finally:
-        # 强制回滚，避免意外写操作污染数据（查询无影响）
-        if db and db.open:
-            try:
-                db.rollback()
-            except Exception as e:
-                print(f"事务回滚失败: {str(e)}")
+        try:
+            db.rollback()  # 强制回滚
+        except Exception as e:
+            print(f"事务回滚失败: {str(e)}")
 
 
 # ------------------------------

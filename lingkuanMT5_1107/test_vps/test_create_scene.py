@@ -39,14 +39,14 @@ class TestCreate_Scene(APITestBase):
                 "followParam": "5.00",
                 "templateId": 1,
                 "Cfd": "",
-                "mode_desc": "固定手数（5倍）"
+                "mode_desc": "固定手数5倍"
             },
             {
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": MT5vps_template_id,
                 "Cfd": "",
-                "mode_desc": "修改品种（3倍）"
+                "mode_desc": "品种3倍"
             },
             {
                 "followMode": 2,
@@ -123,6 +123,7 @@ class TestCreate_Scene(APITestBase):
                     "cfd": param["Cfd"],
                     "forex": "",
                     "abRemark": "",
+                    "followTraderSymbolEntityList": [],
                     "platformType": 1
                 }
 
@@ -251,23 +252,23 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "",
+                "remark": "固定手数5倍",
                 "Cfd": "",
-                "mode_desc": "固定手数（5倍）"
+                "mode_desc": "固定手数5倍"
             },
             {
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": MT5vps_template_id,
-                "remark": "",
+                "remark": "品种3倍",
                 "Cfd": "",
-                "mode_desc": "修改品种（3倍）"
+                "mode_desc": "品种（3倍）"
             },
             {
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "净值比例",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -275,7 +276,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -283,7 +284,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -291,7 +292,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },
@@ -348,6 +349,7 @@ class TestCreate_Scene(APITestBase):
                     "abRemark": "",
                     "platformType": 1,
                     "id": param["id"],
+                    "followTraderSymbolEntityList": [],
                     "platformId": platformId
                 }
 

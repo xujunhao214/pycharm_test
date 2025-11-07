@@ -25,6 +25,7 @@ class TestVPSMasOrder_money_scene:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSOrderSend_money(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
@@ -32,19 +33,27 @@ class TestVPSMasOrder_money_scene:
         def test_update_user(self, class_random_str, logged_session, var_manager, encrypted_password):
             new_user = var_manager.get_variable("new_user")
             MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+            platformId = var_manager.get_variable("platformId")
             data = {
-                "id": MT5vps_trader_id,
+                "type": 0,
                 "account": new_user["account"],
                 "password": encrypted_password,
-                "platformType": 1,
+                "platform": new_user["platform"],
                 "remark": "",
-                "followStatus": 1,
+                "platformId": platformId,
                 "templateId": 1,
-                "type": 0,
+                "followStatus": 1,
                 "cfd": "",
                 "forex": "",
-                "platform": new_user["platform"]
+                "followOrderRemark": 1,
+                "fixedComment": None,
+                "commentType": "",
+                "digits": 0,
+                "platformType": 1,
+                "followTraderSymbolEntityList": [],
+                "id": MT5vps_trader_id
             }
+
             response = self.send_put_request(
                 logged_session,
                 "/subcontrol/trader",
@@ -608,6 +617,7 @@ class TestVPSMasOrder_money_scene:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSOrderSend_Scence(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")

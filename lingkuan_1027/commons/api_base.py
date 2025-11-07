@@ -1306,6 +1306,71 @@ class APITestBase:
                 allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
             raise e
 
+    def assert_expected_in_actual(self, actual, expected, fields_to_compare, tolerance=1e-9,
+                                  error_msg_prefix="预期数据不在实际列表中"):
+        """
+        断言预期列表的所有元素都包含在实际列表中（按order_no匹配，验证指定字段）
+        :param actual: 实际数据列表（大列表）
+        :param expected: 预期数据列表（子集列表）
+        :param fields_to_compare: 需要验证的字段列表（如["magical", "open_price", "symbol"]）
+        :param tolerance: 浮点数比较容差
+        :param error_msg_prefix: 错误提示前缀
+        """
+        # 1. 预处理：将实际列表转为 {order_no: 元素} 的字典，方便快速查找（核心优化）
+        actual_order_map = {item["order_no"]: item for item in actual}
+
+        # 2. Allure 日志附件（保留分层提示）
+        with allure.step("断言预期列表是实际列表的子集"):
+            allure.attach(f"比较字段: {fields_to_compare}", "比较维度", allure.attachment_type.TEXT)
+            allure.attach(f"浮点数容差: {tolerance}", "精度设置", allure.attachment_type.TEXT)
+            allure.attach(self.serialize_data(actual), "实际列表（完整）", allure.attachment_type.JSON)
+            allure.attach(self.serialize_data(expected), "预期列表（需包含）", allure.attachment_type.JSON)
+
+        # 3. 遍历预期列表，逐个验证是否在实际列表中
+        try:
+            # 先断言预期列表非空（可选，根据需求决定是否保留）
+            assert len(expected) > 0, f"{error_msg_prefix}：预期列表为空"
+
+            for expected_item in expected:
+                expected_order_no = expected_item["order_no"]
+
+                # 步骤1：验证 order_no 在实际列表中存在
+                assert expected_order_no in actual_order_map, \
+                    f"{error_msg_prefix}：预期订单号 {expected_order_no} 未在实际列表中找到"
+
+                # 步骤2：获取实际列表中对应的元素
+                actual_item = actual_order_map[expected_order_no]
+
+                # 步骤3：验证指定字段的值一致
+                for field in fields_to_compare:
+                    # 确保字段在两个元素中都存在（可选校验，避免KeyError）
+                    assert field in actual_item, f"实际元素缺少字段: {field}（订单号: {expected_order_no}）"
+                    assert field in expected_item, f"预期元素缺少字段: {field}（订单号: {expected_order_no}）"
+
+                    actual_val = actual_item[field]
+                    expected_val = expected_item[field]
+
+                    # 浮点数精度比较，其他类型直接相等比较
+                    if isinstance(actual_val, float) and isinstance(expected_val, float):
+                        assert abs(actual_val - expected_val) <= tolerance, \
+                            f"{error_msg_prefix}（订单号: {expected_order_no}）" \
+                            f"字段 {field} 不匹配：实际={actual_val}, 预期={expected_val}, 容差={tolerance}"
+                    else:
+                        assert actual_val == expected_val, \
+                            f"{error_msg_prefix}（订单号: {expected_order_no}）" \
+                            f"字段 {field} 不匹配：实际={actual_val}, 预期={expected_val}"
+
+            # 所有预期元素验证通过
+            with allure.step("断言成功"):
+                allure.attach(f"预期列表的 {len(expected)} 个元素均包含在实际列表中，且指定字段匹配", "结果",
+                              allure.attachment_type.TEXT)
+
+        except AssertionError as e:
+            # 断言失败时，附加详细错误信息到Allure
+            with allure.step("断言失败"):
+                allure.attach(str(e), "错误详情", allure.attachment_type.TEXT)
+            raise e
+
     def verify_data(
             self,
             actual_value,

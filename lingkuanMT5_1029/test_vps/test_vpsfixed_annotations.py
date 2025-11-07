@@ -46,7 +46,8 @@ class TestVPSremark:
                 "followOrderRemark": 0,
                 "fixedComment": f"ceshiceluebeizhu{class_random_str}",
                 "commentType": None,
-                "digits": 0
+                "digits": 0,
+                "platformType": 1
             }
             response = self.send_put_request(
                 logged_session,
@@ -87,7 +88,8 @@ class TestVPSremark:
                 "forex": "",
                 "abRemark": "",
                 "id": MT5vps_addslave_id,
-                "platformId": platformId
+                "platformId": platformId,
+                "platformType": 1
             }
             response = self.send_post_request(
                 logged_session,
@@ -212,7 +214,8 @@ class TestVPSremark:
                 "followOrderRemark": 0,
                 "fixedComment": f"ceshiceluebeizhu{class_random_str}",
                 "commentType": None,
-                "digits": 0
+                "digits": 0,
+                "platformType": 1
             }
             response = self.send_put_request(logged_session, '/subcontrol/trader', json_data=json_data)
             self.assert_response_status(response, 200, "修改vps策略信息失败")
@@ -249,7 +252,8 @@ class TestVPSremark:
                 "forex": "",
                 "abRemark": "",
                 "id": MT5vps_addslave_id,
-                "platformId": platformId
+                "platformId": platformId,
+                "platformType": 1
             }
             response = self.send_post_request(
                 logged_session,
@@ -374,7 +378,8 @@ class TestVPSremark:
                 "followOrderRemark": 1,  # 开启订单备注
                 "fixedComment": f"ceshiceluebeizhu{class_random_str}",
                 "commentType": None,
-                "digits": 0
+                "digits": 0,
+                "platformType": 1
             }
             response = self.send_put_request(logged_session, '/subcontrol/trader', json_data=json_data)
             self.assert_response_status(response, 200, "修改vps策略信息失败")
@@ -411,7 +416,8 @@ class TestVPSremark:
                 "forex": "",
                 "abRemark": "",
                 "id": MT5vps_addslave_id,
-                "platformId": platformId
+                "platformId": platformId,
+                "platformType": 1
             }
             response = self.send_post_request(
                 logged_session,

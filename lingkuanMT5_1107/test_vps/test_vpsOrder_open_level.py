@@ -363,7 +363,7 @@ class TestLeakageopen_level:
                 ]
                 logging.info(f"数据库转换后: {db_comparable_list}")
                 # 比较两个列表（可根据需要调整比较逻辑）
-                self.assert_expected_in_actual(
+                self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_open,
                     expected=db_comparable_list,
                     # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
@@ -534,11 +534,11 @@ class TestLeakageopen_level:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.open_time"
                 )
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -726,11 +726,11 @@ class TestLeakageopen_level:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -787,7 +787,7 @@ class TestLeakageopen_level:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改跟单账号（漏平）")
@@ -1056,11 +1056,11 @@ class TestLeakageopen_level:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.open_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1302,7 +1302,7 @@ class TestLeakageopen_level:
                 ]
                 logging.info(f"数据库转换后: {db_comparable_list}")
                 # 比较两个列表（可根据需要调整比较逻辑）
-                self.assert_expected_in_actual(
+                self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_level,
                     expected=db_comparable_list,
                     # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
@@ -1482,11 +1482,11 @@ class TestLeakageopen_level:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
@@ -1543,7 +1543,7 @@ class TestLeakageopen_level:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
+    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-修改策略账号信息")
@@ -1701,7 +1701,7 @@ class TestLeakageopen_level:
                 ]
                 logging.info(f"数据库转换后: {db_comparable_list}")
                 # 比较两个列表（可根据需要调整比较逻辑）
-                self.assert_expected_in_actual(
+                self.assert_data_lists_equal(
                     actual=MT5vps_redis_comparable_list_open,
                     expected=db_comparable_list,
                     # fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
@@ -1941,11 +1941,11 @@ class TestLeakageopen_level:
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:

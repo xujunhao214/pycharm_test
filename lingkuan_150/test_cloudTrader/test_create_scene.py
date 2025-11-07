@@ -144,7 +144,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "templateId": 1,
                 "remark": "云跟单账号测试数据",
                 "Cfd": "",
-                "mode_desc": "固定手数（5倍）"
+                "mode_desc": "固定手数5倍"
             },
             {
                 "followMode": 1,
@@ -152,7 +152,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 "templateId": cloudTrader_template_id1,
                 "remark": "云跟单账号测试数据",
                 "Cfd": "",
-                "mode_desc": "修改品种（3倍）"
+                "mode_desc": "品种3倍"
             },
             {
                 "followMode": 2,
