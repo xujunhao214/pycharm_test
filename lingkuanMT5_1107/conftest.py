@@ -264,7 +264,7 @@ def init_db_pool(db_config):
         failures=(err.OperationalError, err.InterfaceError),  # 连接异常重试
         ping=1,  # 获取连接时 ping 数据库
     )
-    print("数据库连接池初始化成功（无兼容性问题）")
+    # print("数据库连接池初始化成功（无兼容性问题）")
 
 
 # --------------------------
