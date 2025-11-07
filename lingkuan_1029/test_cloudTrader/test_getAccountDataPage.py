@@ -22,7 +22,7 @@ class TestCloudOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend1(APITestBase):
         # @pytest.mark.skipif(True, reason="跳过")
@@ -303,7 +303,7 @@ class TestCloudOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend2(APITestBase):
         @pytest.mark.skipif(True, reason="跳过")

@@ -24,7 +24,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend1(APITestBase):
         @pytest.mark.url("vps")
@@ -547,7 +547,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend2(APITestBase):
         @pytest.mark.url("vps")
@@ -1010,7 +1010,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend3(APITestBase):
         @pytest.mark.url("vps")
@@ -1447,7 +1447,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend4(APITestBase):
         @pytest.mark.url("vps")
@@ -1911,7 +1911,7 @@ class TestVPSOrdersendbuy:
       5. 校验账号的数据是否正确
     - 预期结果：云策略下单的停止功能正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend5(APITestBase):
         @pytest.mark.url("vps")
@@ -2367,7 +2367,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确，权重正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend6(APITestBase):
         @pytest.mark.url("vps")
@@ -2836,7 +2836,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：权重正确，优先满足手数范围，然后是总手数
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend7(APITestBase):
         @pytest.mark.url("vps")
@@ -3330,7 +3330,7 @@ class TestVPSOrdersendbuy:
       2. 预期下单失败：总手数不能低于最低手数
     - 预期结果：提示正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders8(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
@@ -3371,7 +3371,7 @@ class TestVPSOrdersendbuy:
       2. 预期下单失败：下单失败，请检查下单参数
     - 预期结果：提示正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders9(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
@@ -3415,7 +3415,7 @@ class TestVPSOrdersendbuy:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend10(APITestBase):
         @pytest.mark.url("vps")
@@ -3885,7 +3885,7 @@ class TestVPSOrdersendbuy:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend11(APITestBase):
         @pytest.mark.url("vps")
@@ -4355,7 +4355,7 @@ class TestVPSOrdersendbuy:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend12(APITestBase):
         @pytest.mark.url("vps")

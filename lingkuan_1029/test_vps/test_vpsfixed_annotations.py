@@ -22,7 +22,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark1(APITestBase):
         @pytest.mark.url("vps")
@@ -188,7 +188,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark2(APITestBase):
         @pytest.mark.url("vps")
@@ -339,7 +339,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark3(APITestBase):
         @pytest.mark.url("vps")

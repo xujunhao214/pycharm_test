@@ -24,7 +24,7 @@ class TestCloudStrategyOrderbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    @pytest.mark.flaky(reruns=3, reruns_delay=3)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend1(APITestBase):
         @allure.title("云策略列表-修改云跟单")
@@ -114,7 +114,7 @@ class TestCloudStrategyOrderbuy:
                     "响应msg字段应为success"
                 )
 
-        @pytest.mark.flaky(reruns=3, reruns_delay=3)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("数据库校验-云策略-复制下单数据")
         def test_copy_verify_db(self, class_random_str, var_manager, db_transaction):
             """验证复制下单后数据库中的订单数据正确性"""
