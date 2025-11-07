@@ -22,6 +22,7 @@ from lingkuanMT5_1029.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
+from DBUtils.PooledDB import PooledDB
 from lingkuanMT5_1029.commons.random_generator import generate_random_str
 
 logger = logging.getLogger(__name__)
@@ -208,60 +209,88 @@ def test_group(request):
 
 
 # 数据库相关夹具
-@pytest.fixture(scope="session")
-def db_config(environment) -> dict:
-    """获取对应环境的数据库配置"""
-    return ENV_CONFIG[environment]["db_config"]
+# 全局连接池
+db_pool = None
 
 
-@pytest.fixture(scope="function")  # 保持function级别，每个用例独立连接
-def db(db_config) -> pymysql.connections.Connection:
-    """数据库连接夹具（每个用例创建新连接，带有重试功能）"""
+# --------------------------
+# 1. 初始化数据库连接池（session级别）
+# --------------------------
+@pytest.fixture(scope="session", autouse=True)
+def init_db_pool(environment):
+    global db_pool
+    # 获取环境对应的数据库配置
+    db_config = ENV_CONFIG[environment]["db_config"]
+
     # 解析cursorclass字符串为实际类
     if isinstance(db_config["cursorclass"], str):
         module_name, class_name = db_config["cursorclass"].rsplit('.', 1)
         module = __import__(module_name, fromlist=[class_name])
         db_config["cursorclass"] = getattr(module, class_name)
 
-    # 重试配置
-    max_retries = 3  # 最大重试次数
-    retry_delay = 5  # 重试间隔时间（秒）
+    # 初始化连接池（适配并行场景）
+    db_pool = PooledDB(
+        creator=pymysql,
+        maxconnections=4,  # 并行任务数（如 pytest -n 4），根据实际调整
+        mincached=2,  # 初始空闲连接数
+        maxcached=4,  # 最大空闲连接数
+        blocking=True,  # 连接耗尽时阻塞等待（避免报错）
+        isolation_level="READ COMMITTED",  # 读已提交级别，平衡一致性和并发
+        autocommit=False,  # 关闭自动提交，交给事务控制
+        **db_config
+    )
+    print("数据库连接池初始化成功")
+
+
+# --------------------------
+# 2. 数据库连接夹具（function级别，从池获取）
+# --------------------------
+@pytest.fixture(scope="function")
+def db(init_db_pool) -> pymysql.connections.Connection:
+    """每个用例从连接池获取独立连接，自带重试逻辑"""
+    max_retries = 3
+    retry_delay = 5
     conn = None
 
-    # 带重试的连接逻辑
     for attempt in range(max_retries):
         try:
-            conn = pymysql.connect(**db_config)
-            # 连接成功，退出重试循环
-            break
+            conn = db_pool.connection()  # 从连接池获取连接
+            if conn.open:
+                break
         except err.OperationalError as e:
-            # 如果是最后一次尝试，直接抛出异常
             if attempt == max_retries - 1:
                 raise
-            # 打印重试信息
-            print(f"数据库连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
-            print(f"{retry_delay}秒后进行下一次尝试...")
+            print(f"获取数据库连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
             time.sleep(retry_delay)
         except Exception as e:
-            # 非连接性错误，直接抛出
             raise
 
-    yield conn  # 用例执行期间使用该连接
+    yield conn
 
-    # 用例结束后关闭连接
+    # 用例结束后归还连接到池
     if conn and conn.open:
         try:
-            conn.close()
+            conn.rollback()  # 回滚未提交操作
+            conn.close()  # 归还连接（连接池复用）
         except Exception as e:
-            print(f"关闭数据库连接时发生错误: {str(e)}")
+            print(f"关闭数据库连接失败: {str(e)}")
 
 
-@pytest.fixture(scope="function")  # 每个用例独立事务
+# --------------------------
+# 3. 事务管理夹具（function级别，自动回滚）
+# --------------------------
+@pytest.fixture(scope="function")
 def db_transaction(db):
-    """数据库事务管理（每个用例独立）"""
-    # 不需要手动begin()，pymysql默认自动提交模式
-    yield db
-    # 用例结束后无需commit/rollback，因为每个用例使用独立连接，且执行完即关闭
+    """每个用例独立事务，执行完自动回滚"""
+    try:
+        yield db
+    finally:
+        # 强制回滚，避免意外写操作污染数据（查询无影响）
+        if db and db.open:
+            try:
+                db.rollback()
+            except Exception as e:
+                print(f"事务回滚失败: {str(e)}")
 
 
 # ------------------------------

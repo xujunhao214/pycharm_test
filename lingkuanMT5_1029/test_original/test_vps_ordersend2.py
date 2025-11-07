@@ -22,6 +22,7 @@ class TestVPSOrderSend_newScenarios:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确，权重正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestVPSOrderSend6(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -490,6 +491,7 @@ class TestVPSOrderSend_newScenarios:
       4. 校验账号的数据是否正确
     - 预期结果：权重正确，优先满足手数范围，然后是总手数
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestVPSOrderSend7(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略开仓")
@@ -980,6 +982,7 @@ class TestVPSOrderSend_newScenarios:
       2. 预期下单失败：总手数不能低于最低手数
     - 预期结果：提示正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestVPStradingOrders8(APITestBase):
         @allure.title("VPS交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
@@ -1019,6 +1022,7 @@ class TestVPSOrderSend_newScenarios:
           2. 预期下单失败：下单失败，请检查下单参数
         - 预期结果：提示正确
         """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
         class TestVPStradingOrders9(APITestBase):
             @allure.title("VPS交易下单-分配下单请求")
             def test_copy_order_send(self, class_random_str, logged_session, var_manager):

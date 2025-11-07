@@ -24,6 +24,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend1(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -299,6 +300,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend2(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -556,6 +558,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend3(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -796,6 +799,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend4(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1057,6 +1061,7 @@ class TestCloudStrategyOrder:
       5. 校验账号的数据是否正确
     - 预期结果：云策略下单的停止功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend5(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1275,6 +1280,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：云策略分配下单功能正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend6(APITestBase):
         @allure.title("云策略-分配下单操作")
         def test_allocation_place_order(self, class_random_str, logged_session, var_manager):
@@ -1535,6 +1541,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend7(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -1806,6 +1813,7 @@ class TestCloudStrategyOrder:
       4. 校验账号的数据是否正确
     - 预期结果：权重正确，优先满足手数范围，然后是总手数
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend8(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -2076,6 +2084,7 @@ class TestCloudStrategyOrder:
       2. 预期下单失败：总手数不能低于最低手数
     - 预期结果：提示正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend9(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
@@ -2122,6 +2131,7 @@ class TestCloudStrategyOrder:
       2. 预期下单失败：下单失败，请检查下单参数
     - 预期结果：提示正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     class TestMasOrderSend10(APITestBase):
         @allure.title("云策略-复制下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):

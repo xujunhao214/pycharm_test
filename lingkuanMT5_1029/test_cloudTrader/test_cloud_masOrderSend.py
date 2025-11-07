@@ -23,6 +23,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders1(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
@@ -68,7 +69,6 @@ class TestCloudMasOrdersend:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("云策略交易下单-分配下单请求")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
@@ -486,6 +486,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders2(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -920,6 +921,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders3(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -1325,6 +1327,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders4(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -1704,6 +1707,7 @@ class TestCloudMasOrdersend:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders5(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -2122,6 +2126,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders6(APITestBase):
         @allure.title("云策略交易下单-复制下单请求")
@@ -2490,6 +2495,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders7(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
@@ -2915,6 +2921,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders8(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")
@@ -3340,6 +3347,7 @@ class TestCloudMasOrdersend:
       5. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudtradingOrders9(APITestBase):
         @allure.title("云策略交易下单-修改云跟单账号")

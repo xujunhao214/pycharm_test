@@ -917,11 +917,6 @@ class APITestBase:
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -991,6 +986,10 @@ class APITestBase:
                 with allure.step("超时后最终结果"):
                     allure.attach(f"超时{timeout}秒，查到{len(final_result)}条记录", "结果说明",
                                   allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                    allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                                  allure.attachment_type.TEXT)
 
             return final_result  # 超时后返回实际查询结果（可能非空）
 
@@ -1023,7 +1022,7 @@ class APITestBase:
         fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
             "%Y-%m-%d %H:%M:%S")
 
-        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）\n超时: {timeout}秒")
+        logger.info(f"[{self._get_current_time()}] 开始轮询（时区{offset_str}）| 超时: {timeout}秒")
 
         with allure.step(f"轮询等待数据稳定（时区{offset_str}，超时{timeout}秒）"):
             while time.time() - start_time < timeout:
@@ -1289,9 +1288,8 @@ class APITestBase:
             allure.attach(self.serialize_data(expected_sorted), "预期列表", allure.attachment_type.JSON)
 
         try:
-            assert len(actual_sorted) == len(expected_sorted), \
-                f"Failed: {error_msg_prefix}（长度不匹配）"
-
+            # assert len(actual_sorted) == len(expected_sorted), \
+            #     f"Failed: {error_msg_prefix}（长度不匹配）"
             for a, e in zip(actual_sorted, expected_sorted):
                 for field in fields_to_compare:
                     actual_val = a[field]

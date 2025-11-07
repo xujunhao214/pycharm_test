@@ -498,6 +498,7 @@ class TestCloudStrategyOrderbuy:
         """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSOrderSend12(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")

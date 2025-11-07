@@ -22,6 +22,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取策略备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark1(APITestBase):
         @pytest.mark.url("vps")
@@ -96,7 +97,6 @@ class TestVPSremark:
             self.assert_response_status(response, 200, "修改跟单账号失败")
             self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @pytest.mark.url("vps")
         @allure.title("策略开仓及备注校验")
         def test_scenario1_trader_orderSend_and_verify(self, class_random_str, var_manager, logged_session,
@@ -188,6 +188,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取自身备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark2(APITestBase):
         @pytest.mark.url("vps")
@@ -349,6 +350,7 @@ class TestVPSremark:
       5. 策略账号平仓
     - 预期结果：跟单取开仓备注
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSStrategyOrderRemark3(APITestBase):
         @pytest.mark.url("vps")

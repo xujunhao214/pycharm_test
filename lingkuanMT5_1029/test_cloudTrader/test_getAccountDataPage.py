@@ -22,6 +22,7 @@ class TestCloudOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend1(APITestBase):
         # @pytest.mark.skipif(True, reason="跳过")
@@ -140,7 +141,6 @@ class TestCloudOrderSend_newScenarios:
                 # 使用 round 函数保留两位小数，round 函数的第二个参数指定保留的小数位数
                 margin_proportion = round(margin_proportion, 2)
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("仪表盘-账号数据校验")
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
@@ -303,6 +303,7 @@ class TestCloudOrderSend_newScenarios:
       3. 数据正确
     - 预期结果：数据正确
     """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend2(APITestBase):
         @pytest.mark.skipif(True, reason="跳过")
@@ -398,7 +399,6 @@ class TestCloudOrderSend_newScenarios:
                 # 使用 round 函数保留两位小数，round 函数的第二个参数指定保留的小数位数
                 margin_proportion = round(margin_proportion, 2)
 
-        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         @allure.title("仪表盘-账号数据校验")
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
