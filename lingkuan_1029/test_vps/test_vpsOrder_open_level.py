@@ -359,7 +359,7 @@ class TestLeakageopen_level:
                 ]
                 logging.info(f"数据库转换后: {db_comparable_list}")
                 # 比较两个列表（可根据需要调整比较逻辑）
-                self.assert_data_lists_equal(
+                self.assert_expected_in_actual(
                     actual=vps_redis_comparable_list_open,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
@@ -1288,7 +1288,7 @@ class TestLeakageopen_level:
                 ]
                 logging.info(f"数据库转换后: {db_comparable_list}")
                 # 比较两个列表（可根据需要调整比较逻辑）
-                self.assert_data_lists_equal(
+                self.assert_expected_in_actual(
                     actual=vps_redis_comparable_list_level,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
@@ -1682,7 +1682,7 @@ class TestLeakageopen_level:
                 ]
                 logging.info(f"数据库转换后: {db_comparable_list}")
                 # 比较两个列表（可根据需要调整比较逻辑）
-                self.assert_data_lists_equal(
+                self.assert_expected_in_actual(
                     actual=vps_redis_comparable_list_open,
                     expected=db_comparable_list,
                     fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],

@@ -27,7 +27,7 @@ SKIP_REASON = "跳过此用例"
 """)
 class Testcloudstargy_status(APITestBase):
     @allure.title("云策略-云策略列表-修改策略账号信息")
-    def test_mascontrol_cloudMaster(self, var_manager,   logged_session, encrypted_password):
+    def test_mascontrol_cloudMaster(self, var_manager, logged_session, encrypted_password):
         # 1. 修改云策略状态status为1，关闭策略状态
         with allure.step("发送修改云策略的请求"):
             cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
@@ -64,7 +64,7 @@ class Testcloudstargy_status(APITestBase):
             )
 
     @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-    def test_dbcloudTrader_cloudBatchUpdate(self, var_manager,   db_transaction):
+    def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
             params = ("自动化测试",)
@@ -115,7 +115,7 @@ class Testcloudstargy_status(APITestBase):
         )
 
     @allure.title("数据库校验-账号管理-交易下单-根据remark发现有漏单")
-    def test_dbquery_orderSend_addsalve(self, var_manager,   db_transaction):
+    def test_dbquery_orderSend_addsalve(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
             cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
 
@@ -167,7 +167,7 @@ class Testcloudstargy_status(APITestBase):
             # print(f"master_order的数据是：{cloudTrader_master_order_open}")
 
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
-    def test_dbquery_redis(self, var_manager,   db_transaction, redis_cloudTrader_data_send):
+    def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
             cloudOrderSend = var_manager.get_variable("cloudOrderSend")
@@ -232,7 +232,7 @@ class Testcloudstargy_status(APITestBase):
             )
 
     @allure.title("云策略-云策略列表-修改策略账号信息")
-    def test_mascontrol_cloudMaster2(self, var_manager,   logged_session, encrypted_password):
+    def test_mascontrol_cloudMaster2(self, var_manager, logged_session, encrypted_password):
         # 1. 修改云策略状态status为0，开启云策略状态
         with allure.step("发送修改云策略的请求"):
             cloudTrader_group_id = var_manager.get_variable("cloudTrader_group_id")
@@ -269,7 +269,7 @@ class Testcloudstargy_status(APITestBase):
             )
 
     @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-    def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager,   db_transaction):
+    def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
             params = ("自动化测试",)
@@ -285,7 +285,7 @@ class Testcloudstargy_status(APITestBase):
             assert status == 0, f"status的状态应该是0，实际是：{status}"
 
     @allure.title("云策略-云策略列表-修改完之后进行开仓补全")
-    def test_follow_repairSend(self, var_manager,   logged_session):
+    def test_follow_repairSend(self, var_manager, logged_session):
         with allure.step("1. 发送开仓补全请求"):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
@@ -316,7 +316,7 @@ class Testcloudstargy_status(APITestBase):
                 )
 
     @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-    def test_dbcloudTrader_cloudOrderSend(self, var_manager,   db_transaction):
+    def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
@@ -366,48 +366,50 @@ class Testcloudstargy_status(APITestBase):
             totalSzie = cloudOrderSend["totalSzie"]
             size = [record["size"] for record in db_data]
             total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
-            logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
+            # 关键优化：四舍五入保留两位小数
+            total = round(float(total), 2)
+        assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
+            f'下单总手数是：{totalSzie},订单详情总手数是：{total}'
+        logging.info(f'下单总手数是：{totalSzie},订单详情总手数是：{total}')
 
-            # 下单手数与指令表手数校验
-            total_lots = [record["total_lots"] for record in db_data]
-            self.assert_list_equal_ignore_order(total_lots, size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
-            logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
+        # 下单手数与指令表手数校验
+        total_lots = [record["total_lots"] for record in db_data]
+        self.assert_list_equal_ignore_order(total_lots, size), f'下单手数是：{totalSzie},指令表手数是：{total_lots}'
+        logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
 
-    @allure.title("账号管理-交易下单-平仓")
-    def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
-        cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
-        # 1. 发送平仓请求
-        data = {
-            "isCloseAll": 1,
-            "intervalTime": 100,
-            "traderList": [
-                cloudTrader_user_ids_2
-            ]
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/bargain/masOrderClose',
-            json_data=data
-        )
 
-        # 2. 判断是否平仓成功
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
+@allure.title("账号管理-交易下单-平仓")
+def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+    cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
+    # 1. 发送平仓请求
+    data = {
+        "isCloseAll": 1,
+        "intervalTime": 100,
+        "traderList": [
+            cloudTrader_user_ids_2
+        ]
+    }
+    response = self.send_post_request(
+        logged_session,
+        '/bargain/masOrderClose',
+        json_data=data
+    )
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-    def test_dbcloudTrader_cloudOrderClose(self, var_manager,   db_transaction):
-        with allure.step("1. 获取订单详情表账号数据"):
-            cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
-            sql = f"""
+    # 2. 判断是否平仓成功
+    self.assert_json_value(
+        response,
+        "$.msg",
+        "success",
+        "响应msg字段应为success"
+    )
+
+
+# @pytest.mark.skip(reason=SKIP_REASON)
+@allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
+def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+    with allure.step("1. 获取订单详情表账号数据"):
+        cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+        sql = f"""
                        SELECT 
                            fod.size,
                            fod.close_no,
@@ -434,35 +436,35 @@ class Testcloudstargy_status(APITestBase):
                        WHERE foi.operation_type = %s
                            AND fod.account = %s
                            """
-            params = (
-                '1',
-                cloudTrader_user_accounts_4
-            )
+        params = (
+            '1',
+            cloudTrader_user_accounts_4
+        )
 
-            # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.query_database_with_time_with_timezone(
-                db_transaction=db_transaction,
-                sql=sql,
-                params=params,
-                time_field="fod.close_time"
-            )
-        with allure.step("2. 数据校验"):
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+        # 调用轮询等待方法（带时间范围过滤）
+        db_data = self.query_database_with_time_with_timezone(
+            db_transaction=db_transaction,
+            sql=sql,
+            params=params,
+            time_field="fod.close_time"
+        )
+    with allure.step("2. 数据校验"):
+        trader_ordersend = var_manager.get_variable("trader_ordersend")
+        if not db_data:
+            pytest.fail("数据库查询结果为空，无法提取数据")
 
-            status = db_data[0]["status"]
-            assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
-            logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
+        status = db_data[0]["status"]
+        assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
+        logging.info(f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}")
 
-            # 平仓总手数校验
-            totalSzie = trader_ordersend["totalSzie"]
-            size = [record["size"] for record in db_data]
-            total = sum(size)
-                    # 关键优化：四舍五入保留两位小数
-                    total = round(float(total), 2)
-            assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
-                f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
-            logging.info(f'订单详情总手数是：{total}')
+        # 平仓总手数校验
+        totalSzie = trader_ordersend["totalSzie"]
+        size = [record["size"] for record in db_data]
+        total = sum(size)
+        # 关键优化：四舍五入保留两位小数
+        total = round(float(total), 2)
+    assert math.isclose(float(totalSzie), float(total), rel_tol=1e-9, abs_tol=1e-9), \
+        f'下单总手数是：{totalSzie}，订单详情总手数是：{total}'
+    logging.info(f'订单详情总手数是：{total}')
 
-            time.sleep(25)
+    time.sleep(25)
