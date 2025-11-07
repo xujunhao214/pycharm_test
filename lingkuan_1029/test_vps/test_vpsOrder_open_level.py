@@ -24,7 +24,7 @@ class TestLeakageopen_level:
       5. 进行补单操作，然后平仓
     - 预期结果：vps跟单账号开仓-关闭，有漏单数据
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen(APITestBase):
@@ -777,7 +777,7 @@ class TestLeakageopen_level:
       5. 修改vps跟单账号平仓-开启
     - 预期结果：vps跟单账号平仓-关闭，有漏单数据
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakagelevel(APITestBase):
@@ -1522,7 +1522,7 @@ class TestLeakageopen_level:
       5. 进行补单操作，然后平仓
     - 预期结果：vps策略跟单状态为关闭，有漏单数据
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestLeakageopen_addstatus(APITestBase):

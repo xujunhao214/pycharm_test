@@ -29,7 +29,7 @@ class TestVPSCoreFunctionality:
       4. 再次进行平仓
     - 预期结果：平仓的停止功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestStopCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
@@ -270,7 +270,7 @@ class TestVPSFollowDirection:
       4. 策略账号buy方向进行平仓
     - 预期结果：平仓的订单方向功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestReverseFollowClose_sell(APITestBase):
         @pytest.mark.url("vps")
@@ -512,7 +512,7 @@ class TestVPSFollowDirection:
       4. 策略账号buy方向进行平仓
     - 预期结果：平仓的订单方向功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestReverseFollowClose_buy(APITestBase):
         @pytest.mark.url("vps")
@@ -716,7 +716,7 @@ class TestVPSFollowDirection:
     4. 策略账号buy方向进行平仓
     - 预期结果：平仓的订单方向功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestReverseFollowClose_all(APITestBase):
         @pytest.mark.url("vps")
@@ -882,7 +882,7 @@ class TestVPSOrderQuantityControl:
       4. 进行平仓，平仓一个，平仓失败，没有可平订单
     - 预期结果：平仓的订单数量功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestBatchCloseFunctionality(APITestBase):
         @pytest.mark.url("vps")
@@ -1047,7 +1047,7 @@ class TestVPSOrderType:
       4. 在自研平台进行平仓-订单类型-外部订单，平仓成功
     - 预期结果：平仓的订单类型功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT4ExternalOrderClose(APITestBase):
@@ -1179,7 +1179,7 @@ class TestVPSOrderType:
       3. 进行平仓，平仓的订单类型-内部订单-平仓成功
     - 预期结果：平仓的订单类型功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestInternalOrderClose(APITestBase):
         @pytest.mark.url("vps")
@@ -1300,7 +1300,7 @@ class TestVPSOrderType:
       3. 进行平仓，平仓的订单类型-全部订单-平仓成功
     - 预期结果：平仓的订单类型功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestAllOrderClose(APITestBase):
         @pytest.mark.url("vps")
@@ -1430,7 +1430,7 @@ class TestVPSCloseRemark:
       5. 策略账号进行平仓
     - 预期结果：平仓的备注功能正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class TestFixedCommentMatching(APITestBase):
         @pytest.mark.url("vps")

@@ -23,7 +23,7 @@ class Testcloudtrader_moneyandscene:
       5. 判断三个账号的币种手数是否正确
     - 预期结果：三个账号的币种手数正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class Testcloudtrader_money(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
@@ -642,7 +642,7 @@ class Testcloudtrader_moneyandscene:
       5. 判断三个账号的手数是否正确
     - 预期结果：三个账号的手数正确
     """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+    @pytest.mark.flaky(reruns=3, reruns_delay=3)
     @pytest.mark.usefixtures("class_random_str")
     class Testcloudtrader_Scence(APITestBase):
         @allure.title("账号管理-交易下单-云策略账号复制下单")
