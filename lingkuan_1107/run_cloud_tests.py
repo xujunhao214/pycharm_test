@@ -28,7 +28,7 @@ def run_cloud_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        # "test_cloudTrader/test_create.py",
+        "test_cloudTrader/test_create.py",
         # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
         # "test_cloudTrader/test_getAccountDataPage.py",
@@ -42,7 +42,7 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_cloudfixed_annotations.py",
         # "test_cloudTrader/test_create_scene.py",
         # "test_cloudTrader/test_cloudtrader_money_scene.py",
-        "test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_delete.py",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=debug",

@@ -1,348 +1,201 @@
-INFO     - 2025-11-10 10:41:12 - [conftest:341] - [2025-11-10 10:41] 测试会话开始: 2025-11-10 10:41:12, 测试组: vps
-INFO     - 2025-11-10 10:41:12 - [variable_manager:40] - [2025-11-10 10:41] 成功加载静态变量: VAR\test_data.json
-INFO     - 2025-11-10 10:41:12 - [variable_manager:64] - [2025-11-10 10:41] 成功加载运行时变量: VAR\runtime_vars_vps.json
-INFO     - 2025-11-10 10:41:12 - [conftest:65] - [2025-11-10 10:41:12] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:12 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:13 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:13 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:06","refreshTokenExpire":"2025-11-24 10:41:06","access_token":"86582ef96adf47bab61448c2f9d5315f","refresh_token":"aaa9f7f8234d4d48981316327a45af84"}}
-INFO     - 2025-11-10 10:41:13 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:13 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-DEBUG    - 2025-11-10 10:41:13 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/group HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:13 - [api_base:239] - [2025-11-10 10:41:13] DELETE请求: /mascontrol/group 
-数据: [792]
-INFO     - 2025-11-10 10:41:14 - [conftest:170] - [2025-11-10 10:41:14] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_group 执行完毕
-INFO     - 2025-11-10 10:41:14 - [api_base:796] - [2025-11-10 10:41:14] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_group WHERE name = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:14 - [api_base:448] - [2025-11-10 10:41:14] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+INFO     - 2025-11-10 15:05:32 - [conftest:341] - [2025-11-10 15:05] 测试会话开始: 2025-11-10 15:05:32, 测试组: vps
+INFO     - 2025-11-10 15:05:34 - [variable_manager:40] - [2025-11-10 15:05] 成功加载静态变量: VAR\uat_data.json
+INFO     - 2025-11-10 15:05:34 - [variable_manager:64] - [2025-11-10 15:05] 成功加载运行时变量: VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:34 - [conftest:65] - [2025-11-10 15:05:34] 用例 test_vps/test_create.py::TestCreate::test_create_user 开始登录，环境: uat
+INFO     - 2025-11-10 15:05:34 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 744228
+DEBUG    - 2025-11-10 15:05:34 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:05:35 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:35 - [conftest:127] - 登录响应信息：{"code":500,"msg":"MFA验证失败","data":null}
+ERROR    - 2025-11-10 15:05:35 - [conftest:142] - 第1次登录失败: 登录失败: MFA验证失败
+INFO     - 2025-11-10 15:05:45 - [conftest:108] - UAT登录尝试 2/5，MFA验证码: 744228
+DEBUG    - 2025-11-10 15:05:46 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:46 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:05:39","refreshTokenExpire":"2025-11-24 15:05:39","access_token":"8e8912358c1047e08aa08848118e9033","refresh_token":"b316eb6325134c6cb07926a7ee76a1ea"}}
+INFO     - 2025-11-10 15:05:46 - [conftest:137] - UAT登录成功（第2次尝试）
+INFO     - 2025-11-10 15:05:46 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:05:46 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:46 - [api_base:152] - [2025-11-10 15:05:46] POST请求（JSON）: /mascontrol/user 
+数据: {'account': '31491', 'password': 'fa1af751c83d311f091c9393a364068c', 'platform': 'FXAdamantStone-Real', 'platformType': 0, 'serverNode': '47.238.99.66:443', 'remark': '', 'sort': '12', 'vpsDescs': []}
+INFO     - 2025-11-10 15:05:46 - [api_base:160] - [2025-11-10 15:05:46] 请求后等待 1 秒
+INFO     - 2025-11-10 15:05:47 - [conftest:170] - [2025-11-10 15:05:47] 用例 test_vps/test_create.py::TestCreate::test_create_user 执行完毕
+INFO     - 2025-11-10 15:05:47 - [api_base:448] - [2025-11-10 15:05:47] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+参数: ('31491',)
+INFO     - 2025-11-10 15:05:47 - [api_base:451] - [2025-11-10 15:05:47] 查询成功，结果数量: 1
+INFO     - 2025-11-10 15:05:47 - [api_base:463] - [2025-11-10 15:05:47] 查询结果: [{"id": 10067, "account": "31491", "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 346, "platform": "FXAdamantStone-Real", "account_type": "0", "server_node": "47.238.99.66:443", "group_name": null, "group_id": null, "sort": 12, "status": 0, "remark": null, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-10 15:05:40", "updater": 10105, "update_time": "2025-11-10 15:05:40", "platform_type": 0}]
+INFO     - 2025-11-10 15:05:47 - [test_create:72] - 新增用户ID: 10067
+INFO     - 2025-11-10 15:05:47 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:47 - [api_base:448] - [2025-11-10 15:05:47] 执行SQL: SELECT * FROM follow_platform WHERE server = %s ORDER BY create_time DESC 
+参数: ('FXAdamantStone-Real',)
+INFO     - 2025-11-10 15:05:48 - [api_base:451] - [2025-11-10 15:05:48] 查询成功，结果数量: 1
+INFO     - 2025-11-10 15:05:48 - [api_base:463] - [2025-11-10 15:05:48] 查询结果: [{"id": 346, "broker_name": "AS", "platform_type": 0, "server": "FXAdamantStone-Real", "server_node": "47.238.99.66:443", "remark": "BELLA", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2024-12-02 21:49:36", "updater": 10101, "update_time": "2025-11-03 09:30:25", "logo": null, "max_lots": 20.0, "suffix_enabled": 1, "suffix_forex": null, "suffix_cfd": null}]
+INFO     - 2025-11-10 15:05:48 - [test_create:92] - 平台ID: 346
+INFO     - 2025-11-10 15:05:48 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:48 - [conftest:65] - [2025-11-10 15:05:48] 用例 test_vps/test_create.py::TestCreate::test_create_importuser 开始登录，环境: uat
+INFO     - 2025-11-10 15:05:48 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 744228
+DEBUG    - 2025-11-10 15:05:48 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:05:49 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:49 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:05:43","refreshTokenExpire":"2025-11-24 15:05:43","access_token":"12c13affedca4f7ab3adae565349d21f","refresh_token":"ae8ce2ec23ee4029af09c52c61169563"}}
+INFO     - 2025-11-10 15:05:49 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:05:49 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:05:51 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/user/import HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:51 - [api_base:149] - [2025-11-10 15:05:51] POST请求（带文件）: /mascontrol/user/import 
+表单数据: None
+INFO     - 2025-11-10 15:05:51 - [api_base:160] - [2025-11-10 15:05:51] 请求后等待 1 秒
+INFO     - 2025-11-10 15:05:52 - [conftest:170] - [2025-11-10 15:05:52] 用例 test_vps/test_create.py::TestCreate::test_create_importuser 执行完毕
+INFO     - 2025-11-10 15:05:52 - [api_base:448] - [2025-11-10 15:05:52] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE remark = %s ORDER BY account ASC 
+参数: ('参数化新增账号',)
+INFO     - 2025-11-10 15:05:52 - [api_base:451] - [2025-11-10 15:05:52] 查询成功，结果数量: 7
+INFO     - 2025-11-10 15:05:52 - [api_base:463] - [2025-11-10 15:05:52] 查询结果: [{"id": 10081, "account": "31492", "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 346, "platform": "FXAdamantStone-Real", "account_type": null, "server_node": "47.238.99.66:443", "group_name": null, "group_id": null, "sort": 100, "status": 0, "remark": "参数化新增账号", "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-10 15:05:45", "updater": 10105, "update_time": "2025-11-10 15:05:45", "platform_type": 0}, {"id": 10079, "account": "31493", "password": "fa1af751c83d
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:52 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:53 - [conftest:65] - [2025-11-10 15:05:53] 用例 test_vps/test_create.py::TestCreate::test_create_vpsgroup 开始登录，环境: uat
+INFO     - 2025-11-10 15:05:53 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 744228
+DEBUG    - 2025-11-10 15:05:53 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:05:54 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:54 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:05:47","refreshTokenExpire":"2025-11-24 15:05:47","access_token":"eced9192419d46d487d28305c2cf1d9f","refresh_token":"f98b3239cff8416eba628a97754f16ac"}}
+INFO     - 2025-11-10 15:05:54 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:05:54 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:05:54 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/group HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:54 - [api_base:152] - [2025-11-10 15:05:54] POST请求（JSON）: /mascontrol/group 
+数据: {'name': '测试vps', 'color': '#EF7979', 'sort': 10, 'type': 1}
+INFO     - 2025-11-10 15:05:54 - [api_base:160] - [2025-11-10 15:05:54] 请求后等待 1 秒
+INFO     - 2025-11-10 15:05:55 - [conftest:170] - [2025-11-10 15:05:55] 用例 test_vps/test_create.py::TestCreate::test_create_vpsgroup 执行完毕
+INFO     - 2025-11-10 15:05:55 - [api_base:448] - [2025-11-10 15:05:55] 执行SQL: SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
 参数: ('测试vps',)
-INFO     - 2025-11-10 10:41:14 - [api_base:451] - [2025-11-10 10:41:14] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:14 - [api_base:463] - [2025-11-10 10:41:14] 查询结果: []
-INFO     - 2025-11-10 10:41:14 - [api_base:829] - [2025-11-10 10:41:14] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_group WHERE name = %s
-INFO     - 2025-11-10 10:41:14 - [conftest:65] - [2025-11-10 10:41:14] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:14 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:14 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:08","refreshTokenExpire":"2025-11-24 10:41:08","access_token":"f1e0349c62e54be192402317b8f161ce","refresh_token":"1cdf3fa49d1645b6892851c4f8bc1a48"}}
-INFO     - 2025-11-10 10:41:14 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:14 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-INFO     - 2025-11-10 10:41:14 - [conftest:165] - 切换到VPS URL: http://39.98.121.142/vps
-DEBUG    - 2025-11-10 10:41:14 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.121.142:80
-DEBUG    - 2025-11-10 10:41:15 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:15 - [api_base:239] - [2025-11-10 10:41:15] DELETE请求: /subcontrol/trader 
-数据: [15159]
-INFO     - 2025-11-10 10:41:16 - [conftest:170] - [2025-11-10 10:41:16] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalve 执行完毕
-INFO     - 2025-11-10 10:41:16 - [test_delete:217] - 查询条件: table=follow_trader, account=31492
-INFO     - 2025-11-10 10:41:16 - [api_base:796] - [2025-11-10 10:41:16] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:16 - [api_base:448] - [2025-11-10 10:41:16] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31492',)
-INFO     - 2025-11-10 10:41:16 - [api_base:451] - [2025-11-10 10:41:16] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:16 - [api_base:463] - [2025-11-10 10:41:16] 查询结果: []
-INFO     - 2025-11-10 10:41:16 - [api_base:829] - [2025-11-10 10:41:16] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:16 - [api_base:448] - [2025-11-10 10:41:16] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31492',)
-INFO     - 2025-11-10 10:41:16 - [api_base:451] - [2025-11-10 10:41:16] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:16 - [api_base:463] - [2025-11-10 10:41:16] 查询结果: []
-INFO     - 2025-11-10 10:41:16 - [conftest:65] - [2025-11-10 10:41:16] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:16 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:16 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:16 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:10","refreshTokenExpire":"2025-11-24 10:41:10","access_token":"34a76b09efb046d9945d4831648d0b78","refresh_token":"69d807f9ddd645e7a76c2b574b0e8ac5"}}
-INFO     - 2025-11-10 10:41:16 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:16 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-INFO     - 2025-11-10 10:41:16 - [conftest:165] - 切换到VPS URL: http://39.98.121.142/vps
-DEBUG    - 2025-11-10 10:41:16 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.121.142:80
-DEBUG    - 2025-11-10 10:41:17 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:17 - [api_base:239] - [2025-11-10 10:41:17] DELETE请求: /subcontrol/trader 
-数据: [10109]
-INFO     - 2025-11-10 10:41:18 - [test_delete:277] - [2025-11-10 10:41] 第1个跟单账号（ID: 10109）删除成功
-DEBUG    - 2025-11-10 10:41:18 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:18 - [api_base:239] - [2025-11-10 10:41:18] DELETE请求: /subcontrol/trader 
-数据: [10110]
-INFO     - 2025-11-10 10:41:19 - [test_delete:277] - [2025-11-10 10:41] 第2个跟单账号（ID: 10110）删除成功
-DEBUG    - 2025-11-10 10:41:19 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:19 - [api_base:239] - [2025-11-10 10:41:19] DELETE请求: /subcontrol/trader 
-数据: [10111]
-INFO     - 2025-11-10 10:41:20 - [test_delete:277] - [2025-11-10 10:41] 第3个跟单账号（ID: 10111）删除成功
-DEBUG    - 2025-11-10 10:41:20 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:20 - [api_base:239] - [2025-11-10 10:41:20] DELETE请求: /subcontrol/trader 
-数据: [10112]
-INFO     - 2025-11-10 10:41:21 - [test_delete:277] - [2025-11-10 10:41] 第4个跟单账号（ID: 10112）删除成功
-DEBUG    - 2025-11-10 10:41:21 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:21 - [api_base:239] - [2025-11-10 10:41:21] DELETE请求: /subcontrol/trader 
-数据: [10113]
-INFO     - 2025-11-10 10:41:22 - [test_delete:277] - [2025-11-10 10:41] 第5个跟单账号（ID: 10113）删除成功
-DEBUG    - 2025-11-10 10:41:22 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:22 - [api_base:239] - [2025-11-10 10:41:22] DELETE请求: /subcontrol/trader 
-数据: [10114]
-INFO     - 2025-11-10 10:41:23 - [test_delete:277] - [2025-11-10 10:41] 第6个跟单账号（ID: 10114）删除成功
-INFO     - 2025-11-10 10:41:23 - [conftest:170] - [2025-11-10 10:41:23] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_addsalvelist 执行完毕
-INFO     - 2025-11-10 10:41:24 - [api_base:796] - [2025-11-10 10:41:24] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31492',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:829] - [2025-11-10 10:41:24] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31492',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:796] - [2025-11-10 10:41:24] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31493',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:829] - [2025-11-10 10:41:24] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31493',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:796] - [2025-11-10 10:41:24] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31494',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:829] - [2025-11-10 10:41:24] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31494',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:796] - [2025-11-10 10:41:24] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31495',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:829] - [2025-11-10 10:41:24] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31495',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:796] - [2025-11-10 10:41:24] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31496',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:829] - [2025-11-10 10:41:24] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31496',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:796] - [2025-11-10 10:41:24] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31497',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:24 - [api_base:829] - [2025-11-10 10:41:24] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:24 - [api_base:448] - [2025-11-10 10:41:24] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
-参数: ('31497',)
-INFO     - 2025-11-10 10:41:24 - [api_base:451] - [2025-11-10 10:41:24] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:24 - [api_base:463] - [2025-11-10 10:41:24] 查询结果: []
-INFO     - 2025-11-10 10:41:25 - [conftest:65] - [2025-11-10 10:41:25] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:25 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:25 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:25 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:19","refreshTokenExpire":"2025-11-24 10:41:19","access_token":"e2f95793adb845eaba7a0bd7712b64eb","refresh_token":"d6c238c3b43e4dafb54dac944c239c88"}}
-INFO     - 2025-11-10 10:41:25 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:25 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-INFO     - 2025-11-10 10:41:25 - [conftest:165] - 切换到VPS URL: http://39.98.121.142/vps
-DEBUG    - 2025-11-10 10:41:25 - [connectionpool:243] - Starting new HTTP connection (1): 39.98.121.142:80
-DEBUG    - 2025-11-10 10:41:25 - [connectionpool:546] - http://39.98.121.142:80 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:25 - [api_base:239] - [2025-11-10 10:41:25] DELETE请求: /subcontrol/trader 
-数据: [15158]
-INFO     - 2025-11-10 10:41:26 - [conftest:170] - [2025-11-10 10:41:26] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_vpstrader 执行完毕
-INFO     - 2025-11-10 10:41:26 - [test_delete:349] - 查询条件: table=follow_trader, account=31491
-INFO     - 2025-11-10 10:41:26 - [api_base:796] - [2025-11-10 10:41:26] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_trader WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:26 - [api_base:448] - [2025-11-10 10:41:26] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
-参数: ('31491',)
-INFO     - 2025-11-10 10:41:27 - [api_base:451] - [2025-11-10 10:41:27] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:27 - [api_base:463] - [2025-11-10 10:41:27] 查询结果: []
-INFO     - 2025-11-10 10:41:27 - [api_base:829] - [2025-11-10 10:41:27] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM follow_trader WHERE account = %s
-INFO     - 2025-11-10 10:41:27 - [conftest:65] - [2025-11-10 10:41:27] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:27 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:27 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:27 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:20","refreshTokenExpire":"2025-11-24 10:41:20","access_token":"bc026f383ff7409094d5e7731434d1a7","refresh_token":"ea699c92f72f4da088d70dcc493f51fd"}}
-INFO     - 2025-11-10 10:41:27 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:27 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-DEBUG    - 2025-11-10 10:41:27 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/variety/deleteTemplate HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:27 - [api_base:239] - [2025-11-10 10:41:27] DELETE请求: /mascontrol/variety/deleteTemplate 
-数据: [49]
-INFO     - 2025-11-10 10:41:28 - [conftest:170] - [2025-11-10 10:41:28] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate 执行完毕
-INFO     - 2025-11-10 10:41:28 - [test_delete:396] - 查询条件: table=follow_variety, templateName2=自动化1
-INFO     - 2025-11-10 10:41:28 - [api_base:796] - [2025-11-10 10:41:28] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_variety WHERE template_name = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:28 - [api_base:448] - [2025-11-10 10:41:28] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+INFO     - 2025-11-10 15:05:55 - [api_base:451] - [2025-11-10 15:05:55] 查询成功，结果数量: 1
+INFO     - 2025-11-10 15:05:55 - [api_base:463] - [2025-11-10 15:05:55] 查询结果: [{"id": 615, "name": "测试vps", "number": 0, "color": "#EF7979", "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-10 15:05:48", "updater": 10105, "update_time": "2025-11-10 15:05:48", "sort": 10.0, "type": 1}]
+INFO     - 2025-11-10 15:05:55 - [test_create:215] - 新增VPS组别ID: 615
+INFO     - 2025-11-10 15:05:55 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:56 - [conftest:65] - [2025-11-10 15:05:56] 用例 test_vps/test_create.py::TestCreate::test_create_variety 开始登录，环境: uat
+INFO     - 2025-11-10 15:05:56 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 744228
+DEBUG    - 2025-11-10 15:05:56 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:05:57 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:57 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:05:50","refreshTokenExpire":"2025-11-24 15:05:50","access_token":"56d75d3101684ce6a7c3327b7527ce34","refresh_token":"2855e90c442247c1921b2c5a04587afd"}}
+INFO     - 2025-11-10 15:05:57 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:05:57 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:05:57 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/variety/addTemplate HTTP/11" 200 None
+INFO     - 2025-11-10 15:05:57 - [api_base:149] - [2025-11-10 15:05:57] POST请求（带文件）: /mascontrol/variety/addTemplate 
+表单数据: {'templateName': '自动化1'}
+INFO     - 2025-11-10 15:05:57 - [api_base:160] - [2025-11-10 15:05:57] 请求后等待 1 秒
+INFO     - 2025-11-10 15:05:58 - [conftest:170] - [2025-11-10 15:05:58] 用例 test_vps/test_create.py::TestCreate::test_create_variety 执行完毕
+INFO     - 2025-11-10 15:05:58 - [api_base:448] - [2025-11-10 15:05:58] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
 参数: ('自动化1',)
-INFO     - 2025-11-10 10:41:28 - [api_base:451] - [2025-11-10 10:41:28] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:28 - [api_base:463] - [2025-11-10 10:41:28] 查询结果: []
-INFO     - 2025-11-10 10:41:28 - [api_base:829] - [2025-11-10 10:41:28] 删除成功（耗时0.2秒）
-SQL: SELECT * FROM follow_variety WHERE template_name = %s
-INFO     - 2025-11-10 10:41:28 - [conftest:65] - [2025-11-10 10:41:28] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate2 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:28 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:28 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:28 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:22","refreshTokenExpire":"2025-11-24 10:41:22","access_token":"903c15117d104d0f9fac1bd4eaa9a9ec","refresh_token":"5a31421415ac43b7b4cd527048bf2f79"}}
-INFO     - 2025-11-10 10:41:28 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:28 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-DEBUG    - 2025-11-10 10:41:29 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/variety/deleteTemplate HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:29 - [api_base:239] - [2025-11-10 10:41:29] DELETE请求: /mascontrol/variety/deleteTemplate 
-数据: [50]
-INFO     - 2025-11-10 10:41:30 - [conftest:170] - [2025-11-10 10:41:30] 用例 test_vps/test_delete.py::TestDeleteUser::test_deleteTemplate2 执行完毕
-INFO     - 2025-11-10 10:41:30 - [test_delete:443] - 查询条件: table=follow_variety, templateName2=自动化3
-INFO     - 2025-11-10 10:41:30 - [api_base:796] - [2025-11-10 10:41:30] 开始等待数据库记录删除 
-SQL: SELECT * FROM follow_variety WHERE template_name = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:30 - [api_base:448] - [2025-11-10 10:41:30] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+INFO     - 2025-11-10 15:05:59 - [api_base:451] - [2025-11-10 15:05:59] 查询成功，结果数量: 1222
+INFO     - 2025-11-10 15:05:59 - [api_base:463] - [2025-11-10 15:05:59] 查询结果: [{"id": 1491428, "std_contract": 100, "std_symbol": "XAUGBP", "broker_name": "HYCM-Demo", "broker_symbol": "XAUGBP", "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-10 15:05:52", "updater": null, "update_time": "2025-11-10 15:05:52", "template_id": 32, "template_name": "自动化1"}, {"id": 1491429, "std_contract": 100000, "std_symbol": "GBPUSD", "broker_name": "CPTMarkets", "broker_symbol": "GBPUSD", "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-10 15:05:52
+INFO     - 2025-11-10 15:05:59 - [test_create:270] - 新增品种id: 32
+INFO     - 2025-11-10 15:05:59 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:05:59 - [conftest:65] - [2025-11-10 15:05:59] 用例 test_vps/test_create.py::TestCreate::test_create_variety2 开始登录，环境: uat
+INFO     - 2025-11-10 15:05:59 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 744228
+DEBUG    - 2025-11-10 15:05:59 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:06:00 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:00 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:05:53","refreshTokenExpire":"2025-11-24 15:05:53","access_token":"774324564c3440088b44748ceb670767","refresh_token":"f11cc51f3b874aeaa3aac728974e1cf4"}}
+INFO     - 2025-11-10 15:06:00 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:06:00 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:06:01 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/variety/addTemplate HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:01 - [api_base:149] - [2025-11-10 15:06:01] POST请求（带文件）: /mascontrol/variety/addTemplate 
+表单数据: {'templateName': '自动化3'}
+INFO     - 2025-11-10 15:06:01 - [api_base:160] - [2025-11-10 15:06:01] 请求后等待 1 秒
+INFO     - 2025-11-10 15:06:02 - [conftest:170] - [2025-11-10 15:06:02] 用例 test_vps/test_create.py::TestCreate::test_create_variety2 执行完毕
+INFO     - 2025-11-10 15:06:02 - [api_base:448] - [2025-11-10 15:06:02] 执行SQL: SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
 参数: ('自动化3',)
-INFO     - 2025-11-10 10:41:30 - [api_base:451] - [2025-11-10 10:41:30] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:30 - [api_base:463] - [2025-11-10 10:41:30] 查询结果: []
-INFO     - 2025-11-10 10:41:30 - [api_base:829] - [2025-11-10 10:41:30] 删除成功（耗时0.2秒）
-SQL: SELECT * FROM follow_variety WHERE template_name = %s
-INFO     - 2025-11-10 10:41:30 - [conftest:65] - [2025-11-10 10:41:30] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:30 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:30 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:30 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:24","refreshTokenExpire":"2025-11-24 10:41:24","access_token":"a77a5c54390e4655ae872e2a628c5851","refresh_token":"600c23ffd3184a23bc94025cb4e58243"}}
-INFO     - 2025-11-10 10:41:30 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:30 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-DEBUG    - 2025-11-10 10:41:30 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:30 - [api_base:239] - [2025-11-10 10:41:30] DELETE请求: /mascontrol/user 
-数据: [10165]
-INFO     - 2025-11-10 10:41:31 - [conftest:170] - [2025-11-10 10:41:31] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_user 执行完毕
-INFO     - 2025-11-10 10:41:31 - [test_delete:490] - 查询条件: table=FOLLOW_TRADER_USER, name=31491
-INFO     - 2025-11-10 10:41:31 - [api_base:796] - [2025-11-10 10:41:31] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:31 - [api_base:448] - [2025-11-10 10:41:31] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+INFO     - 2025-11-10 15:06:02 - [api_base:451] - [2025-11-10 15:06:02] 查询成功，结果数量: 1220
+INFO     - 2025-11-10 15:06:02 - [api_base:463] - [2025-11-10 15:06:02] 查询结果: [{"id": 1492815, "std_contract": 10000, "std_symbol": "XNGUSD", "broker_name": "CWG Markets", "broker_symbol": null, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-10 15:05:56", "updater": null, "update_time": "2025-11-10 15:05:56", "template_id": 33, "template_name": "自动化3"}, {"id": 1492816, "std_contract": 100, "std_symbol": "XAUJPY", "broker_name": "ForexTimeFXTM-ECN-demo", "broker_symbol": "XAUJPY", "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-10
+INFO     - 2025-11-10 15:06:02 - [test_create:325] - 新增品种id: 33
+INFO     - 2025-11-10 15:06:02 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:02 - [conftest:65] - [2025-11-10 15:06:02] 用例 test_vps/test_create.py::TestCreate::test_get_connect 开始登录，环境: uat
+INFO     - 2025-11-10 15:06:02 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 767900
+DEBUG    - 2025-11-10 15:06:02 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:06:04 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:04 - [conftest:127] - 登录响应信息：{"code":500,"msg":"MFA验证失败","data":null}
+ERROR    - 2025-11-10 15:06:04 - [conftest:142] - 第1次登录失败: 登录失败: MFA验证失败
+INFO     - 2025-11-10 15:06:14 - [conftest:108] - UAT登录尝试 2/5，MFA验证码: 767900
+DEBUG    - 2025-11-10 15:06:15 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:15 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:06:08","refreshTokenExpire":"2025-11-24 15:06:08","access_token":"9dbd5c3e9aca41beb5504aff30cc17dd","refresh_token":"ada17c1b0c224e6ea3636a6c99258224"}}
+INFO     - 2025-11-10 15:06:15 - [conftest:137] - UAT登录成功（第2次尝试）
+INFO     - 2025-11-10 15:06:15 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:06:15 - [connectionpool:546] - https://uat.atcp.top:443 "GET /api/mascontrol/vps/connect?ipAddress=127.0.0.1 HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:15 - [api_base:198] - [2025-11-10 15:06:15] GET请求: /mascontrol/vps/connect 
+参数: {'ipAddress': '127.0.0.1'}
+INFO     - 2025-11-10 15:06:16 - [conftest:170] - [2025-11-10 15:06:16] 用例 test_vps/test_create.py::TestCreate::test_get_connect 执行完毕
+INFO     - 2025-11-10 15:06:16 - [conftest:65] - [2025-11-10 15:06:16] 用例 test_vps/test_create.py::TestCreate::test_get_user 开始登录，环境: uat
+INFO     - 2025-11-10 15:06:16 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 767900
+DEBUG    - 2025-11-10 15:06:16 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:06:18 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:18 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:06:11","refreshTokenExpire":"2025-11-24 15:06:11","access_token":"17e5ae5917304bd4a68e57d7df3e2a75","refresh_token":"1baa0a16a24343e6ab9f848737f109fe"}}
+INFO     - 2025-11-10 15:06:18 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:06:18 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+DEBUG    - 2025-11-10 15:06:18 - [connectionpool:546] - https://uat.atcp.top:443 "GET /api/sys/role/role HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:18 - [api_base:198] - [2025-11-10 15:06:18] GET请求: /sys/role/role 
+参数: None
+INFO     - 2025-11-10 15:06:19 - [test_create:365] - 获取的可见用户信息：[{'id': 34, 'name': '审核人员', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 53, 'name': 'deletetest', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 54, 'name': '测试人员', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 55, 'name': 'test', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 57, 'name': '无权限', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 58, 'name': '测试无权限', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 59, 'name': 'allon-test', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 65, 'name': '后台管理人员', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}, {'id': 66, 'name': '数分部门', 'roleCode': None, 'remark': None, 'dataScope': None, 'menuIdList': None, 'orgIdList': None, 'userNum': None, 'createTime': None, 'vpsIdList': None, 'vpsNameList': None}]
+INFO     - 2025-11-10 15:06:19 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:19 - [conftest:170] - [2025-11-10 15:06:19] 用例 test_vps/test_create.py::TestCreate::test_get_user 执行完毕
+INFO     - 2025-11-10 15:06:19 - [conftest:65] - [2025-11-10 15:06:19] 用例 test_vps/test_create.py::TestCreate::test_add_trader 开始登录，环境: uat
+INFO     - 2025-11-10 15:06:19 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 767900
+DEBUG    - 2025-11-10 15:06:19 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:06:20 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:20 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:06:14","refreshTokenExpire":"2025-11-24 15:06:14","access_token":"db41c73dda7f4280b8054d7c77ba4697","refresh_token":"7a95520886784b60a1df7920dbb87821"}}
+INFO     - 2025-11-10 15:06:20 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:06:20 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:20 - [conftest:165] - 切换到VPS URL: https://39.101.181.190/vps
+DEBUG    - 2025-11-10 15:06:20 - [connectionpool:1051] - Starting new HTTPS connection (1): 39.101.181.190:443
+DEBUG    - 2025-11-10 15:06:23 - [connectionpool:546] - https://39.101.181.190:443 "POST /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:23 - [api_base:152] - [2025-11-10 15:06:23] POST请求（JSON）: /subcontrol/trader 
+数据: {'account': '31491', 'password': 'fa1af751c83d311f091c9393a364068c', 'platform': 'FXAdamantStone-Real', 'remark': '', 'platformId': '', 'platformType': 0, 'type': 0, 'templateId': 1, 'followStatus': 1, 'cfd': '', 'forex': '', 'followOrderRemark': 1, 'fixedComment': '', 'commentType': '', 'digits': ''}
+INFO     - 2025-11-10 15:06:23 - [api_base:160] - [2025-11-10 15:06:23] 请求后等待 1 秒
+INFO     - 2025-11-10 15:06:24 - [conftest:170] - [2025-11-10 15:06:24] 用例 test_vps/test_create.py::TestCreate::test_add_trader 执行完毕
+INFO     - 2025-11-10 15:06:25 - [api_base:448] - [2025-11-10 15:06:25] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
 参数: ('31491',)
-INFO     - 2025-11-10 10:41:31 - [api_base:451] - [2025-11-10 10:41:31] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:31 - [api_base:463] - [2025-11-10 10:41:31] 查询结果: []
-INFO     - 2025-11-10 10:41:31 - [api_base:829] - [2025-11-10 10:41:31] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:32 - [conftest:65] - [2025-11-10 10:41:32] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 开始登录，环境: test
-DEBUG    - 2025-11-10 10:41:32 - [connectionpool:243] - Starting new HTTP connection (1): 39.99.136.49:80
-DEBUG    - 2025-11-10 10:41:32 - [connectionpool:546] - http://39.99.136.49:80 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:32 - [conftest:91] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 10:41:25","refreshTokenExpire":"2025-11-24 10:41:25","access_token":"ea71cc482d524bc98e2bc33629dec583","refresh_token":"8f6879023fd04233aff1faf6cf2ac806"}}
-INFO     - 2025-11-10 10:41:32 - [conftest:97] - 测试环境登录成功
-INFO     - 2025-11-10 10:41:32 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-DEBUG    - 2025-11-10 10:41:32 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:32 - [api_base:239] - [2025-11-10 10:41:32] DELETE请求: /mascontrol/user 
-数据: [10169]
-INFO     - 2025-11-10 10:41:33 - [test_delete:545] - 第1个账号（ID: 10169）删除接口调用成功
-DEBUG    - 2025-11-10 10:41:33 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:33 - [api_base:239] - [2025-11-10 10:41:33] DELETE请求: /mascontrol/user 
-数据: [10167]
-INFO     - 2025-11-10 10:41:34 - [test_delete:545] - 第2个账号（ID: 10167）删除接口调用成功
-DEBUG    - 2025-11-10 10:41:34 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:34 - [api_base:239] - [2025-11-10 10:41:34] DELETE请求: /mascontrol/user 
-数据: [10166]
-INFO     - 2025-11-10 10:41:35 - [test_delete:545] - 第3个账号（ID: 10166）删除接口调用成功
-DEBUG    - 2025-11-10 10:41:35 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:35 - [api_base:239] - [2025-11-10 10:41:35] DELETE请求: /mascontrol/user 
-数据: [10168]
-INFO     - 2025-11-10 10:41:36 - [test_delete:545] - 第4个账号（ID: 10168）删除接口调用成功
-DEBUG    - 2025-11-10 10:41:36 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:36 - [api_base:239] - [2025-11-10 10:41:36] DELETE请求: /mascontrol/user 
-数据: [10172]
-INFO     - 2025-11-10 10:41:37 - [test_delete:545] - 第5个账号（ID: 10172）删除接口调用成功
-DEBUG    - 2025-11-10 10:41:37 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:37 - [api_base:239] - [2025-11-10 10:41:37] DELETE请求: /mascontrol/user 
-数据: [10171]
-INFO     - 2025-11-10 10:41:38 - [test_delete:545] - 第6个账号（ID: 10171）删除接口调用成功
-DEBUG    - 2025-11-10 10:41:38 - [connectionpool:546] - http://39.99.136.49:80 "DELETE /api/mascontrol/user HTTP/11" 200 None
-INFO     - 2025-11-10 10:41:38 - [api_base:239] - [2025-11-10 10:41:38] DELETE请求: /mascontrol/user 
-数据: [10170]
-INFO     - 2025-11-10 10:41:39 - [test_delete:545] - 第7个账号（ID: 10170）删除接口调用成功
-INFO     - 2025-11-10 10:41:39 - [conftest:170] - [2025-11-10 10:41:39] 用例 test_vps/test_delete.py::TestDeleteUser::test_delete_userlist 执行完毕
-INFO     - 2025-11-10 10:41:39 - [api_base:796] - [2025-11-10 10:41:39] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:39 - [api_base:448] - [2025-11-10 10:41:39] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
+INFO     - 2025-11-10 15:06:25 - [api_base:451] - [2025-11-10 15:06:25] 查询成功，结果数量: 1
+INFO     - 2025-11-10 15:06:25 - [api_base:463] - [2025-11-10 15:06:25] 查询结果: [{"id": 10571, "account": "31491", "is_demo": 1, "type": 0, "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9668925.96, "balance": 9668925.96, "free_margin": 9668925.96, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": "", "deleted": 0, "creat
+INFO     - 2025-11-10 15:06:25 - [test_create:531] - 新增策略账号ID: 10571
+INFO     - 2025-11-10 15:06:25 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:25 - [test_create:537] - 新增策略账号状态status应为0（正常），实际状态为: 0
+INFO     - 2025-11-10 15:06:25 - [conftest:65] - [2025-11-10 15:06:25] 用例 test_vps/test_create.py::TestCreate::test_create_addSlave 开始登录，环境: uat
+INFO     - 2025-11-10 15:06:25 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 767900
+DEBUG    - 2025-11-10 15:06:25 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-10 15:06:26 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:26 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-11 15:06:20","refreshTokenExpire":"2025-11-24 15:06:20","access_token":"29d9877bb5824b289fd0ad53d8172ad8","refresh_token":"a085683e83864607b599b45838d12113"}}
+INFO     - 2025-11-10 15:06:26 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-10 15:06:26 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:26 - [conftest:165] - 切换到VPS URL: https://39.101.181.190/vps
+DEBUG    - 2025-11-10 15:06:26 - [connectionpool:1051] - Starting new HTTPS connection (1): 39.101.181.190:443
+DEBUG    - 2025-11-10 15:06:30 - [connectionpool:546] - https://39.101.181.190:443 "POST /vps/subcontrol/follow/addSlave HTTP/11" 200 None
+INFO     - 2025-11-10 15:06:30 - [api_base:152] - [2025-11-10 15:06:30] POST请求（JSON）: /subcontrol/follow/addSlave 
+数据: {'traderId': 10571, 'platform': 'FXAdamantStone-Real', 'account': '31492', 'password': 'fa1af751c83d311f091c9393a364068c', 'remark': '', 'followDirection': 0, 'followMode': 1, 'remainder': 0, 'followParam': 1, 'placedType': 0, 'templateId': 1, 'followStatus': 1, 'followOpen': 1, 'followClose': 1, 'followRep': 0, 'fixedComment': '', 'commentType': '', 'digits': 0, 'cfd': '', 'forex': '', 'abRemark': '', 'platformType': 0}
+INFO     - 2025-11-10 15:06:30 - [api_base:160] - [2025-11-10 15:06:30] 请求后等待 1 秒
+INFO     - 2025-11-10 15:06:31 - [conftest:170] - [2025-11-10 15:06:31] 用例 test_vps/test_create.py::TestCreate::test_create_addSlave 执行完毕
+INFO     - 2025-11-10 15:06:31 - [api_base:448] - [2025-11-10 15:06:31] 执行SQL: SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
 参数: ('31492',)
-INFO     - 2025-11-10 10:41:39 - [api_base:451] - [2025-11-10 10:41:39] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:39 - [api_base:463] - [2025-11-10 10:41:39] 查询结果: []
-INFO     - 2025-11-10 10:41:39 - [api_base:829] - [2025-11-10 10:41:39] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:39 - [api_base:796] - [2025-11-10 10:41:39] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:40 - [api_base:448] - [2025-11-10 10:41:40] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
-参数: ('31493',)
-INFO     - 2025-11-10 10:41:40 - [api_base:451] - [2025-11-10 10:41:40] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:40 - [api_base:463] - [2025-11-10 10:41:40] 查询结果: []
-INFO     - 2025-11-10 10:41:40 - [api_base:829] - [2025-11-10 10:41:40] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:40 - [api_base:796] - [2025-11-10 10:41:40] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:40 - [api_base:448] - [2025-11-10 10:41:40] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
-参数: ('31494',)
-INFO     - 2025-11-10 10:41:40 - [api_base:451] - [2025-11-10 10:41:40] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:40 - [api_base:463] - [2025-11-10 10:41:40] 查询结果: []
-INFO     - 2025-11-10 10:41:40 - [api_base:829] - [2025-11-10 10:41:40] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:40 - [api_base:796] - [2025-11-10 10:41:40] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:40 - [api_base:448] - [2025-11-10 10:41:40] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
-参数: ('31495',)
-INFO     - 2025-11-10 10:41:40 - [api_base:451] - [2025-11-10 10:41:40] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:40 - [api_base:463] - [2025-11-10 10:41:40] 查询结果: []
-INFO     - 2025-11-10 10:41:40 - [api_base:829] - [2025-11-10 10:41:40] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:40 - [api_base:796] - [2025-11-10 10:41:40] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:40 - [api_base:448] - [2025-11-10 10:41:40] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
-参数: ('31496',)
-INFO     - 2025-11-10 10:41:40 - [api_base:451] - [2025-11-10 10:41:40] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:40 - [api_base:463] - [2025-11-10 10:41:40] 查询结果: []
-INFO     - 2025-11-10 10:41:40 - [api_base:829] - [2025-11-10 10:41:40] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:40 - [api_base:796] - [2025-11-10 10:41:40] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:40 - [api_base:448] - [2025-11-10 10:41:40] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
-参数: ('31497',)
-INFO     - 2025-11-10 10:41:40 - [api_base:451] - [2025-11-10 10:41:40] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:40 - [api_base:463] - [2025-11-10 10:41:40] 查询结果: []
-INFO     - 2025-11-10 10:41:40 - [api_base:829] - [2025-11-10 10:41:40] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:40 - [api_base:796] - [2025-11-10 10:41:40] 开始等待数据库记录删除 
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s 
-超时: 5秒
-INFO     - 2025-11-10 10:41:40 - [api_base:448] - [2025-11-10 10:41:40] 执行SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s ORDER BY create_time DESC 
-参数: ('31498',)
-INFO     - 2025-11-10 10:41:40 - [api_base:451] - [2025-11-10 10:41:40] 查询成功，结果数量: 0
-INFO     - 2025-11-10 10:41:40 - [api_base:463] - [2025-11-10 10:41:40] 查询结果: []
-INFO     - 2025-11-10 10:41:40 - [api_base:829] - [2025-11-10 10:41:40] 删除成功（耗时0.1秒）
-SQL: SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s
-INFO     - 2025-11-10 10:41:40 - [variable_manager:111] - [2025-11-10 10:41] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
-INFO     - 2025-11-10 10:41:40 - [conftest:368] - [2025-11-10 10:41] 测试会话结束，总耗时: 28.00秒
-INFO     - 2025-11-10 10:41:40 - [feishu_notification:149] - [2025-11-10 10:41] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
-DEBUG    - 2025-11-10 10:41:40 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
-DEBUG    - 2025-11-10 10:41:41 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
-INFO     - 2025-11-10 10:41:41 - [feishu_notification:157] - [2025-11-10 10:41] 飞书响应状态码: 200
-INFO     - 2025-11-10 10:41:41 - [feishu_notification:158] - [2025-11-10 10:41] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
-INFO     - 2025-11-10 10:41:41 - [feishu_notification:163] - [2025-11-10 10:41] [FEISHU] 消息发送成功
-INFO     - 2025-11-10 10:41:41 - [conftest:380] - [2025-11-10 10:41] 飞书通知发送成功
+INFO     - 2025-11-10 15:06:31 - [api_base:451] - [2025-11-10 15:06:31] 查询成功，结果数量: 1
+INFO     - 2025-11-10 15:06:31 - [api_base:463] - [2025-11-10 15:06:31] 查询结果: [{"id": 10572, "account": "31492", "is_demo": 1, "type": 1, "password": "fa1af751c83d311f091c9393a364068c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9719582.2, "balance": 9719582.2, "free_margin": 9719582.2, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": "", "deleted": 0, "creator"
+INFO     - 2025-11-10 15:06:31 - [test_create:612] - 新增跟单账号ID: 10572
+INFO     - 2025-11-10 15:06:31 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:31 - [test_create:618] - 账号 31492 状态异常：预期status=0，实际=0
+INFO     - 2025-11-10 15:06:31 - [test_create:622] - 账号 31492 净值异常：预期euqit≠0，实际=9719582.2
+INFO     - 2025-11-10 15:06:31 - [api_base:448] - [2025-11-10 15:06:31] 执行SQL: SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('31492',)
+INFO     - 2025-11-10 15:06:31 - [api_base:451] - [2025-11-10 15:06:31] 查询成功，结果数量: 1
+INFO     - 2025-11-10 15:06:31 - [api_base:463] - [2025-11-10 15:06:31] 查询结果: [{"id": 7390, "master_id": 10571, "slave_id": 10572, "master_account": "31491", "slave_account": "31492", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 0, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": "", "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-10 15:06:24", "updater": null, "update_time": "2025-11-10 15:06:24", "remainder": 0, "fixed_comment": "", "comment_ty
+INFO     - 2025-11-10 15:06:31 - [test_create:635] - 账号新增成功，新增账号：31492  数据库账号:31492
+INFO     - 2025-11-10 15:06:31 - [variable_manager:111] - [2025-11-10 15:05] 运行时变量已保存到: D:\pycharm_test\lingkuan_1107\VAR\runtime_vars_vps.json
+INFO     - 2025-11-10 15:06:31 - [conftest:368] - [2025-11-10 15:05] 测试会话结束，总耗时: 59.00秒
+INFO     - 2025-11-10 15:06:31 - [feishu_notification:149] - [2025-11-10 15:05] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+DEBUG    - 2025-11-10 15:06:31 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
+DEBUG    - 2025-11-10 15:06:32 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
+INFO     - 2025-11-10 15:06:32 - [feishu_notification:157] - [2025-11-10 15:05] 飞书响应状态码: 200
+INFO     - 2025-11-10 15:06:32 - [feishu_notification:158] - [2025-11-10 15:05] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     - 2025-11-10 15:06:32 - [feishu_notification:163] - [2025-11-10 15:05] [FEISHU] 消息发送成功
+INFO     - 2025-11-10 15:06:32 - [conftest:380] - [2025-11-10 15:05] 飞书通知发送成功
