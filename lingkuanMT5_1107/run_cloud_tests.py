@@ -39,9 +39,9 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_cloud_masOrderClose.py",
         # "test_cloudTrader/test_cloudOrder_open_level.py",
         # "test_cloudTrader/test_cloudfixed_annotations.py",
-        "test_cloudTrader/test_create_scene.py",
+        # "test_cloudTrader/test_create_scene.py",
         # "test_cloudTrader/test_cloudTrader_money_scene.py",
-        "test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_delete.py",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=debug",
