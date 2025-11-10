@@ -66,7 +66,7 @@ class TestCloudMasOrdersend:
                 self.assert_response_status(response, 200, "修改跟单账号失败")
                 self.assert_json_value(response, "$.msg", "success", "响应msg应为success")
 
-        @allure.title("云策略交易下单-分配下单请求")
+        @allure.title("云策略交易下单-分配下单")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")

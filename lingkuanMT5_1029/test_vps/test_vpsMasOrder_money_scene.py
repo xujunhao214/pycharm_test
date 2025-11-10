@@ -25,7 +25,6 @@ class TestVPSMasOrder_money_scene:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSOrderSend_money(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")
@@ -617,7 +616,6 @@ class TestVPSMasOrder_money_scene:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestVPSOrderSend_Scence(APITestBase):
         # @pytest.mark.skip(reason=SKIP_REASON)
         @pytest.mark.url("vps")

@@ -3287,7 +3287,7 @@ class TestVPSOrdersendsell:
           2. 预期下单失败：总手数不能低于最低手数
         - 预期结果：提示正确
         """)
-        @allure.title("VPS交易下单-分配下单请求")
+        @allure.title("VPS交易下单-分配下单")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")
@@ -3326,7 +3326,7 @@ class TestVPSOrdersendsell:
           2. 预期下单失败：下单失败，请检查下单参数
         - 预期结果：提示正确
         """)
-        @allure.title("VPS交易下单-分配下单请求")
+        @allure.title("VPS交易下单-分配下单")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送VPS策略账号交易下单-复制下单
             masOrderSend = var_manager.get_variable("masOrderSend")

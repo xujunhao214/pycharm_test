@@ -24,7 +24,7 @@ class TestCloudMasOrdersend:
     - 预期结果：账号的数据正确
     """)
     class TestCloudtradingOrders1(APITestBase):
-        @allure.title("云策略交易下单-分配下单请求")
+        @allure.title("云策略交易下单-分配下单")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")

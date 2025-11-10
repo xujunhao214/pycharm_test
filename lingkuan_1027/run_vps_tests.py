@@ -31,16 +31,17 @@ def run_vps_tests(env: str = "test"):
         "test_vps/test_create.py",
         # "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
-        # "test_vps/test_getAccountDataPage.py",
-        # "test_vps/test_vps_ordersendbuy.py",
-        # "test_vps/test_vps_ordersendsell.py",
-        # "test_vps/test_vps_orderclose.py",
-        # "test_vps/test_vps_masOrderSend.py",
-        # "test_vps/test_vps_masOrderClose.py",
-        # "test_vps/test_vpsOrder_open_level.py",
-        # "test_vps/test_vpsfixed_annotations.py",
+        "test_vps/test_getAccountDataPage.py",
+        "test_vps/test_vps_ordersendbuy.py",
+        "test_vps/test_vps_ordersendsell.py",
+        "test_vps/test_vps_orderclose.py",
+        "test_vps/test_vps_masOrderSend.py",
+        "test_vps/test_vps_masOrderClose.py",
+        "test_vps/test_vps_ordersenderror.py",
+        "test_vps/test_vpsOrder_open_level.py",
+        "test_vps/test_vpsfixed_annotations.py",
         "test_vps/test_create_scene.py",
-        # "test_vps/test_vpsMasOrder_money_scene.py",
+        "test_vps/test_vpsMasOrder_money_scene.py",
         "test_vps/test_delete.py",
 
         "--log-file=./Logs/vps_pytest.log",
@@ -94,6 +95,6 @@ def run_vps_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
+    env = sys.argv[1] if len(sys.argv) > 1 else "test"
     exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)

@@ -23,7 +23,7 @@ class TestCloudOrderSend_newScenarios:
     - 预期结果：数据正确
     """)
     class TestCloudOrderSend1(APITestBase):
-        @allure.title("云策略交易下单-分配下单请求")
+        @allure.title("云策略交易下单-分配下单")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
@@ -278,7 +278,7 @@ class TestCloudOrderSend_newScenarios:
     """)
     class TestCloudOrderSend2(APITestBase):
         @pytest.mark.skipif(True, reason="跳过")
-        @allure.title("云策略交易下单-分配下单请求")
+        @allure.title("云策略交易下单-分配下单")
         def test_copy_order_send(self, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")

@@ -49,7 +49,7 @@ class TestCloudOrderSend_newScenarios:
                 "响应msg字段应为success"
             )
 
-        @allure.title("云策略交易下单-分配下单请求")
+        @allure.title("云策略交易下单-分配下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")
@@ -307,7 +307,7 @@ class TestCloudOrderSend_newScenarios:
     @pytest.mark.usefixtures("class_random_str")
     class TestCloudOrderSend2(APITestBase):
         @pytest.mark.skipif(True, reason="跳过")
-        @allure.title("云策略交易下单-分配下单请求")
+        @allure.title("云策略交易下单-分配下单")
         def test_copy_order_send(self, class_random_str, logged_session, var_manager):
             # 发送云策略交易下单-复制下单请求
             masOrderSend = var_manager.get_variable("masOrderSend")

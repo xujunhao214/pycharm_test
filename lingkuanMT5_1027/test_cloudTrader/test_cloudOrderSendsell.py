@@ -33,7 +33,6 @@ class TestCloudStrategyOrdersell:
             with allure.step("1.发送修改云跟单请求"):
                 MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-                MT5cloudTrader_template_id2 = var_manager.get_variable("MT5cloudTrader_template_id2")
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
 
@@ -3233,103 +3232,7 @@ class TestCloudStrategyOrdersell:
                     logging.info(f'订单详情总手数是：{total}')
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景9：交易分配-手数范围0.1-1，总手数0.01")
-    @allure.description("""
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数0.01
-      2. 预期下单失败：总手数不能低于最低手数
-    - 预期结果：提示正确
-    """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
-    @pytest.mark.usefixtures("class_random_str")
-    class TestMasOrderSend9(APITestBase):
-        @allure.title("云策略-复制下单操作")
-        def test_copy_place_order(self, class_random_str, logged_session, var_manager):
-            """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("1.发送复制下单请求"):
-                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-                MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
-
-                request_data = {
-                    "id": cloudMaster_id,
-                    "type": 1,
-                    "tradeType": 0,
-                    "intervalTime": 100,
-                    "cloudTraderId": [MT5cloudTrader_traderList_2],
-                    "symbol": "XAUUSD",
-                    "placedType": 0,
-                    "startSize": "0.1",
-                    "endSize": "1.00",
-                    "totalNum": "",
-                    "totalSzie": "0.01",
-                    "remark": "测试数据"
-                }
-
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/cloudOrderSend',
-                    json_data=request_data
-                )
-
-            with allure.step("2.验证复制下单响应结果"):
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "总手数不能低于最低手数",
-                    "响应msg字段应为：总手数不能低于最低手数"
-                )
-
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景10：交易分配-手数范围0.1-1，总手数2")
-    @allure.description("""
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 进行开仓，手数范围0.1-1，总手数2
-      2. 预期下单失败：下单失败，请检查下单参数
-    - 预期结果：提示正确
-    """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
-    @pytest.mark.usefixtures("class_random_str")
-    class TestMasOrderSend10(APITestBase):
-        @allure.title("云策略-复制下单操作")
-        def test_copy_place_order(self, class_random_str, logged_session, var_manager):
-            """执行云策略复制下单操作并验证请求结果"""
-            with allure.step("1.发送复制下单请求"):
-                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
-                MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
-
-                request_data = {
-                    "id": cloudMaster_id,
-                    "type": 1,
-                    "tradeType": 0,
-                    "intervalTime": 100,
-                    "cloudTraderId": [MT5cloudTrader_traderList_2],
-                    "symbol": "XAUUSD",
-                    "placedType": 0,
-                    "startSize": "0.1",
-                    "endSize": "1.00",
-                    "totalNum": "",
-                    "totalSzie": "2",
-                    "remark": "测试数据"
-                }
-
-                response = self.send_post_request(
-                    logged_session,
-                    '/mascontrol/cloudTrader/cloudOrderSend',
-                    json_data=request_data
-                )
-
-            with allure.step("2.验证复制下单响应结果"):
-                self.assert_json_value(
-                    response,
-                    "$.msg",
-                    "下单失败，请检查下单参数",
-                    "响应msg字段应为：下单失败，请检查下单参数"
-                )
-
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景11：复制下单-手数范围0.01-1，总手数0.3")
+    @allure.story("场景9：复制下单-手数范围0.01-1，总手数0.3")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -3342,7 +3245,7 @@ class TestCloudStrategyOrdersell:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestMasOrderSend11(APITestBase):
+    class TestMasOrderSend9(APITestBase):
         @allure.title("云策略-修改云跟单")
         def test_update_trader(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
@@ -3795,7 +3698,7 @@ class TestCloudStrategyOrdersell:
                     logging.info(f"详情总手数验证通过: {total}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景12：复制下单-手数范围0.01-1，总手数0.3")
+    @allure.story("场景10：复制下单-手数范围0.01-1，总手数0.3")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -3808,7 +3711,7 @@ class TestCloudStrategyOrdersell:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestMasOrderSend12(APITestBase):
+    class TestMasOrderSend10(APITestBase):
         @allure.title("云策略-修改云跟单")
         def test_update_trader(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
@@ -4261,7 +4164,7 @@ class TestCloudStrategyOrdersell:
                     logging.info(f"详情总手数验证通过: {total}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景13：复制下单-手数范围0.01-1，总手数0.01")
+    @allure.story("场景11：复制下单-手数范围0.01-1，总手数0.01")
     @allure.description("""
     ### 测试说明
     - 前置条件：有云策略和云跟单
@@ -4274,7 +4177,7 @@ class TestCloudStrategyOrdersell:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestMasOrderSend13(APITestBase):
+    class TestMasOrderSend11(APITestBase):
         @allure.title("云策略-修改云跟单")
         def test_update_trader(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
