@@ -64,7 +64,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_trader_user_id = db_data[0]["id"]
             print(f"输出：{vps_trader_user_id}")
@@ -85,7 +85,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             platformId = db_data[0]["id"]
             logging.info(f"平台ID: {platformId}")
@@ -141,7 +141,7 @@ class TestCreate(APITestBase):
 
             # 验证查询结果
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 提取vps_user_ids和vps_user_accounts（保持原有列表形式，用于后续判断）
             vps_user_ids = [item["id"] for item in db_data]
@@ -207,7 +207,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_group_id = db_data[0]["id"]
             print(f"输出：{vps_group_id}")
@@ -263,7 +263,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_template_id = db_data[0]["template_id"]
             logging.info(f"新增品种id: {vps_template_id}")
@@ -318,7 +318,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_template_id2 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {vps_template_id2}")
@@ -416,7 +416,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_list_id = db_data[0]["id"]
             logging.info(f"新增vps的id: {vps_list_id}")
@@ -523,7 +523,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_trader_id = db_data[0]["id"]
             logging.info(f"新增策略账号ID: {vps_trader_id}")
@@ -603,7 +603,7 @@ class TestCreate(APITestBase):
             )
 
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addslave_id = db_data[0]["id"]
             logging.info(f"新增跟单账号ID: {vps_addslave_id}")
@@ -625,7 +625,7 @@ class TestCreate(APITestBase):
             )
 
             if not db_data2:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             slave_account = db_data2[0]["slave_account"]
             assert slave_account == vps_user_accounts_1, f"账号新增失败，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}"

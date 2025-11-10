@@ -796,11 +796,6 @@ class APITestBase:
         logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 \nSQL: {sql[:200]} \n超时: {timeout}秒")
 
         with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -881,6 +876,10 @@ class APITestBase:
                     f"剩余记录（共{len(final_result)}条）",
                     allure.attachment_type.JSON
                 )
+                allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                              allure.attachment_type.TEXT)
 
             raise TimeoutError(f"Failed: 等待记录删除超时（{timeout}秒）")
 

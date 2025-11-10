@@ -66,7 +66,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 验证查询结果
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 提取cloudTrader_user_ids和cloudTrader_user_accounts（保持原有列表形式，用于后续判断）
             cloudTrader_user_ids = [item["id"] for item in db_data]
@@ -102,7 +102,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vpsId = db_data[0]["id"]
             var_manager.set_runtime_variable("vpsId", vpsId)
@@ -172,7 +172,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             cloudTrader_vps_id = db_data[0]["id"]
             logging.info(f"新增策略账号ID: {cloudTrader_vps_id}")
@@ -363,7 +363,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库中的值"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             cloudTrader_group_id = db_data[0]["id"]
             print(f"输出：{cloudTrader_group_id}")
@@ -678,7 +678,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             cloudTrader_template_id1 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {cloudTrader_template_id1}")
@@ -733,7 +733,7 @@ class TestCreate_cloudTrader(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             cloudTrader_template_id2 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {cloudTrader_template_id2}")

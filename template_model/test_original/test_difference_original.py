@@ -30,7 +30,7 @@ class Test_create:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 trader_open_time_difference = [record["open_time_difference"] for record in db_data]
@@ -53,7 +53,7 @@ class Test_create:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 follow_open_time_difference = [record["open_time_difference"] for record in db_data]
@@ -75,7 +75,7 @@ class Test_create:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 trader_close_time_difference = [record["close_time_difference"] for record in db_data]
@@ -98,7 +98,7 @@ class Test_create:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 follow_close_time_difference = [record["close_time_difference"] for record in db_data]

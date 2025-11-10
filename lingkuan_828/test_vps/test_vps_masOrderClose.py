@@ -276,7 +276,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -340,7 +340,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -678,7 +678,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -742,7 +742,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -1099,7 +1099,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -1453,7 +1453,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -1807,7 +1807,7 @@ class TestVPSMasOrderclose:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(

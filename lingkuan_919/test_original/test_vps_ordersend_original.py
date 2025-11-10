@@ -136,7 +136,7 @@ class VPSOrderTestBase(APITestBase):
         # 2. 数据校验
         with allure.step("2. 验证主指令开仓数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 验证订单状态
             status = db_data[0]["status"]
@@ -236,7 +236,7 @@ class VPSOrderTestBase(APITestBase):
         # 2. 数据校验
         with allure.step("2. 验证跟单指令开仓数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 验证订单状态
             status = db_data[0]["status"]
@@ -310,7 +310,7 @@ class VPSOrderTestBase(APITestBase):
         # 2. 数据校验
         with allure.step("2. 验证主指令平仓数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 验证订单状态
             status = db_data[0]["status"]
@@ -377,7 +377,7 @@ class VPSOrderTestBase(APITestBase):
         # 2. 数据校验
         with allure.step("2. 验证跟单指令平仓数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 验证订单状态
             status = db_data[0]["status"]
@@ -753,7 +753,7 @@ class TestVPSOrderSend5(VPSOrderTestBase):
             )
         with allure.step("2. 数据校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"

@@ -193,7 +193,7 @@ class Test_numberall:
                 )
             with allure.step("2. 提取数据库数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 order_no = db_data[0]["order_no"]
                 var_manager.set_runtime_variable("ticket_open", order_no)
@@ -320,7 +320,7 @@ class Test_numberall:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 slave_ticket = db_data[0]["slave_ticket"]
@@ -1419,7 +1419,7 @@ class Test_numberall:
                 )
             with allure.step("2. 提取数据库数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 order_no = db_data[0]["order_no"]
                 var_manager.set_runtime_variable("ticket_open", order_no)
@@ -1546,7 +1546,7 @@ class Test_numberall:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 slave_ticket = db_data[0]["slave_ticket"]
@@ -2484,7 +2484,7 @@ class Test_numberall:
                 )
             with allure.step("2. 提取数据库数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 order_no = db_data[0]["order_no"]
                 var_manager.set_runtime_variable("ticket_open", order_no)
@@ -2611,7 +2611,7 @@ class Test_numberall:
 
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             with allure.step("2. 提取数据库中的值"):
                 slave_ticket = db_data[0]["slave_ticket"]

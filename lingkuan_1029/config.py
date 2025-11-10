@@ -8,7 +8,7 @@ import pymysql
 ENV_CONFIG = {
     Environment.TEST: {
         "base_url": "http://39.99.136.49/api",
-        "vps_url": "http://39.99.131.255/vps",
+        "vps_url": "http://39.98.121.142/vps",
         "db_config": {
             "host": "39.99.136.49",
             "port": 3306,

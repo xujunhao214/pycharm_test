@@ -180,7 +180,7 @@ class TestcloudTrader_level(APITestBase):
         with allure.step("2. 数据校验"):
             cloudOrderSend = var_manager.get_variable("cloudOrderSend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 下单总手数与订单详情总手数校验
             totalSzie = cloudOrderSend["totalSzie"]
@@ -523,7 +523,7 @@ class TestcloudTrader_level(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             # 平仓总手数校验
             totalSzie = trader_ordersend["totalSzie"]

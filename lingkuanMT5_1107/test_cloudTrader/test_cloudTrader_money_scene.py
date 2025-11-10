@@ -114,7 +114,7 @@ class TestMT5cloudTrader_moneyandscene:
             with allure.step("2. 数据校验"):
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
                 cfd_value = db_data[0]["cfd"]
                 # 允许为 None 或空字符串（去除空格后）
                 assert cfd_value is None or cfd_value.strip() == "", f"修改个人信息失败（cfd字段应为空，实际值：{cfd_value}）"
@@ -197,7 +197,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -270,7 +270,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -341,7 +341,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -458,7 +458,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -531,7 +531,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -602,7 +602,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -723,7 +723,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = db_data[0]["size"]
@@ -779,7 +779,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -817,7 +817,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 提取数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 cloud_euqit = db_data[0]["euqit"]
                 var_manager.set_runtime_variable("cloud_euqit", cloud_euqit)
@@ -845,7 +845,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 提取数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 MT5cloudTrader_add_euqit = db_data[0]["euqit"]
                 var_manager.set_runtime_variable("MT5cloudTrader_add_euqit", MT5cloudTrader_add_euqit)
@@ -894,7 +894,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 addsalve_size_euqit = [record["size"] for record in db_data]
                 var_manager.set_runtime_variable("addsalve_size_euqit", addsalve_size_euqit)
@@ -1008,7 +1008,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -1067,7 +1067,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -1126,7 +1126,7 @@ class TestMT5cloudTrader_moneyandscene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 addsalve_size_euqit = [record["size"] for record in db_data]
                 var_manager.set_runtime_variable("addsalve_size_euqit", addsalve_size_euqit)

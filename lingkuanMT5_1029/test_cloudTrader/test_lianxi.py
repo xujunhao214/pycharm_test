@@ -61,7 +61,7 @@ class TestCloudStrategyOrderbuy(APITestBase):
         with allure.step("2. 提取数据库中的值"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             MT5cloudTrader_group_id = db_data[0]["id"]
             print(f"输出：{MT5cloudTrader_group_id}")

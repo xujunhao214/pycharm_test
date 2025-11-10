@@ -178,7 +178,7 @@ class TestLeakageopen(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -247,7 +247,7 @@ class TestLeakageopen(APITestBase):
             )
         with allure.step("2. 对订单状态进行校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
             status = db_data[0]["status"]
             assert status == 2, f"跟单失败，跟单状态status应该是2，实际是：{status}"
 
@@ -410,7 +410,7 @@ class TestLeakageopen(APITestBase):
 
         with allure.step("2. 对数据进行校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
             follow_open = db_data[0]["follow_open"]
             assert follow_open == 1, f"数据修改失败，数据follow_openy应该是1，实际是：{follow_open}"
 
@@ -482,7 +482,7 @@ class TestLeakageopen(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -576,7 +576,7 @@ class TestLeakageopen(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -638,7 +638,7 @@ class TestLeakageopen(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -743,7 +743,7 @@ class TestLeakagelevel(APITestBase):
 
         with allure.step("2. 对数据进行校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             follow_close = db_data[0]["follow_close"]
             assert follow_close == 0, f"数据修改失败follow_close数据应该是0，实际是：{follow_close}"
@@ -831,7 +831,7 @@ class TestLeakagelevel(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -912,7 +912,7 @@ class TestLeakagelevel(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -1007,7 +1007,7 @@ class TestLeakagelevel(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -1190,7 +1190,7 @@ class TestLeakagelevel(APITestBase):
 
         with allure.step("2. 对数据进行校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             follow_close = db_data[0]["follow_close"]
             assert follow_close == 1, f"数据修改失败follow_close数据应该是1，实际是：{follow_close}"
@@ -1296,7 +1296,7 @@ class TestLeakagelevel(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"
@@ -1634,7 +1634,7 @@ class TestLeakageopen_addstatus(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             totalSzie = trader_ordersend["totalSzie"]
             size = [record["size"] for record in db_data]
@@ -1723,7 +1723,7 @@ class TestLeakageopen_addstatus(APITestBase):
         with allure.step("2. 数据校验"):
             trader_ordersend = var_manager.get_variable("trader_ordersend")
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             status = db_data[0]["status"]
             assert status in (0, 1), f"订单状态status应为0(处理中)或1(全部成功)，实际状态为: {status}"

@@ -97,7 +97,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_followParam = db_data[0]["size"]
             assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
@@ -136,7 +136,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_templateId3 = [record["size"] for record in db_data]
             total = sum(addsalve_size_templateId3)
@@ -166,7 +166,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_dbtrader_euqit = db_data[0]["euqit"]
             var_manager.set_runtime_variable("vps_dbtrader_euqit", vps_dbtrader_euqit)
@@ -192,7 +192,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_euqit = db_data[0]["euqit"]
             var_manager.set_runtime_variable("vps_addsalve_euqit", vps_addsalve_euqit)
@@ -231,7 +231,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_euqit = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_euqit", vps_addsalve_size_euqit)
@@ -314,7 +314,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_followParam = db_data[0]["size"]
             assert addsalve_size_followParam == 5, f"跟单账号实际下单手数 (实际: {addsalve_size_followParam}, 预期: 5)"
@@ -355,7 +355,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_templateId3 = [record["size"] for record in db_data]
             total = sum(addsalve_size_templateId3)
@@ -397,7 +397,7 @@ class TestVPSOrderSend_Scence(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_euqit = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_euqit", vps_addsalve_size_euqit)

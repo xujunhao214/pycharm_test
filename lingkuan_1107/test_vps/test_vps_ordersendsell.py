@@ -158,7 +158,7 @@ class TestVPSOrdersendsell:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -278,7 +278,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -421,7 +421,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -499,7 +499,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -635,7 +635,7 @@ class TestVPSOrdersendsell:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -741,7 +741,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -884,7 +884,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -962,7 +962,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1098,7 +1098,7 @@ class TestVPSOrdersendsell:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1190,7 +1190,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1329,7 +1329,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1403,7 +1403,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1535,7 +1535,7 @@ class TestVPSOrdersendsell:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1641,7 +1641,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1784,7 +1784,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1862,7 +1862,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2028,7 +2028,7 @@ class TestVPSOrdersendsell:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证手数范围-结束手数"):
                     min_lot_size = db_data[0]["min_lot_size"]
@@ -2108,7 +2108,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2247,7 +2247,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2321,7 +2321,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2455,7 +2455,7 @@ class TestVPSOrdersendsell:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2566,7 +2566,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2706,7 +2706,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2791,7 +2791,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 验证主指令开仓数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -2924,7 +2924,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3022,7 +3022,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3201,7 +3201,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3287,7 +3287,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3321,90 +3321,8 @@ class TestVPSOrdersendsell:
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
 
-    @allure.story("场景8：VPS交易分配-手数范围0.1-1，总手数0.01")
-    @allure.description("""
-    ### 测试说明
-    - 场景校验：手数范围>总手数>订单数量
-    - 前置条件：有vps策略和vps跟单
-      1. 进行开仓，手数范围0.1-1，总手数0.01
-      2. 预期下单失败：总手数不能低于最低手数
-    - 预期结果：提示正确
-    """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
-    @pytest.mark.usefixtures("class_random_str")
-    class TestVPStradingOrders8(APITestBase):
-        @allure.title("VPS交易下单-分配下单请求")
-        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS策略账号交易下单-复制下单
-            masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            data = {
-                "traderList": [vps_trader_user_id],
-                "type": 1,
-                "tradeType": 0,
-                "symbol": masOrderSend["symbol"],
-                "startSize": "0.10",
-                "endSize": "1.00",
-                "totalSzie": "0.01",
-                "remark": "测试数据"
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderSend',
-                json_data=data
-            )
-
-            # 验证下单成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "总手数不能低于最低手数",
-                "响应msg字段应为：总手数不能低于最低手数"
-            )
-
-    @allure.story("场景9：VPS交易分配-手数范围0.1-1，总手数2")
-    @allure.description("""
-    ### 测试说明
-    - 场景校验：手数范围>总手数>订单数量
-    - 前置条件：有vps策略和vps跟单
-      1. 进行开仓，手数范围0.1-1，总手数2
-      2. 预期下单失败：下单失败，请检查下单参数
-    - 预期结果：提示正确
-    """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
-    @pytest.mark.usefixtures("class_random_str")
-    class TestVPStradingOrders9(APITestBase):
-        @allure.title("VPS交易下单-分配下单请求")
-        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送VPS策略账号交易下单-复制下单
-            masOrderSend = var_manager.get_variable("masOrderSend")
-            vps_trader_user_id = var_manager.get_variable("vps_trader_user_id")
-            data = {
-                "traderList": [vps_trader_user_id],
-                "type": 1,
-                "tradeType": 0,
-                "symbol": masOrderSend["symbol"],
-                "startSize": "0.10",
-                "endSize": "1.00",
-                "totalSzie": "2",
-                "remark": "测试数据"
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderSend',
-                json_data=data
-            )
-
-            # 验证下单成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "下单失败，请检查下单参数",
-                "响应msg字段应为：下单失败，请检查下单参数"
-            )
-
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景10：复制下单-手数范围0.01-1，总手数0.3")
+    @allure.story("场景8：复制下单-手数范围0.01-1，总手数0.3")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
@@ -3417,7 +3335,7 @@ class TestVPSOrdersendsell:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestVPSOrderSend10(APITestBase):
+    class TestVPSOrderSend8(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -3548,7 +3466,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3622,7 +3540,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3756,7 +3674,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3835,7 +3753,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -3874,7 +3792,7 @@ class TestVPSOrdersendsell:
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景11：复制下单-手数范围0.01-1，总手数0.3")
+    @allure.story("场景9：复制下单-手数范围0.01-1，总手数0.3")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
@@ -3887,7 +3805,7 @@ class TestVPSOrdersendsell:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestVPSOrderSend11(APITestBase):
+    class TestVPSOrderSend9(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -4018,7 +3936,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4092,7 +4010,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4226,7 +4144,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4305,7 +4223,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4344,7 +4262,7 @@ class TestVPSOrdersendsell:
                     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景12：复制下单-手数范围0.01-1，总手数0.01")
+    @allure.story("场景10：复制下单-手数范围0.01-1，总手数0.01")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
@@ -4357,7 +4275,7 @@ class TestVPSOrdersendsell:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestVPSOrderSend12(APITestBase):
+    class TestVPSOrderSend10(APITestBase):
         @pytest.mark.url("vps")
         @allure.title("修改跟单账号-手数取余-取小数")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
@@ -4488,7 +4406,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4562,7 +4480,7 @@ class TestVPSOrdersendsell:
 
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4696,7 +4614,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -4775,7 +4693,7 @@ class TestVPSOrdersendsell:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]

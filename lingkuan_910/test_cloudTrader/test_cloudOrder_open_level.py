@@ -179,7 +179,7 @@ class TestcloudTrader_openandlevel:
                 )
             with allure.step("2. 对订单状态进行校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
                 remark = db_data[0]["remark"]
                 assert remark == "未开通下单状态", f"跟单失败，异常提示信息是：未开通下单状态，实际是：{remark}"
 
@@ -407,7 +407,7 @@ class TestcloudTrader_openandlevel:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证指令总手数"):
                     total_lots = db_data[0]["total_lots"]
@@ -510,7 +510,7 @@ class TestcloudTrader_openandlevel:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -708,7 +708,7 @@ class TestcloudTrader_openandlevel:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证指令总手数"):
                     total_lots = db_data[0]["total_lots"]
@@ -1072,7 +1072,7 @@ class TestcloudTrader_openandlevel:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证指令总手数"):
                     total_lots = db_data[0]["total_lots"]
@@ -1256,7 +1256,7 @@ class TestcloudTrader_openandlevel:
                 )
             with allure.step("2. 对订单状态进行校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
                 remark = db_data[0]["remark"]
                 assert remark == "未开通下单状态", f"跟单失败，异常提示信息是：未开通下单状态，实际是：{remark}"
 
@@ -1473,7 +1473,7 @@ class TestcloudTrader_openandlevel:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证指令总手数"):
                     total_lots = db_data[0]["total_lots"]
@@ -1576,7 +1576,7 @@ class TestcloudTrader_openandlevel:
             with allure.step("2. 数据校验"):
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]
@@ -1749,7 +1749,7 @@ class TestcloudTrader_openandlevel:
                 )
             with allure.step("2. 对订单状态进行校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
                 remark = db_data[0]["remark"]
                 assert remark == "未开通下单状态", f"跟单失败，异常提示信息是：未开通下单状态，实际是：{remark}"
 
@@ -1955,7 +1955,7 @@ class TestcloudTrader_openandlevel:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -2055,7 +2055,7 @@ class TestcloudTrader_openandlevel:
                 )
             with allure.step("2. 数据校验"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证订单状态"):
                     status = db_data[0]["status"]

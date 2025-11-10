@@ -82,7 +82,7 @@ class TestVPSOrderSend_money(APITestBase):
         with allure.step("2. 校验数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
             cfd_value = db_data[0]["cfd"]
             # 允许为 None 或空字符串（去除空格后）
             assert cfd_value is None or cfd_value.strip() == "", f"修改个人信息失败（cfd字段应为空，实际值：{cfd_value}）"
@@ -154,7 +154,7 @@ class TestVPSOrderSend_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_cfda = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_cfda", vps_addsalve_size_cfda)
@@ -195,7 +195,7 @@ class TestVPSOrderSend_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_cfdp = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_cfdp", vps_addsalve_size_cfdp)
@@ -239,7 +239,7 @@ class TestVPSOrderSend_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_cfdmin = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_cfdmin", vps_addsalve_size_cfdmin)
@@ -316,7 +316,7 @@ class TestVPSOrderSend_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_cfda_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_cfda_close", vps_addsalve_size_cfda_close)
@@ -359,7 +359,7 @@ class TestVPSOrderSend_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_cfdp_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_cfdp_close", vps_addsalve_size_cfdp_close)
@@ -405,7 +405,7 @@ class TestVPSOrderSend_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addsalve_size_cfdmin_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("vps_addsalve_size_cfdmin_close", vps_addsalve_size_cfdmin_close)

@@ -167,7 +167,7 @@ class TestVPSOrderSend1(APITestBase):
             )
         with allure.step("2. 数据校验"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             size = [record["size"] for record in db_data]
             total = sum(size)

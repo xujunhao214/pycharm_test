@@ -70,7 +70,7 @@ class TestVPSOrdersend(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_trader_id = db_data[0]["id"]
             logging.info(f"新增策略账号ID: {vps_trader_id}")
@@ -151,7 +151,7 @@ class TestVPSOrdersend(APITestBase):
             )
 
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             vps_addslave_id = db_data[0]["id"]
             logging.info(f"新增跟单账号ID: {vps_addslave_id}")
@@ -173,7 +173,7 @@ class TestVPSOrdersend(APITestBase):
             )
 
             if not db_data2:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             slave_account = db_data2[0]["slave_account"]
             assert slave_account == vps_user_accounts_1, f"账号新增失败，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}"

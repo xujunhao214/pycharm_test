@@ -109,7 +109,7 @@ class Testcloudtrader_money(APITestBase):
         with allure.step("2. 数据校验"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
             cfd_value = db_data[0]["cfd"]
             # 允许为 None 或空字符串（去除空格后）
             assert cfd_value is None or cfd_value.strip() == "", f"修改个人信息失败（cfd字段应为空，实际值：{cfd_value}）"
@@ -189,7 +189,7 @@ class Testcloudtrader_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_cfda = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfda", addsalve_size_cfda)
@@ -241,7 +241,7 @@ class Testcloudtrader_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_cfdp = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdp", addsalve_size_cfdp)
@@ -296,7 +296,7 @@ class Testcloudtrader_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_cfdmin = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdmin", addsalve_size_cfdmin)
@@ -396,7 +396,7 @@ class Testcloudtrader_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_cfda_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfda_close", addsalve_size_cfda_close)
@@ -448,7 +448,7 @@ class Testcloudtrader_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_cfdp_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdp_close", addsalve_size_cfdp_close)
@@ -503,7 +503,7 @@ class Testcloudtrader_money(APITestBase):
 
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，无法提取数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
             addsalve_size_cfdmin_close = [record["size"] for record in db_data]
             var_manager.set_runtime_variable("addsalve_size_cfdmin_close", addsalve_size_cfdmin_close)

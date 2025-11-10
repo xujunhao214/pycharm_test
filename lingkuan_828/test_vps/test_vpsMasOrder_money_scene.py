@@ -82,7 +82,7 @@ class TestVPSMasOrder_money_scene:
             with allure.step("2. 校验数据"):
                 # 提取数据库中的值
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
                 cfd_value = db_data[0]["cfd"]
                 # 允许为 None 或空字符串（去除空格后）
                 assert cfd_value is None or cfd_value.strip() == "", f"修改个人信息失败（cfd字段应为空，实际值：{cfd_value}）"
@@ -154,7 +154,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -211,7 +211,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -266,7 +266,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -355,7 +355,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -414,7 +414,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -471,7 +471,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -583,7 +583,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = db_data[0]["size"]
@@ -629,7 +629,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -665,7 +665,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 提取数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 vps_dbtrader_euqit = db_data[0]["euqit"]
                 var_manager.set_runtime_variable("vps_dbtrader_euqit", vps_dbtrader_euqit)
@@ -691,7 +691,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 提取数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 vps_addsalve_euqit = db_data[0]["euqit"]
                 var_manager.set_runtime_variable("vps_addsalve_euqit", vps_addsalve_euqit)
@@ -730,7 +730,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 vps_addsalve_size_euqit = [record["size"] for record in db_data]
                 var_manager.set_runtime_variable("vps_addsalve_size_euqit", vps_addsalve_size_euqit)
@@ -820,7 +820,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = db_data[0]["size"]
@@ -868,7 +868,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 with allure.step("验证详情总手数"):
                     size = [record["size"] for record in db_data]
@@ -917,7 +917,7 @@ class TestVPSMasOrder_money_scene:
 
             with allure.step("2. 校验数据"):
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，无法提取数据")
+                    pytest.fail("数据库查询结果为空，订单可能没有入库")
 
                 vps_addsalve_size_euqit = [record["size"] for record in db_data]
                 var_manager.set_runtime_variable("vps_addsalve_size_euqit", vps_addsalve_size_euqit)
