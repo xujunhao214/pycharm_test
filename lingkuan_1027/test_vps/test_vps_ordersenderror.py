@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
-@allure.feature("VPS策略下单-下单限制")
+@allure.feature("VPS策略下单-开仓的场景校验-buy")
 class TestVPSOrdersendbuy:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景1： VPS看板-手数21-21，总订单1")

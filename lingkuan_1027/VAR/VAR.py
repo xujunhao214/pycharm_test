@@ -2,7 +2,7 @@ import datetime
 
 # 加密密钥
 MT4 = "FOLLOWERSHIP4KEY"
-PASSWORD = "Test123456"
+PASSWORD = "Test123456!"
 
 # 飞书机器人WEBHOOK_URL
 WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"

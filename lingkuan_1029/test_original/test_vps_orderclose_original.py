@@ -846,7 +846,7 @@ class TestVPSOrderSend5(APITestBase):
         global token_mt4, headers
         new_user = var_manager.get_variable("new_user")
         # url = f"https://mt4.mtapi.io/Connect?user={new_user['account']}&password={new_user['password']}&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
-        url = "https://mt4.mtapi.io/Connect?user=31491&password=Test123456&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
+        url = "https://mt4.mtapi.io/Connect?user=31491&password=Test123456!&host=47.238.99.66&port=443&connectTimeoutSeconds=30"
 
         payload = {}
         headers = {

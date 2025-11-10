@@ -12,62 +12,42 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
-# ---------------------------
-# 修改模式、品种
-# ---------------------------
 @allure.feature("云策略策略下单-跟单修改模式、品种")
 class TestVPSOrderSend_Scence(APITestBase):
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("账号管理-组别列表-新增云策略组别")
-    def test_create_cloudgroup(self, logged_session, var_manager):
-        add_cloudgroup = var_manager.get_variable("add_cloudgroup")
-        data = {
-            "name": add_cloudgroup["name"],
-            "color": add_cloudgroup["color"],
-            "sort": add_cloudgroup["sort"],
-            "type": add_cloudgroup["type"]
-        }
+    @allure.title("云策略列表-跟单账号平仓")
+    def test_addtrader_close(self, logged_session, var_manager):
+        cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
+        # 循环范围：5 到 cloudTrader_user_count（包含两端）
+        for i in range(5, cloudTrader_user_count + 1):
+            # 直接获取变量值（无需创建动态变量）
+            trader_user_id = var_manager.get_variable(f"cloudTrader_traderList_{i}")
+            # 验证变量存在（可选，避免值为None导致请求失败）
+            assert trader_user_id is not None, f"变量 cloudTrader_traderList_{i} 未找到或值为空"
 
-        # 1. 发送新增VPS组别请求
-        response = self.send_post_request(
-            logged_session,
-            "/mascontrol/group",
-            json_data=data
-        )
+            with allure.step(f"1. 云策略列表-跟单账号平仓（traderUserId={trader_user_id}）"):
+                data = {
+                    "traderUserId": trader_user_id,
+                    "isCloseAll": 1
+                }
 
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "新增云策略组别失败"
-        )
+                # 1. 发送新增VPS组别请求
+                response = self.send_post_request(
+                    logged_session,
+                    "/mascontrol/cloudTrader/orderClose",
+                    json_data=data
+                )
+            with allure.step(f"2. 验证云策略列表-跟单账号平仓结果"):
+                # 2. 验证响应状态码
+                self.assert_response_status(
+                    response,
+                    200,
+                    f"云策略组别平仓失败（traderUserId={trader_user_id}）"
+                )
 
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-组别列表-新增云策略组别")
-    def test_dbquery_cloudgroup(self, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否新增成功"):
-            add_cloudgroup = var_manager.get_variable("add_cloudgroup")
-
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM follow_group WHERE name = %s",
-                (add_cloudgroup["name"],),
-            )
-
-        with allure.step("2. 提取数据库中的值"):
-            # 提取数据库中的值
-            if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
-
-            cloudTrader_group_id = db_data[0]["id"]
-            print(f"输出：{cloudTrader_group_id}")
-            logging.info(f"新增云策略组别ID: {cloudTrader_group_id}")
-            var_manager.set_runtime_variable("cloudTrader_group_id", cloudTrader_group_id)
+                # 3. 验证JSON返回内容
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    f"响应msg字段应为success（traderUserId={trader_user_id}）"
+                )
