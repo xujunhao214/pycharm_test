@@ -72,7 +72,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
             MT5cloudTrader_user_ids = [item["id"] for item in db_data]
             MT5cloudTrader_user_accounts = [item["account"] for item in db_data]
 
-            print(f"提取到用户ID列表: {MT5cloudTrader_user_ids}")
+            print(f"\n提取到用户ID列表: {MT5cloudTrader_user_ids}")
             print(f"提取到用户账号列表: {MT5cloudTrader_user_accounts}")
 
             # 将列表拆分为单独的变量
@@ -255,7 +255,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
             if not MT5cloudTrader_account:
                 pytest.fail(f"未找到第{i}个账号（变量：{MT5cloudTrader_account_var_name}）")
             all_accounts_MT5cloudTrader.append(MT5cloudTrader_account)
-        print(f"将校验的后9个账号：{all_accounts_MT5cloudTrader}")
+        print(f"\n将校验的后9个账号：{all_accounts_MT5cloudTrader}")
 
         # 2. 逐个校验后9个账号的数据库记录（后续代码与之前一致）
         all_ids_MT5cloudTrader = []
@@ -483,7 +483,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增云跟单账号")
-    def test_MT5cloudTrader_cloudBatchAdd(self, var_manager, logged_session):
+    def test_MT5cloudTrader_BatchAdd(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
@@ -537,7 +537,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云跟单账号")
-    def test_dbMT5cloudTrader_cloudBatchAdd(self, var_manager, db_transaction):
+    def test_dbMT5cloudTrader_BatchAdd(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")

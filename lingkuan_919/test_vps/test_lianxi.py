@@ -31,7 +31,7 @@ class TestVPSOrdersend(APITestBase):
                     pytest.fail(f"未找到需要删除的账号ID：vps_addslave_ids_{i}")
                 print(f"删除第{i}个跟单账号:vps_addslave_ids_{i}")
 
-                # 发送删除请求（接口支持单个ID删除，参数为列表形式）
+                # 发送删除请求
                 response = self.send_delete_request(
                     logged_session,
                     '/subcontrol/trader',

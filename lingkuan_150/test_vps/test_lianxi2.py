@@ -18,7 +18,7 @@ class TestVPSOrdersendbuy:
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
       1. 获取该服务器最大手数
-      2. 交易下单-复制下单-策略账号进行开仓，手数21-21，总订单1
+      2. 交易下单-复制下单-策略账号进行开仓
     - 预期结果：开仓失败，超过最大手数限制
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)

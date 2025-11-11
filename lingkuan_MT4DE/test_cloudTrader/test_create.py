@@ -72,7 +72,7 @@ class TestCreate_cloudTrader(APITestBase):
             cloudTrader_user_ids = [item["id"] for item in db_data]
             cloudTrader_user_accounts = [item["account"] for item in db_data]
 
-            print(f"提取到用户ID列表: {cloudTrader_user_ids}")
+            print(f"\n提取到用户ID列表: {cloudTrader_user_ids}")
             print(f"提取到用户账号列表: {cloudTrader_user_accounts}")
 
             # 将列表拆分为单独的变量
@@ -255,7 +255,7 @@ class TestCreate_cloudTrader(APITestBase):
             if not cloudTrader_account:
                 pytest.fail(f"未找到第{i}个账号（变量：{cloudTrader_account_var_name}）")
             all_accounts_cloudTrader.append(cloudTrader_account)
-        print(f"将校验的后9个账号：{all_accounts_cloudTrader}")
+        print(f"\n将校验的后9个账号：{all_accounts_cloudTrader}")
 
         # 2. 逐个校验后9个账号的数据库记录（后续代码与之前一致）
         all_ids_cloudTrader = []
@@ -556,7 +556,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增云跟单账号")
-    def test_cloudTrader_cloudBatchAdd(self, var_manager, logged_session):
+    def test_cloudTrader_BatchAdd(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -610,7 +610,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云跟单账号")
-    def test_dbcloudTrader_cloudBatchAdd(self, var_manager, db_transaction):
+    def test_dbcloudTrader_BatchAdd(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")

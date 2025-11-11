@@ -177,11 +177,11 @@ class TestDeleteUser(APIVPSBase):
                 if not user_id:
                     pytest.fail(f"未找到第{i}个账号的ID（变量名：vps_user_ids_{i}）")
 
-                # 发送删除请求（接口支持传入ID列表，这里单次删除一个）
+                # 发送删除请求
                 response = self.send_delete_request(
                     logged_vps,
                     "/mascontrol/user",
-                    json_data=[user_id]  # 保持接口要求的列表格式
+                    json_data=[user_id]
                 )
 
                 # 3. 验证响应状态码

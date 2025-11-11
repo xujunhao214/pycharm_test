@@ -256,7 +256,7 @@ class TestDeleteUser(APITestBase):
                     pytest.fail(f"未找到需要删除的账号ID：vps_addslave_ids_{i}")
                 print(f"删除第{i}个跟单账号:vps_addslave_ids_{i}")
 
-                # 发送删除请求（接口支持单个ID删除，参数为列表形式）
+                # 发送删除请求
                 response = self.send_delete_request(
                     logged_session,
                     '/subcontrol/trader',
@@ -474,11 +474,11 @@ class TestDeleteUser(APITestBase):
                 if not user_id:
                     pytest.fail(f"未找到第{i}个账号的ID（变量名：vps_user_ids_{i}）")
 
-                # 发送删除请求（接口支持传入ID列表，这里单次删除一个）
+                # 发送删除请求
                 response = self.send_delete_request(
                     logged_session,
                     "/mascontrol/user",
-                    json_data=[user_id]  # 保持接口要求的列表格式
+                    json_data=[user_id]
                 )
 
                 # 3. 验证响应状态码

@@ -15,7 +15,7 @@ SKIP_REASON = "跳过此用例"
 class TestDelete_MT5cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-批量删除云跟单账号")
-    def test_delete_cloudBatchDelete(self, logged_session, var_manager):
+    def test_delete_cloudBatch(self, logged_session, var_manager):
         # 1. 获取账号总数和所有ID
         MT5cloudTrader_user_count = var_manager.get_variable("MT5cloudTrader_user_count", 0)
         if MT5cloudTrader_user_count < 0:
@@ -28,7 +28,7 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     pytest.fail(f"未找到需要删除的账号ID：MT5cloudTrader_traderList_{i}")
                 print(f"删除第{i}云跟单账号：MT5cloudTrader_traderList_{i}")
 
-                # 发送删除请求（接口支持单个ID删除，参数为列表形式）
+                # 发送删除请求
                 data = {
                     "traderList": [
                         slave_id
@@ -59,7 +59,7 @@ class TestDelete_MT5cloudTrader(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.retry(n=0, delay=0)
     @allure.title("数据库校验-云策略列表-批量删除云跟单账号")
-    def test_dbdelete_cloudBatchDelete(self, var_manager, db_transaction):
+    def test_dbdelete_cloudBatch(self, var_manager, db_transaction):
         # 1. 获取账号总数和所有ID
         MT5cloudTrader_user_count = var_manager.get_variable("MT5cloudTrader_user_count", 0)
         if MT5cloudTrader_user_count < 0:
@@ -87,7 +87,7 @@ class TestDelete_MT5cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云跟单账号")
-    def test_delete_cloudBatchDelete(self, logged_session, var_manager):
+    def test_delete_cloudBatch(self, logged_session, var_manager):
         # 1. 发送删除删除云跟单账号请求
         MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
         if MT5cloudTrader_traderList_4 is None:
@@ -120,7 +120,7 @@ class TestDelete_MT5cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-删除云跟单账号")
-    def test_dbdelete_cloudBatchDelete(self, var_manager, db_transaction):
+    def test_dbdelete_cloudBatch(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否删除成功"):
             MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
             logging.info(f"查询条件: table=follow_cloud_trader, id={MT5cloudTrader_traderList_4}")
@@ -377,11 +377,11 @@ class TestDelete_MT5cloudTrader(APITestBase):
                 if not user_id:
                     pytest.fail(f"未找到第{i}个账号的ID（变量名：MT5cloudTrader_user_ids_{i}）")
 
-                # 发送删除请求（接口支持传入ID列表，这里单次删除一个）
+                # 发送删除请求
                 response = self.send_delete_request(
                     logged_session,
                     "/mascontrol/user",
-                    json_data=[user_id]  # 保持接口要求的列表格式
+                    json_data=[user_id]
                 )
 
                 # 3. 验证响应状态码

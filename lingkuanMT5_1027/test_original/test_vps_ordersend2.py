@@ -1022,7 +1022,7 @@ class TestVPSOrderSend_newScenarios:
           2. 预期下单失败：下单失败，请检查下单参数
         - 预期结果：提示正确
         """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+        @pytest.mark.flaky(reruns=0, reruns_delay=0)
         class TestVPStradingOrders9(APITestBase):
             @allure.title("VPS交易下单-分配下单")
             def test_copy_order_send(self, class_random_str, logged_session, var_manager):

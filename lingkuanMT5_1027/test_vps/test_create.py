@@ -148,7 +148,7 @@ class TestCreate(APITestBase):
             MT5vps_user_ids = [item["id"] for item in db_data]
             MT5vps_user_accounts = [item["account"] for item in db_data]
 
-            print(f"提取到用户ID列表: {MT5vps_user_ids}")
+            print(f"\n提取到用户ID列表: {MT5vps_user_ids}")
             print(f"提取到用户账号列表: {MT5vps_user_accounts}")
 
             # 将列表拆分为单独的变量

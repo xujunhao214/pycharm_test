@@ -65,13 +65,13 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 验证查询结果
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             # 提取cloudTrader_user_ids和cloudTrader_user_accounts（保持原有列表形式，用于后续判断）
             cloudTrader_user_ids = [item["id"] for item in db_data]
             cloudTrader_user_accounts = [item["account"] for item in db_data]
 
-            print(f"提取到用户ID列表: {cloudTrader_user_ids}")
+            print(f"\n提取到用户ID列表: {cloudTrader_user_ids}")
             print(f"提取到用户账号列表: {cloudTrader_user_accounts}")
 
             # 将列表拆分为单独的变量
@@ -101,7 +101,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             vpsId = db_data[0]["id"]
             var_manager.set_runtime_variable("vpsId", vpsId)
@@ -170,7 +170,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             cloudTrader_vps_id = db_data[0]["id"]
             logging.info(f"新增策略账号ID: {cloudTrader_vps_id}")
@@ -253,7 +253,7 @@ class TestCreate_cloudTrader(APITestBase):
             if not cloudTrader_account:
                 pytest.fail(f"未找到第{i}个账号（变量：{cloudTrader_account_var_name}）")
             all_accounts_cloudTrader.append(cloudTrader_account)
-        print(f"将校验的后9个账号：{all_accounts_cloudTrader}")
+        print(f"\n将校验的后9个账号：{all_accounts_cloudTrader}")
 
         # 2. 逐个校验后9个账号的数据库记录（后续代码与之前一致）
         all_ids_cloudTrader = []
@@ -361,7 +361,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据库中的值"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             cloudTrader_group_id = db_data[0]["id"]
             print(f"输出：{cloudTrader_group_id}")
@@ -555,7 +555,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-新增云跟单账号")
-    def test_cloudTrader_cloudBatchAdd(self, var_manager, logged_session):
+    def test_cloudTrader_BatchAdd(self, var_manager, logged_session):
         # 1. 发送新增策略账号请求
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
@@ -608,7 +608,7 @@ class TestCreate_cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-新增云跟单账号")
-    def test_dbcloudTrader_cloudBatchAdd(self, var_manager, db_transaction):
+    def test_dbcloudTrader_BatchAdd(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否新增成功"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -676,7 +676,7 @@ class TestCreate_cloudTrader(APITestBase):
         with allure.step("2. 提取数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             cloudTrader_template_id1 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {cloudTrader_template_id1}")
@@ -731,7 +731,7 @@ class TestCreate_cloudTrader(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             cloudTrader_template_id2 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {cloudTrader_template_id2}")

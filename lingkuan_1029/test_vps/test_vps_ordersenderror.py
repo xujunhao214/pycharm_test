@@ -14,12 +14,12 @@ SKIP_REASON = "跳过此用例"
 @allure.feature("VPS策略下单-开仓的场景校验-buy")
 class TestVPSOrdersendbuy:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景1： VPS看板-手数21-21，总订单1")
+    @allure.story("场景1： VPS看板-策略账号超过最大手数")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
       1. 获取该服务器最大手数
-      2. VPS看板-策略账号进行开仓，手数21-21，总订单1
+      2. VPS看板-策略账号进行开仓
     - 预期结果：开仓失败，超过最大手数限制
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
@@ -188,12 +188,12 @@ class TestVPSOrdersendbuy:
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
 
-    @allure.story("场景2：分配下单-手数21-21，总手数21")
+    @allure.story("场景2：分配下单-策略账号超过最大手数")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
       1. 获取该服务器最大手数
-      2. 交易下单-分配下单-策略账号进行开仓，手数21-21，总手数21
+      2. 交易下单-分配下单-策略账号进行开仓
     - 预期结果：开仓失败，超过最大手数限制
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
@@ -352,12 +352,12 @@ class TestVPSOrdersendbuy:
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
 
-    @allure.story("场景3：复制下单-手数21-21，总订单1")
+    @allure.story("场景3：复制下单-策略账号超过最大手数")
     @allure.description("""
     ### 测试说明
     - 前置条件：有vps策略和vps跟单
       1. 获取该服务器最大手数
-      2. 交易下单-复制下单-策略账号进行开仓，手数21-21，总订单1
+      2. 交易下单-复制下单-策略账号进行开仓
     - 预期结果：开仓失败，超过最大手数限制
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
