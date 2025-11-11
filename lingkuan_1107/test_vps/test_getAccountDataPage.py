@@ -163,6 +163,7 @@ class TestVPSOrderSend_newScenarios:
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 new_user = var_manager.get_variable("new_user")
+                broker_name = var_manager.get_variable("broker_name")
                 vps_user_accounts = new_user["account"]
                 params = {
                     "page": 1,
@@ -170,7 +171,7 @@ class TestVPSOrderSend_newScenarios:
                     "order": "",
                     "asc": False,
                     "deleted": None,
-                    "brokerName": "AS",
+                    "brokerName": broker_name,
                     "account": vps_user_accounts,
                 }
                 response = self.send_get_request(
@@ -436,13 +437,14 @@ class TestVPSOrderSend_newScenarios:
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+                broker_name = var_manager.get_variable("broker_name")
                 params = {
                     "page": 1,
                     "limit": 10,
                     "order": "",
                     "asc": False,
                     "deleted": None,
-                    "brokerName": "AS",
+                    "brokerName": broker_name,
                     "account": vps_user_accounts_1,
                 }
                 response = self.send_get_request(
