@@ -28,7 +28,7 @@ class TestMT5cloudTrader_openandlevel:
     class TestMT5cloudTrader_open(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
         @pytest.mark.retry(n=0, delay=0)
-        def test_MT5cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):
+        def test_MT5cloudTrader_BatchUpdate(self, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followOpen改为0，关闭开仓"):
                 MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
                 MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
@@ -85,7 +85,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -258,7 +258,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_MT5cloudTrader_cloudBatchUpdate2(self, var_manager, logged_session):
+        def test_MT5cloudTrader_BatchUpdate2(self, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followOpen改为1，开启开仓"):
                 MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
                 MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
@@ -315,7 +315,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate2(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -364,7 +364,7 @@ class TestMT5cloudTrader_openandlevel:
                     )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -438,7 +438,7 @@ class TestMT5cloudTrader_openandlevel:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓")
-        def test_MT5cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_MT5cloudTrader_OrderClose(self, logged_session, var_manager):
             MT5cloudTrader_user_ids_2 = var_manager.get_variable("MT5cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -464,7 +464,7 @@ class TestMT5cloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderClose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -553,7 +553,7 @@ class TestMT5cloudTrader_openandlevel:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     class TestMT5cloudTrader_level(APITestBase):
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_MT5cloudTrader_cloudBatchUpdate(self, var_manager, logged_session):
+        def test_MT5cloudTrader_BatchUpdate(self, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followClose改为0，关闭平仓"):
                 MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
                 MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
@@ -610,7 +610,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -664,7 +664,7 @@ class TestMT5cloudTrader_openandlevel:
             )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -740,7 +740,7 @@ class TestMT5cloudTrader_openandlevel:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓-出现漏平")
-        def test_MT5cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_MT5cloudTrader_OrderClose(self, logged_session, var_manager):
             MT5cloudTrader_user_ids_2 = var_manager.get_variable("MT5cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -894,7 +894,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("云策略-云策略列表-修改云跟单")
-        def test_MT5cloudTrader_cloudBatchUpdate2(self, var_manager, logged_session):
+        def test_MT5cloudTrader_BatchUpdate2(self, var_manager, logged_session):
             with allure.step("1. 发送修改跟单策略账号请求，将followClose改为1，开启平仓"):
                 MT5cloudTrader_traderList_4 = var_manager.get_variable("MT5cloudTrader_traderList_4")
                 MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
@@ -951,7 +951,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云跟单账号是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate2(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 cloudMaster_id = var_manager.get_variable("cloudMaster_id")
@@ -1001,7 +1001,7 @@ class TestMT5cloudTrader_openandlevel:
                     )
 
         @allure.title("云策略-云策略列表-云跟单账号自己平仓")
-        def test_MT5cloudTrader_cloudOrderClose2(self, logged_session, var_manager):
+        def test_MT5cloudTrader_OrderClose2(self, logged_session, var_manager):
             MT5cloudTrader_user_ids_2 = var_manager.get_variable("MT5cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -1027,7 +1027,7 @@ class TestMT5cloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderClose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1165,7 +1165,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改策略账号是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
@@ -1384,7 +1384,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改策略账号是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate2(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
                 sql = f"SELECT * FROM follow_cloud_trader WHERE account = %s"
@@ -1432,7 +1432,7 @@ class TestMT5cloudTrader_openandlevel:
                     )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1506,7 +1506,7 @@ class TestMT5cloudTrader_openandlevel:
                     logging.info(f"详情总手数验证通过: {total}")
 
         @allure.title("账号管理-交易下单-平仓")
-        def test_MT5cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_MT5cloudTrader_OrderClose(self, logged_session, var_manager):
             MT5cloudTrader_user_ids_2 = var_manager.get_variable("MT5cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -1532,7 +1532,7 @@ class TestMT5cloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderClose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1659,7 +1659,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
                 params = ("MT5自动化测试",)
@@ -1868,7 +1868,7 @@ class TestMT5cloudTrader_openandlevel:
                 )
 
         @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-        def test_dbMT5cloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_BatchUpdate2(self, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否修改成功"):
                 sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
                 params = ("MT5自动化测试",)
@@ -1915,7 +1915,7 @@ class TestMT5cloudTrader_openandlevel:
                     )
 
         @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderSend(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""
@@ -1986,7 +1986,7 @@ class TestMT5cloudTrader_openandlevel:
                     logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
 
         @allure.title("账号管理-交易下单-平仓")
-        def test_MT5cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+        def test_MT5cloudTrader_OrderClose(self, logged_session, var_manager):
             MT5cloudTrader_user_ids_2 = var_manager.get_variable("MT5cloudTrader_user_ids_2")
             # 1. 发送平仓请求
             data = {
@@ -2012,7 +2012,7 @@ class TestMT5cloudTrader_openandlevel:
 
         # @pytest.mark.skip(reason=SKIP_REASON)
         @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-        def test_dbMT5cloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+        def test_dbMT5cloudTrader_OrderClose(self, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
                 sql = f"""

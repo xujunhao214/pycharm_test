@@ -334,7 +334,7 @@ class Testcloudtrader_money(APITestBase):
         )
 
     @allure.title("云策略-云策略列表-平仓")
-    def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+    def test_cloudTrader_OrderClose(self, logged_session, var_manager):
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         # 1. 发送平仓请求
         data = {

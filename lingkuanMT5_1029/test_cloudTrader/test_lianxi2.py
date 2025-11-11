@@ -17,68 +17,47 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 # ---------------------------
 @allure.feature("云策略策略下单-跟单修改模式、品种")
 class TestVPSOrderSend_Scence(APITestBase):
-    @allure.title("出现漏开-redis数据和数据库的数据做比对")
-    def test_dbquery_redis(self, class_random_str, var_manager, db_transaction, redis_MT5cloudTrader_data_send):
-        with allure.step("1. 获取订单详情表账号数据"):
-            MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
-            cloudOrderSend = var_manager.get_variable("cloudOrderSend")
-            symbol = cloudOrderSend["symbol"]
-
-            sql = f"""
-                           SELECT * 
-                           FROM follow_order_detail 
-                           WHERE symbol LIKE %s 
-                             AND account = %s
-                             AND comment = %s
-                           """
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取券商名称和最大手数")
+    def test_dbquery_platform(self, class_random_str, var_manager, db_transaction):
+        with allure.step("1. 数据库的SQL查询"):
+            new_user = var_manager.get_variable("new_user")
+            sql = f""" SELECT * From follow_platform where server= %s """
             params = (
-                f"%{symbol}%",
-                MT5cloudTrader_user_accounts_2,
-                class_random_str
+                new_user["platform"],
             )
 
             # 调用轮询等待方法（带时间范围过滤）
-            db_data = self.query_database_with_time(
+            db_data = self.query_database(
                 db_transaction=db_transaction,
                 sql=sql,
-                params=params,
-                time_field="create_time"
+                params=params
             )
-
-        with allure.step("2. 转换Redis数据为可比较格式"):
-            if not redis_MT5cloudTrader_data_send:
-                pytest.fail("Redis中未查询到订单数据")
-
-            # 转换Redis数据为与数据库一致的格式
-            MT5cloudTrader_redis_comparable_openlist = convert_redis_orders_to_comparable_list(
-                redis_MT5cloudTrader_data_send)
-            logging.info(f"转换后的Redis数据: {MT5cloudTrader_redis_comparable_openlist}")
-
-            # 将转换后的数据存入变量管理器
-            var_manager.set_runtime_variable("MT5cloudTrader_redis_comparable_openlist",
-                                             MT5cloudTrader_redis_comparable_openlist)
-
-        with allure.step("3. 比较Redis与数据库数据"):
-            # 假设db_data是之前从数据库查询的结果
+        with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库中未查询到订单数据")
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
 
-            # 提取数据库中的关键字段（根据实际数据库表结构调整）
-            db_comparable_list = [
-                {
-                    "order_no": record["order_no"],  # 数据库order_no → 统一字段order_no
-                    "magical": record["magical"],  # 数据库magical → 统一字段magical
-                    "size": float(record["size"]),  # 数据库size → 统一字段size
-                    "open_price": float(record["open_price"]),
-                    "symbol": record["symbol"]
-                }
-                for record in db_data
-            ]
-            logging.info(f"数据库转换后: {db_comparable_list}")
-            # 比较两个列表（可根据需要调整比较逻辑）
-            self.assert_expected_in_actual(
-                actual=MT5cloudTrader_redis_comparable_openlist,
-                expected=db_comparable_list,
-                fields_to_compare=["order_no", "magical", "size", "open_price", "symbol"],
-                tolerance=1e-6
+            max_lots = db_data[0]["max_lots"]
+            var_manager.set_runtime_variable("max_lots", max_lots)
+
+            broker_name = db_data[0]["broker_name"]
+            var_manager.set_runtime_variable("broker_name", broker_name)
+
+        with allure.step("3. 全局配置-数据库的SQL查询"):
+            sql = f""" SELECT * From sys_params where param_name= %s """
+            params = (
+                "最大手数配置",
             )
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.query_database(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params
+            )
+        with allure.step("4. 提取数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
+
+            param_value = db_data[0]["param_value"]
+            var_manager.set_runtime_variable("param_value", param_value)

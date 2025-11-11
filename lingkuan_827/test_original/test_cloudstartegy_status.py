@@ -64,7 +64,7 @@ class Testcloudstargy_status(APITestBase):
             )
 
     @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-    def test_dbcloudTrader_cloudBatchUpdate(self, var_manager, db_transaction):
+    def test_dbcloudTrader_BatchUpdate(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
             params = ("自动化测试",)
@@ -269,7 +269,7 @@ class Testcloudstargy_status(APITestBase):
             )
 
     @allure.title("数据库校验-云策略列表-修改云策略是否成功")
-    def test_dbcloudTrader_cloudBatchUpdate2(self, var_manager, db_transaction):
+    def test_dbcloudTrader_BatchUpdate2(self, var_manager, db_transaction):
         with allure.step("1. 查询数据库验证是否修改成功"):
             sql = f"SELECT * FROM follow_cloud_master WHERE name = %s"
             params = ("自动化测试",)
@@ -316,7 +316,7 @@ class Testcloudstargy_status(APITestBase):
                 )
 
     @allure.title("数据库校验-账号管理-交易下单-指令及订单详情数据检查")
-    def test_dbcloudTrader_cloudOrderSend(self, var_manager, db_transaction):
+    def test_dbcloudTrader_OrderSend(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""
@@ -376,7 +376,7 @@ class Testcloudstargy_status(APITestBase):
             logging.info(f'下单手数是：{totalSzie},指令表手数是：{total_lots}')
 
     @allure.title("账号管理-交易下单-平仓")
-    def test_cloudTrader_cloudOrderClose(self, logged_session, var_manager):
+    def test_cloudTrader_OrderClose(self, logged_session, var_manager):
         cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
         # 1. 发送平仓请求
         data = {
@@ -402,7 +402,7 @@ class Testcloudstargy_status(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-交易平仓-指令及订单详情数据检查")
-    def test_dbcloudTrader_cloudOrderClose(self, var_manager, db_transaction):
+    def test_dbcloudTrader_OrderClose(self, var_manager, db_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
             sql = f"""

@@ -68,7 +68,7 @@ class TestVPSOrderSend_newScenarios:
             data = {
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
-                "remark": trader_ordersend["remark"],
+                "remark": class_random_str,
                 "intervalTime": 100,
                 "type": 0,
                 "totalNum": "",
@@ -119,18 +119,20 @@ class TestVPSOrderSend_newScenarios:
                        foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                    WHERE foi.operation_type = %s
                        AND fod.account = %s
+                       AND fod.comment = %s
                        """
                 params = (
                     '0',
                     MT5vps_user_accounts,
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time_with_timezone(
+                db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="fod.open_time"
+                    time_field="foi.create_time"
                 )
             with allure.step("2. 提取数据"):
                 profit_db = [record["profit"] for record in db_data]
@@ -163,6 +165,7 @@ class TestVPSOrderSend_newScenarios:
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 new_user = var_manager.get_variable("new_user")
+                broker_name = var_manager.get_variable("broker_name")
                 MT5vps_user_accounts = new_user["account"]
                 params = {
                     "page": 1,
@@ -170,7 +173,7 @@ class TestVPSOrderSend_newScenarios:
                     "order": "",
                     "asc": False,
                     "deleted": None,
-                    "brokerName": "AS",
+                    "brokerName": broker_name,
                     "account": MT5vps_user_accounts,
                 }
                 response = self.send_get_request(
@@ -436,13 +439,14 @@ class TestVPSOrderSend_newScenarios:
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
+                broker_name = var_manager.get_variable("broker_name")
                 params = {
                     "page": 1,
                     "limit": 10,
                     "order": "",
                     "asc": False,
                     "deleted": None,
-                    "brokerName": "AS",
+                    "brokerName": broker_name,
                     "account": MT5vps_user_accounts_1,
                 }
                 response = self.send_get_request(

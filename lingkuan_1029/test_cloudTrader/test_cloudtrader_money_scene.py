@@ -393,7 +393,7 @@ class Testcloudtrader_moneyandscene:
             )
 
         @allure.title("云策略-云策略列表-平仓")
-        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
+        def test_cloudTrader_OrderClose(self, class_random_str, logged_session, var_manager):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             # 1. 发送平仓请求
             data = {
@@ -942,7 +942,7 @@ class Testcloudtrader_moneyandscene:
             )
 
         @allure.title("云策略-云策略列表-平仓")
-        def test_cloudTrader_cloudOrderClose(self, class_random_str, logged_session, var_manager):
+        def test_cloudTrader_OrderClose(self, class_random_str, logged_session, var_manager):
             cloudMaster_id = var_manager.get_variable("cloudMaster_id")
             # 1. 发送平仓请求
             data = {

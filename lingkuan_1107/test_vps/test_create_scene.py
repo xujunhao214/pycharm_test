@@ -366,7 +366,7 @@ class TestCreate_Scene(APITestBase):
                 )
 
     @pytest.mark.url("vps")
-    @allure.title("VPS策略账号交易下单-复制下单（批量执行）")
+    @allure.title("VPS策略账号-跟单账号平仓")
     def test_seng_close(self, class_random_str, logged_session, var_manager):
         # 1. 获取总数量（控制循环范围）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)

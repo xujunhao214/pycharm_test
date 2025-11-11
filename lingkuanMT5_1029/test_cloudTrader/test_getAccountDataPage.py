@@ -145,13 +145,14 @@ class TestCloudOrderSend_newScenarios:
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
+                broker_name = var_manager.get_variable("broker_name")
                 params = {
                     "page": 1,
                     "limit": 10,
                     "order": "",
                     "asc": False,
                     "deleted": None,
-                    "brokerName": "AS",
+                    "brokerName": broker_name,
                     "account": MT5cloudTrader_user_accounts_2,
                 }
                 response = self.send_get_request(
@@ -403,13 +404,14 @@ class TestCloudOrderSend_newScenarios:
         def test_dashboard_getAccountDataPage(self, class_random_str, var_manager, logged_session):
             with allure.step("1. 获取仪表盘-账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
+                broker_name = var_manager.get_variable("broker_name")
                 params = {
                     "page": 1,
                     "limit": 10,
                     "order": "",
                     "asc": False,
                     "deleted": None,
-                    "brokerName": "AS",
+                    "brokerName": broker_name,
                     "account": MT5cloudTrader_user_accounts_4,
                 }
                 response = self.send_get_request(
