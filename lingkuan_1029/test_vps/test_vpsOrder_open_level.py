@@ -258,13 +258,15 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("数据库校验-策略开仓-跟单开仓指令-根据status状态发现有漏单")
         def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
@@ -564,13 +566,15 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -757,13 +761,15 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
     @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
@@ -1083,13 +1089,15 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @pytest.mark.url("vps")
         @allure.title("跟单软件看板-VPS数据-策略平仓-出现漏平")
@@ -1502,13 +1510,15 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
     @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
@@ -1959,10 +1969,12 @@ class TestLeakageopen_level:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")

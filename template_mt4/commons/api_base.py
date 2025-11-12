@@ -532,7 +532,7 @@ class APITestBase:
         except Exception as e:
             with allure.step("JSONPath解析异常"):
                 allure.attach(json_path, "解析路径", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
+                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
                 allure.attach(str(e), "解析错误", allure.attachment_type.TEXT)
             logger.error(f"JSONPath解析失败: {json_path} | 响应: {response.text[:500]}")
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
@@ -555,7 +555,7 @@ class APITestBase:
             with allure.step(f"JSON断言失败: {json_path}"):
                 allure.attach(json_path, "JSON路径", allure.attachment_type.TEXT)
                 allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
+                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
             logger.error(
                 f"[{self._get_current_time()}] JSON断言失败: {str(e)} | 路径: {json_path} | 响应: {response.text[:500]}")
             raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
@@ -584,7 +584,7 @@ class APITestBase:
 
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
-                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
+                    logger.info(f"[{self._get_current_time()}] 执行SQL: \n{final_sql} \n参数: {params}")
                     cursor.execute(final_sql, params)
                     result = cursor.fetchall()
                     logger.info(

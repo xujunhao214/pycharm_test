@@ -360,8 +360,7 @@ class APITestBase:
             allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
             allure.attach(f"期望值: {expected_status}", "预期状态码", allure.attachment_type.TEXT)
             allure.attach(f"实际值: {actual_status}", "实际状态码", allure.attachment_type.TEXT)
-            allure.attach(response.text[:500] + "..." if len(response.text) > 500 else response.text,
-                          "响应内容", allure.attachment_type.TEXT)
+            allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
 
         try:
             assert actual_status == expected_status, \
@@ -396,7 +395,7 @@ class APITestBase:
         except Exception as e:
             with allure.step("JSONPath解析异常"):
                 allure.attach(json_path, "解析路径", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
+                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
                 allure.attach(str(e), "解析错误", allure.attachment_type.TEXT)
             logger.error(f"JSONPath解析失败: {json_path} \n响应: {response.text[:500]}")
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
@@ -419,7 +418,7 @@ class APITestBase:
             with allure.step(f"JSON断言失败: {json_path}"):
                 allure.attach(json_path, "JSON路径", allure.attachment_type.TEXT)
                 allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
-                allure.attach(response.text[:500], "响应内容", allure.attachment_type.TEXT)
+                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
             logger.error(
                 f"[{self._get_current_time()}] JSON断言失败: {str(e)} \n路径: {json_path} \n响应: {response.text[:500]}")
             raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
@@ -445,7 +444,7 @@ class APITestBase:
             with allure.step("执行数据库查询"):
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
-                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
+                    logger.info(f"[{self._get_current_time()}] 执行SQL: \n{final_sql} \n参数: {params}")
                     cursor.execute(final_sql, params)
                     result = cursor.fetchall()
                     logger.info(
@@ -793,14 +792,9 @@ class APITestBase:
         fixed_time_end = (poll_start_datetime + datetime.timedelta(minutes=time_range)).strftime(
             "%Y-%m-%d %H:%M:%S")
 
-        logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 \nSQL: {sql[:200]} \n超时: {timeout}秒")
+        logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 | 超时: {timeout}秒")
 
         with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-            allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
-                          allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -832,10 +826,12 @@ class APITestBase:
 
                     if not result:
                         logger.info(
-                            f"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）\nSQL: {sql[:200]}")
+                            f"[{self._get_current_time()}] 删除成功（耗时{time.time() - start_time:.1f}秒）")
                         with allure.step("删除验证成功"):
                             allure.attach(f"耗时{time.time() - start_time:.1f}秒，记录已删除", "结果说明",
                                           allure.attachment_type.TEXT)
+                            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         return
 
                     logger.info(
@@ -881,6 +877,10 @@ class APITestBase:
                     f"剩余记录（共{len(final_result)}条）",
                     allure.attachment_type.JSON
                 )
+                allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
+                allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
+                              allure.attachment_type.TEXT)
 
             raise TimeoutError(f"Failed: 等待记录删除超时（{timeout}秒）")
 
@@ -1097,7 +1097,9 @@ class APITestBase:
             # 附加结果到报告
             if final_result and attach_to_allure:
                 with allure.step("带时区查询最终结果"):
-                    allure.attach(self.serialize_data(final_result[:50]), "结果预览", allure.attachment_type.JSON)
+                    display_result = min(len(final_result), 50)
+                    allure.attach(self.serialize_data(final_result[:display_result]),
+                                  f"查询结果（共{len(final_result)}条，显示前50条）", allure.attachment_type.JSON)
                     allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
                     allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                     allure.attach(f"{timezone_offset}", "时区偏移量（小时）", allure.attachment_type.TEXT)
@@ -1224,20 +1226,50 @@ class APITestBase:
                 allure.attach(str(params or json_data), "请求参数", allure.attachment_type.TEXT)
             raise TimeoutError(f"Failed: API条件等待超时（{url}）") from e
 
-    def assert_list_equal_ignore_order(self, list1, list2, error_msg_prefix="列表元素不匹配"):
-        """断言两个列表元素相同（忽略顺序，带Allure分层提示）"""
+    def assert_list_equal_ignore_order(self, list1, list2, list3, error_msg_prefix="列表元素不匹配"):
+        """
+        断言列表元素相同（忽略顺序），精准拆分断言逻辑，明确展示匹配关系
+        :param list1: 总手数列表
+        :param list2: 预期列表
+        :param list3: 实际总手数列表
+        :param error_msg_prefix: 错误提示前缀
+        """
         from collections import Counter
-        with allure.step("断言列表元素相同（忽略顺序）"):
-            allure.attach(self.serialize_data(list1), "实际列表", attachment_type="text/plain")
-            allure.attach(self.serialize_data(list2), "预期列表", attachment_type="text/plain")
 
-        try:
-            assert Counter(list1) == Counter(list2), f"Failed: {error_msg_prefix}（忽略顺序）"
-        except AssertionError as e:
-            with allure.step("列表元素断言失败"):
-                allure.attach(f"实际: {list1[:30]} \n预期: {list2[:30]}", "断言结果",
-                              attachment_type="text/plain")
-            raise e
+        # 分别计算三个列表的元素计数
+        counter1 = Counter(list1)
+        counter2 = Counter(list2)
+        counter3 = Counter(list3)
+
+        with allure.step("断言列表元素相同（忽略顺序）"):
+            # allure.attach(self.serialize_data(list1), "总手数列表", attachment_type="text/plain")
+            # allure.attach(self.serialize_data(list3), "实际总手数列表", attachment_type="text/plain")
+            # allure.attach(self.serialize_data(list2), "详情手数列表", attachment_type="text/plain")
+
+            try:
+                # 先判断总手数列表是否与预期匹配
+                if counter1 == counter2:
+                    with allure.step("总手数列表与详情手数列表匹配"):
+                        allure.attach(f"总手数列表: {list1} \n详情手数列表: {list2}", "匹配结果",
+                                      attachment_type="text/plain")
+                    return  # 匹配成功，直接返回
+
+                # 再判断实际总手数列表是否与预期匹配
+                elif counter3 == counter2:
+                    with allure.step("实际总手数列表与详情手数列表匹配"):
+                        allure.attach(f"实际总手数列表: {list3} \n详情手数列表: {list2}", "匹配结果",
+                                      attachment_type="text/plain")
+                    return  # 匹配成功，直接返回
+
+                # 两者都不匹配时抛出断言错误
+                else:
+                    raise AssertionError(f"Failed: {error_msg_prefix}（忽略顺序）\n"
+                                         f"总手数列表: {list1} \n实际总手数列表: {list3} \n详情手数列表: {list2}")
+
+            except AssertionError as e:
+                with allure.step("列表元素断言失败"):
+                    allure.attach(str(e), "错误详情", attachment_type="text/plain")
+                raise e
 
     def assert_dict_subset(self, subset_dict, full_dict, error_msg_prefix="子字典不匹配"):
         """断言一个字典是另一个字典的子集（带Allure分层提示）"""

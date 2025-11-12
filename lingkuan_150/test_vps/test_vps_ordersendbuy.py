@@ -1142,7 +1142,7 @@ class TestVPSOrdersendbuy:
                         message="总订单数量应符合预期",
                         attachment_name="总订单数量详情"
                     )
-                    logging.info(f"开始手数验证通过: {total_orders}")
+                    logging.info(f"总订单数量验证通过: {total_orders}")
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):

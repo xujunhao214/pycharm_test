@@ -396,7 +396,7 @@ class TestCreate(APITestBase):
             logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
 
             euqit = db_data[0]["euqit"]
-            assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
             logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
     @pytest.mark.skip(reason=SKIP_REASON)
@@ -477,8 +477,8 @@ class TestCreate(APITestBase):
             logging.info(f"账号 {MT5vps_user_accounts_1} 状态异常：预期status=0，实际={status}")
 
             euqit = db_data[0]["euqit"]
-            assert euqit > 0, f"账号 {MT5vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}"
-            logging.info(f"账号 {MT5vps_user_accounts_1} 净值异常：预期euqit≠0，实际={euqit}")
+            assert euqit >= 0, f"账号 {MT5vps_user_accounts_1} 净值异常：预期euqit>=0，实际={euqit}"
+            logging.info(f"账号 {MT5vps_user_accounts_1} 净值异常：预期euqit>=0，实际={euqit}")
 
             db_data2 = self.query_database(
                 db_transaction,

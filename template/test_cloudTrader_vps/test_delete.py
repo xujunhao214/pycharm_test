@@ -53,9 +53,9 @@ class TestDeleteUser(APIVPSBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"VPS组别 {add_vpsgroup['name']} 已成功从数据库删除", "验证结果")
+                allure.attach(f"VPS组别 {add_vpsgroup['name']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     @pytest.mark.skip(reason=SKIP_REASON)
@@ -100,9 +100,9 @@ class TestDeleteUser(APIVPSBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"跟单账号 {vps_user_accounts_2} 已成功从数据库删除", "验证结果")
+                allure.attach(f"跟单账号 {vps_user_accounts_2} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
             db_data2 = self.query_database(
@@ -155,9 +155,9 @@ class TestDeleteUser(APIVPSBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"策略账号 {vps_user_accounts_1} 已成功从数据库删除", "验证结果")
+                allure.attach(f"策略账号 {vps_user_accounts_1} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -228,7 +228,7 @@ class TestDeleteUser(APIVPSBase):
                         sql=sql,
                         params=params
                     )
-                    allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果")
+                    allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
-                    allure.attach(f"删除超时: {str(e)}", "验证结果")
+                    allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                     pytest.fail(f"删除失败: {str(e)}")

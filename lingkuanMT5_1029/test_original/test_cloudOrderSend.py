@@ -686,7 +686,7 @@ class TestCloudStrategyOrder:
                         message="总订单数量应符合预期",
                         attachment_name="总订单数量详情"
                     )
-                    logging.info(f"开始手数验证通过: {total_orders}")
+                    logging.info(f"总订单数量验证通过: {total_orders}")
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
@@ -1684,12 +1684,14 @@ class TestCloudStrategyOrder:
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
                     true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
+                        total_lots,
                         size,
                         true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):

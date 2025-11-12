@@ -445,7 +445,7 @@ class APITestBase:
 
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
-                    logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} \n参数: {params}")
+                    logger.info(f"[{self._get_current_time()}] 执行SQL: \n{final_sql} \n参数: {params}")
                     cursor.execute(final_sql, params)
                     result = cursor.fetchall()
                     logger.info(
@@ -1018,7 +1018,9 @@ class APITestBase:
             # 附加结果到报告
             if final_result and attach_to_allure:
                 with allure.step("带时区查询最终结果"):
-                    allure.attach(self.serialize_data(final_result[:50]), "结果预览", allure.attachment_type.JSON)
+                    display_result = min(len(final_result), 50)
+                    allure.attach(self.serialize_data(final_result[:display_result]),
+                                  f"查询结果（共{len(final_result)}条，显示前50条）", allure.attachment_type.JSON)
 
             if not final_result:
                 with allure.step("时区查询无结果"):

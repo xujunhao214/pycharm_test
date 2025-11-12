@@ -1531,7 +1531,7 @@ class TestVPSOrdersendbuy:
                         message="总订单数量应符合预期",
                         attachment_name="总订单数量详情"
                     )
-                    logging.info(f"开始手数验证通过: {total_orders}")
+                    logging.info(f"总订单数量验证通过: {total_orders}")
 
         @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
@@ -5256,7 +5256,7 @@ class TestVPSOrdersendbuy:
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend9(APITestBase):
         @pytest.mark.url("vps")
-        @allure.title("修改跟单账号-手数取余-取小数")
+        @allure.title("修改跟单账号-手数取余-四舍五入")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号"):
                 # remainder  0 : 四舍五入  1：取小数
@@ -5914,7 +5914,7 @@ class TestVPSOrdersendbuy:
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend10(APITestBase):
         @pytest.mark.url("vps")
-        @allure.title("修改跟单账号-手数取余-取小数")
+        @allure.title("修改跟单账号-手数取余-四舍五入")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单账号"):
                 # remainder  0 : 四舍五入  1：取小数

@@ -675,7 +675,7 @@ class TestCloudStrategyOrder:
                         message="总订单数量应符合预期",
                         attachment_name="总订单数量详情"
                     )
-                    logging.info(f"开始手数验证通过: {total_orders}")
+                    logging.info(f"总订单数量验证通过: {total_orders}")
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, logged_session, var_manager):

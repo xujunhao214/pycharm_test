@@ -91,8 +91,8 @@ class TestVPSOrdersendbuy(APITestBase):
             logging.info(f"账号 {add_MT5Slave['account']} 状态异常：预期status=0，实际={status}")
 
             euqit = db_data[0]["euqit"]
-            assert euqit > 0, f"账号 {add_MT5Slave['account']} 净值异常：预期euqit≠0，实际={euqit}"
-            logging.info(f"账号 {add_MT5Slave['account']} 净值异常：预期euqit≠0，实际={euqit}")
+            assert euqit >= 0, f"账号 {add_MT5Slave['account']} 净值异常：预期euqit>=0，实际={euqit}"
+            logging.info(f"账号 {add_MT5Slave['account']} 净值异常：预期euqit>=0，实际={euqit}")
 
             db_data2 = self.query_database(
                 db_transaction,

@@ -80,9 +80,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                         sql=sql,
                         params=params
                     )
-                    allure.attach(f"云跟单账号 {MT5cloudTrader_traderList} 已成功从数据库删除", "验证结果")
+                    allure.attach(f"云跟单账号 {MT5cloudTrader_traderList} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
-                    allure.attach(f"删除超时: {str(e)}", "验证结果")
+                    allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                     pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -133,9 +133,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云跟单账号 {MT5cloudTrader_traderList_4} 已成功从数据库删除", "验证结果")
+                allure.attach(f"云跟单账号 {MT5cloudTrader_traderList_4} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     @allure.title("云策略-云策略列表-删除云跟单账号-手动下单")
@@ -185,9 +185,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云跟单账号 {MT5cloudTrader_traderList_handid} 已成功从数据库删除", "验证结果")
+                allure.attach(f"云跟单账号 {MT5cloudTrader_traderList_handid} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -237,9 +237,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略账号 {MT5cloudTrader_traderList_2} 已成功从数据库删除", "验证结果")
+                allure.attach(f"云策略账号 {MT5cloudTrader_traderList_2} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -299,19 +299,38 @@ class TestDelete_MT5cloudTrader(APITestBase):
                         sql=sql,
                         params=(account,)
                     )
-                    allure.attach(f"账号 {account} 已成功下架vps", "验证结果")
-                    print(f"账号 {account} 已成功下架vps")
+                    allure.attach(f"账号 {account} 已成功下架vps", "验证结果", allure.attachment_type.TEXT)
+                    # print(f"\n账号 {account} 已成功下架vps")
                 except TimeoutError as e:
-                    allure.attach(f"下架超时: {str(e)}", "验证结果")
+                    allure.attach(f"下架超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                     pytest.fail(f"下架失败: {str(e)}")
 
-                # 验证订阅表是否同步删除
-                sql_sub = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
-                db_data_sub = self.query_database(db_transaction, sql_sub, (account,))
-                assert not db_data_sub, (
-                    f"第{i}个账号（{account}）的订阅表记录未删除，"
-                    f"残留数据：{db_data_sub}"
-                )
+                # 验证订阅表是否同步删除（无超时，直接查询判断）
+                sql_sub = "SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
+                cursor = db_transaction.cursor()
+                cursor.execute(sql_sub, (account,))
+                db_data_sub = cursor.fetchall()
+
+                try:
+                    # 断言查询结果为空（即记录已删除）
+                    assert not db_data_sub, (
+                        f"第{i}个账号（{account}）的订阅表记录未删除，"
+                        f"残留数据：{db_data_sub}"
+                    )
+                    # 断言成功，添加 Allure 日志
+                    allure.attach(
+                        f"账号 {account} 的订阅表记录已成功删除",
+                        "验证结果（订阅表删除）",
+                        allure.attachment_type.TEXT
+                    )
+                except AssertionError as e:
+                    # 断言失败，添加详细错误日志到 Allure
+                    allure.attach(
+                        f"验证失败：{str(e)}",
+                        "验证结果（订阅表删除失败）",
+                        allure.attachment_type.TEXT
+                    )
+                    pytest.fail(f"订阅表删除验证失败：{str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
@@ -355,9 +374,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"策略账号 {MT5cloudTrader_user_accounts_1} 已成功从数据库删除", "验证结果")
+                allure.attach(f"策略账号 {MT5cloudTrader_user_accounts_1} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -429,9 +448,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                         sql=sql,
                         params=params
                     )
-                    allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果")
+                    allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
-                    allure.attach(f"删除超时: {str(e)}", "验证结果")
+                    allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                     pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -476,9 +495,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果")
+                allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -523,9 +542,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"品种 {add_variety['templateName4']} 已成功从数据库删除", "验证结果")
+                allure.attach(f"品种 {add_variety['templateName4']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -570,9 +589,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略 {cloudMaster_id} 已成功从数据库删除", "验证结果")
+                allure.attach(f"云策略 {cloudMaster_id} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     @allure.title("云策略-云策略列表-删除云策略-手动下单")
@@ -616,9 +635,9 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略 {cloudMaster_id_hand} 已成功从数据库删除", "验证结果")
+                allure.attach(f"云策略 {cloudMaster_id_hand} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
@@ -662,7 +681,7 @@ class TestDelete_MT5cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"MT5云策略组别 {MT5cloudTrader_group_id} 已成功从数据库删除", "验证结果")
+                allure.attach(f"MT5云策略组别 {MT5cloudTrader_group_id} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
-                allure.attach(f"删除超时: {str(e)}", "验证结果")
+                allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")

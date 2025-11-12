@@ -1,0 +1,795 @@
+{
+  "uid" : "4fc07b3d7ffd3aa",
+  "name" : "数据库校验-云跟单-复制下单平仓数据",
+  "fullName" : "test_cloudTrader.test_cloudOrderSendsell.TestMasOrderSend8#test_copy_verify_close_dbadd",
+  "historyId" : "24e3996cb5f4ed0d3ecb23684e7b6910",
+  "time" : {
+    "start" : 1762928802418,
+    "stop" : 1762928806908,
+    "duration" : 4490
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5\n      2. 校验权重，优先满足手数范围，然后是总手数\n      3. 进行平仓\n      4. 校验账号的数据是否正确\n    - 预期结果：权重正确，优先满足手数范围，然后是总手数\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有云策略和云跟单\n  1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5\n  2. 校验权重，优先满足手数范围，然后是总手数\n  3. 进行平仓\n  4. 校验账号的数据是否正确\n- 预期结果：权重正确，优先满足手数范围，然后是总手数\n</code></pre>\n",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1762928091554,
+      "stop" : 1762928092214,
+      "duration" : 660
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1762928091553,
+      "stop" : 1762928091553,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1762928092214,
+      "stop" : 1762928092214,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1762928091554,
+      "stop" : 1762928091554,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1762928502422,
+      "stop" : 1762928502423,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "class_random_str",
+    "time" : {
+      "start" : 1762928758270,
+      "stop" : 1762928758270,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1762928802418,
+      "stop" : 1762928802418,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1762928802327,
+      "stop" : 1762928802418,
+      "duration" : 91
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有云策略和云跟单\n      1. 进行开仓，手数范围0.3-1，总订单数量1，总手数5\n      2. 校验权重，优先满足手数范围，然后是总手数\n      3. 进行平仓\n      4. 校验账号的数据是否正确\n    - 预期结果：权重正确，优先满足手数范围，然后是总手数\n    ",
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "查询复制平仓订单数据",
+      "time" : {
+        "start" : 1762928802418,
+        "stop" : 1762928806906,
+        "duration" : 4488
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（时区+06:00，超时30秒）",
+        "time" : {
+          "start" : 1762928802418,
+          "stop" : 1762928806906,
+          "duration" : 4488
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "带时区转换查询（目标时区: +06:00）",
+          "time" : {
+            "start" : 1762928802464,
+            "stop" : 1762928802519,
+            "duration" : 55
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1762928802465,
+              "stop" : 1762928802519,
+              "duration" : 54
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "attachmentsCount" : 0,
+            "shouldDisplayMessage" : false,
+            "hasContent" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "6391b9c830f624cb",
+            "name" : "时区处理",
+            "source" : "6391b9c830f624cb.txt",
+            "type" : "text/plain",
+            "size" : 51
+          }, {
+            "uid" : "8fe7999c35074018",
+            "name" : "查询条件",
+            "source" : "8fe7999c35074018.txt",
+            "type" : "text/plain",
+            "size" : 127
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "轮询中（已等待0.1秒）",
+          "time" : {
+            "start" : 1762928802519,
+            "stop" : 1762928802520,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "cc63ef3bdfa76b9b",
+            "name" : "当前状态",
+            "source" : "cc63ef3bdfa76b9b.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "77e920aed031f3",
+            "name" : "超时倒计时",
+            "source" : "77e920aed031f3.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1762928802520,
+            "stop" : 1762928802520,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "44bc6f8478a5b16c",
+            "name" : "判断结果",
+            "source" : "44bc6f8478a5b16c.txt",
+            "type" : "text/plain",
+            "size" : 39
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "数据发生变化",
+          "time" : {
+            "start" : 1762928802520,
+            "stop" : 1762928802521,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ea28e2c9cb5efd25",
+            "name" : "状态说明",
+            "source" : "ea28e2c9cb5efd25.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "带时区转换查询（目标时区: +06:00）",
+          "time" : {
+            "start" : 1762928804580,
+            "stop" : 1762928804632,
+            "duration" : 52
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1762928804580,
+              "stop" : 1762928804632,
+              "duration" : 52
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "attachmentsCount" : 0,
+            "shouldDisplayMessage" : false,
+            "hasContent" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "6427080924f909af",
+            "name" : "时区处理",
+            "source" : "6427080924f909af.txt",
+            "type" : "text/plain",
+            "size" : 51
+          }, {
+            "uid" : "c37505a62d7b046b",
+            "name" : "查询条件",
+            "source" : "c37505a62d7b046b.txt",
+            "type" : "text/plain",
+            "size" : 127
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "轮询中（已等待2.2秒）",
+          "time" : {
+            "start" : 1762928804632,
+            "stop" : 1762928804633,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "635053ea79e24ba4",
+            "name" : "当前状态",
+            "source" : "635053ea79e24ba4.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "2d44230e9be74234",
+            "name" : "超时倒计时",
+            "source" : "2d44230e9be74234.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1762928804633,
+            "stop" : 1762928804634,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "641f4ad90e1512e6",
+            "name" : "唯一键信息",
+            "source" : "641f4ad90e1512e6.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "a5865ea162646c9b",
+            "name" : "判断结果",
+            "source" : "a5865ea162646c9b.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "数据首次稳定",
+          "time" : {
+            "start" : 1762928804634,
+            "stop" : 1762928804634,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "da71d36738594152",
+            "name" : "状态说明",
+            "source" : "da71d36738594152.txt",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "带时区转换查询（目标时区: +06:00）",
+          "time" : {
+            "start" : 1762928806685,
+            "stop" : 1762928806902,
+            "duration" : 217
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1762928806687,
+              "stop" : 1762928806902,
+              "duration" : 215
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "attachmentsCount" : 0,
+            "shouldDisplayMessage" : false,
+            "hasContent" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "66fb540416b8b94c",
+            "name" : "时区处理",
+            "source" : "66fb540416b8b94c.txt",
+            "type" : "text/plain",
+            "size" : 51
+          }, {
+            "uid" : "293f6a6fdd76d59b",
+            "name" : "查询条件",
+            "source" : "293f6a6fdd76d59b.txt",
+            "type" : "text/plain",
+            "size" : 127
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "轮询中（已等待4.5秒）",
+          "time" : {
+            "start" : 1762928806902,
+            "stop" : 1762928806903,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ef8d6d45723c9c0c",
+            "name" : "当前状态",
+            "source" : "ef8d6d45723c9c0c.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "5128809bb7757b4d",
+            "name" : "超时倒计时",
+            "source" : "5128809bb7757b4d.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1762928806903,
+            "stop" : 1762928806904,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "21d92f0588fb8be5",
+            "name" : "唯一键信息",
+            "source" : "21d92f0588fb8be5.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "c482b976ded60c9e",
+            "name" : "判断结果",
+            "source" : "c482b976ded60c9e.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "数据稳定达标",
+          "time" : {
+            "start" : 1762928806904,
+            "stop" : 1762928806904,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "d41f8ec88df216cc",
+            "name" : "结果说明",
+            "source" : "d41f8ec88df216cc.txt",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        }, {
+          "name" : "带时区查询最终结果",
+          "time" : {
+            "start" : 1762928806904,
+            "stop" : 1762928806906,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "8e93f886b127ba09",
+            "name" : "查询结果（共8条，显示前50条）",
+            "source" : "8e93f886b127ba09.json",
+            "type" : "application/json",
+            "size" : 4024
+          }, {
+            "uid" : "75aa067a01b10407",
+            "name" : "执行SQL",
+            "source" : "75aa067a01b10407.txt",
+            "type" : "text/plain",
+            "size" : 1301
+          }, {
+            "uid" : "3a00d4c444adb68f",
+            "name" : "SQL参数",
+            "source" : "3a00d4c444adb68f.txt",
+            "type" : "text/plain",
+            "size" : 33
+          }, {
+            "uid" : "4ace8246b8c97b4a",
+            "name" : "时区偏移量（小时）",
+            "source" : "4ace8246b8c97b4a.txt",
+            "type" : "text/plain",
+            "size" : 1
+          }, {
+            "uid" : "8a83dd5b7480a432",
+            "name" : "查询时间窗口",
+            "source" : "8a83dd5b7480a432.txt",
+            "type" : "text/plain",
+            "size" : 61
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 5,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 16,
+        "attachmentsCount" : 25,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 17,
+      "attachmentsCount" : 25,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    }, {
+      "name" : "执行复制平仓数据校验",
+      "time" : {
+        "start" : 1762928806906,
+        "stop" : 1762928806907,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "验证订单状态",
+        "time" : {
+          "start" : 1762928806906,
+          "stop" : 1762928806907,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 订单状态应为0或1或3",
+          "time" : {
+            "start" : 1762928806906,
+            "stop" : 1762928806907,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a6cb390ac7a2683c",
+            "name" : "订单状态详情",
+            "source" : "a6cb390ac7a2683c.attach",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "attachmentsCount" : 1,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true
+      }, {
+        "name" : "验证订单数量",
+        "time" : {
+          "start" : 1762928806907,
+          "stop" : 1762928806907,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 订单数量符合预期",
+          "time" : {
+            "start" : 1762928806907,
+            "stop" : 1762928806907,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "49b2faa462477605",
+            "name" : "订单数量",
+            "source" : "49b2faa462477605.attach",
+            "type" : "text/plain",
+            "size" : 32
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "attachmentsCount" : 1,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true
+      }, {
+        "name" : "验证详情总手数",
+        "time" : {
+          "start" : 1762928806907,
+          "stop" : 1762928806907,
+          "duration" : 0
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 详情总手数符合预期",
+          "time" : {
+            "start" : 1762928806907,
+            "stop" : 1762928806907,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "7e2f24fedb692659",
+            "name" : "详情总手数",
+            "source" : "7e2f24fedb692659.attach",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "attachmentsCount" : 1,
+        "shouldDisplayMessage" : false,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 6,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "31a67e7416235272",
+      "name" : "log",
+      "source" : "31a67e7416235272.txt",
+      "type" : "text/plain",
+      "size" : 7615
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 25,
+    "attachmentsCount" : 29,
+    "shouldDisplayMessage" : false,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1762928956342,
+      "stop" : 1762928956344,
+      "duration" : 2
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1762928806908,
+      "stop" : 1762928807708,
+      "duration" : 800
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1762928807708,
+      "stop" : 1762928807798,
+      "duration" : 90
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "story",
+    "value" : "场景8：复制下单-手数范围0.3-1，总订单数量1，总手数5"
+  }, {
+    "name" : "feature",
+    "value" : "云策略复制下单-开仓的场景校验-sell"
+  }, {
+    "name" : "tag",
+    "value" : "@pytest.mark.usefixtures('class_random_str')"
+  }, {
+    "name" : "tag",
+    "value" : "flaky(reruns=0, reruns_delay=0)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_cloudOrderSendsell"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCloudStrategyOrdersell"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "33860-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_cloudOrderSendsell"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ "@pytest.mark.usefixtures('class_random_str')", "flaky(reruns=0, reruns_delay=0)" ]
+  },
+  "source" : "4fc07b3d7ffd3aa.json",
+  "parameterValues" : [ ]
+}

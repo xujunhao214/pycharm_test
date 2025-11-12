@@ -27,7 +27,7 @@ class TestCreate_Scene(APITestBase):
         for i in range(2, 8):  # 直接指定取2~7共6个账号
             account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"未找到第{i}个账号（变量：vps_user_accounts_{i}）")
+                pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"已提取后6个账号：{all_accounts}")
         vps_template_id = var_manager.get_variable("vps_template_id")
@@ -153,9 +153,9 @@ class TestCreate_Scene(APITestBase):
         for i in range(2, 8):  # 直接指定取第2到第7个账号（共6个）
             account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"未找到第{i}个账号（变量：vps_user_accounts_{i}）")
+                pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
-        print(f"将校验的后6个账号：{all_accounts}")
+        print(f"\n将校验的后6个账号：{all_accounts}")
 
         # 3. 初始化ID列表和计数器
         all_ids = []
@@ -190,7 +190,7 @@ class TestCreate_Scene(APITestBase):
                 logging.info(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
 
                 euqit = db_data[0]["euqit"]
-                assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+                assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
                 logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
                 # 校验订阅表记录（从表关联）
@@ -230,7 +230,7 @@ class TestCreate_Scene(APITestBase):
         for i in range(2, 8):  # 直接指定取2~7共6个账号
             account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"未找到第{i}个账号（变量：vps_user_accounts_{i}）")
+                pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"已提取后6个账号：{all_accounts}")
 

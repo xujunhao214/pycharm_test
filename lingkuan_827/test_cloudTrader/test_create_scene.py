@@ -102,7 +102,7 @@ class TestCreate_importcloudTrader(APITestBase):
                     (usr_account,),
                     order_by="account ASC"
                 )
-                print(f"获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}")
+                print(f"\n获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}")
 
                 if not db_data:
                     pytest.fail("数据库查询结果为空，新增云跟单账号失败")

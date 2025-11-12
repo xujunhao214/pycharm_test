@@ -395,7 +395,7 @@ class APITestBase:
         try:
             cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
             with db_transaction.cursor(cursor_type) as cursor:
-                logger.info(f"[{self._get_current_time()}] 执行SQL: {final_sql} | 参数: {params}")
+                logger.info(f"[{self._get_current_time()}] 执行SQL: \n{final_sql} | 参数: {params}")
                 cursor.execute(final_sql, params)
                 result = cursor.fetchall()
                 logger.info(f"[{self._get_current_time()}] 查询成功，结果数量: {len(result)} | SQL: {final_sql[:200]}")

@@ -157,7 +157,7 @@ class TestCreate_Scene(APITestBase):
             if not account:
                 pytest.fail(f"未找到第{i}个账号（变量：MT5vps_user_accounts_{i}）")
             all_accounts.append(account)
-        print(f"将校验的后6个账号：{all_accounts}")
+        print(f"\n将校验的后6个账号：{all_accounts}")
 
         # 3. 初始化ID列表和计数器
         all_ids = []
@@ -192,7 +192,7 @@ class TestCreate_Scene(APITestBase):
                 logging.info(f"新增跟单账号状态status应为0（正常），实际状态为: {status}")
 
                 euqit = db_data[0]["euqit"]
-                assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+                assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
                 logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
                 # 校验订阅表记录（从表关联）

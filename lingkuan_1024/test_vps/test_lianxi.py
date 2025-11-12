@@ -77,15 +77,34 @@ class TestVPSOrdersend(APITestBase):
                         sql=sql,
                         params=(account,)
                     )
-                    allure.attach(f"跟单账号 {account} 已成功从数据库删除", "验证结果")
+                    allure.attach(f"跟单账号 {account} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
-                    allure.attach(f"删除超时: {str(e)}", "验证结果")
+                    allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                     pytest.fail(f"删除失败: {str(e)}")
 
-                # 验证订阅表是否同步删除
-                sql_sub = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
-                db_data_sub = self.query_database(db_transaction, sql_sub, (account,))
-                assert not db_data_sub, (
-                    f"第{i}个账号（{account}）的订阅表记录未删除，"
-                    f"残留数据：{db_data_sub}"
-                )
+                # 验证订阅表是否同步删除（无超时，直接查询判断）
+                sql_sub = "SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
+                cursor = db_transaction.cursor()
+                cursor.execute(sql_sub, (account,))
+                db_data_sub = cursor.fetchall()
+
+                try:
+                    # 断言查询结果为空（即记录已删除）
+                    assert not db_data_sub, (
+                        f"第{i}个账号（{account}）的订阅表记录未删除，"
+                        f"残留数据：{db_data_sub}"
+                    )
+                    # 断言成功，添加 Allure 日志
+                    allure.attach(
+                        f"账号 {account} 的订阅表记录已成功删除",
+                        "验证结果（订阅表删除）",
+                        allure.attachment_type.TEXT
+                    )
+                except AssertionError as e:
+                    # 断言失败，添加详细错误日志到 Allure
+                    allure.attach(
+                        f"验证失败：{str(e)}",
+                        "验证结果（订阅表删除失败）",
+                        allure.attachment_type.TEXT
+                    )
+                    pytest.fail(f"订阅表删除验证失败：{str(e)}")

@@ -1,0 +1,298 @@
+{
+  "uid" : "9a858ecaf0049be4",
+  "name" : "数据库校验-VPS数据-新增跟单账号",
+  "fullName" : "test_vps.test_create.TestCreate#test_dbquery_addslave",
+  "historyId" : "bd69e492cc9af84e28c31c8e3d2f9dd8",
+  "time" : {
+    "start" : 1762940538223,
+    "stop" : 1762940538424,
+    "duration" : 201
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: 账号 66938913 状态异常：预期status=0，实际=1\nassert 1 == 0",
+  "statusTrace" : "self = <lingkuan_MT5DE.test_vps.test_create.TestCreate object at 0x00000287960E9F40>\nvar_manager = <lingkuan_MT5DE.commons.variable_manager.VariableManager object at 0x000002879616DB20>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028796180340>\n\n    @allure.title(\"数据库校验-VPS数据-新增跟单账号\")\n    def test_dbquery_addslave(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            MT5vps_user_accounts_1 = var_manager.get_variable(\"MT5vps_user_accounts_1\")\n            # 执行数据库查询\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader WHERE account = %s\",\n                (MT5vps_user_accounts_1,)\n            )\n    \n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，订单可能没有入库\")\n    \n            MT5vps_addslave_id = db_data[0][\"id\"]\n            logging.info(f\"新增跟单账号ID: {MT5vps_addslave_id}\")\n            var_manager.set_runtime_variable(\"MT5vps_addslave_id\", MT5vps_addslave_id)\n    \n        with allure.step(\"2. 校验账号状态和净值\"):\n            status = db_data[0][\"status\"]\n>           assert status == 0, f\"账号 {MT5vps_user_accounts_1} 状态异常：预期status=0，实际={status}\"\nE           AssertionError: 账号 66938913 状态异常：预期status=0，实际=1\nE           assert 1 == 0\n\ntest_vps\\test_create.py:476: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1762940513061,
+      "stop" : 1762940513061,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1762940513062,
+      "stop" : 1762940513062,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1762940513061,
+      "stop" : 1762940513062,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1762940537990,
+      "stop" : 1762940538222,
+      "duration" : 232
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1762940513061,
+      "stop" : 1762940513061,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1762940538222,
+      "stop" : 1762940538222,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: 账号 66938913 状态异常：预期status=0，实际=1\nassert 1 == 0",
+    "statusTrace" : "self = <lingkuan_MT5DE.test_vps.test_create.TestCreate object at 0x00000287960E9F40>\nvar_manager = <lingkuan_MT5DE.commons.variable_manager.VariableManager object at 0x000002879616DB20>\ndb_transaction = <pymysql.connections.Connection object at 0x0000028796180340>\n\n    @allure.title(\"数据库校验-VPS数据-新增跟单账号\")\n    def test_dbquery_addslave(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            MT5vps_user_accounts_1 = var_manager.get_variable(\"MT5vps_user_accounts_1\")\n            # 执行数据库查询\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader WHERE account = %s\",\n                (MT5vps_user_accounts_1,)\n            )\n    \n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，订单可能没有入库\")\n    \n            MT5vps_addslave_id = db_data[0][\"id\"]\n            logging.info(f\"新增跟单账号ID: {MT5vps_addslave_id}\")\n            var_manager.set_runtime_variable(\"MT5vps_addslave_id\", MT5vps_addslave_id)\n    \n        with allure.step(\"2. 校验账号状态和净值\"):\n            status = db_data[0][\"status\"]\n>           assert status == 0, f\"账号 {MT5vps_user_accounts_1} 状态异常：预期status=0，实际={status}\"\nE           AssertionError: 账号 66938913 状态异常：预期status=0，实际=1\nE           assert 1 == 0\n\ntest_vps\\test_create.py:476: AssertionError",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否新增成功",
+      "time" : {
+        "start" : 1762940538223,
+        "stop" : 1762940538424,
+        "duration" : 201
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1762940538223,
+          "stop" : 1762940538423,
+          "duration" : 200
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1762940538423,
+            "stop" : 1762940538423,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "95198e1d01b97b4b",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "95198e1d01b97b4b.json",
+            "type" : "application/json",
+            "size" : 1064
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        } ],
+        "attachments" : [ {
+          "uid" : "d1b9f1ac2e4a3278",
+          "name" : "执行SQL",
+          "source" : "d1b9f1ac2e4a3278.txt",
+          "type" : "text/plain",
+          "size" : 72
+        }, {
+          "uid" : "332ab3ce071e96c1",
+          "name" : "SQL参数",
+          "source" : "332ab3ce071e96c1.txt",
+          "type" : "text/plain",
+          "size" : 13
+        } ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3
+    }, {
+      "name" : "2. 校验账号状态和净值",
+      "time" : {
+        "start" : 1762940538424,
+        "stop" : 1762940538424,
+        "duration" : 0
+      },
+      "status" : "failed",
+      "statusMessage" : "AssertionError: 账号 66938913 状态异常：预期status=0，实际=1\nassert 1 == 0\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_MT5DE\\test_vps\\test_create.py\", line 476, in test_dbquery_addslave\n    assert status == 0, f\"账号 {MT5vps_user_accounts_1} 状态异常：预期status=0，实际={status}\"\n",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ {
+      "uid" : "5bc0baf1cdf88023",
+      "name" : "log",
+      "source" : "5bc0baf1cdf88023.txt",
+      "type" : "text/plain",
+      "size" : 1521
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 4,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 4
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1762940608026,
+      "stop" : 1762940608027,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1762940538429,
+      "stop" : 1762940538429,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1762940538428,
+      "stop" : 1762940538428,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-创建数据-为VPS测试准备"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "48320-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ ]
+  },
+  "source" : "9a858ecaf0049be4.json",
+  "parameterValues" : [ ]
+}

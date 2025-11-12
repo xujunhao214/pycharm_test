@@ -186,7 +186,7 @@ class TestCreate_cloudTrader(APITestBase):
             logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
 
             # euqit = db_data[0]["euqit"]
-            # assert euqit > 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            # assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
             # logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
     @pytest.mark.skip(reason=SKIP_REASON)
@@ -290,8 +290,8 @@ class TestCreate_cloudTrader(APITestBase):
                 logging.info(f"账号 {cloudTrader_account} 状态异常：预期status=0，实际={status}")
 
                 # euqit = db_data[0]["euqit"]
-                # assert euqit > 0, f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}"
-                # logging.info(f"账号 {cloudTrader_account} 净值异常：预期euqit≠0，实际={euqit}")
+                # assert euqit >= 0, f"账号 {cloudTrader_account} 净值异常：预期euqit>=0，实际={euqit}"
+                # logging.info(f"账号 {cloudTrader_account} 净值异常：预期euqit>=0，实际={euqit}")
 
                 # 校验订阅表记录（代码与之前一致）
                 sql = f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"

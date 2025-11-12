@@ -1373,7 +1373,7 @@ class TestVPSMasOrdersend:
                         message="总订单数量应符合预期",
                         attachment_name="总订单数量详情"
                     )
-                    logging.info(f"开始手数验证通过: {total_orders}")
+                    logging.info(f"总订单数量验证通过: {total_orders}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
