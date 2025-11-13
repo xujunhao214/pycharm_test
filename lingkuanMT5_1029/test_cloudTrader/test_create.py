@@ -825,3 +825,202 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
             param_value = db_data[0]["param_value"]
             var_manager.set_runtime_variable("param_value", param_value)
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-新增MT4跟单账号")
+    def test_create_addMT4Slave(self, var_manager, logged_session, encrypted_password):
+        # 1. 发送新增策略账号请求
+        MT5cloudTrader_MT5vps_id = var_manager.get_variable("MT5cloudTrader_MT5vps_id")
+        addCloud_MT4Slave = var_manager.get_variable("addCloud_MT4Slave")
+        data = {
+            "traderId": MT5cloudTrader_MT5vps_id,
+            "platform": addCloud_MT4Slave["platform"],
+            "account": addCloud_MT4Slave["account"],
+            "password": encrypted_password,
+            "remark": "",
+            "followDirection": 0,
+            "followMode": 1,
+            "remainder": 0,
+            "followParam": 1,
+            "placedType": 0,
+            "templateId": 1,
+            "followStatus": 1,
+            "followOpen": 1,
+            "followClose": 1,
+            "followRep": 0,
+            "fixedComment": "",
+            "commentType": "",
+            "digits": 0,
+            "cfd": "",
+            "forex": "",
+            "abRemark": "",
+            "platformType": 0,
+            "followTraderSymbolEntityList": []
+        }
+
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/follow/addSlave',
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "创建用户失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS数据-新增MT4跟单账号")
+    def test_dbquery_addMT4slave(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            addCloud_MT4Slave = var_manager.get_variable("addCloud_MT4Slave")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader WHERE account = %s",
+                (addCloud_MT4Slave['account'],)
+            )
+
+            if not db_data:
+                pytest.fail("数据库查询结果为空")
+
+            MT4vps_addslave_id = db_data[0]["id"]
+            logging.info(f"新增跟单账号ID: {MT4vps_addslave_id}")
+            var_manager.set_runtime_variable("MT4vps_addslave_id", MT4vps_addslave_id)
+
+        with allure.step("2. 校验账号状态和净值"):
+            status = db_data[0]["status"]
+            assert status == 0, f"账号 {addCloud_MT4Slave['account']} 状态异常：预期status=0，实际={status}"
+            logging.info(f"账号 {addCloud_MT4Slave['account']} 状态异常：预期status=0，实际={status}")
+
+            euqit = db_data[0]["euqit"]
+            assert euqit >= 0, f"账号 {addCloud_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}"
+            logging.info(f"账号 {addCloud_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}")
+
+            db_data2 = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s",
+                (addCloud_MT4Slave['account'],)
+            )
+
+            if not db_data2:
+                pytest.fail("数据库查询结果为空")
+
+            slave_account = db_data2[0]["slave_account"]
+            assert slave_account == addCloud_MT4Slave[
+                'account'], f"账号新增失败，新增账号：{addCloud_MT4Slave['account']}  数据库账号:{slave_account}"
+            logging.info(f"账号新增成功，新增账号：{addCloud_MT4Slave['account']}  数据库账号:{slave_account}")
+
+        with allure.step("3. 提取用户数据"):
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_user WHERE account = %s",
+                (addCloud_MT4Slave["account"],)
+            )
+
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增跟单账号失败")
+
+            cloudTrader_MT4userID = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_MT4userID", cloudTrader_MT4userID)
+            logging.info(f"账号id是：{cloudTrader_MT4userID}")
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("云策略列表-新增MT4云跟单账号")
+    def test_create_addMT4Trader(self, var_manager, logged_session, encrypted_password):
+        # 1. 发送新增策略账号请求
+        MT4vps_addslave_id = var_manager.get_variable("MT4vps_addslave_id")
+        cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+        MT5cloudTrader_traderList_2 = var_manager.get_variable("MT5cloudTrader_traderList_2")
+        MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
+        data = [
+            {
+                "traderList": [
+                    MT4vps_addslave_id
+                ],
+                "cloudId": cloudMaster_id,
+                "masterId": MT5cloudTrader_traderList_2,
+                "masterAccount": MT5cloudTrader_user_accounts_2,
+                "followDirection": 0,
+                "followMode": 1,
+                "followParam": 1,
+                "remainder": 0,
+                "placedType": 0,
+                "templateId": 1,
+                "followStatus": 1,
+                "followOpen": 1,
+                "followClose": 1,
+                "fixedComment": "",
+                "commentType": "",
+                "digits": "",
+                "followTraderIds": [],
+                "sort": "",
+                "remark": ""
+            }
+        ]
+        response = self.send_post_request(
+            logged_session,
+            '/mascontrol/cloudTrader/cloudBatchAdd',
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "创建用户失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-云策略列表-新增MT4云跟单账号")
+    def test_dbcloudTrader_MT4BatchAdd(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            addCloud_MT4Slave = var_manager.get_variable("addCloud_MT4Slave")
+            cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s",
+                (addCloud_MT4Slave["account"], cloudMaster_id,)
+            )
+
+        with allure.step("2. 提取数据"):
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增跟单账号失败")
+
+            cloudTrader_MT4traderID = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_MT4traderID", cloudTrader_MT4traderID)
+            logging.info(f"新增云跟单账号id是：{cloudTrader_MT4traderID}")
+
+        with allure.step("3. 提取用户数据"):
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_user WHERE account = %s",
+                (addCloud_MT4Slave["account"],)
+            )
+
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增跟单账号失败")
+
+            cloudTrader_MT4userID = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_MT4userID", cloudTrader_MT4userID)
+            logging.info(f"账号id是：{cloudTrader_MT4userID}")

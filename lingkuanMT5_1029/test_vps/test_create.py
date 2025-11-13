@@ -92,6 +92,23 @@ class TestCreate(APITestBase):
             logging.info(f"平台ID: {platformId}")
             var_manager.set_runtime_variable("platformId", platformId)
 
+        with allure.step("2. 提取数据库平台ID数据"):
+            addVPS_MT4Slave = var_manager.get_variable("addVPS_MT4Slave")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_platform WHERE server = %s",
+                (addVPS_MT4Slave["platform"],)
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空，订单可能没有入库")
+
+            MT4platformId = db_data[0]["id"]
+            logging.info(f"平台ID: {MT4platformId}")
+            var_manager.set_runtime_variable("MT4platformId", MT4platformId)
+
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
     def test_create_importuser(self, class_random_str, logged_session, var_manager):
@@ -365,108 +382,6 @@ class TestCreate(APITestBase):
         logging.info(f"获取的可见用户信息：{MT5vps_user_data}")
         var_manager.set_runtime_variable("MT5vps_user_data", MT5vps_user_data)
 
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-新增vps")
-    def test_create_vps(self, class_random_str, logged_session, var_manager):
-        # 1. 发送新增vps请求
-        add_VPS = var_manager.get_variable("add_VPS")
-        MT5vps_user_data = var_manager.get_variable("MT5vps_user_data")
-        MT5vps_group_id = var_manager.get_variable("MT5vps_group_id")
-        data = {
-            "ipAddress": add_VPS["ipAddress"],
-            "name": "测试",
-            "expiryDate": DATETIME_ENDTIME,
-            "remark": "MT5测试VPS",
-            "isOpen": 1,
-            "isActive": 1,
-            "roleList": MT5vps_user_data,
-            "isSelectAccount": 1,
-            "isMonitorRepair": 1,
-            "isSpecializedRepair": 1,
-            "isAutoRepair": 1,
-            "groupId": f"{MT5vps_group_id}",
-            "sort": 1000
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/mascontrol/vps',
-            json_data=data,
-
-        )
-
-        # 2. 判断是否添加成功
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-VPS列表-新增vps")
-    def test_dbquery_vps(self, class_random_str, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否新增成功"):
-            add_VPS = var_manager.get_variable("add_VPS")
-
-            # 执行数据库查询
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s",
-                (add_VPS["ipAddress"], add_VPS["deleted"],)
-            )
-
-            # 提取数据库中的值
-            if not db_data:
-                pytest.fail("数据库查询结果为空")
-
-            MT5vps_list_id = db_data[0]["id"]
-            logging.info(f"新增vps的id: {MT5vps_list_id}")
-            var_manager.set_runtime_variable("MT5vps_list_id", MT5vps_list_id)
-
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-获取要复制的VPS的ID")
-    def test_get_MT5vps_pageid(self, class_random_str, logged_session, var_manager):
-        # 1. 请求VPS列表接口
-        list_query = var_manager.get_variable("list_query")
-        response = self.send_get_request(
-            logged_session,
-            'mascontrol/vps/page',
-            params=list_query
-        )
-
-        # 2. 获取要复制的VPS的ID
-        MT5vps_page_id = response.extract_jsonpath("$.data.list[1].id")
-        logging.info(f"获取vps的id：{MT5vps_page_id}")
-        var_manager.set_runtime_variable("MT5vps_page_id", MT5vps_page_id)
-
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-复制默认节点")
-    def test_MT5vps_copyDefaultNode(self, class_random_str, logged_session, var_manager):
-        # 1. 请求VPS复制默认节点接口
-        MT5vps_page_id = var_manager.get_variable("MT5vps_page_id")
-        MT5vps_list_id = var_manager.get_variable("MT5vps_list_id")
-        data = {"oldVpsId": MT5vps_list_id, "newVpsId": [MT5vps_page_id]}
-        response = self.send_put_request(
-            logged_session,
-            '/mascontrol/vps/copyDefaultNode',
-            json_data=data
-        )
-
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "服务器IP不可用"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
@@ -678,3 +593,176 @@ class TestCreate(APITestBase):
 
             param_value = db_data[0]["param_value"]
             var_manager.set_runtime_variable("param_value", param_value)
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-新增MT4跟单账号")
+    def test_create_addMT4Slave(self, var_manager, logged_session, encrypted_password):
+        # 1. 发送新增策略账号请求
+        MT5vps_trader_id = var_manager.get_variable("MT5vps_trader_id")
+        addVPS_MT4Slave = var_manager.get_variable("addVPS_MT4Slave")
+        data = {
+            "traderId": MT5vps_trader_id,
+            "platform": addVPS_MT4Slave["platform"],
+            "account": addVPS_MT4Slave["account"],
+            "password": encrypted_password,
+            "remark": "",
+            "followDirection": 0,
+            "followMode": 1,
+            "remainder": 0,
+            "followParam": 1,
+            "placedType": 0,
+            "templateId": 1,
+            "followStatus": 1,
+            "followOpen": 1,
+            "followClose": 1,
+            "followRep": 0,
+            "fixedComment": "",
+            "commentType": "",
+            "digits": 0,
+            "cfd": "",
+            "forex": "",
+            "abRemark": "",
+            "platformType": 0,
+            "followTraderSymbolEntityList": []
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/follow/addSlave',
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "创建用户失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS数据-新增MT4跟单账号")
+    def test_dbquery_addMT4slave(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            addVPS_MT4Slave = var_manager.get_variable("addVPS_MT4Slave")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader WHERE account = %s",
+                (addVPS_MT4Slave['account'],)
+            )
+
+            if not db_data:
+                pytest.fail("数据库查询结果为空")
+
+            MT4vps_addslave_id = db_data[0]["id"]
+            logging.info(f"新增跟单账号ID: {MT4vps_addslave_id}")
+            var_manager.set_runtime_variable("MT4vps_addslave_id", MT4vps_addslave_id)
+
+        with allure.step("2. 校验账号状态和净值"):
+            status = db_data[0]["status"]
+            assert status == 0, f"账号 {addVPS_MT4Slave['account']} 状态异常：预期status=0，实际={status}"
+            logging.info(f"账号 {addVPS_MT4Slave['account']} 状态异常：预期status=0，实际={status}")
+
+            euqit = db_data[0]["euqit"]
+            assert euqit >= 0, f"账号 {addVPS_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}"
+            logging.info(f"账号 {addVPS_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}")
+
+            db_data2 = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s",
+                (addVPS_MT4Slave['account'],)
+            )
+
+            if not db_data2:
+                pytest.fail("数据库查询结果为空")
+
+            slave_account = db_data2[0]["slave_account"]
+            assert slave_account == addVPS_MT4Slave[
+                'account'], f"账号新增失败，新增账号：{addVPS_MT4Slave['account']}  数据库账号:{slave_account}"
+            logging.info(f"账号新增成功，新增账号：{addVPS_MT4Slave['account']}  数据库账号:{slave_account}")
+
+        with allure.step("3. 提取用户数据"):
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_user WHERE account = %s",
+                (addVPS_MT4Slave["account"],)
+            )
+
+            if not db_data:
+                pytest.fail("数据库查询结果为空，新增跟单账号失败")
+
+            cloudTrader_MT4userID = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_MT4userID", cloudTrader_MT4userID)
+            logging.info(f"账号id是：{cloudTrader_MT4userID}")
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-跟单平仓")
+    def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
+        # 1. 发送全平订单平仓请求
+        MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+        MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
+        data = {
+            "isCloseAll": 1,
+            "intervalTime": 100,
+            "traderId": MT5vps_addslave_id,
+            "account": MT5vps_user_accounts_1
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader/orderClose',
+            json_data=data,
+        )
+
+        # 2. 验证响应
+        self.assert_response_status(
+            response,
+            200,
+            "平仓失败"
+        )
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-MT4账号跟单平仓")
+    def test_addtrader_MT4orderclose(self, class_random_str, var_manager, logged_session):
+        # 1. 发送全平订单平仓请求
+        MT4vps_addslave_id = var_manager.get_variable("MT4vps_addslave_id")
+        addVPS_MT4Slave = var_manager.get_variable("addVPS_MT4Slave")
+        data = {
+            "traderId": MT4vps_addslave_id,
+            "account": addVPS_MT4Slave["account"],
+            "ifAccount": True,
+            "isCloseAll": 1
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader/orderClose',
+            json_data=data,
+        )
+
+        # 2. 验证响应
+        self.assert_response_status(
+            response,
+            200,
+            "平仓失败"
+        )
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )

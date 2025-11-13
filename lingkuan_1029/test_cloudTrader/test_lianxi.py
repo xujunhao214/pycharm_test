@@ -1,8 +1,8 @@
-import time
-import math
 import allure
 import logging
 import pytest
+import time
+import math
 from lingkuan_1029.VAR.VAR import *
 from lingkuan_1029.conftest import var_manager
 from lingkuan_1029.commons.api_base import *
@@ -11,145 +11,712 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
-@allure.feature("VPS策略下单-开仓的场景校验-buy")
-class TestVPSOrdersendbuy:
-    @allure.story("场景3： 云策略列表-策略账号超过最大手数")
-    @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 获取该服务器最大手数
-          2. 云策略列表-分配下单，策略账号进行开仓
-        - 预期结果：开仓失败，超过最大手数限制
-        """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
+@allure.feature("云策略复制下单-开仓的场景校验-buy")
+class TestCloudStrategyOrderbuy:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @allure.story("场景1：复制下单-手数0.1-1，总订单3，总手数1")
+    @allure.description("""
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 进行开仓，手数范围0.1-1，总订单3，总手数1
+      2. 校验账号的数据是否正确
+      3. 进行平仓
+      4. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    """)
+    @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestVPSOrderSend1(APITestBase):
-        @allure.title("数据库提取该服务器最大手数限制")
-        def test_dbquery_maxlots(self, class_random_str, var_manager, db_transaction):
-            with allure.step("1. 数据库的SQL查询"):
-                new_user = var_manager.get_variable("new_user")
-                sql = f""" SELECT * From follow_platform where server= %s """
-                params = (
-                    new_user["platform"],
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-            with allure.step("2. 提取数据"):
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，订单可能没有入库")
-
-                max_lots = db_data[0]["max_lots"]
-                var_manager.set_runtime_variable("max_lots", max_lots)
-
-            with allure.step("3. 全局配置-数据库的SQL查询"):
-                sql = f""" SELECT * From sys_params where param_name= %s """
-                params = (
-                    "最大手数配置",
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-            with allure.step("4. 提取数据"):
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，订单可能没有入库")
-
-                param_value = db_data[0]["param_value"]
-                var_manager.set_runtime_variable("param_value", param_value)
-
-        @allure.title("云策略交易下单-分配下单")
-        def test_copy_order_send(self, class_random_str, logged_session, var_manager):
-            # 发送云策略交易下单-复制下单请求
-            masOrderSend = var_manager.get_variable("masOrderSend")
-            cloudTrader_user_ids_2 = var_manager.get_variable("cloudTrader_user_ids_2")
-            data = {
-                "traderList": [cloudTrader_user_ids_2],
-                "type": 0,
-                "tradeType": 0,
-                "symbol": masOrderSend["symbol"],
-                "startSize": "0.10",
-                "endSize": "1.00",
-                "totalSzie": "1.00",
-                "remark": class_random_str
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/masOrderSend',
-                json_data=data
-            )
-
-            # 验证下单成功
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情表账号数据"):
+    class TestMasOrderSend1(APITestBase):
+        @allure.title("云策略列表-修改云跟单")
+        def test_update_cloudtrader(self, class_random_str, logged_session, var_manager):
+            """执行云策略复制下单操作并验证请求结果"""
+            with allure.step("1.发送修改MT4账号云跟单请求"):
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+                cloudTrader_traderList_4 = var_manager.get_variable("cloudTrader_traderList_4")
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
-                cloudTrader_vps_ids_1 = var_manager.get_variable("cloudTrader_vps_ids_1")
+
+                request_data = [
+                    {
+                        "traderList": [
+                            cloudTrader_traderList_4
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": cloudTrader_traderList_2,
+                        "masterAccount": cloudTrader_user_accounts_2,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": "1",
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": None,
+                        "commentType": None,
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": 100,
+                        "remark": "",
+                        "cfd": None,
+                        "forex": None
+                    }
+                ]
+
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudBatchUpdate',
+                    json_data=request_data
+                )
+
+            with allure.step("2.验证响应结果"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
+
+            with allure.step("3.发送修改MT5账号云跟单请求"):
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+                cloudTrader_MT5traderID = var_manager.get_variable("cloudTrader_MT5traderID")
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+
+                request_data = [
+                    {
+                        "traderList": [
+                            cloudTrader_MT5traderID
+                        ],
+                        "cloudId": cloudMaster_id,
+                        "masterId": cloudTrader_traderList_2,
+                        "masterAccount": cloudTrader_user_accounts_2,
+                        "followDirection": 0,
+                        "followMode": 1,
+                        "followParam": 1,
+                        "remainder": 0,
+                        "placedType": 0,
+                        "templateId": 1,
+                        "followStatus": 1,
+                        "followOpen": 1,
+                        "followClose": 1,
+                        "fixedComment": None,
+                        "commentType": None,
+                        "digits": 0,
+                        "followTraderIds": [],
+                        "sort": 1,
+                        "remark": "",
+                        "cfd": None,
+                        "forex": None
+                    }
+                ]
+
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudBatchUpdate',
+                    json_data=request_data
+                )
+
+            with allure.step("4.验证响应结果"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
+
+        @allure.title("云策略-复制下单操作")
+        def test_copy_place_order(self, class_random_str, logged_session, var_manager):
+            """执行云策略复制下单操作并验证请求结果"""
+            with allure.step("1.发送复制下单请求"):
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+
+                request_data = {
+                    "id": cloudMaster_id,
+                    "type": 0,
+                    "tradeType": 1,
+                    "intervalTime": 100,
+                    "cloudTraderId": [cloudTrader_traderList_2],
+                    "symbol": "XAUUSD",
+                    "placedType": 0,
+                    "startSize": "0.10",
+                    "endSize": "1.00",
+                    "totalNum": "3",
+                    "totalSzie": "1.00",
+                    "remark": class_random_str
+                }
+
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudOrderSend',
+                    json_data=request_data
+                )
+
+            with allure.step("2.验证响应结果"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
+
+        @allure.title("数据库校验-云策略-复制下单数据")
+        def test_copy_verify_db(self, class_random_str, var_manager, db_transaction):
+            """验证复制下单后数据库中的订单数据正确性"""
+            with allure.step("查询复制订单详情数据"):
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
                 sql = """
-                            SELECT 
-                                fod.size,
-                                fod.send_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.comment,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.remark,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.min_lot_size,
-                                foi.max_lot_size,
-                                foi.total_lots,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE fod.account = %s
-                                AND fod.trader_id = %s
-                        """
-                params = (cloudTrader_user_accounts_2, cloudTrader_vps_ids_1)
+                        SELECT 
+                            fod.size,
+                            fod.send_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.comment,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                    """
+                params = ('0', cloudTrader_user_accounts_2, class_random_str)
 
                 # 轮询等待数据库记录
-                db_data = self.query_database_with_time(
+                db_data = self.query_database_with_time_with_timezone(
                     db_transaction=db_transaction,
                     sql=sql,
                     params=params,
-                    time_field="foi.create_time"
+                    time_field="fod.open_time"
                 )
 
-            with allure.step("2. 数据校验"):
+            with allure.step("执行复制下单数据校验"):
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，订单可能没有入库")
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
 
-                with allure.step("验证备注信息"):
-                    open_remark = db_data[0]["remark"]
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
                     self.verify_data(
-                        actual_value=open_remark,
-                        expected_value=("超过最大手数限制"),
-                        op=CompareOp.EQ,
-                        use_isclose=False,
-                        message="开仓失败信息符合预期",
-                        attachment_name="失败信息详情"
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
                     )
-                    logging.info(f"失败信息验证通过: {open_remark}")
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证手数范围-开始手数"):
+                    max_lot_size = db_data[0]["max_lot_size"]
+                    self.verify_data(
+                        actual_value=float(max_lot_size),
+                        expected_value=float(0.10),
+                        op=CompareOp.EQ,
+                        message="开始手数应符合预期",
+                        attachment_name="开始手数详情"
+                    )
+                    logging.info(f"开始手数验证通过: {trader_ordersend['startSize']}")
+
+                with allure.step("验证手数范围-结束手数"):
+                    min_lot_size = db_data[0]["min_lot_size"]
+                    self.verify_data(
+                        actual_value=float(min_lot_size),
+                        expected_value=float(trader_ordersend["endSize"]),
+                        op=CompareOp.EQ,
+                        message="结束手数应符合预期",
+                        attachment_name="结束手数详情"
+                    )
+                    logging.info(f"结束手数验证通过: {trader_ordersend['endSize']}")
+
+                with allure.step("总订单数量校验"):
+                    total_orders = db_data[0]["total_orders"]
+                    totalNum = trader_ordersend["totalNum"]
+                    self.verify_data(
+                        actual_value=float(total_orders),
+                        expected_value=float(totalNum),
+                        op=CompareOp.EQ,
+                        message="总订单数量应符合预期",
+                        attachment_name="总订单数量详情"
+                    )
+                    logging.info(f"总订单数量验证通过: {total_orders}")
+
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
+
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+        @allure.title("数据库校验-云跟单-复制下单数据")
+        def test_copy_verify_dbadd(self, class_random_str, var_manager, db_transaction):
+            """验证复制下单后数据库中的订单数据正确性"""
+            with allure.step("查询复制订单详情数据"):
+                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+                sql = """
+                        SELECT 
+                            fod.size,
+                            fod.send_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.comment,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
+                params = ('0', cloudTrader_user_accounts_4, class_random_str)
+
+                # 轮询等待数据库记录
+                db_data = self.query_database_with_time_with_timezone(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field="fod.open_time"
+                )
+
+            with allure.step("执行复制下单数据校验"):
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
+
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+        @allure.title("数据库校验-MT5云跟单-复制下单数据")
+        def test_copy_verify_MT5dbadd(self, class_random_str, var_manager, db_transaction):
+            """验证复制下单后数据库中的订单数据正确性"""
+            with allure.step("查询复制订单详情数据"):
+                addCloud_MT5Slave = var_manager.get_variable("addCloud_MT5Slave")
+                account = addCloud_MT5Slave["account"]
+                sql = """
+                        SELECT 
+                            fod.size,
+                            fod.send_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.comment,
+                            fod.symbol,
+                            fod.order_no,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.comment = %s
+                            """
+                params = ('0', account, class_random_str)
+
+                # 轮询等待数据库记录
+                db_data = self.query_database_with_time_with_timezone(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field="fod.open_time"
+                )
+
+            with allure.step("执行复制下单数据校验"):
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制下单校验")
+
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证指令总手数"):
+                    total_lots = db_data[0]["total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {total_lots}")
+
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+        @allure.title("云策略-复制下单平仓操作")
+        def test_copy_close_order(self, class_random_str, logged_session, var_manager):
+            """执行复制下单的平仓操作并验证结果"""
+            with allure.step("1.发送复制下单平仓请求"):
+                cloudMaster_id = var_manager.get_variable("cloudMaster_id")
+                cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
+
+                request_data = {
+                    "isCloseAll": 1,
+                    "intervalTime": 100,
+                    "id": f"{cloudMaster_id}",
+                    "cloudTraderId": [cloudTrader_traderList_2]
+                }
+
+                response = self.send_post_request(
+                    logged_session,
+                    '/mascontrol/cloudTrader/cloudOrderClose',
+                    json_data=request_data
+                )
+
+            with allure.step("2.验证复制平仓响应结果"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "复制平仓响应msg字段应为success"
+                )
+
+        @allure.title("数据库校验-云策略-复制下单平仓数据")
+        def test_copy_verify_close_db(self, class_random_str, var_manager, db_transaction):
+            """验证复制下单平仓后数据库中的订单数据正确性"""
+            with allure.step("查询复制平仓订单数据"):
+                cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_1 = var_manager.get_variable("cloudTrader_vps_ids_1")
+
+                sql = """
+                        SELECT 
+                            fod.size,
+                            fod.close_no,
+                            fod.magical,
+                            fod.open_price,
+                            fod.comment,
+                            fod.symbol,
+                            fod.order_no,
+                            fod.close_time,
+                            foi.true_total_lots,
+                            foi.order_no,
+                            foi.operation_type,
+                            foi.create_time,
+                            foi.status,
+                            foi.min_lot_size,
+                            foi.max_lot_size,
+                            foi.total_lots,
+                            foi.master_order,
+                            foi.total_orders
+                        FROM 
+                            follow_order_detail fod
+                        INNER JOIN 
+                            follow_order_instruct foi 
+                        ON 
+                            foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                        WHERE foi.operation_type = %s
+                            AND fod.account = %s
+                            AND fod.trader_id = %s
+                            AND fod.comment = %s
+                    """
+                params = ('1', cloudTrader_user_accounts_2, cloudTrader_vps_ids_1, class_random_str)
+
+                # 轮询等待数据库记录
+                db_data = self.query_database_with_time_with_timezone(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field="fod.close_time"
+                )
+
+            with allure.step("执行复制平仓数据校验"):
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
+
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+        @allure.title("数据库校验-云跟单-复制下单平仓数据")
+        def test_copy_verify_close_dbadd(self, class_random_str, var_manager, db_transaction):
+            """验证复制下单平仓后数据库中的订单数据正确性"""
+            with allure.step("查询复制平仓订单数据"):
+                cloudTrader_user_accounts_4 = var_manager.get_variable("cloudTrader_user_accounts_4")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
+
+                sql = """
+                               SELECT 
+                                   fod.size,
+                                   fod.close_no,
+                                   fod.magical,
+                                   fod.open_price,
+                                   fod.comment,
+                                   fod.symbol,
+                                   fod.order_no,
+                                   fod.close_time,
+                                   foi.true_total_lots,
+                                   foi.order_no,
+                                   foi.operation_type,
+                                   foi.create_time,
+                                   foi.status,
+                                   foi.min_lot_size,
+                                   foi.max_lot_size,
+                                   foi.total_lots,
+                                   foi.master_order,
+                                   foi.total_orders
+                               FROM 
+                                   follow_order_detail fod
+                               INNER JOIN 
+                                   follow_order_instruct foi 
+                               ON 
+                                   foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                               WHERE foi.operation_type = %s
+                                   AND fod.account = %s
+                                   AND fod.trader_id = %s
+                                   AND fod.comment = %s
+                           """
+                params = ('1', cloudTrader_user_accounts_4, cloudTrader_vps_ids_3, class_random_str)
+
+                # 轮询等待数据库记录
+                db_data = self.query_database_with_time_with_timezone(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field="fod.close_time"
+                )
+
+            with allure.step("执行复制平仓数据校验"):
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
+
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")
+
+        @allure.title("数据库校验-MT5云跟单-复制下单平仓数据")
+        def test_copy_verify_close_MT5dbadd(self, class_random_str, var_manager, db_transaction):
+            """验证复制下单平仓后数据库中的订单数据正确性"""
+            with allure.step("查询复制平仓订单数据"):
+                addCloud_MT5Slave = var_manager.get_variable("addCloud_MT5Slave")
+                account = addCloud_MT5Slave["account"]
+                MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+
+                sql = """
+                       SELECT 
+                           fod.size,
+                           fod.close_no,
+                           fod.magical,
+                           fod.open_price,
+                           fod.comment,
+                           fod.symbol,
+                           fod.order_no,
+                           fod.close_time,
+                           foi.true_total_lots,
+                           foi.order_no,
+                           foi.operation_type,
+                           foi.create_time,
+                           foi.status,
+                           foi.min_lot_size,
+                           foi.max_lot_size,
+                           foi.total_lots,
+                           foi.master_order,
+                           foi.total_orders
+                       FROM 
+                           follow_order_detail fod
+                       INNER JOIN 
+                           follow_order_instruct foi 
+                       ON 
+                           foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci
+                       WHERE foi.operation_type = %s
+                           AND fod.account = %s
+                           AND fod.trader_id = %s
+                           AND fod.comment = %s
+                   """
+                params = ('1', account, MT5vps_addslave_id, class_random_str)
+
+                # 轮询等待数据库记录
+                db_data = self.query_database_with_time_with_timezone(
+                    db_transaction=db_transaction,
+                    sql=sql,
+                    params=params,
+                    time_field="fod.close_time"
+                )
+
+            with allure.step("执行复制平仓数据校验"):
+                trader_ordersend = var_manager.get_variable("trader_ordersend")
+                if not db_data:
+                    pytest.fail("数据库查询结果为空，无法进行复制平仓校验")
+
+                with allure.step("验证订单状态"):
+                    status = db_data[0]["status"]
+                    self.verify_data(
+                        actual_value=status,
+                        expected_value=(0, 1, 3),
+                        op=CompareOp.IN,
+                        message="订单状态应为0或1或3",
+                        attachment_name="订单状态详情"
+                    )
+                    logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证详情总手数"):
+                    totalSzie = trader_ordersend["totalSzie"]
+                    size = [record["size"] for record in db_data]
+                    total = sum(size)
+                    # 关键优化：四舍五入保留两位小数
+                    total = round(float(total), 2)
+                    self.verify_data(
+                        actual_value=float(total),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="详情总手数应符合预期",
+                        attachment_name="详情总手数"
+                    )
+                    logging.info(f"详情总手数验证通过: {total}")

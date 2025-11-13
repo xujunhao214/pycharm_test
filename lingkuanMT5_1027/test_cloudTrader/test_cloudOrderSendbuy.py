@@ -2477,12 +2477,14 @@ class TestCloudStrategyOrderbuy:
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
                     true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
+                        total_lots,
                         size,
                         true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("数据库校验-云跟单-复制下单数据")
         def test_copy_verify_dbadd(self, class_random_str, var_manager, db_transaction):
@@ -2566,12 +2568,14 @@ class TestCloudStrategyOrderbuy:
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
                     true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
+                        total_lots,
                         size,
                         true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("云策略-复制下单平仓操作")
         def test_copy_close_order(self, class_random_str, logged_session, var_manager):
@@ -3248,7 +3252,7 @@ class TestCloudStrategyOrderbuy:
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend9(APITestBase):
-        @allure.title("云策略-修改云跟单")
+        @allure.title("云策略-修改云跟单-取小数")
         def test_update_trader(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("1.发送修改云跟单请求"):
@@ -3714,7 +3718,7 @@ class TestCloudStrategyOrderbuy:
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend10(APITestBase):
-        @allure.title("云策略-修改云跟单")
+        @allure.title("云策略-修改云跟单-四舍五入")
         def test_update_trader(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("1.发送修改云跟单请求"):
@@ -4180,7 +4184,7 @@ class TestCloudStrategyOrderbuy:
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend11(APITestBase):
-        @allure.title("云策略-修改云跟单")
+        @allure.title("云策略-修改云跟单-四舍五入")
         def test_update_trader(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("1.发送修改云跟单请求"):

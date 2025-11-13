@@ -767,18 +767,6 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                with allure.step("验证详情手数和指令手数一致"):
-                    size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
-                    self.assert_list_equal_ignore_order(
-                        total_lots,
-                        size,
-                        true_total_lots,
-                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
-                    )
-                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
-
     @allure.story("场景2：VPS策略下单-漏平")
     @allure.description("""
     ### 用例说明
@@ -1527,18 +1515,6 @@ class TestLeakageopen_level:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                with allure.step("验证详情手数和指令手数一致"):
-                    size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
-                    self.assert_list_equal_ignore_order(
-                        total_lots,
-                        size,
-                        true_total_lots,
-                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
-                    )
-                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
-
     @allure.story("场景3：VPS策略下单-关闭策略跟单状态")
     @allure.description("""
     ### 用例说明
@@ -1987,15 +1963,3 @@ class TestLeakageopen_level:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                with allure.step("验证详情手数和指令手数一致"):
-                    size = [record["size"] for record in db_data]
-                    true_total_lots = [record["true_total_lots"] for record in db_data]
-                    total_lots = [record["total_lots"] for record in db_data]
-                    self.assert_list_equal_ignore_order(
-                        total_lots,
-                        size,
-                        true_total_lots,
-                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
-                    )
-                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")

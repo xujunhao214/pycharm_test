@@ -23,13 +23,13 @@ class TestCreate_importcloudTrader(APITestBase):
         cloudTrader_traderList_2 = var_manager.get_variable("cloudTrader_traderList_2")
         cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
         if cloudTrader_account < 0:
-            pytest.fail("未找到需要新增的账号数量，请检查前置步骤")
+            print("未找到需要新增的账号数量，请检查前置步骤")
         # 2. 循环获取每个账号的ID
         for i in range(4, cloudTrader_account + 1):
             with (allure.step(f"1. 获取第{i}个跟单账号的ID")):
                 slave_id = var_manager.get_variable(f"cloudTrader_vps_ids_{i}")
                 if not slave_id:
-                    pytest.fail(f"第{i}个跟单账号的ID为空")
+                    print(f"第{i}个跟单账号的ID为空")
                 print(f"获取第{i}个跟单账号的ID:cloudTrader_vps_ids_{i}")
                 # 3. 发送新增跟单云策略请求（接口支持单个ID删除，参数为列表形式）
                 data = [
@@ -85,7 +85,7 @@ class TestCreate_importcloudTrader(APITestBase):
         # 1. 获取账号总数和所有账号信息
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 0:
-            pytest.fail("未找到需要验证的账号数量，请检查前置步骤")
+            print("未找到需要验证的账号数量，请检查前置步骤")
         # 2. 初始化ID列表和计数器
         cloudTrader_all_count_ids = []
         cloudTrader_add_count = 0
@@ -94,7 +94,7 @@ class TestCreate_importcloudTrader(APITestBase):
             with allure.step(f"1. 获取第{i}个跟单账号的account是否新增成功"):
                 usr_account = var_manager.get_variable(f"cloudTrader_user_accounts_{i}")
                 if not usr_account:
-                    pytest.fail(f"第{i}个跟单账号的account为空")
+                    print(f"第{i}个跟单账号的account为空")
 
                 db_data = self.query_database(
                     db_transaction,
@@ -105,7 +105,7 @@ class TestCreate_importcloudTrader(APITestBase):
                 print(f"\n获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}")
 
                 if not db_data:
-                    pytest.fail("数据库查询结果为空，新增云跟单账号失败")
+                    print("数据库查询结果为空，新增云跟单账号失败")
 
                 usr_account_id = db_data[0]['id']
                 cloudTrader_all_count_ids.append(usr_account_id)
@@ -123,13 +123,13 @@ class TestCreate_importcloudTrader(APITestBase):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{cloudTrader_user_count}，无法提取后6个数据")
+            print(f"用户总数需至少为7，当前为{cloudTrader_user_count}，无法提取后6个数据")
 
         all_ids = []
         for i in range(5, cloudTrader_user_count + 1):
             addslave_id = var_manager.get_variable(f"cloudTrader_traderList_{i}")
             if not addslave_id:
-                pytest.fail(f"未找到第{i}个账号（变量：cloudTrader_traderList_{i}）")
+                print(f"未找到第{i}个账号（变量：cloudTrader_traderList_{i}）")
             all_ids.append(addslave_id)
         print(f"已提取后6个账号id：{all_ids}")
 

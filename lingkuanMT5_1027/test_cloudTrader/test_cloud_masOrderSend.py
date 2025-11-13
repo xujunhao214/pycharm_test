@@ -284,12 +284,14 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
                     true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
+                        total_lots,
                         size,
                         true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("云策略交易下单-分配平仓")
         def test_copy_order_close(self, class_random_str, var_manager, logged_session):
@@ -634,12 +636,14 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
                     true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
+                        total_lots,
                         size,
                         true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("数据库校验-交易下单-跟单指令及订单详情数据检查")
         def test_dbquery_addsalve_orderSend(self, class_random_str, var_manager, db_transaction):
@@ -719,12 +723,14 @@ class TestCloudMasOrdersend:
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
                     true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
+                        total_lots,
                         size,
                         true_total_lots,
-                        f"手数不一致: 详情{size}, 指令{true_total_lots}"
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("云策略交易下单-交易平仓")
         def test_copy_order_close(self, class_random_str, var_manager, logged_session):

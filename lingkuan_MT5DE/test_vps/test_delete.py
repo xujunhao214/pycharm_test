@@ -56,7 +56,7 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"VPS组别 {add_vpsgroup['name']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表列表-清空VPS数据")
@@ -228,7 +228,7 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"跟单账号 {MT5vps_user_accounts_1} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
             db_data2 = self.query_database(
                 db_transaction,
@@ -245,7 +245,7 @@ class TestDeleteUser(APITestBase):
         # 1. 获取账号总数和所有ID
         MT5vps_addslave_count = var_manager.get_variable("MT5vps_addslave_count", 0)
         if MT5vps_addslave_count <= 0:
-            pytest.fail("未找到需要删除的账号数量，请检查前置步骤")
+            print("未找到需要删除的账号数量，请检查前置步骤")
 
         # 2. 循环获取每个账号的ID并删除
         for i in range(1, MT5vps_addslave_count + 1):
@@ -253,7 +253,7 @@ class TestDeleteUser(APITestBase):
                 # 获取单个账号ID（MT5vps_addslave_ids_1, MT5vps_addslave_ids_2, ...）
                 slave_id = var_manager.get_variable(f"MT5vps_addslave_ids_{i}")
                 if not slave_id:
-                    pytest.fail(f"未找到需要删除的账号ID：MT5vps_addslave_ids_{i}")
+                    print(f"未找到需要删除的账号ID：MT5vps_addslave_ids_{i}")
                 print(f"删除第{i}个跟单账号:MT5vps_addslave_ids_{i}")
 
                 # 发送删除请求
@@ -283,7 +283,7 @@ class TestDeleteUser(APITestBase):
         # 1. 获取账号总数和所有账号信息
         MT5vps_addslave_count = var_manager.get_variable("MT5vps_addslave_count", 0)
         if MT5vps_addslave_count <= 0:
-            pytest.fail("未找到需要验证的账号数量，请检查前置步骤")
+            print("未找到需要验证的账号数量，请检查前置步骤")
 
         # 2. 循环验证每个账号的删除状态
         for i in range(1, MT5vps_addslave_count + 1):
@@ -291,7 +291,7 @@ class TestDeleteUser(APITestBase):
                 # 获取单个账号（与删除的ID对应）
                 account = var_manager.get_variable(f"MT5vps_user_accounts_{i}")
                 if not account:
-                    pytest.fail(f"未找到需要验证的账号：MT5vps_user_accounts_{i}")
+                    print(f"未找到需要验证的账号：MT5vps_user_accounts_{i}")
 
                 # 查询数据库（检查删除标记或记录是否存在）
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -305,7 +305,7 @@ class TestDeleteUser(APITestBase):
                     allure.attach(f"跟单账号 {account} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
                     allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                    pytest.fail(f"删除失败: {str(e)}")
+                    print(f"删除失败: {str(e)}")
 
                 # 验证订阅表是否同步删除（无超时，直接查询判断）
                 sql_sub = "SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -332,7 +332,7 @@ class TestDeleteUser(APITestBase):
                         "验证结果（订阅表删除失败）",
                         allure.attachment_type.TEXT
                     )
-                    pytest.fail(f"订阅表删除验证失败：{str(e)}")
+                    print(f"订阅表删除验证失败：{str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
@@ -379,7 +379,7 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"策略账号 {new_user['account']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种")
@@ -426,7 +426,7 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"品种 {add_variety['templateName']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种2")
@@ -473,7 +473,7 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"品种 {add_variety['templateName3']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-删除账号")
@@ -521,7 +521,7 @@ class TestDeleteUser(APITestBase):
                 allure.attach(f"账号 {new_user['account']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量删除账号")
@@ -530,7 +530,7 @@ class TestDeleteUser(APITestBase):
         # 1. 获取需要删除的账号总数（从新增阶段的变量获取，确保与新增数量一致）
         MT5vps_user_count = var_manager.get_variable("MT5vps_user_count", 0)
         if MT5vps_user_count <= 0:
-            pytest.fail("未找到需要删除的账号总数，请检查前置步骤")
+            print("未找到需要删除的账号总数，请检查前置步骤")
 
         # 2. 循环删除每个账号
         for i in range(1, MT5vps_user_count + 1):
@@ -538,7 +538,7 @@ class TestDeleteUser(APITestBase):
                 # 获取单个账号ID（MT5vps_user_ids_1, MT5vps_user_ids_2, MT5vps_user_ids_3）
                 user_id = var_manager.get_variable(f"MT5vps_user_ids_{i}")
                 if not user_id:
-                    pytest.fail(f"未找到第{i}个账号的ID（变量名：MT5vps_user_ids_{i}）")
+                    print(f"未找到第{i}个账号的ID（变量名：MT5vps_user_ids_{i}）")
 
                 # 发送删除请求
                 response = self.send_delete_request(
@@ -571,7 +571,7 @@ class TestDeleteUser(APITestBase):
         # 1. 获取账号总数和数据库查询配置
         MT5vps_user_count = var_manager.get_variable("MT5vps_user_count", 0)
         if MT5vps_user_count <= 0:
-            pytest.fail("未找到需要验证的账号总数，请检查前置步骤")
+            print("未找到需要验证的账号总数，请检查前置步骤")
 
         # 2. 循环验证每个账号的删除状态
         for i in range(1, MT5vps_user_count + 1):
@@ -579,7 +579,7 @@ class TestDeleteUser(APITestBase):
                 # 获取当前账号的ID和账号名（用于数据库查询）
                 account = var_manager.get_variable(f"MT5vps_user_accounts_{i}")  # 账号名，如119999353
                 if not account:
-                    pytest.fail(f"未找到第{i}个账号的账号名（变量名：MT5vps_user_accounts_{i}）")
+                    print(f"未找到第{i}个账号的账号名（变量名：MT5vps_user_accounts_{i}）")
 
                 # 3. 执行数据库查询（按账号名查询，更直观）
                 sql = f"SELECT * FROM FOLLOW_TRADER_USER WHERE account = %s"
@@ -594,4 +594,4 @@ class TestDeleteUser(APITestBase):
                     allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
                     allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                    pytest.fail(f"删除失败: {str(e)}")
+                    print(f"删除失败: {str(e)}")

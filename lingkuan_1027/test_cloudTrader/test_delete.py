@@ -79,8 +79,7 @@ class TestDelete_cloudTrader(APITestBase):
                         sql=sql,
                         params=params
                     )
-                    allure.attach(f"云跟单账号 {cloudTrader_traderList} 已成功从数据库删除", "验证结果",
-                                  allure.attachment_type.TEXT)
+                    allure.attach(f"云跟单账号 {cloudTrader_traderList} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
                     allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                     pytest.fail(f"删除失败: {str(e)}")
@@ -133,8 +132,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云跟单账号 {cloudTrader_traderList_4} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"云跟单账号 {cloudTrader_traderList_4} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -186,8 +184,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云跟单账号 {cloudTrader_traderList_handid} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"云跟单账号 {cloudTrader_traderList_handid} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -239,8 +236,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略manager账号 {cloudTrader_traderList_3} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"云策略manager账号 {cloudTrader_traderList_3} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -292,8 +288,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略账号 {cloudTrader_traderList_2} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"云策略账号 {cloudTrader_traderList_2} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -430,8 +425,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"策略账号 {cloudTrader_user_accounts_1} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"策略账号 {cloudTrader_user_accounts_1} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -552,8 +546,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -600,8 +593,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"品种 {add_variety['templateName4']} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"品种 {add_variety['templateName4']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -694,8 +686,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略 {cloudMaster_id_hand} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"云策略 {cloudMaster_id_hand} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")
@@ -741,8 +732,7 @@ class TestDelete_cloudTrader(APITestBase):
                     sql=sql,
                     params=params
                 )
-                allure.attach(f"云策略组别 {cloudTrader_group_id} 已成功从数据库删除", "验证结果",
-                              allure.attachment_type.TEXT)
+                allure.attach(f"云策略组别 {cloudTrader_group_id} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
                 pytest.fail(f"删除失败: {str(e)}")

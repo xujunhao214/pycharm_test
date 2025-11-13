@@ -2017,13 +2017,15 @@ class TestMT5cloudTrader_openandlevel:
 
                 with allure.step("验证详情手数和指令手数一致"):
                     size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
                     total_lots = [record["total_lots"] for record in db_data]
                     self.assert_list_equal_ignore_order(
-                        size,
                         total_lots,
-                        f"手数不一致: 详情{size}, 指令{total_lots}"
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
                     )
-                    logger.info(f"手数一致: 详情{size}, 指令{total_lots}")
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
         @allure.title("账号管理-交易下单-平仓")
         def test_MT5cloudTrader_OrderClose(self, class_random_str, logged_session, var_manager):

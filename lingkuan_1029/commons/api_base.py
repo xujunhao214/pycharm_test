@@ -830,8 +830,6 @@ class APITestBase:
                         with allure.step("删除验证成功"):
                             allure.attach(f"耗时{time.time() - start_time:.1f}秒，记录已删除", "结果说明",
                                           allure.attachment_type.TEXT)
-                            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         return
 
                     logger.info(
@@ -912,8 +910,7 @@ class APITestBase:
             "%Y-%m-%d %H:%M:%S")
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询等待无记录 \n"
-            f"SQL: {sql[:200]} \n超时: {timeout}秒 \n稳定期: {stable_period}秒"
+            f"[{self._get_current_time()}] 开始轮询等待无记录 | 超时: {timeout}秒"
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):

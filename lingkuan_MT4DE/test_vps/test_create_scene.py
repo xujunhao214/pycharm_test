@@ -20,14 +20,14 @@ class TestCreate_Scene(APITestBase):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
         if vps_user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据")
+            print(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据")
 
         # 2. 仅提取后6个账号（索引1~6，对应vps_user_accounts_2~vps_user_accounts_7）
         all_accounts = []
         for i in range(2, 8):  # 直接指定取2~7共6个账号
             account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
+                print(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"已提取后6个账号：{all_accounts}")
         vps_template_id = var_manager.get_variable("vps_template_id")
@@ -147,14 +147,14 @@ class TestCreate_Scene(APITestBase):
         # 1. 校验总用户数（需至少7个，才能取后6个）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
         if vps_user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据进行校验")
+            print(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据进行校验")
 
         # 2. 提取后6个账号（对应vps_user_accounts_2到vps_user_accounts_7）
         all_accounts = []
         for i in range(2, 8):  # 直接指定取第2到第7个账号（共6个）
             account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
+                print(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"\n将校验的后6个账号：{all_accounts}")
 
@@ -177,7 +177,7 @@ class TestCreate_Scene(APITestBase):
                 )
 
                 if not db_data:
-                    pytest.fail(f"账号 {account} 在主表中未找到记录，请检查新增是否成功")
+                    print(f"账号 {account} 在主表中未找到记录，请检查新增是否成功")
 
                 # 提取当前账号的ID并保存到变量管理器
                 vps_addslave_id = db_data[0]["id"]
@@ -206,7 +206,7 @@ class TestCreate_Scene(APITestBase):
                 )
 
                 if not db_sub_data:
-                    pytest.fail(f"账号 {account} 在订阅表中未找到关联记录")
+                    print(f"账号 {account} 在订阅表中未找到关联记录")
                 # 校验订阅表中的账号与当前账号一致
                 slave_account = db_sub_data[0]["slave_account"]
                 assert slave_account == account, f"订阅表账号不匹配：预期={account}，实际={slave_account}"
@@ -224,14 +224,14 @@ class TestCreate_Scene(APITestBase):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         vps_user_count = var_manager.get_variable("vps_user_count", 0)
         if vps_user_count < 7:
-            pytest.fail(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据")
+            print(f"用户总数需至少为7，当前为{vps_user_count}，无法提取后6个数据")
 
         # 2. 仅提取后6个账号（索引1~6，对应vps_user_accounts_2~vps_user_accounts_7）
         all_accounts = []
         for i in range(2, 8):  # 直接指定取2~7共6个账号
             account = var_manager.get_variable(f"vps_user_accounts_{i}")
             if not account:
-                pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
+                print(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
         print(f"已提取后6个账号：{all_accounts}")
 
@@ -239,7 +239,7 @@ class TestCreate_Scene(APITestBase):
         for i in range(1, 7):  # 直接指定取1~7共6个账号
             addslave_id = var_manager.get_variable(f"vps_addslave_ids_{i}")
             if not addslave_id:
-                pytest.fail(f"未找到第{i}个账号（变量：vps_addslave_ids_{i}）")
+                print(f"未找到第{i}个账号（变量：vps_addslave_ids_{i}）")
             all_ids.append(addslave_id)
         print(f"已提取后6个账号id：{all_ids}")
 

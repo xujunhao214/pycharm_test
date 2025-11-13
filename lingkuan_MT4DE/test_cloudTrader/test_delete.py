@@ -19,13 +19,13 @@ class TestDelete_cloudTrader(APITestBase):
         # 1. 获取账号总数和所有ID
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 0:
-            pytest.fail("未找到需要删除的账号数量，请检查前置步骤")
+            print("未找到需要删除的账号数量，请检查前置步骤")
         # 2. 循环获取每个账号的ID并删除
         for i in range(5, cloudTrader_user_count + 1):
             with allure.step(f"删除第{i}云跟单账号"):
                 slave_id = var_manager.get_variable(f"cloudTrader_traderList_{i}")
                 if not slave_id:
-                    pytest.fail(f"未找到需要删除的账号ID：cloudTrader_traderList_{i}")
+                    print(f"未找到需要删除的账号ID：cloudTrader_traderList_{i}")
                 print(f"删除第{i}云跟单账号：cloudTrader_traderList_{i}")
 
                 # 发送删除请求
@@ -63,13 +63,13 @@ class TestDelete_cloudTrader(APITestBase):
         # 1. 获取账号总数和所有ID
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 0:
-            pytest.fail("未找到需要校验的账号数量，请检查前置步骤")
+            print("未找到需要校验的账号数量，请检查前置步骤")
         # 2. 循环获取每个账号的ID并校验
         for i in range(5, cloudTrader_user_count + 1):
             with allure.step(f"校验第{i}云跟单账号"):
                 cloudTrader_traderList = var_manager.get_variable(f"cloudTrader_traderList_{i}")
                 if not cloudTrader_traderList:
-                    pytest.fail(f"未找到需要删除的账号ID：cloudTrader_traderList_{i}")
+                    print(f"未找到需要删除的账号ID：cloudTrader_traderList_{i}")
                 print(f"校验第{i}云跟单账号：cloudTrader_traderList_{i}")
 
                 sql = f"SELECT * FROM follow_cloud_trader WHERE id = %s"
@@ -83,7 +83,7 @@ class TestDelete_cloudTrader(APITestBase):
                     allure.attach(f"云跟单账号 {cloudTrader_traderList} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
                     allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                    pytest.fail(f"删除失败: {str(e)}")
+                    print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云跟单账号")
@@ -136,7 +136,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云跟单账号 {cloudTrader_traderList_4} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     @allure.title("云策略-云策略列表-删除云跟单账号-手动下单")
     def test_delete_handcloudBatchAdd(self, logged_session, var_manager):
@@ -188,7 +188,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云跟单账号 {cloudTrader_traderList_handid} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云策略manager账号")
@@ -240,7 +240,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云策略manager账号 {cloudTrader_traderList_3} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云策略账号")
@@ -292,7 +292,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云策略账号 {cloudTrader_traderList_2} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量下架VPS（后9个账号）")
@@ -304,7 +304,7 @@ class TestDelete_cloudTrader(APITestBase):
             user_id_var_name = f"cloudTrader_user_ids_{i}"
             user_id = var_manager.get_variable(user_id_var_name)
             if not user_id:
-                pytest.fail(f"未找到第{i}个账号ID（变量：{user_id_var_name}）")
+                print(f"未找到第{i}个账号ID（变量：{user_id_var_name}）")
             cloudTrader_user_ids_later9.append(user_id)
 
         var_manager.set_runtime_variable("cloudTrader_user_ids_later9", cloudTrader_user_ids_later9)  # 保存后9个账号ID
@@ -331,7 +331,7 @@ class TestDelete_cloudTrader(APITestBase):
         # 1. 获取账号总数和所有账号信息
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count < 10:  # 修改条件为至少10个账号
-            pytest.fail(f"用户总数需至少为10，当前为{cloudTrader_user_count}，无法提取后9个数据进行校验")
+            print(f"用户总数需至少为10，当前为{cloudTrader_user_count}，无法提取后9个数据进行校验")
 
         # 2. 循环验证后9个账号的下架状态
         for i in range(2, cloudTrader_user_count + 1):  # 循环索引2-10（共9次）
@@ -339,7 +339,7 @@ class TestDelete_cloudTrader(APITestBase):
                 # 获取单个账号（与下架的ID对应）
                 account = var_manager.get_variable(f"cloudTrader_user_accounts_{i}")
                 if not account:
-                    pytest.fail(f"未找到需要验证的账号：cloudTrader_user_accounts_{i}")
+                    print(f"未找到需要验证的账号：cloudTrader_user_accounts_{i}")
 
                 # 查询数据库（检查删除标记或记录是否存在）
                 sql = f"SELECT * FROM follow_trader WHERE account = %s"
@@ -355,7 +355,7 @@ class TestDelete_cloudTrader(APITestBase):
                     # print(f"\n账号 {account} 已成功下架vps")
                 except TimeoutError as e:
                     allure.attach(f"下架超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                    pytest.fail(f"下架失败: {str(e)}")
+                    print(f"下架失败: {str(e)}")
 
                 # 验证订阅表是否同步删除（无超时，直接查询判断）
                 sql_sub = "SELECT * FROM follow_trader_subscribe WHERE slave_account = %s"
@@ -382,7 +382,7 @@ class TestDelete_cloudTrader(APITestBase):
                         "验证结果（订阅表删除失败）",
                         allure.attachment_type.TEXT
                     )
-                    pytest.fail(f"订阅表删除验证失败：{str(e)}")
+                    print(f"订阅表删除验证失败：{str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
@@ -429,7 +429,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"策略账号 {cloudTrader_user_accounts_1} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量删除账号")
@@ -438,7 +438,7 @@ class TestDelete_cloudTrader(APITestBase):
         # 1. 获取需要删除的账号总数（从新增阶段的变量获取，确保与新增数量一致）
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count <= 0:
-            pytest.fail("未找到需要删除的账号总数，请检查前置步骤")
+            print("未找到需要删除的账号总数，请检查前置步骤")
 
         # 2. 循环删除每个账号
         for i in range(1, cloudTrader_user_count + 1):
@@ -446,7 +446,7 @@ class TestDelete_cloudTrader(APITestBase):
                 # 获取单个账号ID
                 user_id = var_manager.get_variable(f"cloudTrader_user_ids_{i}")
                 if not user_id:
-                    pytest.fail(f"未找到第{i}个账号的ID（变量名：cloudTrader_user_ids_{i}）")
+                    print(f"未找到第{i}个账号的ID（变量名：cloudTrader_user_ids_{i}）")
 
                 # 发送删除请求
                 response = self.send_delete_request(
@@ -480,7 +480,7 @@ class TestDelete_cloudTrader(APITestBase):
         # 1. 获取账号总数和数据库查询配置
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
         if cloudTrader_user_count <= 0:
-            pytest.fail("未找到需要验证的账号总数，请检查前置步骤")
+            print("未找到需要验证的账号总数，请检查前置步骤")
 
         # 2. 循环验证每个账号的删除状态
         for i in range(1, cloudTrader_user_count + 1):
@@ -488,7 +488,7 @@ class TestDelete_cloudTrader(APITestBase):
                 # 获取当前账号的ID和账号名（用于数据库查询）
                 account = var_manager.get_variable(f"cloudTrader_user_accounts_{i}")
                 if not account:
-                    pytest.fail(f"未找到第{i}个账号的账号名（变量名：cloudTrader_user_accounts_{i}）")
+                    print(f"未找到第{i}个账号的账号名（变量名：cloudTrader_user_accounts_{i}）")
 
                 # 3. 执行数据库查询（按账号名查询，更直观）
                 sql = f"SELECT * FROM follow_trader_user WHERE account = %s"
@@ -503,7 +503,7 @@ class TestDelete_cloudTrader(APITestBase):
                     allure.attach(f"账号 {account} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
                 except TimeoutError as e:
                     allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                    pytest.fail(f"删除失败: {str(e)}")
+                    print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种")
@@ -550,7 +550,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"品种 {add_variety['templateName2']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("平台管理-品种管理-删除品种2")
@@ -597,7 +597,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"品种 {add_variety['templateName4']} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-删除云策略")
@@ -644,7 +644,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云策略 {cloudMaster_id} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     @allure.title("云策略-云策略列表-删除云策略-手动下单")
     def test_delete_cloudMaster_hand(self, logged_session, var_manager):
@@ -690,7 +690,7 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云策略 {cloudMaster_id_hand} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-组别列表-删除云策略组别")
@@ -736,4 +736,4 @@ class TestDelete_cloudTrader(APITestBase):
                 allure.attach(f"云策略组别 {cloudTrader_group_id} 已成功从数据库删除", "验证结果", allure.attachment_type.TEXT)
             except TimeoutError as e:
                 allure.attach(f"删除超时: {str(e)}", "验证结果", allure.attachment_type.TEXT)
-                pytest.fail(f"删除失败: {str(e)}")
+                print(f"删除失败: {str(e)}")

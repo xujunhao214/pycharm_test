@@ -477,37 +477,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -1121,37 +1091,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -1743,37 +1683,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -2375,37 +2285,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -3015,37 +2895,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -3637,37 +3487,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -4334,37 +4154,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -5034,37 +4824,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -5692,37 +5452,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):
@@ -6350,37 +6080,7 @@ class TestVPSOrdersendsell:
                 "响应msg字段应为success"
             )
 
-        # @pytest.mark.skip(reason=SKIP_REASON)
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-跟单平仓")
-        def test_addtrader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_addslave_id = var_manager.get_variable("vps_addslave_id")
-            vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
-            data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_addslave_id,
-                "account": vps_user_accounts_1
-            }
-            response = self.send_post_request(
-                logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
-            )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
 
         @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
         def test_dbquery_orderSendclose(self, class_random_str, var_manager, db_transaction):

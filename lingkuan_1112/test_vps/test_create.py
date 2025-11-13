@@ -702,3 +702,67 @@ class TestCreate(APITestBase):
             cloudTrader_MT5userID = db_data[0]['id']
             var_manager.set_runtime_variable("cloudTrader_MT5userID", cloudTrader_MT5userID)
             logging.info(f"账号id是：{cloudTrader_MT5userID}")
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-跟单平仓")
+    def test_addtrader_orderclose(self, var_manager, logged_session):
+        # 1. 发送全平订单平仓请求
+        vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+        data = {
+            "isCloseAll": 1,
+            "intervalTime": 100,
+            "traderId": vps_addslave_id,
+            "account": vps_user_accounts_1
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader/orderClose',
+            json_data=data,
+        )
+
+        # 2. 验证响应
+        self.assert_response_status(
+            response,
+            200,
+            "平仓失败"
+        )
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-MT5账号跟单平仓")
+    def test_addtrader_MT5orderclose(self, class_random_str, var_manager, logged_session):
+        # 1. 发送全平订单平仓请求
+        MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+        addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
+        data = {
+            "traderId": MT5vps_addslave_id,
+            "account": addVPS_MT5Slave["account"],
+            "ifAccount": True,
+            "isCloseAll": 1
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader/orderClose',
+            json_data=data,
+        )
+
+        # 2. 验证响应
+        self.assert_response_status(
+            response,
+            200,
+            "平仓失败"
+        )
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )

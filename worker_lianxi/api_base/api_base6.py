@@ -912,8 +912,7 @@ class APITestBase:
             "%Y-%m-%d %H:%M:%S")
 
         logger.info(
-            f"[{self._get_current_time()}] 开始轮询等待无记录 \n"
-            f"SQL: {sql[:200]} \n超时: {timeout}秒 \n稳定期: {stable_period}秒"
+            f"[{self._get_current_time()}] 开始轮询等待无记录 | 超时: {timeout}秒"
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):

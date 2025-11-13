@@ -2661,7 +2661,7 @@ class TestCloudStrategyOrdersell:
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend6(APITestBase):
-        @allure.title("云策略-复制下单操作")
+        @allure.title("云策略-分配下单操作")
         def test_copy_place_order(self, class_random_str, logged_session, var_manager):
             """执行云策略复制下单操作并验证请求结果"""
             with allure.step("1.发送复制下单请求"):

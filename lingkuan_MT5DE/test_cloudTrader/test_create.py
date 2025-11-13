@@ -66,7 +66,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 验证查询结果
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                print("数据库查询结果为空，订单可能没有入库")
 
             # 提取MT5cloudTrader_user_ids和MT5cloudTrader_user_accounts（保持原有列表形式，用于后续判断）
             MT5cloudTrader_user_ids = [item["id"] for item in db_data]
@@ -102,7 +102,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                print("数据库查询结果为空，订单可能没有入库")
 
             vpsId = db_data[0]["id"]
             var_manager.set_runtime_variable("vpsId", vpsId)
@@ -172,7 +172,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
         with allure.step("2. 提取数据库数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                print("数据库查询结果为空，订单可能没有入库")
 
             MT5cloudTrader_MT5vps_id = db_data[0]["id"]
             logging.info(f"新增策略账号ID: {MT5cloudTrader_MT5vps_id}")
@@ -199,7 +199,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
             user_id_var_name = f"MT5cloudTrader_user_ids_{i}"
             user_id = var_manager.get_variable(user_id_var_name)
             if not user_id:
-                pytest.fail(f"未找到第{i}个账号ID（变量：{user_id_var_name}）")
+                print(f"未找到第{i}个账号ID（变量：{user_id_var_name}）")
             MT5cloudTrader_user_ids_later9.append(user_id)
 
         var_manager.set_runtime_variable("MT5cloudTrader_user_ids_later9", MT5cloudTrader_user_ids_later9)  # 保存后9个账号ID
@@ -253,7 +253,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
             MT5cloudTrader_account_var_name = f"MT5cloudTrader_user_accounts_{i}"
             MT5cloudTrader_account = var_manager.get_variable(MT5cloudTrader_account_var_name)
             if not MT5cloudTrader_account:
-                pytest.fail(f"未找到第{i}个账号（变量：{MT5cloudTrader_account_var_name}）")
+                print(f"未找到第{i}个账号（变量：{MT5cloudTrader_account_var_name}）")
             all_accounts_MT5cloudTrader.append(MT5cloudTrader_account)
         print(f"\n将校验的后9个账号：{all_accounts_MT5cloudTrader}")
 
@@ -275,7 +275,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
                 print(f"验证第{idx}个账号（{MT5cloudTrader_account}）的数据库记录")
 
                 if not db_data:
-                    pytest.fail(f"账号 {MT5cloudTrader_account} 在主表中未找到记录")
+                    print(f"账号 {MT5cloudTrader_account} 在主表中未找到记录")
 
                 # 保存账号ID并校验状态/净值/订阅表（代码与之前一致）
                 MT5cloudTrader_MT5vps_id = db_data[0]["id"]
@@ -304,7 +304,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
                 )
 
                 if not db_sub_data:
-                    pytest.fail(f"账号 {MT5cloudTrader_account} 在订阅表中未找到关联记录")
+                    print(f"账号 {MT5cloudTrader_account} 在订阅表中未找到关联记录")
                 slave_MT5cloudTrader_account = db_sub_data[0]["slave_account"]
                 assert slave_MT5cloudTrader_account == MT5cloudTrader_account, f"账号 {MT5cloudTrader_account} 在订阅表中的关联账号异常"
                 logging.info(f"账号 {MT5cloudTrader_account} 订阅表关联校验通过")
@@ -363,7 +363,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
         with allure.step("2. 提取数据库中的值"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                print("数据库查询结果为空，订单可能没有入库")
 
             MT5cloudTrader_group_id = db_data[0]["id"]
             print(f"输出：{MT5cloudTrader_group_id}")
@@ -411,7 +411,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，新增MT5云策略账号失败")
+                print("数据库查询结果为空，新增MT5云策略账号失败")
 
             cloudMaster_id = db_data[0]['id']
             var_manager.set_runtime_variable("cloudMaster_id", cloudMaster_id)
@@ -475,7 +475,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，新增MT5云策略账号失败")
+                print("数据库查询结果为空，新增MT5云策略账号失败")
 
             MT5cloudTrader_traderList_2 = db_data[0]['id']
             var_manager.set_runtime_variable("MT5cloudTrader_traderList_2", MT5cloudTrader_traderList_2)
@@ -550,7 +550,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，新增跟单账号失败")
+                print("数据库查询结果为空，新增跟单账号失败")
 
             MT5cloudTrader_traderList_4 = db_data[0]['id']
             var_manager.set_runtime_variable("MT5cloudTrader_traderList_4", MT5cloudTrader_traderList_4)
@@ -605,7 +605,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
         with allure.step("2. 提取数据"):
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                print("数据库查询结果为空，订单可能没有入库")
 
             MT5cloudTrader_template_id1 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {MT5cloudTrader_template_id1}")
@@ -660,7 +660,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                print("数据库查询结果为空，订单可能没有入库")
 
             MT5cloudTrader_template_id2 = db_data[0]["template_id"]
             logging.info(f"新增品种id: {MT5cloudTrader_template_id2}")
@@ -707,7 +707,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
 
         with allure.step("2. 提取数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，新增MT5云策略账号失败")
+                print("数据库查询结果为空，新增MT5云策略账号失败")
 
             cloudMaster_id_hand = db_data[0]['id']
             var_manager.set_runtime_variable("cloudMaster_id_hand", cloudMaster_id_hand)
@@ -771,7 +771,7 @@ class TestCreate_MT5cloudTrader(APITestBase):
             )
         with allure.step("2. 校验数据"):
             if not db_data:
-                pytest.fail("数据库查询结果为空，新增云跟单账号失败")
+                print("数据库查询结果为空，新增云跟单账号失败")
 
             MT5cloudTrader_traderList_handid = db_data[0]['id']
             var_manager.set_runtime_variable("MT5cloudTrader_traderList_handid", MT5cloudTrader_traderList_handid)

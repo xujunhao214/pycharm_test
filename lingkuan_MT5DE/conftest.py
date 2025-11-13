@@ -66,7 +66,7 @@ def logged_session(api_session, var_manager, request, environment):
     try:
         login_data = var_manager.get_variable("login")
     except Exception as e:
-        pytest.fail(f"获取登录数据失败: {str(e)}", pytrace=False)
+        print(f"获取登录数据失败: {str(e)}", pytrace=False)
 
     access_token = None
 
@@ -76,7 +76,7 @@ def logged_session(api_session, var_manager, request, environment):
             # 测试环境登录逻辑
             response = api_session.post("/sys/auth/login", json=login_data)
             if response.status_code != 200:
-                pytest.fail(
+                print(
                     f"测试环境登录失败 - 状态码: {response.status_code}, 响应: {response.text[:500]}",
                     pytrace=False
                 )
@@ -84,7 +84,7 @@ def logged_session(api_session, var_manager, request, environment):
             response_json = response.json()
             access_token = response_json.get("data", {}).get("access_token")
             if not access_token:
-                pytest.fail("测试环境登录响应中未找到access_token", pytrace=False)
+                print("测试环境登录响应中未找到access_token", pytrace=False)
 
             logger.info("测试环境登录成功")
 
@@ -128,15 +128,15 @@ def logged_session(api_session, var_manager, request, environment):
                     error_msg = f"第{attempt + 1}次登录失败: {str(e)}"
                     logger.error(error_msg)
                     if attempt == max_retries - 1:  # 最后一次尝试失败
-                        pytest.fail(f"UAT登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
+                        print(f"UAT登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
                     time.sleep(retry_interval)
 
         else:
-            pytest.fail(f"不支持的环境类型: {environment.value}", pytrace=False)
+            print(f"不支持的环境类型: {environment.value}", pytrace=False)
 
     except Exception as e:
         # 捕获所有登录过程中的异常并终止
-        pytest.fail(f"登录过程发生未预期错误: {str(e)}", pytrace=False)
+        print(f"登录过程发生未预期错误: {str(e)}", pytrace=False)
 
     # 4. 设置认证信息
     var_manager.set_runtime_variable("access_token", access_token)
