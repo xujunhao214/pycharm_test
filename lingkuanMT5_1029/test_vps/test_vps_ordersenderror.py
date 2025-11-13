@@ -3,9 +3,9 @@ import math
 import allure
 import logging
 import pytest
-from lingkuan_1107.VAR.VAR import *
-from lingkuan_1107.conftest import var_manager
-from lingkuan_1107.commons.api_base import *
+from lingkuanMT5_1029.VAR.VAR import *
+from lingkuanMT5_1029.conftest import var_manager
+from lingkuanMT5_1029.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
