@@ -16,7 +16,7 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 # 修改模式、品种
 # ---------------------------
 @allure.feature("云策略策略下单-跟单修改模式、品种")
-class TestVPSOrderSend_Scence(APITestBase):
+class TestCloudOrderSend_Scence(APITestBase):
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库查询-获取券商名称和最大手数")
     def test_dbquery_platform(self, class_random_str, var_manager, db_transaction):

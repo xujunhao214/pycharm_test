@@ -12,7 +12,7 @@ SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("VPS策略下单-开仓的场景校验-buy")
-class TestVPSOrdersendbuy:
+class TestCloudOrdersendbuy:
     @allure.story("场景3： 云策略列表-策略账号超过最大手数")
     @allure.description("""
         ### 测试说明
@@ -24,7 +24,7 @@ class TestVPSOrdersendbuy:
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @pytest.mark.usefixtures("class_random_str")
-    class TestVPSOrderSend1(APITestBase):
+    class TestCloudOrderSend1(APITestBase):
         @allure.title("数据库提取该服务器最大手数限制")
         def test_dbquery_maxlots(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 数据库的SQL查询"):

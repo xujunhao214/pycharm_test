@@ -13,7 +13,7 @@ SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("云策略-策略账号交易下单-平仓的功能校验")
-class TestVPSMasOrderclose:
+class TestCloudMasOrderclose:
     @allure.story("场景1：平仓的品种功能校验")
     @allure.description("""
     ### 测试说明
@@ -738,7 +738,7 @@ class TestVPSMasOrderclose:
     """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
-    class TestVPStradingOrders3(APITestBase):
+    class TestCloudtradingOrders3(APITestBase):
         @allure.title("修改跟单账号为反向跟单")
         def test_follow_updateSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
             with allure.step("1. 修改跟单方向为反向"):

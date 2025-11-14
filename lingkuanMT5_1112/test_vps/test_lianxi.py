@@ -15,16 +15,16 @@ SKIP_REASON = "跳过此用例"
 class TestVPSOrdersendbuy:
     @allure.story("场景3：平仓的订单方向功能校验-sell")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有vps策略和vps跟单
-          1. 修改跟单账号，跟单方向-反向sell
-          2. 进行开仓，手数范围：0.1-1，总订单数量4
-          3. 交易下单-跟单账号自己平仓-buy
-          4. 校验平仓的订单数，应该不等于4
-          5. 交易下单-跟单账号自己平仓-sell
-          6. 校验平仓的订单数,等于4
-        - 预期结果：平仓的订单方向功能正确
-        """)
+    ### 测试说明
+    - 前置条件：有vps策略和vps跟单
+      1. 修改跟单账号，跟单方向-反向sell
+      2. 进行开仓，手数范围：0.1-1，总订单数量4
+      3. 交易下单-跟单账号自己平仓-buy
+      4. 校验平仓的订单数，应该不等于4
+      5. 交易下单-跟单账号自己平仓-sell
+      6. 校验平仓的订单数,等于4
+    - 预期结果：平仓的订单方向功能正确
+    """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPStradingOrders3(APITestBase):

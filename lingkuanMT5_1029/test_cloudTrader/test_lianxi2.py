@@ -16,15 +16,15 @@ class TestCloudStrategyOrderbuy:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景10：复制下单-手数范围0.01-1，总手数0.3")
     @allure.description("""
-        ### 测试说明
-        - 前置条件：有云策略和云跟单
-          1. 修改跟单账号下单比例0.25，手数取余-四舍五入，合约比例0.5
-          2. 进行开仓，手数范围0.01-1，总手数0.3
-          3. 校验账号的数据是否正确-下单手数是0.3*0.25*0.5=0.0375，四舍五入是0.04
-          4. 进行平仓
-          5. 校验账号的数据是否正确
-        - 预期结果：账号的数据正确
-        """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+      1. 修改跟单账号下单比例0.25，手数取余-四舍五入，合约比例0.5
+      2. 进行开仓，手数范围0.01-1，总手数0.3
+      3. 校验账号的数据是否正确-下单手数是0.3*0.25*0.5=0.0375，四舍五入是0.04
+      4. 进行平仓
+      5. 校验账号的数据是否正确
+    - 预期结果：账号的数据正确
+    """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend10(APITestBase):

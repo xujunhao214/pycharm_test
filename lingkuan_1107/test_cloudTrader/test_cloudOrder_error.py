@@ -12,7 +12,7 @@ SKIP_REASON = "跳过此用例"
 
 
 @allure.feature("云策略下单-下单限制")
-class TestVPSOrdersendbuy:
+class TestCloudOrdersenderror:
     @allure.story("场景1： 云策略列表-策略账号超过最大手数")
     @allure.description("""
         ### 测试说明

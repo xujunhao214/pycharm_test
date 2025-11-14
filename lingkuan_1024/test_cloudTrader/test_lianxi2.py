@@ -16,7 +16,7 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 # 修改模式、品种
 # ---------------------------
 @allure.feature("云策略策略下单-跟单修改模式、品种")
-class TestVPSOrderSend_Scence(APITestBase):
+class TestCloudOrderSend_Scence(APITestBase):
     @allure.title("出现漏开-redis数据和数据库的数据做比对")
     def test_dbquery_redis(self, var_manager, db_transaction, redis_cloudTrader_data_send):
         with allure.step("1. 获取订单详情表账号数据"):

@@ -13,7 +13,7 @@ SKIP_REASON = "该功能暂不需要"  # 统一跳过原因
 
 
 @allure.feature("云策略策略下单-跟单修改模式、品种")
-class TestVPSOrderSend_Scence(APITestBase):
+class TestCloudOrderSend_Scence(APITestBase):
     @allure.title("云策略列表-跟单账号平仓")
     def test_addtrader_close(self, logged_session, var_manager):
         cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)

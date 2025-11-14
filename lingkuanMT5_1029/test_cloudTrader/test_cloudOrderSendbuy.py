@@ -2484,15 +2484,15 @@ class TestCloudStrategyOrderbuy:
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @allure.story("场景5：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
-       ### 测试说明
-       - 前置条件：有云策略和云跟单
-         1. 进行开仓，手数范围0.1-1，总订单5-停止功能
-         2. 点击停止
-         3. 校验账号的下单总手数和数据库的手数，应该不相等
-         4. 进行平仓
-         5. 校验账号的数据是否正确
-       - 预期结果：云策略下单的停止功能正确
-       """)
+    ### 测试说明
+    - 前置条件：有云策略和云跟单
+     1. 进行开仓，手数范围0.1-1，总订单5-停止功能
+     2. 点击停止
+     3. 校验账号的下单总手数和数据库的手数，应该不相等
+     4. 进行平仓
+     5. 校验账号的数据是否正确
+    - 预期结果：云策略下单的停止功能正确
+    """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestMasOrderSend5(APITestBase):
