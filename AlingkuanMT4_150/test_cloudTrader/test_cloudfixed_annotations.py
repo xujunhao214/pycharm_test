@@ -50,7 +50,7 @@ class TestCloudremark:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                    "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -125,7 +125,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": f"ceshikaicangbeizhu{class_random_str}"
+                    "remark": f"{class_random_str}ceshikaicangbeizhu"
                 }
 
                 response = self.send_post_request(
@@ -148,7 +148,7 @@ class TestCloudremark:
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4,f"ceshiceluebeizhu{class_random_str}")
+                params = ('0', cloudTrader_user_accounts_4,f"{class_random_str}ceshiceluebeizhu")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -161,7 +161,7 @@ class TestCloudremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshiceluebeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshiceluebeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message=f"预期：跟单取策略备注",
@@ -236,7 +236,7 @@ class TestCloudremark:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                    "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -274,7 +274,7 @@ class TestCloudremark:
                     "followStatus": 1,
                     "followOpen": 1,
                     "followClose": 1,
-                    "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单固定注释
+                    "fixedComment": f"{class_random_str}ceshigendanbeizhu",  # 跟单固定注释
                     "commentType": None,
                     "digits": 0,
                     "followTraderIds": [],
@@ -312,7 +312,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": f"ceshikaicangbeizhu{class_random_str}"
+                    "remark": f"{class_random_str}ceshikaicangbeizhu"
                 }
 
                 response = self.send_post_request(
@@ -335,7 +335,7 @@ class TestCloudremark:
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4,f"ceshigendanbeizhu{class_random_str}")
+                params = ('0', cloudTrader_user_accounts_4,f"{class_random_str}ceshigendanbeizhu")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -348,7 +348,7 @@ class TestCloudremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshigendanbeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshigendanbeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取自身备注",
@@ -410,7 +410,7 @@ class TestCloudremark:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                    "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -485,7 +485,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": f"ceshikaicangbeizhu{class_random_str}"
+                    "remark": f"{class_random_str}ceshikaicangbeizhu"
                 }
 
                 response = self.send_post_request(
@@ -508,7 +508,7 @@ class TestCloudremark:
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4,f"ceshikaicangbeizhu{class_random_str}")
+                params = ('0', cloudTrader_user_accounts_4,f"{class_random_str}ceshikaicangbeizhu")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -521,7 +521,7 @@ class TestCloudremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshikaicangbeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshikaicangbeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取开仓备注",
@@ -583,7 +583,7 @@ class TestCloudremark:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                    "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -656,7 +656,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": f"ceshikaicangbeizhu{class_random_str}"
+                    "remark": f"{class_random_str}ceshikaicangbeizhu"
                 }
 
                 response = self.send_post_request(
@@ -679,7 +679,7 @@ class TestCloudremark:
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4,f"ceshiceluebeizhu{class_random_str}")
+                params = ('0', cloudTrader_user_accounts_4,f"{class_random_str}ceshiceluebeizhu")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -692,7 +692,7 @@ class TestCloudremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshiceluebeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshiceluebeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message=f"预期：跟单取策略备注",
@@ -752,7 +752,7 @@ class TestCloudremark:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                    "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -790,7 +790,7 @@ class TestCloudremark:
                     "followStatus": 1,
                     "followOpen": 1,
                     "followClose": 1,
-                    "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单固定注释
+                    "fixedComment": f"{class_random_str}ceshigendanbeizhu",  # 跟单固定注释
                     "commentType": None,
                     "digits": 0,
                     "followTraderIds": [],
@@ -825,7 +825,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": f"ceshikaicangbeizhu{class_random_str}"
+                    "remark": f"{class_random_str}ceshikaicangbeizhu"
                 }
 
                 response = self.send_post_request(
@@ -848,7 +848,7 @@ class TestCloudremark:
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4,f"ceshigendanbeizhu{class_random_str}")
+                params = ('0', cloudTrader_user_accounts_4,f"{class_random_str}ceshigendanbeizhu")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -861,7 +861,7 @@ class TestCloudremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshigendanbeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshigendanbeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取自身备注",
@@ -921,7 +921,7 @@ class TestCloudremark:
                     "account": cloudTrader_user_accounts_2,
                     "platform": new_user["platform"],
                     "templateId": None,
-                    "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                    "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                     "commentType": None,
                     "digits": 0
                 }
@@ -994,7 +994,7 @@ class TestCloudremark:
                     "endSize": "1.00",
                     "totalNum": "3",
                     "totalSzie": "1.00",
-                    "remark": f"ceshikaicangbeizhu{class_random_str}"
+                    "remark": f"{class_random_str}ceshikaicangbeizhu"
                 }
 
                 response = self.send_post_request(
@@ -1017,7 +1017,7 @@ class TestCloudremark:
                         ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
                 """
-                params = ('0', cloudTrader_user_accounts_4,f"ceshikaicangbeizhu{class_random_str}")
+                params = ('0', cloudTrader_user_accounts_4,f"{class_random_str}ceshikaicangbeizhu")
 
                 db_data = self.query_database_with_time(
                     db_transaction=db_transaction,
@@ -1030,7 +1030,7 @@ class TestCloudremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshikaicangbeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshikaicangbeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取开仓备注",

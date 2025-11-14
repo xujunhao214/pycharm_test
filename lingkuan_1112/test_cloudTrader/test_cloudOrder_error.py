@@ -276,7 +276,7 @@ class TestVPSOrdersendbuy:
                         "placedType": 0,
                         "startSize": max_lots,
                         "endSize": max_lots,
-                        "totalNum": "0",
+                        "totalNum": "1",
                         "totalSzie": "",
                         "remark": class_random_str
                     }

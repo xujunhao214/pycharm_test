@@ -47,7 +47,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "account": cloudTrader_user_accounts_2,
                 "platform": new_user["platform"],
                 "templateId": None,
-                "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                 "commentType": None,
                 "digits": 0
             }
@@ -122,7 +122,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": f"ceshikaicangbeizhu{class_random_str}"
+                "remark": f"{class_random_str}ceshikaicangbeizhu"
             }
 
             response = self.send_post_request(
@@ -161,7 +161,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             comment = db_data[0]["comment"]
             self.verify_data(
                 actual_value=comment,
-                expected_value=f"ceshiceluebeizhu{class_random_str}",
+                expected_value=f"{class_random_str}ceshiceluebeizhu",
                 op=CompareOp.EQ,
                 use_isclose=False,
                 message=f"预期：跟单取策略备注",
@@ -223,7 +223,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "account": cloudTrader_user_accounts_2,
                 "platform": new_user["platform"],
                 "templateId": None,
-                "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                 "commentType": None,
                 "digits": 0
             }
@@ -262,7 +262,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "followStatus": 1,
                 "followOpen": 1,
                 "followClose": 1,
-                "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单固定注释
+                "fixedComment": f"{class_random_str}ceshigendanbeizhu",  # 跟单固定注释
                 "commentType": None,
                 "digits": 0,
                 "followTraderIds": [],
@@ -298,7 +298,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": f"ceshikaicangbeizhu{class_random_str}"
+                "remark": f"{class_random_str}ceshikaicangbeizhu"
             }
 
             response = self.send_post_request(
@@ -336,7 +336,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             comment = db_data[0]["comment"]
             self.verify_data(
                 actual_value=comment,
-                expected_value=f"ceshigendanbeizhu{class_random_str}",
+                expected_value=f"{class_random_str}ceshigendanbeizhu",
                 op=CompareOp.EQ,
                 use_isclose=False,
                 message="预期：跟单取自身备注",
@@ -398,7 +398,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "account": cloudTrader_user_accounts_2,
                 "platform": new_user["platform"],
                 "templateId": None,
-                "fixedComment": f"ceshiceluebeizhu{class_random_str}",  # 策略固定注释
+                "fixedComment": f"{class_random_str}ceshiceluebeizhu",  # 策略固定注释
                 "commentType": None,
                 "digits": 0
             }
@@ -473,7 +473,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "endSize": "1.00",
                 "totalNum": "3",
                 "totalSzie": "1.00",
-                "remark": f"ceshikaicangbeizhu{class_random_str}"
+                "remark": f"{class_random_str}ceshikaicangbeizhu"
             }
 
             response = self.send_post_request(
@@ -511,7 +511,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
             comment = db_data[0]["comment"]
             self.verify_data(
                 actual_value=comment,
-                expected_value=f"ceshikaicangbeizhu{class_random_str}",
+                expected_value=f"{class_random_str}ceshikaicangbeizhu",
                 op=CompareOp.EQ,
                 use_isclose=False,
                 message="预期：跟单取开仓备注",

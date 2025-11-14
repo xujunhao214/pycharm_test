@@ -237,7 +237,7 @@ class TestVPSremark:
                 "followOpen": 1,
                 "followClose": 1,
                 "followRep": 0,
-                "fixedComment": "ceshigendanbeizhu",  # 跟单有固定注释
+                "fixedComment": "ceshigendanbeizhu",
                 "commentType": "",
                 "digits": 0,
                 "cfd": "",

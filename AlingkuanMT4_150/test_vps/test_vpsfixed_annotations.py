@@ -44,7 +44,7 @@ class TestVPSremark:
                 "cfd": "",
                 "forex": "",
                 "followOrderRemark": 0,
-                "fixedComment": f"ceshiceluebeizhu{class_random_str}",
+                "fixedComment": f"{class_random_str}ceshiceluebeizhu",
                 "commentType": None,
                 "digits": 0
             }
@@ -107,7 +107,7 @@ class TestVPSremark:
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": f"ceshikaicangbeizhu{class_random_str}",
+                    "remark": f"{class_random_str}ceshikaicangbeizhu",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -133,7 +133,7 @@ class TestVPSremark:
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                 WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', vps_user_accounts_1, f"ceshiceluebeizhu{class_random_str}")
+            params = ('0', vps_user_accounts_1, f"{class_random_str}ceshiceluebeizhu")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -144,7 +144,7 @@ class TestVPSremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshiceluebeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshiceluebeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message=f"预期：跟单取策略备注",
@@ -210,7 +210,7 @@ class TestVPSremark:
                 "cfd": "",
                 "forex": "",
                 "followOrderRemark": 0,
-                "fixedComment": f"ceshiceluebeizhu{class_random_str}",
+                "fixedComment": f"{class_random_str}ceshiceluebeizhu",
                 "commentType": None,
                 "digits": 0
             }
@@ -242,7 +242,7 @@ class TestVPSremark:
                 "followOpen": 1,
                 "followClose": 1,
                 "followRep": 0,
-                "fixedComment": f"ceshigendanbeizhu{class_random_str}",  # 跟单有固定注释
+                "fixedComment": f"{class_random_str}ceshigendanbeizhu",
                 "commentType": "",
                 "digits": 0,
                 "cfd": "",
@@ -269,7 +269,7 @@ class TestVPSremark:
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": f"ceshikaicangbeizhu{class_random_str}",
+                    "remark": f"{class_random_str}ceshikaicangbeizhu",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -294,7 +294,7 @@ class TestVPSremark:
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                 WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', vps_user_accounts_1, f"ceshigendanbeizhu{class_random_str}")
+            params = ('0', vps_user_accounts_1, f"{class_random_str}ceshigendanbeizhu")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -306,7 +306,7 @@ class TestVPSremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshigendanbeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshigendanbeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取自身备注",
@@ -361,7 +361,7 @@ class TestVPSremark:
                 "cfd": "",
                 "forex": "",
                 "followOrderRemark": 1,  # 开启订单备注
-                "fixedComment": f"ceshiceluebeizhu{class_random_str}",
+                "fixedComment": f"{class_random_str}ceshiceluebeizhu",
                 "commentType": None,
                 "digits": 0
             }
@@ -420,7 +420,7 @@ class TestVPSremark:
                 data = {
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
-                    "remark": f"ceshikaicangbeizhu{class_random_str}",
+                    "remark": f"{class_random_str}ceshikaicangbeizhu",
                     "intervalTime": 100,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
@@ -446,7 +446,7 @@ class TestVPSremark:
                     ON foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                 WHERE foi.operation_type = %s AND fod.account = %s AND fod.comment = %s 
             """
-            params = ('0', vps_user_accounts_1, f"ceshikaicangbeizhu{class_random_str}")
+            params = ('0', vps_user_accounts_1, f"{class_random_str}ceshikaicangbeizhu")
             db_data = self.query_database_with_time(
                 db_transaction=db_transaction,
                 sql=sql,
@@ -460,7 +460,7 @@ class TestVPSremark:
                 comment = db_data[0]["comment"]
                 self.verify_data(
                     actual_value=comment,
-                    expected_value=f"ceshikaicangbeizhu{class_random_str}",
+                    expected_value=f"{class_random_str}ceshikaicangbeizhu",
                     op=CompareOp.EQ,
                     use_isclose=False,
                     message="预期：跟单取开仓备注",
