@@ -4,7 +4,7 @@ import os
 
 # 正确：添加项目根目录到Python路径（仅需1次dirname）
 current_script_path = os.path.abspath(__file__)  # 获取当前脚本绝对路径
-project_root = os.path.dirname(current_script_path)  # 取父目录 → 项目根目录（lingkuan_1029/）
+project_root = os.path.dirname(current_script_path)  # 取父目录 → 项目根目录
 sys.path.insert(0, project_root)  # 把项目根目录添加到Python搜索路径最前面
 
 # 验证：打印路径确认（调试用，可保留）
@@ -12,7 +12,7 @@ print(f"当前脚本路径：{current_script_path}")
 print(f"项目根目录：{project_root}")
 print(f"Python搜索路径前3个：{sys.path[:3]}")
 from collections import defaultdict
-from lingkuanMT5_1027.config import ENV_CONFIG, Environment
+from lingkuanMT5_1027.config import *
 from lingkuanMT5_1027.VAR.VAR import *
 from datetime import datetime
 
