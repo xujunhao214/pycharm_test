@@ -3,11 +3,19 @@ import xml.etree.ElementTree as ET
 import argparse
 import logging
 from enum import Enum
+import sys
 
-try:
-    from .VAR.VAR import *
-except ImportError:
-    from lingkuanMT5_1027.VAR.VAR import *
+current_script_path = os.path.abspath(__file__)  # report_generator.py 的绝对路径
+project_root = os.path.dirname(current_script_path)  # 项目根目录（lingkuanMT5_1027/）
+package_parent_dir = os.path.dirname(project_root)  # 包的父目录（workspace/.../QA-TEST-DocumentatioMT5-cloud/）
+
+# 确保包的父目录在 sys.path 中（不管执行目录是什么）
+if package_parent_dir not in sys.path:
+    sys.path.insert(0, package_parent_dir)
+
+# -------------------------- 直接导入模块（无包前缀，和你之前正常工作时一致） --------------------------
+from config import *
+from VAR.VAR import *
 
 
 # ------------------------------

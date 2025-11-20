@@ -4,16 +4,17 @@ import json
 from collections import defaultdict
 from datetime import datetime
 
-# -------------------------- 条件导入：兼容本地和 Jenkins --------------------------
-try:
-    # 尝试相对导入（Jenkins 以模块方式运行时生效）
-    from .config import *
-    from .VAR.VAR import *
-except ImportError:
-    # 相对导入失败 → 本地直接运行，用绝对导入
-    from lingkuanMT5_1027.config import *
-    from lingkuanMT5_1027.VAR.VAR import *
-from datetime import datetime
+current_script_path = os.path.abspath(__file__)  # report_generator.py 的绝对路径
+project_root = os.path.dirname(current_script_path)  # 项目根目录（lingkuanMT5_1027/）
+package_parent_dir = os.path.dirname(project_root)  # 包的父目录（workspace/.../QA-TEST-DocumentatioMT5-cloud/）
+
+# 确保包的父目录在 sys.path 中（不管执行目录是什么）
+if package_parent_dir not in sys.path:
+    sys.path.insert(0, package_parent_dir)
+
+# -------------------------- 直接导入模块（无包前缀，和你之前正常工作时一致） --------------------------
+from config import *
+from VAR.VAR import *
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
