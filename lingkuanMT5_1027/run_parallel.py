@@ -6,7 +6,7 @@ import io
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 import threading
-from commons.report_generator import generate_simple_report
+from lingkuanMT5_1027.commons.report_generator import generate_simple_report
 from generate_env import generate_merged_env
 
 current_script_path = os.path.abspath(__file__)

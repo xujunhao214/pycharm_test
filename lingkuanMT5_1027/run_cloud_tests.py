@@ -5,7 +5,7 @@ import os
 import subprocess
 import io
 from datetime import datetime
-from commons.report_generator import generate_simple_report
+from lingkuanMT5_1027.commons.report_generator import generate_simple_report
 import xml.etree.ElementTree as ET
 
 
