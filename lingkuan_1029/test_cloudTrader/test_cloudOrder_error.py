@@ -15,12 +15,12 @@ SKIP_REASON = "跳过此用例"
 class TestCloudOrdersenderror:
     @allure.story("场景1： 云策略列表-策略账号超过最大手数")
     @allure.description("""
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 获取该服务器最大手数
-      2. 云策略列表-分配下单，策略账号进行开仓
-    - 预期结果：开仓失败，超过最大手数限制
-    """)
+        ### 测试说明
+        - 前置条件：有云策略和云跟单
+          1. 获取该服务器最大手数
+          2. 云策略列表-分配下单，策略账号进行开仓
+        - 预期结果：开仓失败，超过最大手数限制
+        """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @pytest.mark.usefixtures("class_random_str")

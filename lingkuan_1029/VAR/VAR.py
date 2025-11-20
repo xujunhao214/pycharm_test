@@ -13,12 +13,17 @@ JENKINS_USERNAME = "Test"
 JENKINS_PASSWORD = "28y6yyrcnfE3WSxF"
 
 # 优化时间格式：
-DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
-
+# DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
+DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+DATETIME_INIT = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 # 获取当前时间
 current_time = datetime.datetime.now()
 # 计算15天后的时间
 future_time = current_time + datetime.timedelta(days=30)
+# 计算1天前的时间
+old_time = current_time - datetime.timedelta(days=1)
+# 计算5天前的时间
+five_time = (current_time - datetime.timedelta(days=5)).strftime("%Y-%m-%d %H:%M:%S")
 # 格式化为指定字符串格式
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 
@@ -40,4 +45,4 @@ SLEEP_SECONDS = 1
 MFA_SECRET_KEY = "GV5S4LV4CLXUUXVMJBZQITGOEZ6YOTZ4RTABZBEZ4WXWPFAB3DYA"
 
 # 项目名称
-PROJECT_NAME = "自研跟单1.5.0"
+PROJECT_NAME = "MT4自研跟单1.5.0"
