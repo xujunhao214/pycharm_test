@@ -1,0 +1,416 @@
+{
+  "uid" : "d0728357d632dc4d",
+  "name" : "跟单软件看板-VPS数据-新增策略账号",
+  "fullName" : "test_vps.test_create.TestCreate#test_add_trader",
+  "historyId" : "1fed20b0c1cc0ab03d6bdf90239e5107",
+  "time" : {
+    "start" : 1763619944991,
+    "stop" : 1763620006224,
+    "duration" : 61233
+  },
+  "status" : "failed",
+  "statusMessage" : "AssertionError: Failed: 新增策略账号失败（状态码不匹配）",
+  "statusTrace" : "self = <lingkuanMT5_1120.test_vps.test_create.TestCreate object at 0x0000027C5500EFD0>\nclass_random_str = 'zdh4a9924'\nvar_manager = <lingkuanMT5_1120.commons.variable_manager.VariableManager object at 0x0000027C54E82310>\nlogged_session = <lingkuanMT5_1120.commons.session.EnvironmentSession object at 0x0000027C55024C70>\nencrypted_password = '4d490499c86409791b0800ba36b9665c'\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"跟单软件看板-VPS数据-新增策略账号\")\n    def test_add_trader(self, class_random_str, var_manager, logged_session, encrypted_password):\n        # 1. 发送新增策略账号请求\n        new_user = var_manager.get_variable(\"new_user\")\n        data = {\n            \"type\": 0,\n            \"account\": new_user[\"account\"],\n            \"password\": encrypted_password,\n            \"platform\": new_user[\"platform\"],\n            \"remark\": \"\",\n            \"platformId\": \"\",\n            \"templateId\": 1,\n            \"followStatus\": 1,\n            \"cfd\": \"\",\n            \"forex\": \"\",\n            \"followOrderRemark\": 1,\n            \"fixedComment\": \"\",\n            \"commentType\": \"\",\n            \"digits\": \"\",\n            \"platformType\": 1,\n            \"followTraderSymbolEntityList\": []\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/subcontrol/trader',\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n>       self.assert_response_status(\n            response,\n            200,\n            \"新增策略账号失败\"\n        )\n\ntest_vps\\test_create.py:399: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:372: in assert_response_status\n    raise e\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuanMT5_1120.test_vps.test_create.TestCreate object at 0x0000027C5500EFD0>\nresponse = <Response [504]>, expected_status = 200\nerror_msg_prefix = '新增策略账号失败'\n\n    def assert_response_status(self, response, expected_status, error_msg_prefix):\n        \"\"\"断言响应状态码（分层提示优化）\"\"\"\n        with allure.step(\"断言响应状态码\"):\n            actual_status = response.status_code\n            allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n            allure.attach(f\"期望值: {expected_status}\", \"预期状态码\", allure.attachment_type.TEXT)\n            allure.attach(f\"实际值: {actual_status}\", \"实际状态码\", allure.attachment_type.TEXT)\n            allure.attach(response.text, \"响应内容\", allure.attachment_type.TEXT)\n    \n        try:\n>           assert actual_status == expected_status, \\\n                f\"Failed: {error_msg_prefix}（状态码不匹配）\"\nE               AssertionError: Failed: 新增策略账号失败（状态码不匹配）\n\ncommons\\api_base.py:366: AssertionError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "environment",
+    "time" : {
+      "start" : 1763619923946,
+      "stop" : 1763619923946,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1763619923946,
+      "stop" : 1763619924593,
+      "duration" : 647
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1763619924593,
+      "stop" : 1763619924594,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "encrypted_password",
+    "time" : {
+      "start" : 1763619944991,
+      "stop" : 1763619944991,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1763619924593,
+      "stop" : 1763619924593,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1763619944501,
+      "stop" : 1763619944991,
+      "duration" : 490
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ {
+      "uid" : "52c5a448690b12c2",
+      "name" : "请求体",
+      "source" : "52c5a448690b12c2.json",
+      "type" : "application/json",
+      "size" : 247
+    }, {
+      "uid" : "edfead397a6074c",
+      "name" : "响应信息",
+      "source" : "edfead397a6074c.json",
+      "type" : "application/json",
+      "size" : 221
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 2,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : true
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1763619923946,
+      "stop" : 1763619923946,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1763619944500,
+      "stop" : 1763619944501,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "class_random_str",
+    "time" : {
+      "start" : 1763619924594,
+      "stop" : 1763619924594,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "AssertionError: Failed: 新增策略账号失败（状态码不匹配）",
+    "statusTrace" : "self = <lingkuanMT5_1120.test_vps.test_create.TestCreate object at 0x0000027C5500EFD0>\nclass_random_str = 'zdh4a9924'\nvar_manager = <lingkuanMT5_1120.commons.variable_manager.VariableManager object at 0x0000027C54E82310>\nlogged_session = <lingkuanMT5_1120.commons.session.EnvironmentSession object at 0x0000027C55024C70>\nencrypted_password = '4d490499c86409791b0800ba36b9665c'\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"跟单软件看板-VPS数据-新增策略账号\")\n    def test_add_trader(self, class_random_str, var_manager, logged_session, encrypted_password):\n        # 1. 发送新增策略账号请求\n        new_user = var_manager.get_variable(\"new_user\")\n        data = {\n            \"type\": 0,\n            \"account\": new_user[\"account\"],\n            \"password\": encrypted_password,\n            \"platform\": new_user[\"platform\"],\n            \"remark\": \"\",\n            \"platformId\": \"\",\n            \"templateId\": 1,\n            \"followStatus\": 1,\n            \"cfd\": \"\",\n            \"forex\": \"\",\n            \"followOrderRemark\": 1,\n            \"fixedComment\": \"\",\n            \"commentType\": \"\",\n            \"digits\": \"\",\n            \"platformType\": 1,\n            \"followTraderSymbolEntityList\": []\n        }\n        response = self.send_post_request(\n            logged_session,\n            '/subcontrol/trader',\n            json_data=data\n        )\n    \n        # 2. 验证响应状态码\n>       self.assert_response_status(\n            response,\n            200,\n            \"新增策略账号失败\"\n        )\n\ntest_vps\\test_create.py:399: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ncommons\\api_base.py:372: in assert_response_status\n    raise e\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuanMT5_1120.test_vps.test_create.TestCreate object at 0x0000027C5500EFD0>\nresponse = <Response [504]>, expected_status = 200\nerror_msg_prefix = '新增策略账号失败'\n\n    def assert_response_status(self, response, expected_status, error_msg_prefix):\n        \"\"\"断言响应状态码（分层提示优化）\"\"\"\n        with allure.step(\"断言响应状态码\"):\n            actual_status = response.status_code\n            allure.attach(response.url, \"请求URL\", allure.attachment_type.TEXT)\n            allure.attach(f\"期望值: {expected_status}\", \"预期状态码\", allure.attachment_type.TEXT)\n            allure.attach(f\"实际值: {actual_status}\", \"实际状态码\", allure.attachment_type.TEXT)\n            allure.attach(response.text, \"响应内容\", allure.attachment_type.TEXT)\n    \n        try:\n>           assert actual_status == expected_status, \\\n                f\"Failed: {error_msg_prefix}（状态码不匹配）\"\nE               AssertionError: Failed: 新增策略账号失败（状态码不匹配）\n\ncommons\\api_base.py:366: AssertionError",
+    "steps" : [ {
+      "name" : "执行 POST 请求",
+      "time" : {
+        "start" : 1763619944991,
+        "stop" : 1763620006222,
+        "duration" : 61231
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "请求详情",
+        "time" : {
+          "start" : 1763619944991,
+          "stop" : 1763619944992,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "57c8bf3b7e3aedd4",
+          "name" : "请求URL",
+          "source" : "57c8bf3b7e3aedd4.txt",
+          "type" : "text/plain",
+          "size" : 18
+        }, {
+          "uid" : "d92e8b6e49689e33",
+          "name" : "请求头",
+          "source" : "d92e8b6e49689e33.json",
+          "type" : "application/json",
+          "size" : 234
+        }, {
+          "uid" : "f5b637ad4b74ba97",
+          "name" : "请求体（JSON）",
+          "source" : "f5b637ad4b74ba97.json",
+          "type" : "application/json",
+          "size" : 374
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 0,
+        "hasContent" : true
+      }, {
+        "name" : "响应详情",
+        "time" : {
+          "start" : 1763620005212,
+          "stop" : 1763620005214,
+          "duration" : 2
+        },
+        "status" : "passed",
+        "steps" : [ ],
+        "attachments" : [ {
+          "uid" : "c18293909d862052",
+          "name" : "响应状态码",
+          "source" : "c18293909d862052.txt",
+          "type" : "text/plain",
+          "size" : 3
+        }, {
+          "uid" : "bde86089d4c246e6",
+          "name" : "响应头",
+          "source" : "bde86089d4c246e6.json",
+          "type" : "application/json",
+          "size" : 161
+        }, {
+          "uid" : "cd11753b61b0106b",
+          "name" : "响应体（文本）",
+          "source" : "cd11753b61b0106b.txt",
+          "type" : "text/plain",
+          "size" : 167
+        } ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 0,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 6,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 2,
+      "hasContent" : true
+    }, {
+      "name" : "断言响应状态码",
+      "time" : {
+        "start" : 1763620006222,
+        "stop" : 1763620006223,
+        "duration" : 1
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "f5c7aa7986bf46ba",
+        "name" : "请求URL",
+        "source" : "f5c7aa7986bf46ba.txt",
+        "type" : "text/plain",
+        "size" : 42
+      }, {
+        "uid" : "4196ca15da989972",
+        "name" : "预期状态码",
+        "source" : "4196ca15da989972.txt",
+        "type" : "text/plain",
+        "size" : 14
+      }, {
+        "uid" : "5a3cd9520c739aff",
+        "name" : "实际状态码",
+        "source" : "5a3cd9520c739aff.txt",
+        "type" : "text/plain",
+        "size" : 14
+      }, {
+        "uid" : "27fffc995c5a97e",
+        "name" : "响应内容",
+        "source" : "27fffc995c5a97e.txt",
+        "type" : "text/plain",
+        "size" : 167
+      } ],
+      "parameters" : [ ],
+      "attachmentsCount" : 4,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : true
+    }, {
+      "name" : "状态码断言失败",
+      "time" : {
+        "start" : 1763620006223,
+        "stop" : 1763620006223,
+        "duration" : 0
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ {
+        "uid" : "9496713c52af91f6",
+        "name" : "断言结果",
+        "source" : "9496713c52af91f6.txt",
+        "type" : "text/plain",
+        "size" : 24
+      } ],
+      "parameters" : [ ],
+      "attachmentsCount" : 1,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "ff6c4740c17f300f",
+      "name" : "log",
+      "source" : "ff6c4740c17f300f.txt",
+      "type" : "text/plain",
+      "size" : 1960
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 12,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 5,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1763620193791,
+      "stop" : 1763620193793,
+      "duration" : 2
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1763620006381,
+      "stop" : 1763620006382,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1763620006382,
+      "stop" : 1763620006382,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-创建数据-为VPS测试准备"
+  }, {
+    "name" : "tag",
+    "value" : "url('vps')"
+  }, {
+    "name" : "tag",
+    "value" : "flaky(reruns=3, reruns_delay=5)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "87348-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "flaky(reruns=3, reruns_delay=5)", "url('vps')" ]
+  },
+  "source" : "d0728357d632dc4d.json",
+  "parameterValues" : [ ]
+}
