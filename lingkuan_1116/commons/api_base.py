@@ -1488,7 +1488,7 @@ class APITestBase:
                 f"实际值: {actual_value}\n"
                 f"比较操作: {op.value}\n"
                 f"预期值: {expected_value}\n"
-                f"容差设置(rel/abs): {rel_tol}/{abs_tol}\n"
+                # f"容差设置(rel/abs): {rel_tol}/{abs_tol}\n"
                 f"是否通过: {'是' if result else '否'}"
             )
 

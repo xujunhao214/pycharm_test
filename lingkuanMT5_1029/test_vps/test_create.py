@@ -389,21 +389,22 @@ class TestCreate(APITestBase):
         # 1. 发送新增策略账号请求
         new_user = var_manager.get_variable("new_user")
         data = {
+            "type": 0,
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "remark": new_user["remark"],
-            "platformId": new_user["platformId"],
-            "platformType": 1,
-            "type": 0,
+            "remark": "",
+            "platformId": "",
             "templateId": 1,
             "followStatus": 1,
             "cfd": "",
             "forex": "",
             "followOrderRemark": 1,
-            "fixedComment": new_user["fixedComment"],
-            "commentType": new_user["commentType"],
-            "digits": new_user["digits"]
+            "fixedComment": "",
+            "commentType": "",
+            "digits": "",
+            "platformType": 1,
+            "followTraderSymbolEntityList": []
         }
         response = self.send_post_request(
             logged_session,

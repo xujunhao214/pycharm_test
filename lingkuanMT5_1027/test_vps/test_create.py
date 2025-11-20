@@ -365,108 +365,6 @@ class TestCreate(APITestBase):
         logging.info(f"获取的可见用户信息：{MT5vps_user_data}")
         var_manager.set_runtime_variable("MT5vps_user_data", MT5vps_user_data)
 
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-新增vps")
-    def test_create_vps(self, class_random_str, logged_session, var_manager):
-        # 1. 发送新增vps请求
-        add_VPS = var_manager.get_variable("add_VPS")
-        MT5vps_user_data = var_manager.get_variable("MT5vps_user_data")
-        MT5vps_group_id = var_manager.get_variable("MT5vps_group_id")
-        data = {
-            "ipAddress": add_VPS["ipAddress"],
-            "name": "测试",
-            "expiryDate": DATETIME_ENDTIME,
-            "remark": "MT5测试VPS",
-            "isOpen": 1,
-            "isActive": 1,
-            "roleList": MT5vps_user_data,
-            "isSelectAccount": 1,
-            "isMonitorRepair": 1,
-            "isSpecializedRepair": 1,
-            "isAutoRepair": 1,
-            "groupId": f"{MT5vps_group_id}",
-            "sort": 1000
-        }
-        response = self.send_post_request(
-            logged_session,
-            '/mascontrol/vps',
-            json_data=data,
-
-        )
-
-        # 2. 判断是否添加成功
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("数据库校验-VPS列表-新增vps")
-    def test_dbquery_vps(self, class_random_str, var_manager, db_transaction):
-        with allure.step("1. 查询数据库验证是否新增成功"):
-            add_VPS = var_manager.get_variable("add_VPS")
-
-            # 执行数据库查询
-            db_data = self.query_database(
-                db_transaction,
-                f"SELECT * FROM follow_vps WHERE ip_address=%s AND deleted=%s",
-                (add_VPS["ipAddress"], add_VPS["deleted"],)
-            )
-
-            # 提取数据库中的值
-            if not db_data:
-                pytest.fail("数据库查询结果为空")
-
-            MT5vps_list_id = db_data[0]["id"]
-            logging.info(f"新增vps的id: {MT5vps_list_id}")
-            var_manager.set_runtime_variable("MT5vps_list_id", MT5vps_list_id)
-
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-获取要复制的VPS的ID")
-    def test_get_MT5vps_pageid(self, class_random_str, logged_session, var_manager):
-        # 1. 请求VPS列表接口
-        list_query = var_manager.get_variable("list_query")
-        response = self.send_get_request(
-            logged_session,
-            'mascontrol/vps/page',
-            params=list_query
-        )
-
-        # 2. 获取要复制的VPS的ID
-        MT5vps_page_id = response.extract_jsonpath("$.data.list[1].id")
-        logging.info(f"获取vps的id：{MT5vps_page_id}")
-        var_manager.set_runtime_variable("MT5vps_page_id", MT5vps_page_id)
-
-    @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-复制默认节点")
-    def test_MT5vps_copyDefaultNode(self, class_random_str, logged_session, var_manager):
-        # 1. 请求VPS复制默认节点接口
-        MT5vps_page_id = var_manager.get_variable("MT5vps_page_id")
-        MT5vps_list_id = var_manager.get_variable("MT5vps_list_id")
-        data = {"oldVpsId": MT5vps_list_id, "newVpsId": [MT5vps_page_id]}
-        response = self.send_put_request(
-            logged_session,
-            '/mascontrol/vps/copyDefaultNode',
-            json_data=data
-        )
-
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "服务器IP不可用"
-        )
-
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
-
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-新增策略账号")
@@ -474,21 +372,22 @@ class TestCreate(APITestBase):
         # 1. 发送新增策略账号请求
         new_user = var_manager.get_variable("new_user")
         data = {
+            "type": 0,
             "account": new_user["account"],
             "password": encrypted_password,
             "platform": new_user["platform"],
-            "remark": new_user["remark"],
-            "platformId": new_user["platformId"],
-            "platformType": 1,
-            "type": 0,
+            "remark": "",
+            "platformId": "",
             "templateId": 1,
             "followStatus": 1,
             "cfd": "",
             "forex": "",
             "followOrderRemark": 1,
-            "fixedComment": new_user["fixedComment"],
-            "commentType": new_user["commentType"],
-            "digits": new_user["digits"]
+            "fixedComment": "",
+            "commentType": "",
+            "digits": "",
+            "platformType": 1,
+            "followTraderSymbolEntityList": []
         }
         response = self.send_post_request(
             logged_session,
