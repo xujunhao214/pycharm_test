@@ -5,7 +5,7 @@ import os
 import subprocess
 import io
 from datetime import datetime
-from report_generator import generate_simple_report
+from commons.report_generator import generate_simple_report
 import xml.etree.ElementTree as ET
 
 
@@ -37,7 +37,7 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",  # 清理旧结果，避免数据残留
 
         # "test_cloudTrader/test_create.py",
-        # "test_cloudTrader/test_lianxi.py",
+        "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
         # "test_cloudTrader/test_getAccountDataPage.py",
         # "test_cloudTrader/test_cloudOrderSendbuy.py",
