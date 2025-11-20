@@ -11,8 +11,8 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 from collections import defaultdict
-from lingkuan_1029.config import ENV_CONFIG, Environment
-from lingkuan_1029.VAR.VAR import *
+from lingkuanMT5_1027.config import ENV_CONFIG, Environment
+from lingkuanMT5_1027.VAR.VAR import *
 from datetime import datetime
 
 
