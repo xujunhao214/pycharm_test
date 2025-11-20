@@ -1,5 +1,8 @@
 import json
 import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from collections import defaultdict
 from lingkuan_1116.config import ENV_CONFIG, Environment
 from lingkuan_1116.VAR.VAR import *
@@ -246,9 +249,9 @@ def generate_simple_report(allure_results_dir, env, report_path):
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_content)
     print(
-        f"✅ 简化版报告已生成：{report_path}\n"
-        f"📊 全局统计：共{total}条用例，实际执行{executed_total}条，失败{failed}条，跳过{skipped}条，整体通过率：{global_pass_rate:.2f}%\n"
-        f"📋 涉及模块数：{len(module_stats)}个"
+        f"简化版报告已生成：{report_path}\n"
+        f"全局统计：共{total}条用例，实际执行{executed_total}条，失败{failed}条，跳过{skipped}条，整体通过率：{global_pass_rate:.2f}%\n"
+        f"涉及模块数：{len(module_stats)}个"
     )
 
 
