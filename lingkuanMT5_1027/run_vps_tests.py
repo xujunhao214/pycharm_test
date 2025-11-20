@@ -6,7 +6,7 @@ import subprocess
 import io
 import json
 from datetime import datetime
-from lingkuanMT5_1027.commons.report_generator import generate_simple_report
+from report_generator import generate_simple_report
 import xml.etree.ElementTree as ET
 
 

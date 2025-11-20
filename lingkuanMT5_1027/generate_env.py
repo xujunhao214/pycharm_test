@@ -3,16 +3,6 @@ import xml.etree.ElementTree as ET
 import argparse
 import logging
 from enum import Enum
-import sys
-
-# 定位项目根目录（和 run_cloud_tests.py 完全一致）
-current_script_path = os.path.abspath(__file__)
-project_root = os.path.dirname(current_script_path)
-
-# 关键：把项目根目录添加到 Python 搜索路径（确保能导入 config.py、VAR 等）
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-
 from lingkuanMT5_1027.VAR.VAR import *
 
 

@@ -5,7 +5,7 @@ import os
 import subprocess
 import io
 from datetime import datetime
-from lingkuanMT5_1027.commons.report_generator import generate_simple_report
+from report_generator import generate_simple_report
 import xml.etree.ElementTree as ET
 
 
@@ -16,7 +16,6 @@ def run_cloud_tests(env: str = "test"):
 
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
-    sys.path.insert(0, project_root)
 
     # 定义目录路径（Cloud 独立目录，避免与 VPS 冲突）
     report_dir = os.path.join(project_root, "report", "cloud_results")  # allure结果目录
