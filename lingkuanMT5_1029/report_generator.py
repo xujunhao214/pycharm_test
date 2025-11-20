@@ -1,5 +1,9 @@
 import json
+import sys
 import os
+
+# 新增：添加项目根目录到Python路径（解决Jenkins导入问题）
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from collections import defaultdict
 from lingkuanMT5_1029.config import ENV_CONFIG, Environment
 from lingkuanMT5_1029.VAR.VAR import *
