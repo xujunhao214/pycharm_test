@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from lingkuan_MT4DE.VAR.VAR import *
+from lingkuan_1114.VAR.VAR import *
 from typing import Dict, Any, Optional, List
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class VariableManager:
         """
         self.env = env
         self.data_dir = data_dir
-        self.test_group = test_group  # 新增：测试组标识，实现并行隔离
+        self.test_group = test_group
         self.static_vars = {}
         self.runtime_vars = {}
         self.load_static_variables()
@@ -90,9 +90,19 @@ class VariableManager:
             return self._get_nested_variable(self.static_vars, name, default)
 
     def set_runtime_variable(self, name: str, value: Any) -> None:
-        """设置运行时变量并保存到文件（逻辑不变）"""
+        """
+        设置运行时变量并保存到文件（支持空值覆盖旧数据）
+        :param name: 变量名（支持嵌套，如"a.b.c"）
+        :param value: 变量值（可为空：None、""、[]等）
+        """
+        # 直接设置变量（无论值是否为空，强制覆盖旧数据）
         self._set_nested_variable(self.runtime_vars, name, value)
         self.save_runtime_variables()
+        # 补充日志：明确记录空值覆盖行为
+        if value is None or value == "" or (isinstance(value, list) and len(value) == 0):
+            logger.info(f"[{DATETIME_NOW}] 运行时变量已覆盖（空值）: {name} = {value}")
+        else:
+            logger.info(f"[{DATETIME_NOW}] 运行时变量已设置: {name} = {value}")
 
     def save_runtime_variables(self) -> None:
         """保存运行时变量到文件（根据测试组隔离）"""

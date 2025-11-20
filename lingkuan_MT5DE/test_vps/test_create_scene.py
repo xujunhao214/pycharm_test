@@ -16,7 +16,7 @@ class TestCreate_Scene(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("新增跟单账号（仅使用后6个数据与模板匹配）")
-    def test_import_addSlave(self, var_manager, logged_session, encrypted_password):
+    def test_import_addSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         MT5vps_user_count = var_manager.get_variable("MT5vps_user_count", 0)
         if MT5vps_user_count < 7:
@@ -123,6 +123,7 @@ class TestCreate_Scene(APITestBase):
                     "cfd": param["Cfd"],
                     "forex": "",
                     "abRemark": "",
+                    "followTraderSymbolEntityList": [],
                     "platformType": 1
                 }
 
@@ -143,7 +144,7 @@ class TestCreate_Scene(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-VPS数据-批量新增跟单账号")
-    def test_dbimport_addSlave(self, var_manager, db_transaction):
+    def test_dbimport_addSlave(self, class_random_str, var_manager, db_transaction):
         # 1. 校验总用户数（需至少7个，才能取后6个）
         MT5vps_user_count = var_manager.get_variable("MT5vps_user_count", 0)
         if MT5vps_user_count < 7:
@@ -220,7 +221,7 @@ class TestCreate_Scene(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
-    def test_update_addSlave(self, var_manager, logged_session, encrypted_password):
+    def test_update_addSlave(self, class_random_str, var_manager, logged_session, encrypted_password):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         MT5vps_user_count = var_manager.get_variable("MT5vps_user_count", 0)
         if MT5vps_user_count < 7:
@@ -251,7 +252,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "",
+                "remark": "固定手数5倍",
                 "Cfd": "",
                 "mode_desc": "固定手数5倍"
             },
@@ -259,15 +260,15 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": MT5vps_template_id,
-                "remark": "",
+                "remark": "品种3倍",
                 "Cfd": "",
-                "mode_desc": "品种3倍"
+                "mode_desc": "品种（3倍）"
             },
             {
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "净值比例",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -275,7 +276,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -283,7 +284,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -291,7 +292,7 @@ class TestCreate_Scene(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "",
+                "remark": "修改币种",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },
@@ -348,6 +349,7 @@ class TestCreate_Scene(APITestBase):
                     "abRemark": "",
                     "platformType": 1,
                     "id": param["id"],
+                    "followTraderSymbolEntityList": [],
                     "platformId": platformId
                 }
 
@@ -364,3 +366,48 @@ class TestCreate_Scene(APITestBase):
                     response, "$.msg", "success",
                     f"账号{param['account']}响应异常（模板：{param['desc']}）"
                 )
+
+    @pytest.mark.url("vps")
+    @allure.title("VPS策略账号-跟单账号平仓")
+    def test_seng_close(self, class_random_str, logged_session, var_manager):
+        # 1. 获取总数量（控制循环范围）
+        MT5vps_user_count = var_manager.get_variable("MT5vps_user_count", 0)
+        # 校验总数量合理性（确保有足够的变量可获取）
+        assert MT5vps_user_count >= 2, f"MT5vps_user_count={MT5vps_user_count}，数量不足，无法执行批量下单"
+
+        # 2. 循环获取两组变量并执行请求（按索引对应：addslave_ids_1→accounts_2、addslave_ids_2→accounts_3...）
+        # 循环范围：i 对应 vps_addslave_ids 的后缀（1 到 MT5vps_user_count-1）
+        # j 对应 vps_user_accounts 的后缀（2 到 MT5vps_user_count）
+        for i, j in zip(range(1, MT5vps_user_count), range(2, MT5vps_user_count + 1)):
+            # 动态获取两组变量
+            addslave_id = var_manager.get_variable(f"MT5vps_addslave_ids_{i}")
+            user_account = var_manager.get_variable(f"MT5vps_user_accounts_{j}")
+
+            # 验证变量存在（避免空值导致接口报错）
+            assert addslave_id is not None, f"变量 MT5vps_addslave_ids_{i} 未找到或值为空"
+            assert user_account is not None, f"变量 MT5vps_user_accounts_{j} 未找到或值为空"
+
+            # 3. 构造请求数据（每组变量对应一次请求）
+            data = {
+                "traderId": addslave_id,
+                "account": user_account,
+                "ifAccount": True,
+                "isCloseAll": 1
+            }
+
+            with allure.step(f"1.执行下单请求（traderId={addslave_id}，account={user_account}）"):
+                # 4. 发送接口请求
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/trader/orderClose',
+                    json_data=data
+                )
+            with allure.step(f"2.验证响应结果"):
+                # 5. 验证响应结果（每个请求单独校验）
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    f"traderId={addslave_id}、account={user_account} 下单失败，响应msg字段应为success"
+                )
+                logging.info(f"traderId={addslave_id}、account={user_account} 下单成功")

@@ -2,7 +2,7 @@ import datetime
 
 # 加密密钥
 MT4 = "FOLLOWERSHIP4KEY"
-PASSWORD = "Test123456"
+PASSWORD = "Test123456!"
 
 # 飞书机器人WEBHOOK_URL
 WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f"
@@ -23,15 +23,15 @@ future_time = current_time + datetime.timedelta(days=30)
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
 
 # mysql查询语句，查询最近时间的数据
-MYSQL_TIME = 1  # 时间范围（分钟）
+MYSQL_TIME = 3  # 时间范围（分钟）
 WAIT_TIMEOUT = 30  # 数据库查询等待超时时间（秒）
 DELETE_WAIT_TIMEOUT = 5  # 数据库删除查询超时时间（秒）
 POLL_INTERVAL = 2  # 轮询间隔（秒）
 STBLE_PERIOD = 2  # 稳定期（秒）：数据连续2秒不变则认为加载完成
-TIMEZONE_OFFSET = 5  # 时区偏移量（小时）
+TIMEZONE_OFFSET = 6  # 时区偏移量（小时）
 
 # api基类执行完等待时间
-SLEEP_SECONDS = 3
+SLEEP_SECONDS = 1
 
 # MFA登录生成新的验证码秘钥(xujunhao)
 # MFA_SECRET_KEY = "APVHUYXFWW4DZWT7L4HI3EO4Y7VY4J2VEXE4JGZNAVCYRSAOVNQQ"
@@ -40,4 +40,4 @@ SLEEP_SECONDS = 3
 MFA_SECRET_KEY = "GV5S4LV4CLXUUXVMJBZQITGOEZ6YOTZ4RTABZBEZ4WXWPFAB3DYA"
 
 # 项目名称
-PROJECT_NAME = "自研跟单V1.5.0"
+PROJECT_NAME = "自研跟单1.5.0"

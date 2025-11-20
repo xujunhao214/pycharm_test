@@ -103,7 +103,7 @@ class TestCreate(APITestBase):
 
             # 提取数据库中的值
             if not db_data:
-                pytest.fail("数据库查询结果为空，订单可能没有入库")
+                pytest.fail("数据库查询结果为空")
 
             MT4platformId = db_data[0]["id"]
             logging.info(f"平台ID: {MT4platformId}")

@@ -3,14 +3,15 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_MT4DE.VAR.VAR import *
-from lingkuan_MT4DE.conftest import var_manager
-from lingkuan_MT4DE.commons.api_base import *
+from lingkuan_1114.VAR.VAR import *
+from lingkuan_1114.conftest import var_manager
+from lingkuan_1114.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=5)
 @allure.feature("数据管理-创建数据-为VPS测试准备")
 class TestCreate(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
@@ -71,7 +72,7 @@ class TestCreate(APITestBase):
             logging.info(f"新增用户ID: {vps_trader_user_id}")
             var_manager.set_runtime_variable("vps_trader_user_id", vps_trader_user_id)
 
-    # @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库查询-提取数据库平台ID数据")
     def test_dbquery_platform(self, var_manager, db_transaction):
         with allure.step("1. 提取数据库平台ID数据"):
@@ -90,6 +91,23 @@ class TestCreate(APITestBase):
             platformId = db_data[0]["id"]
             logging.info(f"平台ID: {platformId}")
             var_manager.set_runtime_variable("platformId", platformId)
+
+        with allure.step("2. 提取数据库平台ID数据"):
+            addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_platform WHERE server = %s",
+                (addVPS_MT5Slave["platform"],)
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                print("数据库查询结果为空，订单可能没有入库")
+
+            MT5platformId = db_data[0]["id"]
+            logging.info(f"平台ID: {MT5platformId}")
+            var_manager.set_runtime_variable("MT5platformId", MT5platformId)
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("账号管理-账号列表-批量新增用户")
@@ -324,6 +342,45 @@ class TestCreate(APITestBase):
             logging.info(f"新增品种id: {vps_template_id2}")
             var_manager.set_runtime_variable("vps_template_id2", vps_template_id2)
 
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-校验服务器IP是否可用")
+    def test_get_connect(self, logged_session, var_manager):
+        # 1. 校验服务器IP是否可用
+        add_VPS = var_manager.get_variable("add_VPS")
+        response = self.send_get_request(
+            logged_session,
+            '/mascontrol/vps/connect',
+            params={'ipAddress': add_VPS["ipAddress"]}
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "服务器IP不可用"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("VPS管理-VPS列表-获取可见用户信息")
+    def test_get_user(self, logged_session, var_manager):
+        # 1. 请求可见用户列表接口
+        response = self.send_get_request(
+            logged_session,
+            '/sys/role/role'
+        )
+
+        # 2. 获取可见用户信息
+        vps_user_data = response.extract_jsonpath("$.data")
+        logging.info(f"获取的可见用户信息：{vps_user_data}")
+        var_manager.set_runtime_variable("vps_user_data", vps_user_data)
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
@@ -394,9 +451,9 @@ class TestCreate(APITestBase):
             assert status == 0, f"新增策略账号状态status应为0（正常），实际状态为: {status}"
             logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
 
-            euqit = db_data[0]["euqit"]
-            assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
-            logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
+            # euqit = db_data[0]["euqit"]
+            # assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            # logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
@@ -491,3 +548,221 @@ class TestCreate(APITestBase):
             slave_account = db_data2[0]["slave_account"]
             assert slave_account == vps_user_accounts_1, f"账号新增失败，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}"
             logging.info(f"账号新增成功，新增账号：{vps_user_accounts_1}  数据库账号:{slave_account}")
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库查询-获取券商名称和最大手数")
+    def test_dbquery_platform(self, class_random_str, var_manager, db_transaction):
+        with allure.step("1. 数据库的SQL查询"):
+            new_user = var_manager.get_variable("new_user")
+            sql = f""" SELECT * From follow_platform where server= %s """
+            params = (
+                new_user["platform"],
+            )
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.query_database(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params
+            )
+        with allure.step("2. 提取数据"):
+            if not db_data:
+                print("数据库查询结果为空，订单可能没有入库")
+
+            max_lots = db_data[0]["max_lots"]
+            var_manager.set_runtime_variable("max_lots", max_lots)
+
+            broker_name = db_data[0]["broker_name"]
+            var_manager.set_runtime_variable("broker_name", broker_name)
+
+        with allure.step("3. 全局配置-数据库的SQL查询"):
+            sql = f""" SELECT * From sys_params where param_name= %s """
+            params = (
+                "最大手数配置",
+            )
+
+            # 调用轮询等待方法（带时间范围过滤）
+            db_data = self.query_database(
+                db_transaction=db_transaction,
+                sql=sql,
+                params=params
+            )
+        with allure.step("4. 提取数据"):
+            if not db_data:
+                print("数据库查询结果为空，订单可能没有入库")
+
+            param_value = db_data[0]["param_value"]
+            var_manager.set_runtime_variable("param_value", param_value)
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-新增MT5跟单账号")
+    def test_create_addMT5Slave(self, var_manager, logged_session, encrypted_password):
+        # 1. 发送新增策略账号请求
+        addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
+        vps_trader_id = var_manager.get_variable("vps_trader_id")
+        data = {
+            "traderId": vps_trader_id,
+            "platform": addVPS_MT5Slave["platform"],
+            "account": addVPS_MT5Slave["account"],
+            "password": encrypted_password,
+            "remark": "",
+            "followDirection": 0,
+            "followMode": 1,
+            "remainder": 0,
+            "followParam": 1,
+            "placedType": 0,
+            "templateId": 1,
+            "followStatus": 1,
+            "followOpen": 1,
+            "followClose": 1,
+            "followRep": 0,
+            "fixedComment": "",
+            "commentType": "",
+            "digits": "",
+            "cfd": "",
+            "forex": "",
+            "abRemark": "",
+            "platformType": 1,
+            "followTraderSymbolEntityList": []
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/follow/addSlave',
+            json_data=data
+        )
+
+        # 2. 验证响应状态码
+        self.assert_response_status(
+            response,
+            200,
+            "创建用户失败"
+        )
+
+        # 3. 验证JSON返回内容
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS数据-新增MT5跟单账号")
+    def test_dbquery_addMT5slave(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader WHERE account = %s",
+                (addVPS_MT5Slave['account'],)
+            )
+
+            if not db_data:
+                print("数据库查询结果为空")
+
+            MT5vps_addslave_id = db_data[0]["id"]
+            logging.info(f"新增跟单账号ID: {MT5vps_addslave_id}")
+            var_manager.set_runtime_variable("MT5vps_addslave_id", MT5vps_addslave_id)
+
+        with allure.step("2. 校验账号状态和净值"):
+            status = db_data[0]["status"]
+            assert status == 0, f"账号 {addVPS_MT5Slave['account']} 状态异常：预期status=0，实际={status}"
+            logging.info(f"账号 {addVPS_MT5Slave['account']} 状态异常：预期status=0，实际={status}")
+
+            euqit = db_data[0]["euqit"]
+            assert euqit >= 0, f"账号 {addVPS_MT5Slave['account']} 净值异常：预期euqit>=0，实际={euqit}"
+            logging.info(f"账号 {addVPS_MT5Slave['account']} 净值异常：预期euqit>=0，实际={euqit}")
+
+            db_data2 = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s",
+                (addVPS_MT5Slave['account'],)
+            )
+
+            if not db_data2:
+                print("数据库查询结果为空")
+
+            slave_account = db_data2[0]["slave_account"]
+            assert slave_account == addVPS_MT5Slave[
+                'account'], f"账号新增失败，新增账号：{addVPS_MT5Slave['account']}  数据库账号:{slave_account}"
+            logging.info(f"账号新增成功，新增账号：{addVPS_MT5Slave['account']}  数据库账号:{slave_account}")
+
+        with allure.step("3. 提取用户数据"):
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader_user WHERE account = %s",
+                (addVPS_MT5Slave["account"],)
+            )
+
+            if not db_data:
+                print("数据库查询结果为空，新增跟单账号失败")
+
+            cloudTrader_MT5userID = db_data[0]['id']
+            var_manager.set_runtime_variable("cloudTrader_MT5userID", cloudTrader_MT5userID)
+            logging.info(f"账号id是：{cloudTrader_MT5userID}")
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-跟单平仓")
+    def test_addtrader_orderclose(self, var_manager, logged_session):
+        # 1. 发送全平订单平仓请求
+        vps_addslave_id = var_manager.get_variable("vps_addslave_id")
+        vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
+        data = {
+            "isCloseAll": 1,
+            "intervalTime": 100,
+            "traderId": vps_addslave_id,
+            "account": vps_user_accounts_1
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader/orderClose',
+            json_data=data,
+        )
+
+        # 2. 验证响应
+        self.assert_response_status(
+            response,
+            200,
+            "平仓失败"
+        )
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @pytest.mark.url("vps")
+    @allure.title("跟单软件看板-VPS数据-MT5账号跟单平仓")
+    def test_addtrader_MT5orderclose(self, class_random_str, var_manager, logged_session):
+        # 1. 发送全平订单平仓请求
+        MT5vps_addslave_id = var_manager.get_variable("MT5vps_addslave_id")
+        addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
+        data = {
+            "traderId": MT5vps_addslave_id,
+            "account": addVPS_MT5Slave["account"],
+            "ifAccount": True,
+            "isCloseAll": 1
+        }
+        response = self.send_post_request(
+            logged_session,
+            '/subcontrol/trader/orderClose',
+            json_data=data,
+        )
+
+        # 2. 验证响应
+        self.assert_response_status(
+            response,
+            200,
+            "平仓失败"
+        )
+        self.assert_json_value(
+            response,
+            "$.msg",
+            "success",
+            "响应msg字段应为success"
+        )

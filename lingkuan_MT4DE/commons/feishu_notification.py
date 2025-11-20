@@ -2,8 +2,9 @@ import os
 import requests
 import logging
 from typing import Dict, List
-from lingkuan_MT4DE.VAR.VAR import *
-from lingkuan_MT4DE.commons.enums import Environment
+from lingkuan_1114.VAR.VAR import *
+import statistics
+from lingkuan_1114.commons.enums import Environment
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +49,23 @@ def send_feishu_notification(
     duration = statistics.get("duration", "0.0秒")
     success_rate = statistics.get("success_rate", "0.0%")
 
+    # 提取数字部分并转换为整数秒
+    total_seconds = int(float(duration.replace("秒", "")))
+
+    # 计算时分秒
+    hours = total_seconds // 3600
+    remaining_seconds = total_seconds % 3600
+    minutes = remaining_seconds // 60
+    seconds = remaining_seconds % 60
+
+    # 拼接格式（核心优化部分）
+    if hours > 0:
+        # 有小时时，分钟和秒补零（保持统一格式）
+        duration_hms = f"{hours}时{minutes:02d}分{seconds:02d}秒"
+    else:
+        # 无小时时，分钟不补零，秒补零（更自然的显示）
+        duration_hms = f"{minutes}分{seconds:02d}秒"
+
     # 优先使用函数参数中的environment，其次使用statistics中的env
     env = environment or statistics.get("env", "未知环境")
 
@@ -63,7 +81,7 @@ def send_feishu_notification(
 - **测试组**: {test_group or "未指定"}
 - **开始时间**: {statistics.get("start_time", "未记录")}
 - **结束时间**: {statistics.get("end_time", "未记录")}
-- **执行耗时**: {duration}
+- **执行耗时**: {duration_hms}
 
 **用例统计**:
 - 📊 **总用例数**: {total}

@@ -81,7 +81,7 @@ def run_test_script(script_path: str, env: str = "test") -> tuple:
     if "cloud" in script_name:
         report_dir = os.path.join(PROJECT_ROOT, "report", "cloud_results")
     else:
-        report_dir = os.path.join(PROJECT_ROOT, "report", "MT5vps_results")
+        report_dir = os.path.join(PROJECT_ROOT, "report", "vps_results")
 
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
@@ -111,7 +111,7 @@ def merge_allure_reports(source_dirs: list, merged_dir: str):
 
 def run_all_tests_parallel(env: str = "test"):
     test_scripts = [
-        "run_MT5vps_tests.py",
+        "run_vps_tests.py",
         "run_cloud_tests.py"
     ]
 

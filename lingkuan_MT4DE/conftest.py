@@ -1,26 +1,29 @@
 import pytest
 import pymysql
-from lingkuan_MT4DE.VAR.VAR import *
+from lingkuan_1114.VAR.VAR import *
 import allure
 import logging
 import datetime
 from pymysql import err
 import os
+import json
 import time
 import xml.etree.ElementTree as ET
 from pytest import Config
-from lingkuan_MT4DE.commons.mfa_key import generate_code
-from lingkuan_MT4DE.commons.Encryption_and_decryption import aes_encrypt_str
-from lingkuan_MT4DE.commons.session import EnvironmentSession
-from lingkuan_MT4DE.commons.variable_manager import VariableManager
-from lingkuan_MT4DE.commons.test_tracker import TestResultTracker
-from lingkuan_MT4DE.commons.feishu_notification import send_feishu_notification
-from lingkuan_MT4DE.commons.enums import Environment
-from lingkuan_MT4DE.config import ENV_CONFIG  # 仅导入配置数据
-from lingkuan_MT4DE.commons.redis_utils import RedisClient, get_redis_client
+from lingkuan_1114.commons.mfa_key import generate_code
+from lingkuan_1114.commons.Encryption_and_decryption import aes_encrypt_str
+from lingkuan_1114.commons.session import EnvironmentSession
+from lingkuan_1114.commons.variable_manager import VariableManager
+from lingkuan_1114.commons.test_tracker import TestResultTracker
+from lingkuan_1114.commons.feishu_notification import send_feishu_notification
+from lingkuan_1114.commons.enums import Environment
+from lingkuan_1114.config import ENV_CONFIG  # 仅导入配置数据
+from lingkuan_1114.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
+from DBUtils.PooledDB import PooledDB
+from lingkuan_1114.commons.random_generator import generate_random_str
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +85,11 @@ def logged_session(api_session, var_manager, request, environment):
                 )
 
             response_json = response.json()
+            headers_json = json.dumps(login_data, ensure_ascii=False, indent=2)
+            allure.attach(headers_json, "请求体", allure.attachment_type.JSON)
+            # print(f"响应信息：{response.text}")
+            logging.info(f"登录响应信息：{response.text}")
+            allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
             access_token = response_json.get("data", {}).get("access_token")
             if not access_token:
                 print("测试环境登录响应中未找到access_token", pytrace=False)
@@ -113,6 +121,11 @@ def logged_session(api_session, var_manager, request, environment):
                     response = api_session.post("/sys/auth/login", json=login_payload)
                     response.raise_for_status()  # 触发HTTP错误异常
                     response_json = response.json()
+                    headers_json = json.dumps(login_payload, ensure_ascii=False, indent=2)
+                    allure.attach(headers_json, "请求体", allure.attachment_type.JSON)
+                    # print(f"响应信息：{response.text}")
+                    logging.info(f"登录响应信息：{response.text}")
+                    allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
 
                     if response_json.get("code") != 0:
                         raise ValueError(f"登录失败: {response_json.get('msg')}")
@@ -192,61 +205,113 @@ def test_group(request):
     return ""
 
 
-# 数据库相关夹具
+# 全局连接池
+db_pool = None
+
+
+# --------------------------
+# 1. 数据库配置夹具（兼容旧版本 pymysql）
+# --------------------------
 @pytest.fixture(scope="session")
 def db_config(environment) -> dict:
-    """获取对应环境的数据库配置"""
-    return ENV_CONFIG[environment]["db_config"]
+    """获取数据库配置，过滤不支持的参数"""
+    raw_config = ENV_CONFIG[environment]["db_config"]
 
-
-@pytest.fixture(scope="function")  # 保持function级别，每个用例独立连接
-def db(db_config) -> pymysql.connections.Connection:
-    """数据库连接夹具（每个用例创建新连接，带有重试功能）"""
-    # 解析cursorclass字符串为实际类
-    if isinstance(db_config["cursorclass"], str):
-        module_name, class_name = db_config["cursorclass"].rsplit('.', 1)
+    # 解析 cursorclass（字符串转实际类）
+    if isinstance(raw_config.get("cursorclass"), str):
+        module_name, class_name = raw_config["cursorclass"].rsplit('.', 1)
         module = __import__(module_name, fromlist=[class_name])
-        db_config["cursorclass"] = getattr(module, class_name)
+        raw_config["cursorclass"] = getattr(module, class_name)
 
-    # 重试配置
-    max_retries = 3  # 最大重试次数
-    retry_delay = 5  # 重试间隔时间（秒）
+    # 仅保留 pymysql 旧版本支持的核心参数
+    supported_params = [
+        "host", "port", "user", "password", "database", "charset",
+        "cursorclass", "connect_timeout", "read_timeout", "write_timeout"
+    ]
+    conn_config = {k: v for k, v in raw_config.items() if k in supported_params}
+    conn_config["autocommit"] = False  # 强制关闭自动提交
+    return conn_config
+
+
+# --------------------------
+# 2. 初始化数据库连接池（兼容 DBUtils 1.4）
+# --------------------------
+@pytest.fixture(scope="session", autouse=True)
+def init_db_pool(db_config):
+    global db_pool
+
+    # 自定义创建连接：含隔离级别设置（SQL 方式）
+    def create_connection():
+        """创建连接 + 用 SQL 设置隔离级别（兼容所有 pymysql 版本）"""
+        conn = pymysql.connect(**db_config)
+        # 设置 READ COMMITTED 隔离级别（通过 SQL 语句，无版本限制）
+        with conn.cursor() as cursor:
+            cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;")
+        return conn
+
+    # 初始化连接池（仅用 DBUtils 1.4 支持的参数）
+    db_pool = PooledDB(
+        creator=create_connection,
+        maxconnections=4,  # 并行任务数
+        mincached=2,  # 初始空闲连接数（避免空缓存）
+        maxcached=4,  # 最大空闲连接数
+        blocking=True,  # 连接耗尽时阻塞等待
+        maxshared=0,  # 禁止共享连接（并行安全）
+        reset=True,  # 归还时重置连接状态
+        failures=(err.OperationalError, err.InterfaceError),  # 连接异常重试
+        ping=1,  # 获取连接时 ping 数据库
+    )
+    # print("数据库连接池初始化成功（无兼容性问题）")
+
+
+# --------------------------
+# 3. 数据库连接夹具（修复 open 属性错误）
+# --------------------------
+@pytest.fixture(scope="function")
+def db(init_db_pool) -> pymysql.connections.Connection:
+    """每个用例获取独立连接，用 ping() 判断连接有效性"""
+    max_retries = 3
+    retry_delay = 5
     conn = None
 
-    # 带重试的连接逻辑
     for attempt in range(max_retries):
         try:
-            conn = pymysql.connect(**db_config)
-            # 连接成功，退出重试循环
+            conn = db_pool.connection()  # 从连接池获取包装后的连接
+            # 修复：用 ping() 替代 conn.open 判断连接有效性
+            conn.ping(reconnect=True)  # 若连接失效，自动重连
             break
-        except err.OperationalError as e:
-            # 如果是最后一次尝试，直接抛出异常
+        except (err.OperationalError, err.InterfaceError, IndexError) as e:
             if attempt == max_retries - 1:
                 raise
-            # 打印重试信息
-            print(f"数据库连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
-            print(f"{retry_delay}秒后进行下一次尝试...")
+            print(f"获取连接失败（尝试 {attempt + 1}/{max_retries}）: {str(e)}")
             time.sleep(retry_delay)
         except Exception as e:
-            # 非连接性错误，直接抛出
             raise
 
-    yield conn  # 用例执行期间使用该连接
+    yield conn
 
-    # 用例结束后关闭连接
-    if conn and conn.open:
+    # 归还连接（修复：判断连接有效性的方式）
+    if conn:
         try:
-            conn.close()
+            conn.rollback()  # 回滚未提交事务
+            conn.close()  # 归还到连接池（非真正关闭）
         except Exception as e:
-            print(f"关闭数据库连接时发生错误: {str(e)}")
+            print(f"归还连接失败: {str(e)}")
 
 
-@pytest.fixture(scope="function")  # 每个用例独立事务
+# --------------------------
+# 4. 事务管理夹具（保持不变）
+# --------------------------
+@pytest.fixture(scope="function")
 def db_transaction(db):
-    """数据库事务管理（每个用例独立）"""
-    # 不需要手动begin()，pymysql默认自动提交模式
-    yield db
-    # 用例结束后无需commit/rollback，因为每个用例使用独立连接，且执行完即关闭
+    """每个用例独立事务，自动回滚"""
+    try:
+        yield db
+    finally:
+        try:
+            db.rollback()  # 强制回滚
+        except Exception as e:
+            print(f"事务回滚失败: {str(e)}")
 
 
 # ------------------------------
@@ -373,21 +438,6 @@ def pytest_configure(config):
         "markers",
         "retry(n: int, delay: int): 用例失败后重试n次，每次间隔delay秒"
     )
-
-
-# 处理retry标记，关联到插件配置
-def pytest_collection_modifyitems(items):
-    for item in items:
-        # 获取用例上的retry标记
-        retry_mark = item.get_closest_marker("retry")
-        if retry_mark:
-            # 从标记中提取参数（默认值可根据需求调整）
-            reruns = retry_mark.kwargs.get("n", 3)  # 重试次数
-            reruns_delay = retry_mark.kwargs.get("delay", 5)  # 间隔秒数
-
-            # 动态设置当前用例的重试参数
-            item.config.option.reruns = reruns
-            item.config.option.reruns_delay = reruns_delay
 
 
 def pytest_unconfigure(config):
@@ -541,3 +591,11 @@ def parse_decimal_value(value):
     if isinstance(value, list) and len(value) == 2 and value[0] == 'java.math.BigDecimal':
         return float(value[1])
     return value
+
+
+@pytest.fixture(scope="class")  # 类级别：整个类共享一个实例
+def class_random_str():
+    # 调用你的随机数生成函数（可自定义参数，如长度、是否包含数字等）
+    random_str = generate_random_str(length=9)  # 生成9位随机字符串
+    # print(f"\n【生成备注随机数】：{random_str}")  # 可选：打印生成的值，方便调试
+    return random_str

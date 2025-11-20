@@ -16,7 +16,7 @@ SKIP_REASON = "跳过此用例"
 class TestCreate_importMT5cloudTrader(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("云策略-云策略列表-批量新增云跟单账号")
-    def test_create_importcloudBatchAdd(self, var_manager, logged_session):
+    def test_create_importcloudBatchAdd(self, class_random_str, var_manager, logged_session):
         # 1. 获取账号总数和所有ID
         cloudMaster_id = var_manager.get_variable("cloudMaster_id")
         MT5cloudTrader_account = var_manager.get_variable("MT5cloudTrader_account", 0)
@@ -81,7 +81,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("数据库校验-云策略列表-批量新增云跟单账号")
-    def test_dbquery_cloudBatchAdd(self, var_manager, db_transaction):
+    def test_dbquery_cloudBatchAdd(self, class_random_str, var_manager, db_transaction):
         # 1. 获取账号总数和所有账号信息
         MT5cloudTrader_user_count = var_manager.get_variable("MT5cloudTrader_user_count", 0)
         if MT5cloudTrader_user_count < 0:
@@ -119,7 +119,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
 
     @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("修改跟单账号（仅使用后6个数据与模板匹配）")
-    def test_update_addSlave(self, var_manager, logged_session):
+    def test_update_addSlave(self, class_random_str, var_manager, logged_session):
         # 1. 获取总用户数（需确保至少有7个，才能取后6个）
         MT5cloudTrader_user_count = var_manager.get_variable("MT5cloudTrader_user_count", 0)
         if MT5cloudTrader_user_count < 7:
@@ -141,7 +141,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 0,
                 "followParam": "5.00",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "固定手数5倍",
                 "Cfd": "",
                 "mode_desc": "固定手数5倍"
             },
@@ -149,7 +149,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": MT5cloudTrader_template_id1,
-                "remark": "云跟单账号测试数据",
+                "remark": "品种3倍",
                 "Cfd": "",
                 "mode_desc": "品种3倍"
             },
@@ -157,7 +157,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 2,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "净值比例",
                 "Cfd": "",
                 "mode_desc": "净值比例"
             },
@@ -165,7 +165,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "修改币种",
                 "Cfd": "@",
                 "mode_desc": "修改币种，合约是100"
             },
@@ -173,7 +173,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "修改币种",
                 "Cfd": ".p",
                 "mode_desc": "修改币种，合约是100000"
             },
@@ -181,7 +181,7 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 "followMode": 1,
                 "followParam": "1",
                 "templateId": 1,
-                "remark": "云跟单账号测试数据",
+                "remark": "修改币种",
                 "Cfd": ".min",
                 "mode_desc": "修改币种，合约是10"
             },
@@ -252,4 +252,43 @@ class TestCreate_importMT5cloudTrader(APITestBase):
                 self.assert_json_value(
                     response, "$.msg", "success",
                     f"账号{param['traderList']}响应异常"
+                )
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("云策略列表-跟单账号平仓")
+    def test_addtrader_close(self, logged_session, var_manager):
+        MT5cloudTrader_user_count = var_manager.get_variable("MT5cloudTrader_user_count", 0)
+        # 循环范围：5 到 MT5cloudTrader_user_count（包含两端）
+        for i in range(5, MT5cloudTrader_user_count + 1):
+            # 直接获取变量值（无需创建动态变量）
+            trader_user_id = var_manager.get_variable(f"MT5cloudTrader_traderList_{i}")
+            # 验证变量存在（可选，避免值为None导致请求失败）
+            assert trader_user_id is not None, f"变量 MT5cloudTrader_traderList_{i} 未找到或值为空"
+
+            with allure.step(f"1. 云策略列表-跟单账号平仓（traderUserId={trader_user_id}）"):
+                data = {
+                    "traderUserId": trader_user_id,
+                    "isCloseAll": 1
+                }
+
+                # 1. 发送新增VPS组别请求
+                response = self.send_post_request(
+                    logged_session,
+                    "/mascontrol/cloudTrader/orderClose",
+                    json_data=data
+                )
+            with allure.step(f"2. 验证云策略列表-跟单账号平仓结果"):
+                # 2. 验证响应状态码
+                self.assert_response_status(
+                    response,
+                    200,
+                    f"云策略组别平仓失败（traderUserId={trader_user_id}）"
+                )
+
+                # 3. 验证JSON返回内容
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    f"响应msg字段应为success（traderUserId={trader_user_id}）"
                 )

@@ -1,0 +1,358 @@
+{
+  "uid" : "d221b91160cc4e77",
+  "name" : "数据库校验-VPS数据-新增MT4跟单账号",
+  "fullName" : "test_cloudTrader.test_create.TestCreate_MT5cloudTrader#test_dbquery_addMT4slave",
+  "historyId" : "418f1df7535c5718e3614d1089187f8b",
+  "time" : {
+    "start" : 1763110867579,
+    "stop" : 1763110867719,
+    "duration" : 140
+  },
+  "status" : "failed",
+  "statusMessage" : "Failed: 数据库查询结果为空",
+  "statusTrace" : "self = <lingkuanMT5_1112.test_cloudTrader.test_create.TestCreate_MT5cloudTrader object at 0x0000019013AFE370>\nvar_manager = <lingkuanMT5_1112.commons.variable_manager.VariableManager object at 0x0000019013AB1130>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x0000019013AEBC40>\n\n    @allure.title(\"数据库校验-VPS数据-新增MT4跟单账号\")\n    def test_dbquery_addMT4slave(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            addCloud_MT4Slave = var_manager.get_variable(\"addCloud_MT4Slave\")\n            # 执行数据库查询\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader WHERE account = %s\",\n                (addCloud_MT4Slave['account'],)\n            )\n    \n            if not db_data:\n                pytest.fail(\"数据库查询结果为空\")\n    \n            MT4vps_addslave_id = db_data[0][\"id\"]\n            logging.info(f\"新增跟单账号ID: {MT4vps_addslave_id}\")\n            var_manager.set_runtime_variable(\"MT4vps_addslave_id\", MT4vps_addslave_id)\n    \n        with allure.step(\"2. 校验账号状态和净值\"):\n            status = db_data[0][\"status\"]\n            assert status == 0, f\"账号 {addCloud_MT4Slave['account']} 状态异常：预期status=0，实际={status}\"\n            logging.info(f\"账号 {addCloud_MT4Slave['account']} 状态异常：预期status=0，实际={status}\")\n    \n            euqit = db_data[0][\"euqit\"]\n            assert euqit >= 0, f\"账号 {addCloud_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}\"\n            logging.info(f\"账号 {addCloud_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}\")\n    \n            db_data2 = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s\",\n                (addCloud_MT4Slave['account'],)\n            )\n    \n            if not db_data2:\n>               pytest.fail(\"数据库查询结果为空\")\nE               Failed: 数据库查询结果为空\n\ntest_cloudTrader\\test_create.py:918: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1763110867491,
+      "stop" : 1763110867579,
+      "duration" : 88
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1763110585843,
+      "stop" : 1763110585843,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1763110585843,
+      "stop" : 1763110585843,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1763110586480,
+      "stop" : 1763110586480,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1763110585843,
+      "stop" : 1763110586480,
+      "duration" : 637
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1763110586480,
+      "stop" : 1763110586481,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1763110867579,
+      "stop" : 1763110867579,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "Failed: 数据库查询结果为空",
+    "statusTrace" : "self = <lingkuanMT5_1112.test_cloudTrader.test_create.TestCreate_MT5cloudTrader object at 0x0000019013AFE370>\nvar_manager = <lingkuanMT5_1112.commons.variable_manager.VariableManager object at 0x0000019013AB1130>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x0000019013AEBC40>\n\n    @allure.title(\"数据库校验-VPS数据-新增MT4跟单账号\")\n    def test_dbquery_addMT4slave(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            addCloud_MT4Slave = var_manager.get_variable(\"addCloud_MT4Slave\")\n            # 执行数据库查询\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader WHERE account = %s\",\n                (addCloud_MT4Slave['account'],)\n            )\n    \n            if not db_data:\n                pytest.fail(\"数据库查询结果为空\")\n    \n            MT4vps_addslave_id = db_data[0][\"id\"]\n            logging.info(f\"新增跟单账号ID: {MT4vps_addslave_id}\")\n            var_manager.set_runtime_variable(\"MT4vps_addslave_id\", MT4vps_addslave_id)\n    \n        with allure.step(\"2. 校验账号状态和净值\"):\n            status = db_data[0][\"status\"]\n            assert status == 0, f\"账号 {addCloud_MT4Slave['account']} 状态异常：预期status=0，实际={status}\"\n            logging.info(f\"账号 {addCloud_MT4Slave['account']} 状态异常：预期status=0，实际={status}\")\n    \n            euqit = db_data[0][\"euqit\"]\n            assert euqit >= 0, f\"账号 {addCloud_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}\"\n            logging.info(f\"账号 {addCloud_MT4Slave['account']} 净值异常：预期euqit>=0，实际={euqit}\")\n    \n            db_data2 = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader_subscribe WHERE slave_account = %s\",\n                (addCloud_MT4Slave['account'],)\n            )\n    \n            if not db_data2:\n>               pytest.fail(\"数据库查询结果为空\")\nE               Failed: 数据库查询结果为空\n\ntest_cloudTrader\\test_create.py:918: Failed",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否新增成功",
+      "time" : {
+        "start" : 1763110867579,
+        "stop" : 1763110867671,
+        "duration" : 92
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1763110867579,
+          "stop" : 1763110867670,
+          "duration" : 91
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1763110867669,
+            "stop" : 1763110867670,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "444756ae99139493",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "444756ae99139493.json",
+            "type" : "application/json",
+            "size" : 1048
+          }, {
+            "uid" : "8626959b0ffeb0db",
+            "name" : "执行SQL",
+            "source" : "8626959b0ffeb0db.txt",
+            "type" : "text/plain",
+            "size" : 72
+          }, {
+            "uid" : "926640cd67805d15",
+            "name" : "SQL参数",
+            "source" : "926640cd67805d15.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 3
+    }, {
+      "name" : "2. 校验账号状态和净值",
+      "time" : {
+        "start" : 1763110867671,
+        "stop" : 1763110867719,
+        "duration" : 48
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 数据库查询结果为空\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuanMT5_1112\\test_cloudTrader\\test_create.py\", line 918, in test_dbquery_addMT4slave\n    pytest.fail(\"数据库查询结果为空\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1763110867671,
+          "stop" : 1763110867719,
+          "duration" : 48
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1763110867718,
+            "stop" : 1763110867719,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bafb2d119a8de2ce",
+            "name" : "查询结果（共0条，显示前50条）",
+            "source" : "bafb2d119a8de2ce.json",
+            "type" : "application/json",
+            "size" : 2
+          }, {
+            "uid" : "48eaaf5e29d5f232",
+            "name" : "执行SQL",
+            "source" : "48eaaf5e29d5f232.txt",
+            "type" : "text/plain",
+            "size" : 88
+          }, {
+            "uid" : "7bed8653cd68355",
+            "name" : "SQL参数",
+            "source" : "7bed8653cd68355.txt",
+            "type" : "text/plain",
+            "size" : 10
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 3
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 3
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 2,
+      "hasContent" : true,
+      "shouldDisplayMessage" : true,
+      "attachmentsCount" : 3
+    } ],
+    "attachments" : [ {
+      "uid" : "59f494f3ecdc7ff2",
+      "name" : "log",
+      "source" : "59f494f3ecdc7ff2.txt",
+      "type" : "text/plain",
+      "size" : 3469
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 6,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 7
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1763110867771,
+      "stop" : 1763110867860,
+      "duration" : 89
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1763111022862,
+      "stop" : 1763111022863,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1763110867726,
+      "stop" : 1763110867770,
+      "duration" : 44
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-创建数据-为云策略准备"
+  }, {
+    "name" : "tag",
+    "value" : "flaky(reruns=3, reruns_delay=5)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_MT5cloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "62676-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "flaky(reruns=3, reruns_delay=5)" ]
+  },
+  "source" : "d221b91160cc4e77.json",
+  "parameterValues" : [ ]
+}

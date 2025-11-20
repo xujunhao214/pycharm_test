@@ -3,10 +3,10 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_MT4DE.VAR.VAR import *
-from lingkuan_MT4DE.commons.jsonpath_utils import *
-from lingkuan_MT4DE.conftest import var_manager
-from lingkuan_MT4DE.commons.api_base import *
+from lingkuan_1114.VAR.VAR import *
+from lingkuan_1114.commons.jsonpath_utils import *
+from lingkuan_1114.conftest import var_manager
+from lingkuan_1114.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -61,7 +61,8 @@ class TestCreate_importcloudTrader(APITestBase):
                 response = self.send_post_request(
                     logged_session,
                     '/mascontrol/cloudTrader/cloudBatchAdd',
-                    json_data=data
+                    json_data=data,
+                    sleep_seconds=3
                 )
 
                 # 2. 验证响应状态码
@@ -102,7 +103,7 @@ class TestCreate_importcloudTrader(APITestBase):
                     (usr_account,),
                     order_by="account ASC"
                 )
-                print(f"\n获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}")
+                # print(f"\n获取第{i}个跟单账号的account:cloudTrader_user_accounts_{i}")
 
                 if not db_data:
                     print("数据库查询结果为空，新增云跟单账号失败")
@@ -241,7 +242,7 @@ class TestCreate_importcloudTrader(APITestBase):
 
                 # 发送请求并验证
                 response = self.send_post_request(
-                    logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data
+                    logged_session, '/mascontrol/cloudTrader/cloudBatchUpdate', json_data=data, sleep_seconds=3
                 )
                 print(f"修改云跟单账号数据：{param['traderList']}")
 
@@ -252,4 +253,43 @@ class TestCreate_importcloudTrader(APITestBase):
                 self.assert_json_value(
                     response, "$.msg", "success",
                     f"账号{param['traderList']}响应异常"
+                )
+
+    @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("云策略列表-跟单账号平仓")
+    def test_addtrader_close(self, logged_session, var_manager):
+        cloudTrader_user_count = var_manager.get_variable("cloudTrader_user_count", 0)
+        # 循环范围：5 到 cloudTrader_user_count（包含两端）
+        for i in range(5, cloudTrader_user_count + 1):
+            # 直接获取变量值（无需创建动态变量）
+            trader_user_id = var_manager.get_variable(f"cloudTrader_traderList_{i}")
+            # 验证变量存在（可选，避免值为None导致请求失败）
+            assert trader_user_id is not None, f"变量 cloudTrader_traderList_{i} 未找到或值为空"
+
+            with allure.step(f"1. 云策略列表-跟单账号平仓（traderUserId={trader_user_id}）"):
+                data = {
+                    "traderUserId": trader_user_id,
+                    "isCloseAll": 1
+                }
+
+                # 1. 发送新增VPS组别请求
+                response = self.send_post_request(
+                    logged_session,
+                    "/mascontrol/cloudTrader/orderClose",
+                    json_data=data
+                )
+            with allure.step(f"2. 验证云策略列表-跟单账号平仓结果"):
+                # 2. 验证响应状态码
+                self.assert_response_status(
+                    response,
+                    200,
+                    f"云策略组别平仓失败（traderUserId={trader_user_id}）"
+                )
+
+                # 3. 验证JSON返回内容
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    f"响应msg字段应为success（traderUserId={trader_user_id}）"
                 )
