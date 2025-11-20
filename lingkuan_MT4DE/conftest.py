@@ -1,6 +1,6 @@
 import pytest
 import pymysql
-from lingkuan_1114.VAR.VAR import *
+from lingkuan_MT4DE.VAR.VAR import *
 import allure
 import logging
 import datetime
@@ -10,20 +10,20 @@ import json
 import time
 import xml.etree.ElementTree as ET
 from pytest import Config
-from lingkuan_1114.commons.mfa_key import generate_code
-from lingkuan_1114.commons.Encryption_and_decryption import aes_encrypt_str
-from lingkuan_1114.commons.session import EnvironmentSession
-from lingkuan_1114.commons.variable_manager import VariableManager
-from lingkuan_1114.commons.test_tracker import TestResultTracker
-from lingkuan_1114.commons.feishu_notification import send_feishu_notification
-from lingkuan_1114.commons.enums import Environment
-from lingkuan_1114.config import ENV_CONFIG  # 仅导入配置数据
-from lingkuan_1114.commons.redis_utils import RedisClient, get_redis_client
+from lingkuan_MT4DE.commons.mfa_key import generate_code
+from lingkuan_MT4DE.commons.Encryption_and_decryption import aes_encrypt_str
+from lingkuan_MT4DE.commons.session import EnvironmentSession
+from lingkuan_MT4DE.commons.variable_manager import VariableManager
+from lingkuan_MT4DE.commons.test_tracker import TestResultTracker
+from lingkuan_MT4DE.commons.feishu_notification import send_feishu_notification
+from lingkuan_MT4DE.commons.enums import Environment
+from lingkuan_MT4DE.config import ENV_CONFIG  # 仅导入配置数据
+from lingkuan_MT4DE.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
 from DBUtils.PooledDB import PooledDB
-from lingkuan_1114.commons.random_generator import generate_random_str
+from lingkuan_MT4DE.commons.random_generator import generate_random_str
 
 logger = logging.getLogger(__name__)
 

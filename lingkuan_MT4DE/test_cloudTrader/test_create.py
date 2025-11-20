@@ -3,16 +3,16 @@ import pytest
 import logging
 import allure
 from typing import Dict, Any, List
-from lingkuan_1114.VAR.VAR import *
-from lingkuan_1114.commons.jsonpath_utils import *
-from lingkuan_1114.conftest import var_manager
-from lingkuan_1114.commons.api_base import *
+from lingkuan_MT4DE.VAR.VAR import *
+from lingkuan_MT4DE.commons.jsonpath_utils import *
+from lingkuan_MT4DE.conftest import var_manager
+from lingkuan_MT4DE.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
-@pytest.mark.flaky(reruns=3, reruns_delay=5)
+@pytest.mark.flaky(reruns=0, reruns_delay=0)
 @allure.feature("数据管理-创建数据-为云策略准备")
 class TestCreate_cloudTrader(APITestBase):
     @pytest.mark.skip(reason=SKIP_REASON)

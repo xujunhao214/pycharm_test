@@ -14,8 +14,8 @@ from requests.exceptions import (
     HTTPError, SSLError
 )
 from jsonpath_ng import parse
-from lingkuan_1114.VAR.VAR import *
-from lingkuan_1114.commons.wait_utils import wait_for_condition
+from lingkuan_MT4DE.VAR.VAR import *
+from lingkuan_MT4DE.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

@@ -1,459 +1,991 @@
-INFO     - 2025-11-14 13:48:30 - [conftest:341] - [2025-11-14 13:48] 测试会话开始: 2025-11-14 13:48:30, 测试组: cloud
-INFO     - 2025-11-14 13:48:31 - [variable_manager:40] - [2025-11-14 13:48] 成功加载静态变量: VAR\uat_data.json
-INFO     - 2025-11-14 13:48:31 - [variable_manager:64] - [2025-11-14 13:48] 成功加载运行时变量: VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:31 - [api_base:447] - [2025-11-14 13:48:31] 执行SQL: 
- SELECT * From follow_platform where server= %s  ORDER BY create_time DESC 
-参数: ('FXAdamantStone-Real',)
-INFO     - 2025-11-14 13:48:31 - [api_base:450] - [2025-11-14 13:48:31] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:31 - [api_base:462] - [2025-11-14 13:48:31] 查询结果: [{"id": 346, "broker_name": "AS", "platform_type": 0, "server": "FXAdamantStone-Real", "server_node": "47.238.99.66:443", "remark": "BELLA", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2024-12-02 21:49:36", "updater": 10101, "update_time": "2025-11-11 17:31:10", "logo": null, "max_lots": null, "suffix_enabled": 1, "suffix_forex": null, "suffix_cfd": null}]
-INFO     - 2025-11-14 13:48:31 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:31 - [variable_manager:103] - [2025-11-14 13:48] 运行时变量已覆盖（空值）: max_lots = None
-INFO     - 2025-11-14 13:48:31 - [api_base:447] - [2025-11-14 13:48:31] 执行SQL: 
- SELECT * From sys_params where param_name= %s  ORDER BY create_time DESC 
-参数: ('最大手数配置',)
-INFO     - 2025-11-14 13:48:31 - [api_base:450] - [2025-11-14 13:48:31] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:31 - [api_base:462] - [2025-11-14 13:48:31] 查询结果: [{"id": 3, "param_name": "最大手数配置", "param_type": 1, "param_key": "max_lots", "param_value": "10", "remark": "最大手数配置", "tenant_id": 10000, "version": 3, "deleted": 0, "creator": 10000, "create_time": "2025-01-21 17:03:45", "updater": 10000, "update_time": "2025-01-23 22:53:50"}]
-INFO     - 2025-11-14 13:48:31 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:31 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: param_value = 10
-INFO     - 2025-11-14 13:48:31 - [conftest:65] - [2025-11-14 13:48:31] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend1::test_copy_place_order 开始登录，环境: uat
-INFO     - 2025-11-14 13:48:31 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 137571
-DEBUG    - 2025-11-14 13:48:31 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
-DEBUG    - 2025-11-14 13:48:33 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:33 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-15 13:48:33","refreshTokenExpire":"2025-11-28 13:48:33","access_token":"f2a078657cbf44938c6e2baf1f001a63","refresh_token":"688308cba2df46c294b360da039c9beb"}}
-INFO     - 2025-11-14 13:48:33 - [conftest:137] - UAT登录成功（第1次尝试）
-INFO     - 2025-11-14 13:48:33 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:33 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: access_token = f2a078657cbf44938c6e2baf1f001a63
-DEBUG    - 2025-11-14 13:48:34 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudOrderSend HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:34 - [api_base:152] - [2025-11-14 13:48:34] POST请求（JSON）: /mascontrol/cloudTrader/cloudOrderSend 
-数据: {'id': 464, 'type': 0, 'tradeType': 0, 'cloudTraderId': [5860], 'symbol': 'XAUUSD', 'startSize': 11.0, 'endSize': 11.0, 'totalSzie': 11.0, 'totalNum': 0}
-INFO     - 2025-11-14 13:48:34 - [api_base:160] - [2025-11-14 13:48:34] 请求后等待 1 秒
-INFO     - 2025-11-14 13:48:35 - [conftest:170] - [2025-11-14 13:48:35] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend1::test_copy_place_order 执行完毕
-INFO     - 2025-11-14 13:48:35 - [api_base:537] - [2025-11-14 13:48:35] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
-INFO     - 2025-11-14 13:48:35 - [api_base:447] - [2025-11-14 13:48:35] 执行SQL: 
-
-                            SELECT 
-                                fod.size,
-                                fod.send_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.comment,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.remark,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.min_lot_size,
-                                foi.max_lot_size,
-                                foi.total_lots,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE fod.account = %s
-                                AND fod.trader_id = %s
-                         AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('31581', 11297, '2025-11-14 13:45:35', '2025-11-14 13:51:35')
-INFO     - 2025-11-14 13:48:35 - [api_base:450] - [2025-11-14 13:48:35] 查询成功，结果数量: 2
-INFO     - 2025-11-14 13:48:35 - [api_base:462] - [2025-11-14 13:48:35] 查询结果: [{"size": 11.0, "send_no": "9665969877508", "magical": null, "open_price": null, "comment": "", "symbol": "XAUUSD", "order_no": null, "remark": "超过最大手数限制", "true_total_lots": 11.0, "foi.order_no": "9665969877508", "operation_type": 0, "create_time": "2025-11-14 13:48:34", "status": 2, "min_lot_size": 11.0, "max_lot_size": 11.0, "total_lots": 11.0, "total_orders": 0}, {"size": 10.0, "send_no": "4557840164216", "magical": 34714, "open_price": 4195.15, "comment": "zdh1n9175", "symbol": "XAUUSD", "o
-INFO     - 2025-11-14 13:48:37 - [api_base:447] - [2025-11-14 13:48:37] 执行SQL: 
-
-                            SELECT 
-                                fod.size,
-                                fod.send_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.comment,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.remark,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.min_lot_size,
-                                foi.max_lot_size,
-                                foi.total_lots,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE fod.account = %s
-                                AND fod.trader_id = %s
-                         AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('31581', 11297, '2025-11-14 13:45:35', '2025-11-14 13:51:35')
-INFO     - 2025-11-14 13:48:37 - [api_base:450] - [2025-11-14 13:48:37] 查询成功，结果数量: 2
-INFO     - 2025-11-14 13:48:37 - [api_base:462] - [2025-11-14 13:48:37] 查询结果: [{"size": 11.0, "send_no": "9665969877508", "magical": null, "open_price": null, "comment": "", "symbol": "XAUUSD", "order_no": null, "remark": "超过最大手数限制", "true_total_lots": 11.0, "foi.order_no": "9665969877508", "operation_type": 0, "create_time": "2025-11-14 13:48:34", "status": 2, "min_lot_size": 11.0, "max_lot_size": 11.0, "total_lots": 11.0, "total_orders": 0}, {"size": 10.0, "send_no": "4557840164216", "magical": 34714, "open_price": 4195.15, "comment": "zdh1n9175", "symbol": "XAUUSD", "o
-INFO     - 2025-11-14 13:48:39 - [api_base:447] - [2025-11-14 13:48:39] 执行SQL: 
-
-                            SELECT 
-                                fod.size,
-                                fod.send_no,
-                                fod.magical,
-                                fod.open_price,
-                                fod.comment,
-                                fod.symbol,
-                                fod.order_no,
-                                fod.remark,
-                                foi.true_total_lots,
-                                foi.order_no,
-                                foi.operation_type,
-                                foi.create_time,
-                                foi.status,
-                                foi.min_lot_size,
-                                foi.max_lot_size,
-                                foi.total_lots,
-                                foi.total_orders
-                            FROM 
-                                follow_order_detail fod
-                            INNER JOIN 
-                                follow_order_instruct foi 
-                            ON 
-                                foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                            WHERE fod.account = %s
-                                AND fod.trader_id = %s
-                         AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('31581', 11297, '2025-11-14 13:45:35', '2025-11-14 13:51:35')
-INFO     - 2025-11-14 13:48:39 - [api_base:450] - [2025-11-14 13:48:39] 查询成功，结果数量: 2
-INFO     - 2025-11-14 13:48:39 - [api_base:462] - [2025-11-14 13:48:39] 查询结果: [{"size": 11.0, "send_no": "9665969877508", "magical": null, "open_price": null, "comment": "", "symbol": "XAUUSD", "order_no": null, "remark": "超过最大手数限制", "true_total_lots": 11.0, "foi.order_no": "9665969877508", "operation_type": 0, "create_time": "2025-11-14 13:48:34", "status": 2, "min_lot_size": 11.0, "max_lot_size": 11.0, "total_lots": 11.0, "total_orders": 0}, {"size": 10.0, "send_no": "4557840164216", "magical": 34714, "open_price": 4195.15, "comment": "zdh1n9175", "symbol": "XAUUSD", "o
-INFO     - 2025-11-14 13:48:39 - [api_base:578] - [2025-11-14 13:48:39] 数据已稳定2秒（耗时4.4秒）| 结果数: 2
-INFO     - 2025-11-14 13:48:39 - [api_base:1488] - 校验通过: 开仓失败信息符合预期
-
-实际: 超过最大手数限制
-操作: ==
-预期: 超过最大手数限制
-
-INFO     - 2025-11-14 13:48:39 - [test_cloudOrder_error:181] - 失败信息验证通过: 超过最大手数限制
-INFO     - 2025-11-14 13:48:39 - [api_base:447] - [2025-11-14 13:48:39] 执行SQL: 
- SELECT * From follow_platform where server= %s  ORDER BY create_time DESC 
-参数: ('FXAdamantStone-Real',)
-INFO     - 2025-11-14 13:48:39 - [api_base:450] - [2025-11-14 13:48:39] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:39 - [api_base:462] - [2025-11-14 13:48:39] 查询结果: [{"id": 346, "broker_name": "AS", "platform_type": 0, "server": "FXAdamantStone-Real", "server_node": "47.238.99.66:443", "remark": "BELLA", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2024-12-02 21:49:36", "updater": 10101, "update_time": "2025-11-11 17:31:10", "logo": null, "max_lots": null, "suffix_enabled": 1, "suffix_forex": null, "suffix_cfd": null}]
-INFO     - 2025-11-14 13:48:39 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:39 - [variable_manager:103] - [2025-11-14 13:48] 运行时变量已覆盖（空值）: max_lots = None
-INFO     - 2025-11-14 13:48:39 - [api_base:447] - [2025-11-14 13:48:39] 执行SQL: 
- SELECT * From sys_params where param_name= %s  ORDER BY create_time DESC 
-参数: ('最大手数配置',)
-INFO     - 2025-11-14 13:48:39 - [api_base:450] - [2025-11-14 13:48:39] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:39 - [api_base:462] - [2025-11-14 13:48:39] 查询结果: [{"id": 3, "param_name": "最大手数配置", "param_type": 1, "param_key": "max_lots", "param_value": "10", "remark": "最大手数配置", "tenant_id": 10000, "version": 3, "deleted": 0, "creator": 10000, "create_time": "2025-01-21 17:03:45", "updater": 10000, "update_time": "2025-01-23 22:53:50"}]
-INFO     - 2025-11-14 13:48:39 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:39 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: param_value = 10
-INFO     - 2025-11-14 13:48:40 - [conftest:65] - [2025-11-14 13:48:40] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend2::test_copy_place_order 开始登录，环境: uat
-INFO     - 2025-11-14 13:48:40 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 137571
-DEBUG    - 2025-11-14 13:48:40 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
-DEBUG    - 2025-11-14 13:48:41 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:41 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-15 13:48:41","refreshTokenExpire":"2025-11-28 13:48:41","access_token":"898b59246d1e4de4a3fe73cc431bce12","refresh_token":"4dfe4b746e0f46f297741315ebff74d1"}}
-INFO     - 2025-11-14 13:48:41 - [conftest:137] - UAT登录成功（第1次尝试）
-INFO     - 2025-11-14 13:48:41 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:41 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: access_token = 898b59246d1e4de4a3fe73cc431bce12
-DEBUG    - 2025-11-14 13:48:41 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudOrderSend HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:41 - [api_base:152] - [2025-11-14 13:48:41] POST请求（JSON）: /mascontrol/cloudTrader/cloudOrderSend 
-数据: {'id': 464, 'type': 0, 'tradeType': 1, 'intervalTime': 0, 'cloudTraderId': [5860], 'symbol': 'XAUUSD', 'startSize': 11.0, 'endSize': 11.0, 'totalNum': '1', 'totalSzie': '', 'remark': 'zdh539319'}
-INFO     - 2025-11-14 13:48:41 - [api_base:160] - [2025-11-14 13:48:41] 请求后等待 1 秒
-INFO     - 2025-11-14 13:48:42 - [conftest:170] - [2025-11-14 13:48:42] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend2::test_copy_place_order 执行完毕
-INFO     - 2025-11-14 13:48:42 - [api_base:537] - [2025-11-14 13:48:42] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
-INFO     - 2025-11-14 13:48:42 - [api_base:447] - [2025-11-14 13:48:42] 执行SQL: 
-
-                        SELECT 
-                            fod.size,
-                            fod.send_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            fod.remark,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE fod.account = %s
-                            AND fod.trader_id = %s
-                     AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('31581', 11297, '2025-11-14 13:45:42', '2025-11-14 13:51:42')
-INFO     - 2025-11-14 13:48:42 - [api_base:450] - [2025-11-14 13:48:42] 查询成功，结果数量: 3
-INFO     - 2025-11-14 13:48:42 - [api_base:462] - [2025-11-14 13:48:42] 查询结果: [{"size": 11.0, "send_no": "5993640571710", "magical": null, "open_price": null, "comment": "zdh539319", "symbol": "XAUUSD", "order_no": null, "remark": "超过最大手数限制", "true_total_lots": 11.0, "foi.order_no": "5993640571710", "operation_type": 0, "create_time": "2025-11-14 13:48:42", "status": 2, "min_lot_size": 11.0, "max_lot_size": 11.0, "total_lots": 0.0, "total_orders": 1}, {"size": 11.0, "send_no": "9665969877508", "magical": null, "open_price": null, "comment": "", "symbol": "XAUUSD", "order_
-INFO     - 2025-11-14 13:48:45 - [api_base:447] - [2025-11-14 13:48:45] 执行SQL: 
-
-                        SELECT 
-                            fod.size,
-                            fod.send_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            fod.remark,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE fod.account = %s
-                            AND fod.trader_id = %s
-                     AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('31581', 11297, '2025-11-14 13:45:42', '2025-11-14 13:51:42')
-INFO     - 2025-11-14 13:48:45 - [api_base:450] - [2025-11-14 13:48:45] 查询成功，结果数量: 3
-INFO     - 2025-11-14 13:48:45 - [api_base:462] - [2025-11-14 13:48:45] 查询结果: [{"size": 11.0, "send_no": "5993640571710", "magical": null, "open_price": null, "comment": "zdh539319", "symbol": "XAUUSD", "order_no": null, "remark": "超过最大手数限制", "true_total_lots": 11.0, "foi.order_no": "5993640571710", "operation_type": 0, "create_time": "2025-11-14 13:48:42", "status": 2, "min_lot_size": 11.0, "max_lot_size": 11.0, "total_lots": 0.0, "total_orders": 1}, {"size": 11.0, "send_no": "9665969877508", "magical": null, "open_price": null, "comment": "", "symbol": "XAUUSD", "order_
-INFO     - 2025-11-14 13:48:47 - [api_base:447] - [2025-11-14 13:48:47] 执行SQL: 
-
-                        SELECT 
-                            fod.size,
-                            fod.send_no,
-                            fod.magical,
-                            fod.open_price,
-                            fod.comment,
-                            fod.symbol,
-                            fod.order_no,
-                            fod.remark,
-                            foi.true_total_lots,
-                            foi.order_no,
-                            foi.operation_type,
-                            foi.create_time,
-                            foi.status,
-                            foi.min_lot_size,
-                            foi.max_lot_size,
-                            foi.total_lots,
-                            foi.total_orders
-                        FROM 
-                            follow_order_detail fod
-                        INNER JOIN 
-                            follow_order_instruct foi 
-                        ON 
-                            foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                        WHERE fod.account = %s
-                            AND fod.trader_id = %s
-                     AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('31581', 11297, '2025-11-14 13:45:42', '2025-11-14 13:51:42')
-INFO     - 2025-11-14 13:48:47 - [api_base:450] - [2025-11-14 13:48:47] 查询成功，结果数量: 3
-INFO     - 2025-11-14 13:48:47 - [api_base:462] - [2025-11-14 13:48:47] 查询结果: [{"size": 11.0, "send_no": "5993640571710", "magical": null, "open_price": null, "comment": "zdh539319", "symbol": "XAUUSD", "order_no": null, "remark": "超过最大手数限制", "true_total_lots": 11.0, "foi.order_no": "5993640571710", "operation_type": 0, "create_time": "2025-11-14 13:48:42", "status": 2, "min_lot_size": 11.0, "max_lot_size": 11.0, "total_lots": 0.0, "total_orders": 1}, {"size": 11.0, "send_no": "9665969877508", "magical": null, "open_price": null, "comment": "", "symbol": "XAUUSD", "order_
-INFO     - 2025-11-14 13:48:47 - [api_base:578] - [2025-11-14 13:48:47] 数据已稳定2秒（耗时4.4秒）| 结果数: 3
-INFO     - 2025-11-14 13:48:47 - [api_base:1488] - 校验通过: 开仓失败信息符合预期
-
-实际: 超过最大手数限制
-操作: ==
-预期: 超过最大手数限制
-
-INFO     - 2025-11-14 13:48:47 - [test_cloudOrder_error:355] - 失败信息验证通过: 超过最大手数限制
-INFO     - 2025-11-14 13:48:47 - [conftest:65] - [2025-11-14 13:48:47] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestMasOrderSend3::test_copy_place_order 开始登录，环境: uat
-INFO     - 2025-11-14 13:48:47 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 137571
-DEBUG    - 2025-11-14 13:48:47 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
-DEBUG    - 2025-11-14 13:48:49 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:49 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-15 13:48:48","refreshTokenExpire":"2025-11-28 13:48:48","access_token":"86d08e5b94b240d785ffb3126c24ca3a","refresh_token":"23ddd9f907584b5f9fd5f24d85b858eb"}}
-INFO     - 2025-11-14 13:48:49 - [conftest:137] - UAT登录成功（第1次尝试）
-INFO     - 2025-11-14 13:48:49 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:49 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: access_token = 86d08e5b94b240d785ffb3126c24ca3a
-DEBUG    - 2025-11-14 13:48:49 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudOrderSend HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:49 - [api_base:152] - [2025-11-14 13:48:49] POST请求（JSON）: /mascontrol/cloudTrader/cloudOrderSend 
-数据: {'id': 464, 'type': 0, 'tradeType': 0, 'intervalTime': 100, 'cloudTraderId': [5860], 'symbol': 'XAUUSD', 'placedType': 0, 'startSize': '0.1', 'endSize': '1.00', 'totalNum': '', 'totalSzie': '0.01', 'remark': '测试数据'}
-INFO     - 2025-11-14 13:48:49 - [api_base:160] - [2025-11-14 13:48:49] 请求后等待 1 秒
-INFO     - 2025-11-14 13:48:50 - [conftest:170] - [2025-11-14 13:48:50] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestMasOrderSend3::test_copy_place_order 执行完毕
-INFO     - 2025-11-14 13:48:50 - [conftest:65] - [2025-11-14 13:48:50] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestMasOrderSend4::test_copy_place_order 开始登录，环境: uat
-INFO     - 2025-11-14 13:48:50 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 137571
-DEBUG    - 2025-11-14 13:48:50 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
-DEBUG    - 2025-11-14 13:48:51 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:51 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-15 13:48:51","refreshTokenExpire":"2025-11-28 13:48:51","access_token":"22d4d62f33d74bdb8131eded2bd7cf52","refresh_token":"20fc1df615e140ca9082487bc65aa491"}}
-INFO     - 2025-11-14 13:48:51 - [conftest:137] - UAT登录成功（第1次尝试）
-INFO     - 2025-11-14 13:48:51 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:51 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: access_token = 22d4d62f33d74bdb8131eded2bd7cf52
-DEBUG    - 2025-11-14 13:48:52 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudOrderSend HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:52 - [api_base:152] - [2025-11-14 13:48:52] POST请求（JSON）: /mascontrol/cloudTrader/cloudOrderSend 
-数据: {'id': 464, 'type': 0, 'tradeType': 0, 'intervalTime': 100, 'cloudTraderId': [5860], 'symbol': 'XAUUSD', 'placedType': 0, 'startSize': '0.1', 'endSize': '1.00', 'totalNum': '', 'totalSzie': '2', 'remark': '测试数据'}
-INFO     - 2025-11-14 13:48:52 - [api_base:160] - [2025-11-14 13:48:52] 请求后等待 1 秒
-INFO     - 2025-11-14 13:48:53 - [conftest:170] - [2025-11-14 13:48:53] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestMasOrderSend4::test_copy_place_order 执行完毕
-INFO     - 2025-11-14 13:48:53 - [api_base:447] - [2025-11-14 13:48:53] 执行SQL: 
- SELECT * From follow_platform where server = %s  ORDER BY create_time DESC 
-参数: ('FXAdamantStone-Real',)
-INFO     - 2025-11-14 13:48:53 - [api_base:450] - [2025-11-14 13:48:53] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:53 - [api_base:462] - [2025-11-14 13:48:53] 查询结果: [{"id": 346, "broker_name": "AS", "platform_type": 0, "server": "FXAdamantStone-Real", "server_node": "47.238.99.66:443", "remark": "BELLA", "version": 0, "deleted": 0, "creator": 10000, "create_time": "2024-12-02 21:49:36", "updater": 10101, "update_time": "2025-11-11 17:31:10", "logo": null, "max_lots": null, "suffix_enabled": 1, "suffix_forex": null, "suffix_cfd": null}]
-INFO     - 2025-11-14 13:48:53 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:53 - [variable_manager:103] - [2025-11-14 13:48] 运行时变量已覆盖（空值）: max_lots = None
-INFO     - 2025-11-14 13:48:53 - [test_cloudOrder_error:485] - 服务器FXAdamantStone-Real无最大手数数据，已保存空值
-INFO     - 2025-11-14 13:48:53 - [api_base:447] - [2025-11-14 13:48:53] 执行SQL: 
- SELECT * From sys_params where param_name= %s  ORDER BY create_time DESC 
-参数: ('最大手数配置',)
-INFO     - 2025-11-14 13:48:53 - [api_base:450] - [2025-11-14 13:48:53] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:53 - [api_base:462] - [2025-11-14 13:48:53] 查询结果: [{"id": 3, "param_name": "最大手数配置", "param_type": 1, "param_key": "max_lots", "param_value": "10", "remark": "最大手数配置", "tenant_id": 10000, "version": 3, "deleted": 0, "creator": 10000, "create_time": "2025-01-21 17:03:45", "updater": 10000, "update_time": "2025-01-23 22:53:50"}]
-INFO     - 2025-11-14 13:48:53 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:53 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: param_value = 10
-INFO     - 2025-11-14 13:48:53 - [test_cloudOrder_error:510] - 全局配置的最大手数是：10
-INFO     - 2025-11-14 13:48:53 - [api_base:447] - [2025-11-14 13:48:53] 执行SQL: 
- SELECT * From follow_platform where server = %s  ORDER BY create_time DESC 
-参数: ('CWGMarketsSVG-Demo',)
-INFO     - 2025-11-14 13:48:53 - [api_base:450] - [2025-11-14 13:48:53] 查询成功，结果数量: 1
-INFO     - 2025-11-14 13:48:53 - [api_base:462] - [2025-11-14 13:48:53] 查询结果: [{"id": 2165, "broker_name": "CWG", "platform_type": 1, "server": "CWGMarketsSVG-Demo", "server_node": "47.91.76.126:443", "remark": null, "version": 0, "deleted": 0, "creator": 10093, "create_time": "2025-10-23 11:28:24", "updater": 10101, "update_time": "2025-11-14 11:33:24", "logo": null, "max_lots": 9.0, "suffix_enabled": 1, "suffix_forex": ".minx", "suffix_cfd": ".min"}]
-INFO     - 2025-11-14 13:48:53 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:53 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: MT5max_lots = 9.0
-INFO     - 2025-11-14 13:48:53 - [test_cloudOrder_error:533] - 服务器CWGMarketsSVG-Demo的最大手数是：9.0
-INFO     - 2025-11-14 13:48:53 - [conftest:65] - [2025-11-14 13:48:53] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend5::test_trader_orderSend 开始登录，环境: uat
-INFO     - 2025-11-14 13:48:53 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 137571
-DEBUG    - 2025-11-14 13:48:53 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
-DEBUG    - 2025-11-14 13:48:54 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:55 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-15 13:48:54","refreshTokenExpire":"2025-11-28 13:48:54","access_token":"b01cfc463dd64c61a2190cb9a6db1134","refresh_token":"63a42e3947f04730be4c02a1c0782ef1"}}
-INFO     - 2025-11-14 13:48:55 - [conftest:137] - UAT登录成功（第1次尝试）
-INFO     - 2025-11-14 13:48:55 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:55 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: access_token = b01cfc463dd64c61a2190cb9a6db1134
-INFO     - 2025-11-14 13:48:55 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:48:55 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: send_maxlots = 10.0
-DEBUG    - 2025-11-14 13:48:56 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudOrderSend HTTP/11" 200 None
-INFO     - 2025-11-14 13:48:56 - [api_base:152] - [2025-11-14 13:48:56] POST请求（JSON）: /mascontrol/cloudTrader/cloudOrderSend 
-数据: {'id': 464, 'type': 0, 'tradeType': 1, 'intervalTime': 100, 'cloudTraderId': [5860], 'symbol': 'XAUUSD', 'placedType': 0, 'startSize': 10.0, 'endSize': 10.0, 'totalNum': '1', 'totalSzie': '', 'remark': 'zdh6t9333'}
-INFO     - 2025-11-14 13:48:56 - [api_base:160] - [2025-11-14 13:48:56] 请求后等待 1 秒
-INFO     - 2025-11-14 13:48:57 - [conftest:170] - [2025-11-14 13:48:57] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend5::test_trader_orderSend 执行完毕
-INFO     - 2025-11-14 13:48:57 - [api_base:537] - [2025-11-14 13:48:57] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
-INFO     - 2025-11-14 13:48:57 - [api_base:447] - [2025-11-14 13:48:57] 执行SQL: 
-
-                           SELECT
-                               fod.size,
-                               fod.comment,
-                               fod.send_no,
-                               fod.magical,
-                               fod.open_price,
-                               fod.remark,
-                               fod.symbol,
-                               fod.order_no,
-                               foi.true_total_lots,
-                               foi.order_no,
-                               foi.operation_type,
-                               foi.create_time,
-                               foi.status,
-                               foi.min_lot_size,
-                               foi.max_lot_size,
-                               foi.total_lots,
-                               foi.total_orders
-                           FROM
-                               follow_order_detail fod
-                           INNER JOIN
-                               follow_order_instruct foi
-                           ON
-                               foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                           WHERE fod.account = %s
-                               AND fod.trader_id = %s
-                                AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('66938908', 11306, '2025-11-14 13:45:57', '2025-11-14 13:51:57')
-INFO     - 2025-11-14 13:48:57 - [api_base:450] - [2025-11-14 13:48:57] 查询成功，结果数量: 2
-INFO     - 2025-11-14 13:48:57 - [api_base:462] - [2025-11-14 13:48:57] 查询结果: [{"size": 10.0, "comment": null, "send_no": "5463962887993", "magical": null, "open_price": null, "remark": "超过最大手数限制", "symbol": "XAUUSDp", "order_no": null, "true_total_lots": 20.0, "foi.order_no": "5463962887993", "operation_type": 0, "create_time": "2025-11-14 13:48:57", "status": 0, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 10.0, "total_orders": 2}, {"size": 10.0, "comment": null, "send_no": "7966827859047", "magical": null, "open_price": null, "remark": "超过最大手数限制", "symbol": 
-INFO     - 2025-11-14 13:48:59 - [api_base:447] - [2025-11-14 13:48:59] 执行SQL: 
-
-                           SELECT
-                               fod.size,
-                               fod.comment,
-                               fod.send_no,
-                               fod.magical,
-                               fod.open_price,
-                               fod.remark,
-                               fod.symbol,
-                               fod.order_no,
-                               foi.true_total_lots,
-                               foi.order_no,
-                               foi.operation_type,
-                               foi.create_time,
-                               foi.status,
-                               foi.min_lot_size,
-                               foi.max_lot_size,
-                               foi.total_lots,
-                               foi.total_orders
-                           FROM
-                               follow_order_detail fod
-                           INNER JOIN
-                               follow_order_instruct foi
-                           ON
-                               foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                           WHERE fod.account = %s
-                               AND fod.trader_id = %s
-                                AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('66938908', 11306, '2025-11-14 13:45:57', '2025-11-14 13:51:57')
-INFO     - 2025-11-14 13:48:59 - [api_base:450] - [2025-11-14 13:48:59] 查询成功，结果数量: 2
-INFO     - 2025-11-14 13:48:59 - [api_base:462] - [2025-11-14 13:48:59] 查询结果: [{"size": 10.0, "comment": null, "send_no": "5463962887993", "magical": null, "open_price": null, "remark": "超过最大手数限制", "symbol": "XAUUSDp", "order_no": null, "true_total_lots": 20.0, "foi.order_no": "5463962887993", "operation_type": 0, "create_time": "2025-11-14 13:48:57", "status": 0, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 10.0, "total_orders": 2}, {"size": 10.0, "comment": null, "send_no": "7966827859047", "magical": null, "open_price": null, "remark": "超过最大手数限制", "symbol": 
-INFO     - 2025-11-14 13:49:01 - [api_base:447] - [2025-11-14 13:49:01] 执行SQL: 
-
-                           SELECT
-                               fod.size,
-                               fod.comment,
-                               fod.send_no,
-                               fod.magical,
-                               fod.open_price,
-                               fod.remark,
-                               fod.symbol,
-                               fod.order_no,
-                               foi.true_total_lots,
-                               foi.order_no,
-                               foi.operation_type,
-                               foi.create_time,
-                               foi.status,
-                               foi.min_lot_size,
-                               foi.max_lot_size,
-                               foi.total_lots,
-                               foi.total_orders
-                           FROM
-                               follow_order_detail fod
-                           INNER JOIN
-                               follow_order_instruct foi
-                           ON
-                               foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                           WHERE fod.account = %s
-                               AND fod.trader_id = %s
-                                AND  foi.create_time BETWEEN %s AND %s  ORDER BY create_time DESC 
-参数: ('66938908', 11306, '2025-11-14 13:45:57', '2025-11-14 13:51:57')
-INFO     - 2025-11-14 13:49:01 - [api_base:450] - [2025-11-14 13:49:01] 查询成功，结果数量: 2
-INFO     - 2025-11-14 13:49:01 - [api_base:462] - [2025-11-14 13:49:01] 查询结果: [{"size": 10.0, "comment": null, "send_no": "5463962887993", "magical": null, "open_price": null, "remark": "超过最大手数限制", "symbol": "XAUUSDp", "order_no": null, "true_total_lots": 20.0, "foi.order_no": "5463962887993", "operation_type": 0, "create_time": "2025-11-14 13:48:57", "status": 2, "min_lot_size": 0.0, "max_lot_size": 0.0, "total_lots": 10.0, "total_orders": 2}, {"size": 10.0, "comment": null, "send_no": "7966827859047", "magical": null, "open_price": null, "remark": "超过最大手数限制", "symbol": 
-INFO     - 2025-11-14 13:49:01 - [api_base:578] - [2025-11-14 13:49:01] 数据已稳定2秒（耗时4.3秒）| 结果数: 2
-INFO     - 2025-11-14 13:49:01 - [api_base:1488] - 校验通过: 开仓失败信息符合预期
-
-实际: 超过最大手数限制
-操作: ==
-预期: 超过最大手数限制
-
-INFO     - 2025-11-14 13:49:01 - [test_cloudOrder_error:673] - 失败信息验证通过: 超过最大手数限制
-INFO     - 2025-11-14 13:49:01 - [conftest:65] - [2025-11-14 13:49:01] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend5::test_copy_close_order 开始登录，环境: uat
-INFO     - 2025-11-14 13:49:01 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 940092
-DEBUG    - 2025-11-14 13:49:01 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
-DEBUG    - 2025-11-14 13:49:04 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
-INFO     - 2025-11-14 13:49:04 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-15 13:49:04","refreshTokenExpire":"2025-11-28 13:49:04","access_token":"117ec89fdd5b417da1c5f72b287359b5","refresh_token":"3cd001f8b97542c9a26bbd4e9874c73d"}}
-INFO     - 2025-11-14 13:49:04 - [conftest:137] - UAT登录成功（第1次尝试）
-INFO     - 2025-11-14 13:49:04 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:49:04 - [variable_manager:105] - [2025-11-14 13:48] 运行时变量已设置: access_token = 117ec89fdd5b417da1c5f72b287359b5
-DEBUG    - 2025-11-14 13:49:04 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudOrderClose HTTP/11" 200 None
-INFO     - 2025-11-14 13:49:04 - [api_base:152] - [2025-11-14 13:49:04] POST请求（JSON）: /mascontrol/cloudTrader/cloudOrderClose 
-数据: {'isCloseAll': 1, 'intervalTime': 100, 'id': '464', 'cloudTraderId': [5860]}
-INFO     - 2025-11-14 13:49:04 - [api_base:160] - [2025-11-14 13:49:04] 请求后等待 1 秒
-INFO     - 2025-11-14 13:49:05 - [conftest:170] - [2025-11-14 13:49:05] 用例 test_cloudTrader/test_cloudOrder_error.py::TestVPSOrdersendbuy::TestVPSOrderSend5::test_copy_close_order 执行完毕
-INFO     - 2025-11-14 13:49:05 - [variable_manager:121] - [2025-11-14 13:48] 运行时变量已保存到: D:\pycharm_test\lingkuan_1114\VAR\runtime_vars_cloud.json
-INFO     - 2025-11-14 13:49:05 - [conftest:368] - [2025-11-14 13:48] 测试会话结束，总耗时: 35.00秒
-INFO     - 2025-11-14 13:49:05 - [feishu_notification:149] - [2025-11-14 13:48] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
-DEBUG    - 2025-11-14 13:49:05 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
-DEBUG    - 2025-11-14 13:49:06 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
-INFO     - 2025-11-14 13:49:06 - [feishu_notification:157] - [2025-11-14 13:48] 飞书响应状态码: 200
-INFO     - 2025-11-14 13:49:06 - [feishu_notification:158] - [2025-11-14 13:48] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
-INFO     - 2025-11-14 13:49:06 - [feishu_notification:163] - [2025-11-14 13:48] [FEISHU] 消息发送成功
-INFO     - 2025-11-14 13:49:06 - [conftest:380] - [2025-11-14 13:48] 飞书通知发送成功
+INFO     - 2025-11-20 14:43:31 - [conftest:341] - [2025-11-20 14:43] 测试会话开始: 2025-11-20 14:43:31, 测试组: cloud
+INFO     - 2025-11-20 14:43:32 - [variable_manager:40] - [2025-11-20 14:43] 成功加载静态变量: VAR\uat_data.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:64] - [2025-11-20 14:43] 成功加载运行时变量: VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [api_base:447] - [2025-11-20 14:43:32] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE remark = %s ORDER BY account ASC 
+参数: ('参数化新增云策略账号',)
+INFO     - 2025-11-20 14:43:32 - [api_base:450] - [2025-11-20 14:43:32] 查询成功，结果数量: 10
+INFO     - 2025-11-20 14:43:32 - [api_base:462] - [2025-11-20 14:43:32] 查询结果: [{"id": 11152, "account": "31580", "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "account_type": null, "server_node": "47.238.99.66:443", "group_name": null, "group_id": null, "sort": 100, "status": 1, "remark": "参数化新增云策略账号", "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:10:36", "updater": 10105, "update_time": "2025-11-20 14:10:43", "platform_type": 0}, {"id": 11153, "account": "31581", "password": "4d490499c
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_1 = 11152
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_1 = 31580
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_2 = 11153
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_2 = 31581
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_3 = 11151
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_3 = 31582
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_4 = 11145
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_4 = 31583
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_5 = 11148
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_5 = 31584
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_6 = 11150
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_6 = 31585
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_7 = 11147
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_7 = 31586
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_8 = 11146
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_8 = 31587
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_9 = 11149
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_9 = 31588
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_10 = 11144
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_accounts_10 = 31589
+INFO     - 2025-11-20 14:43:32 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:32 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_count = 10
+INFO     - 2025-11-20 14:43:33 - [api_base:447] - [2025-11-20 14:43:33] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31580',)
+INFO     - 2025-11-20 14:43:33 - [api_base:450] - [2025-11-20 14:43:33] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:33 - [api_base:462] - [2025-11-20 14:43:33] 查询结果: [{"id": 11527, "account": "31580", "is_demo": 1, "type": 0, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999236.45, "balance": 10000000.0, "free_margin": 9999199.15, "margin_proportion": 268076.0442, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": "", "deleted": 0
+INFO     - 2025-11-20 14:43:33 - [test_create:178] - 新增策略账号ID: 11527
+INFO     - 2025-11-20 14:43:33 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:33 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_id = 11527
+INFO     - 2025-11-20 14:43:33 - [test_create:186] - 新增策略账号状态status应为0（正常），实际状态为: 0
+INFO     - 2025-11-20 14:43:33 - [api_base:537] - [2025-11-20 14:43:33] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:33 - [api_base:447] - [2025-11-20 14:43:33] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:43:33 - [api_base:450] - [2025-11-20 14:43:33] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:33 - [api_base:462] - [2025-11-20 14:43:33] 查询结果: [{"id": 11529, "account": "31581", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9944423.05, "balance": 9944423.05, "free_margin": 9944423.05, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:43:35 - [api_base:447] - [2025-11-20 14:43:35] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:43:35 - [api_base:450] - [2025-11-20 14:43:35] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:35 - [api_base:462] - [2025-11-20 14:43:35] 查询结果: [{"id": 11529, "account": "31581", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9944423.05, "balance": 9944423.05, "free_margin": 9944423.05, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:43:37 - [api_base:447] - [2025-11-20 14:43:37] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:43:37 - [api_base:450] - [2025-11-20 14:43:37] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:37 - [api_base:462] - [2025-11-20 14:43:37] 查询结果: [{"id": 11529, "account": "31581", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9944423.05, "balance": 9944423.05, "free_margin": 9944423.05, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:43:37 - [api_base:578] - [2025-11-20 14:43:37] 数据已稳定2秒（耗时4.4秒）| 结果数: 1
+INFO     - 2025-11-20 14:43:37 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:37 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_1 = 11529
+INFO     - 2025-11-20 14:43:37 - [test_create:290] - 账号 31581 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:43:37 - [api_base:537] - [2025-11-20 14:43:37] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:37 - [api_base:447] - [2025-11-20 14:43:37] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:43:37 - [api_base:450] - [2025-11-20 14:43:37] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:37 - [api_base:462] - [2025-11-20 14:43:37] 查询结果: [{"id": 8141, "master_id": 11527, "slave_id": 11529, "master_account": "31580", "slave_account": "31581", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:53", "updater": null, "update_time": "2025-11-20 14:10:53", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:39 - [api_base:447] - [2025-11-20 14:43:39] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:43:40 - [api_base:450] - [2025-11-20 14:43:40] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:40 - [api_base:462] - [2025-11-20 14:43:40] 查询结果: [{"id": 8141, "master_id": 11527, "slave_id": 11529, "master_account": "31580", "slave_account": "31581", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:53", "updater": null, "update_time": "2025-11-20 14:10:53", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:42 - [api_base:447] - [2025-11-20 14:43:42] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:43:42 - [api_base:450] - [2025-11-20 14:43:42] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:42 - [api_base:462] - [2025-11-20 14:43:42] 查询结果: [{"id": 8141, "master_id": 11527, "slave_id": 11529, "master_account": "31580", "slave_account": "31581", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:53", "updater": null, "update_time": "2025-11-20 14:10:53", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:42 - [api_base:578] - [2025-11-20 14:43:42] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:43:42 - [test_create:310] - 账号 31581 订阅表关联校验通过
+INFO     - 2025-11-20 14:43:42 - [api_base:537] - [2025-11-20 14:43:42] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:42 - [api_base:447] - [2025-11-20 14:43:42] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:43:42 - [api_base:450] - [2025-11-20 14:43:42] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:42 - [api_base:462] - [2025-11-20 14:43:42] 查询结果: [{"id": 11533, "account": "31582", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999236.1, "balance": 10000000.0, "free_margin": 9999194.65, "margin_proportion": 241236.0941, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 
+INFO     - 2025-11-20 14:43:44 - [api_base:447] - [2025-11-20 14:43:44] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:43:44 - [api_base:450] - [2025-11-20 14:43:44] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:44 - [api_base:462] - [2025-11-20 14:43:44] 查询结果: [{"id": 11533, "account": "31582", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999236.1, "balance": 10000000.0, "free_margin": 9999194.65, "margin_proportion": 241236.0941, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 
+INFO     - 2025-11-20 14:43:46 - [api_base:447] - [2025-11-20 14:43:46] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:43:46 - [api_base:450] - [2025-11-20 14:43:46] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:46 - [api_base:462] - [2025-11-20 14:43:46] 查询结果: [{"id": 11533, "account": "31582", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999236.1, "balance": 10000000.0, "free_margin": 9999194.65, "margin_proportion": 241236.0941, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 
+INFO     - 2025-11-20 14:43:46 - [api_base:578] - [2025-11-20 14:43:46] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:43:46 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:46 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_2 = 11533
+INFO     - 2025-11-20 14:43:46 - [test_create:290] - 账号 31582 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:43:46 - [api_base:537] - [2025-11-20 14:43:46] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:46 - [api_base:447] - [2025-11-20 14:43:46] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:43:46 - [api_base:450] - [2025-11-20 14:43:46] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:46 - [api_base:462] - [2025-11-20 14:43:46] 查询结果: [{"id": 8148, "master_id": 11527, "slave_id": 11533, "master_account": "31580", "slave_account": "31582", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:48 - [api_base:447] - [2025-11-20 14:43:48] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:43:48 - [api_base:450] - [2025-11-20 14:43:48] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:48 - [api_base:462] - [2025-11-20 14:43:48] 查询结果: [{"id": 8148, "master_id": 11527, "slave_id": 11533, "master_account": "31580", "slave_account": "31582", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:50 - [api_base:447] - [2025-11-20 14:43:50] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:43:50 - [api_base:450] - [2025-11-20 14:43:50] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:50 - [api_base:462] - [2025-11-20 14:43:50] 查询结果: [{"id": 8148, "master_id": 11527, "slave_id": 11533, "master_account": "31580", "slave_account": "31582", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:50 - [api_base:578] - [2025-11-20 14:43:50] 数据已稳定2秒（耗时4.4秒）| 结果数: 1
+INFO     - 2025-11-20 14:43:50 - [test_create:310] - 账号 31582 订阅表关联校验通过
+INFO     - 2025-11-20 14:43:50 - [api_base:537] - [2025-11-20 14:43:50] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:50 - [api_base:447] - [2025-11-20 14:43:50] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:43:50 - [api_base:450] - [2025-11-20 14:43:50] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:50 - [api_base:462] - [2025-11-20 14:43:50] 查询结果: [{"id": 11528, "account": "31583", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9943289.12, "balance": 9943289.12, "free_margin": 9943289.12, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:43:53 - [api_base:447] - [2025-11-20 14:43:53] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:43:53 - [api_base:450] - [2025-11-20 14:43:53] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:53 - [api_base:462] - [2025-11-20 14:43:53] 查询结果: [{"id": 11528, "account": "31583", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9943289.12, "balance": 9943289.12, "free_margin": 9943289.12, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:43:55 - [api_base:447] - [2025-11-20 14:43:55] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:43:55 - [api_base:450] - [2025-11-20 14:43:55] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:55 - [api_base:462] - [2025-11-20 14:43:55] 查询结果: [{"id": 11528, "account": "31583", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9943289.12, "balance": 9943289.12, "free_margin": 9943289.12, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:43:55 - [api_base:578] - [2025-11-20 14:43:55] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:43:55 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:43:55 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_3 = 11528
+INFO     - 2025-11-20 14:43:55 - [test_create:290] - 账号 31583 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:43:55 - [api_base:537] - [2025-11-20 14:43:55] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:55 - [api_base:447] - [2025-11-20 14:43:55] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:43:55 - [api_base:450] - [2025-11-20 14:43:55] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:55 - [api_base:462] - [2025-11-20 14:43:55] 查询结果: [{"id": 8140, "master_id": 11527, "slave_id": 11528, "master_account": "31580", "slave_account": "31583", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:52", "updater": null, "update_time": "2025-11-20 14:10:52", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:57 - [api_base:447] - [2025-11-20 14:43:57] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:43:57 - [api_base:450] - [2025-11-20 14:43:57] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:57 - [api_base:462] - [2025-11-20 14:43:57] 查询结果: [{"id": 8140, "master_id": 11527, "slave_id": 11528, "master_account": "31580", "slave_account": "31583", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:52", "updater": null, "update_time": "2025-11-20 14:10:52", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:59 - [api_base:447] - [2025-11-20 14:43:59] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:43:59 - [api_base:450] - [2025-11-20 14:43:59] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:59 - [api_base:462] - [2025-11-20 14:43:59] 查询结果: [{"id": 8140, "master_id": 11527, "slave_id": 11528, "master_account": "31580", "slave_account": "31583", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:52", "updater": null, "update_time": "2025-11-20 14:10:52", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:43:59 - [api_base:578] - [2025-11-20 14:43:59] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:43:59 - [test_create:310] - 账号 31583 订阅表关联校验通过
+INFO     - 2025-11-20 14:43:59 - [api_base:537] - [2025-11-20 14:43:59] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:43:59 - [api_base:447] - [2025-11-20 14:43:59] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:43:59 - [api_base:450] - [2025-11-20 14:43:59] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:43:59 - [api_base:462] - [2025-11-20 14:43:59] 查询结果: [{"id": 11535, "account": "31584", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9996387.6, "balance": 9996387.6, "free_margin": 9996387.6, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:01 - [api_base:447] - [2025-11-20 14:44:01] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:44:01 - [api_base:450] - [2025-11-20 14:44:01] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:01 - [api_base:462] - [2025-11-20 14:44:01] 查询结果: [{"id": 11535, "account": "31584", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9996387.6, "balance": 9996387.6, "free_margin": 9996387.6, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:03 - [api_base:447] - [2025-11-20 14:44:03] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:44:03 - [api_base:450] - [2025-11-20 14:44:03] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:03 - [api_base:462] - [2025-11-20 14:44:03] 查询结果: [{"id": 11535, "account": "31584", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9996387.6, "balance": 9996387.6, "free_margin": 9996387.6, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:03 - [api_base:578] - [2025-11-20 14:44:03] 数据已稳定2秒（耗时4.4秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:03 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:03 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_4 = 11535
+INFO     - 2025-11-20 14:44:03 - [test_create:290] - 账号 31584 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:03 - [api_base:537] - [2025-11-20 14:44:03] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:03 - [api_base:447] - [2025-11-20 14:44:03] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:44:04 - [api_base:450] - [2025-11-20 14:44:04] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:04 - [api_base:462] - [2025-11-20 14:44:04] 查询结果: [{"id": 8146, "master_id": 11527, "slave_id": 11535, "master_account": "31580", "slave_account": "31584", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:06 - [api_base:447] - [2025-11-20 14:44:06] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:44:06 - [api_base:450] - [2025-11-20 14:44:06] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:06 - [api_base:462] - [2025-11-20 14:44:06] 查询结果: [{"id": 8146, "master_id": 11527, "slave_id": 11535, "master_account": "31580", "slave_account": "31584", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:08 - [api_base:447] - [2025-11-20 14:44:08] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:44:08 - [api_base:450] - [2025-11-20 14:44:08] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:08 - [api_base:462] - [2025-11-20 14:44:08] 查询结果: [{"id": 8146, "master_id": 11527, "slave_id": 11535, "master_account": "31580", "slave_account": "31584", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:08 - [api_base:578] - [2025-11-20 14:44:08] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:08 - [test_create:310] - 账号 31584 订阅表关联校验通过
+INFO     - 2025-11-20 14:44:08 - [api_base:537] - [2025-11-20 14:44:08] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:08 - [api_base:447] - [2025-11-20 14:44:08] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:44:08 - [api_base:450] - [2025-11-20 14:44:08] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:08 - [api_base:462] - [2025-11-20 14:44:08] 查询结果: [{"id": 11534, "account": "31585", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9997829.6, "balance": 9997829.6, "free_margin": 9997829.6, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:10 - [api_base:447] - [2025-11-20 14:44:10] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:44:10 - [api_base:450] - [2025-11-20 14:44:10] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:10 - [api_base:462] - [2025-11-20 14:44:10] 查询结果: [{"id": 11534, "account": "31585", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9997829.6, "balance": 9997829.6, "free_margin": 9997829.6, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:12 - [api_base:447] - [2025-11-20 14:44:12] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:44:12 - [api_base:450] - [2025-11-20 14:44:12] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:12 - [api_base:462] - [2025-11-20 14:44:12] 查询结果: [{"id": 11534, "account": "31585", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9997829.6, "balance": 9997829.6, "free_margin": 9997829.6, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:12 - [api_base:578] - [2025-11-20 14:44:12] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:12 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:12 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_5 = 11534
+INFO     - 2025-11-20 14:44:12 - [test_create:290] - 账号 31585 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:12 - [api_base:537] - [2025-11-20 14:44:12] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:12 - [api_base:447] - [2025-11-20 14:44:12] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:44:12 - [api_base:450] - [2025-11-20 14:44:12] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:12 - [api_base:462] - [2025-11-20 14:44:12] 查询结果: [{"id": 8144, "master_id": 11527, "slave_id": 11534, "master_account": "31580", "slave_account": "31585", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:14 - [api_base:447] - [2025-11-20 14:44:14] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:44:14 - [api_base:450] - [2025-11-20 14:44:14] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:14 - [api_base:462] - [2025-11-20 14:44:14] 查询结果: [{"id": 8144, "master_id": 11527, "slave_id": 11534, "master_account": "31580", "slave_account": "31585", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:16 - [api_base:447] - [2025-11-20 14:44:16] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:44:17 - [api_base:450] - [2025-11-20 14:44:17] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:17 - [api_base:462] - [2025-11-20 14:44:17] 查询结果: [{"id": 8144, "master_id": 11527, "slave_id": 11534, "master_account": "31580", "slave_account": "31585", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:17 - [api_base:578] - [2025-11-20 14:44:17] 数据已稳定2秒（耗时4.4秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:17 - [test_create:310] - 账号 31585 订阅表关联校验通过
+INFO     - 2025-11-20 14:44:17 - [api_base:537] - [2025-11-20 14:44:17] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:17 - [api_base:447] - [2025-11-20 14:44:17] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:44:17 - [api_base:450] - [2025-11-20 14:44:17] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:17 - [api_base:462] - [2025-11-20 14:44:17] 查询结果: [{"id": 11530, "account": "31586", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999248.3, "balance": 9999248.3, "free_margin": 9999248.3, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:19 - [api_base:447] - [2025-11-20 14:44:19] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:44:19 - [api_base:450] - [2025-11-20 14:44:19] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:19 - [api_base:462] - [2025-11-20 14:44:19] 查询结果: [{"id": 11530, "account": "31586", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999248.3, "balance": 9999248.3, "free_margin": 9999248.3, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:21 - [api_base:447] - [2025-11-20 14:44:21] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:44:21 - [api_base:450] - [2025-11-20 14:44:21] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:21 - [api_base:462] - [2025-11-20 14:44:21] 查询结果: [{"id": 11530, "account": "31586", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999248.3, "balance": 9999248.3, "free_margin": 9999248.3, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:21 - [api_base:578] - [2025-11-20 14:44:21] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:21 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:21 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_6 = 11530
+INFO     - 2025-11-20 14:44:21 - [test_create:290] - 账号 31586 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:21 - [api_base:537] - [2025-11-20 14:44:21] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:21 - [api_base:447] - [2025-11-20 14:44:21] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:44:21 - [api_base:450] - [2025-11-20 14:44:21] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:21 - [api_base:462] - [2025-11-20 14:44:21] 查询结果: [{"id": 8142, "master_id": 11527, "slave_id": 11530, "master_account": "31580", "slave_account": "31586", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:53", "updater": null, "update_time": "2025-11-20 14:10:53", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:23 - [api_base:447] - [2025-11-20 14:44:23] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:44:23 - [api_base:450] - [2025-11-20 14:44:23] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:23 - [api_base:462] - [2025-11-20 14:44:23] 查询结果: [{"id": 8142, "master_id": 11527, "slave_id": 11530, "master_account": "31580", "slave_account": "31586", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:53", "updater": null, "update_time": "2025-11-20 14:10:53", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:25 - [api_base:447] - [2025-11-20 14:44:25] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:44:25 - [api_base:450] - [2025-11-20 14:44:25] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:25 - [api_base:462] - [2025-11-20 14:44:25] 查询结果: [{"id": 8142, "master_id": 11527, "slave_id": 11530, "master_account": "31580", "slave_account": "31586", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:53", "updater": null, "update_time": "2025-11-20 14:10:53", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:25 - [api_base:578] - [2025-11-20 14:44:25] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:25 - [test_create:310] - 账号 31586 订阅表关联校验通过
+INFO     - 2025-11-20 14:44:25 - [api_base:537] - [2025-11-20 14:44:25] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:25 - [api_base:447] - [2025-11-20 14:44:25] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:44:25 - [api_base:450] - [2025-11-20 14:44:25] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:25 - [api_base:462] - [2025-11-20 14:44:25] 查询结果: [{"id": 11531, "account": "31587", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999250.79, "balance": 9999250.79, "free_margin": 9999250.79, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:44:27 - [api_base:447] - [2025-11-20 14:44:27] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:44:27 - [api_base:450] - [2025-11-20 14:44:27] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:27 - [api_base:462] - [2025-11-20 14:44:27] 查询结果: [{"id": 11531, "account": "31587", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999250.79, "balance": 9999250.79, "free_margin": 9999250.79, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:44:30 - [api_base:447] - [2025-11-20 14:44:30] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:44:30 - [api_base:450] - [2025-11-20 14:44:30] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:30 - [api_base:462] - [2025-11-20 14:44:30] 查询结果: [{"id": 11531, "account": "31587", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999250.79, "balance": 9999250.79, "free_margin": 9999250.79, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:44:30 - [api_base:578] - [2025-11-20 14:44:30] 数据已稳定2秒（耗时4.4秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:30 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:30 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_7 = 11531
+INFO     - 2025-11-20 14:44:30 - [test_create:290] - 账号 31587 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:30 - [api_base:537] - [2025-11-20 14:44:30] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:30 - [api_base:447] - [2025-11-20 14:44:30] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:44:30 - [api_base:450] - [2025-11-20 14:44:30] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:30 - [api_base:462] - [2025-11-20 14:44:30] 查询结果: [{"id": 8143, "master_id": 11527, "slave_id": 11531, "master_account": "31580", "slave_account": "31587", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:32 - [api_base:447] - [2025-11-20 14:44:32] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:44:32 - [api_base:450] - [2025-11-20 14:44:32] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:32 - [api_base:462] - [2025-11-20 14:44:32] 查询结果: [{"id": 8143, "master_id": 11527, "slave_id": 11531, "master_account": "31580", "slave_account": "31587", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:34 - [api_base:447] - [2025-11-20 14:44:34] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:44:34 - [api_base:450] - [2025-11-20 14:44:34] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:34 - [api_base:462] - [2025-11-20 14:44:34] 查询结果: [{"id": 8143, "master_id": 11527, "slave_id": 11531, "master_account": "31580", "slave_account": "31587", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:34 - [api_base:578] - [2025-11-20 14:44:34] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:34 - [test_create:310] - 账号 31587 订阅表关联校验通过
+INFO     - 2025-11-20 14:44:34 - [api_base:537] - [2025-11-20 14:44:34] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:34 - [api_base:447] - [2025-11-20 14:44:34] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:44:34 - [api_base:450] - [2025-11-20 14:44:34] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:34 - [api_base:462] - [2025-11-20 14:44:34] 查询结果: [{"id": 11532, "account": "31588", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999250.1, "balance": 9999250.1, "free_margin": 9999250.1, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:36 - [api_base:447] - [2025-11-20 14:44:36] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:44:36 - [api_base:450] - [2025-11-20 14:44:36] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:36 - [api_base:462] - [2025-11-20 14:44:36] 查询结果: [{"id": 11532, "account": "31588", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999250.1, "balance": 9999250.1, "free_margin": 9999250.1, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:38 - [api_base:447] - [2025-11-20 14:44:38] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:44:38 - [api_base:450] - [2025-11-20 14:44:38] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:38 - [api_base:462] - [2025-11-20 14:44:38] 查询结果: [{"id": 11532, "account": "31588", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999250.1, "balance": 9999250.1, "free_margin": 9999250.1, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "creato
+INFO     - 2025-11-20 14:44:38 - [api_base:578] - [2025-11-20 14:44:38] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:38 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:38 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_8 = 11532
+INFO     - 2025-11-20 14:44:38 - [test_create:290] - 账号 31588 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:38 - [api_base:537] - [2025-11-20 14:44:38] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:38 - [api_base:447] - [2025-11-20 14:44:38] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:44:38 - [api_base:450] - [2025-11-20 14:44:38] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:38 - [api_base:462] - [2025-11-20 14:44:38] 查询结果: [{"id": 8145, "master_id": 11527, "slave_id": 11532, "master_account": "31580", "slave_account": "31588", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:40 - [api_base:447] - [2025-11-20 14:44:40] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:44:40 - [api_base:450] - [2025-11-20 14:44:40] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:40 - [api_base:462] - [2025-11-20 14:44:40] 查询结果: [{"id": 8145, "master_id": 11527, "slave_id": 11532, "master_account": "31580", "slave_account": "31588", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:43 - [api_base:447] - [2025-11-20 14:44:43] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:44:43 - [api_base:450] - [2025-11-20 14:44:43] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:43 - [api_base:462] - [2025-11-20 14:44:43] 查询结果: [{"id": 8145, "master_id": 11527, "slave_id": 11532, "master_account": "31580", "slave_account": "31588", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:54", "updater": null, "update_time": "2025-11-20 14:10:54", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:43 - [api_base:578] - [2025-11-20 14:44:43] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:43 - [test_create:310] - 账号 31588 订阅表关联校验通过
+INFO     - 2025-11-20 14:44:43 - [api_base:537] - [2025-11-20 14:44:43] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:43 - [api_base:447] - [2025-11-20 14:44:43] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:44:43 - [api_base:450] - [2025-11-20 14:44:43] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:43 - [api_base:462] - [2025-11-20 14:44:43] 查询结果: [{"id": 11536, "account": "31589", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999249.11, "balance": 9999249.11, "free_margin": 9999249.11, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:44:45 - [api_base:447] - [2025-11-20 14:44:45] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:44:45 - [api_base:450] - [2025-11-20 14:44:45] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:45 - [api_base:462] - [2025-11-20 14:44:45] 查询结果: [{"id": 11536, "account": "31589", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999249.11, "balance": 9999249.11, "free_margin": 9999249.11, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:44:47 - [api_base:447] - [2025-11-20 14:44:47] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:44:47 - [api_base:450] - [2025-11-20 14:44:47] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:47 - [api_base:462] - [2025-11-20 14:44:47] 查询结果: [{"id": 11536, "account": "31589", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 346, "platform": "FXAdamantStone-Real", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 9999249.11, "balance": 9999249.11, "free_margin": 9999249.11, "margin_proportion": 0.0, "leverage": 1000, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": null, "deleted": 0, "cre
+INFO     - 2025-11-20 14:44:47 - [api_base:578] - [2025-11-20 14:44:47] 数据已稳定2秒（耗时4.3秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:47 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:47 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_vps_ids_9 = 11536
+INFO     - 2025-11-20 14:44:47 - [test_create:290] - 账号 31589 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:47 - [api_base:537] - [2025-11-20 14:44:47] 开始轮询等待数据稳定 | 超时: 30秒 | 稳定期: 2秒
+INFO     - 2025-11-20 14:44:47 - [api_base:447] - [2025-11-20 14:44:47] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:44:47 - [api_base:450] - [2025-11-20 14:44:47] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:47 - [api_base:462] - [2025-11-20 14:44:47] 查询结果: [{"id": 8147, "master_id": 11527, "slave_id": 11536, "master_account": "31580", "slave_account": "31589", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:49 - [api_base:447] - [2025-11-20 14:44:49] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:44:49 - [api_base:450] - [2025-11-20 14:44:49] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:49 - [api_base:462] - [2025-11-20 14:44:49] 查询结果: [{"id": 8147, "master_id": 11527, "slave_id": 11536, "master_account": "31580", "slave_account": "31589", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:51 - [api_base:447] - [2025-11-20 14:44:51] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY slave_account ASC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:44:51 - [api_base:450] - [2025-11-20 14:44:51] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:51 - [api_base:462] - [2025-11-20 14:44:51] 查询结果: [{"id": 8147, "master_id": 11527, "slave_id": 11536, "master_account": "31580", "slave_account": "31589", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 1, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": null, "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:10:55", "updater": null, "update_time": "2025-11-20 14:10:55", "remainder": 0, "fixed_comment": null, "commen
+INFO     - 2025-11-20 14:44:51 - [api_base:578] - [2025-11-20 14:44:51] 数据已稳定2秒（耗时4.4秒）| 结果数: 1
+INFO     - 2025-11-20 14:44:51 - [test_create:310] - 账号 31589 订阅表关联校验通过
+INFO     - 2025-11-20 14:44:51 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:51 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_account = 9
+INFO     - 2025-11-20 14:44:51 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:51 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_all_vps_ids = [11529, 11533, 11528, 11535, 11534, 11530, 11531, 11532, 11536]
+INFO     - 2025-11-20 14:44:52 - [api_base:447] - [2025-11-20 14:44:52] 执行SQL: 
+SELECT * FROM follow_group WHERE name = %s ORDER BY create_time DESC 
+参数: ('云策略组别',)
+INFO     - 2025-11-20 14:44:52 - [api_base:450] - [2025-11-20 14:44:52] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:52 - [api_base:462] - [2025-11-20 14:44:52] 查询结果: [{"id": 721, "name": "云策略组别", "number": 2, "color": "#EF7979", "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:12:32", "updater": 10092, "update_time": "2025-11-20 14:41:58", "sort": 10.0, "type": 2}]
+INFO     - 2025-11-20 14:44:52 - [test_create:370] - 新增云策略组别ID: 721
+INFO     - 2025-11-20 14:44:52 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:52 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_group_id = 721
+INFO     - 2025-11-20 14:44:52 - [api_base:447] - [2025-11-20 14:44:52] 执行SQL: 
+SELECT * FROM follow_cloud_master WHERE name = %s ORDER BY create_time DESC 
+参数: ('自动化测试',)
+INFO     - 2025-11-20 14:44:52 - [api_base:450] - [2025-11-20 14:44:52] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:52 - [api_base:462] - [2025-11-20 14:44:52] 查询结果: [{"id": 482, "name": "自动化测试", "type": 0, "status": 0, "remark": null, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:12:35", "updater": 10105, "update_time": "2025-11-20 14:12:35", "start_time": "2025-11-20 14:12:35", "sort": 100, "group_id": "721", "is_monitor_repair": 1, "is_auto_repair": 1, "single_miss": 0}]
+INFO     - 2025-11-20 14:44:52 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:52 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudMaster_id = 482
+INFO     - 2025-11-20 14:44:52 - [test_create:418] - 新增云策略账号id是：482
+INFO     - 2025-11-20 14:44:52 - [api_base:447] - [2025-11-20 14:44:52] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:44:52 - [api_base:450] - [2025-11-20 14:44:52] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:52 - [api_base:462] - [2025-11-20 14:44:52] 查询结果: [{"id": 5952, "cloud_id": 482, "account": "31581", "platform": "FXAdamantStone-Real", "manager_ip": null, "manager_account": null, "manager_password": null, "trader_id": 11529, "template_id": null, "remark": "新增云策略账号", "source_type": 0, "account_status": 0, "running_status": 0, "type": 0, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:12:39", "updater": 10105, "update_time": "2025-11-20 14:12:39", "follow_mode": 0, "follow_param": 0.0, "follow_status": 1, "follow_ope
+INFO     - 2025-11-20 14:44:52 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:52 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_traderList_2 = 5952
+INFO     - 2025-11-20 14:44:52 - [test_create:482] - 新增策略账号id是：5952
+INFO     - 2025-11-20 14:44:52 - [api_base:447] - [2025-11-20 14:44:52] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:44:53 - [api_base:450] - [2025-11-20 14:44:53] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:53 - [api_base:462] - [2025-11-20 14:44:53] 查询结果: [{"id": 5953, "cloud_id": 482, "account": "31582", "platform": "FXAdamantStone-Real", "manager_ip": "hk-dc-01.adamantstone.co:443", "manager_account": "66", "manager_password": "25a89db6ef0840cdd54d95907e8e3003", "trader_id": null, "template_id": 1, "remark": "新增manager账号", "source_type": 1, "account_status": 0, "running_status": 0, "type": 0, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:12:44", "updater": 10105, "update_time": "2025-11-20 14:12:44", "follow_mode":
+INFO     - 2025-11-20 14:44:53 - [test_create:550] - 新增manager账号服务器是：hk-dc-01.adamantstone.co:443 应该是：hk-dc-01.adamantstone.co:443
+INFO     - 2025-11-20 14:44:53 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:53 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_traderList_3 = 5953
+INFO     - 2025-11-20 14:44:53 - [test_create:555] - 新增manager账号id是：5953
+INFO     - 2025-11-20 14:44:53 - [api_base:447] - [2025-11-20 14:44:53] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s ORDER BY create_time DESC 
+参数: ('31583', 482)
+INFO     - 2025-11-20 14:44:53 - [api_base:450] - [2025-11-20 14:44:53] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:53 - [api_base:462] - [2025-11-20 14:44:53] 查询结果: [{"id": 5954, "cloud_id": 482, "account": "31583", "platform": "FXAdamantStone-Real", "manager_ip": null, "manager_account": null, "manager_password": null, "trader_id": 11528, "template_id": 1, "remark": "", "source_type": 0, "account_status": 0, "running_status": 0, "type": 1, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:12:49", "updater": 10105, "update_time": "2025-11-20 14:13:46", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "fo
+INFO     - 2025-11-20 14:44:53 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:53 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_traderList_4 = 5954
+INFO     - 2025-11-20 14:44:53 - [test_create:631] - 新增云跟单账号id是：5954
+INFO     - 2025-11-20 14:44:53 - [api_base:447] - [2025-11-20 14:44:53] 执行SQL: 
+SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('自动化2',)
+INFO     - 2025-11-20 14:44:54 - [api_base:450] - [2025-11-20 14:44:54] 查询成功，结果数量: 1222
+INFO     - 2025-11-20 14:44:54 - [api_base:462] - [2025-11-20 14:44:54] 查询结果: [{"id": 1750228, "std_contract": 1000, "std_symbol": "XAGEUR", "broker_name": "HYCM-Demo", "broker_symbol": "XAGEUR", "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:12:53", "updater": null, "update_time": "2025-11-20 14:12:53", "template_id": 34, "template_name": "自动化2"}, {"id": 1750230, "std_contract": 100000, "std_symbol": "USDCZK", "broker_name": "Hantec", "broker_symbol": "USDCZK", "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:12:53", 
+INFO     - 2025-11-20 14:44:54 - [test_create:685] - 新增品种id: 34
+INFO     - 2025-11-20 14:44:54 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:54 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_template_id1 = 34
+INFO     - 2025-11-20 14:44:54 - [api_base:447] - [2025-11-20 14:44:54] 执行SQL: 
+SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('自动化4',)
+INFO     - 2025-11-20 14:44:55 - [api_base:450] - [2025-11-20 14:44:55] 查询成功，结果数量: 1222
+INFO     - 2025-11-20 14:44:55 - [api_base:462] - [2025-11-20 14:44:55] 查询结果: [{"id": 1750687, "std_contract": 100000, "std_symbol": "EURUSD", "broker_name": "FX", "broker_symbol": null, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:12:59", "updater": null, "update_time": "2025-11-20 14:12:59", "template_id": 35, "template_name": "自动化4"}, {"id": 1750688, "std_contract": 100000, "std_symbol": "USDJPY", "broker_name": "FX", "broker_symbol": null, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:12:59", "updater": null, 
+INFO     - 2025-11-20 14:44:55 - [test_create:740] - 新增品种id: 35
+INFO     - 2025-11-20 14:44:55 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:55 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_template_id2 = 35
+INFO     - 2025-11-20 14:44:55 - [api_base:447] - [2025-11-20 14:44:55] 执行SQL: 
+SELECT * FROM follow_cloud_master WHERE name = %s ORDER BY create_time DESC 
+参数: ('自动化测试_手动下单',)
+INFO     - 2025-11-20 14:44:55 - [api_base:450] - [2025-11-20 14:44:55] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:55 - [api_base:462] - [2025-11-20 14:44:55] 查询结果: [{"id": 483, "name": "自动化测试_手动下单", "type": 1, "status": 0, "remark": null, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:13:03", "updater": 10105, "update_time": "2025-11-20 14:13:03", "start_time": "2025-11-20 14:13:03", "sort": 100, "group_id": "721", "is_monitor_repair": 1, "is_auto_repair": 1, "single_miss": 0}]
+INFO     - 2025-11-20 14:44:55 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:55 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudMaster_id_hand = 483
+INFO     - 2025-11-20 14:44:55 - [test_create:789] - 新增云策略账号id是：483
+INFO     - 2025-11-20 14:44:55 - [api_base:447] - [2025-11-20 14:44:55] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s ORDER BY create_time DESC 
+参数: ('31583', 483)
+INFO     - 2025-11-20 14:44:55 - [api_base:450] - [2025-11-20 14:44:55] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:55 - [api_base:462] - [2025-11-20 14:44:55] 查询结果: [{"id": 5955, "cloud_id": 483, "account": "31583", "platform": "FXAdamantStone-Real", "manager_ip": null, "manager_account": null, "manager_password": null, "trader_id": 11528, "template_id": 1, "remark": "测试手动下单", "source_type": 0, "account_status": 0, "running_status": 0, "type": 1, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:13:07", "updater": 10105, "update_time": "2025-11-20 14:13:07", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 
+INFO     - 2025-11-20 14:44:55 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:55 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_traderList_handid = 5955
+INFO     - 2025-11-20 14:44:55 - [test_create:855] - 新增云跟单账号id是：5955
+INFO     - 2025-11-20 14:44:56 - [api_base:447] - [2025-11-20 14:44:56] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938908',)
+INFO     - 2025-11-20 14:44:56 - [api_base:450] - [2025-11-20 14:44:56] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:56 - [api_base:462] - [2025-11-20 14:44:56] 查询结果: [{"id": 11537, "account": "66938908", "is_demo": 1, "type": 1, "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 2165, "platform": "CWGMarketsSVG-Demo", "status": 0, "status_extra": "启动成功", "ip_addr": "39.101.181.190", "server_id": 57, "server_name": "张家口 （39.101.181.190）-I T", "euqit": 97362.19, "balance": 97362.19, "free_margin": 97322.92, "margin_proportion": 0.0, "leverage": 100, "profit_loss": 0.0, "multiple": 0.0, "diff": 2, "version": 0, "remark": "", "deleted": 0, "creator":
+INFO     - 2025-11-20 14:44:56 - [test_create:971] - 新增跟单账号ID: 11537
+INFO     - 2025-11-20 14:44:56 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:56 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: MT5vps_addslave_id = 11537
+INFO     - 2025-11-20 14:44:56 - [test_create:977] - 账号 66938908 状态异常：预期status=0，实际=0
+INFO     - 2025-11-20 14:44:56 - [test_create:981] - 账号 66938908 净值异常：预期euqit>=0，实际=97362.19
+INFO     - 2025-11-20 14:44:56 - [api_base:447] - [2025-11-20 14:44:56] 执行SQL: 
+SELECT * FROM follow_trader_subscribe WHERE slave_account = %s ORDER BY create_time DESC 
+参数: ('66938908',)
+INFO     - 2025-11-20 14:44:56 - [api_base:450] - [2025-11-20 14:44:56] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:56 - [api_base:462] - [2025-11-20 14:44:56] 查询结果: [{"id": 8149, "master_id": 11527, "slave_id": 11537, "master_account": "31580", "slave_account": "66938908", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "follow_close": 1, "follow_rep": 0, "placed_type": 0, "tp_sl": 0, "follow_direction": 0, "pause": 0, "remark": "", "order_num": 0, "version": 0, "deleted": 0, "creator": null, "create_time": "2025-11-20 14:13:16", "updater": null, "update_time": "2025-11-20 14:13:16", "remainder": 0, "fixed_comment": "", "comment
+INFO     - 2025-11-20 14:44:56 - [test_create:995] - 账号新增成功，新增账号：66938908  数据库账号:66938908
+INFO     - 2025-11-20 14:44:56 - [api_base:447] - [2025-11-20 14:44:56] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s ORDER BY create_time DESC 
+参数: ('66938908', 482)
+INFO     - 2025-11-20 14:44:56 - [api_base:450] - [2025-11-20 14:44:56] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:56 - [api_base:462] - [2025-11-20 14:44:56] 查询结果: [{"id": 5956, "cloud_id": 482, "account": "66938908", "platform": "CWGMarketsSVG-Demo", "manager_ip": null, "manager_account": null, "manager_password": null, "trader_id": 11537, "template_id": 1, "remark": "", "source_type": 0, "account_status": 0, "running_status": 0, "type": 1, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:13:19", "updater": 10105, "update_time": "2025-11-20 14:13:47", "follow_mode": 1, "follow_param": 1.0, "follow_status": 1, "follow_open": 1, "
+INFO     - 2025-11-20 14:44:56 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:56 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_MT5traderID = 5956
+INFO     - 2025-11-20 14:44:56 - [test_create:1070] - 新增云跟单账号id是：5956
+INFO     - 2025-11-20 14:44:56 - [api_base:447] - [2025-11-20 14:44:56] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938908',)
+INFO     - 2025-11-20 14:44:56 - [api_base:450] - [2025-11-20 14:44:56] 查询成功，结果数量: 1
+INFO     - 2025-11-20 14:44:56 - [api_base:462] - [2025-11-20 14:44:56] 查询结果: [{"id": 11154, "account": "66938908", "password": "4d490499c86409791b0800ba36b9665c", "platform_id": 2165, "platform": "CWGMarketsSVG-Demo", "account_type": null, "server_node": "47.91.76.126:443", "group_name": null, "group_id": null, "sort": 1, "status": 1, "remark": null, "version": 0, "deleted": 0, "creator": 10105, "create_time": "2025-11-20 14:13:12", "updater": 10105, "update_time": "2025-11-20 14:13:12", "platform_type": 1}]
+INFO     - 2025-11-20 14:44:56 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:56 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_MT5userID = 11154
+INFO     - 2025-11-20 14:44:56 - [test_create:1084] - 账号id是：11154
+INFO     - 2025-11-20 14:44:56 - [variable_manager:40] - [2025-11-20 14:43] 成功加载静态变量: VAR\uat_data.json
+INFO     - 2025-11-20 14:44:56 - [variable_manager:64] - [2025-11-20 14:43] 成功加载运行时变量: VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:56 - [api_base:447] - [2025-11-20 14:44:56] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE account = %s ORDER BY account ASC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:44:56 - [api_base:450] - [2025-11-20 14:44:56] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:44:56 - [api_base:462] - [2025-11-20 14:44:56] 查询结果: []
+INFO     - 2025-11-20 14:44:57 - [variable_manager:40] - [2025-11-20 14:43] 成功加载静态变量: VAR\uat_data.json
+INFO     - 2025-11-20 14:44:57 - [variable_manager:64] - [2025-11-20 14:43] 成功加载运行时变量: VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:57 - [conftest:65] - [2025-11-20 14:44:57] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudBatch 开始登录，环境: uat
+INFO     - 2025-11-20 14:44:57 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 568070
+DEBUG    - 2025-11-20 14:44:57 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:44:58 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:44:58 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:44:57","refreshTokenExpire":"2025-12-04 14:44:57","access_token":"e5b2607ebf714941b62e23d84e0df710","refresh_token":"81070ea2c29547869487a1a0fbc59f23"}}
+INFO     - 2025-11-20 14:44:58 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:44:58 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:44:58 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = e5b2607ebf714941b62e23d84e0df710
+DEBUG    - 2025-11-20 14:44:58 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudBatchDelete HTTP/11" 200 None
+INFO     - 2025-11-20 14:44:58 - [api_base:152] - [2025-11-20 14:44:58] POST请求（JSON）: /mascontrol/cloudTrader/cloudBatchDelete 
+数据: {'traderList': [5954]}
+INFO     - 2025-11-20 14:44:58 - [api_base:160] - [2025-11-20 14:44:58] 请求后等待 1 秒
+INFO     - 2025-11-20 14:44:59 - [conftest:170] - [2025-11-20 14:44:59] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudBatch 执行完毕
+INFO     - 2025-11-20 14:44:59 - [test_delete:125] - 查询条件: table=follow_cloud_trader, id=5954
+INFO     - 2025-11-20 14:44:59 - [api_base:795] - [2025-11-20 14:44:59] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:44:59 - [api_base:447] - [2025-11-20 14:44:59] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE id = %s ORDER BY create_time DESC 
+参数: (5954,)
+INFO     - 2025-11-20 14:44:59 - [api_base:450] - [2025-11-20 14:44:59] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:44:59 - [api_base:462] - [2025-11-20 14:44:59] 查询结果: []
+INFO     - 2025-11-20 14:44:59 - [api_base:828] - [2025-11-20 14:44:59] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:44:59 - [conftest:65] - [2025-11-20 14:44:59] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_MT5cloudBatch 开始登录，环境: uat
+INFO     - 2025-11-20 14:44:59 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 568070
+DEBUG    - 2025-11-20 14:44:59 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:00 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:00 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:44:59","refreshTokenExpire":"2025-12-04 14:44:59","access_token":"4eb6f0653e2240c7b0ffe0baa2c6fb2f","refresh_token":"eccf826b79c44efebc4d226fd5c12172"}}
+INFO     - 2025-11-20 14:45:00 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:00 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:00 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 4eb6f0653e2240c7b0ffe0baa2c6fb2f
+DEBUG    - 2025-11-20 14:45:00 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudBatchDelete HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:00 - [api_base:152] - [2025-11-20 14:45:00] POST请求（JSON）: /mascontrol/cloudTrader/cloudBatchDelete 
+数据: {'traderList': [5956]}
+INFO     - 2025-11-20 14:45:00 - [api_base:160] - [2025-11-20 14:45:00] 请求后等待 1 秒
+INFO     - 2025-11-20 14:45:01 - [conftest:170] - [2025-11-20 14:45:01] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_MT5cloudBatch 执行完毕
+INFO     - 2025-11-20 14:45:01 - [api_base:795] - [2025-11-20 14:45:01] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:01 - [api_base:447] - [2025-11-20 14:45:01] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE id = %s ORDER BY create_time DESC 
+参数: (5956,)
+INFO     - 2025-11-20 14:45:01 - [api_base:450] - [2025-11-20 14:45:01] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:01 - [api_base:462] - [2025-11-20 14:45:01] 查询结果: []
+INFO     - 2025-11-20 14:45:01 - [api_base:828] - [2025-11-20 14:45:01] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:01 - [conftest:65] - [2025-11-20 14:45:01] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_addMT5Slave 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:01 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:01 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:01 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:01 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:01","refreshTokenExpire":"2025-12-04 14:45:01","access_token":"384ded28fc254a15a422643fa8363af5","refresh_token":"bbaf2df7b70a4418bc0409b2d8e7266d"}}
+INFO     - 2025-11-20 14:45:01 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:01 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:01 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 384ded28fc254a15a422643fa8363af5
+INFO     - 2025-11-20 14:45:01 - [conftest:165] - 切换到VPS URL: https://39.101.181.190/vps
+DEBUG    - 2025-11-20 14:45:01 - [connectionpool:1051] - Starting new HTTPS connection (1): 39.101.181.190:443
+DEBUG    - 2025-11-20 14:45:02 - [connectionpool:546] - https://39.101.181.190:443 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:02 - [api_base:239] - [2025-11-20 14:45:02] DELETE请求: /subcontrol/trader 
+数据: [11537]
+INFO     - 2025-11-20 14:45:03 - [conftest:170] - [2025-11-20 14:45:03] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_addMT5Slave 执行完毕
+INFO     - 2025-11-20 14:45:03 - [api_base:795] - [2025-11-20 14:45:03] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:03 - [api_base:447] - [2025-11-20 14:45:03] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938908',)
+INFO     - 2025-11-20 14:45:03 - [api_base:450] - [2025-11-20 14:45:03] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:03 - [api_base:462] - [2025-11-20 14:45:03] 查询结果: []
+INFO     - 2025-11-20 14:45:03 - [api_base:828] - [2025-11-20 14:45:03] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:03 - [conftest:65] - [2025-11-20 14:45:03] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_MT5user 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:03 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:03 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:03 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:03 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:03","refreshTokenExpire":"2025-12-04 14:45:03","access_token":"78a83cef4b9f423393d7f5e48f5ed287","refresh_token":"74668f60885f4301ae18b6d291b75d5d"}}
+INFO     - 2025-11-20 14:45:03 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:03 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:03 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 78a83cef4b9f423393d7f5e48f5ed287
+DEBUG    - 2025-11-20 14:45:03 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:03 - [api_base:239] - [2025-11-20 14:45:03] DELETE请求: /mascontrol/user 
+数据: [11154]
+INFO     - 2025-11-20 14:45:05 - [conftest:170] - [2025-11-20 14:45:05] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_MT5user 执行完毕
+INFO     - 2025-11-20 14:45:05 - [api_base:795] - [2025-11-20 14:45:05] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:05 - [api_base:447] - [2025-11-20 14:45:05] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('66938908',)
+INFO     - 2025-11-20 14:45:05 - [api_base:450] - [2025-11-20 14:45:05] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:05 - [api_base:462] - [2025-11-20 14:45:05] 查询结果: []
+INFO     - 2025-11-20 14:45:05 - [api_base:828] - [2025-11-20 14:45:05] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:05 - [conftest:65] - [2025-11-20 14:45:05] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_handcloudBatchAdd 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:05 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:05 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:05 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:05 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:04","refreshTokenExpire":"2025-12-04 14:45:04","access_token":"87ab1a46e93f4742914a7de4c9aeba60","refresh_token":"3fb8e830437c4ae9b6dd37c5496e80d6"}}
+INFO     - 2025-11-20 14:45:05 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:05 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:05 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 87ab1a46e93f4742914a7de4c9aeba60
+DEBUG    - 2025-11-20 14:45:05 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/cloudTrader/cloudBatchDelete HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:05 - [api_base:152] - [2025-11-20 14:45:05] POST请求（JSON）: /mascontrol/cloudTrader/cloudBatchDelete 
+数据: {'traderList': [5955]}
+INFO     - 2025-11-20 14:45:05 - [api_base:160] - [2025-11-20 14:45:05] 请求后等待 1 秒
+INFO     - 2025-11-20 14:45:06 - [conftest:170] - [2025-11-20 14:45:06] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_handcloudBatchAdd 执行完毕
+INFO     - 2025-11-20 14:45:06 - [test_delete:314] - 查询条件: table=follow_cloud_trader, id=5955
+INFO     - 2025-11-20 14:45:06 - [api_base:795] - [2025-11-20 14:45:06] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:06 - [api_base:447] - [2025-11-20 14:45:06] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE id = %s ORDER BY create_time DESC 
+参数: (5955,)
+INFO     - 2025-11-20 14:45:06 - [api_base:450] - [2025-11-20 14:45:06] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:06 - [api_base:462] - [2025-11-20 14:45:06] 查询结果: []
+INFO     - 2025-11-20 14:45:06 - [api_base:828] - [2025-11-20 14:45:06] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:07 - [conftest:65] - [2025-11-20 14:45:07] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_managercloudTrader 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:07 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:07 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:07 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:07 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:06","refreshTokenExpire":"2025-12-04 14:45:06","access_token":"61e50a56f1d34717b4980f7f5f70d91d","refresh_token":"50a838a53a1940ef923028d6387e244c"}}
+INFO     - 2025-11-20 14:45:07 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:07 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:07 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 61e50a56f1d34717b4980f7f5f70d91d
+DEBUG    - 2025-11-20 14:45:07 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/cloudTrader HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:07 - [api_base:239] - [2025-11-20 14:45:07] DELETE请求: /mascontrol/cloudTrader 
+数据: {'idList': [5953], 'isForceDel': 1}
+INFO     - 2025-11-20 14:45:08 - [conftest:170] - [2025-11-20 14:45:08] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_managercloudTrader 执行完毕
+INFO     - 2025-11-20 14:45:08 - [test_delete:366] - 查询条件: table=follow_cloud_trader, id=5953
+INFO     - 2025-11-20 14:45:08 - [api_base:795] - [2025-11-20 14:45:08] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:08 - [api_base:447] - [2025-11-20 14:45:08] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE id = %s ORDER BY create_time DESC 
+参数: (5953,)
+INFO     - 2025-11-20 14:45:08 - [api_base:450] - [2025-11-20 14:45:08] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:08 - [api_base:462] - [2025-11-20 14:45:08] 查询结果: []
+INFO     - 2025-11-20 14:45:08 - [api_base:828] - [2025-11-20 14:45:08] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:08 - [conftest:65] - [2025-11-20 14:45:08] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudTrader 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:08 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:08 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:09 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:09 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:08","refreshTokenExpire":"2025-12-04 14:45:08","access_token":"c788e177ff4d4347912de34b37839c27","refresh_token":"111f9ef676294240a515f64dbd4d71d8"}}
+INFO     - 2025-11-20 14:45:09 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:09 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:09 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = c788e177ff4d4347912de34b37839c27
+DEBUG    - 2025-11-20 14:45:09 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/cloudTrader HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:09 - [api_base:239] - [2025-11-20 14:45:09] DELETE请求: /mascontrol/cloudTrader 
+数据: {'idList': [5952], 'isForceDel': 1}
+INFO     - 2025-11-20 14:45:10 - [conftest:170] - [2025-11-20 14:45:10] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudTrader 执行完毕
+INFO     - 2025-11-20 14:45:10 - [test_delete:418] - 查询条件: table=follow_cloud_trader, id=5953
+INFO     - 2025-11-20 14:45:10 - [api_base:795] - [2025-11-20 14:45:10] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:10 - [api_base:447] - [2025-11-20 14:45:10] 执行SQL: 
+SELECT * FROM follow_cloud_trader WHERE id = %s ORDER BY create_time DESC 
+参数: (5953,)
+INFO     - 2025-11-20 14:45:10 - [api_base:450] - [2025-11-20 14:45:10] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:10 - [api_base:462] - [2025-11-20 14:45:10] 查询结果: []
+INFO     - 2025-11-20 14:45:10 - [api_base:828] - [2025-11-20 14:45:10] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:10 - [conftest:65] - [2025-11-20 14:45:10] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_user_belowVps 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:10 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:10 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:10 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:10 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:10","refreshTokenExpire":"2025-12-04 14:45:10","access_token":"7d4350730f99465b8c85100e0838c12a","refresh_token":"05bc67cf0bab4d0896cbf95033b77bbd"}}
+INFO     - 2025-11-20 14:45:10 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:10 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:10 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 7d4350730f99465b8c85100e0838c12a
+INFO     - 2025-11-20 14:45:11 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:11 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: cloudTrader_user_ids_later9 = [11153, 11151, 11145, 11148, 11150, 11147, 11146, 11149, 11144]
+DEBUG    - 2025-11-20 14:45:11 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/mascontrol/user/belowVps HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:11 - [api_base:152] - [2025-11-20 14:45:11] POST请求（JSON）: /mascontrol/user/belowVps 
+数据: {'traderUserIds': [11153, 11151, 11145, 11148, 11150, 11147, 11146, 11149, 11144], 'vpsId': [57]}
+INFO     - 2025-11-20 14:45:11 - [api_base:160] - [2025-11-20 14:45:11] 请求后等待 1 秒
+INFO     - 2025-11-20 14:45:12 - [conftest:170] - [2025-11-20 14:45:12] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_user_belowVps 执行完毕
+INFO     - 2025-11-20 14:45:12 - [api_base:795] - [2025-11-20 14:45:12] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:12 - [api_base:447] - [2025-11-20 14:45:12] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:45:12 - [api_base:450] - [2025-11-20 14:45:12] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:12 - [api_base:462] - [2025-11-20 14:45:12] 查询结果: []
+INFO     - 2025-11-20 14:45:12 - [api_base:828] - [2025-11-20 14:45:12] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:12 - [api_base:795] - [2025-11-20 14:45:12] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:12 - [api_base:447] - [2025-11-20 14:45:12] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:45:12 - [api_base:450] - [2025-11-20 14:45:12] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:12 - [api_base:462] - [2025-11-20 14:45:12] 查询结果: []
+INFO     - 2025-11-20 14:45:12 - [api_base:828] - [2025-11-20 14:45:12] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:12 - [api_base:795] - [2025-11-20 14:45:12] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:12 - [api_base:447] - [2025-11-20 14:45:12] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:45:12 - [api_base:450] - [2025-11-20 14:45:12] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:12 - [api_base:462] - [2025-11-20 14:45:12] 查询结果: []
+INFO     - 2025-11-20 14:45:12 - [api_base:828] - [2025-11-20 14:45:12] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:13 - [api_base:795] - [2025-11-20 14:45:13] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:13 - [api_base:447] - [2025-11-20 14:45:13] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:45:13 - [api_base:450] - [2025-11-20 14:45:13] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:13 - [api_base:462] - [2025-11-20 14:45:13] 查询结果: []
+INFO     - 2025-11-20 14:45:13 - [api_base:828] - [2025-11-20 14:45:13] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:13 - [api_base:795] - [2025-11-20 14:45:13] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:13 - [api_base:447] - [2025-11-20 14:45:13] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:45:13 - [api_base:450] - [2025-11-20 14:45:13] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:13 - [api_base:462] - [2025-11-20 14:45:13] 查询结果: []
+INFO     - 2025-11-20 14:45:13 - [api_base:828] - [2025-11-20 14:45:13] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:13 - [api_base:795] - [2025-11-20 14:45:13] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:13 - [api_base:447] - [2025-11-20 14:45:13] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:45:13 - [api_base:450] - [2025-11-20 14:45:13] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:13 - [api_base:462] - [2025-11-20 14:45:13] 查询结果: []
+INFO     - 2025-11-20 14:45:13 - [api_base:828] - [2025-11-20 14:45:13] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:13 - [api_base:795] - [2025-11-20 14:45:13] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:13 - [api_base:447] - [2025-11-20 14:45:13] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:45:13 - [api_base:450] - [2025-11-20 14:45:13] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:13 - [api_base:462] - [2025-11-20 14:45:13] 查询结果: []
+INFO     - 2025-11-20 14:45:13 - [api_base:828] - [2025-11-20 14:45:13] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:13 - [api_base:795] - [2025-11-20 14:45:13] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:13 - [api_base:447] - [2025-11-20 14:45:13] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:45:13 - [api_base:450] - [2025-11-20 14:45:13] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:13 - [api_base:462] - [2025-11-20 14:45:13] 查询结果: []
+INFO     - 2025-11-20 14:45:13 - [api_base:828] - [2025-11-20 14:45:13] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:13 - [api_base:795] - [2025-11-20 14:45:13] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:13 - [api_base:447] - [2025-11-20 14:45:13] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:45:13 - [api_base:450] - [2025-11-20 14:45:13] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:13 - [api_base:462] - [2025-11-20 14:45:13] 查询结果: []
+INFO     - 2025-11-20 14:45:13 - [api_base:828] - [2025-11-20 14:45:13] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:14 - [conftest:65] - [2025-11-20 14:45:14] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_vpstrader 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:14 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:14 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:14 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:14 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:13","refreshTokenExpire":"2025-12-04 14:45:13","access_token":"dc459eb41e354d93ac9909e9a0ad8ab5","refresh_token":"cb09a7a73c24471397dbaf5f42e21cdb"}}
+INFO     - 2025-11-20 14:45:14 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:14 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:14 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = dc459eb41e354d93ac9909e9a0ad8ab5
+INFO     - 2025-11-20 14:45:14 - [conftest:165] - 切换到VPS URL: https://39.101.181.190/vps
+DEBUG    - 2025-11-20 14:45:14 - [connectionpool:1051] - Starting new HTTPS connection (1): 39.101.181.190:443
+DEBUG    - 2025-11-20 14:45:14 - [connectionpool:546] - https://39.101.181.190:443 "DELETE /vps/subcontrol/trader HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:14 - [api_base:239] - [2025-11-20 14:45:14] DELETE请求: /subcontrol/trader 
+数据: [11527]
+INFO     - 2025-11-20 14:45:15 - [conftest:170] - [2025-11-20 14:45:15] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_vpstrader 执行完毕
+INFO     - 2025-11-20 14:45:15 - [test_delete:555] - 查询条件: table=follow_trader, account=31580
+INFO     - 2025-11-20 14:45:15 - [api_base:795] - [2025-11-20 14:45:15] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:15 - [api_base:447] - [2025-11-20 14:45:15] 执行SQL: 
+SELECT * FROM follow_trader WHERE account = %s ORDER BY create_time DESC 
+参数: ('31580',)
+INFO     - 2025-11-20 14:45:15 - [api_base:450] - [2025-11-20 14:45:15] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:15 - [api_base:462] - [2025-11-20 14:45:15] 查询结果: []
+INFO     - 2025-11-20 14:45:15 - [api_base:828] - [2025-11-20 14:45:15] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:15 - [conftest:65] - [2025-11-20 14:45:15] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_userlist 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:15 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:15 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:16 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:16 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:15","refreshTokenExpire":"2025-12-04 14:45:15","access_token":"d3d1daa65088481683514e817ee75c29","refresh_token":"c24b0bbc5d074cbd8792c6e974abdce4"}}
+INFO     - 2025-11-20 14:45:16 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:16 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:16 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = d3d1daa65088481683514e817ee75c29
+DEBUG    - 2025-11-20 14:45:16 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:16 - [api_base:239] - [2025-11-20 14:45:16] DELETE请求: /mascontrol/user 
+数据: [11152]
+INFO     - 2025-11-20 14:45:17 - [test_delete:609] - 第1个账号（ID: 11152）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:17 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:17 - [api_base:239] - [2025-11-20 14:45:17] DELETE请求: /mascontrol/user 
+数据: [11153]
+INFO     - 2025-11-20 14:45:18 - [test_delete:609] - 第2个账号（ID: 11153）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:18 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:18 - [api_base:239] - [2025-11-20 14:45:18] DELETE请求: /mascontrol/user 
+数据: [11151]
+INFO     - 2025-11-20 14:45:19 - [test_delete:609] - 第3个账号（ID: 11151）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:19 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:19 - [api_base:239] - [2025-11-20 14:45:19] DELETE请求: /mascontrol/user 
+数据: [11145]
+INFO     - 2025-11-20 14:45:20 - [test_delete:609] - 第4个账号（ID: 11145）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:20 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:20 - [api_base:239] - [2025-11-20 14:45:20] DELETE请求: /mascontrol/user 
+数据: [11148]
+INFO     - 2025-11-20 14:45:21 - [test_delete:609] - 第5个账号（ID: 11148）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:22 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:22 - [api_base:239] - [2025-11-20 14:45:22] DELETE请求: /mascontrol/user 
+数据: [11150]
+INFO     - 2025-11-20 14:45:23 - [test_delete:609] - 第6个账号（ID: 11150）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:23 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:23 - [api_base:239] - [2025-11-20 14:45:23] DELETE请求: /mascontrol/user 
+数据: [11147]
+INFO     - 2025-11-20 14:45:24 - [test_delete:609] - 第7个账号（ID: 11147）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:24 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:24 - [api_base:239] - [2025-11-20 14:45:24] DELETE请求: /mascontrol/user 
+数据: [11146]
+INFO     - 2025-11-20 14:45:25 - [test_delete:609] - 第8个账号（ID: 11146）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:25 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:25 - [api_base:239] - [2025-11-20 14:45:25] DELETE请求: /mascontrol/user 
+数据: [11149]
+INFO     - 2025-11-20 14:45:26 - [test_delete:609] - 第9个账号（ID: 11149）删除接口调用成功
+DEBUG    - 2025-11-20 14:45:26 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/user HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:26 - [api_base:239] - [2025-11-20 14:45:26] DELETE请求: /mascontrol/user 
+数据: [11144]
+INFO     - 2025-11-20 14:45:27 - [test_delete:609] - 第10个账号（ID: 11144）删除接口调用成功
+INFO     - 2025-11-20 14:45:27 - [conftest:170] - [2025-11-20 14:45:27] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_userlist 执行完毕
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31580',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31581',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31582',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31583',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31584',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31585',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31586',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:28 - [api_base:447] - [2025-11-20 14:45:28] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31587',)
+INFO     - 2025-11-20 14:45:28 - [api_base:450] - [2025-11-20 14:45:28] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:28 - [api_base:462] - [2025-11-20 14:45:28] 查询结果: []
+INFO     - 2025-11-20 14:45:28 - [api_base:828] - [2025-11-20 14:45:28] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:28 - [api_base:795] - [2025-11-20 14:45:28] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:29 - [api_base:447] - [2025-11-20 14:45:29] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31588',)
+INFO     - 2025-11-20 14:45:29 - [api_base:450] - [2025-11-20 14:45:29] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:29 - [api_base:462] - [2025-11-20 14:45:29] 查询结果: []
+INFO     - 2025-11-20 14:45:29 - [api_base:828] - [2025-11-20 14:45:29] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:29 - [api_base:795] - [2025-11-20 14:45:29] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:29 - [api_base:447] - [2025-11-20 14:45:29] 执行SQL: 
+SELECT * FROM follow_trader_user WHERE account = %s ORDER BY create_time DESC 
+参数: ('31589',)
+INFO     - 2025-11-20 14:45:29 - [api_base:450] - [2025-11-20 14:45:29] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:29 - [api_base:462] - [2025-11-20 14:45:29] 查询结果: []
+INFO     - 2025-11-20 14:45:29 - [api_base:828] - [2025-11-20 14:45:29] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:29 - [conftest:65] - [2025-11-20 14:45:29] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_deleteTemplate 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:29 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 646062
+DEBUG    - 2025-11-20 14:45:29 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:29 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:29 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:28","refreshTokenExpire":"2025-12-04 14:45:28","access_token":"28602b2b5fc54931b50fe91751ab0a01","refresh_token":"85830f2d067d422f92a14dd60186e360"}}
+INFO     - 2025-11-20 14:45:29 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:29 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:29 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 28602b2b5fc54931b50fe91751ab0a01
+DEBUG    - 2025-11-20 14:45:29 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/variety/deleteTemplate HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:29 - [api_base:239] - [2025-11-20 14:45:29] DELETE请求: /mascontrol/variety/deleteTemplate 
+数据: [34]
+INFO     - 2025-11-20 14:45:30 - [conftest:170] - [2025-11-20 14:45:30] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_deleteTemplate 执行完毕
+INFO     - 2025-11-20 14:45:30 - [test_delete:676] - 查询条件: table=follow_variety, templateName2=自动化2
+INFO     - 2025-11-20 14:45:30 - [api_base:795] - [2025-11-20 14:45:30] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:30 - [api_base:447] - [2025-11-20 14:45:30] 执行SQL: 
+SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('自动化2',)
+INFO     - 2025-11-20 14:45:30 - [api_base:450] - [2025-11-20 14:45:30] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:30 - [api_base:462] - [2025-11-20 14:45:30] 查询结果: []
+INFO     - 2025-11-20 14:45:30 - [api_base:828] - [2025-11-20 14:45:30] 删除成功（耗时0.2秒）
+INFO     - 2025-11-20 14:45:31 - [conftest:65] - [2025-11-20 14:45:31] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_deleteTemplate2 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:31 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 176266
+DEBUG    - 2025-11-20 14:45:31 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:31 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:31 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:30","refreshTokenExpire":"2025-12-04 14:45:30","access_token":"57e615df787f4e9ea13803a2f66c202c","refresh_token":"dac2469b0e604e0992b9c869af4a05ec"}}
+INFO     - 2025-11-20 14:45:31 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:31 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:31 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 57e615df787f4e9ea13803a2f66c202c
+DEBUG    - 2025-11-20 14:45:31 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/variety/deleteTemplate HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:31 - [api_base:239] - [2025-11-20 14:45:31] DELETE请求: /mascontrol/variety/deleteTemplate 
+数据: [35]
+INFO     - 2025-11-20 14:45:32 - [conftest:170] - [2025-11-20 14:45:32] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_deleteTemplate2 执行完毕
+INFO     - 2025-11-20 14:45:32 - [test_delete:723] - 查询条件: table=follow_variety, templateName4=自动化4
+INFO     - 2025-11-20 14:45:32 - [api_base:795] - [2025-11-20 14:45:32] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:32 - [api_base:447] - [2025-11-20 14:45:32] 执行SQL: 
+SELECT * FROM follow_variety WHERE template_name = %s ORDER BY create_time DESC 
+参数: ('自动化4',)
+INFO     - 2025-11-20 14:45:32 - [api_base:450] - [2025-11-20 14:45:32] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:32 - [api_base:462] - [2025-11-20 14:45:32] 查询结果: []
+INFO     - 2025-11-20 14:45:32 - [api_base:828] - [2025-11-20 14:45:32] 删除成功（耗时0.3秒）
+INFO     - 2025-11-20 14:45:33 - [conftest:65] - [2025-11-20 14:45:33] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudMaster 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:33 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 176266
+DEBUG    - 2025-11-20 14:45:33 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:33 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:33 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:32","refreshTokenExpire":"2025-12-04 14:45:32","access_token":"b2d64eba883342b4bd87b17ed3ef8894","refresh_token":"ffad66ba09b54495ab6d32d5c35af221"}}
+INFO     - 2025-11-20 14:45:33 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:33 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:33 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = b2d64eba883342b4bd87b17ed3ef8894
+DEBUG    - 2025-11-20 14:45:33 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/cloudMaster HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:33 - [api_base:239] - [2025-11-20 14:45:33] DELETE请求: /mascontrol/cloudMaster 
+数据: [482]
+INFO     - 2025-11-20 14:45:34 - [conftest:170] - [2025-11-20 14:45:34] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudMaster 执行完毕
+INFO     - 2025-11-20 14:45:34 - [test_delete:770] - 查询条件: table=follow_cloud_master, id=482
+INFO     - 2025-11-20 14:45:34 - [api_base:795] - [2025-11-20 14:45:34] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:34 - [api_base:447] - [2025-11-20 14:45:34] 执行SQL: 
+SELECT * FROM follow_cloud_master WHERE id = %s ORDER BY create_time DESC 
+参数: (482,)
+INFO     - 2025-11-20 14:45:34 - [api_base:450] - [2025-11-20 14:45:34] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:34 - [api_base:462] - [2025-11-20 14:45:34] 查询结果: []
+INFO     - 2025-11-20 14:45:34 - [api_base:828] - [2025-11-20 14:45:34] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:34 - [conftest:65] - [2025-11-20 14:45:34] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudMaster_hand 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:34 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 176266
+DEBUG    - 2025-11-20 14:45:34 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:34 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:34 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:34","refreshTokenExpire":"2025-12-04 14:45:34","access_token":"8061c7d2951e46a59489cef7ac2fd08f","refresh_token":"b7d704254fcd4d41aa4ae8b003fd7f55"}}
+INFO     - 2025-11-20 14:45:34 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:34 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:34 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = 8061c7d2951e46a59489cef7ac2fd08f
+DEBUG    - 2025-11-20 14:45:35 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/cloudMaster HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:35 - [api_base:239] - [2025-11-20 14:45:35] DELETE请求: /mascontrol/cloudMaster 
+数据: [483]
+INFO     - 2025-11-20 14:45:36 - [conftest:170] - [2025-11-20 14:45:36] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_delete_cloudMaster_hand 执行完毕
+INFO     - 2025-11-20 14:45:36 - [test_delete:816] - 查询条件: table=follow_cloud_master, id=483
+INFO     - 2025-11-20 14:45:36 - [api_base:795] - [2025-11-20 14:45:36] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:36 - [api_base:447] - [2025-11-20 14:45:36] 执行SQL: 
+SELECT * FROM follow_cloud_master WHERE id = %s ORDER BY create_time DESC 
+参数: (483,)
+INFO     - 2025-11-20 14:45:36 - [api_base:450] - [2025-11-20 14:45:36] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:36 - [api_base:462] - [2025-11-20 14:45:36] 查询结果: []
+INFO     - 2025-11-20 14:45:36 - [api_base:828] - [2025-11-20 14:45:36] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:36 - [conftest:65] - [2025-11-20 14:45:36] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_deletecloudgroup 开始登录，环境: uat
+INFO     - 2025-11-20 14:45:36 - [conftest:108] - UAT登录尝试 1/5，MFA验证码: 176266
+DEBUG    - 2025-11-20 14:45:36 - [connectionpool:1051] - Starting new HTTPS connection (1): uat.atcp.top:443
+DEBUG    - 2025-11-20 14:45:36 - [connectionpool:546] - https://uat.atcp.top:443 "POST /api/sys/auth/login HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:36 - [conftest:127] - 登录响应信息：{"code":0,"msg":"success","data":{"accessTokenExpire":"2025-11-21 14:45:35","refreshTokenExpire":"2025-12-04 14:45:35","access_token":"bd7657560c6a4b87b8e1caed30efcf20","refresh_token":"739ead7a7f884c22a5853a195bdeb4fd"}}
+INFO     - 2025-11-20 14:45:36 - [conftest:137] - UAT登录成功（第1次尝试）
+INFO     - 2025-11-20 14:45:36 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:36 - [variable_manager:105] - [2025-11-20 14:43] 运行时变量已设置: access_token = bd7657560c6a4b87b8e1caed30efcf20
+DEBUG    - 2025-11-20 14:45:36 - [connectionpool:546] - https://uat.atcp.top:443 "DELETE /api/mascontrol/group HTTP/11" 200 None
+INFO     - 2025-11-20 14:45:36 - [api_base:239] - [2025-11-20 14:45:36] DELETE请求: /mascontrol/group 
+数据: [721]
+INFO     - 2025-11-20 14:45:37 - [conftest:170] - [2025-11-20 14:45:37] 用例 test_cloudTrader/test_delete.py::TestDelete_cloudTrader::test_deletecloudgroup 执行完毕
+INFO     - 2025-11-20 14:45:37 - [test_delete:862] - 查询条件: table=follow_group, id=721
+INFO     - 2025-11-20 14:45:37 - [api_base:795] - [2025-11-20 14:45:37] 开始等待数据库记录删除 | 超时: 5秒
+INFO     - 2025-11-20 14:45:37 - [api_base:447] - [2025-11-20 14:45:37] 执行SQL: 
+SELECT * FROM follow_group WHERE id = %s ORDER BY create_time DESC 
+参数: (721,)
+INFO     - 2025-11-20 14:45:37 - [api_base:450] - [2025-11-20 14:45:37] 查询成功，结果数量: 0
+INFO     - 2025-11-20 14:45:37 - [api_base:462] - [2025-11-20 14:45:37] 查询结果: []
+INFO     - 2025-11-20 14:45:37 - [api_base:828] - [2025-11-20 14:45:37] 删除成功（耗时0.1秒）
+INFO     - 2025-11-20 14:45:38 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:38 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:38 - [variable_manager:121] - [2025-11-20 14:43] 运行时变量已保存到: D:\pycharm_test\lingkuan_MT4DE\VAR\runtime_vars_cloud.json
+INFO     - 2025-11-20 14:45:38 - [conftest:368] - [2025-11-20 14:43] 测试会话结束，总耗时: 127.00秒
+INFO     - 2025-11-20 14:45:38 - [feishu_notification:149] - [2025-11-20 14:43] 发送飞书消息，URL: https://open.feishu.cn/open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f
+DEBUG    - 2025-11-20 14:45:38 - [connectionpool:1051] - Starting new HTTPS connection (1): open.feishu.cn:443
+DEBUG    - 2025-11-20 14:45:38 - [connectionpool:546] - https://open.feishu.cn:443 "POST /open-apis/bot/v2/hook/8d3475ac-8adc-45ed-97c7-0f0ec8647a4f HTTP/11" 200 77
+INFO     - 2025-11-20 14:45:38 - [feishu_notification:157] - [2025-11-20 14:43] 飞书响应状态码: 200
+INFO     - 2025-11-20 14:45:38 - [feishu_notification:158] - [2025-11-20 14:43] 飞书响应内容: {"StatusCode":0,"StatusMessage":"success","code":0,"data":{},"msg":"success"}
+INFO     - 2025-11-20 14:45:38 - [feishu_notification:163] - [2025-11-20 14:43] [FEISHU] 消息发送成功
+INFO     - 2025-11-20 14:45:38 - [conftest:380] - [2025-11-20 14:43] 飞书通知发送成功
