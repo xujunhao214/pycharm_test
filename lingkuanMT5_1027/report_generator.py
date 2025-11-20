@@ -1,23 +1,18 @@
-import json
-# generate_env.py 最顶部新增这3行路径配置
 import sys
 import os
-
-# 1. 获取当前脚本路径 → generate_env.py 的绝对路径
-current_script_path = os.path.abspath(__file__)
-# 2. 获取包目录（lingkuanMT5_1027/，因为 generate_env.py 在该目录下）
-package_dir = os.path.dirname(current_script_path)
-# 3. 获取包的父目录（关键！添加到 sys.path，让 Python 识别 lingkuanMT5_1027 为包）
-package_parent_dir = os.path.dirname(package_dir)
-sys.path.insert(0, package_parent_dir)
-
-# 验证路径（可选，调试用）
-print(f"generate_env.py - 包的父目录：{package_parent_dir}")
-print(f"generate_env.py - sys.path 前3个：{sys.path[:3]}")
-
+import json
 from collections import defaultdict
-from lingkuanMT5_1027.config import *
-from lingkuanMT5_1027.VAR.VAR import *
+from datetime import datetime
+
+# -------------------------- 条件导入：兼容本地和 Jenkins --------------------------
+try:
+    # 尝试相对导入（Jenkins 以模块方式运行时生效）
+    from .config import *
+    from .VAR.VAR import *
+except ImportError:
+    # 相对导入失败 → 本地直接运行，用绝对导入
+    from lingkuanMT5_1027.config import *
+    from lingkuanMT5_1027.VAR.VAR import *
 from datetime import datetime
 
 
