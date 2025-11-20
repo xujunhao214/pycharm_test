@@ -2,11 +2,12 @@ import json
 import sys
 import os
 
-# 定位项目根目录（和 run_cloud_tests.py 完全一致）
-current_script_path = os.path.abspath(__file__)
-project_root = os.path.dirname(current_script_path)
+# 关键：脚本在 commons/ 子目录，需要向上取两级才是项目根目录
+current_script_path = os.path.abspath(__file__)  # commons/report_generator.py
+commons_dir = os.path.dirname(current_script_path)  # commons/ 目录
+project_root = os.path.dirname(commons_dir)  # 向上再取一级 → 项目根目录（lingkuanMT5_1027/）
 
-# 关键：把项目根目录添加到 Python 搜索路径（确保能导入 config.py、VAR 等）
+# 把项目根目录添加到 sys.path（确保能找到 config.py、VAR 等）
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
