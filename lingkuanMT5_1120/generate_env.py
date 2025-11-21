@@ -54,24 +54,24 @@ def get_pure_report_paths(markdown_report_path):
 
     # 区分本地和 Jenkins 环境
     if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：链接必须与 HTML Publisher 插件的发布路径一致
+        # Jenkins 环境：自动提取相对路径（与 HTML Publisher 配置一致）
         job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", "1")
-        # 获取报告文件名
+
+        # 关键：自动获取报告文件的「相对路径」（相对于 Jenkins 工作空间）
+        # 假设 pure_md_path 是「工作空间/相对路径/文件名.md」，提取「相对路径」部分
+        # 例如：pure_md_path = "lingkuanMT5_1120/report/Cloud接口自动化测试报告.md" → relative_dir = "lingkuanMT5_1120/report"
+        relative_dir = os.path.dirname(pure_md_path)  # 自动提取相对目录（无硬编码）
         md_filename = os.path.basename(pure_md_path)
         html_filename = os.path.basename(html_report_path)
 
-        # 关键：根据插件配置的「Report directory path」填写子路径
-        # 若插件设置了「HTML_Report」，则路径为 job/{job_name}/{build_number}/HTML_Report/
-        # 若未设置，则路径为 job/{job_name}/{build_number}/artifact/lingkuanMT5_1120/report/
-        # （根据你的插件配置二选一）
-        # 方案A：插件设置了「Report directory path: HTML_Report」
-        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{md_filename}"
-        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{html_filename}"
+        # 方案B（推荐，无需高级设置）：使用 Jenkins 默认的 artifact 路径
+        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/{relative_dir}/{md_filename}"
+        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/{relative_dir}/{html_filename}"
 
-        # 方案B：插件未设置子路径（默认发布到 artifact 目录）
-        # md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/lingkuanMT5_1120/report/{md_filename}"
-        # html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/lingkuanMT5_1120/report/{html_filename}"
+        # 若后续启用了插件的「Report directory path」（如 HTML_Report），再切换到方案A：
+        # md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{md_filename}"
+        # html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{html_filename}"
     else:
         # 本地环境：使用 file:// 协议
         if os.name == "nt":
