@@ -143,6 +143,7 @@ class TestcloudTrader_openandlevel:
         def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = f"""
                         SELECT 
@@ -168,10 +169,12 @@ class TestcloudTrader_openandlevel:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND foi.cloud_account = %s
+                            AND fod.trader_id = %s
                          """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    cloudTrader_vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -395,10 +398,12 @@ class TestcloudTrader_openandlevel:
                                 foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
+                                AND fod.comment = %s
                                 """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -786,6 +791,7 @@ class TestcloudTrader_openandlevel:
         def test_dbquery_addsalve_clsesdetail(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = f"""
                            SELECT 
@@ -815,11 +821,13 @@ class TestcloudTrader_openandlevel:
                            WHERE foi.operation_type = %s
                                AND foi.cloud_account = %s
                                AND fod.comment = %s
-                                                   """
+                               AND fod.trader_id = %s
+                          """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    class_random_str
+                    class_random_str,
+                    cloudTrader_vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1252,6 +1260,7 @@ class TestcloudTrader_openandlevel:
         def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = f"""
                     SELECT 
@@ -1277,10 +1286,12 @@ class TestcloudTrader_openandlevel:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND foi.cloud_account = %s
+                        AND fod.trader_id = %s
                      """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    cloudTrader_vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1888,6 +1899,7 @@ class TestcloudTrader_openandlevel:
         def test_dbquery_addsalve_clsesdetail(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = f"""
                        SELECT 
@@ -1917,11 +1929,13 @@ class TestcloudTrader_openandlevel:
                        WHERE foi.operation_type = %s
                            AND foi.cloud_account = %s
                            AND fod.comment = %s
-                                               """
+                           AND fod.trader_id = %s
+                     """
                 params = (
                     '1',
                     cloudTrader_user_accounts_2,
-                    class_random_str
+                    class_random_str,
+                    cloudTrader_vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2343,6 +2357,7 @@ class TestcloudTrader_openandlevel:
         def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = f"""
                     SELECT 
@@ -2368,10 +2383,12 @@ class TestcloudTrader_openandlevel:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND foi.cloud_account = %s
+                        AND fod.trader_id = %s
                  """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    cloudTrader_vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2843,6 +2860,7 @@ class TestcloudTrader_openandlevel:
         def test_dbquery_orderSend_addsalve(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 查询数据库验证是否有跟单开仓指令"):
                 cloudTrader_user_accounts_2 = var_manager.get_variable("cloudTrader_user_accounts_2")
+                cloudTrader_vps_ids_3 = var_manager.get_variable("cloudTrader_vps_ids_3")
 
                 sql = f"""
                     SELECT 
@@ -2868,10 +2886,12 @@ class TestcloudTrader_openandlevel:
                         foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                     WHERE foi.operation_type = %s
                         AND foi.cloud_account = %s
+                        AND fod.trader_id = %s
                       """
                 params = (
                     '0',
                     cloudTrader_user_accounts_2,
+                    cloudTrader_vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）

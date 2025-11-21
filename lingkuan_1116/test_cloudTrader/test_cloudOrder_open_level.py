@@ -398,10 +398,12 @@ class TestcloudTrader_openandlevel:
                                 foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
+                                AND fod.comment = %s
                                 """
                 params = (
                     '0',
                     cloudTrader_user_accounts_4,
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
