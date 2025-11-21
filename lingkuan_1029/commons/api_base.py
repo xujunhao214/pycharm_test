@@ -878,7 +878,7 @@ class APITestBase:
                 allure.attach(f"固定时间范围: {fixed_time_start} ~ {fixed_time_end}", "查询时间窗口",
                               allure.attachment_type.TEXT)
 
-            raise TimeoutError(f"Failed: 等待记录删除超时（{timeout}秒）")
+            raise TimeoutError(f"等待记录删除超时（{timeout}秒）")
 
     def wait_for_database_no_record(
             self,

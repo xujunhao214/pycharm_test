@@ -55,3 +55,32 @@ class TestVPSMasOrdersend(APITestBase):
             "success",
             "响应msg字段应为success"
         )
+
+    # @pytest.mark.skip(reason=SKIP_REASON)
+    @allure.title("数据库校验-VPS数据-新增策略账号")
+    def test_dbquery_trader(self, class_random_str, var_manager, db_transaction):
+        with allure.step("1. 查询数据库验证是否新增成功"):
+            new_user = var_manager.get_variable("new_user")
+            # 执行数据库查询
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_trader WHERE account = %s",
+                (new_user["account"],)
+            )
+
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空")
+
+            MT5vps_trader_id = db_data[0]["id"]
+            logging.info(f"新增策略账号ID: {MT5vps_trader_id}")
+            var_manager.set_runtime_variable("MT5vps_trader_id", MT5vps_trader_id)
+
+        with allure.step("2. 数据校验"):
+            status = db_data[0]["status"]
+            assert status == 0, f"新增策略账号状态status应为0（正常），实际状态为: {status}"
+            logging.info(f"新增策略账号状态status应为0（正常），实际状态为: {status}")
+
+            euqit = db_data[0]["euqit"]
+            assert euqit >= 0, f"账号净值euqit有钱，实际金额为: {euqit}"
+            logging.info(f"账号净值euqit有钱，实际金额为: {euqit}")

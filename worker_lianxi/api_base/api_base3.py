@@ -819,7 +819,7 @@ class APITestBase:
                     allure.attachment_type.JSON
                 )
 
-            raise TimeoutError(f"Failed: 等待记录删除超时（{timeout}秒）")
+            raise TimeoutError(f"等待记录删除超时（{timeout}秒）")
 
     def wait_for_database_no_record(
             self,
