@@ -54,16 +54,12 @@ def get_pure_report_paths(markdown_report_path):
     if "JENKINS_URL" in os.environ:
         # Jenkins 环境：生成与实际访问路径一致的 URL（包含 view 前缀）
         job_name = os.environ.get("JOB_NAME", "默认任务名")
-        build_number = os.environ.get("BUILD_NUMBER", "1")
-        # 提取报告文件名
-        md_filename = os.path.basename(pure_md_path)
-        html_filename = os.path.basename(html_report_path)
 
         # 关键：根据实际路径格式拼接（包含 view/自动化测试/ 前缀）
         # 正确格式：http://{Jenkins地址}/view/自动化测试/job/{任务名}/{构建号}/HTML_Report/{报告文件名}
         # 注意：view 名称固定为“自动化测试”，与你的实际路径匹配
-        md_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/{build_number}"
-        html_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/{build_number}"
+        md_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/MDReport"
+        html_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/MDReport"
     else:
         # 本地环境：保留 file:// 协议（直接打开）
         if os.name == "nt":
