@@ -13,7 +13,9 @@ JENKINS_USERNAME = "Test"
 JENKINS_PASSWORD = "28y6yyrcnfE3WSxF"
 
 # 优化时间格式：
-DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
+# DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
+DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+DATETIME_INIT = datetime.datetime.now().strftime("%Y-%m-%d 00:00:00")
 
 # 获取当前时间
 current_time = datetime.datetime.now()
@@ -21,6 +23,8 @@ current_time = datetime.datetime.now()
 future_time = current_time + datetime.timedelta(days=30)
 # 格式化为指定字符串格式
 DATETIME_ENDTIME = future_time.strftime("%Y-%m-%d")
+# 计算5天前的时间
+five_time = (current_time - datetime.timedelta(days=5)).strftime("%Y-%m-%d %H:%M:%S")
 
 # mysql查询语句，查询最近时间的数据
 MYSQL_TIME = 3  # 时间范围（分钟）
@@ -40,4 +44,4 @@ SLEEP_SECONDS = 1
 MFA_SECRET_KEY = "ZBW6Z6ZTYUG7BU7QXZQKPNYZF2HYVYQQLMLPSZVMF2MKT4HZTLBQ"
 
 # 项目名称
-PROJECT_NAME = "自研跟单1.5.0"
+PROJECT_NAME = "MT5自研跟单1.5.0"

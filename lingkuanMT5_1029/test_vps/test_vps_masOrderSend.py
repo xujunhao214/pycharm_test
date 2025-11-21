@@ -420,6 +420,18 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f'订单详情总手数是：{total}')
 
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        total_lots,
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
+
     @allure.story("场景2：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
@@ -847,6 +859,18 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        total_lots,
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
+
     @allure.story("场景3：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -1243,6 +1267,18 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        total_lots,
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
+
     @allure.story("场景4：复制下单-手数0.01-1，总订单数10")
     @allure.description("""
     ### 测试说明
@@ -1613,6 +1649,18 @@ class TestVPSMasOrdersend:
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
+
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        total_lots,
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -2033,6 +2081,18 @@ class TestVPSMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
+                with allure.step("验证详情手数和指令手数一致"):
+                    size = [record["size"] for record in db_data]
+                    true_total_lots = [record["true_total_lots"] for record in db_data]
+                    total_lots = [record["total_lots"] for record in db_data]
+                    self.assert_list_equal_ignore_order(
+                        total_lots,
+                        size,
+                        true_total_lots,
+                        f"手数不一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}"
+                    )
+                    logger.info(f"手数一致: 详情手数{size}, 总手数{total_lots}, 实际总手数{true_total_lots}")
+
     @allure.story("场景6：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
     ### 测试说明
@@ -2382,6 +2442,15 @@ class TestVPSMasOrdersend:
                     time_field="fod.close_time"
                 )
             with allure.step("2. 数据校验"):
+                size = [record["size"] for record in db_data]
+                total_lots = [record["total_lots"] for record in db_data]
+                self.assert_list_equal_ignore_order(
+                    size,
+                    total_lots,
+                    f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}不一致"
+                )
+                logging.info(f"订单详情列表的手数：{size}和指令列表的手数：{total_lots}")
+
                 with allure.step("验证订单数量"):
                     self.verify_data(
                         actual_value=len(db_data),

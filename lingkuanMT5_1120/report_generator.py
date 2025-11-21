@@ -198,7 +198,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
                 f"{fail_case['status']} | {fail_case['failure_msg']} |\n"
             )
     else:
-        report_content += "| - | - | - | - | 无失败/中断用例 |\n"
+        report_content += "| - | - | - | - | 无失败用例 |\n"
 
     report_content += f"""
 ## 4. 环境信息

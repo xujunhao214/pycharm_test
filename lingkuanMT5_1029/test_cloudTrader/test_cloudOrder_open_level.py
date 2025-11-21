@@ -371,7 +371,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                         SELECT 
                             fod.size,
@@ -398,12 +397,10 @@ class TestMT5cloudTrader_openandlevel:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
-                            AND fod.trader_id = %s
                             """
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    MT5cloudTrader_MT5vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -477,7 +474,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                    SELECT 
                        fod.size,
@@ -506,13 +502,11 @@ class TestMT5cloudTrader_openandlevel:
                    WHERE foi.operation_type = %s
                        AND fod.account = %s
                        AND fod.comment = %s
-                       AND fod.trader_id = %s
                        """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -685,7 +679,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                             SELECT 
                                 fod.size,
@@ -713,13 +706,11 @@ class TestMT5cloudTrader_openandlevel:
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
                                 AND fod.comment = %s
-                                AND fod.trader_id = %s
                                 """
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -734,6 +725,18 @@ class TestMT5cloudTrader_openandlevel:
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，订单可能没有入库")
+
+                with allure.step("验证指令总手数"):
+                    true_total_lots = db_data[0]["true_total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(true_total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -781,7 +784,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbquery_addsalve_clsesdetail(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
 
                 sql = f"""
                        SELECT 
@@ -811,13 +813,11 @@ class TestMT5cloudTrader_openandlevel:
                        WHERE foi.operation_type = %s
                            AND foi.cloud_account = %s
                            AND fod.comment = %s
-                           AND fod.trader_id = %s
-                      """
+                                               """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1048,7 +1048,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                            SELECT 
                                fod.size,
@@ -1077,13 +1076,11 @@ class TestMT5cloudTrader_openandlevel:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.comment = %s
-                               AND fod.trader_id = %s
                                """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1098,6 +1095,18 @@ class TestMT5cloudTrader_openandlevel:
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，订单可能没有入库")
+
+                with allure.step("验证指令总手数"):
+                    true_total_lots = db_data[0]["true_total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(true_total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -1452,7 +1461,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                         SELECT 
                             fod.size,
@@ -1479,12 +1487,10 @@ class TestMT5cloudTrader_openandlevel:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
-                            AND fod.trader_id = %s
                             """
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    MT5cloudTrader_MT5vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1558,7 +1564,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                            SELECT 
                                fod.size,
@@ -1587,13 +1592,11 @@ class TestMT5cloudTrader_openandlevel:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.comment = %s
-                               AND fod.trader_id = %s
                                """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -1952,7 +1955,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                         SELECT 
                             fod.size,
@@ -1979,12 +1981,10 @@ class TestMT5cloudTrader_openandlevel:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
-                            AND fod.trader_id = %s
                             """
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    MT5cloudTrader_MT5vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2057,7 +2057,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                            SELECT 
                                fod.size,
@@ -2086,13 +2085,11 @@ class TestMT5cloudTrader_openandlevel:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.comment = %s
-                               AND fod.trader_id = %s
                                """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2493,7 +2490,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                         SELECT 
                             fod.size,
@@ -2520,12 +2516,10 @@ class TestMT5cloudTrader_openandlevel:
                             foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
                         WHERE foi.operation_type = %s
                             AND fod.account = %s
-                            AND fod.trader_id = %s
                             """
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    MT5cloudTrader_MT5vps_ids_3
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2602,7 +2596,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                            SELECT 
                                fod.size,
@@ -2631,13 +2624,11 @@ class TestMT5cloudTrader_openandlevel:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.comment = %s
-                               AND fod.trader_id = %s
                                """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2810,7 +2801,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderSend(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                             SELECT 
                                 fod.size,
@@ -2838,13 +2828,11 @@ class TestMT5cloudTrader_openandlevel:
                             WHERE foi.operation_type = %s
                                 AND fod.account = %s
                                 AND fod.comment = %s
-                                AND fod.trader_id = %s
                                 """
                 params = (
                     '0',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -2859,6 +2847,18 @@ class TestMT5cloudTrader_openandlevel:
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，订单可能没有入库")
+
+                with allure.step("验证指令总手数"):
+                    true_total_lots = db_data[0]["true_total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(true_total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")
@@ -2909,7 +2909,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbquery_addsalve_clsesdetail(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_2 = var_manager.get_variable("MT5cloudTrader_user_accounts_2")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
 
                 sql = f"""
                        SELECT 
@@ -2939,13 +2938,11 @@ class TestMT5cloudTrader_openandlevel:
                        WHERE foi.operation_type = %s
                            AND foi.cloud_account = %s
                            AND fod.comment = %s
-                           AND fod.trader_id = %s
-                        """
+                                               """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_2,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3176,7 +3173,6 @@ class TestMT5cloudTrader_openandlevel:
         def test_dbMT5cloudTrader_OrderClose(self, class_random_str, var_manager, db_transaction):
             with allure.step("1. 获取订单详情表账号数据"):
                 MT5cloudTrader_user_accounts_4 = var_manager.get_variable("MT5cloudTrader_user_accounts_4")
-                MT5cloudTrader_MT5vps_ids_3 = var_manager.get_variable("MT5cloudTrader_MT5vps_ids_3")
                 sql = f"""
                            SELECT 
                                fod.size,
@@ -3205,13 +3201,11 @@ class TestMT5cloudTrader_openandlevel:
                            WHERE foi.operation_type = %s
                                AND fod.account = %s
                                AND fod.comment = %s
-                               AND fod.trader_id = %s
                                """
                 params = (
                     '1',
                     MT5cloudTrader_user_accounts_4,
-                    class_random_str,
-                    MT5cloudTrader_MT5vps_ids_3
+                    class_random_str
                 )
 
                 # 调用轮询等待方法（带时间范围过滤）
@@ -3226,6 +3220,18 @@ class TestMT5cloudTrader_openandlevel:
                 trader_ordersend = var_manager.get_variable("trader_ordersend")
                 if not db_data:
                     pytest.fail("数据库查询结果为空，订单可能没有入库")
+
+                with allure.step("验证指令总手数"):
+                    true_total_lots = db_data[0]["true_total_lots"]
+                    totalSzie = trader_ordersend["totalSzie"]
+                    self.verify_data(
+                        actual_value=float(true_total_lots),
+                        expected_value=float(totalSzie),
+                        op=CompareOp.EQ,
+                        message="指令总手数应符合预期",
+                        attachment_name="指令总手数详情"
+                    )
+                    logging.info(f"指令总手数验证通过: {true_total_lots}")
 
                 with allure.step("验证详情总手数"):
                     trader_ordersend = var_manager.get_variable("trader_ordersend")

@@ -156,7 +156,7 @@ class TestCreate_Scene(APITestBase):
             if not account:
                 pytest.fail(f"\n未找到第{i}个账号（变量：vps_user_accounts_{i}）")
             all_accounts.append(account)
-        print(f"\n将校验的后6个账号")
+        print(f"\n将校验的后6个账号：{all_accounts}")
 
         # 3. 初始化ID列表和计数器
         all_ids = []

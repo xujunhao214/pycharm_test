@@ -100,7 +100,7 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         add_param(environment, "BASE_URL", env_config["base_url"])
         add_param(environment, "VPS_URL", env_config["MT5vps_url"])
         # add_param(environment, "Markdown报告", md_url)  # 纯路径
-        add_param(environment, "HTML测试报告", html_url)  # 纯路径
+        add_param(environment, "测试报告", html_url)  # 纯路径
 
         os.makedirs(output_dir, exist_ok=True)
         env_file_path = os.path.join(output_dir, "environment.xml")
@@ -149,7 +149,7 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
         add_param(root, "BASE_URL", env_config["base_url"])
         add_param(root, "VPS_URL", env_config["MT5vps_url"])
         # add_param(root, "Markdown汇总报告", md_url)  # 纯路径
-        add_param(root, "HTML汇总报告", html_url)  # 纯路径
+        add_param(root, "汇总报告", html_url)  # 纯路径
 
         env_file_path = os.path.join(merged_results_dir, "environment.xml")
         tree = ET.ElementTree(root)

@@ -3,268 +3,312 @@ import math
 import allure
 import logging
 import pytest
+import re
 from lingkuan_1027.VAR.VAR import *
 from lingkuan_1027.conftest import var_manager
 from lingkuan_1027.commons.api_base import *
+from template.commons.jsonpath_utils import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
-@allure.feature("VPS策略下单-开仓的场景校验-buy")
-class TestVPSOrdersendbuy(APITestBase):
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @allure.story("场景6： VPS看板-跟单账号超过最大手数")
-    @allure.description("""
-        ### 测试说明
-        - 前置条件：有vps策略和vps跟单
-          1. 获取策略账号服务器最大手数
-          2. VPS看板-策略账号进行开仓
-          3. 跟单账号进行校验，超过最大手数
-          4. 策略账号进行平仓
-        - 预期结果：跟单账号开仓失败，超过最大手数
-        """)
-    @pytest.mark.flaky(reruns=0, reruns_delay=0)
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
-    @pytest.mark.usefixtures("class_random_str")
-    class TestVPSOrderSend6(APITestBase):
-        @allure.title("数据库提取该服务器最大手数")
-        def test_dbquery_maxlots(self, class_random_str, var_manager, db_transaction):
-            with allure.step("1. 数据库的SQL查询"):
-                new_user = var_manager.get_variable("new_user")
-                sql = f""" SELECT * From follow_platform where server = %s """
-                params = (new_user["platform"],)
+@allure.feature("运营监控-历史指令-查询校验")
+class TestVPShistoryCommands(APITestBase):
+    # 实例化JsonPath工具类（全局复用）
+    json_utils = JsonPathUtils()
 
-                db_data = self.query_database(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-            with allure.step("2. 提取数据并保存"):
-                max_lots = db_data[0]["max_lots"]
-                if max_lots is None:
-                    # 数据库查询为空，主动存入None，覆盖旧数据
-                    var_manager.set_runtime_variable("max_lots", None)
-                    logger.info(f"服务器{new_user['platform']}无最大手数数据，已保存空值")
-                    allure.attach("None", f"服务器{new_user['platform']}的最大手数", allure.attachment_type.TEXT)
-                else:
-                    var_manager.set_runtime_variable("max_lots", max_lots)
-                    logger.info(f"服务器{new_user['platform']}的最大手数是：{max_lots}")
-                    allure.attach(str(max_lots), f"服务器{new_user['platform']}的最大手数", allure.attachment_type.TEXT)
-
-            # 其他查询逻辑同理：查询为空时主动存空值
-            with allure.step("3. 全局配置-数据库的SQL查询"):
-                sql = f""" SELECT * From sys_params where param_name= %s """
-                params = ("最大手数配置",)
-                db_data = self.query_database(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-            with allure.step("4. 提取数据并保存"):
-                param_value = db_data[0]["param_value"]
-                if param_value is None:
-                    var_manager.set_runtime_variable("param_value", None)  # 存空值覆盖旧数据
-                    logger.info(f"全局配置无最大手数数据，已保存空值")
-                    allure.attach("None", f"全局配置的最大手数", allure.attachment_type.TEXT)
-                else:
-                    var_manager.set_runtime_variable("param_value", param_value)
-                    logger.info(f"全局配置的最大手数是：{param_value}")
-                    allure.attach(str(param_value), f"全局配置的最大手数", allure.attachment_type.TEXT)
-
-            with allure.step("5. 数据库的SQL查询"):
-                addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
-                sql = f""" SELECT * From follow_platform where server = %s """
-                params = (addVPS_MT5Slave["platform"],)
-
-                db_data = self.query_database(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params
-                )
-            with allure.step("6. 提取数据并保存"):
-                MT5max_lots = db_data[0]["max_lots"]
-                if MT5max_lots is None:
-                    # 数据库查询为空，主动存入None，覆盖旧数据
-                    var_manager.set_runtime_variable("MT5max_lots", None)
-                    logger.info(f"服务器{addVPS_MT5Slave['platform']}无最大手数数据，已保存空值")
-                    allure.attach("None", f"服务器{addVPS_MT5Slave['platform']}的最大手数", allure.attachment_type.TEXT)
-                else:
-                    var_manager.set_runtime_variable("MT5max_lots", MT5max_lots)
-                    logger.info(f"服务器{addVPS_MT5Slave['platform']}的最大手数是：{MT5max_lots}")
-                    allure.attach(str(MT5max_lots), f"服务器{addVPS_MT5Slave['platform']}的最大手数",
-                                  allure.attachment_type.TEXT)
-
-        @pytest.mark.url("vps")
-        # @pytest.mark.skipif(True, reason=SKIP_REASON)
-        @pytest.mark.dependency()  # 标记为【被依赖用例】，后续用例依赖它
-        @allure.title("跟单软件看板-VPS数据-策略开仓")
-        def test_trader_orderSend(self, class_random_str, var_manager, logged_session):
-            # 1. 发送策略开仓请求
-            trader_ordersend = var_manager.get_variable("trader_ordersend")
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            max_lots = var_manager.get_variable("max_lots")
-            param_value = var_manager.get_variable("param_value")
-            MT5max_lots = var_manager.get_variable("MT5max_lots")
-
-            if max_lots == None and MT5max_lots == None:
-                skip_msg = "策略和跟单的服务器都没有最大手数限制，跳过执行"
-                logging.info(skip_msg)
-                pytest.skip(skip_msg)
-
-            elif max_lots == None and MT5max_lots != None:
-                max_lots = float(param_value)
-                var_manager.set_runtime_variable("send_maxlots", max_lots)
-                data = {
-                    "symbol": trader_ordersend["symbol"],
-                    "placedType": 0,
-                    "remark": class_random_str,
-                    "intervalTime": 100,
-                    "type": 0,
-                    "totalNum": "1",
-                    "totalSzie": "",
-                    "startSize": max_lots,
-                    "endSize": max_lots,
-                    "traderId": vps_trader_id
-                }
-                response = self.send_post_request(
-                    logged_session,
-                    '/subcontrol/trader/orderSend',
-                    json_data=data,
-                )
-
-            elif max_lots != None and MT5max_lots != None and max_lots > MT5max_lots:
-                max_lots = max_lots
-                var_manager.set_runtime_variable("send_maxlots", max_lots)
-                data = {
-                    "symbol": trader_ordersend["symbol"],
-                    "placedType": 0,
-                    "remark": class_random_str,
-                    "intervalTime": 100,
-                    "type": 0,
-                    "totalNum": "1",
-                    "totalSzie": "",
-                    "startSize": max_lots,
-                    "endSize": max_lots,
-                    "traderId": vps_trader_id
-                }
-                response = self.send_post_request(
-                    logged_session,
-                    '/subcontrol/trader/orderSend',
-                    json_data=data,
-                )
-
-            # 2. 验证响应状态码和内容
-            self.assert_response_status(
-                response,
-                200,
-                "策略开仓失败"
-            )
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        @pytest.mark.dependency(depends=["test_trader_orderSend"])
-        @allure.title("数据库校验-策略开仓-跟单指令及订单详情数据检查")
-        def test_dbquery_orderSend(self, class_random_str, var_manager, db_transaction):
-            with allure.step("1. 获取订单详情表账号数据"):
-                addVPS_MT5Slave = var_manager.get_variable("addVPS_MT5Slave")
-                sql = f"""
-                           SELECT
-                               fod.size,
-                               fod.comment,
-                               fod.send_no,
-                               fod.magical,
-                               fod.open_price,
-                               fod.remark,
-                               fod.symbol,
-                               fod.order_no,
-                               foi.true_total_lots,
-                               foi.order_no,
-                               foi.operation_type,
-                               foi.create_time,
-                               foi.status,
-                               foi.min_lot_size,
-                               foi.max_lot_size,
-                               foi.total_lots,
-                               foi.total_orders
-                           FROM
-                               follow_order_detail fod
-                           INNER JOIN
-                               follow_order_instruct foi
-                           ON
-                               foi.order_no = fod.send_no COLLATE utf8mb4_0900_ai_ci
-                           WHERE fod.account = %s
-                               AND fod.comment = %s
-                               """
-                params = (
-                    addVPS_MT5Slave["account"],
-                    class_random_str
-                )
-
-                # 调用轮询等待方法（带时间范围过滤）
-                db_data = self.query_database_with_time(
-                    db_transaction=db_transaction,
-                    sql=sql,
-                    params=params,
-                    time_field="foi.create_time"
-                )
-            with allure.step("2. 数据校验"):
-                if not db_data:
-                    pytest.fail("数据库查询结果为空，订单可能没有入库")
-
-                with allure.step("验证备注信息"):
-                    open_remark = db_data[0]["remark"]
-                    self.verify_data(
-                        actual_value=open_remark,
-                        expected_value=("超过最大手数限制"),
-                        op=CompareOp.EQ,
-                        use_isclose=False,
-                        message="开仓失败信息符合预期",
-                        attachment_name="失败信息详情"
-                    )
-                    logging.info(f"失败信息验证通过: {open_remark}")
-
-                    send_maxlots = var_manager.get_variable("send_maxlots")
-                    MT5max_lots = var_manager.get_variable("MT5max_lots")
-                    param_value = var_manager.get_variable("param_value")
-                    allure.attach(
-                        f"服务器最大手数：{MT5max_lots}，全局限制最大手数：{param_value}，下单手数：{send_maxlots}",
-                        "失败信息详情",
-                        allure.attachment_type.TEXT
-                    )
-
-        @pytest.mark.dependency(depends=["test_trader_orderSend"])
-        @pytest.mark.url("vps")
-        @allure.title("跟单软件看板-VPS数据-策略平仓")
-        def test_trader_orderclose(self, class_random_str, var_manager, logged_session):
-            # 1. 发送全平订单平仓请求
-            vps_trader_id = var_manager.get_variable("vps_trader_id")
-            new_user = var_manager.get_variable("new_user")
+    @allure.title("时间查询校验")
+    def test_query_time(self, var_manager, logged_session):
+        with allure.step(f"1. 发送时间查询请求"):
             data = {
-                "isCloseAll": 1,
-                "intervalTime": 100,
-                "traderId": vps_trader_id,
-                "account": new_user["account"]
+                "page": 1,
+                "limit": 50,
+                "instructionType": "",
+                "symbol": "",
+                "type": "",
+                "creatorName": "",
+                "startTime": DATETIME_INIT,
+                "endTime": DATETIME_NOW,
+                "cloudType": [],
+                "cloud": [],
+                "operationType": "",
+                "ifFollows": [],
+                "detailStatus": "",
+                "detailAccount": "",
+                "orderNo": "",
+                "magical": "",
+                "status": [],
+                "isClosed": True,
+                "platformType": ""
             }
+
             response = self.send_post_request(
                 logged_session,
-                '/subcontrol/trader/orderClose',
-                json_data=data,
+                '/bargain/historyCommands',
+                json_data=data
             )
 
-            # 2. 验证响应
-            self.assert_response_status(
-                response,
-                200,
-                "平仓失败"
-            )
+        with allure.step("2. 返回校验"):
             self.assert_json_value(
                 response,
                 "$.msg",
                 "success",
                 "响应msg字段应为success"
             )
+
+        with allure.step(f"3. 查询结果校验"):
+            # 修复：正确的 JsonPath 表达式（提取所有记录的 responseOpnetime）
+            responseOpnetime_list = self.json_utils.extract(
+                response.json(),
+                "$.data.list[*].followBaiginInstructSubVOList[*].createTime",
+                default=[],
+                multi_match=True
+            )
+
+            # 日志和 Allure 附件优化
+            if not responseOpnetime_list:
+                pytest.fail("查询结果为空，不符合预期")
+            else:
+                attach_body = f"查询开始时间：[{five_time}]，结束时间：[{DATETIME_NOW}]，返回 {len(responseOpnetime_list)} 条记录"
+
+                logger.info(attach_body)
+                allure.attach(
+                    body=attach_body,
+                    name=f"时间查询结果",
+                    attachment_type="text/plain"
+                )
+
+            # 修复：去掉 int() 强制转换（status 是字符串，dateTime 也是字符串）
+            for idx, actual_status in enumerate(responseOpnetime_list):
+                self.verify_data(
+                    actual_value=str(actual_status),
+                    expected_value=str(DATETIME_INIT),
+                    op=CompareOp.GE,
+                    use_isclose=False,
+                    message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
+                    attachment_name=f"时间:{actual_status}第 {idx + 1} 条记录校验"
+                )
+
+                self.verify_data(
+                    actual_value=str(actual_status),
+                    expected_value=str(DATETIME_NOW),
+                    op=CompareOp.LE,
+                    use_isclose=False,
+                    message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
+                    attachment_name=f"时间:{actual_status}第 {idx + 1} 条记录校验"
+                )
+
+    @allure.title("时间查询校验-查询结果为空")
+    def test_query_timeNO(self, var_manager, logged_session):
+        with allure.step(f"1. 发送时间查询请求"):
+            data = {
+                "page": 1,
+                "limit": 50,
+                "instructionType": "",
+                "symbol": "",
+                "type": "",
+                "creatorName": "",
+                "startTime": DATETIME_NOW,
+                "endTime": DATETIME_INIT,
+                "cloudType": [],
+                "cloud": [],
+                "operationType": "",
+                "ifFollows": [],
+                "detailStatus": "",
+                "detailAccount": "",
+                "orderNo": "",
+                "magical": "",
+                "status": [],
+                "isClosed": True,
+                "platformType": ""
+            }
+
+            response = self.send_post_request(
+                logged_session,
+                '/bargain/historyCommands',
+                json_data=data
+            )
+
+        with allure.step("2. 返回校验"):
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+        with allure.step("3. 查询校验"):
+            self.json_utils.assert_empty_list(
+                data=response.json(),
+                expression="$.data.list",
+            )
+            logging.info("查询结果符合预期：list为空列表")
+            allure.attach("查询结果为空，符合预期", 'text/plain')
+
+    # 定义所有需要测试的状态（作为参数化数据源）
+    STATUS_instructionType = [
+        (0, "分配"),
+        (1, "复制"),
+        (2, "策略")
+    ]
+
+    @pytest.mark.parametrize("status, status_desc", STATUS_instructionType)
+    @allure.title("指令类型查询：{status_desc}（{status}）")
+    def test_query_instructionType(self, var_manager, logged_session, status, status_desc):
+        with allure.step(f"1. 发送请求：指令类型查询-{status_desc}（{status}）"):
+            data = {
+                "page": 1,
+                "limit": 50,
+                "instructionType": status,
+                "symbol": "",
+                "type": "",
+                "creatorName": "",
+                "startTime": "",
+                "endTime": "",
+                "cloudType": [],
+                "cloud": [],
+                "operationType": "",
+                "ifFollows": [],
+                "detailStatus": "",
+                "detailAccount": "",
+                "orderNo": "",
+                "magical": "",
+                "status": [],
+                "isClosed": True,
+                "platformType": ""
+            }
+
+            response = self.send_post_request(
+                logged_session,
+                '/bargain/historyCommands',
+                json_data=data
+            )
+
+        with allure.step("2. 返回校验"):
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+        with allure.step(f"3. 指令类型查询结果校验：返回记录的instructionType应为{status}"):
+            # 修复：正确的 JsonPath 表达式（提取所有记录的 instructionType）
+            instructionType_list = self.json_utils.extract(
+                response.json(),
+                "$.data.list[*].instructionType",
+                default=[],
+                multi_match=True
+            )
+
+            # 日志和 Allure 附件优化
+            if not instructionType_list:
+                attach_body = f"指令类型查询[{status}]，返回的instructionType列表为空（暂无数据）"
+                logger.info(attach_body)
+                allure.attach(
+                    body=attach_body,
+                    name=f"指令类型:{status}查询结果",
+                    attachment_type="text/plain"
+                )
+                # 可选：暂无数据时跳过后续校验（或断言“允许为空”）
+                pytest.skip(f"指令类型查询[{status}]暂无数据，跳过校验")
+            else:
+                attach_body = f"指令类型查询[{status}]，返回 {len(instructionType_list)} 条记录"
+                logger.info(attach_body)
+                allure.attach(
+                    body=attach_body,
+                    name=f"指令类型:{status}查询结果",
+                    attachment_type="text/plain"
+                )
+
+            # 修复：去掉 int() 强制转换（status 是字符串，instructionType 也是字符串）
+            for idx, actual_status in enumerate(instructionType_list):
+                self.verify_data(
+                    actual_value=actual_status,
+                    expected_value=status,
+                    op=CompareOp.EQ,
+                    use_isclose=False,
+                    message=f"第 {idx + 1} 条记录的instructionType应为{status}，实际为{actual_status}",
+                    attachment_name=f"指令类型:{status}第 {idx + 1} 条记录校验"
+                )
+
+    @allure.title("品种查询校验")
+    def test_query_symbol(self, var_manager, logged_session):
+        with allure.step(f"1. 发送查询请求"):
+            symbol = "123121546131563"
+            data = {
+                "page": 1,
+                "limit": 50,
+                "instructionType": "",
+                "symbol": symbol,
+                "type": "",
+                "creatorName": "",
+                "startTime": "",
+                "endTime": "",
+                "cloudType": [],
+                "cloud": [],
+                "operationType": "",
+                "ifFollows": [],
+                "detailStatus": "",
+                "detailAccount": "",
+                "orderNo": "",
+                "magical": "",
+                "status": [],
+                "isClosed": True,
+                "platformType": ""
+            }
+
+            response = self.send_post_request(
+                logged_session,
+                '/bargain/historyCommands',
+                json_data=data
+            )
+
+        with allure.step("2. 返回校验"):
+            self.assert_json_value(
+                response,
+                "$.msg",
+                "success",
+                "响应msg字段应为success"
+            )
+
+        with allure.step(f"3. 品种查询校验"):
+            # 修复：正确的 JsonPath 表达式（提取所有记录的 symbol）
+            symbol_list = self.json_utils.extract(
+                response.json(),
+                "$.data.list[*].followBaiginInstructSubVOList[*].symbol",
+                default=[],
+                multi_match=True
+            )
+
+            # 日志和 Allure 附件优化
+            if not symbol_list:
+                attach_body = f"品种查询校验[{symbol}]，返回的symbol列表为空（暂无数据）"
+                logger.info(attach_body)
+                allure.attach(
+                    body=attach_body,
+                    name=f"品种:{symbol}查询结果",
+                    attachment_type="text/plain"
+                )
+                # 可选：暂无数据时跳过后续校验（或断言“允许为空”）
+                pytest.skip(f"品种查询[{symbol}]暂无数据，跳过校验")
+            else:
+                attach_body = f"品种查询[{symbol}]，返回 {len(symbol_list)} 条记录"
+                logger.info(attach_body)
+                allure.attach(
+                    body=attach_body,
+                    name=f"品种:{symbol}查询结果",
+                    attachment_type="text/plain"
+                )
+
+            # 修复：去掉 int() 强制转换（status 是字符串，symbol 也是字符串）
+            for idx, actual_status in enumerate(symbol_list):
+                self.verify_data(
+                    actual_value=symbol,
+                    expected_value=actual_status,
+                    op=CompareOp.IN,
+                    use_isclose=False,
+                    message=f"第 {idx + 1} 条记录的symbol应为{symbol}，实际为{actual_status}",
+                    attachment_name=f"品种:{symbol}第 {idx + 1} 条记录校验"
+                )

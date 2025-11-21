@@ -49,7 +49,7 @@ def run_cloud_tests(env: str = "test"):
         "test_cloudTrader/test_cloudOrder_open_level.py",
         "test_cloudTrader/test_cloudfixed_annotations.py",
         "test_cloudTrader/test_create_scene.py",
-        "test_cloudTrader/test_cloudTrader_money_scene.py",
+        "test_cloudTrader/test_cloudtrader_money_scene.py",
         "test_cloudTrader/test_delete.py",
 
         # 日志配置
@@ -68,16 +68,15 @@ def run_cloud_tests(env: str = "test"):
         print(f"\nCloud pytest 执行异常: {str(e)}")
         exit_code = 1
 
-    # 生成环境文件（与VPS逻辑一致，可选）
+    # 生成环境文件（关键：传递纯路径，而非 file:// 协议路径）
     markdown_abs_path = os.path.abspath(markdown_report_path)
     standard_path = markdown_abs_path.replace('\\', '/')
-    markdown_file_url = f"file:///{standard_path}"
-    # markdown_file_url = f"{standard_path}"
+    markdown_file_path = standard_path  # 去掉 file:// 前缀，直接传纯路径
     generate_env_cmd = [
         "python", "generate_env.py",
         "--env", env,
         "--output-dir", report_dir,
-        "--markdown-report-path", markdown_file_url
+        "--markdown-report-path", markdown_file_path
     ]
     try:
         result = subprocess.run(
@@ -98,9 +97,10 @@ def run_cloud_tests(env: str = "test"):
     except Exception as e:
         print(f"\nCloud 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Cloud独立Allure HTML报告（可选）
+    # 生成Cloud独立Allure HTML报告
     try:
         os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
+        # 注释/删除注入代码：inject_html_fix(html_dir)
         print(f"\nCloud独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
         print(f"\nCloud独立HTML报告生成失败: {str(e)}（不影响Markdown报告生成）")

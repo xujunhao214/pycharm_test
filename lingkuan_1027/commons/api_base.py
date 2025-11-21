@@ -830,8 +830,6 @@ class APITestBase:
                         with allure.step("删除验证成功"):
                             allure.attach(f"耗时{time.time() - start_time:.1f}秒，记录已删除", "结果说明",
                                           allure.attachment_type.TEXT)
-                            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         return
 
                     logger.info(
@@ -1468,23 +1466,40 @@ class APITestBase:
                         result = actual_value not in expected_value
 
             except TypeError as e:
-                pytest.fail(
-                    f"校验类型错误: {str(e)}\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}")
+                # 类型错误提示：移除换行，精简格式
+                err_msg = f"校验类型错误: {str(e)} | 实际值类型: {type(actual_value)} | 预期值类型: {type(expected_value)}"
+                pytest.fail(err_msg)
 
-            # 生成详细提示信息（包含容差参数）
+            # 生成详细提示信息（移除换行符，用 | 分隔，避免表格错乱）
+            # 若值过长，可截取前50字符（根据需要调整）
+            def truncate(val):
+                val_str = str(val)
+                return val_str[:50] + "..." if len(val_str) > 50 else val_str
+
             detail_msg = (
-                f"\n实际: {actual_value}\n"
-                f"操作: {op.value}\n"
-                f"预期: {expected_value}\n"
+                f"实际: {truncate(actual_value)} | "
+                f"操作: {op.value} | "
+                f"预期: {truncate(expected_value)}"
             )
 
-            # 添加allure.attach，将信息写入报告
+            # 生成Allure附件（保留完整信息，不影响原始报告）
+            full_detail = (
+                f"校验场景: {message}\n"
+                f"实际值: {actual_value}\n"
+                f"比较操作: {op.value}\n"
+                f"预期值: {expected_value}\n"
+                # f"容差设置(rel/abs): {rel_tol}/{abs_tol}\n"
+                f"是否通过: {'是' if result else '否'}"
+            )
+
+            # 添加allure.attach，将完整信息写入Allure报告（不影响简化版报告）
             allure.attach(
-                detail_msg,  # 附件内容
+                full_detail,  # 附件内容（完整信息）
                 name=attachment_name,  # 附件名称（来自参数）
                 attachment_type=attachment_type  # 附件类型
             )
 
             if not result:
-                pytest.fail(f"校验失败: {message}\n{detail_msg}")
-            logging.info(f"校验通过: {message}\n{detail_msg}")
+                # 失败提示：合并message和detail_msg，无换行
+                pytest.fail(f"校验失败: {message} | {detail_msg}")
+            logging.info(f"校验通过: {message} | {detail_msg}")
