@@ -3,7 +3,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import markdown  # 新增：导入markdown库
+import markdown  # 导入markdown库
 from collections import defaultdict
 from lingkuanMT5_1120.config import ENV_CONFIG, Environment
 from VAR.VAR import *
@@ -11,8 +11,8 @@ from datetime import datetime
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
-    # 1. 先收集所有用例结果（含重试），不做去重
-    all_case_results = []  # 存储所有用例结果（含重试）
+    # 1. 收集用例结果（逻辑不变）
+    all_case_results = []
     start_time_ts = None
     end_time_ts = None
 
@@ -23,14 +23,14 @@ def generate_simple_report(allure_results_dir, env, report_path):
                 with open(file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
 
-                    # 生成用例唯一标识（与之前一致）
+                    # 生成用例唯一标识
                     case_fullname = data.get("fullName", data.get("name", "未知用例"))
                     case_stage = data.get("stage", "call").upper()
                     parameters = data.get("parameters", [])
                     param_str = json.dumps(parameters, ensure_ascii=False, sort_keys=True)
                     case_unique_id = f"{case_fullname}_{case_stage}_{param_str}"
 
-                    # 提取执行时间（重点：记录 stop 时间，用于排序）
+                    # 提取执行时间
                     case_start = data.get("start", 0)
                     case_stop = data.get("stop", 0)
                     if not start_time_ts or case_start < start_time_ts:
@@ -38,7 +38,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
                     if not end_time_ts or case_stop > end_time_ts:
                         end_time_ts = case_stop
 
-                    # 状态映射、模块、场景、失败原因提取（与之前一致）
+                    # 状态映射、模块、场景、失败原因提取
                     status = data.get("status", "unknown").upper()
                     final_status = "FAILED" if status == "BROKEN" else status if status in ["PASSED", "FAILED",
                                                                                             "SKIPPED"] else "FAILED"
@@ -54,7 +54,6 @@ def generate_simple_report(allure_results_dir, env, report_path):
                     failure_msg = data.get("statusDetails", {}).get("message", "")[
                                   :80] or "无详细原因" if final_status == "FAILED" else "-"
 
-                    # 保存所有信息（含 stop 时间）
                     all_case_results.append({
                         "case_unique_id": case_unique_id,
                         "case_name": data.get("name", "未知用例"),
@@ -63,29 +62,25 @@ def generate_simple_report(allure_results_dir, env, report_path):
                         "status": final_status,
                         "failure_msg": failure_msg,
                         "start_time": case_start,
-                        "stop_time": case_stop  # 关键：用于排序，取最后一次执行结果
+                        "stop_time": case_stop
                     })
 
-    # 2. 按 case_unique_id 分组，每组内按 stop_time 降序排序，保留最后一次结果
+    # 2. 用例去重（保留最后一次执行结果）
     case_groups = defaultdict(list)
     for case in all_case_results:
         case_groups[case["case_unique_id"]].append(case)
-
-    # 去重：每组取最后一次执行（stop_time 最大）的结果
     case_final_results = {}
     for case_id, cases in case_groups.items():
-        # 按 stop_time 降序排序，第一个就是最后一次执行的结果
         cases_sorted = sorted(cases, key=lambda x: x["stop_time"], reverse=True)
         case_final_results[case_id] = cases_sorted[0]
 
-    # 3. 统计计算（基于去重后的结果）
+    # 3. 统计计算
     total = len(case_final_results)
     passed = 0
     failed = 0
     skipped = 0
     cases = []
     failed_cases = []
-
     for case_data in case_final_results.values():
         cases.append(case_data)
         status = case_data["status"]
@@ -97,7 +92,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
         elif status == "SKIPPED":
             skipped += 1
 
-    # 4. 后续逻辑（时间格式、模块统计、报告生成）完全不变
+    # 时间格式转换
     def timestamp_to_str(ts):
         if not ts or ts == 0:
             return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -117,6 +112,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
     executed_total = total - skipped
     global_pass_rate = round((passed / executed_total) * 100, 2) if executed_total > 0 else 0.0
 
+    # 模块统计
     module_stats = defaultdict(
         lambda: {"total": 0, "executed": 0, "passed": 0, "failed": 0, "skipped": 0, "pass_rate": 0.0})
     for case in cases:
@@ -136,7 +132,6 @@ def generate_simple_report(allure_results_dir, env, report_path):
                 (module_stats[module]["passed"] / module_stats[module]["executed"]) * 100, 2)
         else:
             module_stats[module]["pass_rate"] = 0.0
-
     failed_cases.sort(key=lambda x: (x["module"], x["scenario"] or "", x["case_name"]))
 
     # 项目名称与报告标题
@@ -159,23 +154,22 @@ def generate_simple_report(allure_results_dir, env, report_path):
     except (KeyError, ValueError):
         base_url = "未知环境URL"
 
-    # 生成报告内容
-    report_content = f"""
-<div align="center"><h1>{report_title}</h1></div>
+    # -------------------------- 核心调整：Markdown内容结构（保持原布局） --------------------------
+    report_content = f"""# {report_title}
 
 ## 1. 测试概览
-| 项目名称       | {project_name}接口自动化测试                               |
-|--------------|----------------------------------------------------------|
-| 开始时间       | {start_time}                                              |
-| 结束时间       | {end_time}                                                |
-| 总耗时         | {duration}                                                |
-| 执行环境       | {env}                                                    |
-| 总用例数       | {total}                                                  |
-| 实际执行数     | {executed_total}                                          |
-| 通过数（PASSED）| {passed}                                                  |
-| 失败数（FAILED）| {failed}                                                  |
-| 跳过数（SKIPPED）| {skipped}                                                |
-| 整体通过率     | {global_pass_rate:.2f}%                                   |
+| 项目名称       | {project_name}接口自动化测试 |
+|--------------|--------------------------|
+| 开始时间       | {start_time}              |
+| 结束时间       | {end_time}                |
+| 总耗时         | {duration}                |
+| 执行环境       | {env}                    |
+| 总用例数       | {total}                  |
+| 实际执行数     | {executed_total}          |
+| 通过数（PASSED）| {passed}                  |
+| 失败数（FAILED）| {failed}                  |
+| 跳过数（SKIPPED）| {skipped}                |
+| 整体通过率     | {global_pass_rate:.2f}%   |
 
 ## 2. 模块统计列表
 | 模块                 | 总用例数  | 实际执行数   | 通过数   | 失败数  | 跳过数  | 通过率   |
@@ -223,7 +217,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
 4. 报告生成路径：{os.path.abspath(report_path)}
 """
 
-    # 写入 MD 报告文件（原有逻辑不变）
+    # 写入MD报告
     os.makedirs(os.path.dirname(report_path), exist_ok=True)
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_content)
@@ -233,108 +227,100 @@ def generate_simple_report(allure_results_dir, env, report_path):
         f"涉及模块数：{len(module_stats)}个"
     )
 
-    # -------------------------- 新增：MD 转 HTML 逻辑 --------------------------
-    # 1. 拼接 HTML 报告路径（与 MD 报告同名，后缀改为 .html）
+    # -------------------------- HTML转换（保持原布局+美化样式） --------------------------
     html_report_path = report_path.replace(".md", ".html")
 
-    # 2. 读取 MD 内容并转换为 HTML（支持表格、目录等扩展语法）
     try:
         with open(report_path, "r", encoding="utf-8") as f:
             md_content = f.read()
 
-        # 转换 HTML（支持表格、代码块、目录）
+        # 转换HTML（保留基础扩展）
         html_content = markdown.markdown(
             md_content,
             extensions=[
-                "extra",  # 支持表格（核心）
-                "toc",  # 自动生成目录
-                "sane_lists",  # 修复列表渲染问题
-                "codehilite"  # 代码高亮（需安装 pygments）
+                "extra",  # 支持表格
+                "sane_lists",  # 修复列表渲染
+                "nl2br"  # 换行符转<br>
             ]
         )
 
-        # 3. 美化 HTML（添加基础样式）
+        # HTML模板（调整样式以匹配原布局）
         html_template = f"""
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{report_title}</title>
     <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ 
-            font-family: "Microsoft YaHei", Arial, sans-serif; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 30px; 
-            line-height: 1.8; 
+        /* 全局样式：保持紧凑布局 */
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }}
+        body {{
+            background-color: #fff;
+            color: #333;
+            line-height: 1.6;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }}
+        /* 标题样式：与原布局一致 */
+        h1 {{
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin: 20px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }}
+        h2 {{
+            font-size: 20px;
+            color: #333;
+            margin: 30px 0 15px;
+            padding-left: 5px;
+            border-left: 3px solid #3498db;
+        }}
+        /* 表格样式：保留原布局的蓝色表头 */
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }}
+        th {{
+            background-color: #3498db;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }}
+        td {{
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+        }}
+        tr:nth-child(even) {{
             background-color: #f9f9f9;
         }}
-        h1, h2, h3 {{ 
-            color: #2c3e50; 
-            margin: 30px 0 15px; 
-            border-bottom: 2px solid #eee; 
-            padding-bottom: 10px; 
+        tr:hover {{
+            background-color: #f0f7ff;
         }}
-        h1 {{ font-size: 32px; text-align: center; margin-bottom: 40px; }}
-        h2 {{ font-size: 26px; }}
-        h3 {{ font-size: 22px; }}
-        table {{ 
-            border-collapse: collapse; 
-            width: 100%; 
-            margin: 20px 0; 
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        /* 修复无失败用例时的显示 */
+        .no-fail {{
+            color: #2ecc71;
+            text-align: center;
+            padding: 10px;
         }}
-        th, td {{ 
-            border: 1px solid #ddd; 
-            padding: 12px 15px; 
-            text-align: left; 
-        }}
-        th {{ 
-            background-color: #3498db; 
-            color: #fff; 
-            font-weight: bold; 
-        }}
-        tr:nth-child(even) {{ background-color: #f8f9fa; }}
-        tr:hover {{ background-color: #f1f1f1; }}
-        .toc {{ 
-            margin: 30px 0; 
-            padding: 20px; 
-            border: 1px solid #eee; 
-            border-radius: 8px; 
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }}
-        .toc h3 {{ 
-            margin-top: 0; 
-            border-bottom: none; 
-            color: #3498db;
-        }}
-        .toc ul {{ list-style: none; padding-left: 20px; }}
-        .toc li {{ margin: 10px 0; }}
-        .toc a {{ 
-            text-decoration: none; 
-            color: #2c3e50; 
-            transition: color 0.3s;
-        }}
-        .toc a:hover {{ 
-            text-decoration: underline; 
-            color: #3498db; 
-        }}
-        pre {{ 
-            background-color: #f5f5f5; 
-            padding: 15px; 
-            border-radius: 6px; 
-            overflow-x: auto; 
-            margin: 15px 0; 
-            border: 1px solid #eee;
-        }}
-        code {{ 
-            background-color: #f5f5f5; 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-            color: #e74c3c; 
+        /* 注意事项样式 */
+        .notes {{
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 3px solid #ddd;
         }}
     </style>
 </head>
@@ -344,16 +330,17 @@ def generate_simple_report(allure_results_dir, env, report_path):
 </html>
 """
 
-        # 4. 写入 HTML 文件
+        # 写入HTML文件
         with open(html_report_path, "w", encoding="utf-8") as f:
             f.write(html_template)
-
         print(f"HTML 报告已生成：{html_report_path}")
         print(f"HTML 报告绝对路径：{os.path.abspath(html_report_path)}")
 
+    except ImportError as e:
+        print(f"MD 转 HTML 失败！缺少依赖：{str(e)}")
+        print("请执行以下命令安装依赖：pip install markdown pygments")
     except Exception as e:
-        print(f"⚠️ MD 转 HTML 失败！错误信息：{str(e)}")
-        print("提示：请确保已安装依赖：pip install markdown pygments")
+        print(f"MD 转 HTML 失败！错误信息：{str(e)}")
 
 
 if __name__ == "__main__":

@@ -52,18 +52,22 @@ def get_pure_report_paths(markdown_report_path):
     html_report_path = pure_md_path.replace(".md", ".html")
 
     if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：生成与 HTML Publisher 插件一致的路径
+        # Jenkins 环境：生成与 Publish HTML 插件完全一致的路径
         job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", "1")
-        relative_dir = os.path.dirname(pure_md_path)  # 自动提取相对目录
+        # 提取报告文件的「相对路径」（相对于 Jenkins 工作空间）
+        # 例如：pure_md_path = "lingkuanMT5_1120/report/Cloud接口自动化测试报告.md" → relative_dir = "lingkuanMT5_1120/report"
+        relative_dir = os.path.dirname(pure_md_path)
         md_filename = os.path.basename(pure_md_path)
         html_filename = os.path.basename(html_report_path)
 
-        # 生成正确的 Jenkins 访问路径（与插件发布路径一致）
-        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/{relative_dir}/{md_filename}"
-        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/{relative_dir}/{html_filename}"
+        # 关键：使用 Publish HTML 插件的发布路径格式
+        # 格式：http://Jenkins地址/job/任务名/构建号/HTML_Report/文件名
+        # （需与插件的「Report directory path」配置一致，若未配置则用默认路径）
+        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{md_filename}"
+        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{html_filename}"
     else:
-        # 本地环境：使用 file:// 协议
+        # 本地环境：保留 file:// 协议（直接点击可打开，无需启动 HTTP 服务）
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
