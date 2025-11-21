@@ -52,22 +52,20 @@ def get_pure_report_paths(markdown_report_path):
     html_report_path = pure_md_path.replace(".md", ".html")
 
     if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：生成与 Publish HTML 插件完全一致的路径
+        # Jenkins 环境：生成与实际访问路径一致的 URL（包含 view 前缀）
         job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", "1")
-        # 提取报告文件的「相对路径」（相对于 Jenkins 工作空间）
-        # 例如：pure_md_path = "lingkuanMT5_1120/report/Cloud接口自动化测试报告.md" → relative_dir = "lingkuanMT5_1120/report"
-        relative_dir = os.path.dirname(pure_md_path)
+        # 提取报告文件名
         md_filename = os.path.basename(pure_md_path)
         html_filename = os.path.basename(html_report_path)
 
-        # 关键：使用 Publish HTML 插件的发布路径格式
-        # 格式：http://Jenkins地址/job/任务名/构建号/HTML_Report/文件名
-        # （需与插件的「Report directory path」配置一致，若未配置则用默认路径）
-        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{md_filename}"
-        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{html_filename}"
+        # 关键：根据实际路径格式拼接（包含 view/自动化测试/ 前缀）
+        # 正确格式：http://{Jenkins地址}/view/自动化测试/job/{任务名}/{构建号}/HTML_Report/{报告文件名}
+        # 注意：view 名称固定为“自动化测试”，与你的实际路径匹配
+        md_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/{build_number}"
+        html_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/{build_number}"
     else:
-        # 本地环境：保留 file:// 协议（直接点击可打开，无需启动 HTTP 服务）
+        # 本地环境：保留 file:// 协议（直接打开）
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
