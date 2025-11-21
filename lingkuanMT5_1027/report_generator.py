@@ -286,11 +286,11 @@ def generate_simple_report(allure_results_dir, env, report_path):
 | Pytest版本     | 7.4.3                  |
 | Allure版本     | 2.14.2                 |
 | 接口BaseURL    | {base_url}             |
-| 测试设备        | Windows 11             |
 
 ## 5. 注意事项
-1. 失败用例请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑或代码报错；
-2. 通过率计算规则：仅统计实际执行的用例（排除跳过用例）；
+1. 通过率计算规则：仅统计实际执行的用例（排除跳过用例）；
+2. 失败用例请查看"备注"和"具体原因"，实际操作步骤请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑；
+
 """
     # 报告生成路径：{os.path.abspath(report_path)}
 
