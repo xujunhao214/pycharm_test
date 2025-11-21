@@ -86,7 +86,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
                         trace = status_details.get("trace", "")
 
                         # 场景1：数据库超时（关键词匹配 TimeoutError + 等待记录/删除）
-                        if "TimeoutError" in trace and ("等待记录" in msg or "删除" in msg):
+                        if "TimeoutError" in trace and ("等待记录" in msg or "删除" in msg or "时区查询" in msg):
                             # 备注：显示完整超时信息（如“等待记录出现超时（30秒）”）
                             failure_msg = msg.strip()[:80]
                             # 具体原因：为空
