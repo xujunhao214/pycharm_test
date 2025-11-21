@@ -48,30 +48,20 @@ def add_param(parent, key, value):
 
 
 def get_pure_report_paths(markdown_report_path):
-    # 移除 file:// 协议，获取纯路径
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 区分本地和 Jenkins 环境
     if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：自动提取相对路径（与 HTML Publisher 配置一致）
+        # Jenkins 环境：生成与 HTML Publisher 插件一致的路径
         job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", "1")
-
-        # 关键：自动获取报告文件的「相对路径」（相对于 Jenkins 工作空间）
-        # 假设 pure_md_path 是「工作空间/相对路径/文件名.md」，提取「相对路径」部分
-        # 例如：pure_md_path = "lingkuanMT5_1120/report/Cloud接口自动化测试报告.md" → relative_dir = "lingkuanMT5_1120/report"
-        relative_dir = os.path.dirname(pure_md_path)  # 自动提取相对目录（无硬编码）
+        relative_dir = os.path.dirname(pure_md_path)  # 自动提取相对目录
         md_filename = os.path.basename(pure_md_path)
         html_filename = os.path.basename(html_report_path)
 
-        # 方案B（推荐，无需高级设置）：使用 Jenkins 默认的 artifact 路径
+        # 生成正确的 Jenkins 访问路径（与插件发布路径一致）
         md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/{relative_dir}/{md_filename}"
         html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/{relative_dir}/{html_filename}"
-
-        # 若后续启用了插件的「Report directory path」（如 HTML_Report），再切换到方案A：
-        # md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{md_filename}"
-        # html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{html_filename}"
     else:
         # 本地环境：使用 file:// 协议
         if os.name == "nt":
