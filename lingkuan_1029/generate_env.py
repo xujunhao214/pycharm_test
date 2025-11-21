@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import argparse
 import logging
 from enum import Enum
-from lingkuan_1029.VAR.VAR import *
+from VAR.VAR import *
 
 
 # ------------------------------

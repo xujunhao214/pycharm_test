@@ -1,13 +1,14 @@
 import json
 import sys
 import os
-
-# 新增：添加项目根目录到Python路径（解决Jenkins导入问题）
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import markdown  # 新增：导入markdown库
 from collections import defaultdict
 from lingkuanMT5_1120.config import ENV_CONFIG, Environment
 from VAR.VAR import *
 from datetime import datetime
+
+# 新增：添加项目根目录到Python路径（解决Jenkins导入问题）
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
@@ -223,15 +224,137 @@ def generate_simple_report(allure_results_dir, env, report_path):
 4. 报告生成路径：{os.path.abspath(report_path)}
 """
 
-    # 写入报告文件
+    # 写入 MD 报告文件（原有逻辑不变）
     os.makedirs(os.path.dirname(report_path), exist_ok=True)
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_content)
     print(
-        f"简化版报告已生成：{report_path}\n"
+        f"简化版 MD 报告已生成：{report_path}\n"
         f"全局统计：共{total}条用例，实际执行{executed_total}条，失败{failed}条，跳过{skipped}条，整体通过率：{global_pass_rate:.2f}%\n"
         f"涉及模块数：{len(module_stats)}个"
     )
+
+    # -------------------------- 新增：MD 转 HTML 逻辑 --------------------------
+    # 1. 拼接 HTML 报告路径（与 MD 报告同名，后缀改为 .html）
+    html_report_path = report_path.replace(".md", ".html")
+
+    # 2. 读取 MD 内容并转换为 HTML（支持表格、目录等扩展语法）
+    try:
+        with open(report_path, "r", encoding="utf-8") as f:
+            md_content = f.read()
+
+        # 转换 HTML（支持表格、代码块、目录）
+        html_content = markdown.markdown(
+            md_content,
+            extensions=[
+                "extra",  # 支持表格（核心）
+                "toc",  # 自动生成目录
+                "sane_lists",  # 修复列表渲染问题
+                "codehilite"  # 代码高亮（需安装 pygments）
+            ]
+        )
+
+        # 3. 美化 HTML（添加基础样式）
+        html_template = f"""
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{report_title}</title>
+    <style>
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{ 
+            font-family: "Microsoft YaHei", Arial, sans-serif; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 30px; 
+            line-height: 1.8; 
+            background-color: #f9f9f9;
+        }}
+        h1, h2, h3 {{ 
+            color: #2c3e50; 
+            margin: 30px 0 15px; 
+            border-bottom: 2px solid #eee; 
+            padding-bottom: 10px; 
+        }}
+        h1 {{ font-size: 32px; text-align: center; margin-bottom: 40px; }}
+        h2 {{ font-size: 26px; }}
+        h3 {{ font-size: 22px; }}
+        table {{ 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }}
+        th, td {{ 
+            border: 1px solid #ddd; 
+            padding: 12px 15px; 
+            text-align: left; 
+        }}
+        th {{ 
+            background-color: #3498db; 
+            color: #fff; 
+            font-weight: bold; 
+        }}
+        tr:nth-child(even) {{ background-color: #f8f9fa; }}
+        tr:hover {{ background-color: #f1f1f1; }}
+        .toc {{ 
+            margin: 30px 0; 
+            padding: 20px; 
+            border: 1px solid #eee; 
+            border-radius: 8px; 
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }}
+        .toc h3 {{ 
+            margin-top: 0; 
+            border-bottom: none; 
+            color: #3498db;
+        }}
+        .toc ul {{ list-style: none; padding-left: 20px; }}
+        .toc li {{ margin: 10px 0; }}
+        .toc a {{ 
+            text-decoration: none; 
+            color: #2c3e50; 
+            transition: color 0.3s;
+        }}
+        .toc a:hover {{ 
+            text-decoration: underline; 
+            color: #3498db; 
+        }}
+        pre {{ 
+            background-color: #f5f5f5; 
+            padding: 15px; 
+            border-radius: 6px; 
+            overflow-x: auto; 
+            margin: 15px 0; 
+            border: 1px solid #eee;
+        }}
+        code {{ 
+            background-color: #f5f5f5; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            color: #e74c3c; 
+        }}
+    </style>
+</head>
+<body>
+    {html_content}
+</body>
+</html>
+"""
+
+        # 4. 写入 HTML 文件
+        with open(html_report_path, "w", encoding="utf-8") as f:
+            f.write(html_template)
+
+        print(f"HTML 报告已生成：{html_report_path}")
+        print(f"HTML 报告绝对路径：{os.path.abspath(html_report_path)}")
+
+    except Exception as e:
+        print(f"⚠️ MD 转 HTML 失败！错误信息：{str(e)}")
+        print("提示：请确保已安装依赖：pip install markdown pygments")
 
 
 if __name__ == "__main__":

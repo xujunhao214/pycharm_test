@@ -6,7 +6,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from collections import defaultdict
 from lingkuan_1029.config import ENV_CONFIG, Environment
-from lingkuan_1029.VAR.VAR import *
+from VAR.VAR import *
 from datetime import datetime
 
 
