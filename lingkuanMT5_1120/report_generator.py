@@ -1,14 +1,13 @@
 import json
 import sys
 import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import markdown  # 新增：导入markdown库
 from collections import defaultdict
 from lingkuanMT5_1120.config import ENV_CONFIG, Environment
 from VAR.VAR import *
 from datetime import datetime
-
-# 新增：添加项目根目录到Python路径（解决Jenkins导入问题）
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
