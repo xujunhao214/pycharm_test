@@ -54,11 +54,24 @@ def get_pure_report_paths(markdown_report_path):
 
     # 区分本地和 Jenkins 环境
     if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：使用 HTML Publisher 插件的访问路径
+        # Jenkins 环境：链接必须与 HTML Publisher 插件的发布路径一致
         job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", "1")
-        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/"
-        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/Cloud接口自动化测试报告.html"
+        # 获取报告文件名
+        md_filename = os.path.basename(pure_md_path)
+        html_filename = os.path.basename(html_report_path)
+
+        # 关键：根据插件配置的「Report directory path」填写子路径
+        # 若插件设置了「HTML_Report」，则路径为 job/{job_name}/{build_number}/HTML_Report/
+        # 若未设置，则路径为 job/{job_name}/{build_number}/artifact/lingkuanMT5_1120/report/
+        # （根据你的插件配置二选一）
+        # 方案A：插件设置了「Report directory path: HTML_Report」
+        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{md_filename}"
+        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/{html_filename}"
+
+        # 方案B：插件未设置子路径（默认发布到 artifact 目录）
+        # md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/lingkuanMT5_1120/report/{md_filename}"
+        # html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/artifact/lingkuanMT5_1120/report/{html_filename}"
     else:
         # 本地环境：使用 file:// 协议
         if os.name == "nt":
