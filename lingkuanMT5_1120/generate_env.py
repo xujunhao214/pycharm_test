@@ -48,23 +48,29 @@ def add_param(parent, key, value):
 
 
 def get_pure_report_paths(markdown_report_path):
-    """只返回纯路径（不包含<a>标签），Allure会自动识别为链接"""
-    # 移除 MD 路径的 file:/// 协议，获取纯路径
+    # 移除 file:// 协议，获取纯路径
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
-    # 拼接 HTML 报告路径
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 处理为可直接跳转的纯路径（带 file:// 协议）
-    if os.name == "nt":  # Windows
-        md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
-        html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
-        md_url = f"file:///{md_abs_path}"
-        html_url = f"file:///{html_abs_path}"
-    else:  # Linux/Mac
-        md_abs_path = os.path.abspath(pure_md_path)
-        html_abs_path = os.path.abspath(html_report_path)
-        md_url = f"file://{md_abs_path}"
-        html_url = f"file://{html_abs_path}"
+    # 区分本地和 Jenkins 环境
+    if "JENKINS_URL" in os.environ:
+        # Jenkins 环境：使用 HTML Publisher 插件的访问路径
+        job_name = os.environ.get("JOB_NAME", "默认任务名")
+        build_number = os.environ.get("BUILD_NUMBER", "1")
+        md_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/"
+        html_url = f"{os.environ['JENKINS_URL']}job/{job_name}/{build_number}/HTML_Report/Cloud接口自动化测试报告.html"
+    else:
+        # 本地环境：使用 file:// 协议
+        if os.name == "nt":
+            md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
+            html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
+            md_url = f"file:///{md_abs_path}"
+            html_url = f"file:///{html_abs_path}"
+        else:
+            md_abs_path = os.path.abspath(pure_md_path)
+            html_abs_path = os.path.abspath(html_report_path)
+            md_url = f"file://{md_abs_path}"
+            html_url = f"file://{html_abs_path}"
 
     return md_url, html_url
 
