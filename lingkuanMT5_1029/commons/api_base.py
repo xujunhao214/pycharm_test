@@ -401,27 +401,27 @@ class APITestBase:
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
 
     def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):
-        """断言JSON路径对应的值（分层提示优化）"""
         try:
             actual_value = self.extract_jsonpath(response, json_path)
             if isinstance(actual_value, list) and len(actual_value) == 1:
                 actual_value = actual_value[0]
 
+            # Allure中记录详细信息
             with allure.step(f"断言JSON路径: {json_path}"):
                 allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
                 allure.attach(f"期望值: {self.serialize_data(expected_value)}", "预期值", allure.attachment_type.TEXT)
                 allure.attach(f"实际值: {self.serialize_data(actual_value)}", "实际值", allure.attachment_type.TEXT)
 
+            # 断言失败时，异常消息明确包含实际/预期
             assert actual_value == expected_value, \
-                f"Failed: {error_msg_prefix}（JSON路径值不匹配）"
+                f"（预期: {expected_value}, 实际: {actual_value if actual_value is not None else 'None'}）"
         except Exception as e:
-            with allure.step(f"JSON断言失败: {json_path}"):
-                allure.attach(json_path, "JSON路径", allure.attachment_type.TEXT)
-                allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
-                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
-            logger.error(
-                f"[{self._get_current_time()}] JSON断言失败: {str(e)} \n路径: {json_path} \n响应: {response.text[:500]}")
-            raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
+            # 异常时，构造包含实际/预期的错误消息
+            if 'actual_value' in locals():
+                actual_str = str(actual_value) if actual_value is not None else 'None'
+            else:
+                actual_str = '未获取到'
+            raise AssertionError(f"Failed: {error_msg_prefix}（预期: {expected_value}, 实际: {actual_str}）") from e
 
     # ------------------------------ 数据库操作（异常分层优化） ------------------------------
     def query_database(self, db_transaction: pymysql.connections.Connection,
@@ -645,11 +645,9 @@ class APITestBase:
             # 判断超时场景（原有逻辑不变）
             if len(final_result) == 0:
                 with allure.step("轮询超时（无结果）"):
-                    allure.attach(
-                        f"等待{timeout}秒后仍无查询结果",
-                        "超时详情", allure.attachment_type.TEXT)
-                error_msg = f"Failed: 等待记录出现超时（{timeout}秒）"
-                raise TimeoutError(error_msg)
+                    allure.attach(f"等待{timeout}秒后仍无查询结果", "超时详情", allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                raise TimeoutError(f"Failed: 等待记录出现超时（{timeout}秒）")
             elif final_result is None:
                 with allure.step("轮询超时（未稳定）"):
                     allure.attach(
@@ -830,8 +828,6 @@ class APITestBase:
                         with allure.step("删除验证成功"):
                             allure.attach(f"耗时{time.time() - start_time:.1f}秒，记录已删除", "结果说明",
                                           allure.attachment_type.TEXT)
-                            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         return
 
                     logger.info(
@@ -1468,23 +1464,40 @@ class APITestBase:
                         result = actual_value not in expected_value
 
             except TypeError as e:
-                pytest.fail(
-                    f"校验类型错误: {str(e)}\n实际值类型: {type(actual_value)}, 预期值类型: {type(expected_value)}")
+                # 类型错误提示：移除换行，精简格式
+                err_msg = f"校验类型错误: {str(e)} | 实际值类型: {type(actual_value)} | 预期值类型: {type(expected_value)}"
+                pytest.fail(err_msg)
 
-            # 生成详细提示信息（包含容差参数）
+            # 生成详细提示信息（移除换行符，用 | 分隔，避免表格错乱）
+            # 若值过长，可截取前50字符（根据需要调整）
+            def truncate(val):
+                val_str = str(val)
+                return val_str[:50] + "..." if len(val_str) > 50 else val_str
+
             detail_msg = (
-                f"\n实际: {actual_value}\n"
-                f"操作: {op.value}\n"
-                f"预期: {expected_value}\n"
+                f"实际: {truncate(actual_value)} | "
+                f"操作: {op.value} | "
+                f"预期: {truncate(expected_value)}"
             )
 
-            # 添加allure.attach，将信息写入报告
+            # 生成Allure附件（保留完整信息，不影响原始报告）
+            full_detail = (
+                f"校验场景: {message}\n"
+                f"实际值: {actual_value}\n"
+                f"比较操作: {op.value}\n"
+                f"预期值: {expected_value}\n"
+                # f"容差设置(rel/abs): {rel_tol}/{abs_tol}\n"
+                f"是否通过: {'是' if result else '否'}"
+            )
+
+            # 添加allure.attach，将完整信息写入Allure报告（不影响简化版报告）
             allure.attach(
-                detail_msg,  # 附件内容
+                full_detail,  # 附件内容（完整信息）
                 name=attachment_name,  # 附件名称（来自参数）
                 attachment_type=attachment_type  # 附件类型
             )
 
             if not result:
-                pytest.fail(f"校验失败: {message}\n{detail_msg}")
-            logging.info(f"校验通过: {message}\n{detail_msg}")
+                # 失败提示：合并message和detail_msg，无换行
+                pytest.fail(f"校验失败: {message} | {detail_msg}")
+            logging.info(f"校验通过: {message} | {detail_msg}")

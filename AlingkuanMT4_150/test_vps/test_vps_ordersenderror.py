@@ -183,7 +183,7 @@ class TestVPSOrdersenderror:
                         expected_value=("超过最大手数限制"),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message="开仓失败信息符合预期",
+                        message="开仓失败提示信息应符合预期",
                         attachment_name="失败信息详情"
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
@@ -347,7 +347,7 @@ class TestVPSOrdersenderror:
                         expected_value=("超过最大手数限制"),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message="开仓失败信息符合预期",
+                        message="开仓失败提示信息应符合预期",
                         attachment_name="失败信息详情"
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
@@ -518,7 +518,7 @@ class TestVPSOrdersenderror:
                         expected_value=("超过最大手数限制"),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message="开仓失败信息符合预期",
+                        message="开仓失败提示信息应符合预期",
                         attachment_name="失败信息详情"
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")

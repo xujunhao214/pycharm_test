@@ -182,27 +182,45 @@ def var_manager(environment, test_group):
     manager.save_runtime_variables()
 
 
-@pytest.fixture(scope="session")  # 关键修改：提升为会话级
+import pytest
+import allure  # 导入 allure
+
+
+@pytest.fixture(scope="session")
 def test_group(request):
     """
     根据测试文件所在目录自动判断测试组（会话级）
     - 优先通过命令行参数指定，其次自动识别目录
+    - 自动添加 Allure 标签，供报告识别
     """
-    # 支持通过命令行参数手动指定test_group（优先级最高）
+    # 1. 优先读取命令行参数
     test_group = request.config.getoption("--test-group")
     if test_group:
+        # 给整个会话添加 test-group 标签（所有用例共享）
+        allure.label("test-group", test_group)
         return test_group
 
-    # 自动识别：根据第一个测试模块的路径判断
+    # 2. 自动识别目录（第一个测试文件的路径）
     if request.session.testscollected > 0:
-        first_test_path = request.session.testscollected[0].parent.fspath.strpath
-        if "test_vps" in first_test_path:
-            return "vps"
-        elif "test_cloudTrader" in first_test_path:
-            return "cloud"
+        # 修复：获取第一个测试用例的路径（兼容 pytest 不同版本）
+        first_test = request.session.testscollected[0]
+        first_test_path = first_test.fspath.strpath if hasattr(first_test, "fspath") else str(first_test.parent)
 
-    # 默认值（无隔离）
-    return ""
+        if "test_vps" in first_test_path:
+            test_group = "vps"
+        elif "test_cloudTrader" in first_test_path:
+            test_group = "cloud"
+        else:
+            test_group = "default"
+
+        # 添加 Allure 标签
+        allure.label("test-group", test_group)
+        return test_group
+
+    # 3. 默认值
+    test_group = "default"
+    allure.label("test-group", test_group)
+    return test_group
 
 
 # 全局连接池

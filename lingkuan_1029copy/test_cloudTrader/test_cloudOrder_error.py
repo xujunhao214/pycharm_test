@@ -15,12 +15,12 @@ SKIP_REASON = "跳过此用例"
 class TestCloudOrdersenderror:
     @allure.story("场景1： 云策略列表-策略账号超过最大手数")
     @allure.description("""
-    ### 测试说明
-    - 前置条件：有云策略和云跟单
-      1. 获取该服务器最大手数
-      2. 云策略列表-分配下单，策略账号进行开仓
-    - 预期结果：开仓失败，超过最大手数限制
-    """)
+        ### 测试说明
+        - 前置条件：有云策略和云跟单
+          1. 获取该服务器最大手数
+          2. 云策略列表-分配下单，策略账号进行开仓
+        - 预期结果：开仓失败，超过最大手数限制
+        """)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @pytest.mark.usefixtures("class_random_str")
@@ -175,7 +175,7 @@ class TestCloudOrdersenderror:
                         expected_value=("超过最大手数限制"),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message="开仓失败信息符合预期",
+                        message="开仓失败提示信息应符合预期",
                         attachment_name="失败信息详情"
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
@@ -349,7 +349,7 @@ class TestCloudOrdersenderror:
                         expected_value=("超过最大手数限制"),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message="开仓失败信息符合预期",
+                        message="开仓失败提示信息应符合预期",
                         attachment_name="失败信息详情"
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
@@ -667,7 +667,7 @@ class TestCloudOrdersenderror:
                         expected_value=("超过最大手数限制"),
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message="开仓失败信息符合预期",
+                        message="开仓失败提示信息应符合预期",
                         attachment_name="失败信息详情"
                     )
                     logging.info(f"失败信息验证通过: {open_remark}")
