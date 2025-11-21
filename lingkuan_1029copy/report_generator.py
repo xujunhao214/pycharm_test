@@ -213,8 +213,8 @@ def generate_simple_report(allure_results_dir, env, report_path):
 ## 5. 注意事项
 1. 失败用例请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑或代码报错；
 2. 通过率计算规则：仅统计实际执行的用例（排除跳过用例）；
-3. 报告生成路径：{os.path.abspath(report_path)}
 """
+# 报告生成路径：{os.path.abspath(report_path)}
 
     # 写入MD报告
     os.makedirs(os.path.dirname(report_path), exist_ok=True)
