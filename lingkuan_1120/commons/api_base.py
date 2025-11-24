@@ -401,27 +401,27 @@ class APITestBase:
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
 
     def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):
-        """断言JSON路径对应的值（分层提示优化）"""
         try:
             actual_value = self.extract_jsonpath(response, json_path)
             if isinstance(actual_value, list) and len(actual_value) == 1:
                 actual_value = actual_value[0]
 
+            # Allure中记录详细信息
             with allure.step(f"断言JSON路径: {json_path}"):
                 allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
                 allure.attach(f"期望值: {self.serialize_data(expected_value)}", "预期值", allure.attachment_type.TEXT)
                 allure.attach(f"实际值: {self.serialize_data(actual_value)}", "实际值", allure.attachment_type.TEXT)
 
+            # 断言失败时，异常消息明确包含实际/预期
             assert actual_value == expected_value, \
-                f"Failed: {error_msg_prefix}（JSON路径值不匹配）"
+                f"（预期: {expected_value}, 实际: {actual_value if actual_value is not None else 'None'}）"
         except Exception as e:
-            with allure.step(f"JSON断言失败: {json_path}"):
-                allure.attach(json_path, "JSON路径", allure.attachment_type.TEXT)
-                allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
-                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
-            logger.error(
-                f"[{self._get_current_time()}] JSON断言失败: {str(e)} \n路径: {json_path} \n响应: {response.text[:500]}")
-            raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
+            # 异常时，构造包含实际/预期的错误消息
+            if 'actual_value' in locals():
+                actual_str = str(actual_value) if actual_value is not None else 'None'
+            else:
+                actual_str = '未获取到'
+            raise AssertionError(f"Failed: {error_msg_prefix}（预期: {expected_value}, 实际: {actual_str}）") from e
 
     # ------------------------------ 数据库操作（异常分层优化） ------------------------------
     def query_database(self, db_transaction: pymysql.connections.Connection,
@@ -645,11 +645,9 @@ class APITestBase:
             # 判断超时场景（原有逻辑不变）
             if len(final_result) == 0:
                 with allure.step("轮询超时（无结果）"):
-                    allure.attach(
-                        f"等待{timeout}秒后仍无查询结果",
-                        "超时详情", allure.attachment_type.TEXT)
-                error_msg = f"Failed: 等待记录出现超时（{timeout}秒）"
-                raise TimeoutError(error_msg)
+                    allure.attach(f"等待{timeout}秒后仍无查询结果", "超时详情", allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                raise TimeoutError(f"Failed: 等待记录出现超时（{timeout}秒）")
             elif final_result is None:
                 with allure.step("轮询超时（未稳定）"):
                     allure.attach(
@@ -1225,42 +1223,93 @@ class APITestBase:
 
     def assert_list_equal_ignore_order(self, list1, list2, list3, error_msg_prefix="断言失败，列表元素不匹配"):
         """
-        断言列表元素相同（忽略顺序），精准拆分断言逻辑，明确展示匹配关系
+        断言列表元素相同（忽略顺序），二选一匹配逻辑（总手数/实际总手数任一与详情匹配即通过）
+        优化点：1. 明确展示不匹配差异 2. 支持手数格式转换 3. 完善 Allure 日志 4. 适配 MD 报告解析
         :param list1: 总手数列表
-        :param list2: 预期列表
+        :param list2: 预期列表（详情手数）
         :param list3: 实际总手数列表
         :param error_msg_prefix: 错误提示前缀
         """
         from collections import Counter
 
-        # 分别计算三个列表的元素计数
-        counter1 = Counter(list1)
-        counter2 = Counter(list2)
-        counter3 = Counter(list3)
+        # -------------- 新增：统一格式转换（避免字符串/数字混用，兼容 None/空值）--------------
+        def clean_and_convert(lst):
+            """清洗列表：过滤 None/空值，转换为浮点数（手数统一格式）"""
+            cleaned = []
+            for item in lst:
+                if item in (None, ""):
+                    continue  # 过滤无效值
+                try:
+                    cleaned.append(float(item))
+                except (ValueError, TypeError):
+                    # 非数字类型直接保留（如特殊字符串），不影响 Counter 计数
+                    cleaned.append(str(item))
+            return cleaned
+
+        # 清洗并转换三个列表
+        list1_clean = clean_and_convert(list1)
+        list2_clean = clean_and_convert(list2)
+        list3_clean = clean_and_convert(list3)
+
+        # 计算元素计数（忽略顺序）
+        counter1 = Counter(list1_clean)
+        counter2 = Counter(list2_clean)
+        counter3 = Counter(list3_clean)
 
         with allure.step("断言列表元素相同（忽略顺序）"):
-            # allure.attach(self.serialize_data(list1), "总手数列表", attachment_type="text/plain")
-            # allure.attach(self.serialize_data(list3), "实际总手数列表", attachment_type="text/plain")
-            # allure.attach(self.serialize_data(list2), "详情手数列表", attachment_type="text/plain")
+            # -------------- 新增：Allure 附件展示原始+清洗后的数据 --------------
+            allure.attach(
+                f"原始总手数列表: {list1}\n清洗后: {list1_clean}",
+                "总手数列表",
+                attachment_type="text/plain"
+            )
+            allure.attach(
+                f"原始详情手数列表: {list2}\n清洗后: {list2_clean}",
+                "详情手数列表（预期）",
+                attachment_type="text/plain"
+            )
+            allure.attach(
+                f"原始实际总手数列表: {list3}\n清洗后: {list3_clean}",
+                "实际总手数列表",
+                attachment_type="text/plain"
+            )
 
             try:
-                # 先判断总手数列表是否与预期匹配
+                # 原逻辑：总手数与预期匹配 → 通过
                 if counter1 == counter2:
                     with allure.step("总手数列表与详情手数列表匹配"):
-                        allure.attach(f"总手数列表: {list1} \n详情手数列表: {list2}", "匹配结果",
-                                      attachment_type="text/plain")
-                    return  # 匹配成功，直接返回
+                        allure.attach(
+                            f"总手数列表: {list1_clean} \n详情手数列表: {list2_clean}",
+                            "匹配结果",
+                            attachment_type="text/plain"
+                        )
+                    return
 
-                # 再判断实际总手数列表是否与预期匹配
+                # 原逻辑：实际总手数与预期匹配 → 通过
                 elif counter3 == counter2:
                     with allure.step("实际总手数列表与详情手数列表匹配"):
-                        allure.attach(f"实际总手数列表: {list3} \n详情手数列表: {list2}", "匹配结果",
-                                      attachment_type="text/plain")
-                    return  # 匹配成功，直接返回
+                        allure.attach(
+                            f"实际总手数列表: {list3_clean} \n详情手数列表: {list2_clean}",
+                            "匹配结果",
+                            attachment_type="text/plain"
+                        )
+                    return
 
-                # 两者都不匹配时抛出断言错误
+                # 原逻辑：两者都不匹配 → 失败（新增：展示具体差异）
                 else:
-                    raise AssertionError(f"Failed: {error_msg_prefix}（忽略顺序）")
+                    # 计算不匹配项（方便 MD 报告提取）
+                    list1_mismatch = {k: v for k, v in counter1.items() if counter2.get(k, 0) != v}
+                    list3_mismatch = {k: v for k, v in counter3.items() if counter2.get(k, 0) != v}
+
+                    # 构建详细错误信息（适配 MD 报告解析）
+                    error_detail = (
+                        f"{error_msg_prefix}（忽略顺序）\n"
+                        f"详情手数列表（预期）: {list2_clean}\n"
+                        f"总手数列表不匹配项: {list1_mismatch}\n"
+                        f"实际总手数列表不匹配项: {list3_mismatch}\n"
+                        f"原始数据: 总手数={list1}, 实际总手数={list3}, 详情={list2}"
+                    )
+                    raise AssertionError(f"Failed: {error_detail}")
 
             except AssertionError as e:
                 with allure.step("列表元素断言失败"):

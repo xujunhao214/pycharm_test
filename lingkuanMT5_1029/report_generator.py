@@ -3,6 +3,7 @@ import sys
 import os
 import re
 import math
+from collections import Counter
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import markdown  # 导入markdown库
@@ -85,15 +86,16 @@ def generate_simple_report(allure_results_dir, env, report_path):
                         msg = status_details.get("message", "")
                         trace = status_details.get("trace", "")
 
-                        # 场景1：数据库超时（关键词匹配 TimeoutError + 等待记录/删除）
-                        if "TimeoutError" in trace and ("等待记录" in msg or "删除" in msg or "时区查询" in msg or "数据库查询" in msg):
+                        # 场景1：数据库超时（关键词匹配 TimeoutError + 等待/删除/超时/查询）
+                        if "TimeoutError" in trace and (
+                                "等待" in msg or "删除" in msg or "超时" in msg or "查询" in msg):
                             # 备注：显示完整超时信息（如“等待记录出现超时（30秒）”）
                             failure_msg = msg.strip()[:80]
                             # 具体原因：为空
                             specific_reason = ""
 
                         # 场景2：JSON断言失败（关键词匹配 AssertionError + 响应字段/JSON路径）
-                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg):
+                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg or "失败" in msg):
                             # 提取“备注（失败原因）”：仅显示错误描述（如“响应msg字段应为success”）
                             json_match = re.search(r'Failed: ([^（]+)', msg)  # 匹配“Failed: xxx”到“（”之前的内容
                             if json_match:
@@ -111,7 +113,26 @@ def generate_simple_report(allure_results_dir, env, report_path):
                             else:
                                 specific_reason = "未获取到实际/预期信息"
 
-                        # 场景3：其他失败（如verify_data校验、普通断言等）
+                        # 新增场景3：手数列表不匹配（核心优化）
+                        elif "AssertionError" in trace and "列表元素不匹配" in msg and "总手数列表不匹配项" in msg:
+                            failure_msg = "总手数/实际总手数二选一匹配失败（忽略顺序）"
+
+                            # 提取结构化的不匹配信息
+                            detail_match = re.search(r'详情手数列表（预期）: (.*?)\n', msg)
+                            list1_mismatch_match = re.search(r'总手数列表不匹配项: ({.*?})\n', msg)
+                            list3_mismatch_match = re.search(r'实际总手数列表不匹配项: ({.*?})\n', msg)
+
+                            specific_parts = []
+                            if detail_match:
+                                specific_parts.append(f"预期（详情）: {detail_match.group(1).strip()}")
+                            if list1_mismatch_match:
+                                specific_parts.append(f"总手数不匹配: {list1_mismatch_match.group(1).strip()}")
+                            if list3_mismatch_match:
+                                specific_parts.append(f"实际总手数不匹配: {list3_mismatch_match.group(1).strip()}")
+
+                            specific_reason = "; ".join(specific_parts)[:200] if specific_parts else "未获取到具体不匹配项"
+
+                        # 场景4：其他失败（如verify_data校验、普通断言等）
                         else:
                             # 保持原有逻辑，提取校验失败信息
                             failure_match = re.search(r'校验失败: ([^|]+) \| 实际:', msg)
@@ -291,7 +312,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
 1. 通过率计算规则：仅统计实际执行的用例（排除跳过用例）；
 2. 失败用例先查看"备注"和"具体原因"，实际操作步骤请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑；
 """
-# 报告生成路径：{os.path.abspath(report_path)}
+    # 报告生成路径：{os.path.abspath(report_path)}
 
     # 写入MD报告
     os.makedirs(os.path.dirname(report_path), exist_ok=True)

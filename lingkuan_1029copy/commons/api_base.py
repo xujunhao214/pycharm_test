@@ -401,27 +401,27 @@ class APITestBase:
             raise ValueError(f"Failed: JSONPath解析失败（{json_path}）") from e
 
     def assert_json_value(self, response, json_path, expected_value, error_msg_prefix):
-        """断言JSON路径对应的值（分层提示优化）"""
         try:
             actual_value = self.extract_jsonpath(response, json_path)
             if isinstance(actual_value, list) and len(actual_value) == 1:
                 actual_value = actual_value[0]
 
+            # Allure中记录详细信息
             with allure.step(f"断言JSON路径: {json_path}"):
                 allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
                 allure.attach(f"期望值: {self.serialize_data(expected_value)}", "预期值", allure.attachment_type.TEXT)
                 allure.attach(f"实际值: {self.serialize_data(actual_value)}", "实际值", allure.attachment_type.TEXT)
 
+            # 断言失败时，异常消息明确包含实际/预期
             assert actual_value == expected_value, \
-                f"Failed: {error_msg_prefix}（JSON路径值不匹配）"
+                f"（预期: {expected_value}, 实际: {actual_value if actual_value is not None else 'None'}）"
         except Exception as e:
-            with allure.step(f"JSON断言失败: {json_path}"):
-                allure.attach(json_path, "JSON路径", allure.attachment_type.TEXT)
-                allure.attach(str(expected_value), "预期值", allure.attachment_type.TEXT)
-                allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
-            logger.error(
-                f"[{self._get_current_time()}] JSON断言失败: {str(e)} \n路径: {json_path} \n响应: {response.text[:500]}")
-            raise AssertionError(f"Failed: {error_msg_prefix}（JSON断言失败）") from e
+            # 异常时，构造包含实际/预期的错误消息
+            if 'actual_value' in locals():
+                actual_str = str(actual_value) if actual_value is not None else 'None'
+            else:
+                actual_str = '未获取到'
+            raise AssertionError(f"Failed: {error_msg_prefix}（预期: {expected_value}, 实际: {actual_str}）") from e
 
     # ------------------------------ 数据库操作（异常分层优化） ------------------------------
     def query_database(self, db_transaction: pymysql.connections.Connection,
@@ -645,11 +645,9 @@ class APITestBase:
             # 判断超时场景（原有逻辑不变）
             if len(final_result) == 0:
                 with allure.step("轮询超时（无结果）"):
-                    allure.attach(
-                        f"等待{timeout}秒后仍无查询结果",
-                        "超时详情", allure.attachment_type.TEXT)
-                error_msg = f"Failed: 等待记录出现超时（{timeout}秒）"
-                raise TimeoutError(error_msg)
+                    allure.attach(f"等待{timeout}秒后仍无查询结果", "超时详情", allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                raise TimeoutError(f"Failed: 等待记录出现超时（{timeout}秒）")
             elif final_result is None:
                 with allure.step("轮询超时（未稳定）"):
                     allure.attach(

@@ -81,12 +81,13 @@ def generate_simple_report(allure_results_dir, env, report_path):
                         trace = status_details.get("trace", "")
 
                         # 场景1：数据库超时
-                        if "TimeoutError" in trace and ("等待记录" in msg or "删除" in msg or "超时" in msg):
+                        if "TimeoutError" in trace and (
+                                "等待" in msg or "删除" in msg or "超时" in msg or "查询" in msg):
                             failure_msg = msg.strip()[:80]
                             specific_reason = ""
 
                         # 场景2：JSON断言失败
-                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg):
+                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg or "失败" in msg):
                             json_match = re.search(r'Failed: ([^（]+)', msg)
                             failure_msg = json_match.group(1).strip()[:80] if json_match else "响应字段断言失败"
                             actual_expected_match = re.search(r'预期: (.*?), 实际: (.*?)(?:）|$)', msg)
@@ -281,7 +282,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
 1. 通过率计算规则：仅统计实际执行的用例（排除跳过用例）；
 2. 失败用例先查看"备注"和"具体原因"，实际操作步骤请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑；
 """
-# 报告生成路径：{os.path.abspath(report_path)}
+    # 报告生成路径：{os.path.abspath(report_path)}
 
     # 写入MD报告
     os.makedirs(os.path.dirname(report_path), exist_ok=True)

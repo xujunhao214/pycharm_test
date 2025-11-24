@@ -1,0 +1,773 @@
+{
+  "uid" : "aa7ba0d0a80521ae",
+  "name" : "数据库校验-交易平仓-跟单指令及订单详情数据检查",
+  "fullName" : "test_vps.test_vps_masOrderSend.TestVPStradingOrders2#test_dbquery_addsalve_orderSendclose",
+  "historyId" : "56225187b0ab7d27ad7dee153efa2f87",
+  "time" : {
+    "start" : 1763975107690,
+    "stop" : 1763975112032,
+    "duration" : 4342
+  },
+  "description" : "\n    ### 测试说明\n    - 前置条件：有vps策略和vps跟单\n      1. 进行开仓，手数范围0.1-1，总订单3，总手数1\n      2. 校验账号的数据是否正确\n      3. 进行平仓\n      4. 校验账号的数据是否正确\n    - 预期结果：账号的数据正确\n    ",
+  "descriptionHtml" : "<pre><code>### 测试说明\n- 前置条件：有vps策略和vps跟单\n  1. 进行开仓，手数范围0.1-1，总订单3，总手数1\n  2. 校验账号的数据是否正确\n  3. 进行平仓\n  4. 校验账号的数据是否正确\n- 预期结果：账号的数据正确\n</code></pre>\n",
+  "status" : "failed",
+  "statusMessage" : "Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0",
+  "statusTrace" : "self = <lingkuanMT5_1027.test_vps.test_vps_masOrderSend.TestVPSMasOrdersend.TestVPStradingOrders2 object at 0x000001C91659F610>\nclass_random_str = 'zdhq95088'\nvar_manager = <lingkuanMT5_1027.commons.variable_manager.VariableManager object at 0x000001C9165B3280>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x000001C91666C8E0>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查\")\n    def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            MT5vps_user_accounts_1 = var_manager.get_variable(\"MT5vps_user_accounts_1\")\n            MT5vps_addslave_id = var_manager.get_variable(\"MT5vps_addslave_id\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.magical,\n                        fod.open_price,\n                        fod.comment,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status,\n                        foi.min_lot_size,\n                        foi.max_lot_size,\n                        foi.total_lots,\n                        foi.master_order,\n                        foi.total_orders\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type = %s\n                        AND fod.account = %s\n                        AND fod.trader_id = %s\n                        AND fod.comment = %s\n                        \"\"\"\n            params = (\n                '1',\n                MT5vps_user_accounts_1,\n                MT5vps_addslave_id,\n                class_random_str\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，订单可能没有入库\")\n    \n            with allure.step(\"验证订单状态\"):\n                status = db_data[0][\"status\"]\n                self.verify_data(\n                    actual_value=status,\n                    expected_value=(0, 1, 3),\n                    op=CompareOp.IN,\n                    message=\"订单状态应为0或1或3\",\n                    attachment_name=\"订单状态详情\"\n                )\n                logging.info(f\"订单状态验证通过: {status}\")\n    \n            with allure.step(\"验证详情总手数\"):\n                trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n                totalSzie = trader_ordersend[\"totalSzie\"]\n                size = [record[\"size\"] for record in db_data]\n                total = sum(size)\n                # 关键优化：四舍五入保留两位小数\n                total = round(float(total), 2)\n>               self.verify_data(\n                    actual_value=float(total),\n                    expected_value=float(totalSzie),\n                    op=CompareOp.EQ,\n                    message=\"详情总手数应符合预期\",\n                    attachment_name=\"详情总手数\"\n                )\n\ntest_vps\\test_vps_masOrderSend.py:853: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuanMT5_1027.test_vps.test_vps_masOrderSend.TestVPSMasOrdersend.TestVPStradingOrders2 object at 0x000001C91659F610>\nactual_value = 0.13, expected_value = 1.0, op = <CompareOp.EQ: '=='>\nmessage = '详情总手数应符合预期', attachment_name = '详情总手数'\nattachment_type = 'text/plain', use_isclose = True, rel_tol = 1e-09, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                # 类型错误提示：移除换行，精简格式\n                err_msg = f\"校验类型错误: {str(e)} | 实际值类型: {type(actual_value)} | 预期值类型: {type(expected_value)}\"\n                pytest.fail(err_msg)\n    \n            # 生成详细提示信息（移除换行符，用 | 分隔，避免表格错乱）\n            # 若值过长，可截取前50字符（根据需要调整）\n            def truncate(val):\n                val_str = str(val)\n                return val_str[:50] + \"...\" if len(val_str) > 50 else val_str\n    \n            detail_msg = (\n                f\"实际: {truncate(actual_value)} | \"\n                f\"操作: {op.value} | \"\n                f\"预期: {truncate(expected_value)}\"\n            )\n    \n            # 生成Allure附件（保留完整信息，不影响原始报告）\n            full_detail = (\n                f\"校验场景: {message}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"比较操作: {op.value}\\n\"\n                f\"预期值: {expected_value}\\n\"\n                # f\"容差设置(rel/abs): {rel_tol}/{abs_tol}\\n\"\n                f\"是否通过: {'是' if result else '否'}\"\n            )\n    \n            # 添加allure.attach，将完整信息写入Allure报告（不影响简化版报告）\n            allure.attach(\n                full_detail,  # 附件内容（完整信息）\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n                # 失败提示：合并message和detail_msg，无换行\n>               pytest.fail(f\"校验失败: {message} | {detail_msg}\")\nE               Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0\n\ncommons\\api_base.py:1552: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1763975107690,
+      "stop" : 1763975107690,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1763975107592,
+      "stop" : 1763975107689,
+      "duration" : 97
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1763975064357,
+      "stop" : 1763975065036,
+      "duration" : 679
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1763975065036,
+      "stop" : 1763975065037,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1763975064357,
+      "stop" : 1763975064357,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1763975065036,
+      "stop" : 1763975065036,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "class_random_str",
+    "time" : {
+      "start" : 1763975088611,
+      "stop" : 1763975088611,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1763975064357,
+      "stop" : 1763975064357,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 测试说明\n    - 前置条件：有vps策略和vps跟单\n      1. 进行开仓，手数范围0.1-1，总订单3，总手数1\n      2. 校验账号的数据是否正确\n      3. 进行平仓\n      4. 校验账号的数据是否正确\n    - 预期结果：账号的数据正确\n    ",
+    "status" : "failed",
+    "statusMessage" : "Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0",
+    "statusTrace" : "self = <lingkuanMT5_1027.test_vps.test_vps_masOrderSend.TestVPSMasOrdersend.TestVPStradingOrders2 object at 0x000001C91659F610>\nclass_random_str = 'zdhq95088'\nvar_manager = <lingkuanMT5_1027.commons.variable_manager.VariableManager object at 0x000001C9165B3280>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x000001C91666C8E0>\n\n    @allure.title(\"数据库校验-交易平仓-跟单指令及订单详情数据检查\")\n    def test_dbquery_addsalve_orderSendclose(self, class_random_str, var_manager, db_transaction):\n        with allure.step(\"1. 获取订单详情表账号数据\"):\n            MT5vps_user_accounts_1 = var_manager.get_variable(\"MT5vps_user_accounts_1\")\n            MT5vps_addslave_id = var_manager.get_variable(\"MT5vps_addslave_id\")\n            sql = f\"\"\"\n                    SELECT\n                        fod.size,\n                        fod.close_no,\n                        fod.magical,\n                        fod.open_price,\n                        fod.comment,\n                        fod.symbol,\n                        fod.order_no,\n                        foi.true_total_lots,\n                        foi.order_no,\n                        foi.operation_type,\n                        foi.create_time,\n                        foi.status,\n                        foi.min_lot_size,\n                        foi.max_lot_size,\n                        foi.total_lots,\n                        foi.master_order,\n                        foi.total_orders\n                    FROM\n                        follow_order_detail fod\n                    INNER JOIN\n                        follow_order_instruct foi\n                    ON\n                        foi.order_no = fod.close_no COLLATE utf8mb4_0900_ai_ci\n                    WHERE foi.operation_type = %s\n                        AND fod.account = %s\n                        AND fod.trader_id = %s\n                        AND fod.comment = %s\n                        \"\"\"\n            params = (\n                '1',\n                MT5vps_user_accounts_1,\n                MT5vps_addslave_id,\n                class_random_str\n            )\n    \n            # 调用轮询等待方法（带时间范围过滤）\n            db_data = self.query_database_with_time_with_timezone(\n                db_transaction=db_transaction,\n                sql=sql,\n                params=params,\n                time_field=\"fod.close_time\"\n            )\n        with allure.step(\"2. 数据校验\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，订单可能没有入库\")\n    \n            with allure.step(\"验证订单状态\"):\n                status = db_data[0][\"status\"]\n                self.verify_data(\n                    actual_value=status,\n                    expected_value=(0, 1, 3),\n                    op=CompareOp.IN,\n                    message=\"订单状态应为0或1或3\",\n                    attachment_name=\"订单状态详情\"\n                )\n                logging.info(f\"订单状态验证通过: {status}\")\n    \n            with allure.step(\"验证详情总手数\"):\n                trader_ordersend = var_manager.get_variable(\"trader_ordersend\")\n                totalSzie = trader_ordersend[\"totalSzie\"]\n                size = [record[\"size\"] for record in db_data]\n                total = sum(size)\n                # 关键优化：四舍五入保留两位小数\n                total = round(float(total), 2)\n>               self.verify_data(\n                    actual_value=float(total),\n                    expected_value=float(totalSzie),\n                    op=CompareOp.EQ,\n                    message=\"详情总手数应符合预期\",\n                    attachment_name=\"详情总手数\"\n                )\n\ntest_vps\\test_vps_masOrderSend.py:853: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuanMT5_1027.test_vps.test_vps_masOrderSend.TestVPSMasOrdersend.TestVPStradingOrders2 object at 0x000001C91659F610>\nactual_value = 0.13, expected_value = 1.0, op = <CompareOp.EQ: '=='>\nmessage = '详情总手数应符合预期', attachment_name = '详情总手数'\nattachment_type = 'text/plain', use_isclose = True, rel_tol = 1e-09, abs_tol = 0\n\n    def verify_data(\n            self,\n            actual_value,\n            expected_value,\n            op: CompareOp,\n            message: str,\n            attachment_name: str,\n            attachment_type=\"text/plain\",\n            use_isclose=True,  # 新增参数：是否启用math.isclose容错（默认启用）\n            rel_tol=1e-9,  # 相对容差（仅当use_isclose=True时生效）\n            abs_tol=0  # 绝对容差（仅当use_isclose=True时生效）\n    ):\n        \"\"\"\n        通用数据校验函数，支持浮点容错比较\n        :param actual_value: 实际值\n        :param expected_value: 预期值\n        :param op: 比较操作，CompareOp 枚举\n        :param message: 校验失败时的提示信息\n        :param attachment_name: Allure 附件名称\n        :param attachment_type: Allure 附件类型，默认文本\n        :param use_isclose: 是否使用math.isclose进行浮点容错比较\n        :param rel_tol: 相对容差（默认1e-9）\n        :param abs_tol: 绝对容差（默认0.0）\n        其他参数同前\n        \"\"\"\n        with allure.step(f\"校验: {message}\"):\n            result = False\n            try:\n                # 处理浮点容错比较（仅对EQ/NE操作生效）\n                if use_isclose and op in (CompareOp.EQ, CompareOp.NE):\n                    if not (isinstance(actual_value, (int, float)) and\n                            isinstance(expected_value, (int, float))):\n                        # 非数字类型自动禁用isclose，避免报错\n                        use_isclose = False\n                        logging.warning(f\"自动禁用isclose：非数字类型比较（实际值类型：{type(actual_value)}）\")\n    \n                    # 计算isclose结果\n                    is_close = math.isclose(\n                        actual_value,\n                        expected_value,\n                        rel_tol=rel_tol,\n                        abs_tol=abs_tol\n                    )\n                    # 根据操作类型取反\n                    result = is_close if op == CompareOp.EQ else not is_close\n    \n                # 普通比较逻辑\n                else:\n                    if op == CompareOp.EQ:\n                        result = actual_value == expected_value\n                    elif op == CompareOp.NE:\n                        result = actual_value != expected_value\n                    elif op == CompareOp.GT:\n                        result = actual_value > expected_value\n                    elif op == CompareOp.LT:\n                        result = actual_value < expected_value\n                    elif op == CompareOp.GE:\n                        result = actual_value >= expected_value\n                    elif op == CompareOp.LE:\n                        result = actual_value <= expected_value\n                    elif op == CompareOp.IN:\n                        result = actual_value in expected_value\n                    elif op == CompareOp.NOT_IN:\n                        result = actual_value not in expected_value\n    \n            except TypeError as e:\n                # 类型错误提示：移除换行，精简格式\n                err_msg = f\"校验类型错误: {str(e)} | 实际值类型: {type(actual_value)} | 预期值类型: {type(expected_value)}\"\n                pytest.fail(err_msg)\n    \n            # 生成详细提示信息（移除换行符，用 | 分隔，避免表格错乱）\n            # 若值过长，可截取前50字符（根据需要调整）\n            def truncate(val):\n                val_str = str(val)\n                return val_str[:50] + \"...\" if len(val_str) > 50 else val_str\n    \n            detail_msg = (\n                f\"实际: {truncate(actual_value)} | \"\n                f\"操作: {op.value} | \"\n                f\"预期: {truncate(expected_value)}\"\n            )\n    \n            # 生成Allure附件（保留完整信息，不影响原始报告）\n            full_detail = (\n                f\"校验场景: {message}\\n\"\n                f\"实际值: {actual_value}\\n\"\n                f\"比较操作: {op.value}\\n\"\n                f\"预期值: {expected_value}\\n\"\n                # f\"容差设置(rel/abs): {rel_tol}/{abs_tol}\\n\"\n                f\"是否通过: {'是' if result else '否'}\"\n            )\n    \n            # 添加allure.attach，将完整信息写入Allure报告（不影响简化版报告）\n            allure.attach(\n                full_detail,  # 附件内容（完整信息）\n                name=attachment_name,  # 附件名称（来自参数）\n                attachment_type=attachment_type  # 附件类型\n            )\n    \n            if not result:\n                # 失败提示：合并message和detail_msg，无换行\n>               pytest.fail(f\"校验失败: {message} | {detail_msg}\")\nE               Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0\n\ncommons\\api_base.py:1552: Failed",
+    "steps" : [ {
+      "name" : "1. 获取订单详情表账号数据",
+      "time" : {
+        "start" : 1763975107690,
+        "stop" : 1763975112030,
+        "duration" : 4340
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（时区+06:00，超时30秒）",
+        "time" : {
+          "start" : 1763975107691,
+          "stop" : 1763975112030,
+          "duration" : 4339
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "带时区转换查询（目标时区: +06:00）",
+          "time" : {
+            "start" : 1763975107737,
+            "stop" : 1763975107796,
+            "duration" : 59
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1763975107739,
+              "stop" : 1763975107796,
+              "duration" : 57
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : false,
+            "shouldDisplayMessage" : false,
+            "attachmentsCount" : 0
+          } ],
+          "attachments" : [ {
+            "uid" : "5b307becadfb2c76",
+            "name" : "时区处理",
+            "source" : "5b307becadfb2c76.txt",
+            "type" : "text/plain",
+            "size" : 51
+          }, {
+            "uid" : "ae9d1eb6717af1b0",
+            "name" : "查询条件",
+            "source" : "ae9d1eb6717af1b0.txt",
+            "type" : "text/plain",
+            "size" : 127
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "轮询中（已等待0.1秒）",
+          "time" : {
+            "start" : 1763975107796,
+            "stop" : 1763975107797,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "c02e5555c86ac4b5",
+            "name" : "当前状态",
+            "source" : "c02e5555c86ac4b5.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "21f86d2609959a63",
+            "name" : "超时倒计时",
+            "source" : "21f86d2609959a63.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1763975107797,
+            "stop" : 1763975107797,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "9d80f30cd0061f69",
+            "name" : "判断结果",
+            "source" : "9d80f30cd0061f69.txt",
+            "type" : "text/plain",
+            "size" : 39
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "数据发生变化",
+          "time" : {
+            "start" : 1763975107797,
+            "stop" : 1763975107797,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ceddb79a055b24a5",
+            "name" : "状态说明",
+            "source" : "ceddb79a055b24a5.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "带时区转换查询（目标时区: +06:00）",
+          "time" : {
+            "start" : 1763975109858,
+            "stop" : 1763975109914,
+            "duration" : 56
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1763975109859,
+              "stop" : 1763975109914,
+              "duration" : 55
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : false,
+            "shouldDisplayMessage" : false,
+            "attachmentsCount" : 0
+          } ],
+          "attachments" : [ {
+            "uid" : "7908bb46be872d5c",
+            "name" : "时区处理",
+            "source" : "7908bb46be872d5c.txt",
+            "type" : "text/plain",
+            "size" : 51
+          }, {
+            "uid" : "133ba9352564055a",
+            "name" : "查询条件",
+            "source" : "133ba9352564055a.txt",
+            "type" : "text/plain",
+            "size" : 127
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "轮询中（已等待2.2秒）",
+          "time" : {
+            "start" : 1763975109914,
+            "stop" : 1763975109916,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "57ede6739b57c747",
+            "name" : "当前状态",
+            "source" : "57ede6739b57c747.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "11e2136f79e410d5",
+            "name" : "超时倒计时",
+            "source" : "11e2136f79e410d5.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1763975109916,
+            "stop" : 1763975109916,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b652e50169965dba",
+            "name" : "唯一键信息",
+            "source" : "b652e50169965dba.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "44660ff798d73c8a",
+            "name" : "判断结果",
+            "source" : "44660ff798d73c8a.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "数据首次稳定",
+          "time" : {
+            "start" : 1763975109916,
+            "stop" : 1763975109917,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "359ea93be88c01a0",
+            "name" : "状态说明",
+            "source" : "359ea93be88c01a0.txt",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "带时区转换查询（目标时区: +06:00）",
+          "time" : {
+            "start" : 1763975111967,
+            "stop" : 1763975112027,
+            "duration" : 60
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1763975111968,
+              "stop" : 1763975112027,
+              "duration" : 59
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : false,
+            "shouldDisplayMessage" : false,
+            "attachmentsCount" : 0
+          } ],
+          "attachments" : [ {
+            "uid" : "53d8499fae53c892",
+            "name" : "时区处理",
+            "source" : "53d8499fae53c892.txt",
+            "type" : "text/plain",
+            "size" : 51
+          }, {
+            "uid" : "d68d36af60c1013f",
+            "name" : "查询条件",
+            "source" : "d68d36af60c1013f.txt",
+            "type" : "text/plain",
+            "size" : 127
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "轮询中（已等待4.3秒）",
+          "time" : {
+            "start" : 1763975112027,
+            "stop" : 1763975112028,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "101fb8822c9e1c",
+            "name" : "当前状态",
+            "source" : "101fb8822c9e1c.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "f200e8d6e3b5954b",
+            "name" : "超时倒计时",
+            "source" : "f200e8d6e3b5954b.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1763975112028,
+            "stop" : 1763975112028,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "cb2d1489c2a51762",
+            "name" : "唯一键信息",
+            "source" : "cb2d1489c2a51762.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "db00a06fa4b4f3f2",
+            "name" : "判断结果",
+            "source" : "db00a06fa4b4f3f2.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 2
+        }, {
+          "name" : "数据稳定达标",
+          "time" : {
+            "start" : 1763975112028,
+            "stop" : 1763975112029,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "8d2c9301db0b5a61",
+            "name" : "结果说明",
+            "source" : "8d2c9301db0b5a61.txt",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        }, {
+          "name" : "带时区查询最终结果",
+          "time" : {
+            "start" : 1763975112029,
+            "stop" : 1763975112030,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "99a2d1d056ff8fc8",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "99a2d1d056ff8fc8.json",
+            "type" : "application/json",
+            "size" : 465
+          }, {
+            "uid" : "7ef8067e92c22e4e",
+            "name" : "执行SQL",
+            "source" : "7ef8067e92c22e4e.txt",
+            "type" : "text/plain",
+            "size" : 1287
+          }, {
+            "uid" : "7881d15617676c47",
+            "name" : "SQL参数",
+            "source" : "7881d15617676c47.txt",
+            "type" : "text/plain",
+            "size" : 37
+          }, {
+            "uid" : "558b16249167beb7",
+            "name" : "时区偏移量（小时）",
+            "source" : "558b16249167beb7.txt",
+            "type" : "text/plain",
+            "size" : 1
+          }, {
+            "uid" : "a946d916bcf33c3a",
+            "name" : "查询时间窗口",
+            "source" : "a946d916bcf33c3a.txt",
+            "type" : "text/plain",
+            "size" : 61
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 5
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 16,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 25
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 17,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 25
+    }, {
+      "name" : "2. 数据校验",
+      "time" : {
+        "start" : 1763975112030,
+        "stop" : 1763975112031,
+        "duration" : 1
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuanMT5_1027\\test_vps\\test_vps_masOrderSend.py\", line 853, in test_dbquery_addsalve_orderSendclose\n    self.verify_data(\n  File \"D:\\pycharm_test\\lingkuanMT5_1027\\commons\\api_base.py\", line 1552, in verify_data\n    pytest.fail(f\"校验失败: {message} | {detail_msg}\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "验证订单状态",
+        "time" : {
+          "start" : 1763975112030,
+          "stop" : 1763975112031,
+          "duration" : 1
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "校验: 订单状态应为0或1或3",
+          "time" : {
+            "start" : 1763975112030,
+            "stop" : 1763975112031,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "602883494fb3e44b",
+            "name" : "订单状态详情",
+            "source" : "602883494fb3e44b.attach",
+            "type" : "text/plain",
+            "size" : 110
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : false,
+          "attachmentsCount" : 1
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1
+      }, {
+        "name" : "验证详情总手数",
+        "time" : {
+          "start" : 1763975112031,
+          "stop" : 1763975112031,
+          "duration" : 0
+        },
+        "status" : "failed",
+        "statusMessage" : "Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\lingkuanMT5_1027\\test_vps\\test_vps_masOrderSend.py\", line 853, in test_dbquery_addsalve_orderSendclose\n    self.verify_data(\n  File \"D:\\pycharm_test\\lingkuanMT5_1027\\commons\\api_base.py\", line 1552, in verify_data\n    pytest.fail(f\"校验失败: {message} | {detail_msg}\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+        "steps" : [ {
+          "name" : "校验: 详情总手数应符合预期",
+          "time" : {
+            "start" : 1763975112031,
+            "stop" : 1763975112031,
+            "duration" : 0
+          },
+          "status" : "failed",
+          "statusMessage" : "Failed: 校验失败: 详情总手数应符合预期 | 实际: 0.13 | 操作: == | 预期: 1.0\n",
+          "statusTrace" : "  File \"D:\\pycharm_test\\lingkuanMT5_1027\\commons\\api_base.py\", line 1552, in verify_data\n    pytest.fail(f\"校验失败: {message} | {detail_msg}\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "ddeeed3314dbcfcc",
+            "name" : "详情总手数",
+            "source" : "ddeeed3314dbcfcc.attach",
+            "type" : "text/plain",
+            "size" : 110
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "shouldDisplayMessage" : true,
+          "attachmentsCount" : 1
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 1,
+        "hasContent" : true,
+        "shouldDisplayMessage" : false,
+        "attachmentsCount" : 1
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 4,
+      "hasContent" : true,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 2
+    } ],
+    "attachments" : [ {
+      "uid" : "c6a9e1e40212e654",
+      "name" : "log",
+      "source" : "c6a9e1e40212e654.txt",
+      "type" : "text/plain",
+      "size" : 6930
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 23,
+    "hasContent" : true,
+    "shouldDisplayMessage" : true,
+    "attachmentsCount" : 28
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1763975112055,
+      "stop" : 1763975112104,
+      "duration" : 49
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1763975112105,
+      "stop" : 1763975112198,
+      "duration" : 93
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1763975217191,
+      "stop" : 1763975217192,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略账号交易下单-开仓的场景校验"
+  }, {
+    "name" : "story",
+    "value" : "场景2：复制下单-手数0.1-1，总订单3，总手数1"
+  }, {
+    "name" : "tag",
+    "value" : "@pytest.mark.usefixtures('class_random_str')"
+  }, {
+    "name" : "tag",
+    "value" : "flaky(reruns=0, reruns_delay=0)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vps_masOrderSend"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSMasOrdersend"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "42736-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vps_masOrderSend"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Product defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ "@pytest.mark.usefixtures('class_random_str')", "flaky(reruns=0, reruns_delay=0)" ]
+  },
+  "source" : "aa7ba0d0a80521ae.json",
+  "parameterValues" : [ ]
+}
