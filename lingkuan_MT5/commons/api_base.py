@@ -1228,7 +1228,7 @@ class APITestBase:
                 allure.attach(str(params or json_data), "请求参数", allure.attachment_type.TEXT)
             raise TimeoutError(f"Failed: API条件等待超时（{url}）") from e
 
-    def assert_list_equal_ignore_order(self, list1, list2, error_msg_prefix="列表元素不匹配"):
+    def assert_list_equal_ignore_order(self, list1, list2, error_msg_prefix="断言失败，列表元素不匹配"):
         """断言两个列表元素相同（忽略顺序，带Allure分层提示）"""
         from collections import Counter
         with allure.step("断言列表元素相同（忽略顺序）"):

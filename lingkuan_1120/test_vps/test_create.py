@@ -343,30 +343,29 @@ class TestCreate(APITestBase):
             var_manager.set_runtime_variable("vps_template_id2", vps_template_id2)
 
     # @pytest.mark.skip(reason=SKIP_REASON)
-    @allure.title("VPS管理-VPS列表-校验服务器IP是否可用")
-    def test_get_connect(self, logged_session, var_manager):
-        # 1. 校验服务器IP是否可用
-        add_VPS = var_manager.get_variable("add_VPS")
-        response = self.send_get_request(
-            logged_session,
-            '/mascontrol/vps/connect',
-            params={'ipAddress': add_VPS["ipAddress"]}
-        )
+    @allure.title("数据库查询-获取VPSID")
+    def test_get_vpsID(self, var_manager, db_transaction):
+        with allure.step("1. 查询数据库数据"):
+            ip_address = var_manager.get_variable("IP_ADDRESS")
 
-        # 2. 验证响应状态码
-        self.assert_response_status(
-            response,
-            200,
-            "服务器IP不可用"
-        )
+            db_data = self.query_database(
+                db_transaction,
+                f"SELECT * FROM follow_vps WHERE ip_address = %s",
+                (ip_address,)
+            )
 
-        # 3. 验证JSON返回内容
-        self.assert_json_value(
-            response,
-            "$.msg",
-            "success",
-            "响应msg字段应为success"
-        )
+        with allure.step("2. 提取数据库数据"):
+            # 提取数据库中的值
+            if not db_data:
+                pytest.fail("数据库查询结果为空")
+
+            vpsId = db_data[0]["id"]
+            var_manager.set_runtime_variable("vpsId", vpsId)
+            print(f"成功提取 VPS ID: {vpsId}")
+
+            vpsname = db_data[0]["name"]
+            var_manager.set_runtime_variable("vpsname", vpsname)
+            print(f"成功提取vpsname: {vpsname}")
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @allure.title("VPS管理-VPS列表-获取可见用户信息")

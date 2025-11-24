@@ -270,7 +270,7 @@ class TestCloudMasOrdersend:
                         actual_value=float(total),
                         expected_value=1,
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
                     logging.info(f'订单详情总手数是：{total}')

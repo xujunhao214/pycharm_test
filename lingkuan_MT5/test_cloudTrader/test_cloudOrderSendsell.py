@@ -2365,7 +2365,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=1,
                         op=CompareOp.EQ,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -2376,7 +2376,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(size),
                         expected_value=0.6,
                         op=CompareOp.GE,
-                        message="实际手数符合预期",
+                        message="实际手数应符合预期",
                         attachment_name="实际手数"
                     )
                     logging.info(f"实际手数: {size}")
@@ -2454,7 +2454,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=1,
                         op=CompareOp.EQ,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -2465,7 +2465,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(size),
                         expected_value=0.6,
                         op=CompareOp.GE,
-                        message="实际手数符合预期",
+                        message="实际手数应符合预期",
                         attachment_name="实际手数"
                     )
                     logging.info(f"实际手数: {size}")
@@ -2576,7 +2576,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=1,
                         op=CompareOp.EQ,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -2587,7 +2587,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(size),
                         expected_value=0.6,
                         op=CompareOp.GE,
-                        message="实际手数符合预期",
+                        message="实际手数应符合预期",
                         attachment_name="实际手数"
                     )
                     logging.info(f"实际手数: {size}")
@@ -2659,7 +2659,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=1,
                         op=CompareOp.EQ,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -2670,7 +2670,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(size),
                         expected_value=0.6,
                         op=CompareOp.GE,
-                        message="实际手数符合预期",
+                        message="实际手数应符合预期",
                         attachment_name="实际手数"
                     )
                     logging.info(f"实际手数: {size}")
@@ -2789,7 +2789,7 @@ class TestCloudStrategyOrdersell:
                             actual_value=float(i),
                             expected_value=0.3,
                             op=CompareOp.GE,
-                            message="实际手数符合预期",
+                            message="实际手数应符合预期",
                             attachment_name="实际手数"
                         )
                     logging.info(f"实际手数: {size}")
@@ -2800,7 +2800,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=total_orders,
                         op=CompareOp.NE,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -2812,7 +2812,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(total),
                         expected_value=5,
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
                     logging.info(f'订单详情总手数是：{total}')
@@ -2882,7 +2882,7 @@ class TestCloudStrategyOrdersell:
                             actual_value=float(i),
                             expected_value=0.3,
                             op=CompareOp.GE,
-                            message="实际手数符合预期",
+                            message="实际手数应符合预期",
                             attachment_name="实际手数"
                         )
                     logging.info(f"实际手数: {size}")
@@ -2893,7 +2893,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=total_orders,
                         op=CompareOp.NE,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -2905,7 +2905,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(total),
                         expected_value=5,
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
                     logging.info(f'订单详情总手数是：{total}')
@@ -3008,7 +3008,7 @@ class TestCloudStrategyOrdersell:
                             actual_value=float(i),
                             expected_value=0.3,
                             op=CompareOp.GE,
-                            message="实际手数符合预期",
+                            message="实际手数应符合预期",
                             attachment_name="实际手数"
                         )
                     logging.info(f"实际手数: {size}")
@@ -3019,7 +3019,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=total_orders,
                         op=CompareOp.NE,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -3031,7 +3031,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(total),
                         expected_value=5,
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
                     logging.info(f'订单详情总手数是：{total}')
@@ -3105,7 +3105,7 @@ class TestCloudStrategyOrdersell:
                             actual_value=float(i),
                             expected_value=0.3,
                             op=CompareOp.GE,
-                            message="实际手数符合预期",
+                            message="实际手数应符合预期",
                             attachment_name="实际手数"
                         )
                     logging.info(f"实际手数: {size}")
@@ -3116,7 +3116,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=len(db_data),
                         expected_value=total_orders,
                         op=CompareOp.NE,
-                        message="订单数量符合预期",
+                        message="订单数量应符合预期",
                         attachment_name="订单数量"
                     )
                     logging.info(f"实际订单数量: {len(db_data)}")
@@ -3128,7 +3128,7 @@ class TestCloudStrategyOrdersell:
                         actual_value=float(total),
                         expected_value=5,
                         op=CompareOp.EQ,
-                        message="详情总手数符合预期",
+                        message="详情总手数应符合预期",
                         attachment_name="详情总手数"
                     )
                     logging.info(f'订单详情总手数是：{total}')

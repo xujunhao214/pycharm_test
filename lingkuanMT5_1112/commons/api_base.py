@@ -1225,7 +1225,7 @@ class APITestBase:
                 allure.attach(str(params or json_data), "请求参数", allure.attachment_type.TEXT)
             raise TimeoutError(f"Failed: API条件等待超时（{url}）") from e
 
-    def assert_list_equal_ignore_order(self, list1, list2, list3, error_msg_prefix="列表元素不匹配"):
+    def assert_list_equal_ignore_order(self, list1, list2, list3, error_msg_prefix="断言失败，列表元素不匹配"):
         """
         断言列表元素相同（忽略顺序），精准拆分断言逻辑，明确展示匹配关系
         :param list1: 总手数列表
@@ -1262,8 +1262,7 @@ class APITestBase:
 
                 # 两者都不匹配时抛出断言错误
                 else:
-                    raise AssertionError(f"Failed: {error_msg_prefix}（忽略顺序）\n"
-                                         f"总手数列表: {list1} \n实际总手数列表: {list3} \n详情手数列表: {list2}")
+                    raise AssertionError(f"Failed: {error_msg_prefix}（忽略顺序）")
 
             except AssertionError as e:
                 with allure.step("列表元素断言失败"):
