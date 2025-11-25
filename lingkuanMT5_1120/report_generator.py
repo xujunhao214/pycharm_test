@@ -233,7 +233,7 @@ def generate_simple_report(allure_results_dir, env, report_path, error_msg_prefi
         try:
             return datetime.datetime.fromtimestamp(ts_seconds).strftime("%Y-%m-%d %H:%M:%S")
         except Exception as e:
-            print(f"⚠️  时间戳转换失败（原始ts: {ts}，转换后秒级: {ts_seconds}），错误：{str(e)}")
+            print(f"时间戳转换失败（原始ts: {ts}，转换后秒级: {ts_seconds}），错误：{str(e)}")
             return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     start_time = timestamp_to_str(start_time_ts)
