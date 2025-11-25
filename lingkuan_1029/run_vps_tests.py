@@ -52,6 +52,7 @@ def run_vps_tests(env: str = "test"):
         "test_vps/test_vpsOrder_open_level.py",
         "test_vps/test_vps_query.py",
         "test_vps/test_history_query.py",
+        "test_vps/test_platform_query.py",
         "test_vps/test_vpsfixed_annotations.py",
         "test_vps/test_create_scene.py",
         "test_vps/test_vpsMasOrder_money_scene.py",

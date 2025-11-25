@@ -13,302 +13,152 @@ logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
 
 
-@allure.feature("运营监控-历史指令-查询校验")
-class TestVPShistoryCommands(APITestBase):
-    # 实例化JsonPath工具类（全局复用）
-    json_utils = JsonPathUtils()
+@allure.feature("查询校验")
+class TestVPSquery(APITestBase):
+    @allure.story("日志记录-系统日志")
+    class TestVPSquerylog(APITestBase):
+        # 实例化JsonPath工具类（全局复用）
+        json_utils = JsonPathUtils()
 
-    @allure.title("时间查询校验")
-    def test_query_time(self, var_manager, logged_session):
-        with allure.step(f"1. 发送时间查询请求"):
-            data = {
-                "page": 1,
-                "limit": 50,
-                "instructionType": "",
-                "symbol": "",
-                "type": "",
-                "creatorName": "",
-                "startTime": DATETIME_INIT,
-                "endTime": DATETIME_NOW,
-                "cloudType": [],
-                "cloud": [],
-                "operationType": "",
-                "ifFollows": [],
-                "detailStatus": "",
-                "detailAccount": "",
-                "orderNo": "",
-                "magical": "",
-                "status": [],
-                "isClosed": True,
-                "platformType": ""
-            }
+        @pytest.mark.url("vps")
+        @allure.title("云策略查询校验")
+        def test_query_cloudId(self, var_manager, logged_session, db_transaction):
+            with allure.step(f"0. 提取云策略ID"):
+                dbcloud_data = self.query_database(
+                    db_transaction,
+                    f"SELECT * FROM follow_cloud_master WHERE name = %s",
+                    ("xjh测试策略",)
+                )
+                cloud_id = dbcloud_data[0]['id']
+                # cloud_id = 106
 
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/historyCommands',
-                json_data=data
-            )
+            with allure.step(f"1. 发送查询请求"):
+                json_data = {
+                    "page": 1,
+                    "limit": 100,
+                    "platformType": [],
+                    "startDate": DATETIME_INIT,
+                    "endDate": DATETIME_NOW,
+                    "keywords": [],
+                    "logInfo": [],
+                    "cloudId": [cloud_id],
+                    "vpsId": [],
+                    "logType": [],
+                    "source": []
+                }
 
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
+                response = self.send_post_request(
+                    logged_session,
+                    '/subcontrol/eslog/queryLogsPage',
+                    json_data=json_data
+                )
 
-        with allure.step(f"3. 查询结果校验"):
-            # 修复：正确的 JsonPath 表达式（提取所有记录的 responseOpnetime）
-            responseOpnetime_list = self.json_utils.extract(
-                response.json(),
-                "$.data.list[*].followBaiginInstructSubVOList[*].createTime",
-                default=[],
-                multi_match=True
-            )
+            with allure.step("2. 返回校验"):
+                self.assert_json_value(
+                    response,
+                    "$.msg",
+                    "success",
+                    "响应msg字段应为success"
+                )
 
-            # 日志和 Allure 附件优化
-            if not responseOpnetime_list:
-                pytest.fail("查询结果为空，不符合预期")
-            else:
-                attach_body = f"查询开始时间：[{five_time}]，结束时间：[{DATETIME_NOW}]，返回 {len(responseOpnetime_list)} 条记录"
+            # 3. 提取账号（保留记录与账号的关联关系）
+            with allure.step(f"3. 提取所有记录中的账号（按记录分组）"):
+                response_json = response.json()
+                data_list = response_json.get("data", {}).get("list", [])
+                record_accounts = []  # 存储格式：[(记录索引, [账号1, 账号2, ...]), ...]
 
+                # 正则表达式：匹配 "账号：数字" 或 "账号=数字"（冒号/等号，兼容中文冒号）
+                account_pattern = re.compile(r'账号[：=](\d+)')
+
+                for idx, item in enumerate(data_list):
+                    message = item.get("message", "")
+                    # 匹配当前记录的所有账号（支持一条message多个账号）
+                    accounts = account_pattern.findall(message)
+                    if accounts:
+                        record_accounts.append((idx + 1, accounts))  # 记录“第几条记录”和“其包含的账号”
+                        logger.info(f"第 {idx + 1} 条记录提取到账号：{accounts}（message：{message[:50]}...）")
+                    else:
+                        logger.warning(f"第 {idx + 1} 条记录未提取到账号（message：{message[:50]}...）")
+
+                # 断言至少有一条记录提取到账号
+                assert len(record_accounts) > 0, f"查询[{cloud_id}]未提取到任何账号"
+
+                # 日志和 Allure 报告展示（按记录分组）
+                attach_body = f"查询策略【xjh测试策略】cloud_id：【{cloud_id}】\n"
+                attach_body += f"共提取到 {len(record_accounts)} 条含账号的记录：\n"
+                for idx, accounts in record_accounts:
+                    attach_body += f"- 第 {idx} 条记录：{accounts}\n"
                 logger.info(attach_body)
                 allure.attach(
                     body=attach_body,
-                    name=f"时间查询结果",
+                    name=f"日志:策略【xjh测试策略】cloud_id：【{cloud_id}】提取的账号列表",
                     attachment_type="text/plain"
                 )
 
-            # 修复：去掉 int() 强制转换（status 是字符串，dateTime 也是字符串）
-            for idx, actual_status in enumerate(responseOpnetime_list):
-                self.verify_data(
-                    actual_value=str(actual_status),
-                    expected_value=str(DATETIME_INIT),
-                    op=CompareOp.GE,
-                    use_isclose=False,
-                    message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
-                    attachment_name=f"时间:{actual_status}第 {idx + 1} 条记录校验"
+                # 提取所有去重账号（供后续用例使用，保留原有功能）
+                all_accounts = []
+                for _, accounts in record_accounts:
+                    all_accounts.extend(accounts)
+                unique_accounts = list(set(all_accounts))
+                var_manager.set_runtime_variable("extracted_accounts", unique_accounts)
+
+            with allure.step("4. 从数据库查询该策略下的所有账号（去重）"):
+                db_data = self.query_database(
+                    db_transaction,
+                    f"SELECT * FROM follow_cloud_trader WHERE cloud_id = %s",
+                    (cloud_id,)
                 )
+                # 1. 提取数据库账号并转字符串（统一格式）
+                raw_db_accounts = [str(item["account"]) for item in db_data]
+                # 2. 对数据库账号去重（避免重复对比）
+                db_accounts = list(set(raw_db_accounts))  # 无序去重（效率高）
+                # 若需要保持原始顺序，可替换为：db_accounts = list(dict.fromkeys(raw_db_accounts))  # Python3.7+
 
-                self.verify_data(
-                    actual_value=str(actual_status),
-                    expected_value=str(DATETIME_NOW),
-                    op=CompareOp.LE,
-                    use_isclose=False,
-                    message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
-                    attachment_name=f"时间:{actual_status}第 {idx + 1} 条记录校验"
-                )
-
-    @allure.title("时间查询校验-查询结果为空")
-    def test_query_timeNO(self, var_manager, logged_session):
-        with allure.step(f"1. 发送时间查询请求"):
-            data = {
-                "page": 1,
-                "limit": 50,
-                "instructionType": "",
-                "symbol": "",
-                "type": "",
-                "creatorName": "",
-                "startTime": DATETIME_NOW,
-                "endTime": DATETIME_INIT,
-                "cloudType": [],
-                "cloud": [],
-                "operationType": "",
-                "ifFollows": [],
-                "detailStatus": "",
-                "detailAccount": "",
-                "orderNo": "",
-                "magical": "",
-                "status": [],
-                "isClosed": True,
-                "platformType": ""
-            }
-
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/historyCommands',
-                json_data=data
-            )
-
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        with allure.step("3. 查询校验"):
-            self.json_utils.assert_empty_list(
-                data=response.json(),
-                expression="$.data.list",
-            )
-            logging.info("查询结果符合预期：list为空列表")
-            allure.attach("查询结果为空，符合预期", 'text/plain')
-
-    # 定义所有需要测试的状态（作为参数化数据源）
-    STATUS_instructionType = [
-        (0, "分配"),
-        (1, "复制"),
-        (2, "策略")
-    ]
-
-    @pytest.mark.parametrize("status, status_desc", STATUS_instructionType)
-    @allure.title("指令类型查询：{status_desc}（{status}）")
-    def test_query_instructionType(self, var_manager, logged_session, status, status_desc):
-        with allure.step(f"1. 发送请求：指令类型查询-{status_desc}（{status}）"):
-            data = {
-                "page": 1,
-                "limit": 50,
-                "instructionType": status,
-                "symbol": "",
-                "type": "",
-                "creatorName": "",
-                "startTime": "",
-                "endTime": "",
-                "cloudType": [],
-                "cloud": [],
-                "operationType": "",
-                "ifFollows": [],
-                "detailStatus": "",
-                "detailAccount": "",
-                "orderNo": "",
-                "magical": "",
-                "status": [],
-                "isClosed": True,
-                "platformType": ""
-            }
-
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/historyCommands',
-                json_data=data
-            )
-
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        with allure.step(f"3. 指令类型查询结果校验：返回记录的instructionType应为{status}"):
-            # 修复：正确的 JsonPath 表达式（提取所有记录的 instructionType）
-            instructionType_list = self.json_utils.extract(
-                response.json(),
-                "$.data.list[*].instructionType",
-                default=[],
-                multi_match=True
-            )
-
-            # 日志和 Allure 附件优化
-            if not instructionType_list:
-                attach_body = f"指令类型查询[{status}]，返回的instructionType列表为空（暂无数据）"
-                logger.info(attach_body)
+                # 日志和Allure展示（补充去重前后对比）
+                db_attach_body = f"策略【xjh测试策略】cloud_id：【{cloud_id}】在数据库中关联的账号：\n"
+                db_attach_body += f"- 去重前：共 {len(raw_db_accounts)} 个（含重复）→ {raw_db_accounts}\n"
+                db_attach_body += f"- 去重后：共 {len(db_accounts)} 个 → {db_accounts}"
+                logger.info(db_attach_body)
                 allure.attach(
-                    body=attach_body,
-                    name=f"指令类型:{status}查询结果",
+                    body=db_attach_body,
+                    name=f"策略【xjh测试策略】cloud_id：【{cloud_id}】关联的数据库账号列表",
                     attachment_type="text/plain"
                 )
-                # 可选：暂无数据时跳过后续校验（或断言“允许为空”）
-                pytest.skip(f"指令类型查询[{status}]暂无数据，跳过校验")
-            else:
-                attach_body = f"指令类型查询[{status}]，返回 {len(instructionType_list)} 条记录"
-                logger.info(attach_body)
+
+                # 断言数据库有数据（去重后仍需有有效账号）
+                assert len(
+                    db_accounts) > 0, f"策略【xjh测试策略】cloud_id：【{cloud_id}】在数据库中未查询到关联账号（去重后为空）"
+
+            with allure.step("5. 校验：每条记录至少有一个账号存在于数据库中"):
+                invalid_records = []  # 存储无效记录：[(记录索引, 账号列表), ...]
+
+                for idx, accounts in record_accounts:
+                    # 核心逻辑：判断当前记录的所有账号中，是否至少有一个存在于数据库
+                    has_valid_account = any(acc in db_accounts for acc in accounts)
+                    if not has_valid_account:
+                        # 所有账号都不在数据库中，记录为无效
+                        invalid_records.append((idx, accounts))
+                        logger.error(f"第 {idx} 条记录无效：所有账号{accounts}均不在数据库中")
+                    else:
+                        # 至少有一个有效账号，记录有效信息
+                        valid_accounts = [acc for acc in accounts if acc in db_accounts]
+                        logger.info(f"第 {idx} 条记录有效：有效账号{valid_accounts}（数据库中存在）")
+
+                # 核心断言：不允许存在“所有账号都无效”的记录
+                assert len(invalid_records) == 0, \
+                    f"策略【xjh测试策略】cloud_id：【{cloud_id}】校验失败！以下记录的所有账号均不在数据库中：\n" \
+                    + "\n".join([f"  第 {idx} 条记录：账号{accounts}" for idx, accounts in invalid_records]) \
+                    + f"\n数据库关联账号：{db_accounts}"
+
+                # 校验通过的日志和Allure报告
+                success_msg = f"校验通过！\n"
+                success_msg += f"- 含账号的记录总数：{len(record_accounts)} 条\n"
+                success_msg += f"- 每条记录均至少有一个账号存在于数据库中\n"
+                success_msg += f"- 接口提取去重后账号：{unique_accounts}\n"
+                success_msg += f"- 数据库去重后账号：{db_accounts}"
+                logger.info(success_msg)
                 allure.attach(
-                    body=attach_body,
-                    name=f"指令类型:{status}查询结果",
+                    body=success_msg,
+                    name=f"账号一致性校验结果（cloud_id：{cloud_id}）",
                     attachment_type="text/plain"
-                )
-
-            # 修复：去掉 int() 强制转换（status 是字符串，instructionType 也是字符串）
-            for idx, actual_status in enumerate(instructionType_list):
-                self.verify_data(
-                    actual_value=actual_status,
-                    expected_value=status,
-                    op=CompareOp.EQ,
-                    use_isclose=False,
-                    message=f"第 {idx + 1} 条记录的instructionType应为{status}，实际为{actual_status}",
-                    attachment_name=f"指令类型:{status}第 {idx + 1} 条记录校验"
-                )
-
-    @allure.title("品种查询校验")
-    def test_query_symbol(self, var_manager, logged_session):
-        with allure.step(f"1. 发送查询请求"):
-            symbol = "123121546131563"
-            data = {
-                "page": 1,
-                "limit": 50,
-                "instructionType": "",
-                "symbol": symbol,
-                "type": "",
-                "creatorName": "",
-                "startTime": "",
-                "endTime": "",
-                "cloudType": [],
-                "cloud": [],
-                "operationType": "",
-                "ifFollows": [],
-                "detailStatus": "",
-                "detailAccount": "",
-                "orderNo": "",
-                "magical": "",
-                "status": [],
-                "isClosed": True,
-                "platformType": ""
-            }
-
-            response = self.send_post_request(
-                logged_session,
-                '/bargain/historyCommands',
-                json_data=data
-            )
-
-        with allure.step("2. 返回校验"):
-            self.assert_json_value(
-                response,
-                "$.msg",
-                "success",
-                "响应msg字段应为success"
-            )
-
-        with allure.step(f"3. 品种查询校验"):
-            # 修复：正确的 JsonPath 表达式（提取所有记录的 symbol）
-            symbol_list = self.json_utils.extract(
-                response.json(),
-                "$.data.list[*].followBaiginInstructSubVOList[*].symbol",
-                default=[],
-                multi_match=True
-            )
-
-            # 日志和 Allure 附件优化
-            if not symbol_list:
-                attach_body = f"品种查询校验[{symbol}]，返回的symbol列表为空（暂无数据）"
-                logger.info(attach_body)
-                allure.attach(
-                    body=attach_body,
-                    name=f"品种:{symbol}查询结果",
-                    attachment_type="text/plain"
-                )
-                # 可选：暂无数据时跳过后续校验（或断言“允许为空”）
-                pytest.skip(f"品种查询[{symbol}]暂无数据，跳过校验")
-            else:
-                attach_body = f"品种查询[{symbol}]，返回 {len(symbol_list)} 条记录"
-                logger.info(attach_body)
-                allure.attach(
-                    body=attach_body,
-                    name=f"品种:{symbol}查询结果",
-                    attachment_type="text/plain"
-                )
-
-            # 修复：去掉 int() 强制转换（status 是字符串，symbol 也是字符串）
-            for idx, actual_status in enumerate(symbol_list):
-                self.verify_data(
-                    actual_value=symbol,
-                    expected_value=actual_status,
-                    op=CompareOp.IN,
-                    use_isclose=False,
-                    message=f"第 {idx + 1} 条记录的symbol应为{symbol}，实际为{actual_status}",
-                    attachment_name=f"品种:{symbol}第 {idx + 1} 条记录校验"
                 )

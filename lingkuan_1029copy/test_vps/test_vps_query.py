@@ -252,7 +252,7 @@ class TestVPSquery(APITestBase):
                 logger.info(attach_body)
                 allure.attach(
                     body=attach_body,
-                    name=f"日志:{cloud_id}提取的账号列表",
+                    name=f"日志:策略【xjh测试策略】cloud_id：【{cloud_id}】提取的账号列表",
                     attachment_type="text/plain"
                 )
 
@@ -268,22 +268,25 @@ class TestVPSquery(APITestBase):
                     f"SELECT * FROM follow_cloud_trader WHERE cloud_id = %s",
                     (cloud_id,)
                 )
-                # 提取数据库中的账号（注意：数据库账号可能是int类型，转str统一格式）
-                db_accounts = [str(item["account"]) for item in db_data]  # 假设数据库账号字段是account，不是cloud_id！
-                # （如果数据库存储账号的字段确实是cloud_id，可保留原逻辑，但命名改为db_cloud_accounts更清晰）
+                # 1. 提取数据库账号并转字符串（统一格式）
+                raw_db_accounts = [str(item["account"]) for item in db_data]  # 假设字段是account
+                # 2. 对数据库账号去重（关键步骤）
+                db_accounts = list(set(raw_db_accounts))  # 无序去重（推荐，效率高）
+                # 若需要保持原始顺序，用：db_accounts = list(dict.fromkeys(raw_db_accounts))  # Python3.7+ 支持
 
-                # 日志和Allure展示数据库账号
-                db_attach_body = f"策略{cloud_id}在数据库中关联的账号共 {len(db_accounts)} 个\n"
-                db_attach_body += f"数据库账号列表：{db_accounts}"
+                # 日志和Allure展示（补充去重前后的数量对比）
+                db_attach_body = f"策略【xjh测试策略】cloud_id：【{cloud_id}】在数据库中关联的账号：\n"
+                db_attach_body += f"去重前：共 {len(raw_db_accounts)} 个（含重复）{raw_db_accounts}\n"
+                db_attach_body += f"去重后：共 {len(db_accounts)} 个{db_accounts}"
                 logger.info(db_attach_body)
                 allure.attach(
                     body=db_attach_body,
-                    name=f"策略{cloud_id}关联的数据库账号列表",
+                    name=f"策略【xjh测试策略】cloud_id：【{cloud_id}】关联的数据库账号列表（去重后）",
                     attachment_type="text/plain"
                 )
 
-                # 断言数据库有数据（避免无关联账号导致对比无意义）
-                assert len(db_accounts) > 0, f"策略{cloud_id}在数据库中未查询到关联账号"
+                # 断言数据库有数据（去重后仍需有数据）
+                assert len(db_accounts) > 0, f"策略【xjh测试策略】cloud_id：【{cloud_id}】在数据库中未查询到关联账号（去重后为空）"
 
             with allure.step("5. 校验接口提取账号是否全部存在于数据库中"):
                 # 找出接口提取但数据库中没有的账号（异常账号）
@@ -291,7 +294,7 @@ class TestVPSquery(APITestBase):
 
                 # 核心断言：不允许存在异常账号
                 assert len(invalid_accounts) == 0, \
-                    f"策略{cloud_id}校验失败！以下账号在数据库中不存在：{invalid_accounts}\n" \
+                    f"策略【xjh测试策略】cloud_id：【{cloud_id}】校验失败！以下账号在数据库中不存在：{invalid_accounts}\n" \
                     f"接口提取账号：{unique_accounts}\n数据库关联账号：{db_accounts}"
 
                 # 校验通过的日志和Allure报告

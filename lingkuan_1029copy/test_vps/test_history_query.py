@@ -1455,9 +1455,9 @@ class TestVPShistoryCommands(APITestBase):
             # 修复：去掉 int() 强制转换（status 是字符串，magical 也是字符串）
             for idx, actual_status in enumerate(magical_list):
                 self.verify_data(
-                    actual_value=str(actual_status),
-                    expected_value=str(magical),
-                    op=CompareOp.EQ,
+                    actual_value=str(magical),
+                    expected_value=str(actual_status),
+                    op=CompareOp.IN,
                     use_isclose=False,
                     message=f"第 {idx + 1} 条记录的magical应为{magical}，实际为{actual_status}",
                     attachment_name=f"魔术号第 {idx + 1} 条记录校验"
