@@ -468,16 +468,6 @@ class TestCloudMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                # with allure.step("验证详情手数和指令手数一致"):
-                #     size = [record["size"] for record in db_data]
-                #     true_total_lots = [record["true_total_lots"] for record in db_data]
-                #     self.assert_list_equal_ignore_order(
-                #         size,
-                #         true_total_lots,
-                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                #     )
-                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
-
     @allure.story("场景2：复制下单-手数0.1-1，总订单3，总手数1")
     @allure.description("""
     ### 测试说明
@@ -907,16 +897,6 @@ class TestCloudMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                # with allure.step("验证详情手数和指令手数一致"):
-                #     size = [record["size"] for record in db_data]
-                #     true_total_lots = [record["true_total_lots"] for record in db_data]
-                #     self.assert_list_equal_ignore_order(
-                #         size,
-                #         true_total_lots,
-                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                #     )
-                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
-
     @allure.story("场景3：复制下单-手数0.01-0.01，总手数0.01")
     @allure.description("""
     ### 测试说明
@@ -1313,16 +1293,6 @@ class TestCloudMasOrdersend:
                     )
                     logging.info(f"详情总手数验证通过: {total}")
 
-                # with allure.step("验证详情手数和指令手数一致"):
-                #     size = [record["size"] for record in db_data]
-                #     true_total_lots = [record["true_total_lots"] for record in db_data]
-                #     self.assert_list_equal_ignore_order(
-                #         size,
-                #         true_total_lots,
-                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                #     )
-                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
-
     @allure.story("场景4：复制下单-手数0.01-1，总订单数10")
     @allure.description("""
     ### 测试说明
@@ -1682,16 +1652,6 @@ class TestCloudMasOrdersend:
                         attachment_name="订单状态详情"
                     )
                     logging.info(f"订单状态验证通过: {status}")
-
-                # with allure.step("验证详情手数和指令手数一致"):
-                #     size = [record["size"] for record in db_data]
-                #     true_total_lots = [record["true_total_lots"] for record in db_data]
-                #     self.assert_list_equal_ignore_order(
-                #         size,
-                #         true_total_lots,
-                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                #     )
-                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
                 with allure.step("验证订单数量"):
                     self.verify_data(
@@ -2110,16 +2070,6 @@ class TestCloudMasOrdersend:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                # with allure.step("验证详情手数和指令手数一致"):
-                #     size = [record["size"] for record in db_data]
-                #     true_total_lots = [record["true_total_lots"] for record in db_data]
-                #     self.assert_list_equal_ignore_order(
-                #         size,
-                #         true_total_lots,
-                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                #     )
-                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景6：复制下单-手数0.1-1，总订单5-停止功能")
     @allure.description("""
@@ -2905,16 +2855,6 @@ class TestCloudMasOrdersend:
                         attachment_name="详情总手数"
                     )
                     logging.info(f"详情总手数验证通过: {total}")
-
-                # with allure.step("验证详情手数和指令手数一致"):
-                #     size = [record["size"] for record in db_data]
-                #     true_total_lots = [record["true_total_lots"] for record in db_data]
-                #     self.assert_list_equal_ignore_order(
-                #         size,
-                #         true_total_lots,
-                #         f"手数不一致: 详情{size}, 指令{true_total_lots}"
-                #     )
-                #     logger.info(f"手数一致: 详情{size}, 指令{true_total_lots}")
 
     @allure.story("场景8：分配下单-手数范围0.01-1，总手数0.3")
     @allure.description("""
