@@ -17,7 +17,7 @@ try:
     from commons.api_base import *
 except ImportError as e:
     print(f"导入项目依赖警告：{str(e)}，部分环境信息可能无法显示")
-    PROJECT_NAME = "灵宽MT5"  # 兜底项目名称
+    PROJECT_NAME = "自研跟单"  # 兜底项目名称
     ENV_CONFIG = {}
     Environment = type('Environment', (), {})  # 兜底Environment类
 

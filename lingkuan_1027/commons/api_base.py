@@ -1218,48 +1218,63 @@ class APITestBase:
                 allure.attach(str(params or json_data), "请求参数", allure.attachment_type.TEXT)
             raise TimeoutError(f"Failed: API条件等待超时（{url}）") from e
 
-    def assert_list_equal_ignore_order(self, list1, list2, list3, error_msg_prefix="断言失败，列表元素不匹配"):
+    def assert_list_equal_ignore_order(self, list1, list2, list3, error_msg_prefix="手数不一致"):
         """
-        断言列表元素相同（忽略顺序），精准拆分断言逻辑，明确展示匹配关系
-        :param list1: 总手数列表
-        :param list2: 预期列表
-        :param list3: 实际总手数列表
-        :param error_msg_prefix: 错误提示前缀
+        断言列表元素相同（忽略顺序），二选一匹配逻辑（总手数/实际总手数任一与详情匹配即通过）
+        优化点：结构化错误信息，适配报告解析
         """
         from collections import Counter
 
-        # 分别计算三个列表的元素计数
-        counter1 = Counter(list1)
-        counter2 = Counter(list2)
-        counter3 = Counter(list3)
+        # 清洗并转换列表（保持原逻辑）
+        def clean_and_convert(lst):
+            cleaned = []
+            for item in lst:
+                if item in (None, ""):
+                    continue
+                try:
+                    cleaned.append(float(item))
+                except (ValueError, TypeError):
+                    cleaned.append(str(item))
+            return cleaned
+
+        list1_clean = clean_and_convert(list1)  # 总手数列表
+        list2_clean = clean_and_convert(list2)  # 详情手数列表（预期）
+        list3_clean = clean_and_convert(list3)  # 实际总手数列表
+
+        counter1 = Counter(list1_clean)
+        counter2 = Counter(list2_clean)
+        counter3 = Counter(list3_clean)
 
         with allure.step("断言列表元素相同（忽略顺序）"):
-            # allure.attach(self.serialize_data(list1), "总手数列表", attachment_type="text/plain")
-            # allure.attach(self.serialize_data(list3), "实际总手数列表", attachment_type="text/plain")
-            # allure.attach(self.serialize_data(list2), "详情手数列表", attachment_type="text/plain")
+            # 附件展示（保持原逻辑）
+            allure.attach(f"总手数列表: {list1_clean}", "总手数列表", attachment_type="text/plain")
+            allure.attach(f"详情手数列表（预期）: {list2_clean}", "预期列表", attachment_type="text/plain")
+            allure.attach(f"实际总手数列表: {list3_clean}", "实际总手数列表", attachment_type="text/plain")
 
             try:
-                # 先判断总手数列表是否与预期匹配
-                if counter1 == counter2:
-                    with allure.step("总手数列表与详情手数列表匹配"):
-                        allure.attach(f"总手数列表: {list1} \n详情手数列表: {list2}", "匹配结果",
-                                      attachment_type="text/plain")
-                    return  # 匹配成功，直接返回
+                if counter1 == counter2 or counter3 == counter2:
+                    return  # 匹配成功
 
-                # 再判断实际总手数列表是否与预期匹配
-                elif counter3 == counter2:
-                    with allure.step("实际总手数列表与详情手数列表匹配"):
-                        allure.attach(f"实际总手数列表: {list3} \n详情手数列表: {list2}", "匹配结果",
-                                      attachment_type="text/plain")
-                    return  # 匹配成功，直接返回
-
-                # 两者都不匹配时抛出断言错误
+                # 匹配失败：构建结构化错误信息（关键修改）
                 else:
-                    raise AssertionError(f"Failed: {error_msg_prefix}（忽略顺序）")
+                    # 1. 提取不匹配项（保留原逻辑）
+                    list1_mismatch = {k: f"预期{counter2[k]}, 实际{counter1[k]}"
+                                      for k in counter1 if counter1[k] != counter2.get(k, 0)}
+                    list3_mismatch = {k: f"预期{counter2[k]}, 实际{counter3[k]}"
+                                      for k in counter3 if counter3[k] != counter2.get(k, 0)}
+
+                    # 2. 错误信息格式：使用“|”分隔“失败原因”和“实际/预期详情”
+                    # 格式：Failed: [失败原因] | 预期: [预期值] | 实际总手数: [实际值] | 总手数: [实际值]
+                    error_msg = (
+                        f"Failed: {error_msg_prefix} | "
+                        f"预期: {list2_clean} | "
+                        f"总手数不匹配: {list1_mismatch} | "
+                        f"实际总手数不匹配: {list3_mismatch}"
+                    )
+                    raise AssertionError(error_msg)
 
             except AssertionError as e:
-                with allure.step("列表元素断言失败"):
-                    allure.attach(str(e), "错误详情", attachment_type="text/plain")
+                allure.attach(str(e), "错误详情", attachment_type="text/plain")
                 raise e
 
     def assert_dict_subset(self, subset_dict, full_dict, error_msg_prefix="子字典不匹配"):

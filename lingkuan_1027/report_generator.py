@@ -17,7 +17,7 @@ try:
     from commons.api_base import *
 except ImportError as e:
     print(f"导入项目依赖警告：{str(e)}，部分环境信息可能无法显示")
-    PROJECT_NAME = "灵宽MT5"  # 兜底项目名称
+    PROJECT_NAME = "自研跟单"  # 兜底项目名称
     ENV_CONFIG = {}
     Environment = type('Environment', (), {})  # 兜底Environment类
 
@@ -152,19 +152,32 @@ def generate_simple_report(allure_results_dir, env, report_path, error_msg_prefi
                             specific_reason = "未获取到实际/预期信息"
 
                     # 场景3：手数列表不匹配
-                    elif "AssertionError" in trace and "列表元素不匹配" in msg and "总手数列表不匹配项" in msg:
-                        failure_msg = "总手数/实际总手数二选一匹配失败（忽略顺序）"
-                        detail_match = re.search(r'详情手数列表（预期）: (.*?)\n', msg)
-                        list1_mismatch_match = re.search(r'总手数列表不匹配项: ({.*?})\n', msg)
-                        list3_mismatch_match = re.search(r'实际总手数列表不匹配项: ({.*?})\n', msg)
-                        specific_parts = []
-                        if detail_match:
-                            specific_parts.append(f"预期（详情）: {detail_match.group(1).strip()}")
-                        if list1_mismatch_match:
-                            specific_parts.append(f"总手数不匹配: {list1_mismatch_match.group(1).strip()}")
-                        if list3_mismatch_match:
-                            specific_parts.append(f"实际总手数不匹配: {list3_mismatch_match.group(1).strip()}")
-                        specific_reason = "; ".join(specific_parts)[:200] if specific_parts else "未获取到具体不匹配项"
+                    # 在“失败场景提取”部分，修改“场景3：手数列表不匹配”的解析逻辑
+                    elif "AssertionError" in trace and "手数不一致" in msg:
+                        # 从结构化错误信息中提取字段（基于上面定义的“|”分隔格式）
+                        parts = [p.strip() for p in msg.split("|")]
+                        # 提取失败原因（如“手数不一致”）
+                        failure_match = re.search(r'Failed: (.*)', parts[0])
+                        failure_msg = failure_match.group(1).strip() if failure_match else "手数列表不匹配"
+
+                        # 提取预期值、总手数不匹配、实际总手数不匹配
+                        expected_val = "未知"
+                        list1_mismatch = "无"
+                        list3_mismatch = "无"
+                        for part in parts[1:]:
+                            if part.startswith("预期:"):
+                                expected_val = part.split(":", 1)[1].strip()
+                            elif part.startswith("总手数不匹配:"):
+                                list1_mismatch = part.split(":", 1)[1].strip()
+                            elif part.startswith("实际总手数不匹配:"):
+                                list3_mismatch = part.split(":", 1)[1].strip()
+
+                        # 拼接具体原因（实际/预期）
+                        specific_reason = (
+                            f"预期手数列表: {expected_val}<br>"
+                            f"总手数不匹配项: {list1_mismatch}<br>"
+                            f"实际总手数不匹配项: {list3_mismatch}"
+                        )
 
                     # 场景4：状态码断言失败（仅保留预期和实际状态码）
                     elif "AssertionError" in trace and "状态码不匹配" in msg:
