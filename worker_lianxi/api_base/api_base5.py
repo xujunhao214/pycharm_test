@@ -354,21 +354,18 @@ class APITestBase:
 
     # ------------------------------ 断言方法（异常分层优化） ------------------------------
     def assert_response_status(self, response, expected_status, error_msg_prefix):
-        """断言响应状态码（分层提示优化）"""
         with allure.step("断言响应状态码"):
             actual_status = response.status_code
-            allure.attach(response.url, "请求URL", allure.attachment_type.TEXT)
-            allure.attach(f"期望值: {expected_status}", "预期状态码", allure.attachment_type.TEXT)
-            allure.attach(f"实际值: {actual_status}", "实际状态码", allure.attachment_type.TEXT)
+            # 1. 强制记录预期/实际状态码（文本格式，方便后续提取）
+            allure.attach(str(expected_status), "预期状态码", allure.attachment_type.TEXT)
+            allure.attach(str(actual_status), "实际状态码", allure.attachment_type.TEXT)
+            # 2. 强制记录响应内容（原始文本，无论格式）
             allure.attach(response.text, "响应内容", allure.attachment_type.TEXT)
 
         try:
             assert actual_status == expected_status, \
-                f"Failed: {error_msg_prefix}（状态码不匹配）"
+                f"Failed: {error_msg_prefix}（状态码不匹配）| 预期: {expected_status} | 实际: {actual_status}"
         except AssertionError as e:
-            with allure.step("状态码断言失败"):
-                allure.attach(f"预期: {expected_status}, 实际: {actual_status}", "断言结果",
-                              allure.attachment_type.TEXT)
             raise e
 
     def assert_values_equal(self, actual_value, expected_value, error_msg_prefix):

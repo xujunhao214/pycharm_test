@@ -95,7 +95,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
                             specific_reason = ""
 
                         # 场景2：JSON断言失败（关键词匹配 AssertionError + 响应字段/JSON路径）
-                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg or "失败" in msg):
+                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg):
                             # 提取“备注（失败原因）”：仅显示错误描述（如“响应msg字段应为success”）
                             json_match = re.search(r'Failed: ([^（]+)', msg)  # 匹配“Failed: xxx”到“（”之前的内容
                             if json_match:

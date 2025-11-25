@@ -87,7 +87,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
                             specific_reason = ""
 
                         # 场景2：JSON断言失败
-                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg or "失败" in msg):
+                        elif "AssertionError" in trace and ("JSON路径" in msg or "响应" in msg):
                             json_match = re.search(r'Failed: ([^（]+)', msg)
                             failure_msg = json_match.group(1).strip()[:80] if json_match else "响应字段断言失败"
                             actual_expected_match = re.search(r'预期: (.*?), 实际: (.*?)(?:）|$)', msg)

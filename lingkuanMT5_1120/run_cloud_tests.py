@@ -43,14 +43,14 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_cloudOrderSendbuy.py",
         # "test_cloudTrader/test_cloudOrderSendsell.py",
         # "test_cloudTrader/test_cloudOrderClose.py",
-        # "test_cloudTrader/test_cloud_masOrderSend.py",
+        "test_cloudTrader/test_cloud_masOrderSend.py",
         # "test_cloudTrader/test_cloud_masOrderClose.py",
         # "test_cloudTrader/test_cloudOrder_error.py",
         # "test_cloudTrader/test_cloudOrder_open_level.py",
         # "test_cloudTrader/test_cloudfixed_annotations.py",
         # "test_cloudTrader/test_create_scene.py",
-        # "test_cloudTrader/test_cloudtrader_money_scene.py",
-        "test_cloudTrader/test_delete.py",
+        # "test_cloudTrader/test_cloudTrader_money_scene.py",
+        # "test_cloudTrader/test_delete.py",
 
         # 日志配置
         "--log-file=./Logs/cloud_pytest.log",
