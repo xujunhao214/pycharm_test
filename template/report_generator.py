@@ -539,5 +539,5 @@ if __name__ == "__main__":
     generate_simple_report(
         allure_results_dir="report/cloud_results",
         env="test",
-        report_path="report/Cloud接口自动化测试报告.md"
+        report_path="report/跟单社区接口自动化测试报告.md"
     )

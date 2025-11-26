@@ -16,7 +16,7 @@ def run_cloud_tests(env: str = "test"):
 
     report_dir = os.path.join(project_root, "report", "cloud_results")
     html_dir = os.path.join(project_root, "report", "cloud_html")
-    markdown_report_path = os.path.join(project_root, "report", "Cloud接口自动化测试报告.md")  # Cloud 专属Markdown报告
+    markdown_report_path = os.path.join(project_root, "report", "跟单社区接口自动化测试报告.md")  # Cloud 专属Markdown报告
     os.makedirs(report_dir, exist_ok=True)
     os.makedirs(os.path.dirname("./Logs/cloud_pytest.log"), exist_ok=True)  # 确保日志目录存在
 
