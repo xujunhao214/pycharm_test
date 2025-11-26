@@ -14,7 +14,7 @@ from template_model.public_function.proportion_public import PublicUtils
 # -------------------------- 关键：读取统一JSON并提取账号数据 --------------------------
 def get_follow_accounts_from_runtime_json():
     """
-    从 template_model/VAR/runtime_vars_cloud.json 中提取多账号数据
+    从 template/VAR/runtime_vars_cloud.json 中提取多账号数据
     返回格式：[{"account": "301392106", "pass_id": "xxx", "jeecg_rowkey": "xxx"}, ...]
     """
     # 1. 定义需要处理的账号列表

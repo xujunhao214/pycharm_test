@@ -119,7 +119,7 @@ def send_feishu_notification(
                     "tag": "plain_text",
                     "content": f"【{PROJECT_NAME}】接口自动化测试报告"
                 },
-                "template_model": "red" if failed > 0 else "blue"
+                "template": "red" if failed > 0 else "blue"
             }
         }
     }

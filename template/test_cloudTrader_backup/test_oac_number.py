@@ -186,10 +186,10 @@ class Test_numberall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -200,7 +200,7 @@ class Test_numberall:
                             actual_value=float(order_size),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
@@ -314,10 +314,10 @@ class Test_numberall:
                         expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -326,10 +326,10 @@ class Test_numberall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -342,7 +342,7 @@ class Test_numberall:
                             actual_value=float(add_size),
                             expected_value=float(fixed_lots),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{add_size}")
@@ -428,7 +428,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {lots_open}")
@@ -527,7 +527,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {master_lots}")
@@ -541,7 +541,7 @@ class Test_numberall:
                         actual_value=float(slave_lots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"跟单手数符合预期",
+                        message=f"跟单手数应符合预期",
                         attachment_name="跟单手数详情"
                     )
                     logger.info(f"跟单手数验证通过: {slave_lots}")
@@ -604,7 +604,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"喊单者手数：{totalLots} 开仓手数：{lots_open}")
@@ -650,7 +650,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"跟单者手数：{totalLots}")
@@ -735,10 +735,10 @@ class Test_numberall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -749,7 +749,7 @@ class Test_numberall:
                             actual_value=float(order_size),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
@@ -827,10 +827,10 @@ class Test_numberall:
                         expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -839,10 +839,10 @@ class Test_numberall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -855,7 +855,7 @@ class Test_numberall:
                             actual_value=float(add_size),
                             expected_value=float(fixed_lots),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{add_size}")
@@ -939,7 +939,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {master_lots}")
@@ -953,7 +953,7 @@ class Test_numberall:
                         actual_value=float(slave_lots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"跟单手数符合预期",
+                        message=f"跟单手数应符合预期",
                         attachment_name="跟单手数详情"
                     )
                     logger.info(f"跟单手数验证通过: {slave_lots}")
@@ -1085,7 +1085,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(0),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
@@ -1129,7 +1129,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(0),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
@@ -1302,10 +1302,10 @@ class Test_numberall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1316,7 +1316,7 @@ class Test_numberall:
                             actual_value=float(order_size),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
@@ -1430,10 +1430,10 @@ class Test_numberall:
                         expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -1442,10 +1442,10 @@ class Test_numberall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1458,7 +1458,7 @@ class Test_numberall:
                             actual_value=float(add_size),
                             expected_value=float(fixed_lots),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{add_size}")
@@ -1544,7 +1544,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {lots_open}")
@@ -1643,7 +1643,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {master_lots}")
@@ -1657,7 +1657,7 @@ class Test_numberall:
                         actual_value=float(slave_lots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"跟单手数符合预期",
+                        message=f"跟单手数应符合预期",
                         attachment_name="跟单手数详情"
                     )
                     logger.info(f"跟单手数验证通过: {slave_lots}")
@@ -1720,7 +1720,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"喊单者手数：{totalLots} 开仓手数：{lots_open}")
@@ -1766,7 +1766,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"跟单者手数：{totalLots}")
@@ -1851,10 +1851,10 @@ class Test_numberall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1865,7 +1865,7 @@ class Test_numberall:
                             actual_value=float(order_size),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
@@ -1943,10 +1943,10 @@ class Test_numberall:
                         expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -1955,10 +1955,10 @@ class Test_numberall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1971,7 +1971,7 @@ class Test_numberall:
                             actual_value=float(add_size),
                             expected_value=float(fixed_lots),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{add_size}")
@@ -2055,7 +2055,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {master_lots}")
@@ -2069,7 +2069,7 @@ class Test_numberall:
                         actual_value=float(slave_lots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"跟单手数符合预期",
+                        message=f"跟单手数应符合预期",
                         attachment_name="跟单手数详情"
                     )
                     logger.info(f"跟单手数验证通过: {slave_lots}")
@@ -2257,10 +2257,10 @@ class Test_numberall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2271,7 +2271,7 @@ class Test_numberall:
                             actual_value=float(order_size),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
@@ -2385,10 +2385,10 @@ class Test_numberall:
                         expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -2397,10 +2397,10 @@ class Test_numberall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2413,7 +2413,7 @@ class Test_numberall:
                             actual_value=float(add_size),
                             expected_value=float(fixed_lots),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{add_size}")
@@ -2499,7 +2499,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {lots_open}")
@@ -2598,7 +2598,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {master_lots}")
@@ -2612,7 +2612,7 @@ class Test_numberall:
                         actual_value=float(slave_lots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"跟单手数符合预期",
+                        message=f"跟单手数应符合预期",
                         attachment_name="跟单手数详情"
                     )
                     logger.info(f"跟单手数验证通过: {slave_lots}")
@@ -2675,7 +2675,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"喊单者手数：{totalLots} 开仓手数：{lots_open}")
@@ -2721,7 +2721,7 @@ class Test_numberall:
                         actual_value=float(totalLots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"手数符合预期",
+                        message=f"手数应符合预期",
                         attachment_name="手数详情"
                     )
                     logger.info(f"跟单者手数：{totalLots}")
@@ -2806,10 +2806,10 @@ class Test_numberall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2820,7 +2820,7 @@ class Test_numberall:
                             actual_value=float(order_size),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{order_size} 开仓手数：{lots_open}")
@@ -2898,10 +2898,10 @@ class Test_numberall:
                         expected_value=ticket_open,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -2910,10 +2910,10 @@ class Test_numberall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2926,7 +2926,7 @@ class Test_numberall:
                             actual_value=float(add_size),
                             expected_value=float(fixed_lots),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{add_size}")
@@ -3010,7 +3010,7 @@ class Test_numberall:
                         actual_value=float(master_lots),
                         expected_value=float(lots_open),
                         op=CompareOp.EQ,
-                        message=f"喊单者手数符合预期",
+                        message=f"喊单者手数应符合预期",
                         attachment_name="喊单者手数详情"
                     )
                     logger.info(f"喊单者手数验证通过: {master_lots}")
@@ -3024,7 +3024,7 @@ class Test_numberall:
                         actual_value=float(slave_lots),
                         expected_value=float(fixed_lots),
                         op=CompareOp.EQ,
-                        message=f"跟单手数符合预期",
+                        message=f"跟单手数应符合预期",
                         attachment_name="跟单手数详情"
                     )
                     logger.info(f"跟单手数验证通过: {slave_lots}")

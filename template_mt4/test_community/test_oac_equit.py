@@ -285,10 +285,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -414,10 +414,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -426,10 +426,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1024,10 +1024,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1116,10 +1116,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -1128,10 +1128,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1623,10 +1623,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -1752,10 +1752,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -1764,10 +1764,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2229,10 +2229,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2321,10 +2321,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -2333,10 +2333,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2800,10 +2800,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -2929,10 +2929,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -2941,10 +2941,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -3403,10 +3403,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -3495,10 +3495,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -3507,10 +3507,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -3973,10 +3973,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -4102,10 +4102,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -4114,10 +4114,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -4576,10 +4576,10 @@ class Test_equitall:
                             expected_value=ticket_open,
                             op=CompareOp.EQ,
                             use_isclose=False,
-                            message=f"订单号数据正确",
+                            message=f"订单号数据应符合预期",
                             attachment_name="订单号详情"
                         )
-                        logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
+                        logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{order_no}")
 
                     with allure.step("喊单手数校验-MT4开仓手数和持仓订单手数"):
                         order_size = self.json_utils.extract(response.json(), "$.result.records[0].size")
@@ -4668,10 +4668,10 @@ class Test_equitall:
                         expected_value=master_order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
+                    logger.info(f"订单号数据应符合预期,开仓订单号：{ticket_open} 喊单者订单号：{master_order_no}")
 
                 with allure.step("跟单订单号校验"):
                     slave_ticket = var_manager.get_variable("slave_ticket")
@@ -4680,10 +4680,10 @@ class Test_equitall:
                         expected_value=order_no,
                         op=CompareOp.EQ,
                         use_isclose=False,
-                        message=f"订单号数据正确",
+                        message=f"订单号数据应符合预期",
                         attachment_name="订单号详情"
                     )
-                    logger.info(f"订单号数据正确,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
+                    logger.info(f"订单号数据应符合预期,跟单者订单号：{order_no} 数据库数据：{slave_ticket}")
 
                 with allure.step("跟单手数校验"):
                     add_size = self.json_utils.extract(response.json(), "$.result.records[0].size")

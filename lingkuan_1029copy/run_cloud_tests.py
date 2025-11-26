@@ -68,7 +68,7 @@ def run_cloud_tests(env: str = "test"):
         print(f"\nCloud pytest 执行异常: {str(e)}")
         exit_code = 1
 
-    # 生成环境文件（与VPS逻辑一致，可选）
+    # 生成环境文件
     markdown_abs_path = os.path.abspath(markdown_report_path)
     standard_path = markdown_abs_path.replace('\\', '/')
     markdown_file_url = f"file:///{standard_path}"

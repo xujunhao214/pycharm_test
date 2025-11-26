@@ -34,7 +34,7 @@ class Test_delete(APITestBase):
             "platform": new_user["platform"],
             "remark": "",
             "platformId": "",
-            "template_modelId": 1,
+            "templateId": 1,
             "followStatus": 1,
             "cfd": "",
             "forex": "",

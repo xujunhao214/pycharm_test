@@ -16,14 +16,14 @@ class PublicVpsUtils(APITestBase):
     # @pytest.mark.skipif(True, reason=SKIP_REASON)
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略开仓")
-    def test_trader_openorderSend(self, var_manager, logged_vps):
+    def test_trader_openorderSend(self, class_random_str, var_manager, logged_vps):
         # 1. 发送策略开仓请求
         trader_ordersend = var_manager.get_variable("trader_ordersend")
         vps_trader_id = var_manager.get_variable("vps_trader_id")
         data = {
             "symbol": trader_ordersend["symbol"],
             "placedType": 0,
-            "remark": "gendanshequ",
+            "remark": class_random_str,
             "intervalTime": 100,
             "type": 0,
             "totalNum": trader_ordersend["totalNum"],
@@ -51,9 +51,8 @@ class PublicVpsUtils(APITestBase):
             "响应msg字段应为success"
         )
 
-
     @allure.title("数据库校验-策略开仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSend(self, var_manager, dbvps_transaction):
+    def test_dbquery_orderSend(self, class_random_str, var_manager, dbvps_transaction):
         with allure.step("1. 数据库提取订单号和手数"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
@@ -87,7 +86,7 @@ class PublicVpsUtils(APITestBase):
             params = (
                 '0',
                 vps_user_accounts_1,
-                "gendanshequ"
+                class_random_str
             )
 
             # 调用轮询等待方法（带时间范围过滤）
@@ -105,7 +104,6 @@ class PublicVpsUtils(APITestBase):
             var_manager.set_runtime_variable("ticket_open", master_order)
             total_lots = db_data[0]["total_lots"]
             var_manager.set_runtime_variable("lots_open", total_lots)
-
 
     @pytest.mark.url("vps")
     @allure.title("跟单软件看板-VPS数据-策略平仓")
@@ -139,7 +137,6 @@ class PublicVpsUtils(APITestBase):
                 "success",
                 "响应msg字段应为success"
             )
-
 
     # @pytest.mark.skip(reason=SKIP_REASON)
     @pytest.mark.url("vps")
@@ -175,9 +172,8 @@ class PublicVpsUtils(APITestBase):
                 "响应msg字段应为success"
             )
 
-
     @allure.title("数据库校验-策略平仓-主指令及订单详情数据检查")
-    def test_dbquery_orderSendclose(self, var_manager, dbvps_transaction):
+    def test_dbquery_orderSendclose(self, class_random_str, var_manager, dbvps_transaction):
         with allure.step("1. 获取订单详情表账号数据"):
             vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
             sql = f"""
@@ -207,7 +203,7 @@ class PublicVpsUtils(APITestBase):
             params = (
                 '1',
                 vps_user_accounts_1,
-                "gendanshequ"
+                class_random_str
             )
 
             # 调用轮询等待方法（带时间范围过滤）

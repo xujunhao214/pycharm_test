@@ -169,7 +169,7 @@ class Test_openandclouseall:
                             actual_value=float(totalLots),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"喊单者手数：{totalLots} 开仓手数：{lots_open}")
@@ -248,7 +248,7 @@ class Test_openandclouseall:
                             actual_value=float(totalLots),
                             expected_value=float(lots_open),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"跟单者手数：{totalLots} 开仓手数：{lots_open}")
@@ -351,7 +351,7 @@ class Test_openandclouseall:
                             actual_value=float(totalLots),
                             expected_value=float(0),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"平仓后手数应为：0，实际是：{totalLots}")
@@ -428,7 +428,7 @@ class Test_openandclouseall:
                             actual_value=float(totalLots),
                             expected_value=float(0),
                             op=CompareOp.EQ,
-                            message=f"手数符合预期",
+                            message=f"手数应符合预期",
                             attachment_name="手数详情"
                         )
                         logger.info(f"平仓后手数应为：0，实际是：{totalLots}")

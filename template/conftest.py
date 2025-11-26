@@ -23,6 +23,7 @@ from template.config import ENV_CONFIG  # 仅导入配置数据
 from template.commons.redis_utils import RedisClient, get_redis_client
 from typing import List, Dict, Any
 from pathlib import Path
+from template.commons.random_generator import generate_random_str
 import sys
 
 logger = logging.getLogger(__name__)
@@ -782,3 +783,11 @@ def encrypted_password(request):
     """夹具：对输入的明文密码进行加密"""
     plain_password = PASSWORD
     return aes_encrypt_str(plain_password, MT4_KEY)
+
+
+@pytest.fixture(scope="class")  # 类级别：整个类共享一个实例
+def class_random_str():
+    # 调用你的随机数生成函数（可自定义参数，如长度、是否包含数字等）
+    random_str = generate_random_str(length=9)  # 生成9位随机字符串
+    # print(f"\n【生成备注随机数】：{random_str}")  # 可选：打印生成的值，方便调试
+    return random_str

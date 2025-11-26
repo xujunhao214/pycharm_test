@@ -1,0 +1,663 @@
+{
+  "uid" : "2555e5daa02b05cc",
+  "name" : "数据库校验-VPS数据-修改跟单账号是否成功",
+  "fullName" : "test_vps.test_vpsOrder_open_level.TestLeakageopen#test_dbquery_updateslave",
+  "historyId" : "30e189ed52a071d28cbc40065ebaeffb",
+  "time" : {
+    "start" : 1764120139572,
+    "stop" : 1764120144029,
+    "duration" : 4457
+  },
+  "description" : "\n    ### 用例说明\n    - 前置条件：有vps策略和vps跟单\n    - 操作步骤：\n      1. 修改vps跟单账号开仓-关闭\n      2. 进行开仓\n      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验\n      4. 修改vps跟单账号开仓-开启\n      5. 进行补单操作，然后平仓\n    - 预期结果：vps跟单账号开仓-关闭，有漏单数据\n    ",
+  "descriptionHtml" : "<pre><code>### 用例说明\n- 前置条件：有vps策略和vps跟单\n- 操作步骤：\n  1. 修改vps跟单账号开仓-关闭\n  2. 进行开仓\n  3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验\n  4. 修改vps跟单账号开仓-开启\n  5. 进行补单操作，然后平仓\n- 预期结果：vps跟单账号开仓-关闭，有漏单数据\n</code></pre>\n",
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "db",
+    "time" : {
+      "start" : 1764120139446,
+      "stop" : 1764120139571,
+      "duration" : 125
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1764120136616,
+      "stop" : 1764120137900,
+      "duration" : 1284
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1764120137901,
+      "stop" : 1764120137901,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "class_random_str",
+    "time" : {
+      "start" : 1764120137901,
+      "stop" : 1764120137902,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1764120137900,
+      "stop" : 1764120137901,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1764120139571,
+      "stop" : 1764120139571,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1764120136615,
+      "stop" : 1764120136615,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1764120136615,
+      "stop" : 1764120136616,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "description" : "\n    ### 用例说明\n    - 前置条件：有vps策略和vps跟单\n    - 操作步骤：\n      1. 修改vps跟单账号开仓-关闭\n      2. 进行开仓\n      3. 跟单账号开仓失败，有漏单数据，把redis数据和MySQL数据进行校验\n      4. 修改vps跟单账号开仓-开启\n      5. 进行补单操作，然后平仓\n    - 预期结果：vps跟单账号开仓-关闭，有漏单数据\n    ",
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否修改成功",
+      "time" : {
+        "start" : 1764120139572,
+        "stop" : 1764120144029,
+        "duration" : 4457
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "轮询等待数据稳定（超时: 30秒，稳定期: 2秒）",
+        "time" : {
+          "start" : 1764120139572,
+          "stop" : 1764120144029,
+          "duration" : 4457
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1764120139668,
+            "stop" : 1764120139727,
+            "duration" : 59
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1764120139668,
+              "stop" : 1764120139727,
+              "duration" : 59
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : false,
+            "attachmentsCount" : 0,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "c30207274f23548a",
+            "name" : "查询条件",
+            "source" : "c30207274f23548a.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待0.2秒）",
+          "time" : {
+            "start" : 1764120139727,
+            "stop" : 1764120139728,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "e57eaf76817a7ec0",
+            "name" : "当前状态",
+            "source" : "e57eaf76817a7ec0.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "375dedea1591ae4",
+            "name" : "超时倒计时",
+            "source" : "375dedea1591ae4.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1764120139728,
+            "stop" : 1764120139728,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "bec387319e023364",
+            "name" : "判断结果",
+            "source" : "bec387319e023364.txt",
+            "type" : "text/plain",
+            "size" : 39
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据发生变化",
+          "time" : {
+            "start" : 1764120139728,
+            "stop" : 1764120139728,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "77cf0fe40774e6f1",
+            "name" : "状态说明",
+            "source" : "77cf0fe40774e6f1.txt",
+            "type" : "text/plain",
+            "size" : 24
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1764120141792,
+            "stop" : 1764120141858,
+            "duration" : 66
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1764120141792,
+              "stop" : 1764120141858,
+              "duration" : 66
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : false,
+            "attachmentsCount" : 0,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "b43e636711de95a",
+            "name" : "查询条件",
+            "source" : "b43e636711de95a.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待2.3秒）",
+          "time" : {
+            "start" : 1764120141858,
+            "stop" : 1764120141859,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "44ea5fd3b3064fc9",
+            "name" : "当前状态",
+            "source" : "44ea5fd3b3064fc9.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "9a2fafc7fc44a2fa",
+            "name" : "超时倒计时",
+            "source" : "9a2fafc7fc44a2fa.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1764120141859,
+            "stop" : 1764120141860,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "f40f763060c9eb5a",
+            "name" : "唯一键信息",
+            "source" : "f40f763060c9eb5a.txt",
+            "type" : "text/plain",
+            "size" : 25
+          }, {
+            "uid" : "18a08ec2f70b076e",
+            "name" : "判断结果",
+            "source" : "18a08ec2f70b076e.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据首次稳定",
+          "time" : {
+            "start" : 1764120141860,
+            "stop" : 1764120141860,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "b1a98aa00ed61778",
+            "name" : "状态说明",
+            "source" : "b1a98aa00ed61778.txt",
+            "type" : "text/plain",
+            "size" : 40
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "执行单次数据库查询",
+          "time" : {
+            "start" : 1764120143940,
+            "stop" : 1764120144026,
+            "duration" : 86
+          },
+          "status" : "passed",
+          "steps" : [ {
+            "name" : "执行数据库查询",
+            "time" : {
+              "start" : 1764120143941,
+              "stop" : 1764120144026,
+              "duration" : 85
+            },
+            "status" : "passed",
+            "steps" : [ ],
+            "attachments" : [ ],
+            "parameters" : [ ],
+            "stepsCount" : 0,
+            "hasContent" : false,
+            "attachmentsCount" : 0,
+            "shouldDisplayMessage" : false
+          } ],
+          "attachments" : [ {
+            "uid" : "1d430819ce73359c",
+            "name" : "查询条件",
+            "source" : "1d430819ce73359c.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 1,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "轮询中（已等待4.5秒）",
+          "time" : {
+            "start" : 1764120144026,
+            "stop" : 1764120144027,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "fb734cadcd687b55",
+            "name" : "当前状态",
+            "source" : "fb734cadcd687b55.txt",
+            "type" : "text/plain",
+            "size" : 15
+          }, {
+            "uid" : "b65f643c881696a6",
+            "name" : "超时倒计时",
+            "source" : "b65f643c881696a6.txt",
+            "type" : "text/plain",
+            "size" : 21
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "判断结果稳定性",
+          "time" : {
+            "start" : 1764120144027,
+            "stop" : 1764120144027,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "e985c7e3936d999e",
+            "name" : "唯一键信息",
+            "source" : "e985c7e3936d999e.txt",
+            "type" : "text/plain",
+            "size" : 25
+          }, {
+            "uid" : "9e04e79131f816fb",
+            "name" : "判断结果",
+            "source" : "9e04e79131f816fb.txt",
+            "type" : "text/plain",
+            "size" : 42
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 2,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据稳定达标",
+          "time" : {
+            "start" : 1764120144028,
+            "stop" : 1764120144028,
+            "duration" : 0
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "3fa85b73570c111e",
+            "name" : "结果说明",
+            "source" : "3fa85b73570c111e.txt",
+            "type" : "text/plain",
+            "size" : 34
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 1,
+          "shouldDisplayMessage" : false
+        }, {
+          "name" : "数据库查询结果（最终稳定结果）",
+          "time" : {
+            "start" : 1764120144028,
+            "stop" : 1764120144029,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "37d6cf82b77da167",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "37d6cf82b77da167.json",
+            "type" : "application/json",
+            "size" : 641
+          }, {
+            "uid" : "2e0651acde89e25b",
+            "name" : "执行SQL",
+            "source" : "2e0651acde89e25b.txt",
+            "type" : "text/plain",
+            "size" : 62
+          }, {
+            "uid" : "40eb6a8d64c06c40",
+            "name" : "SQL参数",
+            "source" : "40eb6a8d64c06c40.txt",
+            "type" : "text/plain",
+            "size" : 10
+          }, {
+            "uid" : "715fb6da08a1552",
+            "name" : "查询时间窗口",
+            "source" : "715fb6da08a1552.txt",
+            "type" : "text/plain",
+            "size" : 61
+          } ],
+          "parameters" : [ ],
+          "stepsCount" : 0,
+          "hasContent" : true,
+          "attachmentsCount" : 4,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "stepsCount" : 16,
+        "hasContent" : true,
+        "attachmentsCount" : 21,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 17,
+      "hasContent" : true,
+      "attachmentsCount" : 21,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "2. 对数据进行校验",
+      "time" : {
+        "start" : 1764120144029,
+        "stop" : 1764120144029,
+        "duration" : 0
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "5b2ab9cae85a58cb",
+      "name" : "log",
+      "source" : "5b2ab9cae85a58cb.txt",
+      "type" : "text/plain",
+      "size" : 2975
+    } ],
+    "parameters" : [ ],
+    "stepsCount" : 19,
+    "hasContent" : true,
+    "attachmentsCount" : 22,
+    "shouldDisplayMessage" : false
+  },
+  "afterStages" : [ {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1764120144161,
+      "stop" : 1764120144278,
+      "duration" : 117
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1764120283859,
+      "stop" : 1764120283860,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1764120144029,
+      "stop" : 1764120144160,
+      "duration" : 131
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 0,
+    "hasContent" : false,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS策略下单-漏单场景"
+  }, {
+    "name" : "story",
+    "value" : "场景1：VPS策略下单-漏开"
+  }, {
+    "name" : "tag",
+    "value" : "@pytest.mark.usefixtures('class_random_str')"
+  }, {
+    "name" : "tag",
+    "value" : "flaky(reruns=0, reruns_delay=0)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_vpsOrder_open_level"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestLeakageopen_level"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "74448-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_vpsOrder_open_level"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ "@pytest.mark.usefixtures('class_random_str')", "flaky(reruns=0, reruns_delay=0)" ]
+  },
+  "source" : "2555e5daa02b05cc.json",
+  "parameterValues" : [ ]
+}

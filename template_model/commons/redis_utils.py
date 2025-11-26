@@ -1,4 +1,4 @@
-# template_model/commons/redis_utils.py
+# template/commons/redis_utils.py
 import redis
 import json
 from typing import Dict, Any, List

@@ -1,4 +1,4 @@
-# template_model/config.py
+# template/config.py
 # 导入已有的Environment枚举（无需重复定义）
 from template_model.commons.enums import Environment
 import pymysql
@@ -37,7 +37,7 @@ ENV_CONFIG = {
             "db": 1,
             "password": "diVMn9bMpACrXh79QyYY"
         },
-        "data_source_dir": "template_model/VAR"
+        "data_source_dir": "template/VAR"
     },
     Environment.DEV: {
         "base_url": "https://dev.lgcopytrade.top/api",
@@ -70,6 +70,6 @@ ENV_CONFIG = {
             "db": 2,
             "password": "diVMn9bMpACrXh79QyYY"
         },
-        "data_source_dir": "template_model/VAR"
+        "data_source_dir": "template/VAR"
     }
 }
