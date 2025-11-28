@@ -136,7 +136,7 @@ def generate_interface_detail_page(time_details, report_title, detail_report_pat
     <h1>{report_title} - 接口耗时详情 </h1>
 
     <div class="summary">
-        <strong>统计信息：</strong>共 {len(time_details)} 条有效接口耗时记录 | 按执行时间排序
+        <strong>统计信息：</strong>共 {len(time_details)} 条有效接口耗时记录
     </div>
 
     <a href="javascript:history.back()" class="back-link">← 返回主报告</a>
