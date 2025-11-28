@@ -712,7 +712,7 @@ class TestCreate(APITestBase):
         MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderId": MT5vps_addslave_id,
             "account": MT5vps_user_accounts_1
         }

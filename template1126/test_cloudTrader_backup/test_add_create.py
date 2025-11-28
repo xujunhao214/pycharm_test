@@ -14,7 +14,7 @@ from template1126.commons.random_generator import *
 FOLLOW_ACCOUNT_LIST = FOLLOW_ACCOUNT_LIST
 
 
-@allure.story("绑定跟随者账号（多账号批量版）")
+@allure.feature("绑定跟随者账号（多账号批量版）")
 class Test_follow_batch(APITestBase):
     json_utils = JsonPathUtils()
 

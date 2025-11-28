@@ -38,7 +38,7 @@ class TestVPSOrdersend(APITestBase):
                     "symbol": trader_ordersend["symbol"],
                     "placedType": 0,
                     "remark": f"gendanshequ_loop_{cycle_num}",  # 标记当前循环次数
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "type": 0,
                     "totalNum": trader_ordersend["totalNum"],
                     "totalSzie": trader_ordersend["totalSzie"],
@@ -74,7 +74,7 @@ class TestVPSOrdersend(APITestBase):
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderId": vps_trader_id,
                     "account": vps_user_accounts_1
                 }

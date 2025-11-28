@@ -36,7 +36,7 @@ class TestCloudStrategyOrder:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [cloudTrader_traderList_4],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -187,7 +187,7 @@ class TestCloudStrategyOrder:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_4]
                 }
@@ -305,7 +305,7 @@ class TestCloudStrategyOrder:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [cloudTrader_traderList_4],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -440,7 +440,7 @@ class TestCloudStrategyOrder:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_4]
                 }
@@ -556,7 +556,7 @@ class TestCloudStrategyOrder:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [cloudTrader_traderList_4],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -680,7 +680,7 @@ class TestCloudStrategyOrder:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_4]
                 }
@@ -794,7 +794,7 @@ class TestCloudStrategyOrder:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [cloudTrader_traderList_4],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -931,7 +931,7 @@ class TestCloudStrategyOrder:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_4]
                 }
@@ -1224,7 +1224,7 @@ class TestCloudStrategyOrder:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_4]
                 }
@@ -1403,7 +1403,7 @@ class TestCloudStrategyOrder:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_4]
                 }

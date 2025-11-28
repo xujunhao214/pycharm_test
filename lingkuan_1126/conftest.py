@@ -43,9 +43,9 @@ def environment(request):
     return Environment(env)
 
 
-@pytest.fixture(scope="function")  # 改为function作用域
+@pytest.fixture(scope="class")  # 改为 class 作用域
 def api_session(environment) -> EnvironmentSession:
-    """创建支持多URL的API会话（每个用例独立）"""
+    """创建支持多URL的API会话（整个测试类共用一个会话）"""
     config = ENV_CONFIG[environment]
     session = EnvironmentSession(
         environment=environment,
@@ -53,16 +53,15 @@ def api_session(environment) -> EnvironmentSession:
         vps_url=config.get("vps_url")
     )
     yield session
-    session.close()
+    session.close()  # 整个测试类执行完后关闭会话
 
 
-@pytest.fixture(scope="function")
-def logged_session(api_session, var_manager, request, environment):
-    """登录夹具：任何环境登录失败都直接终止用例执行"""
+@pytest.fixture(scope="class")  # 改为 class 作用域
+def class_logged_session(api_session, var_manager, request, environment):
+    """class 级登录夹具：仅登录一次，复用会话（解决响应时间统计误差）"""
     # 1. 初始化登录配置
-    api_session.use_base_url()
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    logger.info(f"[{current_time}] 用例 {request.node.nodeid} 开始登录，环境: {environment.value}")
+    logger.info(f"[{current_time}] 测试类 {request.cls.__name__} 开始登录，环境: {environment.value}")
     print(f"环境: {environment.value}")
 
     # 2. 获取登录基础数据
@@ -73,40 +72,31 @@ def logged_session(api_session, var_manager, request, environment):
 
     access_token = None
 
-    # 3. 根据环境执行登录逻辑
+    # 3. 根据环境执行登录逻辑（与原逻辑一致，仅执行一次）
     try:
         if environment.value == "test":
-            # 测试环境登录逻辑
             response = api_session.post("/sys/auth/login", json=login_data)
             if response.status_code != 200:
                 pytest.fail(
                     f"测试环境登录失败 - 状态码: {response.status_code}, 响应: {response.text[:500]}",
                     pytrace=False
                 )
-
             response_json = response.json()
-            headers_json = json.dumps(login_data, ensure_ascii=False, indent=2)
-            allure.attach(headers_json, "请求体", allure.attachment_type.JSON)
-            # print(f"响应信息：{response.text}")
+            allure.attach(json.dumps(login_data, ensure_ascii=False, indent=2), "请求体", allure.attachment_type.JSON)
             logging.info(f"登录响应信息：{response.text}")
             allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
             access_token = response_json.get("data", {}).get("access_token")
             if not access_token:
                 pytest.fail("测试环境登录响应中未找到access_token", pytrace=False)
-
             logger.info("测试环境登录成功")
 
         elif environment.value == "uat":
-            # UAT环境登录逻辑（带重试）
             max_retries = 5
             retry_interval = 10
-            access_token = None
-
             for attempt in range(max_retries):
                 try:
                     mfa_code = generate_code(MFA_SECRET_KEY)
                     logger.info(f"UAT登录尝试 {attempt + 1}/{max_retries}，MFA验证码: {mfa_code}")
-
                     login_payload = {
                         "username": login_data["username"],
                         "password": login_data["password"],
@@ -117,57 +107,64 @@ def logged_session(api_session, var_manager, request, environment):
                         "isMfaVerified": 1,
                         "isStartMfaVerify": 1
                     }
-
                     response = api_session.post("/sys/auth/login", json=login_payload)
-                    response.raise_for_status()  # 触发HTTP错误异常
+                    response.raise_for_status()
                     response_json = response.json()
-                    headers_json = json.dumps(login_payload, ensure_ascii=False, indent=2)
-                    allure.attach(headers_json, "请求体", allure.attachment_type.JSON)
-                    # print(f"响应信息：{response.text}")
+                    allure.attach(json.dumps(login_payload, ensure_ascii=False, indent=2), "请求体",
+                                  allure.attachment_type.JSON)
                     logging.info(f"登录响应信息：{response.text}")
                     allure.attach(response.text, "响应信息", allure.attachment_type.JSON)
-
                     if response_json.get("code") != 0:
                         raise ValueError(f"登录失败: {response_json.get('msg')}")
-
                     access_token = response_json["data"]["access_token"]
                     if not access_token:
                         raise ValueError("未返回access_token")
-
                     logger.info(f"UAT登录成功（第{attempt + 1}次尝试）")
                     break
-
                 except Exception as e:
                     error_msg = f"第{attempt + 1}次登录失败: {str(e)}"
                     logger.error(error_msg)
-                    if attempt == max_retries - 1:  # 最后一次尝试失败
+                    if attempt == max_retries - 1:
                         pytest.fail(f"UAT登录失败（已重试{max_retries}次）: {str(e)}", pytrace=False)
                     time.sleep(retry_interval)
-
         else:
             pytest.fail(f"不支持的环境类型: {environment.value}", pytrace=False)
-
     except Exception as e:
-        # 捕获所有登录过程中的异常并终止
         pytest.fail(f"登录过程发生未预期错误: {str(e)}", pytrace=False)
 
-    # 4. 设置认证信息
+    # 4. 设置认证信息（仅设置一次，整个类复用）
     var_manager.set_runtime_variable("access_token", access_token)
     api_session.headers.update({
         "Authorization": f"{access_token}",
         "x-sign": "417B110F1E71BD20FE96366E67849B0B"
     })
 
-    # 5. 处理URL切换
+    logger.info(f"测试类 {request.cls.__name__} 登录完成，会话已准备就绪")
+    yield api_session  # 整个测试类共用这个已登录的会话
+
+    # 5. 会话清理（整个测试类执行完后执行）
+    logger.info(
+        f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 测试类 {request.cls.__name__} 执行完毕，关闭会话")
+
+
+@pytest.fixture(scope="function")  # 保留 function 作用域的 URL 切换夹具
+def logged_session(class_logged_session, request):
+    """用例级夹具：根据当前用例的 url 标记切换 URL（解决 class 作用域 URL 复用问题）"""
+    session = class_logged_session
+    # 读取当前用例的 @pytest.mark.url 标记
     url_marker = next(request.node.iter_markers(name="url"), None)
     if url_marker and url_marker.args[0] == "vps":
-        api_session.use_vps_url()
-        logger.info(f"切换到VPS URL: {api_session.vps_url}")
+        session.use_vps_url()
+        logger.info(f"用例 {request.node.nodeid} 切换到 VPS URL: {session.vps_url}")
+    else:
+        # 若无 url 标记，切换回默认 base_url（避免复用前一个用例的 VPS URL）
+        session.use_base_url()
+        logger.info(f"用例 {request.node.nodeid} 使用默认 URL: {session.base_url}")
 
-    yield api_session
+    yield session
 
-    # 6. 可选：会话清理逻辑（仅在登录成功时执行）
-    logger.info(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 用例 {request.node.nodeid} 执行完毕")
+    # 可选：用例执行完后重置 URL（避免影响下一个用例）
+    session.use_base_url()
 
 
 @pytest.fixture(scope="session")  # 会话级：整个测试会话只初始化一次
@@ -356,7 +353,7 @@ class TestResultTracker:
         self.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # 新增：获取 --test-group 参数
         self.test_group = session.config.getoption("--test-group", "未指定")
-        logger.info(f"[{DATETIME_NOW}] 测试会话开始: {self.start_time}, 测试组: {self.test_group}")
+        logger.info(f"[{get_current_time()}] 测试会话开始: {self.start_time}, 测试组: {self.test_group}")
 
     def pytest_runtest_logreport(self, report):
         """记录每个测试用例的结果"""
@@ -383,7 +380,7 @@ class TestResultTracker:
         start = datetime.datetime.strptime(self.start_time, "%Y-%m-%d %H:%M:%S")
         end = datetime.datetime.strptime(self.end_time, "%Y-%m-%d %H:%M:%S")
         self.duration = f"{(end - start).total_seconds():.2f}秒"
-        logger.info(f"[{DATETIME_NOW}] 测试会话结束，总耗时: {self.duration}")
+        logger.info(f"[{get_current_time()}] 测试会话结束，总耗时: {self.duration}")
 
         try:
             statistics = self.get_statistics()
@@ -395,9 +392,9 @@ class TestResultTracker:
                 failed_cases=self.failed_test_names,
                 skipped_cases=self.skipped_test_names
             )
-            logger.info(f"[{DATETIME_NOW}] 飞书通知发送成功")
+            logger.info(f"[{get_current_time()}] 飞书通知发送成功")
         except Exception as e:
-            logger.error(f"[{DATETIME_NOW}] 发送飞书通知失败: {str(e)}")
+            logger.error(f"[{get_current_time()}] 发送飞书通知失败: {str(e)}")
 
     def get_statistics(self) -> Dict[str, any]:
         """获取测试统计数据"""
@@ -450,7 +447,7 @@ def pytest_configure(config):
 
     env_value = config.getoption("--env").lower()
     config.environment = env_value
-    logger.info(f"[{DATETIME_NOW}] 测试环境设置为: {config.environment}")
+    logger.info(f"[{get_current_time()}] 测试环境设置为: {config.environment}")
 
     config.addinivalue_line(
         "markers",

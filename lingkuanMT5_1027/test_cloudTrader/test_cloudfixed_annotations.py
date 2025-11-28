@@ -118,7 +118,7 @@ class TestCloudremark:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -181,7 +181,7 @@ class TestCloudremark:
                     '/mascontrol/cloudTrader/cloudOrderClose',
                     json_data={
                         "isCloseAll": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "id": f"{cloudMaster_id}",
                         "cloudTraderId": [MT5cloudTrader_traderList_2]
                     }
@@ -306,7 +306,7 @@ class TestCloudremark:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -369,7 +369,7 @@ class TestCloudremark:
                     '/mascontrol/cloudTrader/cloudOrderClose',
                     json_data={
                         "isCloseAll": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "id": f"{cloudMaster_id}",
                         "cloudTraderId": [MT5cloudTrader_traderList_2]
                     }
@@ -481,7 +481,7 @@ class TestCloudremark:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -544,7 +544,7 @@ class TestCloudremark:
                     '/mascontrol/cloudTrader/cloudOrderClose',
                     json_data={
                         "isCloseAll": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "id": f"{cloudMaster_id}",
                         "cloudTraderId": [MT5cloudTrader_traderList_2]
                     }
@@ -654,7 +654,7 @@ class TestCloudremark:
                     "traderList": [self.MT5cloudTrader_user_ids_2],
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "symbol": "XAUUSD",
                     "placedType": 0,
                     "startSize": "0.10",
@@ -715,7 +715,7 @@ class TestCloudremark:
                     '/bargain/masOrderClose',
                     json_data={
                         "isCloseAll": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "traderList": [MT5cloudTrader_user_ids_2]
                     }
                 )
@@ -824,7 +824,7 @@ class TestCloudremark:
                     "traderList": [self.MT5cloudTrader_user_ids_2],
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "symbol": "XAUUSD",
                     "placedType": 0,
                     "startSize": "0.10",
@@ -885,7 +885,7 @@ class TestCloudremark:
                     '/bargain/masOrderClose',
                     json_data={
                         "isCloseAll": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "traderList": [MT5cloudTrader_user_ids_2]
                     }
                 )
@@ -994,7 +994,7 @@ class TestCloudremark:
                     "traderList": [self.MT5cloudTrader_user_ids_2],
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "symbol": "XAUUSD",
                     "placedType": 0,
                     "startSize": "0.10",
@@ -1055,7 +1055,7 @@ class TestCloudremark:
                     '/bargain/masOrderClose',
                     json_data={
                         "isCloseAll": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "traderList": [MT5cloudTrader_user_ids_2]
                     }
                 )

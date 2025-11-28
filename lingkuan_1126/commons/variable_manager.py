@@ -37,16 +37,16 @@ class VariableManager:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     self.static_vars = json.load(f)
-                logger.info(f"[{DATETIME_NOW}] 成功加载静态变量: {file_path}")
-                # print(f"[{DATETIME_NOW}] 成功加载静态变量: {file_path}")
+                logger.info(f"[{get_current_time()}] 成功加载静态变量: {file_path}")
+                # print(f"[{get_current_time()}] 成功加载静态变量: {file_path}")
             except Exception as e:
-                logger.error(f"[{DATETIME_NOW}] 静态变量加载失败: {str(e)}")
+                logger.error(f"[{get_current_time()}] 静态变量加载失败: {str(e)}")
                 self.static_vars = {}
-                # print(f"[{DATETIME_NOW}] 静态变量加载失败: {str(e)}")
+                # print(f"[{get_current_time()}] 静态变量加载失败: {str(e)}")
         else:
-            logger.warning(f"[{DATETIME_NOW}] 静态变量文件不存在: {file_path}")
+            logger.warning(f"[{get_current_time()}] 静态变量文件不存在: {file_path}")
             self.static_vars = {}
-            # print(f"[{DATETIME_NOW}] 静态变量文件不存在: {file_path}")
+            # print(f"[{get_current_time()}] 静态变量文件不存在: {file_path}")
 
     def load_runtime_variables(self):
         """加载运行时动态变量文件（根据测试组隔离）"""
@@ -61,16 +61,16 @@ class VariableManager:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     self.runtime_vars = json.load(f)
-                logger.info(f"[{DATETIME_NOW}] 成功加载运行时变量: {file_path}")
-                # print(f"[{DATETIME_NOW}] 成功加载运行时变量: {file_path}")
+                logger.info(f"[{get_current_time()}] 成功加载运行时变量: {file_path}")
+                # print(f"[{get_current_time()}] 成功加载运行时变量: {file_path}")
             except Exception as e:
-                logger.error(f"[{DATETIME_NOW}] 运行时变量加载失败: {str(e)}")
+                logger.error(f"[{get_current_time()}] 运行时变量加载失败: {str(e)}")
                 self.runtime_vars = {}
-                # print(f"[{DATETIME_NOW}] 运行时变量加载失败: {str(e)}")
+                # print(f"[{get_current_time()}] 运行时变量加载失败: {str(e)}")
         else:
-            logger.warning(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
+            logger.warning(f"[{get_current_time()}] 运行时变量文件不存在: {file_path}")
             self.runtime_vars = {}
-            # print(f"[{DATETIME_NOW}] 运行时变量文件不存在: {file_path}")
+            # print(f"[{get_current_time()}] 运行时变量文件不存在: {file_path}")
 
     def get_variable(
             self,
@@ -100,9 +100,9 @@ class VariableManager:
         self.save_runtime_variables()
         # 补充日志：明确记录空值覆盖行为
         if value is None or value == "" or (isinstance(value, list) and len(value) == 0):
-            logger.info(f"[{DATETIME_NOW}] 运行时变量已覆盖（空值）: {name} = {value}")
+            logger.info(f"[{get_current_time()}] 运行时变量已覆盖（空值）: {name} = {value}")
         else:
-            logger.info(f"[{DATETIME_NOW}] 运行时变量已设置: {name} = {value}")
+            logger.info(f"[{get_current_time()}] 运行时变量已设置: {name} = {value}")
 
     def save_runtime_variables(self) -> None:
         """保存运行时变量到文件（根据测试组隔离）"""
@@ -118,9 +118,9 @@ class VariableManager:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(self.runtime_vars, f, ensure_ascii=False, indent=2)
-            logger.info(f"[{DATETIME_NOW}] 运行时变量已保存到: {file_path}")
+            logger.info(f"[{get_current_time()}] 运行时变量已保存到: {file_path}")
         except Exception as e:
-            logger.error(f"[{DATETIME_NOW}] 保存运行时变量失败: {str(e)}")
+            logger.error(f"[{get_current_time()}] 保存运行时变量失败: {str(e)}")
 
     # 以下方法（_get_nested_variable、_set_nested_variable等）保持不变
     def _get_nested_variable(
@@ -154,17 +154,17 @@ class VariableManager:
     def append_to_list(self, var_name: str, value: Any) -> None:
         current_value = self.get_variable(var_name, from_runtime=True, default=[])
         if not isinstance(current_value, list):
-            logger.warning(f"[{DATETIME_NOW}] 变量 {var_name} 不是列表类型，将重置为列表")
+            logger.warning(f"[{get_current_time()}] 变量 {var_name} 不是列表类型，将重置为列表")
             current_value = []
         current_value.append(value)
         self.set_runtime_variable(var_name, current_value)
-        logger.info(f"[{DATETIME_NOW}] 向列表 {var_name} 追加值: {value}")
+        logger.info(f"[{get_current_time()}] 向列表 {var_name} 追加值: {value}")
 
     def get_variable_list(self, name: str, default: List[Any] = None) -> List[Any]:
         default = default or []
         value = self.get_variable(name, from_runtime=True, default=default)
         if not isinstance(value, list):
-            logger.warning(f"[{DATETIME_NOW}] 变量 {name} 不是列表类型，强制转换为列表（原值: {value}）")
+            logger.warning(f"[{get_current_time()}] 变量 {name} 不是列表类型，强制转换为列表（原值: {value}）")
             return default
         return value
 
@@ -172,7 +172,7 @@ class VariableManager:
         for var_name, value in var_dict.items():
             self.set_runtime_variable(var_name, value)
         self.save_runtime_variables()
-        logger.info(f"[{DATETIME_NOW}] 批量设置 {len(var_dict)} 个运行时变量")
+        logger.info(f"[{get_current_time()}] 批量设置 {len(var_dict)} 个运行时变量")
 
     def delete_variable(self, name: str) -> None:
         parts = name.split(".")
@@ -183,8 +183,8 @@ class VariableManager:
                 current = current[part]
             del current[parts[-1]]
             self.save_runtime_variables()
-            logger.info(f"[{DATETIME_NOW}] 删除运行时变量: {name}")
+            logger.info(f"[{get_current_time()}] 删除运行时变量: {name}")
         except KeyError:
-            logger.warning(f"[{DATETIME_NOW}] 变量 {name} 不存在，无法删除")
+            logger.warning(f"[{get_current_time()}] 变量 {name} 不存在，无法删除")
         except Exception as e:
-            logger.error(f"[{DATETIME_NOW}] 删除变量失败: {str(e)}")
+            logger.error(f"[{get_current_time()}] 删除变量失败: {str(e)}")

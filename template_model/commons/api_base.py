@@ -2,6 +2,7 @@ import allure
 import logging
 import time
 import json
+import os
 import pytest
 import math
 from typing import List, Dict, Any, Optional, Tuple
@@ -169,31 +170,109 @@ class APITestBase:
                     allure.attachment_type.TEXT,
                 )
 
+    TIME_RECORD_FILE = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),  # 基类所在目录
+        "../../report/cloud_results/time_record.json"  # 耗时存储文件（和Allure结果同目录）
+    )
+
+    # 基类中 _record_request_time 方法的修改：
+    # 基类中记录耗时的方法（彻底修复版）
+    def _record_request_time(self, method: str, url: str, start_time: float) -> float:
+        import time
+        import allure
+        import json
+        import os
+        import datetime
+        import inspect  # 用于获取调用栈，精准定位用例
+
+        # 计算耗时（毫秒）
+        elapsed_time = (time.perf_counter() - start_time) * 1000
+        # print(f"基类记录耗时：{elapsed_time:.2f}ms")
+        # 日志打印（包含方法、URL、耗时）
+        logger.info(f"[{self._get_current_time()}] {method} 请求纯耗时: {elapsed_time:.2f}ms | URL: {url}")
+        # Allure 单独步骤展示耗时（方便报告查看）
+        with allure.step(f"{method} 请求耗时统计"):
+            allure.attach(f"{elapsed_time:.2f}ms", "纯耗时（不含等待）", allure.attachment_type.TEXT)
+            allure.attach(f"统计范围：请求发送 → 响应接收", "统计说明", allure.attachment_type.TEXT)
+
+        # ########## 核心修复：通过调用栈获取当前用例的唯一标识 ##########
+        # 遍历调用栈，找到测试用例的方法（ pytest 用例通常在 Test* 类中）
+        case_full_name = "未知用例"
+        stack = inspect.stack()
+        for frame_info in stack:
+            frame = frame_info.frame
+            # 检查是否为测试类中的方法（类名以Test开头，方法名以test_开头）
+            if "self" in frame.f_locals:
+                cls = frame.f_locals["self"].__class__
+                if cls.__name__.startswith("Test") and frame.f_code.co_name.startswith("test_"):
+                    # 构造用例唯一标识：模块路径.类名#方法名（与Allure报告一致）
+                    module_name = cls.__module__  # 模块路径（如test_vps.test_lianxi2）
+                    class_name = cls.__name__  # 类名（如TestVPSOrderSend1）
+                    method_name = frame.f_code.co_name  # 方法名（如test_follow_updateSlave）
+                    case_full_name = f"{module_name}.{class_name}#{method_name}"
+                    break
+        # print(f"当前用例唯一标识：{case_full_name}")  # 用于验证是否正确
+
+        # ########## 构造包含唯一标识的耗时记录 ##########
+        time_record = {
+            "url": url,
+            "method": method,
+            "elapsed_time": round(elapsed_time, 2),
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            # 用例唯一标识（与Allure报告中的fullName完全一致）
+            "case_full_name": case_full_name,
+            # 用例方法名（用于快速匹配）
+            "case_method": case_full_name.split("#")[-1] if "#" in case_full_name else ""
+        }
+
+        # 写入耗时文件（确保路径正确）
+        try:
+            # 确保目录存在
+            os.makedirs(os.path.dirname(self.TIME_RECORD_FILE), exist_ok=True)
+            # 读取已有记录
+            records = []
+            if os.path.exists(self.TIME_RECORD_FILE):
+                with open(self.TIME_RECORD_FILE, "r", encoding="utf-8") as f:
+                    records = json.load(f)
+            # 追加新记录
+            records.append(time_record)
+            # 写入文件
+            with open(self.TIME_RECORD_FILE, "w", encoding="utf-8") as f:
+                json.dump(records, f, ensure_ascii=False, indent=2)
+            # print(f"耗时已写入文件：{self.TIME_RECORD_FILE}")
+        except Exception as e:
+            print(f"写入耗时文件失败：{str(e)}")
+
+        return elapsed_time
+
     def send_post_request(self, logged_session, url, json_data=None, data=None, files=None,
-                          params=None,  # 新增：支持URL查询参数
+                          params=None,  # 保留：支持URL查询参数
                           sleep_seconds=SLEEP_SECONDS):
-        """发送POST请求（异常分层优化，新增params参数支持URL查询）"""
+        """发送POST请求（异常分层优化 + 新增耗时统计，先统计再等待）"""
         method = "POST"
         with allure.step(f"执行 {method} 请求"):
             try:
-                # 1. 附加请求详情到Allure（新增params展示）
+                # 1. 附加请求详情到Allure（保留params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_session.headers,
-                    params=params,  # 新增：将params传入，用于Allure展示
+                    params=params,  # 保留：展示URL参数
                     body=json_data if json_data else data,
                     is_json=bool(json_data),
                 )
 
-                # 2. 发送POST请求（根据不同场景携带params）
+                # ========== 新增：2. 记录请求开始时间（核心） ==========
+                start_time = time.perf_counter()
+
+                # 3. 发送POST请求（保留params传递 + 原有场景逻辑）
                 if files:
                     # 场景1：带文件上传（表单数据+URL参数）
                     response = logged_session.post(
                         url=url,
                         data=data,
                         files=files,
-                        params=params  # 新增：传递URL参数
+                        params=params  # 保留：传递URL参数
                     )
                     logger.info(
                         f"[{self._get_current_time()}] POST请求（带文件+URL参数）: {url} "
@@ -204,7 +283,7 @@ class APITestBase:
                     response = logged_session.post(
                         url=url,
                         json=json_data,
-                        params=params  # 新增：传递URL参数
+                        params=params  # 保留：传递URL参数
                     )
                     logger.info(
                         f"[{self._get_current_time()}] POST请求（JSON+URL参数）: {url} "
@@ -215,51 +294,58 @@ class APITestBase:
                     response = logged_session.post(
                         url=url,
                         data=data,
-                        params=params  # 新增：传递URL参数
+                        params=params  # 保留：传递URL参数
                     )
                     logger.info(
                         f"[{self._get_current_time()}] POST请求（表单+URL参数）: {url} "
                         f"| URL参数: {params} | 表单数据: {data}"
                     )
 
-                # 3. 附加响应详情（原有逻辑不变）
+                # ========== 新增：4. 记录并展示耗时（核心：先统计再等待） ==========
+                self._record_request_time(method, url, start_time)
+
+                # 5. 附加响应详情（原有逻辑不变）
                 self._attach_response_details(response)
 
-                # 4. 请求后等待（原有逻辑不变）
+                # 6. 请求后等待（在耗时统计之后，不包含在耗时内）
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
 
-            # 5. 异常捕获与处理（新增params到异常详情）
+            # 7. 异常捕获与处理（新增耗时兜底 + 保留params展示）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # ========== 新增：异常场景也记录耗时（兜底） ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, url, start_time)
+
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_session.headers,
-                        params=params,  # 新增：异常时也展示URL参数
+                        params=params,  # 保留：异常时展示URL参数
                         body=json_data if json_data else data,
                         is_json=bool(json_data),
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
-                        f"URL参数: {params}\n"  # 新增：异常详情中显示URL参数
+                        f"URL参数: {params}\n"  # 保留：异常详情显示URL参数
                         f"请求头: {logged_session.headers}\n"
                         f"请求体: {json_data if json_data else data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
                 logger.error(
                     f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
-                    f"| URL: {url} | URL参数: {params}",  # 新增：日志中打印URL参数
+                    f"| URL: {url} | URL参数: {params}",  # 保留：日志打印URL参数
                     exc_info=True
                 )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_get_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
-        """发送GET请求（异常分层优化）"""
+        """发送GET请求（新增耗时统计，先统计再等待）"""
         method = "GET"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -271,12 +357,22 @@ class APITestBase:
                     is_json=False,
                 )
 
-                response = logged_session.get(url, params=params)
-                logger.info(f"[{self._get_current_time()}] GET请求: {url} | 参数: {params}")
+                # 1. 记录请求开始时间
+                start_time = time.perf_counter()
 
+                # 2. 发送请求
+                response = logged_session.get(url, params=params)
+                logger.info(f"[{self._get_current_time()}] GET请求: {url} \n参数: {params}")
+
+                # 3. 记录并展示耗时
+                self._record_request_time(method, url, start_time)
+
+                # 4. 附加响应详情
                 self._attach_response_details(response)
 
+                # 5. 执行等待
                 if sleep_seconds > 0:
+                    logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
                 return response
 
@@ -296,12 +392,20 @@ class APITestBase:
                         f"请求参数: {params}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
+
+    import time
+    import allure
+    from urllib.parse import urlparse, urlunparse
+    from requests.exceptions import SSLError, ConnectionError, Timeout, RequestException
+
+    # 假设 SLEEP_SECONDS 已在文件中定义（如 SLEEP_SECONDS = 1）
+    SLEEP_SECONDS = 1
 
     def send_delete_request(self, logged_session, url, json_data=None, params=None, sleep_seconds=SLEEP_SECONDS):
         """
-        发送DELETE请求（异常分层优化）
+        发送DELETE请求（异常分层优化 + 新增耗时统计，先统计再等待）
 
         :param logged_session: 已登录的会话对象
         :param url: 请求URL
@@ -332,12 +436,18 @@ class APITestBase:
                     is_json=True,
                 )
 
+                # ========== 新增：1. 记录请求开始时间 ==========
+                start_time = time.perf_counter()
+
                 # 发送DELETE请求，查询参数通过params参数传递
                 response = logged_session.delete(
                     full_url,
                     json=json_data,
                     params=params
                 )
+
+                # ========== 新增：2. 记录并展示耗时（先统计再等待） ==========
+                self._record_request_time(method, full_url, start_time)
 
                 # 记录请求日志
                 logger.info(
@@ -348,13 +458,18 @@ class APITestBase:
                 # 附加响应详情到allure报告
                 self._attach_response_details(response)
 
-                # 请求后等待
+                # 3. 执行等待（耗时统计不包含等待时间）
                 if sleep_seconds > 0:
+                    logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
 
             except (SSLError, ConnectionError, Timeout) as e:
+                # ========== 新增：异常场景也记录耗时（兜底） ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, full_url, start_time)
+
                 error_type = "网络层异常"
                 with allure.step(f"{method} 请求{error_type}"):
                     self._attach_request_details(
@@ -381,6 +496,10 @@ class APITestBase:
                 raise ConnectionError(f"Failed: {method}请求{error_type}（{str(e)[:1000]}）") from e
 
             except RequestException as e:
+                # ========== 新增：异常场景也记录耗时（兜底） ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, full_url, start_time)
+
                 error_type = "请求层异常"
                 with allure.step(f"{method} 请求{error_type}"):
                     self._attach_request_details(
@@ -407,6 +526,10 @@ class APITestBase:
                 raise RequestException(f"Failed: {method}请求{error_type}（{str(e)[:1000]}）") from e
 
             except Exception as e:
+                # ========== 新增：异常场景也记录耗时（兜底） ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, full_url, start_time)
+
                 error_type = "未知异常"
                 with allure.step(f"{method} 请求{error_type}"):
                     error_detail = f"{error_type}: {str(e)}\nURL: {url}\n查询参数: {params}"
@@ -419,7 +542,7 @@ class APITestBase:
                 raise Exception(f"Failed: {method}请求{error_type}（{str(e)[:1000]}）") from e
 
     def send_put_request(self, logged_session, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
-        """发送PUT请求（异常分层优化）"""
+        """发送PUT请求（新增耗时统计，先统计再等待）"""
         method = "PUT"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -431,12 +554,22 @@ class APITestBase:
                     is_json=True,
                 )
 
-                response = logged_session.put(url, json=json_data)
-                logger.info(f"[{self._get_current_time()}] PUT请求: {url} | 数据: {json_data}")
+                # 1. 记录请求开始时间
+                start_time = time.perf_counter()
 
+                # 2. 发送请求
+                response = logged_session.put(url, json=json_data)
+                logger.info(f"[{self._get_current_time()}] PUT请求: {url} \n数据: {json_data}")
+
+                # 3. 记录并展示耗时
+                self._record_request_time(method, url, start_time)
+
+                # 4. 附加响应详情
                 self._attach_response_details(response)
 
+                # 5. 执行等待
                 if sleep_seconds > 0:
+                    logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
                 return response
 
@@ -456,11 +589,11 @@ class APITestBase:
                         f"请求体: {json_data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def send_options_request(self, logged_session, url, params=None, sleep_seconds=SLEEP_SECONDS):
-        """发送OPTIONS请求（异常分层优化）"""
+        """发送OPTIONS请求（新增耗时统计，先统计再等待）"""
         method = "OPTIONS"
         with allure.step(f"执行 {method} 请求"):
             try:
@@ -472,11 +605,20 @@ class APITestBase:
                     is_json=False,
                 )
 
-                response = logged_session.options(url, params=params)
-                logger.info(f"[{self._get_current_time()}] OPTIONS请求: {url} | 参数: {params}")
+                # 1. 记录请求开始时间
+                start_time = time.perf_counter()
 
+                # 2. 发送请求
+                response = logged_session.options(url, params=params)
+                logger.info(f"[{self._get_current_time()}] OPTIONS请求: {url} \n参数: {params}")
+
+                # 3. 记录并展示耗时
+                self._record_request_time(method, url, start_time)
+
+                # 4. 附加响应详情
                 self._attach_response_details(response)
 
+                # 5. 执行等待
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
@@ -499,7 +641,7 @@ class APITestBase:
                         f"请求参数: {params}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} \nURL: {url}", exc_info=True)
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def _log_response(self, response):

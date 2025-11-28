@@ -37,7 +37,7 @@ class Testcloudtrader_Scence(APITestBase):
             ],
             "type": 0,
             "tradeType": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "symbol": "XAUUSD",
             "placedType": 0,
             "startSize": "0.10",
@@ -272,7 +272,7 @@ class Testcloudtrader_Scence(APITestBase):
         # 1. 发送平仓请求
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderList": [cloudTrader_user_ids_2]
         }
         response = self.send_post_request(
@@ -295,7 +295,7 @@ class Testcloudtrader_Scence(APITestBase):
         # 1. 发送平仓请求
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "id": f"{cloudMaster_id}",
             "cloudTraderId": []
         }

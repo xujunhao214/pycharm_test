@@ -126,7 +126,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -454,7 +454,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -754,7 +754,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "0.01",
@@ -1068,7 +1068,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -1368,7 +1368,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "10",
                 "totalSzie": "",
@@ -1660,7 +1660,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -1948,7 +1948,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "5",
@@ -2262,7 +2262,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -2872,7 +2872,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -3162,7 +3162,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "1.00",
@@ -3464,7 +3464,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -3785,7 +3785,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "1",
                 "totalSzie": "5.00",
@@ -4131,7 +4131,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -4542,7 +4542,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "0.3",
@@ -4801,7 +4801,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -5170,7 +5170,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "0.3",
@@ -5429,7 +5429,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }
@@ -5798,7 +5798,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "0.01",
@@ -6057,7 +6057,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_trader_id,
                 "account": new_user["account"]
             }

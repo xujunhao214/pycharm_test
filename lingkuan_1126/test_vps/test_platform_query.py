@@ -1112,7 +1112,7 @@ class TestVPSquery(APITestBase):
                     "limit": 200,
                     "platformType": [],
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [],
                     "cloudId": [],
@@ -1148,7 +1148,7 @@ class TestVPSquery(APITestBase):
                 if not dateTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(dateTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(dateTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -1170,7 +1170,7 @@ class TestVPSquery(APITestBase):
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
@@ -1184,7 +1184,7 @@ class TestVPSquery(APITestBase):
                     "page": 1,
                     "limit": 200,
                     "platformType": [],
-                    "startDate": DATETIME_NOW,
+                    "startDate": get_current_time(),
                     "endDate": DATETIME_INIT,
                     "keywords": [],
                     "logInfo": [],
@@ -1231,7 +1231,7 @@ class TestVPSquery(APITestBase):
                     "limit": 100,
                     "platformType": [],
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [],
                     "cloudId": [],
@@ -1311,7 +1311,7 @@ class TestVPSquery(APITestBase):
                     "limit": 100,
                     "platformType": [],
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [],
                     "cloudId": [],
@@ -1388,7 +1388,7 @@ class TestVPSquery(APITestBase):
                     "limit": 200,
                     "platformType": [],
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [],
                     "cloudId": [],
@@ -1516,7 +1516,7 @@ class TestVPSquery(APITestBase):
                     "limit": 100,
                     "platformType": [],
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [],
                     "cloudId": [cloud_id],
@@ -1671,7 +1671,7 @@ class TestVPSquery(APITestBase):
                     "limit": 200,
                     "platformType": [],
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [keyword],
                     "cloudId": [],
@@ -1783,7 +1783,7 @@ class TestVPSquery(APITestBase):
                                 "limit": 200,
                                 "platformType": [],
                                 "startDate": DATETIME_INIT,
-                                "endDate": DATETIME_NOW,
+                                "endDate": get_current_time(),
                                 "keywords": [keyword],  # 当前循环的关键词
                                 "logInfo": [],
                                 "cloudId": [],
@@ -1897,7 +1897,7 @@ class TestVPSquery(APITestBase):
                     "limit": 200,
                     "platformType": [query_platform],  # 按平台类型筛选（MT4/MT5）
                     "startDate": DATETIME_INIT,
-                    "endDate": DATETIME_NOW,
+                    "endDate": get_current_time(),
                     "keywords": [],
                     "logInfo": [],
                     "cloudId": [],

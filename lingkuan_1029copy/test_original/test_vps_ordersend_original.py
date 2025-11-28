@@ -66,7 +66,7 @@ class VPSOrderTestBase(APITestBase):
         """发送平仓请求（公共方法）"""
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderId": trader_id,
             "account": account
         }

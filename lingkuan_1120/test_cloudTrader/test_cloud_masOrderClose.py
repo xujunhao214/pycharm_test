@@ -37,7 +37,7 @@ class TestCloudMasOrderclose:
                 "traderList": [cloudTrader_user_ids_2],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.10",

@@ -81,7 +81,7 @@ class TestcloudTrader_openandlevel:
                 "traderList": [cloudTrader_user_ids_2],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.01",
@@ -257,7 +257,7 @@ class TestcloudTrader_openandlevel:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [cloudTrader_user_ids_2]
             }
             response = self.send_post_request(

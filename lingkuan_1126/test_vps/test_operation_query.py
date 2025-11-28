@@ -31,7 +31,7 @@ class TestoperationQuery:
                     "type": "",
                     "creatorName": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "cloudType": [],
                     "cloud": [],
                     "operationType": "",
@@ -72,7 +72,7 @@ class TestoperationQuery:
                 if not responseOpnetime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{five_time}]，结束时间：[{DATETIME_NOW}]，返回 {len(responseOpnetime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{five_time}]，结束时间：[{get_current_time()}]，返回 {len(responseOpnetime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -94,7 +94,7 @@ class TestoperationQuery:
 
                     self.verify_data(
                         actual_value=str(actual_status),
-                        expected_value=str(DATETIME_NOW),
+                        expected_value=str(get_current_time()),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
@@ -111,7 +111,7 @@ class TestoperationQuery:
                     "symbol": "",
                     "type": "",
                     "creatorName": "",
-                    "startTime": DATETIME_NOW,
+                    "startTime": get_current_time(),
                     "endTime": DATETIME_INIT,
                     "cloudType": [],
                     "cloud": [],
@@ -1739,7 +1739,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1827,7 +1827,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1886,7 +1886,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1980,7 +1980,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": status,
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2067,7 +2067,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2152,7 +2152,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2207,7 +2207,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2292,7 +2292,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2347,7 +2347,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2432,7 +2432,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2486,7 +2486,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2570,7 +2570,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2624,7 +2624,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2708,7 +2708,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2761,7 +2761,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2844,7 +2844,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2895,7 +2895,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -2977,7 +2977,7 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -3027,7 +3027,7 @@ class TestoperationQuery:
                     "closeServerName": closeServerName,
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -3108,7 +3108,7 @@ class TestoperationQuery:
                     "closeServerName": "9999999999",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -3156,7 +3156,7 @@ class TestoperationQuery:
                     "sourceUser": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -3193,7 +3193,7 @@ class TestoperationQuery:
                 if not dateTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(dateTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(dateTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -3215,7 +3215,7 @@ class TestoperationQuery:
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的openTime应为{actual_status}",
@@ -3237,7 +3237,7 @@ class TestoperationQuery:
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "startTime": DATETIME_NOW,
+                    "startTime": get_current_time(),
                     "endTime": DATETIME_INIT,
                     "closeStartTime": "",
                     "closeEndTime": "",
@@ -3286,7 +3286,7 @@ class TestoperationQuery:
                     "sourceUser": "",
                     "orderingSystem": "",
                     "closeStartTime": DATETIME_INIT,
-                    "closeEndTime": DATETIME_NOW,
+                    "closeEndTime": get_current_time(),
                     "requestOpenTimeStart": "",
                     "requestOpenTimeEnd": "",
                     "requestCloseTimeStart": "",
@@ -3321,7 +3321,7 @@ class TestoperationQuery:
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -3343,7 +3343,7 @@ class TestoperationQuery:
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",
@@ -3365,7 +3365,7 @@ class TestoperationQuery:
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "closeStartTime": DATETIME_NOW,
+                    "closeStartTime": get_current_time(),
                     "closeEndTime": DATETIME_INIT,
                     "requestOpenTimeStart": "",
                     "requestOpenTimeEnd": "",
@@ -3412,7 +3412,7 @@ class TestoperationQuery:
                     "sourceUser": "",
                     "orderingSystem": "",
                     "requestOpenTimeStart": DATETIME_INIT,
-                    "requestOpenTimeEnd": DATETIME_NOW,
+                    "requestOpenTimeEnd": get_current_time(),
                     "requestCloseTimeStart": "",
                     "requestCloseTimeEnd": "",
                     "platformType": "",
@@ -3445,7 +3445,7 @@ class TestoperationQuery:
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -3467,7 +3467,7 @@ class TestoperationQuery:
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",
@@ -3489,7 +3489,7 @@ class TestoperationQuery:
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "requestOpenTimeStart": DATETIME_NOW,
+                    "requestOpenTimeStart": get_current_time(),
                     "requestOpenTimeEnd": DATETIME_INIT,
                     "requestCloseTimeStart": "",
                     "requestCloseTimeEnd": "",
@@ -3534,7 +3534,7 @@ class TestoperationQuery:
                     "sourceUser": "",
                     "orderingSystem": "",
                     "requestCloseTimeStart": DATETIME_INIT,
-                    "requestCloseTimeEnd": DATETIME_NOW,
+                    "requestCloseTimeEnd": get_current_time(),
                     "platformType": "",
                 }
 
@@ -3565,7 +3565,7 @@ class TestoperationQuery:
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -3587,7 +3587,7 @@ class TestoperationQuery:
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",
@@ -3609,7 +3609,7 @@ class TestoperationQuery:
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "requestCloseTimeStart": DATETIME_NOW,
+                    "requestCloseTimeStart": get_current_time(),
                     "requestCloseTimeEnd": DATETIME_INIT,
                     "platformType": "",
                 }
@@ -3662,13 +3662,13 @@ class TestoperationQuery:
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
                     "requestOpenTimeEnd": "",
                     "requestCloseTimeStart": DATETIME_INIT,
-                    "requestCloseTimeEnd": DATETIME_NOW,
+                    "requestCloseTimeEnd": get_current_time(),
                     "platformType": "",
                 }
 
@@ -3781,7 +3781,7 @@ class TestoperationQuery:
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -3803,7 +3803,7 @@ class TestoperationQuery:
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",

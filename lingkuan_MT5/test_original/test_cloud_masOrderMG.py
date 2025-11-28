@@ -137,7 +137,7 @@ class TestCloudStrategyOrderSend(APITestBase):
 
         request_data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderList": [MT5cloudTrader_user_ids_3]
         }
 
@@ -227,7 +227,7 @@ class TestCloudStrategyOrderSend(APITestBase):
             "traderList": [self.MT5cloudTrader_user_ids_3],
             "type": 0,
             "tradeType": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "symbol": cloudOrderSend["symbol"],
             "placedType": 0,
             "startSize": "0.10",
@@ -340,7 +340,7 @@ class TestCloudStrategyOrderSend(APITestBase):
 
         request_data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderList": [MT5cloudTrader_user_ids_3]
         }
 

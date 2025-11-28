@@ -252,7 +252,7 @@ class TestVPSMasOrdersend:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_user_id]
             }
             response = self.send_post_request(
@@ -450,7 +450,7 @@ class TestVPSMasOrdersend:
                 "traderList": [vps_trader_user_id],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.10",
@@ -684,7 +684,7 @@ class TestVPSMasOrdersend:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_user_id]
             }
             response = self.send_post_request(
@@ -883,7 +883,7 @@ class TestVPSMasOrdersend:
                 "traderList": [vps_trader_user_id],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.01",
@@ -1092,7 +1092,7 @@ class TestVPSMasOrdersend:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_user_id]
             }
             response = self.send_post_request(
@@ -1289,7 +1289,7 @@ class TestVPSMasOrdersend:
                 "traderList": [vps_trader_user_id],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.01",
@@ -1491,7 +1491,7 @@ class TestVPSMasOrdersend:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_user_id]
             }
             response = self.send_post_request(
@@ -1680,7 +1680,7 @@ class TestVPSMasOrdersend:
                 "traderList": [vps_trader_user_id],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.01",
@@ -1890,7 +1890,7 @@ class TestVPSMasOrdersend:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_user_id]
             }
             response = self.send_post_request(
@@ -2304,7 +2304,7 @@ class TestVPSMasOrdersend:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_user_id]
             }
             response = self.send_post_request(

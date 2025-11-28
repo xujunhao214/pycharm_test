@@ -364,7 +364,7 @@ class PublicUtils(APITestBase):
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],

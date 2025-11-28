@@ -83,7 +83,7 @@ class TestVPSOrdersendbuy:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -327,7 +327,7 @@ class TestVPSOrdersendbuy:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }
@@ -359,7 +359,7 @@ class TestVPSOrdersendbuy:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_addslave_id,
                 "account": MT5vps_user_accounts_1
             }

@@ -263,7 +263,7 @@ class TestCloudStrategyOrderbuy:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_2]
                 }

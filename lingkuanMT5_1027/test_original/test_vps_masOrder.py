@@ -129,7 +129,7 @@ class TestVPStradingOrders(APITestBase):
         # 发送平仓请求
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderList": [MT5vps_user_ids_1]
         }
         response = self.send_post_request(
@@ -210,7 +210,7 @@ class TestVPStradingOrders(APITestBase):
             "traderList": [MT5vps_user_ids_1],
             "type": 0,
             "tradeType": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "symbol": masOrderSend["symbol"],
             "placedType": 0,
             "startSize": "0.10",
@@ -309,7 +309,7 @@ class TestVPStradingOrders(APITestBase):
         # 发送平仓请求
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderList": [MT5vps_user_ids_1]
         }
         response = self.send_post_request(

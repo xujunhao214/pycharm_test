@@ -35,7 +35,7 @@ class TestVPSOrderSend_newScenarios:
             MT5vps_user_accounts = new_user["account"]
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": MT5vps_user_accounts
             }
@@ -69,7 +69,7 @@ class TestVPSOrderSend_newScenarios:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "1.00",
@@ -299,7 +299,7 @@ class TestVPSOrderSend_newScenarios:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }
@@ -346,7 +346,7 @@ class TestVPSOrderSend_newScenarios:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": trader_ordersend["remark"],
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "1.00",
@@ -571,7 +571,7 @@ class TestVPSOrderSend_newScenarios:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }

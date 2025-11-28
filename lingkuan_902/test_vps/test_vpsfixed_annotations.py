@@ -107,7 +107,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "ceshikaicangbeizhu",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -161,7 +161,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_trader_id, "account": new_user["account"]}
+            json_data={"isCloseAll": 1, "intervalTime": 0, "traderId": vps_trader_id, "account": new_user["account"]}
         )
         self.assert_response_status(response, 200, "策略平仓失败")
 
@@ -171,7 +171,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
+            json_data={"isCloseAll": 1, "intervalTime": 0, "traderId": vps_addslave_id,
                        "account": vps_user_accounts_1}
         )
         self.assert_response_status(response, 200, "跟单平仓失败")
@@ -258,7 +258,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "ceshikaicangbeizhu",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -312,7 +312,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_trader_id, "account": new_user["account"]}
+            json_data={"isCloseAll": 1, "intervalTime": 0, "traderId": vps_trader_id, "account": new_user["account"]}
         )
         self.assert_response_status(response, 200, "策略平仓失败")
 
@@ -322,7 +322,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
+            json_data={"isCloseAll": 1, "intervalTime": 0, "traderId": vps_addslave_id,
                        "account": vps_user_accounts_1}
         )
         self.assert_response_status(response, 200, "跟单平仓失败")
@@ -409,7 +409,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "ceshikaicangbeizhu",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -466,7 +466,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_trader_id, "account": new_user["account"]}
+            json_data={"isCloseAll": 1, "intervalTime": 0, "traderId": vps_trader_id, "account": new_user["account"]}
         )
         self.assert_response_status(response, 200, "策略平仓失败")
 
@@ -476,7 +476,7 @@ class TestVPSOrderSend_AllRemarkScenarios(APITestBase):
         response = self.send_post_request(
             logged_session,
             '/subcontrol/trader/orderClose',
-            json_data={"isCloseAll": 1, "intervalTime": 100, "traderId": vps_addslave_id,
+            json_data={"isCloseAll": 1, "intervalTime": 0, "traderId": vps_addslave_id,
                        "account": vps_user_accounts_1}
         )
         self.assert_response_status(response, 200, "跟单平仓失败")

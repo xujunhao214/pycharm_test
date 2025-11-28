@@ -114,7 +114,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -453,7 +453,7 @@ class TestcloudTrader_openandlevel:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_2]
                 }
@@ -652,7 +652,7 @@ class TestcloudTrader_openandlevel:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -764,7 +764,7 @@ class TestcloudTrader_openandlevel:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [cloudTrader_traderList_2]
                 }
@@ -1025,7 +1025,7 @@ class TestcloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     cloudTrader_user_ids_2
                 ]
@@ -1226,7 +1226,7 @@ class TestcloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -1559,7 +1559,7 @@ class TestcloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     cloudTrader_user_ids_2
                 ]
@@ -1758,7 +1758,7 @@ class TestcloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -1866,7 +1866,7 @@ class TestcloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     cloudTrader_user_ids_2
                 ]
@@ -2127,7 +2127,7 @@ class TestcloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     cloudTrader_user_ids_2
                 ]
@@ -2317,7 +2317,7 @@ class TestcloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -2639,7 +2639,7 @@ class TestcloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     cloudTrader_user_ids_2
                 ]
@@ -2817,7 +2817,7 @@ class TestcloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -3126,7 +3126,7 @@ class TestcloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     cloudTrader_user_ids_2
                 ]

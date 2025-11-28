@@ -37,7 +37,7 @@ class TestVPSMasOrderclose:
                 "traderList": [MT5vps_trader_user_id],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": masOrderSend["symbol"],
                 "placedType": 0,
                 "startSize": "0.10",

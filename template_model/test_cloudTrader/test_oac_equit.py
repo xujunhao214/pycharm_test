@@ -220,7 +220,7 @@ class Test_equitall:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "gendanshequ",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -906,7 +906,7 @@ class Test_equitall:
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderId": vps_trader_id,
                     "account": vps_user_accounts_1
                 }
@@ -1668,7 +1668,7 @@ class Test_equitall:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "gendanshequ",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -2354,7 +2354,7 @@ class Test_equitall:
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderId": vps_trader_id,
                     "account": vps_user_accounts_1
                 }
@@ -2955,7 +2955,7 @@ class Test_equitall:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "gendanshequ",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -3638,7 +3638,7 @@ class Test_equitall:
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderId": vps_trader_id,
                     "account": vps_user_accounts_1
                 }
@@ -4238,7 +4238,7 @@ class Test_equitall:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "gendanshequ",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -4921,7 +4921,7 @@ class Test_equitall:
                 vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
                 data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderId": vps_trader_id,
                     "account": vps_user_accounts_1
                 }

@@ -39,7 +39,7 @@ class TestcloudTrader_openandlevel:
                         "id": cloudMaster_id,
                         "type": 0,
                         "tradeType": 1,
-                        "intervalTime": 100,
+                        "intervalTime": 0,
                         "cloudTraderId": [cloudTrader_traderList_4],
                         "symbol": "XAUUSD",
                         "placedType": 0,

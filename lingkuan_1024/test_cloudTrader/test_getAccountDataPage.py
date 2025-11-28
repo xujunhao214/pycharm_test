@@ -30,7 +30,7 @@ class TestCloudOrderSend_newScenarios:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [cloudTrader_user_ids_2]
             }
             response = self.send_post_request(
@@ -273,7 +273,7 @@ class TestCloudOrderSend_newScenarios:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [cloudTrader_user_ids_2]
             }
             response = self.send_post_request(
@@ -527,7 +527,7 @@ class TestCloudOrderSend_newScenarios:
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [cloudTrader_user_ids_2]
             }
             response = self.send_post_request(

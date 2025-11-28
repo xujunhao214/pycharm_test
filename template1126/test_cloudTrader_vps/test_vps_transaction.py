@@ -24,7 +24,7 @@ class TestVPSOrdersend(APITestBase):
                 "traderList": [vps_trader_id],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "startSize": trader_ordersend["startSize"],
@@ -261,7 +261,7 @@ class TestVPSOrdersend(APITestBase):
             vps_trader_id = var_manager.get_variable("vps_trader_id")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [vps_trader_id]
             }
             response = self.send_post_request(
@@ -294,7 +294,7 @@ class TestVPSOrdersend(APITestBase):
             vps_user_accounts_2 = var_manager.get_variable("vps_user_accounts_2")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": vps_addslave_id,
                 "account": vps_user_accounts_2
             }

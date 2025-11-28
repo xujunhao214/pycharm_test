@@ -797,7 +797,7 @@ class TestVPSquery(APITestBase):
                 "endLots": "",
                 "magic": "",
                 "startOpenTime": five_time,
-                "endOpenTime": DATETIME_NOW,
+                "endOpenTime": get_current_time(),
                 "symbol": "",
                 "sourceUser": "",
                 "platformType": "",
@@ -830,7 +830,7 @@ class TestVPSquery(APITestBase):
             if not openTime_list:
                 pytest.fail("查询结果为空，不符合预期")
             else:
-                attach_body = f"查询开始时间：[{five_time}]，结束时间：[{DATETIME_NOW}]，返回 {len(openTime_list)} 条记录"
+                attach_body = f"查询开始时间：[{five_time}]，结束时间：[{get_current_time()}]，返回 {len(openTime_list)} 条记录"
 
                 logger.info(attach_body)
                 allure.attach(
@@ -852,7 +852,7 @@ class TestVPSquery(APITestBase):
 
                 self.verify_data(
                     actual_value=actual_status,
-                    expected_value=DATETIME_NOW,
+                    expected_value=get_current_time(),
                     op=CompareOp.LE,
                     use_isclose=False,
                     message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
@@ -875,7 +875,7 @@ class TestVPSquery(APITestBase):
                 "startLots": "",
                 "endLots": "",
                 "magic": "",
-                "startOpenTime": DATETIME_NOW,
+                "startOpenTime": get_current_time(),
                 "endOpenTime": five_time,
                 "symbol": "",
                 "sourceUser": "",
@@ -915,7 +915,7 @@ class TestVPSquery(APITestBase):
                 "order": "close_time",
                 "traderId": vps_addslave_id,
                 "startTime": five_time,
-                "endTime": DATETIME_NOW,
+                "endTime": get_current_time(),
                 "types": "",
                 "startLots": "",
                 "endLots": "",
@@ -954,7 +954,7 @@ class TestVPSquery(APITestBase):
             if not closeTime_list:
                 pytest.fail("查询结果为空，不符合预期")
             else:
-                attach_body = f"查询开始时间：[{five_time}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                attach_body = f"查询开始时间：[{five_time}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                 logger.info(attach_body)
                 allure.attach(
@@ -976,7 +976,7 @@ class TestVPSquery(APITestBase):
 
                 self.verify_data(
                     actual_value=actual_status,
-                    expected_value=DATETIME_NOW,
+                    expected_value=get_current_time(),
                     op=CompareOp.LE,
                     use_isclose=False,
                     message=f"第 {idx + 1} 条记录的dateTime应为{actual_status}",
@@ -993,7 +993,7 @@ class TestVPSquery(APITestBase):
                 "limit": 50,
                 "order": "close_time",
                 "traderId": vps_addslave_id,
-                "startTime": DATETIME_NOW,
+                "startTime": get_current_time(),
                 "endTime": five_time,
                 "types": "",
                 "startLots": "",

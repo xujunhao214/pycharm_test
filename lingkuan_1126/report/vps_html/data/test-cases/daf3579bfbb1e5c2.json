@@ -1,0 +1,471 @@
+{
+  "uid" : "daf3579bfbb1e5c2",
+  "name" : "云策略查询校验",
+  "fullName" : "test_vps.test_lianxi.TestVPSquerylog#test_query_cloudId",
+  "historyId" : "1df2e9bb834766cf4a47b61d60f43b7d",
+  "time" : {
+    "start" : 1764234421950,
+    "stop" : 1764234423502,
+    "duration" : 1552
+  },
+  "status" : "broken",
+  "statusMessage" : "AttributeError: 'TestVPSquerylog' object has no attribute '_record_request_time'",
+  "statusTrace" : "self = <lingkuan_1126.test_vps.test_lianxi.TestVPSquery.TestVPSquerylog object at 0x0000017DC61B99D0>\nvar_manager = <lingkuan_1126.commons.variable_manager.VariableManager object at 0x0000017DC61DB0A0>\nlogged_session = <lingkuan_1126.commons.session.EnvironmentSession object at 0x0000017DC61DB0D0>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x0000017DC62A9D90>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"云策略查询校验\")\n    def test_query_cloudId(self, var_manager, logged_session, db_transaction):\n        with allure.step(f\"0. 提取云策略ID\"):\n            dbcloud_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_cloud_master WHERE name = %s\",\n                (\"xjh测试策略\",)\n            )\n            cloud_id = dbcloud_data[0]['id']\n            # cloud_id = 106\n        with allure.step(f\"1. 发送查询请求\"):\n            json_data = {\n                \"page\": 1,\n                \"limit\": 100,\n                \"platformType\": [],\n                \"startDate\": DATETIME_INIT,\n                \"endDate\": get_current_time(),\n                \"keywords\": [],\n                \"logInfo\": [],\n                \"cloudId\": [cloud_id],\n                \"vpsId\": [],\n                \"logType\": [],\n                \"source\": []\n            }\n    \n>           response = self.send_post_request(\n                logged_session,\n                '/subcontrol/eslog/queryLogsPage',\n                json_data=json_data\n            )\n\ntest_vps\\test_lianxi.py:212: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_1126.test_vps.test_lianxi.TestVPSquery.TestVPSquerylog object at 0x0000017DC61B99D0>\nlogged_session = <lingkuan_1126.commons.session.EnvironmentSession object at 0x0000017DC61DB0D0>\nurl = '/subcontrol/eslog/queryLogsPage'\njson_data = {'cloudId': [106], 'endDate': '2025-11-27 17:07:01', 'keywords': [], 'limit': 100, ...}\ndata = None, files = None, sleep_seconds = 1\n\n    def send_post_request(self, logged_session, url, json_data=None, data=None, files=None,\n                          sleep_seconds=SLEEP_SECONDS):\n        \"\"\"发送POST请求（新增耗时统计，先统计再等待）\"\"\"\n        method = \"POST\"\n        with allure.step(f\"执行 {method} 请求\"):\n            try:\n                self._attach_request_details(\n                    method=method,\n                    url=url,\n                    headers=logged_session.headers,\n                    body=json_data if json_data else data,\n                    is_json=bool(json_data),\n                )\n    \n                # 1. 记录请求开始时间（核心：在发送请求前计时）\n                start_time = time.perf_counter()\n    \n                # 2. 发送请求（原有逻辑不变）\n                if files:\n                    response = logged_session.post(url, data=data, files=files)\n                    logger.info(f\"[{self._get_current_time()}] POST请求（带文件）: {url} \\n表单数据: {data}\")\n                elif json_data:\n                    response = logged_session.post(url, json=json_data)\n                    logger.info(f\"[{self._get_current_time()}] POST请求（JSON）: {url} \\n数据: {json_data}\")\n                else:\n                    response = logged_session.post(url, data=data)\n                    logger.info(f\"[{self._get_current_time()}] POST请求（表单）: {url} \\n数据: {data}\")\n    \n                # 3. 记录并展示耗时（核心：响应接收后立即统计，不含等待）\n>               self._record_request_time(method, url, start_time)\nE               AttributeError: 'TestVPSquerylog' object has no attribute '_record_request_time'\n\ncommons\\api_base.py:342: AttributeError",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "class_logged_session",
+    "time" : {
+      "start" : 1764234418299,
+      "stop" : 1764234418801,
+      "duration" : 502
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ {
+      "uid" : "a7d8b6ce189b6881",
+      "name" : "请求体",
+      "source" : "a7d8b6ce189b6881.json",
+      "type" : "application/json",
+      "size" : 320
+    }, {
+      "uid" : "e0b3894f9e36c629",
+      "name" : "响应信息",
+      "source" : "e0b3894f9e36c629.json",
+      "type" : "application/json",
+      "size" : 221
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 0,
+    "attachmentsCount" : 2,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1764234417637,
+      "stop" : 1764234418297,
+      "duration" : 660
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session",
+    "time" : {
+      "start" : 1764234421859,
+      "stop" : 1764234421859,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1764234418297,
+      "stop" : 1764234418297,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1764234417637,
+      "stop" : 1764234417637,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1764234417637,
+      "stop" : 1764234417637,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1764234418297,
+      "stop" : 1764234418298,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1764234421949,
+      "stop" : 1764234421949,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1764234421859,
+      "stop" : 1764234421949,
+      "duration" : 90
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session",
+    "time" : {
+      "start" : 1764234418298,
+      "stop" : 1764234418299,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "testStage" : {
+    "status" : "broken",
+    "statusMessage" : "AttributeError: 'TestVPSquerylog' object has no attribute '_record_request_time'",
+    "statusTrace" : "self = <lingkuan_1126.test_vps.test_lianxi.TestVPSquery.TestVPSquerylog object at 0x0000017DC61B99D0>\nvar_manager = <lingkuan_1126.commons.variable_manager.VariableManager object at 0x0000017DC61DB0A0>\nlogged_session = <lingkuan_1126.commons.session.EnvironmentSession object at 0x0000017DC61DB0D0>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x0000017DC62A9D90>\n\n    @pytest.mark.url(\"vps\")\n    @allure.title(\"云策略查询校验\")\n    def test_query_cloudId(self, var_manager, logged_session, db_transaction):\n        with allure.step(f\"0. 提取云策略ID\"):\n            dbcloud_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_cloud_master WHERE name = %s\",\n                (\"xjh测试策略\",)\n            )\n            cloud_id = dbcloud_data[0]['id']\n            # cloud_id = 106\n        with allure.step(f\"1. 发送查询请求\"):\n            json_data = {\n                \"page\": 1,\n                \"limit\": 100,\n                \"platformType\": [],\n                \"startDate\": DATETIME_INIT,\n                \"endDate\": get_current_time(),\n                \"keywords\": [],\n                \"logInfo\": [],\n                \"cloudId\": [cloud_id],\n                \"vpsId\": [],\n                \"logType\": [],\n                \"source\": []\n            }\n    \n>           response = self.send_post_request(\n                logged_session,\n                '/subcontrol/eslog/queryLogsPage',\n                json_data=json_data\n            )\n\ntest_vps\\test_lianxi.py:212: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <lingkuan_1126.test_vps.test_lianxi.TestVPSquery.TestVPSquerylog object at 0x0000017DC61B99D0>\nlogged_session = <lingkuan_1126.commons.session.EnvironmentSession object at 0x0000017DC61DB0D0>\nurl = '/subcontrol/eslog/queryLogsPage'\njson_data = {'cloudId': [106], 'endDate': '2025-11-27 17:07:01', 'keywords': [], 'limit': 100, ...}\ndata = None, files = None, sleep_seconds = 1\n\n    def send_post_request(self, logged_session, url, json_data=None, data=None, files=None,\n                          sleep_seconds=SLEEP_SECONDS):\n        \"\"\"发送POST请求（新增耗时统计，先统计再等待）\"\"\"\n        method = \"POST\"\n        with allure.step(f\"执行 {method} 请求\"):\n            try:\n                self._attach_request_details(\n                    method=method,\n                    url=url,\n                    headers=logged_session.headers,\n                    body=json_data if json_data else data,\n                    is_json=bool(json_data),\n                )\n    \n                # 1. 记录请求开始时间（核心：在发送请求前计时）\n                start_time = time.perf_counter()\n    \n                # 2. 发送请求（原有逻辑不变）\n                if files:\n                    response = logged_session.post(url, data=data, files=files)\n                    logger.info(f\"[{self._get_current_time()}] POST请求（带文件）: {url} \\n表单数据: {data}\")\n                elif json_data:\n                    response = logged_session.post(url, json=json_data)\n                    logger.info(f\"[{self._get_current_time()}] POST请求（JSON）: {url} \\n数据: {json_data}\")\n                else:\n                    response = logged_session.post(url, data=data)\n                    logger.info(f\"[{self._get_current_time()}] POST请求（表单）: {url} \\n数据: {data}\")\n    \n                # 3. 记录并展示耗时（核心：响应接收后立即统计，不含等待）\n>               self._record_request_time(method, url, start_time)\nE               AttributeError: 'TestVPSquerylog' object has no attribute '_record_request_time'\n\ncommons\\api_base.py:342: AttributeError",
+    "steps" : [ {
+      "name" : "0. 提取云策略ID",
+      "time" : {
+        "start" : 1764234421950,
+        "stop" : 1764234421996,
+        "duration" : 46
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1764234421950,
+          "stop" : 1764234421996,
+          "duration" : 46
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1764234421995,
+            "stop" : 1764234421996,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "a283db7dc15370d0",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "a283db7dc15370d0.json",
+            "type" : "application/json",
+            "size" : 621
+          }, {
+            "uid" : "799595d0452d0f0d",
+            "name" : "执行SQL",
+            "source" : "799595d0452d0f0d.txt",
+            "type" : "text/plain",
+            "size" : 75
+          }, {
+            "uid" : "52b021a539b13ba",
+            "name" : "SQL参数",
+            "source" : "52b021a539b13ba.txt",
+            "type" : "text/plain",
+            "size" : 20
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 1,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    }, {
+      "name" : "1. 发送查询请求",
+      "time" : {
+        "start" : 1764234421996,
+        "stop" : 1764234423501,
+        "duration" : 1505
+      },
+      "status" : "broken",
+      "statusMessage" : "AttributeError: 'TestVPSquerylog' object has no attribute '_record_request_time'\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_1126\\test_vps\\test_lianxi.py\", line 212, in test_query_cloudId\n    response = self.send_post_request(\n  File \"D:\\pycharm_test\\lingkuan_1126\\commons\\api_base.py\", line 342, in send_post_request\n    self._record_request_time(method, url, start_time)\n",
+      "steps" : [ {
+        "name" : "执行 POST 请求",
+        "time" : {
+          "start" : 1764234421997,
+          "stop" : 1764234423501,
+          "duration" : 1504
+        },
+        "status" : "broken",
+        "statusMessage" : "AttributeError: 'TestVPSquerylog' object has no attribute '_record_request_time'\n",
+        "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_1126\\commons\\api_base.py\", line 342, in send_post_request\n    self._record_request_time(method, url, start_time)\n",
+        "steps" : [ {
+          "name" : "请求详情",
+          "time" : {
+            "start" : 1764234421997,
+            "stop" : 1764234421998,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "f2d3cdfb72b522c7",
+            "name" : "请求URL",
+            "source" : "f2d3cdfb72b522c7.txt",
+            "type" : "text/plain",
+            "size" : 31
+          }, {
+            "uid" : "a78a6852c47423bc",
+            "name" : "请求头",
+            "source" : "a78a6852c47423bc.json",
+            "type" : "application/json",
+            "size" : 234
+          }, {
+            "uid" : "2c73358528aa24ab",
+            "name" : "请求体（JSON）",
+            "source" : "2c73358528aa24ab.json",
+            "type" : "application/json",
+            "size" : 238
+          } ],
+          "parameters" : [ ],
+          "hasContent" : true,
+          "stepsCount" : 0,
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "hasContent" : true,
+        "stepsCount" : 1,
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "hasContent" : true,
+      "stepsCount" : 2,
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false
+    } ],
+    "attachments" : [ {
+      "uid" : "cea39a04096d56ac",
+      "name" : "log",
+      "source" : "cea39a04096d56ac.txt",
+      "type" : "text/plain",
+      "size" : 1905
+    } ],
+    "parameters" : [ ],
+    "hasContent" : true,
+    "stepsCount" : 6,
+    "attachmentsCount" : 7,
+    "shouldDisplayMessage" : true
+  },
+  "afterStages" : [ {
+    "name" : "class_logged_session::0",
+    "time" : {
+      "start" : 1764234423661,
+      "stop" : 1764234423661,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "logged_session::0",
+    "time" : {
+      "start" : 1764234423660,
+      "stop" : 1764234423660,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1764234423662,
+      "stop" : 1764234423663,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1764234423519,
+      "stop" : 1764234423564,
+      "duration" : 45
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1764234423564,
+      "stop" : 1764234423659,
+      "duration" : 95
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  }, {
+    "name" : "api_session::0",
+    "time" : {
+      "start" : 1764234423661,
+      "stop" : 1764234423661,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "hasContent" : false,
+    "stepsCount" : 0,
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "VPS看板-查询校验"
+  }, {
+    "name" : "story",
+    "value" : "VPS看板-日志查询"
+  }, {
+    "name" : "tag",
+    "value" : "url('vps')"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_vps"
+  }, {
+    "name" : "suite",
+    "value" : "test_lianxi"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestVPSquery"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "72640-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_vps.test_lianxi"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ {
+      "name" : "Test defects",
+      "matchedStatuses" : [ ],
+      "flaky" : false
+    } ],
+    "tags" : [ "url('vps')" ]
+  },
+  "source" : "daf3579bfbb1e5c2.json",
+  "parameterValues" : [ ]
+}

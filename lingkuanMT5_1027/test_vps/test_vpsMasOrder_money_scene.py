@@ -108,7 +108,7 @@ class TestVPSMasOrder_money_scene:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -361,7 +361,7 @@ class TestVPSMasOrder_money_scene:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }
@@ -628,7 +628,7 @@ class TestVPSMasOrder_money_scene:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": class_random_str,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": trader_ordersend["totalNum"],
                 "totalSzie": trader_ordersend["totalSzie"],
@@ -901,7 +901,7 @@ class TestVPSMasOrder_money_scene:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }

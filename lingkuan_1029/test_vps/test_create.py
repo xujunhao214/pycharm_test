@@ -712,7 +712,7 @@ class TestCreate(APITestBase):
         vps_user_accounts_1 = var_manager.get_variable("vps_user_accounts_1")
         data = {
             "isCloseAll": 1,
-            "intervalTime": 100,
+            "intervalTime": 0,
             "traderId": vps_addslave_id,
             "account": vps_user_accounts_1
         }

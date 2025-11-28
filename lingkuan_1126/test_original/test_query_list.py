@@ -44,7 +44,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -132,7 +132,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -191,7 +191,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -285,7 +285,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": status,
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -372,7 +372,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -457,7 +457,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -512,7 +512,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -597,7 +597,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -652,7 +652,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -737,7 +737,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -791,7 +791,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -875,7 +875,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -929,7 +929,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1013,7 +1013,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1066,7 +1066,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1149,7 +1149,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1200,7 +1200,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1282,7 +1282,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1332,7 +1332,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": closeServerName,
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1413,7 +1413,7 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "9999999999",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1461,7 +1461,7 @@ class TestVPSquery(APITestBase):
                     "sourceUser": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
@@ -1498,7 +1498,7 @@ class TestVPSquery(APITestBase):
                 if not dateTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(dateTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(dateTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -1520,7 +1520,7 @@ class TestVPSquery(APITestBase):
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的openTime应为{actual_status}",
@@ -1542,7 +1542,7 @@ class TestVPSquery(APITestBase):
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "startTime": DATETIME_NOW,
+                    "startTime": get_current_time(),
                     "endTime": DATETIME_INIT,
                     "closeStartTime": "",
                     "closeEndTime": "",
@@ -1591,7 +1591,7 @@ class TestVPSquery(APITestBase):
                     "sourceUser": "",
                     "orderingSystem": "",
                     "closeStartTime": DATETIME_INIT,
-                    "closeEndTime": DATETIME_NOW,
+                    "closeEndTime": get_current_time(),
                     "requestOpenTimeStart": "",
                     "requestOpenTimeEnd": "",
                     "requestCloseTimeStart": "",
@@ -1626,7 +1626,7 @@ class TestVPSquery(APITestBase):
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -1648,7 +1648,7 @@ class TestVPSquery(APITestBase):
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",
@@ -1670,7 +1670,7 @@ class TestVPSquery(APITestBase):
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "closeStartTime": DATETIME_NOW,
+                    "closeStartTime": get_current_time(),
                     "closeEndTime": DATETIME_INIT,
                     "requestOpenTimeStart": "",
                     "requestOpenTimeEnd": "",
@@ -1717,7 +1717,7 @@ class TestVPSquery(APITestBase):
                     "sourceUser": "",
                     "orderingSystem": "",
                     "requestOpenTimeStart": DATETIME_INIT,
-                    "requestOpenTimeEnd": DATETIME_NOW,
+                    "requestOpenTimeEnd": get_current_time(),
                     "requestCloseTimeStart": "",
                     "requestCloseTimeEnd": "",
                     "platformType": "",
@@ -1750,7 +1750,7 @@ class TestVPSquery(APITestBase):
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -1772,7 +1772,7 @@ class TestVPSquery(APITestBase):
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",
@@ -1794,7 +1794,7 @@ class TestVPSquery(APITestBase):
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "requestOpenTimeStart": DATETIME_NOW,
+                    "requestOpenTimeStart": get_current_time(),
                     "requestOpenTimeEnd": DATETIME_INIT,
                     "requestCloseTimeStart": "",
                     "requestCloseTimeEnd": "",
@@ -1839,7 +1839,7 @@ class TestVPSquery(APITestBase):
                     "sourceUser": "",
                     "orderingSystem": "",
                     "requestCloseTimeStart": DATETIME_INIT,
-                    "requestCloseTimeEnd": DATETIME_NOW,
+                    "requestCloseTimeEnd": get_current_time(),
                     "platformType": "",
                 }
 
@@ -1870,7 +1870,7 @@ class TestVPSquery(APITestBase):
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -1892,7 +1892,7 @@ class TestVPSquery(APITestBase):
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",
@@ -1914,7 +1914,7 @@ class TestVPSquery(APITestBase):
                     "account": "",
                     "sourceUser": "",
                     "orderingSystem": "",
-                    "requestCloseTimeStart": DATETIME_NOW,
+                    "requestCloseTimeStart": get_current_time(),
                     "requestCloseTimeEnd": DATETIME_INIT,
                     "platformType": "",
                 }
@@ -1967,13 +1967,13 @@ class TestVPSquery(APITestBase):
                     "closeServerName": "",
                     "orderingSystem": "",
                     "startTime": DATETIME_INIT,
-                    "endTime": DATETIME_NOW,
+                    "endTime": get_current_time(),
                     "closeStartTime": "",
                     "closeEndTime": "",
                     "requestOpenTimeStart": "",
                     "requestOpenTimeEnd": "",
                     "requestCloseTimeStart": DATETIME_INIT,
-                    "requestCloseTimeEnd": DATETIME_NOW,
+                    "requestCloseTimeEnd": get_current_time(),
                     "platformType": "",
                 }
 
@@ -2086,7 +2086,7 @@ class TestVPSquery(APITestBase):
                 if not closeTime_list:
                     pytest.fail("查询结果为空，不符合预期")
                 else:
-                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{DATETIME_NOW}]，返回 {len(closeTime_list)} 条记录"
+                    attach_body = f"查询开始时间：[{DATETIME_INIT}]，结束时间：[{get_current_time()}]，返回 {len(closeTime_list)} 条记录"
 
                     logger.info(attach_body)
                     allure.attach(
@@ -2108,7 +2108,7 @@ class TestVPSquery(APITestBase):
 
                     self.verify_data(
                         actual_value=actual_status,
-                        expected_value=DATETIME_NOW,
+                        expected_value=get_current_time(),
                         op=CompareOp.LE,
                         use_isclose=False,
                         message=f"第 {idx + 1} 条记录的closeTime应为{actual_status}",

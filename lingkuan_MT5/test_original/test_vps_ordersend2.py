@@ -33,7 +33,7 @@ class TestVPSOrderSend_newScenarios:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "changjing6",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "",
                 "totalSzie": "1.00",
@@ -262,7 +262,7 @@ class TestVPSOrderSend_newScenarios:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }
@@ -294,7 +294,7 @@ class TestVPSOrderSend_newScenarios:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_addslave_id,
                 "account": MT5vps_user_accounts_1
             }
@@ -501,7 +501,7 @@ class TestVPSOrderSend_newScenarios:
                 "symbol": trader_ordersend["symbol"],
                 "placedType": 0,
                 "remark": "changjing7",
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "type": 0,
                 "totalNum": "1",
                 "totalSzie": "5.00",
@@ -748,7 +748,7 @@ class TestVPSOrderSend_newScenarios:
             new_user = var_manager.get_variable("new_user")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_trader_id,
                 "account": new_user["account"]
             }
@@ -780,7 +780,7 @@ class TestVPSOrderSend_newScenarios:
             MT5vps_user_accounts_1 = var_manager.get_variable("MT5vps_user_accounts_1")
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderId": MT5vps_addslave_id,
                 "account": MT5vps_user_accounts_1
             }

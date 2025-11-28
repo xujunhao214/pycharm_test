@@ -115,7 +115,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "traderList": [self.cloudTrader_user_ids_2],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -180,7 +180,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 '/bargain/masOrderClose',
                 json_data={
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderList": [cloudTrader_user_ids_2]
                 }
             )
@@ -292,7 +292,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "traderList": [self.cloudTrader_user_ids_2],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -356,7 +356,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 '/bargain/masOrderClose',
                 json_data={
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderList": [cloudTrader_user_ids_2]
                 }
             )
@@ -468,7 +468,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 "traderList": [self.cloudTrader_user_ids_2],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -532,7 +532,7 @@ class TestCloudStrategyOrderRemark(APITestBase):
                 '/bargain/masOrderClose',
                 json_data={
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "traderList": [cloudTrader_user_ids_2]
                 }
             )

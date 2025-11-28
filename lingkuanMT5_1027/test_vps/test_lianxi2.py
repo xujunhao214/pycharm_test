@@ -238,7 +238,7 @@ class TestVPSMasOrdersend(APITestBase):
             # 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [MT5vps_trader_user_id]
             }
             response = self.send_post_request(

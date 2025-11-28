@@ -114,7 +114,7 @@ class TestMT5cloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -450,7 +450,7 @@ class TestMT5cloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     MT5cloudTrader_user_ids_2
                 ]
@@ -650,7 +650,7 @@ class TestMT5cloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -760,7 +760,7 @@ class TestMT5cloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     MT5cloudTrader_user_ids_2
                 ]
@@ -1024,7 +1024,7 @@ class TestMT5cloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     MT5cloudTrader_user_ids_2
                 ]
@@ -1215,7 +1215,7 @@ class TestMT5cloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -1540,7 +1540,7 @@ class TestMT5cloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     MT5cloudTrader_user_ids_2
                 ]
@@ -1719,7 +1719,7 @@ class TestMT5cloudTrader_openandlevel:
                 ],
                 "type": 0,
                 "tradeType": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "symbol": "XAUUSD",
                 "placedType": 0,
                 "startSize": "0.10",
@@ -2033,7 +2033,7 @@ class TestMT5cloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     MT5cloudTrader_user_ids_2
                 ]
@@ -2233,7 +2233,7 @@ class TestMT5cloudTrader_openandlevel:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -2572,7 +2572,7 @@ class TestMT5cloudTrader_openandlevel:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [MT5cloudTrader_traderList_2]
                 }
@@ -2772,7 +2772,7 @@ class TestMT5cloudTrader_openandlevel:
                     "id": cloudMaster_id,
                     "type": 0,
                     "tradeType": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "cloudTraderId": [MT5cloudTrader_traderList_2],
                     "symbol": "XAUUSD",
                     "placedType": 0,
@@ -2885,7 +2885,7 @@ class TestMT5cloudTrader_openandlevel:
 
                 request_data = {
                     "isCloseAll": 1,
-                    "intervalTime": 100,
+                    "intervalTime": 0,
                     "id": f"{cloudMaster_id}",
                     "cloudTraderId": [MT5cloudTrader_traderList_2]
                 }
@@ -3149,7 +3149,7 @@ class TestMT5cloudTrader_openandlevel:
             # 1. 发送平仓请求
             data = {
                 "isCloseAll": 1,
-                "intervalTime": 100,
+                "intervalTime": 0,
                 "traderList": [
                     MT5cloudTrader_user_ids_2
                 ]
