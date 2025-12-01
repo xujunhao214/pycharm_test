@@ -47,19 +47,39 @@ def add_param(parent, key, value):
     ET.SubElement(param, "value").text = value
 
 
+# ------------------------------
+# 公共辅助函数（修复datetime命名冲突）
+# ------------------------------
+def get_unique_build_identifier():
+    """获取唯一构建标识（Jenkins用BUILD_NUMBER，本地用时间戳）"""
+    # 方案1：导入子模块并重命名，彻底避免冲突
+    import datetime as dt
+    return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
+
+
 def get_pure_report_paths(markdown_report_path):
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：生成与实际访问路径一致的 URL（包含 view 前缀）
-        job_name = os.environ.get("JOB_NAME", "默认任务名")
+    # 2. 获取唯一构建标识（修复datetime调用）
+    build_id = get_unique_build_identifier()
+    report_subdir = f"build_{build_id}"  # 报告存储子目录
 
-        # 关键：根据实际路径格式拼接（包含 view/自动化测试/ 前缀）
-        # 正确格式：http://{Jenkins地址}/view/自动化测试/job/{任务名}/{构建号}/HTML_Report/{报告文件名}
-        # 注意：view 名称固定为“自动化测试”，与你的实际路径匹配
-        md_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/MDReport"
-        html_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/MDReport"
+    if "JENKINS_URL" in os.environ:
+        jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
+        job_name = os.environ.get("JOB_NAME", "默认任务名")
+        build_number = os.environ.get("BUILD_NUMBER", build_id)
+
+        # 核心修复：URL加入构建号和子目录，确保唯一性
+        md_filename = os.path.basename(pure_md_path)
+        html_filename = os.path.basename(html_report_path)
+
+        md_url = (
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{md_filename}"
+        )
+        html_url = (
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{html_filename}"
+        )
     else:
         # 本地环境：保留 file:// 协议（直接打开）
         if os.name == "nt":

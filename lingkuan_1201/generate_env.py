@@ -53,29 +53,28 @@ def add_param(parent, key, value):
 # 公共辅助函数（修复datetime命名冲突）
 # ------------------------------
 def get_unique_build_identifier():
-    """获取唯一构建标识（Jenkins用BUILD_NUMBER，本地用时间戳）"""
-    # 方案1：导入子模块并重命名，彻底避免冲突
+    """
+    修复：本地环境不生成新build号（使用run_parallel传入的REPORT_ROOT中的build号）
+    """
     import datetime as dt
-    return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
-
-    # 方案2（备选）：直接导入 datetime 类
-    # from datetime import datetime
-    # return os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
+    if "JENKINS_URL" in os.environ:
+        return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
+    else:
+        # 本地环境：直接返回空（不新增build目录）
+        return ""
 
 
 def get_pure_report_paths(markdown_report_path):
     """
-    修复：加入构建号，确保每个报告URL唯一，避免覆盖
-    :param markdown_report_path: 原始MD报告路径
-    :return: 带构建号的MD/HTML报告URL
+    修复：本地环境不再重复创建build目录（REPORT_ROOT已带构建号）
     """
     # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 2. 获取唯一构建标识（修复datetime调用）
+    # 2. 获取唯一构建标识（仅Jenkins环境需要，本地环境用REPORT_ROOT已有的构建号）
     build_id = get_unique_build_identifier()
-    report_subdir = f"build_{build_id}"  # 报告存储子目录
+    report_subdir = f"build_{build_id}"  # 仅Jenkins环境使用
 
     # 3. Jenkins环境处理
     if "JENKINS_URL" in os.environ:
@@ -83,50 +82,40 @@ def get_pure_report_paths(markdown_report_path):
         job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", build_id)
 
-        # 核心修复：URL加入构建号和子目录，确保唯一性
+        # 核心：仅Jenkins环境添加build子目录
         md_filename = os.path.basename(pure_md_path)
         html_filename = os.path.basename(html_report_path)
 
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/{build_number}/HTML_Report/"
+            f"{report_subdir}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/{build_number}/HTML_Report/"
+            f"{report_subdir}/{html_filename}"
         )
 
-        # 物理文件：移动到带构建号的子目录
+        # 物理文件：Jenkins环境下移动到build子目录
         if os.path.exists(pure_md_path):
             target_dir = os.path.join(os.path.dirname(pure_md_path), report_subdir)
             os.makedirs(target_dir, exist_ok=True)
-            # 移动MD文件
             target_md = os.path.join(target_dir, md_filename)
             shutil.move(pure_md_path, target_md)
             logger.info(f"MD报告已迁移至历史目录: {target_md}")
-            # 移动HTML文件（如果存在）
             if os.path.exists(html_report_path):
                 target_html = os.path.join(target_dir, html_filename)
                 shutil.move(html_report_path, target_html)
                 logger.info(f"HTML报告已迁移至历史目录: {target_html}")
     else:
-        # 本地环境：保留file协议，加入构建号子目录
-        import datetime as dt  # 本地环境也显式导入
+        # 本地环境：直接使用REPORT_ROOT的路径（不再创建build子目录）
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
-            # 本地也创建子目录避免覆盖
-            local_target_dir = os.path.join(os.path.dirname(md_abs_path), report_subdir)
-            os.makedirs(local_target_dir, exist_ok=True)
-            md_abs_path = os.path.join(local_target_dir, os.path.basename(md_abs_path))
-            html_abs_path = os.path.join(local_target_dir, os.path.basename(html_abs_path))
             md_url = f"file:///{md_abs_path}"
             html_url = f"file:///{html_abs_path}"
         else:
             md_abs_path = os.path.abspath(pure_md_path)
             html_abs_path = os.path.abspath(html_report_path)
-            local_target_dir = os.path.join(os.path.dirname(md_abs_path), report_subdir)
-            os.makedirs(local_target_dir, exist_ok=True)
-            md_abs_path = os.path.join(local_target_dir, os.path.basename(md_abs_path))
-            html_abs_path = os.path.join(local_target_dir, os.path.basename(html_abs_path))
             md_url = f"file://{md_abs_path}"
             html_url = f"file://{html_abs_path}"
 
