@@ -53,59 +53,44 @@ def add_param(parent, key, value):
 # 公共辅助函数（修复datetime命名冲突）
 # ------------------------------
 def get_unique_build_identifier():
-    """
-    修复：本地环境不生成新build号（使用run_parallel传入的REPORT_ROOT中的build号）
-    """
+    """获取Jenkins构建号（本地返回空）"""
     import datetime as dt
     if "JENKINS_URL" in os.environ:
+        # Jenkins环境：使用BUILD_NUMBER（自增序号，如28）
         return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
     else:
-        # 本地环境：直接返回空（不新增build目录）
         return ""
 
 
 def get_pure_report_paths(markdown_report_path):
-    """
-    修复：本地环境不再重复创建build目录（REPORT_ROOT已带构建号）
-    """
+    """修复Jenkins报告链接格式"""
     # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 2. 获取唯一构建标识（仅Jenkins环境需要，本地环境用REPORT_ROOT已有的构建号）
+    # 2. 获取构建信息（仅Jenkins）
     build_id = get_unique_build_identifier()
-    report_subdir = f"build_{build_id}"  # 仅Jenkins环境使用
+    md_filename = os.path.basename(pure_md_path)
+    html_filename = os.path.basename(html_report_path)
 
-    # 3. Jenkins环境处理
+    # 3. Jenkins环境处理（核心修复链接格式）
     if "JENKINS_URL" in os.environ:
         jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
-        job_name = os.environ.get("JOB_NAME", "默认任务名")
+        job_name = os.environ.get("JOB_NAME", "QA-Documentatio-test")
         build_number = os.environ.get("BUILD_NUMBER", build_id)
 
-        # 核心：仅Jenkins环境添加build子目录
-        md_filename = os.path.basename(pure_md_path)
-        html_filename = os.path.basename(html_report_path)
-
+        # 正确的Jenkins归档报告访问路径：
+        # 格式：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}
+        # 说明：`artifact`是Jenkins归档产物的固定路径前缀
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{html_filename}"
         )
 
-        # # 物理文件：Jenkins环境下移动到build子目录
-        # if os.path.exists(pure_md_path):
-        #     target_dir = os.path.join(os.path.dirname(pure_md_path), report_subdir)
-        #     os.makedirs(target_dir, exist_ok=True)
-        #     target_md = os.path.join(target_dir, md_filename)
-        #     shutil.move(pure_md_path, target_md)
-        #     logger.info(f"MD报告已迁移至历史目录: {target_md}")
-        #     if os.path.exists(html_report_path):
-        #         target_html = os.path.join(target_dir, html_filename)
-        #         shutil.move(html_report_path, target_html)
-        #         logger.info(f"HTML报告已迁移至历史目录: {target_html}")
     else:
-        # 本地环境：直接使用REPORT_ROOT的路径（不再创建build子目录）
+        # 本地环境：直接使用file协议
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
