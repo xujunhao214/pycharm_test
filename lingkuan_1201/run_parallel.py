@@ -38,8 +38,9 @@ def stream_output(pipe, prefix, is_error=False):
 def run_test_script(script_path: str, env: str = "test", report_root: str = "") -> tuple:
     script_name = os.path.basename(script_path)
     prefix = f"[{script_name}]"
+    from datetime import datetime as dt
 
-    start_time = datetime.now()
+    start_time = dt.now()
     print(f"[{start_time.strftime('%H:%M:%S')}] {prefix} 开始执行 (环境: {env})")
 
     try:
@@ -52,7 +53,7 @@ def run_test_script(script_path: str, env: str = "test", report_root: str = "") 
             env=env_vars
         )
     except Exception as e:
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] {prefix} ERROR: 子进程启动失败: {str(e)}")
+        print(f"[{dt.now().strftime('%H:%M:%S')}] {prefix} ERROR: 子进程启动失败: {str(e)}")
         return (script_name, 1, "")
 
     stdout_thread = threading.Thread(
@@ -77,7 +78,7 @@ def run_test_script(script_path: str, env: str = "test", report_root: str = "") 
     else:
         report_dir = os.path.join(report_root, "vps_results")
 
-    end_time = datetime.now()
+    end_time = dt.now()
     duration = (end_time - start_time).total_seconds()
     print(f"[{end_time.strftime('%H:%M:%S')}] {prefix} 执行完成 (耗时: {duration:.2f}秒)")
 
