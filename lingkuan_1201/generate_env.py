@@ -2,9 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 import argparse
 import logging
-import shutil
 from enum import Enum
-from datetime import datetime
 from VAR.VAR import *
 
 
@@ -40,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 
 # ------------------------------
-# 公共辅助函数（修复历史记录覆盖问题）
+# 公共辅助函数（还原为原始版本）
 # ------------------------------
 def add_param(parent, key, value):
     """仅添加纯文本参数，不包含任何HTML标签"""
@@ -53,44 +51,37 @@ def add_param(parent, key, value):
 # 公共辅助函数（修复datetime命名冲突）
 # ------------------------------
 def get_unique_build_identifier():
-    """获取Jenkins构建号（本地返回空）"""
+    """获取唯一构建标识（Jenkins用BUILD_NUMBER，本地用时间戳）"""
+    # 方案1：导入子模块并重命名，彻底避免冲突
     import datetime as dt
-    if "JENKINS_URL" in os.environ:
-        # Jenkins环境：使用BUILD_NUMBER（自增序号，如28）
-        return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
-    else:
-        return ""
+    return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
 
 
 def get_pure_report_paths(markdown_report_path):
-    """修复Jenkins报告链接格式"""
-    # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 2. 获取构建信息（仅Jenkins）
+    # 2. 获取唯一构建标识（修复datetime调用）
     build_id = get_unique_build_identifier()
-    md_filename = os.path.basename(pure_md_path)
-    html_filename = os.path.basename(html_report_path)
+    report_subdir = f"build_{build_id}"  # 报告存储子目录
 
-    # 3. Jenkins环境处理（核心修复链接格式）
     if "JENKINS_URL" in os.environ:
         jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
-        job_name = os.environ.get("JOB_NAME", "QA-Documentatio-test")
+        job_name = os.environ.get("JOB_NAME", "默认任务名")
         build_number = os.environ.get("BUILD_NUMBER", build_id)
 
-        # 正确的Jenkins归档报告访问路径：
-        # 格式：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}
-        # 说明：`artifact`是Jenkins归档产物的固定路径前缀
+        # 核心修复：URL加入构建号和子目录，确保唯一性
+        md_filename = os.path.basename(pure_md_path)
+        html_filename = os.path.basename(html_report_path)
+
         md_url = (
-            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{DATETIME_TICON}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{DATETIME_TICON}/{html_filename}"
         )
-
     else:
-        # 本地环境：直接使用file协议
+        # 本地环境：保留 file:// 协议（直接打开）
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
@@ -116,7 +107,7 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         env_config = BASE_ENV_CONFIG[env_value].copy()
         env_config["markdown_report_path"] = markdown_report_path
 
-        # 获取带构建号的纯路径链接
+        # 获取纯路径链接（无HTML标签）
         md_url = "无"
         html_url = "无"
         if markdown_report_path:
@@ -128,8 +119,8 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         add_param(environment, "版本", env_config["browser_version"])
         add_param(environment, "BASE_URL", env_config["base_url"])
         add_param(environment, "VPS_URL", env_config["vps_url"])
-        add_param(environment, "Markdown报告", md_url)  # 启用带构建号的MD链接
-        add_param(environment, "测试报告", html_url)  # 带构建号的HTML链接
+        # add_param(environment, "Markdown报告", md_url)  # 纯路径
+        add_param(environment, "测试报告", html_url)  # 纯路径
 
         os.makedirs(output_dir, exist_ok=True)
         env_file_path = os.path.join(output_dir, "environment.xml")
@@ -138,7 +129,6 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
 
         logger.info(f"独立执行环境文件生成成功: {env_file_path}")
         logger.info(f"HTML 报告纯路径: {html_url}")
-        logger.info(f"MD 报告纯路径: {md_url}")
         return True
     except Exception as e:
         logger.error(f"生成独立执行环境文件失败: {str(e)}", exc_info=True)
@@ -164,9 +154,9 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
             env_file = os.path.join(dir_path, "environment.xml")
             if os.path.exists(env_file):
                 os.remove(env_file)
-                logger.info(f"已清理旧环境文件：{env_file}")
+                print(f"已清理旧环境文件：{env_file}")
 
-        # 获取带构建号的纯路径链接
+        # 获取纯路径链接（无HTML标签）
         md_url = "无"
         html_url = "无"
         if markdown_report_path:
@@ -178,19 +168,18 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
         add_param(root, "版本", env_config["browser_version"])
         add_param(root, "BASE_URL", env_config["base_url"])
         add_param(root, "VPS_URL", env_config["vps_url"])
-        # add_param(root, "Markdown汇总报告", md_url)  # 启用带构建号的MD汇总链接
-        add_param(root, "汇总报告", html_url)  # 带构建号的HTML汇总链接
+        # add_param(root, "Markdown汇总报告", md_url)  # 纯路径
+        add_param(root, "汇总报告", html_url)  # 纯路径
 
         env_file_path = os.path.join(merged_results_dir, "environment.xml")
         tree = ET.ElementTree(root)
         tree.write(env_file_path, encoding="utf-8", xml_declaration=True)
 
-        logger.info(f"合并执行环境文件生成成功：{env_file_path}")
-        logger.info(f"HTML 汇总报告纯路径: {html_url}")
-        logger.info(f"MD 汇总报告纯路径: {md_url}")
+        print(f"合并执行环境文件生成成功：{env_file_path}")
+        print(f"HTML 汇总报告纯路径: {html_url}")
         return True
     except Exception as e:
-        logger.error(f"生成合并执行环境文件失败：{str(e)}", exc_info=True)
+        print(f"生成合并执行环境文件失败：{str(e)}")
         return False
 
 

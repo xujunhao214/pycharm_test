@@ -8,6 +8,7 @@ from datetime import datetime
 import threading
 from report_generator import generate_simple_report
 from generate_env import generate_merged_env
+from lingkuan_1201.VAR.VAR import *
 
 current_script_path = os.path.abspath(__file__)
 PROJECT_ROOT = os.path.dirname(current_script_path)
@@ -111,8 +112,8 @@ def run_all_tests_parallel(env: str = "test"):
 
     # 核心逻辑：仅Jenkins环境生成带构建号的目录，本地用固定目录
     if "JENKINS_URL" in os.environ:
-        build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
-        report_root = os.path.join(PROJECT_ROOT, "report", f"build_{build_number}")
+        # build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
+        report_root = os.path.join(PROJECT_ROOT, "report", f"build_{DATETIME_TICON}")
     else:
         report_root = os.path.join(PROJECT_ROOT, "report")
     os.makedirs(report_root, exist_ok=True)
