@@ -75,10 +75,10 @@ def get_pure_report_paths(markdown_report_path):
         html_filename = os.path.basename(html_report_path)
 
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{DATETIME_TICON}/{md_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1202/report/build_{DATETIME_TICON}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{DATETIME_TICON}/{html_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1202/report/build_{DATETIME_TICON}/{html_filename}"
         )
     else:
         # 本地环境：保留 file:// 协议（直接打开）

@@ -107,15 +107,65 @@ def run_all_tests_parallel(env: str = "test"):
     ]
     from VAR.VAR import DATETIME_TICON
 
-    report_root = os.path.join(PROJECT_ROOT, "report")
-    # 核心逻辑：仅Jenkins环境生成带构建号的目录，本地用固定目录
+    # 1. 定义报告根目录（Jenkins带build_xxx，本地固定）
     if "JENKINS_URL" in os.environ:
-        # build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
         report_root = os.path.join(PROJECT_ROOT, "report", f"build_{DATETIME_TICON}")
     else:
         report_root = os.path.join(PROJECT_ROOT, "report")
     os.makedirs(report_root, exist_ok=True)
     print(f"当前构建报告根目录: {report_root} (Jenkins环境: {'是' if 'JENKINS_URL' in os.environ else '否'})")
+
+    # 2. 传递report_root给子脚本（关键：让子脚本也把报告写入build_xxx）
+    def run_test_script(script_path: str, env: str = "test") -> tuple:
+        script_name = os.path.basename(script_path)
+        prefix = f"[{script_name}]"
+
+        start_time = datetime.now()
+        print(f"[{start_time.strftime('%H:%M:%S')}] {prefix} 开始执行 (环境: {env})")
+
+        try:
+            # 新增：将report_root通过环境变量传递给子脚本
+            env_vars = os.environ.copy()
+            env_vars["REPORT_ROOT"] = report_root
+            process = subprocess.Popen(
+                [sys.executable, script_path, env],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env=env_vars  # 传递环境变量
+            )
+        except Exception as e:
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] {prefix} ERROR: 子进程启动失败: {str(e)}")
+            return (script_name, 1, "")
+
+        stdout_thread = threading.Thread(
+            target=stream_output,
+            args=(process.stdout, prefix, False),
+            daemon=True
+        )
+        stderr_thread = threading.Thread(
+            target=stream_output,
+            args=(process.stderr, prefix, True),
+            daemon=True
+        )
+
+        stdout_thread.start()
+        stderr_thread.start()
+        exit_code = process.wait()
+        stdout_thread.join()
+        stderr_thread.join()
+
+        # 子脚本的报告目录也基于report_root
+        if "cloud" in script_name:
+            report_dir = os.path.join(report_root, "cloud_results")
+        else:
+            report_dir = os.path.join(report_root, "vps_results")
+
+        end_time = datetime.now()
+        duration = (end_time - start_time).total_seconds()
+        print(f"[{end_time.strftime('%H:%M:%S')}] {prefix} 执行完成 (耗时: {duration:.2f}秒)")
+
+        return (script_name, exit_code, report_dir)
+
 
     for script in test_scripts:
         script_path = os.path.join(PROJECT_ROOT, script)
@@ -133,9 +183,10 @@ def run_all_tests_parallel(env: str = "test"):
         print("错误: 无有效测试结果目录，无法合并报告")
         return 1
 
-    merged_results_dir = os.path.join(PROJECT_ROOT, "report", "merged_allure-results")
-    merged_html_dir = os.path.join(PROJECT_ROOT, "report", "merged_html-report")
-    merged_markdown_path = os.path.join(PROJECT_ROOT, "report", "汇总接口自动化测试报告.md")
+    # 3. 所有汇总报告路径基于report_root（核心修复：替换PROJECT_ROOT/report为report_root）
+    merged_results_dir = os.path.join(report_root, "merged_allure-results")
+    merged_html_dir = os.path.join(report_root, "merged_html-report")
+    merged_markdown_path = os.path.join(report_root, "汇总接口自动化测试报告.md")
 
     try:
         print("\n====== 开始合并Allure结果 ======")
@@ -145,20 +196,18 @@ def run_all_tests_parallel(env: str = "test"):
         generate_simple_report(merged_results_dir, env, merged_markdown_path)
         merged_markdown_abs = os.path.abspath(merged_markdown_path)
 
-        # ========== 关键：添加 file:/// 协议（Windows 系统需 3 个斜杠） ==========
-        # 替换反斜杠为正斜杠，避免路径解析错误
         standard_path = merged_markdown_abs.replace("\\", "/")
-        markdown_file_url = f"file:///{standard_path}"  # Windows 用 file:///，Linux/Mac 用 file://
+        markdown_file_url = f"file:///{standard_path}"
         print(f"汇总Markdown报告（带协议路径）: {markdown_file_url}")
 
         print("\n====== 生成合并环境文件（供HTML报告使用）======")
-        # 传入带 file:/// 协议的路径到合并环境函数
         generate_merged_env(merged_results_dir, markdown_file_url, env_value=env)
 
         print("\n====== 开始生成汇总HTML报告（读取最新环境文件）======")
         if os.path.exists(merged_html_dir):
             shutil.rmtree(merged_html_dir)
-        os.system(f"chcp 65001 >nul && allure generate {merged_results_dir} -o {merged_html_dir} --clean")
+        # 适配Linux系统（去掉chcp 65001，Jenkins通常是Linux）
+        os.system(f"allure generate {merged_results_dir} -o {merged_html_dir} --clean")
         merged_html_abs = os.path.abspath(merged_html_dir)
         print(f"汇总HTML报告生成成功: file://{merged_html_abs}/index.html")
 
