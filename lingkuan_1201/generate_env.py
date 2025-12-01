@@ -49,9 +49,18 @@ def add_param(parent, key, value):
     ET.SubElement(param, "value").text = value
 
 
+# ------------------------------
+# 公共辅助函数（修复datetime命名冲突）
+# ------------------------------
 def get_unique_build_identifier():
     """获取唯一构建标识（Jenkins用BUILD_NUMBER，本地用时间戳）"""
-    return os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
+    # 方案1：导入子模块并重命名，彻底避免冲突
+    import datetime as dt
+    return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
+
+    # 方案2（备选）：直接导入 datetime 类
+    # from datetime import datetime
+    # return os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
 
 
 def get_pure_report_paths(markdown_report_path):
@@ -64,7 +73,7 @@ def get_pure_report_paths(markdown_report_path):
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 2. 获取唯一构建标识
+    # 2. 获取唯一构建标识（修复datetime调用）
     build_id = get_unique_build_identifier()
     report_subdir = f"build_{build_id}"  # 报告存储子目录
 
@@ -102,6 +111,7 @@ def get_pure_report_paths(markdown_report_path):
                 logger.info(f"HTML报告已迁移至历史目录: {target_html}")
     else:
         # 本地环境：保留file协议，加入构建号子目录
+        import datetime as dt  # 本地环境也显式导入
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
