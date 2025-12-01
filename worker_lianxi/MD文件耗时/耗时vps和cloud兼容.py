@@ -688,7 +688,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
 | Pytest版本    | 7.4.3                      |
 | Allure版本    | 2.14.2                     |
 | 接口BaseURL   | {base_url}                 |
-| 报告生成时间  | {dt.now().strftime("%Y-%m-%d %H:%M:%S")} |
+
 
 ## 8. 注意事项
 1. 接口列表按执行时间排序；

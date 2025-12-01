@@ -15,7 +15,9 @@ JENKINS_PASSWORD = "28y6yyrcnfE3WSxF"
 # 优化时间格式：
 # DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
 # DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-DATETIME_TICON = datetime.datetime.now()
+DATETIME_TICON = datetime.datetime.now().timestamp()
+DATETIME_TICON = int(DATETIME_TICON * 1000)
+print(DATETIME_TICON)
 
 
 # 去掉原有的get_current_time()固定变量，改为函数

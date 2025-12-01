@@ -90,10 +90,30 @@ class APIVPSBase:
             headers: Dict[str, str],
             body: Optional[Any],
             is_json: bool = True,
+            params: Optional[Dict[str, Any]] = None,  # 新增：支持URL参数，默认None
     ) -> None:
-        """统一附加请求详情到Allure步骤"""
+        """统一附加请求详情到Allure步骤（新增URL参数params展示）"""
         with allure.step("请求详情"):
-            allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+            # 1. 处理params：拼接完整URL（含查询参数，便于直接复制访问）
+            if params:
+                # 避免URL已有?时重复拼接，用&连接
+                separator = "&" if "?" in url else "?"
+                # 将params字典转为URL参数字符串（如{"version":"v2"}→"version=v2"）
+                url_with_params = f"{url}{separator}{urlencode(params)}"
+                allure.attach(url_with_params, "请求完整URL（含参数）", allure.attachment_type.TEXT)
+            else:
+                # 无params时，仅展示原始URL
+                allure.attach(url, "请求URL", allure.attachment_type.TEXT)
+
+            # 2. 展示URL参数（若有）
+            if params:
+                allure.attach(
+                    json.dumps(params, ensure_ascii=False, indent=2),
+                    "URL查询参数",
+                    allure.attachment_type.JSON,  # 用JSON格式展示，更清晰
+                )
+
+            # 3. 原有逻辑：展示请求头、请求体（保持不变）
             allure.attach(
                 json.dumps(dict(headers), ensure_ascii=False, indent=2),
                 "请求头",
@@ -130,221 +150,409 @@ class APIVPSBase:
                     allure.attachment_type.TEXT,
                 )
 
+    def _record_request_time(self, method, url, start_time):
+        """新增：统一记录请求耗时（核心方法）"""
+        end_time = time.perf_counter()
+        cost_time_ms = (end_time - start_time) * 1000  # 转换为毫秒
+        # 1. 日志打印耗时
+        logger.info(f"[{self._get_current_time()}] {method} 请求耗时: {url} → {cost_time_ms:.2f}ms")
+        # 2. Allure附加耗时
+        allure.attach(f"{cost_time_ms:.2f}ms", f"{method} 请求耗时", allure.attachment_type.TEXT)
+
+    # ------------------------------
+    # POST 请求（按你的模板改造完成）
+    # ------------------------------
     def send_post_request(self, logged_vps, url, json_data=None, data=None, files=None,
+                          params=None,  # 保留：支持URL查询参数
                           sleep_seconds=SLEEP_SECONDS):
-        """发送POST请求（异常分层优化）"""
+        """发送POST请求（异常分层优化 + 新增耗时统计，先统计再等待）"""
         method = "POST"
         with allure.step(f"执行 {method} 请求"):
             try:
+                # 1. 附加请求详情到Allure（保留params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_vps.headers,
+                    params=params,  # 保留：展示URL参数
                     body=json_data if json_data else data,
                     is_json=bool(json_data),
                 )
 
-                if files:
-                    response = logged_vps.post(url, data=data, files=files)
-                    logger.info(f"[{self._get_current_time()}] POST请求（带文件）: {url} | 表单数据: {data}")
-                elif json_data:
-                    response = logged_vps.post(url, json=json_data)
-                    logger.info(f"[{self._get_current_time()}] POST请求（JSON）: {url} | 数据: {json_data}")
-                else:
-                    response = logged_vps.post(url, data=data)
-                    logger.info(f"[{self._get_current_time()}] POST请求（表单）: {url} | 数据: {data}")
+                # ========== 新增：2. 记录请求开始时间（核心） ==========
+                start_time = time.perf_counter()
 
+                # 3. 发送POST请求（保留params传递 + 原有场景逻辑）
+                if files:
+                    # 场景1：带文件上传（表单数据+URL参数）
+                    response = logged_vps.post(
+                        url=url,
+                        data=data,
+                        files=files,
+                        params=params  # 保留：传递URL参数
+                    )
+                    logger.info(
+                        f"[{self._get_current_time()}] POST请求（带文件+URL参数）: {url} "
+                        f"| URL参数: {params} | 表单数据: {data}"
+                    )
+                elif json_data:
+                    # 场景2：JSON请求体（JSON数据+URL参数）
+                    response = logged_vps.post(
+                        url=url,
+                        json=json_data,
+                        params=params  # 保留：传递URL参数
+                    )
+                    logger.info(
+                        f"[{self._get_current_time()}] POST请求（JSON+URL参数）: {url} "
+                        f"| URL参数: {params} | JSON数据: {json_data}"
+                    )
+                else:
+                    # 场景3：普通表单请求（表单数据+URL参数）
+                    response = logged_vps.post(
+                        url=url,
+                        data=data,
+                        params=params  # 保留：传递URL参数
+                    )
+                    logger.info(
+                        f"[{self._get_current_time()}] POST请求（表单+URL参数）: {url} "
+                        f"| URL参数: {params} | 表单数据: {data}"
+                    )
+
+                # ========== 新增：4. 记录并展示耗时（核心：先统计再等待） ==========
+                self._record_request_time(method, url, start_time)
+
+                # 5. 附加响应详情（原有逻辑不变）
                 self._attach_response_details(response)
 
+                # 6. 请求后等待（在耗时统计之后，不包含在耗时内）
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
 
+            # 7. 异常捕获与处理（新增耗时兜底 + 保留params展示）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # ========== 新增：异常场景也记录耗时（兜底） ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, url, start_time)
+
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_vps.headers,
+                        params=params,  # 保留：异常时展示URL参数
                         body=json_data if json_data else data,
                         is_json=bool(json_data),
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"URL参数: {params}\n"  # 保留：异常详情显示URL参数
                         f"请求头: {logged_vps.headers}\n"
                         f"请求体: {json_data if json_data else data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(
+                    f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
+                    f"| URL: {url} | URL参数: {params}",  # 保留：日志打印URL参数
+                    exc_info=True
+                )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
+    # ------------------------------
+    # GET 请求（对齐POST改造逻辑）
+    # ------------------------------
     def send_get_request(self, logged_vps, url, params=None, sleep_seconds=SLEEP_SECONDS):
-        """发送GET请求（异常分层优化）"""
+        """发送GET请求（异常分层优化 + 新增耗时统计 + 支持URL参数）"""
         method = "GET"
         with allure.step(f"执行 {method} 请求"):
             try:
+                # 1. 附加请求详情到Allure（新增params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_vps.headers,
+                    params=params,  # 新增：展示URL参数
                     body=params,
                     is_json=False,
                 )
 
-                response = logged_vps.get(url, params=params)
-                logger.info(f"[{self._get_current_time()}] GET请求: {url} | 参数: {params}")
+                # ========== 新增：2. 记录请求开始时间 ==========
+                start_time = time.perf_counter()
 
+                # 3. 发送GET请求（新增params传递）
+                response = logged_vps.get(
+                    url=url,
+                    params=params  # 新增：传递URL参数
+                )
+                logger.info(
+                    f"[{self._get_current_time()}] GET请求（URL参数）: {url} "
+                    f"| URL参数: {params}"  # 新增：日志打印URL参数
+                )
+
+                # ========== 新增：4. 记录耗时 ==========
+                self._record_request_time(method, url, start_time)
+
+                # 5. 附加响应详情（原有逻辑）
                 self._attach_response_details(response)
 
+                # 6. 请求后等待（原有逻辑）
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
 
+            # 7. 异常处理（新增耗时兜底 + params展示）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # ========== 新增：异常场景记录耗时 ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, url, start_time)
+
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_vps.headers,
+                        params=params,  # 新增：异常时展示URL参数
                         body=params,
                         is_json=False,
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"URL参数: {params}\n"  # 新增：异常详情显示URL参数
                         f"请求头: {logged_vps.headers}\n"
                         f"请求参数: {params}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(
+                    f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
+                    f"| URL: {url} | URL参数: {params}",  # 新增：日志打印URL参数
+                    exc_info=True
+                )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
-    def send_delete_request(self, logged_vps, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
-        """发送DELETE请求（异常分层优化）"""
+    # ------------------------------
+    # DELETE 请求（对齐POST改造逻辑）
+    # ------------------------------
+    def send_delete_request(self, logged_vps, url, json_data=None, params=None,  # 新增：params参数
+                            sleep_seconds=SLEEP_SECONDS):
+        """发送DELETE请求（异常分层优化 + 新增耗时统计 + 支持URL参数）"""
         method = "DELETE"
         with allure.step(f"执行 {method} 请求"):
             try:
+                # 1. 附加请求详情到Allure（新增params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_vps.headers,
+                    params=params,  # 新增：展示URL参数
                     body=json_data,
                     is_json=True,
                 )
 
-                response = logged_vps.delete(url, json=json_data)
-                logger.info(f"[{self._get_current_time()}] DELETE请求: {url} | 数据: {json_data}")
+                # ========== 新增：2. 记录请求开始时间 ==========
+                start_time = time.perf_counter()
 
+                # 3. 发送DELETE请求（新增params传递）
+                response = logged_vps.delete(
+                    url=url,
+                    json=json_data,
+                    params=params  # 新增：传递URL参数
+                )
+                logger.info(
+                    f"[{self._get_current_time()}] DELETE请求（JSON+URL参数）: {url} "
+                    f"| URL参数: {params} | JSON数据: {json_data}"  # 新增：日志打印URL参数
+                )
+
+                # ========== 新增：4. 记录耗时 ==========
+                self._record_request_time(method, url, start_time)
+
+                # 5. 附加响应详情（原有逻辑）
                 self._attach_response_details(response)
 
+                # 6. 请求后等待（原有逻辑）
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
 
+            # 7. 异常处理（新增耗时兜底 + params展示）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # ========== 新增：异常场景记录耗时 ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, url, start_time)
+
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_vps.headers,
+                        params=params,  # 新增：异常时展示URL参数
                         body=json_data,
                         is_json=True,
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"URL参数: {params}\n"  # 新增：异常详情显示URL参数
                         f"请求头: {logged_vps.headers}\n"
                         f"请求体: {json_data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(
+                    f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
+                    f"| URL: {url} | URL参数: {params}",  # 新增：日志打印URL参数
+                    exc_info=True
+                )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
-    def send_put_request(self, logged_vps, url, json_data=None, sleep_seconds=SLEEP_SECONDS):
-        """发送PUT请求（异常分层优化）"""
+    # ------------------------------
+    # PUT 请求（对齐POST改造逻辑）
+    # ------------------------------
+    def send_put_request(self, logged_vps, url, json_data=None, params=None,  # 新增：params参数
+                         sleep_seconds=SLEEP_SECONDS):
+        """发送PUT请求（异常分层优化 + 新增耗时统计 + 支持URL参数）"""
         method = "PUT"
         with allure.step(f"执行 {method} 请求"):
             try:
+                # 1. 附加请求详情到Allure（新增params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_vps.headers,
+                    params=params,  # 新增：展示URL参数
                     body=json_data,
                     is_json=True,
                 )
 
-                response = logged_vps.put(url, json=json_data)
-                logger.info(f"[{self._get_current_time()}] PUT请求: {url} | 数据: {json_data}")
+                # ========== 新增：2. 记录请求开始时间 ==========
+                start_time = time.perf_counter()
 
+                # 3. 发送PUT请求（新增params传递）
+                response = logged_vps.put(
+                    url=url,
+                    json=json_data,
+                    params=params  # 新增：传递URL参数
+                )
+                logger.info(
+                    f"[{self._get_current_time()}] PUT请求（JSON+URL参数）: {url} "
+                    f"| URL参数: {params} | JSON数据: {json_data}"  # 新增：日志打印URL参数
+                )
+
+                # ========== 新增：4. 记录耗时 ==========
+                self._record_request_time(method, url, start_time)
+
+                # 5. 附加响应详情（原有逻辑）
                 self._attach_response_details(response)
 
+                # 6. 请求后等待（原有逻辑）
                 if sleep_seconds > 0:
                     time.sleep(sleep_seconds)
                 return response
 
+            # 7. 异常处理（新增耗时兜底 + params展示）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # ========== 新增：异常场景记录耗时 ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, url, start_time)
+
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_vps.headers,
+                        params=params,  # 新增：异常时展示URL参数
                         body=json_data,
                         is_json=True,
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"URL参数: {params}\n"  # 新增：异常详情显示URL参数
                         f"请求头: {logged_vps.headers}\n"
                         f"请求体: {json_data}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(
+                    f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
+                    f"| URL: {url} | URL参数: {params}",  # 新增：日志打印URL参数
+                    exc_info=True
+                )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
+    # ------------------------------
+    # OPTIONS 请求（对齐POST改造逻辑）
+    # ------------------------------
     def send_options_request(self, logged_vps, url, params=None, sleep_seconds=SLEEP_SECONDS):
-        """发送OPTIONS请求（异常分层优化）"""
+        """发送OPTIONS请求（异常分层优化 + 新增耗时统计 + 支持URL参数）"""
         method = "OPTIONS"
         with allure.step(f"执行 {method} 请求"):
             try:
+                # 1. 附加请求详情到Allure（保留params展示）
                 self._attach_request_details(
                     method=method,
                     url=url,
                     headers=logged_vps.headers,
+                    params=params,  # 保留：展示URL参数
                     body=params,
                     is_json=False,
                 )
 
-                response = logged_vps.options(url, params=params)
-                logger.info(f"[{self._get_current_time()}] OPTIONS请求: {url} | 参数: {params}")
+                # ========== 新增：2. 记录请求开始时间 ==========
+                start_time = time.perf_counter()
 
+                # 3. 发送OPTIONS请求（保留params传递）
+                response = logged_vps.options(
+                    url=url,
+                    params=params  # 保留：传递URL参数
+                )
+                logger.info(
+                    f"[{self._get_current_time()}] OPTIONS请求（URL参数）: {url} "
+                    f"| URL参数: {params}"  # 保留：日志打印URL参数
+                )
+
+                # ========== 新增：4. 记录耗时 ==========
+                self._record_request_time(method, url, start_time)
+
+                # 5. 附加响应详情（原有逻辑）
                 self._attach_response_details(response)
 
+                # 6. 请求后等待（原有逻辑）
                 if sleep_seconds > 0:
                     logger.info(f"[{self._get_current_time()}] 请求后等待 {sleep_seconds} 秒")
                     time.sleep(sleep_seconds)
 
                 return response
 
+            # 7. 异常处理（新增耗时兜底 + params展示）
             except (SSLError, ConnectionError, Timeout, RequestException) as e:
+                # ========== 新增：异常场景记录耗时 ==========
+                if 'start_time' in locals():
+                    self._record_request_time(method, url, start_time)
+
                 with allure.step(f"{method} 请求异常"):
                     self._attach_request_details(
                         method=method,
                         url=url,
                         headers=logged_vps.headers,
+                        params=params,  # 保留：异常时展示URL参数
                         body=params,
                         is_json=False,
                     )
                     error_detail = (
                         f"请求异常: {str(e)}\n"
                         f"URL: {url}\n"
+                        f"URL参数: {params}\n"  # 保留：异常详情显示URL参数
                         f"请求头: {logged_vps.headers}\n"
                         f"请求参数: {params}"
                     )
                     allure.attach(error_detail, "请求异常详情", allure.attachment_type.TEXT)
-                logger.error(f"[{self._get_current_time()}] {method} 请求异常: {str(e)} | URL: {url}", exc_info=True)
+                logger.error(
+                    f"[{self._get_current_time()}] {method} 请求异常: {str(e)} "
+                    f"| URL: {url} | URL参数: {params}",  # 保留：日志打印URL参数
+                    exc_info=True
+                )
                 raise ConnectionError(f"Failed: {method} 请求异常（{str(e)[:1000]}）") from e
 
     def _log_response(self, response):
