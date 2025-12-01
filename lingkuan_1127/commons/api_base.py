@@ -139,7 +139,7 @@ class APITestBase:
     # 新增：耗时存储文件路径（和Allure结果目录同级）
     TIME_RECORD_FILE = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),  # 基类所在目录
-        "../../report/cloud_results/time_record.json"  # 耗时存储文件（和Allure结果同目录）
+        "../../report/test_vps/time_record.json"  # 耗时存储文件（和Allure结果同目录）
     )
 
     # 基类中 _record_request_time 方法的修改：

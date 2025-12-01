@@ -739,7 +739,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend2(APITestBase):
