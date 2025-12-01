@@ -35,9 +35,6 @@ def stream_output(pipe, prefix, is_error=False):
 
 
 def run_test_script(script_path: str, env: str = "test", report_root: str = "") -> tuple:
-    """
-    修复：传入带构建号的report_root，让子脚本的报告输出到该目录
-    """
     script_name = os.path.basename(script_path)
     prefix = f"[{script_name}]"
 
@@ -45,14 +42,13 @@ def run_test_script(script_path: str, env: str = "test", report_root: str = "") 
     print(f"[{start_time.strftime('%H:%M:%S')}] {prefix} 开始执行 (环境: {env})")
 
     try:
-        # 关键：将构建号目录传给子脚本（通过环境变量）
         env_vars = os.environ.copy()
         env_vars["REPORT_ROOT"] = report_root
         process = subprocess.Popen(
             [sys.executable, script_path, env],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            env=env_vars  # 传递环境变量给子脚本
+            env=env_vars
         )
     except Exception as e:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] {prefix} ERROR: 子进程启动失败: {str(e)}")
@@ -75,9 +71,8 @@ def run_test_script(script_path: str, env: str = "test", report_root: str = "") 
     stdout_thread.join()
     stderr_thread.join()
 
-    # 修复：子脚本的结果目录也放到带构建号的目录下
     if "cloud" in script_name:
-        report_dir = os.path.join(report_root, "cloud_results")  # 不再用PROJECT_ROOT/report
+        report_dir = os.path.join(report_root, "cloud_results")
     else:
         report_dir = os.path.join(report_root, "vps_results")
 
@@ -114,7 +109,7 @@ def run_all_tests_parallel(env: str = "test"):
         "run_cloud_tests.py"
     ]
 
-    # 1. 获取Jenkins构建号（本地执行时用时间戳）
+    # 核心逻辑：仅Jenkins环境生成带构建号的目录，本地用固定目录
     if "JENKINS_URL" in os.environ:
         build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
         report_root = os.path.join(PROJECT_ROOT, "report", f"build_{build_number}")
@@ -122,11 +117,6 @@ def run_all_tests_parallel(env: str = "test"):
         report_root = os.path.join(PROJECT_ROOT, "report")
     os.makedirs(report_root, exist_ok=True)
     print(f"当前构建报告根目录: {report_root} (Jenkins环境: {'是' if 'JENKINS_URL' in os.environ else '否'})")
-
-    # build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
-    # report_root = os.path.join(PROJECT_ROOT, "report", f"build_{build_number}")
-    # os.makedirs(report_root, exist_ok=True)
-    # print(f"当前构建报告根目录: {report_root}")  # 新增：打印目录，方便调试
 
     for script in test_scripts:
         script_path = os.path.join(PROJECT_ROOT, script)
@@ -136,7 +126,6 @@ def run_all_tests_parallel(env: str = "test"):
 
     print(f"\n====== 开始并行执行测试（环境: {env}）======")
     with ThreadPoolExecutor(max_workers=2) as executor:
-        # 修复：将report_root传给子脚本
         futures = [executor.submit(run_test_script, script, env, report_root) for script in test_scripts]
         results = [future.result() for future in futures]
 
@@ -145,10 +134,10 @@ def run_all_tests_parallel(env: str = "test"):
         print("错误: 无有效测试结果目录，无法合并报告")
         return 1
 
-    # 2. 所有汇总报告路径都基于带构建号的report_root
-    merged_results_dir = os.path.join(report_root, "merged_allure-results")  # 原：report/merged_allure-results
-    merged_html_dir = os.path.join(report_root, "merged_html-report")  # 原：report/merged_html-report
-    merged_markdown_path = os.path.join(report_root, "汇总接口自动化测试报告.md")  # 原：report/汇总...md
+    # 所有汇总报告路径基于report_root（Jenkins带构建号，本地固定）
+    merged_results_dir = os.path.join(report_root, "merged_allure-results")
+    merged_html_dir = os.path.join(report_root, "merged_html-report")
+    merged_markdown_path = os.path.join(report_root, "汇总接口自动化测试报告.md")
 
     try:
         print("\n====== 开始合并Allure结果 ======")
@@ -157,8 +146,6 @@ def run_all_tests_parallel(env: str = "test"):
         print("\n====== 开始生成汇总Markdown报告 ======")
         generate_simple_report(merged_results_dir, env, merged_markdown_path)
         merged_markdown_abs = os.path.abspath(merged_markdown_path)
-
-        # ========== 关键：添加 file:/// 协议（Windows 系统需 3 个斜杠） ==========
         standard_path = merged_markdown_abs.replace("\\", "/")
         markdown_file_url = f"file:///{standard_path}"
         print(f"汇总Markdown报告（带协议路径）: {markdown_file_url}")

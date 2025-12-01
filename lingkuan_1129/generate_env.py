@@ -81,10 +81,10 @@ def get_pure_report_paths(markdown_report_path):
         # 格式：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}
         # 说明：`artifact`是Jenkins归档产物的固定路径前缀
         md_url = (
-            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1129/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1129/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{html_filename}"
         )
 
     else:
