@@ -32,7 +32,7 @@ def run_cloud_tests(env: str = "test"):
         "--clean-alluredir",
 
         "test_cloudTrader/test_create.py",
-        # "test_cloudTrader_vps/test_create.py",
+        "test_cloudTrader/test_createVPS.py",
         # "test_cloudTrader/test_create_order.py",
         # "test_cloudTrader/test_oac_proportion.py",
         # "test_cloudTrader/test_oac_number.py",
@@ -50,7 +50,7 @@ def run_cloud_tests(env: str = "test"):
         # "test_cloudTrader/test_lianxi.py",
         # "test_cloudTrader/test_lianxi2.py",
         "test_cloudTrader/test_delete.py",
-        # "test_cloudTrader_vps/test_delete.py",
+        "test_cloudTrader/test_deleteVPS.py",
 
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=debug",
@@ -65,13 +65,13 @@ def run_cloud_tests(env: str = "test"):
     except Exception as e:
         print(f"Cloud pytest 执行异常: {str(e)}")
         exit_code = 1
-        
+
     # 生成环境文件
     markdown_abs_path = os.path.abspath(markdown_report_path)
     standard_path = markdown_abs_path.replace('\\', '/')
     markdown_file_url = f"file:///{standard_path}"
     # markdown_file_url = f"{standard_path}"
-    
+
     # 生成环境文件（字节流处理+安全编码）
     generate_env_cmd = [
         "python", "generate_env.py",
