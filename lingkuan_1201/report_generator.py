@@ -187,7 +187,7 @@ def generate_interface_detail_page(time_details, report_title, detail_report_pat
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
-    # ====================== 1. 核心配置（修复路径 + 兼容Cloud） ======================
+    # ====================== 1. 核心配置（修复路径 + 兼容Cloud + 汇总耗时合并） ======================
     # 修复：获取正确的项目根目录（当前脚本的上上级目录）
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.abspath(os.path.join(current_script_dir, ".."))  # 修正根目录计算
@@ -196,32 +196,48 @@ def generate_simple_report(allure_results_dir, env, report_path):
     db_keywords = ["dbquery", "数据库校验"]
     allure_abs_dir = os.path.abspath(allure_results_dir)
 
-    # 修复：耗时文件路径映射（基于正确的项目根目录）
+    # 修复：耗时文件路径映射（基于正确的项目根目录，新增汇总报告合并逻辑）
     time_record_mapping = {
         "vps_results": os.path.join(project_root, "report", "test_vps", "time_record.json"),
         "cloud_results": os.path.join(project_root, "report", "test_cloudTrader", "time_record.json"),
-        "merged_allure-results": os.path.join(project_root, "report", "merged_allure-results", "time_record.json")
+        "merged_allure-results": [  # 汇总报告：合并VPS和Cloud的耗时文件
+            os.path.join(project_root, "report", "test_vps", "time_record.json"),
+            os.path.join(project_root, "report", "test_cloudTrader", "time_record.json")
+        ]
     }
 
-    # 自动匹配耗时文件
+    # 自动匹配耗时文件（汇总报告需合并多个文件）
     time_record_file = None
+    merged_time_records = []  # 用于汇总报告的合并耗时数据
     for key, path in time_record_mapping.items():
         if key in allure_results_dir:
-            time_record_file = os.path.abspath(path)
+            if key == "merged_allure-results":
+                # 汇总报告：读取VPS和Cloud的耗时文件并合并
+                for single_path in path:
+                    if os.path.exists(single_path):
+                        try:
+                            with open(single_path, "r", encoding="utf-8") as f:
+                                merged_time_records.extend(json.load(f))
+                        except Exception as e:
+                            print(f"⚠️ 读取{single_path}耗时文件失败：{e}")
+                print(f"📊 汇总报告合并耗时记录数：{len(merged_time_records)}")
+            else:
+                # 单一项目：读取对应耗时文件
+                time_record_file = os.path.abspath(path)
             break
 
-    # 兜底：如果未匹配到，默认使用test_vps的耗时文件
-    if not time_record_file:
+    # 兜底：如果未匹配到，默认使用test_vps的耗时文件（仅单一项目）
+    if not time_record_file and "merged_allure-results" not in allure_results_dir:
         time_record_file = os.path.abspath(os.path.join(project_root, "report", "test_vps", "time_record.json"))
 
-    # 新增：检查耗时文件是否存在
-    if not os.path.exists(time_record_file):
+    # 新增：检查耗时文件是否存在（仅单一项目）
+    if not "merged_allure-results" in allure_results_dir and not os.path.exists(time_record_file):
         print(f"⚠️ 耗时文件不存在：{time_record_file}，尝试创建空文件")
         os.makedirs(os.path.dirname(time_record_file), exist_ok=True)
         with open(time_record_file, "w", encoding="utf-8") as f:
             json.dump([], f)  # 创建空的耗时记录文件
 
-    print(f"📌 当前使用的耗时文件：{time_record_file}")
+    print(f"📌 当前使用的耗时文件：{time_record_file if time_record_file else '合并VPS+Cloud文件'}")
 
     # 动态生成详情页路径（与主报告同目录，区分不同项目）
     if "vps_results" in allure_results_dir:
@@ -418,7 +434,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
     # 失败用例按执行时间排序（核心需求1）
     failed_cases = sorted([c for c in cases if c["status"] == "FAILED"], key=lambda x: x["start_time"])
 
-    # ====================== 5. 耗时数据处理（核心修复：兼容Cloud） ======================
+    # ====================== 5. 耗时数据处理（核心修复：兼容Cloud + 汇总合并） ======================
     # 5.1 构建匹配映射（增加模糊匹配）
     pure_identity_map = {}
     # 构建反向映射：用例名称关键词 → 用例对象（提高匹配容错）
@@ -433,61 +449,64 @@ def generate_simple_report(allure_results_dir, env, report_path):
             "case_name"]
         case_name_map[case_name_key.lower()] = case
 
-    # 5.2 读取并处理耗时记录（修复匹配逻辑）
+    # 5.2 读取并处理耗时记录（修复匹配逻辑 + 汇总合并）
     case_time_map = {}
-    if os.path.exists(time_record_file):
-        try:
+    try:
+        # 区分单一项目和汇总报告的耗时数据来源
+        if "merged_allure-results" in allure_results_dir:
+            time_records = merged_time_records
+        else:
             with open(time_record_file, "r", encoding="utf-8") as f:
                 time_records = json.load(f)
 
-            print(f"📊 读取到耗时记录数：{len(time_records)}")
+        print(f"📊 读取到耗时记录数：{len(time_records)}")
 
-            # 按用例分组，取最后一次执行的耗时
-            record_group = defaultdict(list)
-            for idx, record in enumerate(time_records):
-                elapsed_ms = round(float(record.get("elapsed_time", 0.0)), 2)
-                record_full_name = str(record.get("case_full_name", ""))
-                record_case_name = str(record.get("case_name", ""))
+        # 按用例分组，取最后一次执行的耗时
+        record_group = defaultdict(list)
+        for idx, record in enumerate(time_records):
+            elapsed_ms = round(float(record.get("elapsed_time", 0.0)), 2)
+            record_full_name = str(record.get("case_full_name", ""))
+            record_case_name = str(record.get("case_name", ""))
 
-                if elapsed_ms <= 0:
-                    print(f"⚠️ 跳过无效耗时记录 {idx}：耗时={elapsed_ms}ms，名称={record_full_name}")
-                    continue
+            if elapsed_ms <= 0:
+                print(f"⚠️ 跳过无效耗时记录 {idx}：耗时={elapsed_ms}ms，名称={record_full_name}")
+                continue
 
-                # 修复：提取耗时记录的匹配标识（兼容多种格式）
-                # 方式1：正则提取核心标识
-                record_pure_id = re.sub(r'^.*?(test_(vps|cloudTrader)\.[^#]+#[^_]+)', r'\1', record_full_name)
-                # 方式2：如果正则失败，提取用例名称关键词
-                if not record_pure_id.startswith(("test_vps", "test_cloudTrader")):
-                    record_pure_id = re.sub(r'[^a-zA-Z0-9_.#]', '', record_full_name).split("::")[-1].replace("::", "#")
+            # 修复：提取耗时记录的匹配标识（兼容多种格式）
+            # 方式1：正则提取核心标识
+            record_pure_id = re.sub(r'^.*?(test_(vps|cloudTrader)\.[^#]+#[^_]+)', r'\1', record_full_name)
+            # 方式2：如果正则失败，提取用例名称关键词
+            if not record_pure_id.startswith(("test_vps", "test_cloudTrader")):
+                record_pure_id = re.sub(r'[^a-zA-Z0-9_.#]', '', record_full_name).split("::")[-1].replace("::", "#")
 
-                # 方式3：用例名称关键词匹配
-                record_name_key = re.search(r'test_\w+', record_case_name).group().lower() if re.search(r'test_\w+',
-                                                                                                        record_case_name) else record_case_name.lower()
+            # 方式3：用例名称关键词匹配
+            record_name_key = re.search(r'test_\w+', record_case_name).group().lower() if re.search(r'test_\w+',
+                                                                                                    record_case_name) else record_case_name.lower()
 
-                # 优先按pure_id分组，否则按名称关键词
-                if record_pure_id and record_pure_id in pure_identity_map:
-                    record_group[record_pure_id].append(elapsed_ms)
-                elif record_name_key in case_name_map:
-                    # 通过名称关键词匹配到用例，获取其pure_id
-                    matched_case = case_name_map[record_name_key]
-                    record_group[matched_case["pure_identity"]].append(elapsed_ms)
-                    print(f"🔍 模糊匹配耗时记录：{record_case_name} → {matched_case['pure_identity']} → {elapsed_ms}ms")
-                else:
-                    print(f"⚠️ 耗时记录无匹配用例：{record_pure_id} / {record_case_name}")
+            # 优先按pure_id分组，否则按名称关键词
+            if record_pure_id and record_pure_id in pure_identity_map:
+                record_group[record_pure_id].append(elapsed_ms)
+            elif record_name_key in case_name_map:
+                # 通过名称关键词匹配到用例，获取其pure_id
+                matched_case = case_name_map[record_name_key]
+                record_group[matched_case["pure_identity"]].append(elapsed_ms)
+                print(f"🔍 模糊匹配耗时记录：{record_case_name} → {matched_case['pure_identity']} → {elapsed_ms}ms")
+            else:
+                print(f"⚠️ 耗时记录无匹配用例：{record_pure_id} / {record_case_name}")
 
-            # 每个用例取最后一次的耗时（仅保留>0的）
-            for pure_id, elapsed_list in record_group.items():
-                if pure_id in pure_identity_map and elapsed_list:
-                    final_elapsed = elapsed_list[-1]
-                    if final_elapsed > 0:  # 确保只保留正数耗时
-                        case = pure_identity_map[pure_id]
-                        case_time_map[case["case_unique_id"]] = final_elapsed
-                        print(f"✅ 耗时匹配成功：{pure_id} → {final_elapsed}ms")
+        # 每个用例取最后一次的耗时（仅保留>0的）
+        for pure_id, elapsed_list in record_group.items():
+            if pure_id in pure_identity_map and elapsed_list:
+                final_elapsed = elapsed_list[-1]
+                if final_elapsed > 0:  # 确保只保留正数耗时
+                    case = pure_identity_map[pure_id]
+                    case_time_map[case["case_unique_id"]] = final_elapsed
+                    print(f"✅ 耗时匹配成功：{pure_id} → {final_elapsed}ms")
 
-        except Exception as e:
-            print(f"❌ 读取耗时文件失败：{e}")
-            import traceback
-            traceback.print_exc()
+    except Exception as e:
+        print(f"❌ 读取耗时文件失败：{e}")
+        import traceback
+        traceback.print_exc()
 
     # 5.3 筛选接口用例（仅保留有有效耗时的）
     interface_cases = [c for c in cases if
@@ -553,7 +572,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
             "elapsed": elapsed_ms
         })
 
-    # 5.6 生成耗时TOP10列表（毫秒）
+    # 5.6 生成耗时TOP10列表（按耗时从高到低排序，核心需求2）
     time_top10 = sorted(time_details, key=lambda x: x["elapsed"], reverse=True)[:10]
 
     # ====================== 6. 生成报告（恢复之前的好看布局） ======================
@@ -592,13 +611,13 @@ def generate_simple_report(allure_results_dir, env, report_path):
 | 总耗时         | {duration}                |
 | 执行环境       | {env}                    |
 | 总用例数       | {total}                  |
-| 实际执行数     | {executed_total}          |f
+| 实际执行数     | {executed_total}          |
 | 通过数（PASSED）| {passed}                  |
 | 失败数（FAILED）| {failed}                  |
 | 跳过数（SKIPPED）| {skipped}                |
 | 整体通过率     | {global_pass_rate:.2f}%   |
 
-## 2. 模块统计列表
+## 2. 模块执行统计（按用例执行时间排序）
 | 模块名称         | 总用例数  | 实际执行数   | 通过数   | 失败数  | 跳过数  | 通过率(%)  |
 |-----------------|----------|-------------|---------|---------|---------|------------|
 """
@@ -616,7 +635,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
 
         # 耗时统计（按用例执行时间排序，核心需求1）
         report_content += f"""
-## 3. 接口耗时统计（毫秒）
+## 3. 接口耗时统计（毫秒，按用例执行时间排序）
 | 模块名称         | 总用例数  | 数据库查询数  | 接口用例数   | 有效耗时用例数 | 平均耗时  | 最大耗时   | 最小耗时   | 总耗时    |
 |-----------------|----------|--------------|-------------|---------------|-----------|-----------|-----------|-----------|
 """
@@ -633,26 +652,24 @@ def generate_simple_report(allure_results_dir, env, report_path):
 
         # 耗时详情列表（按执行时间排序，核心需求1）
         report_content += f"""
-## 4. 接口耗时详情列表（毫秒）
+## 4. 接口耗时详情列表（毫秒，按执行时间排序）
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |
 |---------------------|-----------------------------|------------------------|----------|
 """
-        # 主报告只显示前5条数据
+        # 显示所有耗时数据（按执行时间排序）
         if time_details:
-            # 显示前5条
-            for i, detail in enumerate(time_details[:5]):
+            for detail in time_details:
                 report_content += (
                     f"| {detail['module']} | {detail['scenario']} | {detail['case_name']} | {detail['elapsed']} |\n"
                 )
-            # 如果数据超过5条，添加跳转链接
-            if len(time_details) > 5:
-                report_content += f"| 更多数据 | 共{len(time_details)}条记录 | [查看全部耗时详情]({detail_report_filename}) | 点击跳转 |\n"
+            # 添加跳转链接
+            report_content += f"| 更多数据 | 共{len(time_details)}条记录 | [查看全部耗时详情]({detail_report_filename}) | 点击跳转 |\n"
         else:
             report_content += "| - | - | - | 无有效耗时数据 |\n"
 
-        # 失败用例
+        # 新增：接口耗时TOP10列表（按耗时从高到低排序，核心需求2）
         report_content += f"""
-## 5. 接口耗时TOP10（毫秒）
+## 5. 接口耗时TOP10（毫秒，按耗时从高到低排序）
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |
 |---------------------|-----------------------------|------------------------|----------|
 """
