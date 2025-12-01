@@ -91,6 +91,7 @@ def generate_interface_detail_page(time_details, report_title, detail_report_pat
             border-collapse: collapse;
             margin: 15px 0;
             border: 1px solid #ddd;
+            table-layout: fixed; /* 固定表格布局，统一列宽 */
         }}
         th {{
             background-color: #3498db;
@@ -99,11 +100,13 @@ def generate_interface_detail_page(time_details, report_title, detail_report_pat
             text-align: left;
             font-weight: bold;
             border: 1px solid #ddd;
+            width: 25%; /* 均分四列 */
         }}
         td {{
             padding: 10px 12px;
             border: 1px solid #ddd;
             text-align: left;
+            word-wrap: break-word; /* 自动换行，防止内容溢出 */
         }}
         tr:nth-child(even) {{
             background-color: #f9f9f9;
@@ -184,6 +187,37 @@ def generate_interface_detail_page(time_details, report_title, detail_report_pat
     with open(detail_report_path, "w", encoding="utf-8") as f:
         f.write(detail_content)
     print(f"✅ 耗时详情页生成成功：{os.path.abspath(detail_report_path)}")
+
+
+def filter_time_records(time_records, current_test_cases):
+    """
+    过滤耗时记录，仅保留当前执行用例
+    :param time_records: 原始耗时记录字典/列表
+    :param current_test_cases: 当前执行的用例标识列表
+    :return: 过滤后的耗时记录
+    """
+    filtered = []
+    if isinstance(time_records, dict):
+        time_records = list(time_records.values())
+
+    for record in time_records:
+        # 兼容不同格式的耗时记录
+        if isinstance(record, dict):
+            record_full_name = str(record.get("case_full_name", ""))
+            record_case_name = str(record.get("case_name", ""))
+        else:
+            continue
+
+        # 提取核心标识
+        record_pure_id = re.sub(r'^.*?(test_(vps|cloudTrader)\.[^#]+#[^_]+)', r'\1', record_full_name)
+        if not record_pure_id.startswith(("test_vps", "test_cloudTrader")):
+            record_pure_id = re.sub(r'[^a-zA-Z0-9_.#]', '', record_full_name).split("::")[-1].replace("::", "#")
+
+        # 匹配当前执行用例
+        if any(record_pure_id in curr_case or curr_case in record_pure_id for curr_case in current_test_cases):
+            filtered.append(record)
+
+    return filtered
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
@@ -410,7 +444,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
     else:
         duration = "2分11秒"
 
-    # 模块统计（按用例执行时间排序，核心需求1）
+    # 模块统计（合并同名模块 + 按名称排序，确保独立/汇总报告统一）
     module_stats = defaultdict(
         lambda: {"total": 0, "executed": 0, "passed": 0, "failed": 0, "skipped": 0, "pass_rate": 0.0})
     for case in cases:
@@ -428,8 +462,8 @@ def generate_simple_report(allure_results_dir, env, report_path):
         if module_stats[module]["executed"] > 0:
             module_stats[module]["pass_rate"] = round(
                 (module_stats[module]["passed"] / module_stats[module]["executed"]) * 100, 2)
-    # 模块统计列表按用例执行时间对应的模块顺序排序
-    sorted_modules = list(module_stats.keys())
+    # 模块按名称排序（独立/汇总报告统一规则）
+    sorted_modules = sorted(module_stats.keys())
 
     # 失败用例按执行时间排序（核心需求1）
     failed_cases = sorted([c for c in cases if c["status"] == "FAILED"], key=lambda x: x["start_time"])
@@ -449,7 +483,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
             "case_name"]
         case_name_map[case_name_key.lower()] = case
 
-    # 5.2 读取并处理耗时记录（修复匹配逻辑 + 汇总合并）
+    # 5.2 读取并处理耗时记录（修复匹配逻辑 + 汇总合并 + 过滤旧记录）
     case_time_map = {}
     try:
         # 区分单一项目和汇总报告的耗时数据来源
@@ -459,7 +493,9 @@ def generate_simple_report(allure_results_dir, env, report_path):
             with open(time_record_file, "r", encoding="utf-8") as f:
                 time_records = json.load(f)
 
-        print(f"📊 读取到耗时记录数：{len(time_records)}")
+        # 过滤旧耗时记录，仅保留当前执行用例
+        time_records = filter_time_records(time_records, pure_ids)
+        print(f"📊 过滤后耗时记录数：{len(time_records)}")
 
         # 按用例分组，取最后一次执行的耗时
         record_group = defaultdict(list)
@@ -575,7 +611,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
     # 5.6 生成耗时TOP10列表（按耗时从高到低排序，核心需求2）
     time_top10 = sorted(time_details, key=lambda x: x["elapsed"], reverse=True)[:10]
 
-    # ====================== 6. 生成报告（恢复之前的好看布局） ======================
+    # ====================== 6. 生成报告（统一布局样式） ======================
     try:
         # 修复：PROJECT_NAME 未定义的兜底处理
         project_name_global = globals().get('PROJECT_NAME', 'MT4自研跟单1.5.0')
@@ -600,7 +636,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
         except (KeyError, ValueError, NameError):
             base_url = f"{env}环境 - 未配置BaseURL"
 
-        # ====================== 生成Markdown报告（保留原始数据逻辑） ======================
+        # ====================== 生成Markdown报告（统一布局） ======================
         report_content = f"""# {report_title}
 
 ## 1. 测试概览
@@ -617,11 +653,11 @@ def generate_simple_report(allure_results_dir, env, report_path):
 | 跳过数（SKIPPED）| {skipped}                |
 | 整体通过率     | {global_pass_rate:.2f}%   |
 
-## 2. 模块执行统计（按用例执行时间排序）
+## 2. 模块执行统计
 | 模块名称         | 总用例数  | 实际执行数   | 通过数   | 失败数  | 跳过数  | 通过率(%)  |
 |-----------------|----------|-------------|---------|---------|---------|------------|
 """
-        # 模块执行统计（按用例执行时间对应的模块顺序排序）
+        # 模块执行统计（按名称排序，统一独立/汇总报告）
         if module_stats:
             for module in sorted_modules:
                 stats = module_stats[module]
@@ -633,13 +669,13 @@ def generate_simple_report(allure_results_dir, env, report_path):
         else:
             report_content += "| 无模块数据 | 0 | 0 | 0 | 0 | 0 | 0.00 |\n"
 
-        # 耗时统计（按用例执行时间排序，核心需求1）
+        # 耗时统计（统一列宽和格式）
         report_content += f"""
-## 3. 接口耗时统计（毫秒，按用例执行时间排序）
+## 3. 接口耗时统计（毫秒）
 | 模块名称         | 总用例数  | 数据库查询数  | 接口用例数   | 有效耗时用例数 | 平均耗时  | 最大耗时   | 最小耗时   | 总耗时    |
 |-----------------|----------|--------------|-------------|---------------|-----------|-----------|-----------|-----------|
 """
-        # 按模块输出耗时统计（按用例执行时间对应的模块顺序排序）
+        # 按模块输出耗时统计（按名称排序）
         if module_time_stats:
             for module in sorted_modules:
                 stats = module_time_stats[module]
@@ -650,26 +686,28 @@ def generate_simple_report(allure_results_dir, env, report_path):
         else:
             report_content += "| 无耗时数据 | 0 | 0 | 0 | 0 | 0.00 | 0.00 | 0.00 | 0.00 |\n"
 
-        # 耗时详情列表（按执行时间排序，核心需求1）
+        # 耗时详情列表（统一格式）
         report_content += f"""
-## 4. 接口耗时详情列表（毫秒，按执行时间排序）
+## 4. 接口耗时详情列表（毫秒）
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |
 |---------------------|-----------------------------|------------------------|----------|
 """
-        # 显示所有耗时数据（按执行时间排序）
+        # 主报告只显示前5条数据
         if time_details:
-            for detail in time_details:
+            # 显示前5条
+            for i, detail in enumerate(time_details[:5]):
                 report_content += (
                     f"| {detail['module']} | {detail['scenario']} | {detail['case_name']} | {detail['elapsed']} |\n"
                 )
-            # 添加跳转链接
-            report_content += f"| 更多数据 | 共{len(time_details)}条记录 | [查看全部耗时详情]({detail_report_filename}) | 点击跳转 |\n"
+            # 如果数据超过5条，添加跳转链接
+            if len(time_details) > 5:
+                report_content += f"| 更多数据 | 共{len(time_details)}条记录 | [查看全部耗时详情]({detail_report_filename}) | 点击跳转 |\n"
         else:
             report_content += "| - | - | - | 无有效耗时数据 |\n"
 
-        # 新增：接口耗时TOP10列表（按耗时从高到低排序，核心需求2）
+        # 失败用例
         report_content += f"""
-## 5. 接口耗时TOP10（毫秒，按耗时从高到低排序）
+## 5. 接口耗时TOP10（毫秒）
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |
 |---------------------|-----------------------------|------------------------|----------|
 """
@@ -681,9 +719,9 @@ def generate_simple_report(allure_results_dir, env, report_path):
         else:
             report_content += "| - | - | - | 无有效耗时数据 |\n"
 
-        # 失败用例列表（按执行时间排序，核心需求1）
+        # 失败用例列表（按执行时间排序）
         report_content += f"""
-## 6. 失败用例列表（共{len(failed_cases)}条，按执行时间排序）
+## 6. 失败用例列表（共{len(failed_cases)}条）
 | 模块                | 场景                          | 用例名称                | 执行结果   | 备注（失败原因）          | 具体原因（实际/预期）      |
 |---------------------|-----------------------------|------------------------|----------|-------------------------|-------------------------|
 """
@@ -722,12 +760,12 @@ def generate_simple_report(allure_results_dir, env, report_path):
             f.write(report_content)
         print(f"\n✅ MD报告生成成功：{os.path.abspath(report_path)}")
 
-        # 生成HTML报告（恢复之前的好看样式：蓝头、奇偶行变色）
+        # 生成HTML报告（统一样式：固定列宽+蓝头+奇偶行变色）
         if markdown:
             html_report_path = report_path.replace(".md", ".html")
             try:
                 html_content = markdown.markdown(report_content, extensions=["extra", "sane_lists", "nl2br"])
-                # 恢复之前的HTML样式（保留数据逻辑）
+                # 统一HTML模板样式
                 html_template = f"""
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -770,6 +808,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
             border-collapse: collapse;
             margin: 15px 0;
             border: 1px solid #ddd;
+            table-layout: fixed; /* 固定表格布局，统一列宽 */
         }}
         th {{
             background-color: #3498db;
@@ -783,6 +822,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
             padding: 10px 12px;
             border: 1px solid #ddd;
             text-align: left;
+            word-wrap: break-word; /* 自动换行，防止溢出 */
         }}
         tr:nth-child(even) {{
             background-color: #f9f9f9;
@@ -798,6 +838,32 @@ def generate_simple_report(allure_results_dir, env, report_path):
             color: #2980b9;
             text-decoration: underline;
         }}
+        /* 统一列宽 */
+        table:nth-of-type(1) th, table:nth-of-type(1) td {{ width: 50%; }}
+        table:nth-of-type(2) th:nth-child(1), table:nth-of-type(2) td:nth-child(1) {{ width: 20%; }}
+        table:nth-of-type(2) th:nth-child(2), table:nth-of-type(2) td:nth-child(2) {{ width: 10%; }}
+        table:nth-of-type(2) th:nth-child(3), table:nth-of-type(2) td:nth-child(3) {{ width: 10%; }}
+        table:nth-of-type(2) th:nth-child(4), table:nth-of-type(2) td:nth-child(4) {{ width: 10%; }}
+        table:nth-of-type(2) th:nth-child(5), table:nth-of-type(2) td:nth-child(5) {{ width: 10%; }}
+        table:nth-of-type(2) th:nth-child(6), table:nth-of-type(2) td:nth-child(6) {{ width: 10%; }}
+        table:nth-of-type(2) th:nth-child(7), table:nth-of-type(2) td:nth-child(7) {{ width: 20%; }}
+        table:nth-of-type(3) th:nth-child(1), table:nth-of-type(3) td:nth-child(1) {{ width: 15%; }}
+        table:nth-of-type(3) th:nth-child(2), table:nth-of-type(3) td:nth-child(2) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(3), table:nth-of-type(3) td:nth-child(3) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(4), table:nth-of-type(3) td:nth-child(4) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(5), table:nth-of-type(3) td:nth-child(5) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(6), table:nth-of-type(3) td:nth-child(6) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(7), table:nth-of-type(3) td:nth-child(7) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(8), table:nth-of-type(3) td:nth-child(8) {{ width: 10%; }}
+        table:nth-of-type(3) th:nth-child(9), table:nth-of-type(3) td:nth-child(9) {{ width: 15%; }}
+        table:nth-of-type(4) th, table:nth-of-type(4) td {{ width: 25%; }}
+        table:nth-of-type(5) th, table:nth-of-type(5) td {{ width: 25%; }}
+        table:nth-of-type(6) th:nth-child(1), table:nth-of-type(6) td:nth-child(1) {{ width: 15%; }}
+        table:nth-of-type(6) th:nth-child(2), table:nth-of-type(6) td:nth-child(2) {{ width: 15%; }}
+        table:nth-of-type(6) th:nth-child(3), table:nth-of-type(6) td:nth-child(3) {{ width: 25%; }}
+        table:nth-of-type(6) th:nth-child(4), table:nth-of-type(6) td:nth-child(4) {{ width: 15%; }}
+        table:nth-of-type(6) th:nth-child(5), table:nth-of-type(6) td:nth-child(5) {{ width: 15%; }}
+        table:nth-of-type(6) th:nth-child(6), table:nth-of-type(6) td:nth-child(6) {{ width: 15%; }}
     </style>
 </head>
 <body>
