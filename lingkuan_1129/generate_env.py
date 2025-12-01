@@ -64,6 +64,7 @@ def get_pure_report_paths(markdown_report_path):
     # 2. 获取唯一构建标识（修复datetime调用）
     build_id = get_unique_build_identifier()
     report_subdir = f"build_{build_id}"  # 报告存储子目录
+    current_dir = os.path.basename(os.getcwd())
 
     if "JENKINS_URL" in os.environ:
         jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
@@ -75,10 +76,10 @@ def get_pure_report_paths(markdown_report_path):
         html_filename = os.path.basename(html_report_path)
 
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/{current_dir}/report/build_{build_number}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/{current_dir}/report/build_{build_number}/{html_filename}"
         )
     else:
         # 本地环境：保留 file:// 协议（直接打开）
