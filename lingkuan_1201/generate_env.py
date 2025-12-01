@@ -2,7 +2,9 @@ import os
 import xml.etree.ElementTree as ET
 import argparse
 import logging
+import shutil
 from enum import Enum
+from datetime import datetime
 from VAR.VAR import *
 
 
@@ -38,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 
 # ------------------------------
-# 公共辅助函数（还原为原始版本）
+# 公共辅助函数（修复历史记录覆盖问题）
 # ------------------------------
 def add_param(parent, key, value):
     """仅添加纯文本参数，不包含任何HTML标签"""
@@ -47,29 +49,76 @@ def add_param(parent, key, value):
     ET.SubElement(param, "value").text = value
 
 
+def get_unique_build_identifier():
+    """获取唯一构建标识（Jenkins用BUILD_NUMBER，本地用时间戳）"""
+    return os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
+
+
 def get_pure_report_paths(markdown_report_path):
+    """
+    修复：加入构建号，确保每个报告URL唯一，避免覆盖
+    :param markdown_report_path: 原始MD报告路径
+    :return: 带构建号的MD/HTML报告URL
+    """
+    # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    if "JENKINS_URL" in os.environ:
-        # Jenkins 环境：生成与实际访问路径一致的 URL（包含 view 前缀）
-        job_name = os.environ.get("JOB_NAME", "默认任务名")
+    # 2. 获取唯一构建标识
+    build_id = get_unique_build_identifier()
+    report_subdir = f"build_{build_id}"  # 报告存储子目录
 
-        # 关键：根据实际路径格式拼接（包含 view/自动化测试/ 前缀）
-        # 正确格式：http://{Jenkins地址}/view/自动化测试/job/{任务名}/{构建号}/HTML_Report/{报告文件名}
-        # 注意：view 名称固定为“自动化测试”，与你的实际路径匹配
-        md_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/MDReport"
-        html_url = f"{os.environ['JENKINS_URL']}view/自动化测试/job/{job_name}/MDReport"
+    # 3. Jenkins环境处理
+    if "JENKINS_URL" in os.environ:
+        jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
+        job_name = os.environ.get("JOB_NAME", "默认任务名")
+        build_number = os.environ.get("BUILD_NUMBER", build_id)
+
+        # 核心修复：URL加入构建号和子目录，确保唯一性
+        md_filename = os.path.basename(pure_md_path)
+        html_filename = os.path.basename(html_report_path)
+
+        md_url = (
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/{build_number}/HTML_Report/"
+            f"{report_subdir}/{md_filename}"
+        )
+        html_url = (
+            f"{jenkins_url}/view/自动化测试/job/{job_name}/{build_number}/HTML_Report/"
+            f"{report_subdir}/{html_filename}"
+        )
+
+        # 物理文件：移动到带构建号的子目录
+        if os.path.exists(pure_md_path):
+            target_dir = os.path.join(os.path.dirname(pure_md_path), report_subdir)
+            os.makedirs(target_dir, exist_ok=True)
+            # 移动MD文件
+            target_md = os.path.join(target_dir, md_filename)
+            shutil.move(pure_md_path, target_md)
+            logger.info(f"MD报告已迁移至历史目录: {target_md}")
+            # 移动HTML文件（如果存在）
+            if os.path.exists(html_report_path):
+                target_html = os.path.join(target_dir, html_filename)
+                shutil.move(html_report_path, target_html)
+                logger.info(f"HTML报告已迁移至历史目录: {target_html}")
     else:
-        # 本地环境：保留 file:// 协议（直接打开）
+        # 本地环境：保留file协议，加入构建号子目录
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
+            # 本地也创建子目录避免覆盖
+            local_target_dir = os.path.join(os.path.dirname(md_abs_path), report_subdir)
+            os.makedirs(local_target_dir, exist_ok=True)
+            md_abs_path = os.path.join(local_target_dir, os.path.basename(md_abs_path))
+            html_abs_path = os.path.join(local_target_dir, os.path.basename(html_abs_path))
             md_url = f"file:///{md_abs_path}"
             html_url = f"file:///{html_abs_path}"
         else:
             md_abs_path = os.path.abspath(pure_md_path)
             html_abs_path = os.path.abspath(html_report_path)
+            local_target_dir = os.path.join(os.path.dirname(md_abs_path), report_subdir)
+            os.makedirs(local_target_dir, exist_ok=True)
+            md_abs_path = os.path.join(local_target_dir, os.path.basename(md_abs_path))
+            html_abs_path = os.path.join(local_target_dir, os.path.basename(html_abs_path))
             md_url = f"file://{md_abs_path}"
             html_url = f"file://{html_abs_path}"
 
@@ -87,7 +136,7 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         env_config = BASE_ENV_CONFIG[env_value].copy()
         env_config["markdown_report_path"] = markdown_report_path
 
-        # 获取纯路径链接（无HTML标签）
+        # 获取带构建号的纯路径链接
         md_url = "无"
         html_url = "无"
         if markdown_report_path:
@@ -99,8 +148,8 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         add_param(environment, "版本", env_config["browser_version"])
         add_param(environment, "BASE_URL", env_config["base_url"])
         add_param(environment, "VPS_URL", env_config["vps_url"])
-        # add_param(environment, "Markdown报告", md_url)  # 纯路径
-        add_param(environment, "测试报告", html_url)  # 纯路径
+        add_param(environment, "Markdown报告", md_url)  # 启用带构建号的MD链接
+        add_param(environment, "测试报告", html_url)  # 带构建号的HTML链接
 
         os.makedirs(output_dir, exist_ok=True)
         env_file_path = os.path.join(output_dir, "environment.xml")
@@ -109,6 +158,7 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
 
         logger.info(f"独立执行环境文件生成成功: {env_file_path}")
         logger.info(f"HTML 报告纯路径: {html_url}")
+        logger.info(f"MD 报告纯路径: {md_url}")
         return True
     except Exception as e:
         logger.error(f"生成独立执行环境文件失败: {str(e)}", exc_info=True)
@@ -134,9 +184,9 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
             env_file = os.path.join(dir_path, "environment.xml")
             if os.path.exists(env_file):
                 os.remove(env_file)
-                print(f"已清理旧环境文件：{env_file}")
+                logger.info(f"已清理旧环境文件：{env_file}")
 
-        # 获取纯路径链接（无HTML标签）
+        # 获取带构建号的纯路径链接
         md_url = "无"
         html_url = "无"
         if markdown_report_path:
@@ -148,18 +198,19 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
         add_param(root, "版本", env_config["browser_version"])
         add_param(root, "BASE_URL", env_config["base_url"])
         add_param(root, "VPS_URL", env_config["vps_url"])
-        # add_param(root, "Markdown汇总报告", md_url)  # 纯路径
-        add_param(root, "汇总报告", html_url)  # 纯路径
+        add_param(root, "Markdown汇总报告", md_url)  # 启用带构建号的MD汇总链接
+        add_param(root, "汇总报告", html_url)  # 带构建号的HTML汇总链接
 
         env_file_path = os.path.join(merged_results_dir, "environment.xml")
         tree = ET.ElementTree(root)
         tree.write(env_file_path, encoding="utf-8", xml_declaration=True)
 
-        print(f"合并执行环境文件生成成功：{env_file_path}")
-        print(f"HTML 汇总报告纯路径: {html_url}")
+        logger.info(f"合并执行环境文件生成成功：{env_file_path}")
+        logger.info(f"HTML 汇总报告纯路径: {html_url}")
+        logger.info(f"MD 汇总报告纯路径: {md_url}")
         return True
     except Exception as e:
-        print(f"生成合并执行环境文件失败：{str(e)}")
+        logger.error(f"生成合并执行环境文件失败：{str(e)}", exc_info=True)
         return False
 
 

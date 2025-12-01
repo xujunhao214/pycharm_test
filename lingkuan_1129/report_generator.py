@@ -14,7 +14,7 @@ except ImportError:
 
 # 配置降级处理
 try:
-    from lingkuan_1201.config import ENV_CONFIG, Environment
+    from lingkuan_1129.config import ENV_CONFIG, Environment
     from VAR.VAR import *
 except ImportError:
     class Environment:
@@ -692,18 +692,20 @@ def generate_simple_report(allure_results_dir, env, report_path):
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |
 |---------------------|-----------------------------|------------------------|----------|
 """
-        # 显示所有耗时数据（按执行时间排序）
+        # 主报告只显示前5条数据
         if time_details:
-            for detail in time_details:
+            # 显示前5条
+            for i, detail in enumerate(time_details[:5]):
                 report_content += (
                     f"| {detail['module']} | {detail['scenario']} | {detail['case_name']} | {detail['elapsed']} |\n"
                 )
-            # 统一“更多数据”行格式
-            report_content += f"| 更多数据 | 共{len(time_details)}条记录 | [查看全部耗时详情]({detail_report_filename}) | 点击跳转 |\n"
+            # 如果数据超过5条，添加跳转链接
+            if len(time_details) > 5:
+                report_content += f"| 更多数据 | 共{len(time_details)}条记录 | [查看全部耗时详情]({detail_report_filename}) | 点击跳转 |\n"
         else:
             report_content += "| - | - | - | 无有效耗时数据 |\n"
 
-        # 新增：接口耗时TOP10列表（按耗时从高到低排序）
+        # 失败用例
         report_content += f"""
 ## 5. 接口耗时TOP10（毫秒）
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |

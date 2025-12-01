@@ -131,5 +131,3 @@ if __name__ == "__main__":
 
     if args.mode == "single":
         generate_environment_xml(args.output_dir, args.env, args.markdown_report_path)
-    else:
-        generate_merged_env(args.output_dir, args.markdown_report_path, args.env)
