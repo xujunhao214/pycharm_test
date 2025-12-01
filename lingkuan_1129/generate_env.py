@@ -48,41 +48,47 @@ def add_param(parent, key, value):
 
 
 # ------------------------------
-# 公共辅助函数（修复datetime命名冲突）
+# 公共辅助函数（修复Jenkins链接路径）
 # ------------------------------
 def get_unique_build_identifier():
-    """获取唯一构建标识（Jenkins用BUILD_NUMBER，本地用时间戳）"""
-    # 方案1：导入子模块并重命名，彻底避免冲突
+    """获取Jenkins构建号（本地返回空）"""
     import datetime as dt
-    return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
+    if "JENKINS_URL" in os.environ:
+        # Jenkins环境：使用BUILD_NUMBER（自增序号，如28）
+        return os.environ.get("BUILD_NUMBER", dt.datetime.now().strftime("%Y%m%d%H%M%S"))
+    else:
+        return ""
 
 
 def get_pure_report_paths(markdown_report_path):
+    """修复Jenkins报告链接格式"""
+    # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
 
-    # 2. 获取唯一构建标识（修复datetime调用）
+    # 2. 获取构建信息（仅Jenkins）
     build_id = get_unique_build_identifier()
-    report_subdir = f"build_{build_id}"  # 报告存储子目录
-    current_dir = os.path.basename(os.getcwd())
+    md_filename = os.path.basename(pure_md_path)
+    html_filename = os.path.basename(html_report_path)
 
+    # 3. Jenkins环境处理（核心修复链接格式）
     if "JENKINS_URL" in os.environ:
         jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
-        job_name = os.environ.get("JOB_NAME", "默认任务名")
+        job_name = os.environ.get("JOB_NAME", "QA-Documentatio-test")
         build_number = os.environ.get("BUILD_NUMBER", build_id)
 
-        # 核心修复：URL加入构建号和子目录，确保唯一性
-        md_filename = os.path.basename(pure_md_path)
-        html_filename = os.path.basename(html_report_path)
-
+        # 正确的Jenkins归档报告访问路径：
+        # 格式：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}
+        # 说明：`artifact`是Jenkins归档产物的固定路径前缀
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/{current_dir}/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1129/report/build_{build_number}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/{current_dir}/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1129/report/build_{build_number}/{html_filename}"
         )
+
     else:
-        # 本地环境：保留 file:// 协议（直接打开）
+        # 本地环境：直接使用file协议
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
