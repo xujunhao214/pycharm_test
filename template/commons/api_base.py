@@ -4,6 +4,7 @@ import time
 import json
 import os
 import pytest
+import inspect
 import math
 from typing import List, Dict, Any, Optional, Tuple
 import datetime
@@ -170,78 +171,124 @@ class APITestBase:
                     allure.attachment_type.TEXT,
                 )
 
-    TIME_RECORD_FILE = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),  # 基类所在目录
-        "../../report/cloud_results/time_record.json"  # 耗时存储文件（和Allure结果同目录）
-    )
+    @property
+    def TIME_RECORD_FILE(self):
+        """
+        动态获取耗时文件路径：
+        - 根据当前用例所属模块（test_vps/test_cloudTrader）自动匹配对应文件
+        - 路径：lingkuan_1201/report/[test_vps/test_cloudTrader/merged_allure-results]/time_record.json
+        """
+        # 1. 获取当前用例的唯一标识（从调用栈）
+        case_full_name = self._get_current_case_full_name()
 
-    # 基类中 _record_request_time 方法的修改：
-    # 基类中记录耗时的方法（彻底修复版）
-    def _record_request_time(self, method: str, url: str, start_time: float) -> float:
-        import time
-        import allure
-        import json
-        import os
-        import datetime
-        import inspect  # 用于获取调用栈，精准定位用例
+        # 2. 确定项目类型（VPS/Cloud/汇总）
+        if "test_vps" in case_full_name:
+            project_dir = "test_vps"
+        elif "test_cloudTrader" in case_full_name:
+            project_dir = "test_cloudTrader"
+        else:
+            project_dir = "merged_allure-results"  # 兜底
 
-        # 计算耗时（毫秒）
-        elapsed_time = (time.perf_counter() - start_time) * 1000
-        # print(f"基类记录耗时：{elapsed_time:.2f}ms")
-        # 日志打印（包含方法、URL、耗时）
-        logger.info(f"[{self._get_current_time()}] {method} 请求纯耗时: {elapsed_time:.2f}ms | URL: {url}")
-        # Allure 单独步骤展示耗时（方便报告查看）
-        with allure.step(f"{method} 请求耗时统计"):
-            allure.attach(f"{elapsed_time:.2f}ms", "纯耗时（不含等待）", allure.attachment_type.TEXT)
-            allure.attach(f"统计范围：请求发送 → 响应接收", "统计说明", allure.attachment_type.TEXT)
+        # 3. 计算绝对路径（核心：基于基类文件的真实路径）
+        # 基类文件的绝对路径
+        base_file_dir = os.path.dirname(os.path.abspath(__file__))
+        # 拼接最终路径：基类目录 → 上两级 → report → 项目目录 → time_record.json
+        time_record_file = os.path.abspath(
+            os.path.join(
+                base_file_dir,
+                "../../report",  # 从基类目录向上两级到 lingkuan_1201 根目录
+                project_dir,
+                "time_record.json"
+            )
+        )
+        return time_record_file
 
-        # ########## 核心修复：通过调用栈获取当前用例的唯一标识 ##########
-        # 遍历调用栈，找到测试用例的方法（ pytest 用例通常在 Test* 类中）
+    def _get_current_case_full_name(self):
+        """辅助方法：从调用栈获取当前用例的唯一标识（module.class#method）"""
         case_full_name = "未知用例"
         stack = inspect.stack()
         for frame_info in stack:
             frame = frame_info.frame
-            # 检查是否为测试类中的方法（类名以Test开头，方法名以test_开头）
             if "self" in frame.f_locals:
                 cls = frame.f_locals["self"].__class__
+                # 匹配测试类（Test开头）和测试方法（test_开头）
                 if cls.__name__.startswith("Test") and frame.f_code.co_name.startswith("test_"):
-                    # 构造用例唯一标识：模块路径.类名#方法名（与Allure报告一致）
-                    module_name = cls.__module__  # 模块路径（如test_vps.test_lianxi2）
-                    class_name = cls.__name__  # 类名（如TestVPSOrderSend1）
-                    method_name = frame.f_code.co_name  # 方法名（如test_follow_updateSlave）
+                    module_name = cls.__module__  # 模块路径（如 test_cloudTrader.test_lianxi）
+                    class_name = cls.__name__  # 类名（如 TestVPSqueryList）
+                    method_name = frame.f_code.co_name  # 方法名（如 test_query_brokeName）
                     case_full_name = f"{module_name}.{class_name}#{method_name}"
                     break
-        # print(f"当前用例唯一标识：{case_full_name}")  # 用于验证是否正确
+            # 释放栈帧（避免内存泄漏）
+            del frame_info
+        return case_full_name
 
-        # ########## 构造包含唯一标识的耗时记录 ##########
+    # ========== 修复2：完善的耗时记录方法（最终版） ==========
+    def _record_request_time(self, method: str, url: str, start_time: float) -> float:
+        """
+        记录请求耗时（核心修复版）
+        :param method: 请求方法（GET/POST等）
+        :param url: 请求URL
+        :param start_time: 请求开始时间（time.perf_counter()）
+        :return: 耗时（毫秒）
+        """
+        # 1. 计算耗时（毫秒，保留2位小数）
+        elapsed_time = round((time.perf_counter() - start_time) * 1000, 2)
+        # print(f"基类记录耗时：{elapsed_time:.2f}ms")
+
+        # 2. 日志打印（包含用例标识）
+        case_full_name = self._get_current_case_full_name()
+        logger.info(
+            f"[{self._get_current_time()}] "
+            f"用例：{case_full_name} | "
+            f"{method} 请求纯耗时: {elapsed_time:.2f}ms | URL: {url}"
+        )
+
+        # 3. Allure报告展示耗时
+        with allure.step(f"{method} 请求耗时统计"):
+            allure.attach(f"{elapsed_time:.2f}ms", "纯耗时（不含等待）", allure.attachment_type.TEXT)
+            allure.attach(f"统计范围：请求发送 → 响应接收", "统计说明", allure.attachment_type.TEXT)
+            allure.attach(case_full_name, "所属用例", allure.attachment_type.TEXT)
+
+        # 4. 构造耗时记录（包含完整用例标识）
         time_record = {
             "url": url,
             "method": method,
-            "elapsed_time": round(elapsed_time, 2),
+            "elapsed_time": elapsed_time,
             "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            # 用例唯一标识（与Allure报告中的fullName完全一致）
-            "case_full_name": case_full_name,
-            # 用例方法名（用于快速匹配）
-            "case_method": case_full_name.split("#")[-1] if "#" in case_full_name else ""
+            "case_full_name": case_full_name,  # 与Allure报告完全一致的用例标识
+            "case_method": case_full_name.split("#")[-1] if "#" in case_full_name else "",  # 仅方法名
+            "project_type": "test_vps" if "test_vps" in case_full_name else "test_cloudTrader"
         }
 
-        # 写入耗时文件（确保路径正确）
+        # 5. 写入耗时文件（核心：动态路径 + 异常处理）
         try:
+            time_record_file = self.TIME_RECORD_FILE
             # 确保目录存在
-            os.makedirs(os.path.dirname(self.TIME_RECORD_FILE), exist_ok=True)
-            # 读取已有记录
+            os.makedirs(os.path.dirname(time_record_file), exist_ok=True)
+
+            # 读取已有记录（兼容空文件/格式错误）
             records = []
-            if os.path.exists(self.TIME_RECORD_FILE):
-                with open(self.TIME_RECORD_FILE, "r", encoding="utf-8") as f:
-                    records = json.load(f)
+            if os.path.exists(time_record_file):
+                try:
+                    with open(time_record_file, "r", encoding="utf-8") as f:
+                        records = json.load(f)
+                except (json.JSONDecodeError, FileNotFoundError):
+                    records = []  # 文件损坏/空文件则重置
+
             # 追加新记录
             records.append(time_record)
-            # 写入文件
-            with open(self.TIME_RECORD_FILE, "w", encoding="utf-8") as f:
+
+            # 写入文件（缩进格式化，方便查看）
+            with open(time_record_file, "w", encoding="utf-8") as f:
                 json.dump(records, f, ensure_ascii=False, indent=2)
-            # print(f"耗时已写入文件：{self.TIME_RECORD_FILE}")
+
+            # print(f"✅ 耗时记录已写入：{time_record_file}")
+            # print(f"   用例标识：{case_full_name} | 耗时：{elapsed_time}ms")
+
         except Exception as e:
-            print(f"写入耗时文件失败：{str(e)}")
+            error_msg = f"❌ 写入耗时文件失败：{str(e)}"
+            print(error_msg)
+            logger.error(error_msg)
 
         return elapsed_time
 

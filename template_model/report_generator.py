@@ -187,14 +187,51 @@ def generate_interface_detail_page(time_details, report_title, detail_report_pat
 
 
 def generate_simple_report(allure_results_dir, env, report_path):
-    # ====================== 1. 核心配置 ======================
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    time_record_file = os.path.abspath(os.path.join(project_root, "report", "cloud_results", "time_record.json"))
+    # ====================== 1. 核心配置（修复路径 + 兼容Cloud） ======================
+    # 修复：获取正确的项目根目录（当前脚本的上上级目录）
+    current_script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_script_dir, ".."))  # 修正根目录计算
+    print(f"🔧 修正后的项目根目录：{project_root}")
+
     db_keywords = ["dbquery", "数据库校验"]
     allure_abs_dir = os.path.abspath(allure_results_dir)
 
-    # 动态生成详情页路径（与主报告同目录）
-    detail_report_filename = "interface_time_detail.html"
+    # 修复：耗时文件路径映射（基于正确的项目根目录）
+    time_record_mapping = {
+        "vps_results": os.path.join(project_root, "report", "test_vps", "time_record.json"),
+        "cloud_results": os.path.join(project_root, "report", "test_cloudTrader", "time_record.json"),
+        "merged_allure-results": os.path.join(project_root, "report", "merged_allure-results", "time_record.json")
+    }
+
+    # 自动匹配耗时文件
+    time_record_file = None
+    for key, path in time_record_mapping.items():
+        if key in allure_results_dir:
+            time_record_file = os.path.abspath(path)
+            break
+
+    # 兜底：如果未匹配到，默认使用test_vps的耗时文件
+    if not time_record_file:
+        time_record_file = os.path.abspath(os.path.join(project_root, "report", "test_vps", "time_record.json"))
+
+    # 新增：检查耗时文件是否存在
+    if not os.path.exists(time_record_file):
+        print(f"⚠️ 耗时文件不存在：{time_record_file}，尝试创建空文件")
+        os.makedirs(os.path.dirname(time_record_file), exist_ok=True)
+        with open(time_record_file, "w", encoding="utf-8") as f:
+            json.dump([], f)  # 创建空的耗时记录文件
+
+    print(f"📌 当前使用的耗时文件：{time_record_file}")
+
+    # 动态生成详情页路径（与主报告同目录，区分不同项目）
+    if "vps_results" in allure_results_dir:
+        detail_report_filename = "vps_interface_time_detail.html"
+    elif "cloud_results" in allure_results_dir:
+        detail_report_filename = "cloud_interface_time_detail.html"
+    elif "merged_allure-results" in allure_results_dir:
+        detail_report_filename = "merged_interface_time_detail.html"
+    else:
+        detail_report_filename = "interface_time_detail.html"
     detail_report_path = os.path.join(os.path.dirname(report_path), detail_report_filename)
 
     # ====================== 2. 收集用例结果 ======================
@@ -289,10 +326,15 @@ def generate_simple_report(allure_results_dir, env, report_path):
                         else:
                             specific_reason = "未获取到实际/预期信息"
 
-                # 生成用于耗时匹配的精简标识
-                pure_identity = re.sub(r'^.*?(test_cloudTrader\.[^#]+#[^_]+)', r'\1', case_full_name)
-                if not pure_identity.startswith("test_cloudTrader"):
-                    pure_identity = case_full_name
+                # 修复：兼容Cloud用例标识（简化匹配逻辑，提高容错）
+                # 提取核心标识：去掉路径前缀，保留 test_xxx.xxx.xxx#test_xxx 格式
+                pure_identity = re.sub(r'^.*?(test_(vps|cloudTrader)\.[^#]+#[^_]+)', r'\1', case_full_name)
+                # 兜底：如果正则匹配失败，直接使用全名称的简化版
+                if not pure_identity.startswith(("test_vps", "test_cloudTrader")):
+                    # 从fullName中提取用例核心标识（如：test_cloudTrader.test_lianxi.TestVPSqueryList.test_query_brokeName）
+                    pure_identity = re.sub(r'[^a-zA-Z0-9_.#]', '', case_full_name).split("::")[-1]
+                    # 替换::为#，统一格式
+                    pure_identity = pure_identity.replace("::", "#")
 
                 all_case_results.append({
                     "case_unique_id": case_unique_id,
@@ -308,13 +350,18 @@ def generate_simple_report(allure_results_dir, env, report_path):
                     "stop_time": case_stop
                 })
 
-    # ====================== 3. 用例去重 ======================
+    # ====================== 3. 用例去重 & 按执行时间排序 ======================
     case_final_results = {}
     for case in all_case_results:
         case_id = case["case_unique_id"]
         if case_id not in case_final_results or case["stop_time"] > case_final_results[case_id]["stop_time"]:
             case_final_results[case_id] = case
-    cases = list(case_final_results.values())
+    # 所有用例按执行时间排序（核心需求1）
+    cases = sorted(list(case_final_results.values()), key=lambda x: x["start_time"])
+
+    # 打印用例标识（调试用）
+    pure_ids = [c["pure_identity"] for c in cases]
+    print(f"📌 用例纯标识列表：{pure_ids}")
 
     # ====================== 4. 基础统计 ======================
     total = len(cases)
@@ -347,7 +394,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
     else:
         duration = "2分11秒"
 
-    # 模块统计
+    # 模块统计（按用例执行时间排序，核心需求1）
     module_stats = defaultdict(
         lambda: {"total": 0, "executed": 0, "passed": 0, "failed": 0, "skipped": 0, "pass_rate": 0.0})
     for case in cases:
@@ -365,39 +412,68 @@ def generate_simple_report(allure_results_dir, env, report_path):
         if module_stats[module]["executed"] > 0:
             module_stats[module]["pass_rate"] = round(
                 (module_stats[module]["passed"] / module_stats[module]["executed"]) * 100, 2)
+    # 模块统计列表按用例执行时间对应的模块顺序排序
+    sorted_modules = list(module_stats.keys())
 
-    # 失败用例按执行时间排序
-    failed_cases = [c for c in cases if c["status"] == "FAILED"]
-    failed_cases.sort(key=lambda x: x["start_time"])
+    # 失败用例按执行时间排序（核心需求1）
+    failed_cases = sorted([c for c in cases if c["status"] == "FAILED"], key=lambda x: x["start_time"])
 
-    # ====================== 5. 耗时数据处理（核心优化：按模块分组统计） ======================
-    # 5.1 构建匹配映射
+    # ====================== 5. 耗时数据处理（核心修复：兼容Cloud） ======================
+    # 5.1 构建匹配映射（增加模糊匹配）
     pure_identity_map = {}
+    # 构建反向映射：用例名称关键词 → 用例对象（提高匹配容错）
+    case_name_map = {}
     for case in cases:
         pure_id = case["pure_identity"]
         pure_identity_map[pure_id] = case
-    # print(f"📌 用例纯标识列表：{list(pure_identity_map.keys())}")
 
-    # 5.2 读取并处理耗时记录
+        # 提取用例名称关键词（如 test_query_brokeName）
+        case_name_key = re.search(r'test_\w+', case["case_name"]).group() if re.search(r'test_\w+',
+                                                                                       case["case_name"]) else case[
+            "case_name"]
+        case_name_map[case_name_key.lower()] = case
+
+    # 5.2 读取并处理耗时记录（修复匹配逻辑）
     case_time_map = {}
     if os.path.exists(time_record_file):
         try:
             with open(time_record_file, "r", encoding="utf-8") as f:
                 time_records = json.load(f)
 
+            print(f"📊 读取到耗时记录数：{len(time_records)}")
+
             # 按用例分组，取最后一次执行的耗时
             record_group = defaultdict(list)
-            for record in time_records:
+            for idx, record in enumerate(time_records):
                 elapsed_ms = round(float(record.get("elapsed_time", 0.0)), 2)
                 record_full_name = str(record.get("case_full_name", ""))
-                if elapsed_ms <= 0 or not record_full_name:
-                    continue  # 直接过滤耗时为0的记录
+                record_case_name = str(record.get("case_name", ""))
 
-                # 提取耗时记录的纯标识
-                record_pure_id = re.sub(r'^.*?(test_cloudTrader\.[^#]+#[^_]+)', r'\1', record_full_name)
-                if not record_pure_id.startswith("test_cloudTrader"):
-                    record_pure_id = record_full_name
-                record_group[record_pure_id].append(elapsed_ms)
+                if elapsed_ms <= 0:
+                    print(f"⚠️ 跳过无效耗时记录 {idx}：耗时={elapsed_ms}ms，名称={record_full_name}")
+                    continue
+
+                # 修复：提取耗时记录的匹配标识（兼容多种格式）
+                # 方式1：正则提取核心标识
+                record_pure_id = re.sub(r'^.*?(test_(vps|cloudTrader)\.[^#]+#[^_]+)', r'\1', record_full_name)
+                # 方式2：如果正则失败，提取用例名称关键词
+                if not record_pure_id.startswith(("test_vps", "test_cloudTrader")):
+                    record_pure_id = re.sub(r'[^a-zA-Z0-9_.#]', '', record_full_name).split("::")[-1].replace("::", "#")
+
+                # 方式3：用例名称关键词匹配
+                record_name_key = re.search(r'test_\w+', record_case_name).group().lower() if re.search(r'test_\w+',
+                                                                                                        record_case_name) else record_case_name.lower()
+
+                # 优先按pure_id分组，否则按名称关键词
+                if record_pure_id and record_pure_id in pure_identity_map:
+                    record_group[record_pure_id].append(elapsed_ms)
+                elif record_name_key in case_name_map:
+                    # 通过名称关键词匹配到用例，获取其pure_id
+                    matched_case = case_name_map[record_name_key]
+                    record_group[matched_case["pure_identity"]].append(elapsed_ms)
+                    print(f"🔍 模糊匹配耗时记录：{record_case_name} → {matched_case['pure_identity']} → {elapsed_ms}ms")
+                else:
+                    print(f"⚠️ 耗时记录无匹配用例：{record_pure_id} / {record_case_name}")
 
             # 每个用例取最后一次的耗时（仅保留>0的）
             for pure_id, elapsed_list in record_group.items():
@@ -406,22 +482,24 @@ def generate_simple_report(allure_results_dir, env, report_path):
                     if final_elapsed > 0:  # 确保只保留正数耗时
                         case = pure_identity_map[pure_id]
                         case_time_map[case["case_unique_id"]] = final_elapsed
-                        # print(f"✅ 耗时匹配成功：{pure_id} → {final_elapsed}ms")
-                # else:
-                #     print(f"⚠️ 耗时记录无匹配用例或耗时为0：{pure_id}")
+                        print(f"✅ 耗时匹配成功：{pure_id} → {final_elapsed}ms")
 
         except Exception as e:
             print(f"❌ 读取耗时文件失败：{e}")
+            import traceback
+            traceback.print_exc()
 
     # 5.3 筛选接口用例（仅保留有有效耗时的）
     interface_cases = [c for c in cases if
                        not any(kw in c["case_name"] or kw in c["case_full_name"] for kw in db_keywords)]
     # 过滤出耗时>0的接口用例
     valid_interface_cases = [c for c in interface_cases if case_time_map.get(c["case_unique_id"], 0.0) > 0]
-    # 按执行时间排序
+    # 按执行时间排序（核心需求1）
     valid_interface_cases.sort(key=lambda x: x["start_time"])
 
-    # 5.4 按模块分组统计耗时（核心修复：每个模块单独计算）
+    print(f"📈 有效耗时接口用例数：{len(valid_interface_cases)}")
+
+    # 5.4 按模块分组统计耗时（按用例执行时间排序，核心需求1）
     module_time_stats = defaultdict(lambda: {
         "total_case": 0,  # 模块总用例数
         "interface_case": 0,  # 模块接口用例数
@@ -464,7 +542,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
             stats["min_time"] = 0.0
             stats["total_time"] = 0.0
 
-    # 5.5 构建耗时详情（仅包含耗时>0的用例）
+    # 5.5 构建耗时详情（仅包含耗时>0的用例，按执行时间排序）
     time_details = []
     for case in valid_interface_cases:
         elapsed_ms = case_time_map[case["case_unique_id"]]
@@ -475,22 +553,29 @@ def generate_simple_report(allure_results_dir, env, report_path):
             "elapsed": elapsed_ms
         })
 
-    # ====================== 6. 生成报告（优化展示：按模块分组耗时统计 + 详情跳转） ======================
+    # 5.6 生成耗时TOP10列表（毫秒）
+    time_top10 = sorted(time_details, key=lambda x: x["elapsed"], reverse=True)[:10]
+
+    # ====================== 6. 生成报告（恢复之前的好看布局） ======================
     try:
+        # 修复：PROJECT_NAME 未定义的兜底处理
+        project_name_global = globals().get('PROJECT_NAME', 'MT4自研跟单1.5.0')
+
+        # 区分项目类型，生成标题
         if "cloud_results" in allure_results_dir:
-            project_name = "Cloud"
-            report_title = f"{PROJECT_NAME} 云策略接口自动化测试报告"
+            project_name = "跟单社区"
+            report_title = f"{project_name_global}接口自动化测试报告"
         else:
             project_name = "未知项目"
-            report_title = f"{PROJECT_NAME}接口自动化测试报告"
+            report_title = f"{project_name_global} 接口自动化测试报告"
 
-        # 环境信息
+        # 环境信息（增强容错）
         try:
             base_url = ENV_CONFIG[Environment[env.upper()]]['base_url']
-        except (KeyError, ValueError):
-            base_url = "未知环境URL"
+        except (KeyError, ValueError, NameError):
+            base_url = f"{env}环境 - 未配置BaseURL"
 
-        # 生成Markdown报告
+        # ====================== 生成Markdown报告（保留原始数据逻辑） ======================
         report_content = f"""# {report_title}
 
 ## 1. 测试概览
@@ -508,33 +593,39 @@ def generate_simple_report(allure_results_dir, env, report_path):
 | 整体通过率     | {global_pass_rate:.2f}%   |
 
 ## 2. 模块统计列表
-| 模块                 | 总用例数  | 实际执行数   | 通过数   | 失败数  | 跳过数  | 通过率   |
-|---------------------|----------|------------|--------|--------|--------|----------|
+| 模块名称         | 总用例数  | 实际执行数   | 通过数   | 失败数  | 跳过数  | 通过率(%)  |
+|-----------------|----------|-------------|---------|---------|---------|------------|
 """
-        # 模块统计
-        for module in sorted(module_stats.keys()):
-            stats = module_stats[module]
-            report_content += (
-                f"| {module} | {stats['total']} | {stats['executed']} | "
-                f"{stats['passed']} | {stats['failed']} | {stats['skipped']} | "
-                f"{stats['pass_rate']:.2f}% |\n"
-            )
+        # 模块执行统计（按用例执行时间对应的模块顺序排序）
+        if module_stats:
+            for module in sorted_modules:
+                stats = module_stats[module]
+                report_content += (
+                    f"| {module} | {stats['total']} | {stats['executed']} | "
+                    f"{stats['passed']} | {stats['failed']} | {stats['skipped']} | "
+                    f"{stats['pass_rate']:.2f} |\n"
+                )
+        else:
+            report_content += "| 无模块数据 | 0 | 0 | 0 | 0 | 0 | 0.00 |\n"
 
-        # 耗时统计（按模块分组，与模块统计列表一致）
+        # 耗时统计（按用例执行时间排序，核心需求1）
         report_content += f"""
 ## 3. 接口耗时统计（毫秒）
-| 模块                 | 总用例数  | 数据库查询数  | 接口用例数       | 有效耗时用例数 | 平均耗时(ms)  | 最大耗时(ms)   | 最小耗时(ms)  | 总耗时(ms) |
-|---------------------|----------|------------|----------------|--------------|--------------|--------------|--------------|------------|
+| 模块名称         | 总用例数  | 数据库查询数  | 接口用例数   | 有效耗时用例数 | 平均耗时  | 最大耗时   | 最小耗时   | 总耗时    |
+|-----------------|----------|--------------|-------------|---------------|-----------|-----------|-----------|-----------|
 """
-        # 按模块输出耗时统计
-        for module in sorted(module_time_stats.keys()):
-            stats = module_time_stats[module]
-            report_content += (
-                f"| {module} | {stats['total_case']} | {stats['db_case']} | {stats['interface_case']} | "
-                f"{stats['valid_interface_case']} | {stats['avg_time']} | {stats['max_time']} | {stats['min_time']} | {stats['total_time']} |\n"
-            )
+        # 按模块输出耗时统计（按用例执行时间对应的模块顺序排序）
+        if module_time_stats:
+            for module in sorted_modules:
+                stats = module_time_stats[module]
+                report_content += (
+                    f"| {module} | {stats['total_case']} | {stats['db_case']} | {stats['interface_case']} | "
+                    f"{stats['valid_interface_case']} | {stats['avg_time']} | {stats['max_time']} | {stats['min_time']} | {stats['total_time']} |\n"
+                )
+        else:
+            report_content += "| 无耗时数据 | 0 | 0 | 0 | 0 | 0.00 | 0.00 | 0.00 | 0.00 |\n"
 
-        # 耗时详情列表（仅展示前5条 + 跳转链接）
+        # 耗时详情列表（按执行时间排序，核心需求1）
         report_content += f"""
 ## 4. 接口耗时详情列表（毫秒）
 | 模块                | 场景                          | 用例名称                | 耗时(ms) |
@@ -555,7 +646,21 @@ def generate_simple_report(allure_results_dir, env, report_path):
 
         # 失败用例
         report_content += f"""
-## 5. 失败用例列表（共{len(failed_cases)}条）
+## 5. 接口耗时TOP10（毫秒）
+| 模块                | 场景                          | 用例名称                | 耗时(ms) |
+|---------------------|-----------------------------|------------------------|----------|
+"""
+        if time_top10:
+            for top in time_top10:
+                report_content += (
+                    f"| {top['module']} | {top['scenario']} | {top['case_name']} | {top['elapsed']} |\n"
+                )
+        else:
+            report_content += "| - | - | - | 无有效耗时数据 |\n"
+
+        # 失败用例列表（按执行时间排序，核心需求1）
+        report_content += f"""
+## 6. 失败用例列表（共{len(failed_cases)}条，按执行时间排序）
 | 模块                | 场景                          | 用例名称                | 执行结果   | 备注（失败原因）          | 具体原因（实际/预期）      |
 |---------------------|-----------------------------|------------------------|----------|-------------------------|-------------------------|
 """
@@ -570,22 +675,23 @@ def generate_simple_report(allure_results_dir, env, report_path):
 
         # 环境信息
         report_content += f"""
-## 6. 环境信息
-| 环境项         | 值                     |
-|---------------|------------------------|
-| Python版本     | {sys.version.split()[0]} |
-| Pytest版本     | 7.4.3                  |
-| Allure版本     | 2.14.2                 |
-| 接口BaseURL    | {base_url}             |
+## 7. 环境信息
+| 环境项         | 配置值                     |
+|---------------|----------------------------|
+| Python版本    | {sys.version.split()[0]}   |
+| Pytest版本    | 7.4.3                      |
+| Allure版本    | 2.14.2                     |
+| 接口BaseURL   | {base_url}                 |
+| 报告生成时间  | {dt.now().strftime("%Y-%m-%d %H:%M:%S")} |
 
-## 7. 注意事项
+## 8. 注意事项
 1. 接口列表按执行时间排序；
 2. 接口耗时统计仅包含非数据库查询类用例；
 3. 通过率计算规则：仅统计实际执行的用例（排除跳过用例）；
 4. 失败用例先查看"备注"和"具体原因"，实际操作步骤请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑；
 """
 
-        # 写入报告
+        # ====================== 写入报告文件 ======================
         os.makedirs(os.path.dirname(report_path), exist_ok=True)
 
         # 写入MD报告
@@ -593,11 +699,12 @@ def generate_simple_report(allure_results_dir, env, report_path):
             f.write(report_content)
         print(f"\n✅ MD报告生成成功：{os.path.abspath(report_path)}")
 
-        # 生成HTML报告
+        # 生成HTML报告（恢复之前的好看样式：蓝头、奇偶行变色）
         if markdown:
             html_report_path = report_path.replace(".md", ".html")
             try:
                 html_content = markdown.markdown(report_content, extensions=["extra", "sane_lists", "nl2br"])
+                # 恢复之前的HTML样式（保留数据逻辑）
                 html_template = f"""
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -684,6 +791,8 @@ def generate_simple_report(allure_results_dir, env, report_path):
 
             except Exception as e:
                 print(f"❌ HTML报告生成失败：{e}")
+                import traceback
+                traceback.print_exc()
         else:
             print("⚠️ 未安装markdown库，跳过HTML报告生成（执行 pip install markdown 安装）")
 
@@ -785,10 +894,11 @@ except:
     pass
 
 if __name__ == "__main__":
-    # 执行报告生成
+    # 示例：生成CloudTrader报告
     success = generate_simple_report(
         allure_results_dir="report/cloud_results",
         env="test",
-        report_path="report/Cloud接口自动化测试报告.md"
+        report_path="report/跟单社区接口自动化测试报告.md"
     )
+
     sys.exit(0 if success else 1)
