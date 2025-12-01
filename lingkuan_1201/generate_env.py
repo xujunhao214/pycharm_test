@@ -88,12 +88,10 @@ def get_pure_report_paths(markdown_report_path):
         html_filename = os.path.basename(html_report_path)
 
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/{build_number}/HTML_Report/"
-            f"{report_subdir}/{md_filename}"
+            f"{jenkins_url}/job/{job_name}/ws/lingkuan_1201/report/{build_number}{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/{build_number}/HTML_Report/"
-            f"{report_subdir}/{html_filename}"
+            f"{jenkins_url}/job/{job_name}/ws/lingkuan_1201/report/{build_number}{html_filename}"
         )
 
         # 物理文件：移动到带构建号的子目录
