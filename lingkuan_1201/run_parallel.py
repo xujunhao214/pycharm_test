@@ -106,7 +106,9 @@ def run_all_tests_parallel(env: str = "test"):
         "run_cloud_tests.py"
     ]
 
-    report_root = os.path.join(PROJECT_ROOT, "report")
+    # 获取Jenkins构建号（本地执行时用时间戳）
+    build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
+    report_root = os.path.join(PROJECT_ROOT, "report", f"build_{build_number}")
     os.makedirs(report_root, exist_ok=True)
 
     for script in test_scripts:
