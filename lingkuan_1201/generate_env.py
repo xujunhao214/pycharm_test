@@ -93,17 +93,17 @@ def get_pure_report_paths(markdown_report_path):
             f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}/{html_filename}"
         )
 
-        # 物理文件：Jenkins环境下移动到build子目录
-        if os.path.exists(pure_md_path):
-            target_dir = os.path.join(os.path.dirname(pure_md_path), report_subdir)
-            os.makedirs(target_dir, exist_ok=True)
-            target_md = os.path.join(target_dir, md_filename)
-            shutil.move(pure_md_path, target_md)
-            logger.info(f"MD报告已迁移至历史目录: {target_md}")
-            if os.path.exists(html_report_path):
-                target_html = os.path.join(target_dir, html_filename)
-                shutil.move(html_report_path, target_html)
-                logger.info(f"HTML报告已迁移至历史目录: {target_html}")
+        # # 物理文件：Jenkins环境下移动到build子目录
+        # if os.path.exists(pure_md_path):
+        #     target_dir = os.path.join(os.path.dirname(pure_md_path), report_subdir)
+        #     os.makedirs(target_dir, exist_ok=True)
+        #     target_md = os.path.join(target_dir, md_filename)
+        #     shutil.move(pure_md_path, target_md)
+        #     logger.info(f"MD报告已迁移至历史目录: {target_md}")
+        #     if os.path.exists(html_report_path):
+        #         target_html = os.path.join(target_dir, html_filename)
+        #         shutil.move(html_report_path, target_html)
+        #         logger.info(f"HTML报告已迁移至历史目录: {target_html}")
     else:
         # 本地环境：直接使用REPORT_ROOT的路径（不再创建build子目录）
         if os.name == "nt":
