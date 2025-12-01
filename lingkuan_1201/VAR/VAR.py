@@ -12,11 +12,12 @@ JENKINS = "http://172.96.192.137:8080/view/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%
 JENKINS_USERNAME = "Test"
 JENKINS_PASSWORD = "28y6yyrcnfE3WSxF"
 
-
 # 优化时间格式：
 # DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
 # DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-DATETIME_TICON = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+DATETIME_TICON = datetime.datetime.now()
+
+
 # 去掉原有的get_current_time()固定变量，改为函数
 def get_current_time():
     """实时获取当前时间，格式：YYYY-MM-DD HH:MM:SS"""
