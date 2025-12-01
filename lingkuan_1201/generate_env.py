@@ -88,10 +88,10 @@ def get_pure_report_paths(markdown_report_path):
         html_filename = os.path.basename(html_report_path)
 
         md_url = (
-            f"{jenkins_url}/job/{job_name}/ws/lingkuan_1201/report/{build_number}{md_filename}"
+            f"{jenkins_url}/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/job/{job_name}/ws/lingkuan_1201/report/{build_number}{html_filename}"
+            f"{jenkins_url}/job/{job_name}/ws/lingkuan_1201/report/build_{build_number}{html_filename}"
         )
 
         # 物理文件：移动到带构建号的子目录
@@ -206,7 +206,7 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
         add_param(root, "版本", env_config["browser_version"])
         add_param(root, "BASE_URL", env_config["base_url"])
         add_param(root, "VPS_URL", env_config["vps_url"])
-        add_param(root, "Markdown汇总报告", md_url)  # 启用带构建号的MD汇总链接
+        # add_param(root, "Markdown汇总报告", md_url)  # 启用带构建号的MD汇总链接
         add_param(root, "汇总报告", html_url)  # 带构建号的HTML汇总链接
 
         env_file_path = os.path.join(merged_results_dir, "environment.xml")
