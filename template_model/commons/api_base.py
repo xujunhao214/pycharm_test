@@ -785,9 +785,6 @@ class APITestBase:
 
         try:
             with allure.step("执行数据库查询"):
-                allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
-                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with db_transaction.cursor(cursor_type) as cursor:
                     logger.info(f"[{self._get_current_time()}] 执行SQL: \n{final_sql} \n参数: {params}")
@@ -815,6 +812,8 @@ class APITestBase:
                                 f"查询结果（共{len(result)}条，显示前50条）",
                                 allure.attachment_type.JSON
                             )
+                            allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
 
                 return result
 
@@ -898,9 +897,6 @@ class APITestBase:
 
         try:
             with allure.step("执行数据库查询"):
-                allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
-                allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-
                 cursor_type = pymysql.cursors.DictCursor if dictionary_cursor else None
                 with dbvps_transaction.cursor(cursor_type) as cursor:
                     logger.info(f"[{self._getvps_current_time()}] 执行SQL: \n{final_sql} \n参数: {params}")
@@ -928,6 +924,8 @@ class APITestBase:
                                 f"查询结果（共{len(result)}条，显示前50条）",
                                 allure.attachment_type.JSON
                             )
+                            allure.attach(final_sql, "执行SQL", allure.attachment_type.TEXT)
+                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
 
                 return result
 
@@ -1179,9 +1177,6 @@ class APITestBase:
         logger.info(f"[{self._get_current_time()}] 开始等待数据库记录删除 | SQL: {sql[:200]} | 超时: {timeout}秒")
 
         with allure.step(f"等待数据库记录删除（超时: {timeout}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -1217,6 +1212,8 @@ class APITestBase:
                         with allure.step("删除验证成功"):
                             allure.attach(f"耗时{time.time() - start_time:.1f}秒，记录已删除", "结果说明",
                                           allure.attachment_type.TEXT)
+                            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
                         return
 
                     logger.info(
@@ -1291,9 +1288,6 @@ class APITestBase:
         )
 
         with allure.step(f"轮询等待无记录（超时: {timeout}秒，稳定期: {stable_period}秒）"):
-            allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
-            allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
-
             while time.time() - start_time < timeout:
                 try:
                     db_transaction.commit()
@@ -1361,6 +1355,8 @@ class APITestBase:
                 with allure.step("超时后最终结果"):
                     allure.attach(f"超时{timeout}秒，查到{len(final_result)}条记录", "结果说明",
                                   allure.attachment_type.TEXT)
+                    allure.attach(sql, "执行SQL", allure.attachment_type.TEXT)
+                    allure.attach(str(params), "SQL参数", allure.attachment_type.TEXT)
 
             return final_result  # 超时后返回实际查询结果（可能非空）
 

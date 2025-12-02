@@ -39,8 +39,8 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        # "test_vps/test_create.py",
-        "test_vps/test_lianxi.py",
+        "test_vps/test_create.py",
+        # "test_vps/test_lianxi.py",
         # "test_vps/test_lianxi2.py",
         # "test_vps/test_getAccountDataPage.py",
         # "test_vps/test_vps_ordersendbuy.py",
@@ -54,9 +54,9 @@ def run_vps_tests(env: str = "test"):
         # "test_vps/test_operation_query.py",
         # "test_vps/test_platform_query.py",
         # "test_vps/test_vpsfixed_annotations.py",
-        # "test_vps/test_create_scene.py",
+        "test_vps/test_create_scene.py",
         # "test_vps/test_vpsMasOrder_money_scene.py",
-        # "test_vps/test_delete.py",
+        "test_vps/test_delete.py",
 
         # 日志配置
         "--log-file=./Logs/vps_pytest.log",

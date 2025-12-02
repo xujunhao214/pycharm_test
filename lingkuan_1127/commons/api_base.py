@@ -154,7 +154,7 @@ class APITestBase:
 
         # 计算耗时（毫秒）
         elapsed_time = (time.perf_counter() - start_time) * 1000
-        print(f"基类记录耗时：{elapsed_time:.2f}ms")
+        # print(f"基类记录耗时：{elapsed_time:.2f}ms")
         # 日志打印（包含方法、URL、耗时）
         logger.info(f"[{self._get_current_time()}] {method} 请求纯耗时: {elapsed_time:.2f}ms | URL: {url}")
         # Allure 单独步骤展示耗时（方便报告查看）

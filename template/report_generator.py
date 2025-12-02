@@ -472,8 +472,8 @@ def generate_simple_report(allure_results_dir, env, report_path):
                     matched_case = case_name_map[record_name_key]
                     record_group[matched_case["pure_identity"]].append(elapsed_ms)
                     print(f"🔍 模糊匹配耗时记录：{record_case_name} → {matched_case['pure_identity']} → {elapsed_ms}ms")
-                else:
-                    print(f"⚠️ 耗时记录无匹配用例：{record_pure_id} / {record_case_name}")
+                # else:
+                #     print(f"⚠️ 耗时记录无匹配用例：{record_pure_id} / {record_case_name}")
 
             # 每个用例取最后一次的耗时（仅保留>0的）
             for pure_id, elapsed_list in record_group.items():

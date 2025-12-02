@@ -51,7 +51,9 @@ def run_vps_tests(env: str = "test"):
         f"--test-group=vps",
         f"--alluredir={report_dir}",
         "--clean-alluredir",
+
         "test_vps/test_lianxi.py",
+
         # 日志配置
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=debug",
