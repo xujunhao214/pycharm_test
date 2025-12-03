@@ -18,19 +18,13 @@ def run_vps_tests(env: str = "test"):
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
 
-    # 核心逻辑：区分Jenkins/本地环境
-    if "JENKINS_URL" in os.environ:
-        # Jenkins环境：优先用BUILD_NUMBER，无则用时间戳（保留历史）
-        build_id = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
-        # 优先读取run_parallel传入的REPORT_ROOT，无则生成vps+构建号目录
-        REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report", f"vps_{build_id}"))
-    else:
-        # 本地环境：复用固定目录（方便调试，不保留历史）
-        REPORT_ROOT = os.path.join(project_root, "report")
-
+    # 核心逻辑：完全复用run_parallel传递的REPORT_ROOT（统一报告目录）
+    # Jenkins环境：run_parallel已传递带build_${BUILD_NUMBER}的REPORT_ROOT
+    # 本地环境：兜底使用固定report目录
+    REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report"))
     os.makedirs(REPORT_ROOT, exist_ok=True)  # 确保目录存在
 
-    # 定义目录路径（全部基于REPORT_ROOT）
+    # 定义目录路径（全部基于REPORT_ROOT，与run_parallel完全对齐）
     report_dir = os.path.join(REPORT_ROOT, "vps_results")  # allure结果目录
     html_dir = os.path.join(REPORT_ROOT, "vps_html")  # allure HTML报告目录
     markdown_report_path = os.path.join(REPORT_ROOT, "VPS接口自动化测试报告.md")  # Markdown报告路径
@@ -72,7 +66,8 @@ def run_vps_tests(env: str = "test"):
     standard_path = markdown_abs_path.replace('\\', '/')
     markdown_file_url = f"file:///{standard_path}"
     generate_env_cmd = [
-        "python", "generate_env.py",
+        sys.executable,  # 替换python为sys.executable，兼容多Python环境
+        "generate_env.py",
         "--env", env,
         "--output-dir", report_dir,
         "--markdown-report-path", markdown_file_url
@@ -81,23 +76,21 @@ def run_vps_tests(env: str = "test"):
         result = subprocess.run(
             generate_env_cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
+            encoding="utf-8"  # 直接指定编码，避免多次解码
         )
-        encodings = ['utf-8', 'gbk', sys.getdefaultencoding(), 'latin-1']
-        stderr_output = "无法解码的错误信息"
-        for encoding in encodings:
-            try:
-                stderr_output = result.stderr.decode(encoding, errors='replace')
-                break
-            except:
-                continue
-        print(f"\nVPS环境文件生成输出: {stderr_output.encode('utf-8', errors='replace').decode('utf-8')}")
+        # 合并stdout和stderr输出
+        env_output = result.stdout + result.stderr
+        print(f"\nVPS环境文件生成输出: {env_output}")
     except Exception as e:
         print(f"\nVPS 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Allure独立HTML报告
+    # 生成Allure独立HTML报告（兼容Windows/Linux）
     try:
-        os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
+        if os.name == "nt":  # Windows系统
+            os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
+        else:  # Linux/Mac系统（Jenkins）
+            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
         print(f"\nVPS独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
         print(f"\nVPS独立HTML报告生成失败: {str(e)}（不影响Markdown报告生成）")
