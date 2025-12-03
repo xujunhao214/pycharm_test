@@ -6,7 +6,7 @@ import subprocess
 import io
 from datetime import datetime
 from report_generator import generate_simple_report
-from generate_env import get_pure_report_paths  # 新增：导入Jenkins链接生成函数
+import xml.etree.ElementTree as ET
 
 
 def run_cloud_tests(env: str = "test"):
@@ -17,14 +17,14 @@ def run_cloud_tests(env: str = "test"):
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
 
-    # 核心：读取run_parallel传递的REPORT_ROOT
+    # 核心逻辑：完全复用run_parallel传递的REPORT_ROOT（统一报告目录）
     REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report"))
     os.makedirs(REPORT_ROOT, exist_ok=True)
 
-    # 所有目录基于REPORT_ROOT生成
-    report_dir = os.path.join(REPORT_ROOT, "cloud_results")  # allure结果目录
-    html_dir = os.path.join(REPORT_ROOT, "cloud_html")  # allure HTML报告目录
-    markdown_report_path = os.path.join(REPORT_ROOT, "Cloud接口自动化测试报告.md")  # MD报告路径
+    # 定义目录路径（与run_parallel完全对齐）
+    report_dir = os.path.join(REPORT_ROOT, "cloud_results")
+    html_dir = os.path.join(REPORT_ROOT, "cloud_html")
+    markdown_report_path = os.path.join(REPORT_ROOT, "Cloud接口自动化测试报告.md")
 
     # 创建必要目录
     os.makedirs(report_dir, exist_ok=True)
@@ -35,7 +35,7 @@ def run_cloud_tests(env: str = "test"):
     print(f"Cloud 结果目录: {report_dir}")
     print(f"Cloud 报告根目录: {REPORT_ROOT} (Jenkins环境: {'是' if 'JENKINS_URL' in os.environ else '否'})")
 
-    # pytest执行参数（保留原有用例配置）
+    # pytest执行参数
     args = [
         "-s", "-v",
         f"--env={env}",
@@ -43,9 +43,7 @@ def run_cloud_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "test_cloudTrader/test_create.py",
-        "test_cloudTrader/test_create_scene.py",
-        "test_cloudTrader/test_delete.py",
+        "test_cloudTrader/test_lianxi.py",
 
         # 日志配置
         "--log-file=./Logs/cloud_pytest.log",
@@ -62,17 +60,18 @@ def run_cloud_tests(env: str = "test"):
         print(f"\nCloud pytest 执行异常: {str(e)}")
         exit_code = 1
 
-    # 生成环境文件（核心修改：调用get_pure_report_paths）
+    # 生成环境文件（优化编码和解码逻辑）
+    markdown_abs_path = os.path.abspath(markdown_report_path)
+    standard_path = markdown_abs_path.replace('\\', '/')
+    markdown_file_url = f"file:///{standard_path}"
+    generate_env_cmd = [
+        sys.executable,  # 兼容多Python环境
+        "generate_env.py",
+        "--env", env,
+        "--output-dir", report_dir,
+        "--markdown-report-path", markdown_file_url
+    ]
     try:
-        markdown_abs_path = os.path.abspath(markdown_report_path)
-        md_url, _ = get_pure_report_paths(markdown_abs_path)
-        generate_env_cmd = [
-            sys.executable,  # 兼容多Python环境
-            "generate_env.py",
-            "--env", env,
-            "--output-dir", report_dir,
-            "--markdown-report-path", md_url
-        ]
         result = subprocess.run(
             generate_env_cmd,
             stdout=subprocess.PIPE,
@@ -84,11 +83,11 @@ def run_cloud_tests(env: str = "test"):
     except Exception as e:
         print(f"\nCloud 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Cloud独立Allure HTML报告（兼容Windows/Linux）
+    # 生成Allure独立HTML报告（兼容Windows/Linux）
     try:
         if os.name == "nt":  # Windows
             os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
-        else:  # Linux/Jenkins
+        else:  # Linux（Jenkins）
             os.system(f"allure generate {report_dir} -o {html_dir} --clean")
         print(f"\nCloud独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
