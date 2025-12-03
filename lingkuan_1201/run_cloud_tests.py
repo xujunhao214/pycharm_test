@@ -17,11 +17,11 @@ def run_cloud_tests(env: str = "test"):
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
 
-    # 核心逻辑：完全复用run_parallel传递的REPORT_ROOT（统一报告目录）
+    # 核心逻辑：复用run_parallel传递的REPORT_ROOT
     REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report"))
     os.makedirs(REPORT_ROOT, exist_ok=True)
 
-    # 定义目录路径（与run_parallel完全对齐）
+    # 定义目录路径
     report_dir = os.path.join(REPORT_ROOT, "cloud_results")
     html_dir = os.path.join(REPORT_ROOT, "cloud_html")
     markdown_report_path = os.path.join(REPORT_ROOT, "Cloud接口自动化测试报告.md")
@@ -42,9 +42,7 @@ def run_cloud_tests(env: str = "test"):
         f"--test-group=cloud",
         f"--alluredir={report_dir}",
         "--clean-alluredir",
-
         "test_cloudTrader/test_lianxi.py",
-
         # 日志配置
         "--log-file=./Logs/cloud_pytest.log",
         "--log-file-level=debug",
@@ -60,12 +58,12 @@ def run_cloud_tests(env: str = "test"):
         print(f"\nCloud pytest 执行异常: {str(e)}")
         exit_code = 1
 
-    # 生成环境文件（优化编码和解码逻辑）
+    # 生成环境文件
     markdown_abs_path = os.path.abspath(markdown_report_path)
     standard_path = markdown_abs_path.replace('\\', '/')
     markdown_file_url = f"file:///{standard_path}"
     generate_env_cmd = [
-        sys.executable,  # 兼容多Python环境
+        sys.executable,
         "generate_env.py",
         "--env", env,
         "--output-dir", report_dir,
@@ -83,15 +81,29 @@ def run_cloud_tests(env: str = "test"):
     except Exception as e:
         print(f"\nCloud 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Allure独立HTML报告（兼容Windows/Linux）
+    # 生成Allure独立HTML报告（核心优化：不限定路径+环境区分+容错）
     try:
-        if os.name == "nt":  # Windows
-            os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
-        else:  # Linux（Jenkins）
-            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
+        # 第一步：判断环境，选择Allure命令
+        if os.name == "nt":  # Windows本地
+            allure_cmd = "allure"
+            cmd = f"chcp 65001 >nul && {allure_cmd} generate {report_dir} -o {html_dir} --clean"
+        else:
+            if "JENKINS_URL" in os.environ:  # Jenkins环境（Linux）
+                # 优先读取Jenkins的Allure环境变量（兼容不同配置）
+                allure_cmd = os.environ.get("ALLURE_COMMAND", "allure")
+                # Jenkins下若执行失败，直接跳过（汇总报告由Jenkins插件生成）
+                cmd = f"{allure_cmd} generate {report_dir} -o {html_dir} --clean || echo 'Jenkins下独立Allure报告生成跳过'"
+            else:  # Linux本地
+                allure_cmd = "allure"
+                cmd = f"{allure_cmd} generate {report_dir} -o {html_dir} --clean"
+
+        # 执行命令
+        print(f"\n执行Allure命令: {cmd}")
+        os.system(cmd)
         print(f"\nCloud独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
-        print(f"\nCloud独立HTML报告生成失败: {str(e)}（不影响Markdown报告生成）")
+        # 仅打印错误，不中断流程
+        print(f"\nCloud独立HTML报告生成失败: {str(e)}（不影响核心测试流程，汇总Allure报告由Jenkins插件生成）")
 
     # 生成Markdown报告
     try:

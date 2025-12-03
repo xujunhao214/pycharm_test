@@ -18,16 +18,14 @@ def run_vps_tests(env: str = "test"):
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
 
-    # 核心逻辑：完全复用run_parallel传递的REPORT_ROOT（统一报告目录）
-    # Jenkins环境：run_parallel已传递带build_${BUILD_NUMBER}的REPORT_ROOT
-    # 本地环境：兜底使用固定report目录
+    # 核心逻辑：复用run_parallel传递的REPORT_ROOT（统一报告目录）
     REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report"))
-    os.makedirs(REPORT_ROOT, exist_ok=True)  # 确保目录存在
+    os.makedirs(REPORT_ROOT, exist_ok=True)
 
-    # 定义目录路径（全部基于REPORT_ROOT，与run_parallel完全对齐）
-    report_dir = os.path.join(REPORT_ROOT, "vps_results")  # allure结果目录
-    html_dir = os.path.join(REPORT_ROOT, "vps_html")  # allure HTML报告目录
-    markdown_report_path = os.path.join(REPORT_ROOT, "VPS接口自动化测试报告.md")  # Markdown报告路径
+    # 定义目录路径（全部基于REPORT_ROOT）
+    report_dir = os.path.join(REPORT_ROOT, "vps_results")
+    html_dir = os.path.join(REPORT_ROOT, "vps_html")
+    markdown_report_path = os.path.join(REPORT_ROOT, "VPS接口自动化测试报告.md")
 
     # 创建必要目录
     os.makedirs(report_dir, exist_ok=True)
@@ -45,9 +43,7 @@ def run_vps_tests(env: str = "test"):
         f"--test-group=vps",
         f"--alluredir={report_dir}",
         "--clean-alluredir",
-        
         "test_vps/test_lianxi.py",
-
         # 日志配置
         "--log-file=./Logs/vps_pytest.log",
         "--log-file-level=debug",
@@ -68,7 +64,7 @@ def run_vps_tests(env: str = "test"):
     standard_path = markdown_abs_path.replace('\\', '/')
     markdown_file_url = f"file:///{standard_path}"
     generate_env_cmd = [
-        sys.executable,  # 替换python为sys.executable，兼容多Python环境
+        sys.executable,
         "generate_env.py",
         "--env", env,
         "--output-dir", report_dir,
@@ -79,23 +75,36 @@ def run_vps_tests(env: str = "test"):
             generate_env_cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            encoding="utf-8"  # 直接指定编码，避免多次解码
+            encoding="utf-8"
         )
-        # 合并stdout和stderr输出
         env_output = result.stdout + result.stderr
         print(f"\nVPS环境文件生成输出: {env_output}")
     except Exception as e:
         print(f"\nVPS 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Allure独立HTML报告（兼容Windows/Linux）
+    # 生成Allure独立HTML报告（核心优化：不限定路径+环境区分+容错）
     try:
-        if os.name == "nt":  # Windows系统
-            os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
-        else:  # Linux/Mac系统（Jenkins）
-            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
+        # 第一步：判断环境，选择Allure命令
+        if os.name == "nt":  # Windows本地
+            allure_cmd = "allure"
+            cmd = f"chcp 65001 >nul && {allure_cmd} generate {report_dir} -o {html_dir} --clean"
+        else:
+            if "JENKINS_URL" in os.environ:  # Jenkins环境（Linux）
+                # 优先读取Jenkins的Allure环境变量（兼容不同配置）
+                allure_cmd = os.environ.get("ALLURE_COMMAND", "allure")
+                # Jenkins下若执行失败，直接跳过（汇总报告由Jenkins插件生成）
+                cmd = f"{allure_cmd} generate {report_dir} -o {html_dir} --clean || echo 'Jenkins下独立Allure报告生成跳过'"
+            else:  # Linux本地
+                allure_cmd = "allure"
+                cmd = f"{allure_cmd} generate {report_dir} -o {html_dir} --clean"
+
+        # 执行命令
+        print(f"\n执行Allure命令: {cmd}")
+        os.system(cmd)
         print(f"\nVPS独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
-        print(f"\nVPS独立HTML报告生成失败: {str(e)}（不影响Markdown报告生成）")
+        # 仅打印错误，不中断流程（核心测试/MD报告不受影响）
+        print(f"\nVPS独立HTML报告生成失败: {str(e)}（不影响核心测试流程，汇总Allure报告由Jenkins插件生成）")
 
     # 生成Markdown报告
     try:
