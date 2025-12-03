@@ -5,7 +5,7 @@ from allure_commons.model2 import Status
 from allure_commons.reporter import AllureReporter
 from allure_commons._allure import StepContext
 from typing import Callable, Any, Optional
-from lingkuan_1201.VAR.VAR import *
+from lingkuan_1127.VAR.VAR import *
 
 
 def wait_for_condition(

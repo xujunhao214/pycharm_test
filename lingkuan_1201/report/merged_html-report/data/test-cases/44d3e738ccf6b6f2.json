@@ -1,0 +1,373 @@
+{
+  "uid" : "44d3e738ccf6b6f2",
+  "name" : "数据库校验-云策略列表-新增MT5云跟单账号",
+  "fullName" : "test_cloudTrader.test_create.TestCreate_cloudTrader#test_dbcloudTrader_MT5BatchAdd",
+  "historyId" : "8f63a8f84b7dc0df0dbb14c7afb81aa1",
+  "time" : {
+    "start" : 1764641788662,
+    "stop" : 1764641789044,
+    "duration" : 382
+  },
+  "status" : "failed",
+  "statusMessage" : "Failed: 数据库查询结果为空，新增跟单账号失败",
+  "statusTrace" : "self = <lingkuan_1127.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x00000243F976DFD0>\nvar_manager = <lingkuan_1127.commons.variable_manager.VariableManager object at 0x00000243F97A5310>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x00000243F99A2A60>\n\n    @allure.title(\"数据库校验-云策略列表-新增MT5云跟单账号\")\n    def test_dbcloudTrader_MT5BatchAdd(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            addCloud_MT5Slave = var_manager.get_variable(\"addCloud_MT5Slave\")\n            cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n    \n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s\",\n                (addCloud_MT5Slave[\"account\"], cloudMaster_id,)\n            )\n    \n        with allure.step(\"2. 提取数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，新增跟单账号失败\")\n    \n            cloudTrader_MT5traderID = db_data[0]['id']\n            var_manager.set_runtime_variable(\"cloudTrader_MT5traderID\", cloudTrader_MT5traderID)\n            logging.info(f\"新增云跟单账号id是：{cloudTrader_MT5traderID}\")\n    \n        with allure.step(\"3. 提取用户数据\"):\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader_user WHERE account = %s\",\n                (addCloud_MT5Slave[\"account\"],)\n            )\n    \n            if not db_data:\n>               pytest.fail(\"数据库查询结果为空，新增跟单账号失败\")\nE               Failed: 数据库查询结果为空，新增跟单账号失败\n\ntest_cloudTrader\\test_create.py:1078: Failed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ {
+    "name" : "test_group",
+    "time" : {
+      "start" : 1764641523074,
+      "stop" : 1764641523074,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_transaction",
+    "time" : {
+      "start" : 1764641788661,
+      "stop" : 1764641788661,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db",
+    "time" : {
+      "start" : 1764641788569,
+      "stop" : 1764641788661,
+      "duration" : 92
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager",
+    "time" : {
+      "start" : 1764641523075,
+      "stop" : 1764641523076,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db_config",
+    "time" : {
+      "start" : 1764641522406,
+      "stop" : 1764641522407,
+      "duration" : 1
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "environment",
+    "time" : {
+      "start" : 1764641522406,
+      "stop" : 1764641522406,
+      "duration" : 0
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "init_db_pool",
+    "time" : {
+      "start" : 1764641522407,
+      "stop" : 1764641523074,
+      "duration" : 667
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "testStage" : {
+    "status" : "failed",
+    "statusMessage" : "Failed: 数据库查询结果为空，新增跟单账号失败",
+    "statusTrace" : "self = <lingkuan_1127.test_cloudTrader.test_create.TestCreate_cloudTrader object at 0x00000243F976DFD0>\nvar_manager = <lingkuan_1127.commons.variable_manager.VariableManager object at 0x00000243F97A5310>\ndb_transaction = <DBUtils.PooledDB.PooledDedicatedDBConnection object at 0x00000243F99A2A60>\n\n    @allure.title(\"数据库校验-云策略列表-新增MT5云跟单账号\")\n    def test_dbcloudTrader_MT5BatchAdd(self, var_manager, db_transaction):\n        with allure.step(\"1. 查询数据库验证是否新增成功\"):\n            addCloud_MT5Slave = var_manager.get_variable(\"addCloud_MT5Slave\")\n            cloudMaster_id = var_manager.get_variable(\"cloudMaster_id\")\n    \n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_cloud_trader WHERE account = %s and cloud_id = %s\",\n                (addCloud_MT5Slave[\"account\"], cloudMaster_id,)\n            )\n    \n        with allure.step(\"2. 提取数据\"):\n            if not db_data:\n                pytest.fail(\"数据库查询结果为空，新增跟单账号失败\")\n    \n            cloudTrader_MT5traderID = db_data[0]['id']\n            var_manager.set_runtime_variable(\"cloudTrader_MT5traderID\", cloudTrader_MT5traderID)\n            logging.info(f\"新增云跟单账号id是：{cloudTrader_MT5traderID}\")\n    \n        with allure.step(\"3. 提取用户数据\"):\n            db_data = self.query_database(\n                db_transaction,\n                f\"SELECT * FROM follow_trader_user WHERE account = %s\",\n                (addCloud_MT5Slave[\"account\"],)\n            )\n    \n            if not db_data:\n>               pytest.fail(\"数据库查询结果为空，新增跟单账号失败\")\nE               Failed: 数据库查询结果为空，新增跟单账号失败\n\ntest_cloudTrader\\test_create.py:1078: Failed",
+    "steps" : [ {
+      "name" : "1. 查询数据库验证是否新增成功",
+      "time" : {
+        "start" : 1764641788662,
+        "stop" : 1764641788993,
+        "duration" : 331
+      },
+      "status" : "passed",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1764641788662,
+          "stop" : 1764641788993,
+          "duration" : 331
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1764641788991,
+            "stop" : 1764641788993,
+            "duration" : 2
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "2500c1dc7cd4dd02",
+            "name" : "查询结果（共1条，显示前50条）",
+            "source" : "2500c1dc7cd4dd02.json",
+            "type" : "application/json",
+            "size" : 951
+          }, {
+            "uid" : "f83b0e9576afdbc",
+            "name" : "执行SQL",
+            "source" : "f83b0e9576afdbc.txt",
+            "type" : "text/plain",
+            "size" : 96
+          }, {
+            "uid" : "43389f0b9ac15f4b",
+            "name" : "SQL参数",
+            "source" : "43389f0b9ac15f4b.txt",
+            "type" : "text/plain",
+            "size" : 17
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 1,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 2,
+      "hasContent" : true
+    }, {
+      "name" : "2. 提取数据",
+      "time" : {
+        "start" : 1764641788993,
+        "stop" : 1764641788995,
+        "duration" : 2
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 0,
+      "shouldDisplayMessage" : false,
+      "stepsCount" : 0,
+      "hasContent" : false
+    }, {
+      "name" : "3. 提取用户数据",
+      "time" : {
+        "start" : 1764641788995,
+        "stop" : 1764641789044,
+        "duration" : 49
+      },
+      "status" : "failed",
+      "statusMessage" : "Failed: 数据库查询结果为空，新增跟单账号失败\n",
+      "statusTrace" : "  File \"D:\\pycharm_test\\lingkuan_1127\\test_cloudTrader\\test_create.py\", line 1078, in test_dbcloudTrader_MT5BatchAdd\n    pytest.fail(\"数据库查询结果为空，新增跟单账号失败\")\n  File \"D:\\pycharm_test\\Community\\lib\\site-packages\\_pytest\\outcomes.py\", line 198, in fail\n    raise Failed(msg=reason, pytrace=pytrace)\n",
+      "steps" : [ {
+        "name" : "执行数据库查询",
+        "time" : {
+          "start" : 1764641788995,
+          "stop" : 1764641789044,
+          "duration" : 49
+        },
+        "status" : "passed",
+        "steps" : [ {
+          "name" : "数据库查询结果",
+          "time" : {
+            "start" : 1764641789043,
+            "stop" : 1764641789044,
+            "duration" : 1
+          },
+          "status" : "passed",
+          "steps" : [ ],
+          "attachments" : [ {
+            "uid" : "55406b48bdc2d20f",
+            "name" : "查询结果（共0条，显示前50条）",
+            "source" : "55406b48bdc2d20f.json",
+            "type" : "application/json",
+            "size" : 2
+          }, {
+            "uid" : "b4140b160acc587d",
+            "name" : "执行SQL",
+            "source" : "b4140b160acc587d.txt",
+            "type" : "text/plain",
+            "size" : 77
+          }, {
+            "uid" : "b9e5b63daf6249f1",
+            "name" : "SQL参数",
+            "source" : "b9e5b63daf6249f1.txt",
+            "type" : "text/plain",
+            "size" : 13
+          } ],
+          "parameters" : [ ],
+          "attachmentsCount" : 3,
+          "shouldDisplayMessage" : false,
+          "stepsCount" : 0,
+          "hasContent" : true
+        } ],
+        "attachments" : [ ],
+        "parameters" : [ ],
+        "attachmentsCount" : 3,
+        "shouldDisplayMessage" : false,
+        "stepsCount" : 1,
+        "hasContent" : true
+      } ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "attachmentsCount" : 3,
+      "shouldDisplayMessage" : true,
+      "stepsCount" : 2,
+      "hasContent" : true
+    } ],
+    "attachments" : [ {
+      "uid" : "3eeafa29cc6857f3",
+      "name" : "log",
+      "source" : "3eeafa29cc6857f3.txt",
+      "type" : "text/plain",
+      "size" : 5263
+    } ],
+    "parameters" : [ ],
+    "attachmentsCount" : 7,
+    "shouldDisplayMessage" : true,
+    "stepsCount" : 7,
+    "hasContent" : true
+  },
+  "afterStages" : [ {
+    "name" : "db_transaction::0",
+    "time" : {
+      "start" : 1764641789057,
+      "stop" : 1764641789104,
+      "duration" : 47
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "db::0",
+    "time" : {
+      "start" : 1764641789105,
+      "stop" : 1764641789197,
+      "duration" : 92
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  }, {
+    "name" : "var_manager::0",
+    "time" : {
+      "start" : 1764641926142,
+      "stop" : 1764641926144,
+      "duration" : 2
+    },
+    "status" : "passed",
+    "steps" : [ ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "attachmentsCount" : 0,
+    "shouldDisplayMessage" : false,
+    "stepsCount" : 0,
+    "hasContent" : false
+  } ],
+  "labels" : [ {
+    "name" : "feature",
+    "value" : "数据管理-创建数据-为云策略准备"
+  }, {
+    "name" : "tag",
+    "value" : "flaky(reruns=3, reruns_delay=5)"
+  }, {
+    "name" : "parentSuite",
+    "value" : "test_cloudTrader"
+  }, {
+    "name" : "suite",
+    "value" : "test_create"
+  }, {
+    "name" : "subSuite",
+    "value" : "TestCreate_cloudTrader"
+  }, {
+    "name" : "host",
+    "value" : "DESKTOP-4S9CU1E"
+  }, {
+    "name" : "thread",
+    "value" : "76704-MainThread"
+  }, {
+    "name" : "framework",
+    "value" : "pytest"
+  }, {
+    "name" : "language",
+    "value" : "cpython3"
+  }, {
+    "name" : "package",
+    "value" : "test_cloudTrader.test_create"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : true,
+  "retry" : true,
+  "extra" : {
+    "categories" : [ ],
+    "tags" : [ "flaky(reruns=3, reruns_delay=5)" ]
+  },
+  "source" : "44d3e738ccf6b6f2.json",
+  "parameterValues" : [ ]
+}

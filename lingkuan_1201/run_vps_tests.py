@@ -7,7 +7,7 @@ import io
 import json
 from datetime import datetime
 from report_generator import generate_simple_report
-import xml.etree.ElementTree as ET
+from generate_env import get_pure_report_paths  # 新增：导入Jenkins链接生成函数
 
 
 def run_vps_tests(env: str = "test"):
@@ -18,22 +18,14 @@ def run_vps_tests(env: str = "test"):
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(current_script_path)
 
-    # 核心逻辑：区分Jenkins/本地环境
-    if "JENKINS_URL" in os.environ:
-        # Jenkins环境：优先用BUILD_NUMBER，无则用时间戳（保留历史）
-        build_id = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
-        # 优先读取run_parallel传入的REPORT_ROOT，无则生成vps+构建号目录
-        REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report", f"vps_{build_id}"))
-    else:
-        # 本地环境：复用固定目录（方便调试，不保留历史）
-        REPORT_ROOT = os.path.join(project_root, "report")
-
+    # 核心：读取run_parallel传递的REPORT_ROOT（Jenkins带构建号，本地固定）
+    REPORT_ROOT = os.environ.get("REPORT_ROOT", os.path.join(project_root, "report"))
     os.makedirs(REPORT_ROOT, exist_ok=True)  # 确保目录存在
 
-    # 定义目录路径（全部基于REPORT_ROOT）
+    # 所有目录基于REPORT_ROOT生成（不再硬编码project_root/report）
     report_dir = os.path.join(REPORT_ROOT, "vps_results")  # allure结果目录
     html_dir = os.path.join(REPORT_ROOT, "vps_html")  # allure HTML报告目录
-    markdown_report_path = os.path.join(REPORT_ROOT, "VPS接口自动化测试报告.md")  # Markdown报告路径
+    markdown_report_path = os.path.join(REPORT_ROOT, "VPS接口自动化测试报告.md")  # MD报告路径
 
     # 创建必要目录
     os.makedirs(report_dir, exist_ok=True)
@@ -44,7 +36,7 @@ def run_vps_tests(env: str = "test"):
     print(f"VPS 结果目录: {report_dir}")
     print(f"VPS 报告根目录: {REPORT_ROOT} (Jenkins环境: {'是' if 'JENKINS_URL' in os.environ else '否'})")
 
-    # pytest执行参数
+    # pytest执行参数（保留原有用例配置）
     args = [
         "-s", "-v",
         f"--env={env}",
@@ -52,7 +44,9 @@ def run_vps_tests(env: str = "test"):
         f"--alluredir={report_dir}",
         "--clean-alluredir",
 
-        "test_vps/test_lianxi.py",
+        "test_vps/test_create.py",
+        "test_vps/test_create_scene.py",
+        "test_vps/test_delete.py",
 
         # 日志配置
         "--log-file=./Logs/vps_pytest.log",
@@ -69,37 +63,35 @@ def run_vps_tests(env: str = "test"):
         print(f"\nVPS pytest 执行异常: {str(e)}")
         exit_code = 1
 
-    # 生成环境文件
-    markdown_abs_path = os.path.abspath(markdown_report_path)
-    standard_path = markdown_abs_path.replace('\\', '/')
-    markdown_file_url = f"file:///{standard_path}"
-    generate_env_cmd = [
-        "python", "generate_env.py",
-        "--env", env,
-        "--output-dir", report_dir,
-        "--markdown-report-path", markdown_file_url
-    ]
+    # 生成环境文件（核心修改：调用get_pure_report_paths生成Jenkins链接）
     try:
+        markdown_abs_path = os.path.abspath(markdown_report_path)
+        # 调用工具函数，自动生成Jenkins/http或本地/file链接
+        md_url, _ = get_pure_report_paths(markdown_abs_path)
+        generate_env_cmd = [
+            sys.executable,  # 替换python为sys.executable，兼容多Python环境
+            "generate_env.py",
+            "--env", env,
+            "--output-dir", report_dir,
+            "--markdown-report-path", md_url  # 传递生成的链接
+        ]
         result = subprocess.run(
             generate_env_cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            stderr=subprocess.PIPE,
+            encoding="utf-8"  # 直接指定编码，避免多次解码
         )
-        encodings = ['utf-8', 'gbk', sys.getdefaultencoding(), 'latin-1']
-        stderr_output = "无法解码的错误信息"
-        for encoding in encodings:
-            try:
-                stderr_output = result.stderr.decode(encoding, errors='replace')
-                break
-            except:
-                continue
-        print(f"\nVPS环境文件生成输出: {stderr_output.encode('utf-8', errors='replace').decode('utf-8')}")
+        env_output = result.stdout + result.stderr
+        print(f"\nVPS环境文件生成输出: {env_output}")
     except Exception as e:
         print(f"\nVPS 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Allure独立HTML报告
+    # 生成Allure独立HTML报告（兼容Windows/Linux）
     try:
-        os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
+        if os.name == "nt":  # Windows系统
+            os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
+        else:  # Linux/Jenkins系统
+            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
         print(f"\nVPS独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
         print(f"\nVPS独立HTML报告生成失败: {str(e)}（不影响Markdown报告生成）")
@@ -118,6 +110,6 @@ def run_vps_tests(env: str = "test"):
 
 
 if __name__ == "__main__":
-    env = sys.argv[1] if len(sys.argv) > 1 else "uat"
+    env = sys.argv[1] if len(sys.argv) > 1 else "test"
     exit_code, _ = run_vps_tests(env)
     sys.exit(exit_code)

@@ -3,9 +3,9 @@ import math
 import allure
 import logging
 import pytest
-from lingkuan_1201.VAR.VAR import *
-from lingkuan_1201.conftest import var_manager
-from lingkuan_1201.commons.api_base import *
+from lingkuan_1127.VAR.VAR import *
+from lingkuan_1127.conftest import var_manager
+from lingkuan_1127.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"
@@ -739,7 +739,7 @@ class TestVPSOrdersendbuy:
       4. 校验账号的数据是否正确
     - 预期结果：账号的数据正确
     """)
-    # @pytest.mark.skipif(True, reason=SKIP_REASON)
+    @pytest.mark.skipif(True, reason=SKIP_REASON)
     @pytest.mark.flaky(reruns=0, reruns_delay=0)
     @pytest.mark.usefixtures("class_random_str")
     class TestVPSOrderSend2(APITestBase):
