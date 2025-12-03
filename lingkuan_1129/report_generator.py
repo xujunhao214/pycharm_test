@@ -225,7 +225,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
     # 修复：获取正确的项目根目录（当前脚本的上上级目录）
     current_script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.abspath(os.path.join(current_script_dir, ".."))  # 修正根目录计算
-    print(f"🔧 修正后的项目根目录：{project_root}")
+    # print(f"🔧 修正后的项目根目录：{project_root}")
 
     db_keywords = ["dbquery", "数据库校验"]
     allure_abs_dir = os.path.abspath(allure_results_dir)
@@ -411,7 +411,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
 
     # 打印用例标识（调试用）
     pure_ids = [c["pure_identity"] for c in cases]
-    print(f"📌 用例纯标识列表：{pure_ids}")
+    # print(f"📌 用例纯标识列表：{pure_ids}")
 
     # ====================== 4. 基础统计 ======================
     total = len(cases)
@@ -537,7 +537,7 @@ def generate_simple_report(allure_results_dir, env, report_path):
                 if final_elapsed > 0:  # 确保只保留正数耗时
                     case = pure_identity_map[pure_id]
                     case_time_map[case["case_unique_id"]] = final_elapsed
-                    print(f"✅ 耗时匹配成功：{pure_id} → {final_elapsed}ms")
+                    # print(f"✅ 耗时匹配成功：{pure_id} → {final_elapsed}ms")
 
     except Exception as e:
         print(f"❌ 读取耗时文件失败：{e}")

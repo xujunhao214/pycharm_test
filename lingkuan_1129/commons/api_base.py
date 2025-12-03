@@ -194,7 +194,7 @@ class APITestBase:
         """
         # 1. 计算耗时（毫秒，保留2位小数）
         elapsed_time = round((time.perf_counter() - start_time) * 1000, 2)
-        print(f"基类记录耗时：{elapsed_time:.2f}ms")
+        # print(f"基类记录耗时：{elapsed_time:.2f}ms")
 
         # 2. 日志打印（包含用例标识）
         case_full_name = self._get_current_case_full_name()
@@ -243,8 +243,8 @@ class APITestBase:
             with open(time_record_file, "w", encoding="utf-8") as f:
                 json.dump(records, f, ensure_ascii=False, indent=2)
 
-            print(f"✅ 耗时记录已写入：{time_record_file}")
-            print(f"   用例标识：{case_full_name} | 耗时：{elapsed_time}ms")
+            # print(f"✅ 耗时记录已写入：{time_record_file}")
+            # print(f"   用例标识：{case_full_name} | 耗时：{elapsed_time}ms")
 
         except Exception as e:
             error_msg = f"❌ 写入耗时文件失败：{str(e)}"
