@@ -15,8 +15,8 @@ SKIP_REASON = "跳过此用例"
 VPS_IP_PATTERN = re.compile(r'VPS=.*?([\d.]+)')
 
 
-@allure.feature("查询校验")
-class TestVPSquery(APITestBase):
+@allure.feature("查询校验2")
+class TestVPSquery2(APITestBase):
     @allure.story("平台管理-平台列表")
     class TestVPSqueryList(APITestBase):
         # 实例化JsonPath工具类（全局复用）

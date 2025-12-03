@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MT4自研跟单1.5.0 云策略接口自动化测试报告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+        body {
+            background-color: #fff;
+            color: #333;
+            line-height: 1.6;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin: 20px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin: 30px 0 15px;
+            padding-left: 5px;
+            border-left: 3px solid #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            table-layout: fixed; /* 固定表格布局，统一列宽 */
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+        td {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            word-wrap: break-word; /* 自动换行，防止溢出 */
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f7ff;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        /* 统一列宽 */
+        table:nth-of-type(1) th, table:nth-of-type(1) td { width: 50%; }
+        table:nth-of-type(2) th:nth-child(1), table:nth-of-type(2) td:nth-child(1) { width: 20%; }
+        table:nth-of-type(2) th:nth-child(2), table:nth-of-type(2) td:nth-child(2) { width: 10%; }
+        table:nth-of-type(2) th:nth-child(3), table:nth-of-type(2) td:nth-child(3) { width: 10%; }
+        table:nth-of-type(2) th:nth-child(4), table:nth-of-type(2) td:nth-child(4) { width: 10%; }
+        table:nth-of-type(2) th:nth-child(5), table:nth-of-type(2) td:nth-child(5) { width: 10%; }
+        table:nth-of-type(2) th:nth-child(6), table:nth-of-type(2) td:nth-child(6) { width: 10%; }
+        table:nth-of-type(2) th:nth-child(7), table:nth-of-type(2) td:nth-child(7) { width: 20%; }
+        table:nth-of-type(3) th:nth-child(1), table:nth-of-type(3) td:nth-child(1) { width: 15%; }
+        table:nth-of-type(3) th:nth-child(2), table:nth-of-type(3) td:nth-child(2) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(3), table:nth-of-type(3) td:nth-child(3) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(4), table:nth-of-type(3) td:nth-child(4) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(5), table:nth-of-type(3) td:nth-child(5) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(6), table:nth-of-type(3) td:nth-child(6) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(7), table:nth-of-type(3) td:nth-child(7) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(8), table:nth-of-type(3) td:nth-child(8) { width: 10%; }
+        table:nth-of-type(3) th:nth-child(9), table:nth-of-type(3) td:nth-child(9) { width: 15%; }
+        table:nth-of-type(4) th, table:nth-of-type(4) td { width: 25%; }
+        table:nth-of-type(5) th, table:nth-of-type(5) td { width: 25%; }
+        table:nth-of-type(6) th:nth-child(1), table:nth-of-type(6) td:nth-child(1) { width: 15%; }
+        table:nth-of-type(6) th:nth-child(2), table:nth-of-type(6) td:nth-child(2) { width: 15%; }
+        table:nth-of-type(6) th:nth-child(3), table:nth-of-type(6) td:nth-child(3) { width: 25%; }
+        table:nth-of-type(6) th:nth-child(4), table:nth-of-type(6) td:nth-child(4) { width: 15%; }
+        table:nth-of-type(6) th:nth-child(5), table:nth-of-type(6) td:nth-child(5) { width: 15%; }
+        table:nth-of-type(6) th:nth-child(6), table:nth-of-type(6) td:nth-child(6) { width: 15%; }
+    </style>
+</head>
+<body>
+    <h1>MT4自研跟单1.5.0 云策略接口自动化测试报告</h1>
+<h2>1. 测试概览</h2>
+<table>
+<thead>
+<tr>
+<th>项目名称</th>
+<th>云策略接口自动化测试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始时间</td>
+<td>2025-12-03 09:17:06</td>
+</tr>
+<tr>
+<td>结束时间</td>
+<td>2025-12-03 09:17:35</td>
+</tr>
+<tr>
+<td>总耗时</td>
+<td>0分28秒</td>
+</tr>
+<tr>
+<td>执行环境</td>
+<td>test</td>
+</tr>
+<tr>
+<td>总用例数</td>
+<td>8</td>
+</tr>
+<tr>
+<td>实际执行数</td>
+<td>8</td>
+</tr>
+<tr>
+<td>通过数（PASSED）</td>
+<td>8</td>
+</tr>
+<tr>
+<td>失败数（FAILED）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>跳过数（SKIPPED）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>整体通过率</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+<h2>2. 模块执行统计</h2>
+<table>
+<thead>
+<tr>
+<th>模块名称</th>
+<th>总用例数</th>
+<th>实际执行数</th>
+<th>通过数</th>
+<th>失败数</th>
+<th>跳过数</th>
+<th>通过率(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查询校验</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>100.00</td>
+</tr>
+</tbody>
+</table>
+<h2>3. 接口耗时统计（毫秒）</h2>
+<table>
+<thead>
+<tr>
+<th>模块名称</th>
+<th>总用例数</th>
+<th>数据库查询数</th>
+<th>接口用例数</th>
+<th>有效耗时用例数</th>
+<th>平均耗时</th>
+<th>最大耗时</th>
+<th>最小耗时</th>
+<th>总耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查询校验</td>
+<td>8</td>
+<td>0</td>
+<td>8</td>
+<td>7</td>
+<td>2788.71</td>
+<td>10641.45</td>
+<td>55.24</td>
+<td>19520.94</td>
+</tr>
+</tbody>
+</table>
+<h2>4. 接口耗时详情列表（毫秒）</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>场景</th>
+<th>用例名称</th>
+<th>耗时(ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>券商查询校验</td>
+<td>77.69</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>券商查询校验-查询结果为空</td>
+<td>55.24</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>服务器查询校验</td>
+<td>55.95</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>服务器查询校验-查询结果为空</td>
+<td>253.44</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>平台类型查询：MT5（1）</td>
+<td>81.23</td>
+</tr>
+<tr>
+<td>更多数据</td>
+<td>共7条记录</td>
+<td><a href="cloud_interface_time_detail.html">查看全部耗时详情</a></td>
+<td>点击跳转</td>
+</tr>
+</tbody>
+</table>
+<h2>5. 接口耗时TOP10（毫秒）</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>场景</th>
+<th>用例名称</th>
+<th>耗时(ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查询校验</td>
+<td>平台管理-服务器管理</td>
+<td>券商查询校验-查询结果为空</td>
+<td>10641.45</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-服务器管理</td>
+<td>券商查询校验</td>
+<td>8355.94</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>服务器查询校验-查询结果为空</td>
+<td>253.44</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>平台类型查询：MT5（1）</td>
+<td>81.23</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>券商查询校验</td>
+<td>77.69</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>服务器查询校验</td>
+<td>55.95</td>
+</tr>
+<tr>
+<td>查询校验</td>
+<td>平台管理-平台列表</td>
+<td>券商查询校验-查询结果为空</td>
+<td>55.24</td>
+</tr>
+</tbody>
+</table>
+<h2>6. 失败用例列表（共0条）</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>场景</th>
+<th>用例名称</th>
+<th>执行结果</th>
+<th>备注（失败原因）</th>
+<th>具体原因（实际/预期）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>无失败用例</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2>7. 环境信息</h2>
+<table>
+<thead>
+<tr>
+<th>环境项</th>
+<th>配置值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python版本</td>
+<td>3.8.5</td>
+</tr>
+<tr>
+<td>Pytest版本</td>
+<td>7.4.3</td>
+</tr>
+<tr>
+<td>Allure版本</td>
+<td>2.14.2</td>
+</tr>
+<tr>
+<td>接口BaseURL</td>
+<td>http://39.99.136.49/api</td>
+</tr>
+</tbody>
+</table>
+<h2>8. 注意事项</h2>
+<ol>
+<li>接口列表按执行时间排序；</li>
+<li>接口耗时统计仅包含非数据库查询类用例；</li>
+<li>通过率计算规则：仅统计实际执行的用例（排除跳过用例）；</li>
+<li>失败用例先查看"备注"和"具体原因"，实际操作步骤请查看Allure报告的日志文件，优先排查接口返回数据、校验逻辑；</li>
+</ol>
+</body>
+</html>

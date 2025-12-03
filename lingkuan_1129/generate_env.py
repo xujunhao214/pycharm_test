@@ -48,7 +48,7 @@ def add_param(parent, key, value):
 
 
 # ------------------------------
-# 公共辅助函数（修复Jenkins链接路径）
+# 公共辅助函数（修复Jenkins链接路径：适配build_${BUILD_NUMBER}）
 # ------------------------------
 def get_unique_build_identifier():
     """获取Jenkins构建号（本地返回空）"""
@@ -61,7 +61,6 @@ def get_unique_build_identifier():
 
 
 def get_pure_report_paths(markdown_report_path):
-    """修复Jenkins报告链接格式"""
     # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
@@ -71,24 +70,24 @@ def get_pure_report_paths(markdown_report_path):
     md_filename = os.path.basename(pure_md_path)
     html_filename = os.path.basename(html_report_path)
 
-    # 3. Jenkins环境处理（核心修复链接格式）
+    # 3. Jenkins环境处理：路径包含 build_${BUILD_NUMBER}
     if "JENKINS_URL" in os.environ:
         jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
         job_name = os.environ.get("JOB_NAME", "QA-Documentatio-test")
         build_number = os.environ.get("BUILD_NUMBER", build_id)
+        # 报告根目录（Jenkins中是 report/build_${BUILD_NUMBER}）
+        report_rel_path = os.path.dirname(pure_md_path).replace(os.environ.get("WORKSPACE", ""), "").lstrip("/\\")
 
-        # 正确的Jenkins归档报告访问路径：
-        # 格式：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}
-        # 说明：`artifact`是Jenkins归档产物的固定路径前缀
+        # 正确路径：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}/{文件名}
         md_url = (
-            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/{report_rel_path}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/lingkuan_1201/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/artifact/{report_rel_path}/{html_filename}"
         )
 
     else:
-        # 本地环境：直接使用file协议
+        # 本地环境逻辑：使用绝对路径的file协议
         if os.name == "nt":
             md_abs_path = os.path.abspath(pure_md_path).replace("\\", "/")
             html_abs_path = os.path.abspath(html_report_path).replace("\\", "/")
@@ -126,8 +125,8 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         add_param(environment, "版本", env_config["browser_version"])
         add_param(environment, "BASE_URL", env_config["base_url"])
         add_param(environment, "VPS_URL", env_config["vps_url"])
-        # add_param(environment, "Markdown报告", md_url)  # 纯路径
-        add_param(environment, "测试报告", html_url)  # 纯路径
+        add_param(environment, "Markdown报告", md_url)  # 保留MD报告路径
+        add_param(environment, "HTML报告", html_url)  # 保留HTML报告路径
 
         os.makedirs(output_dir, exist_ok=True)
         env_file_path = os.path.join(output_dir, "environment.xml")
@@ -135,7 +134,8 @@ def generate_environment_xml(output_dir, env_value, markdown_report_path=""):
         tree.write(env_file_path, encoding="utf-8", xml_declaration=True)
 
         logger.info(f"独立执行环境文件生成成功: {env_file_path}")
-        logger.info(f"HTML 报告纯路径: {html_url}")
+        logger.info(f"Markdown报告纯路径: {md_url}")
+        logger.info(f"HTML报告纯路径: {html_url}")
         return True
     except Exception as e:
         logger.error(f"生成独立执行环境文件失败: {str(e)}", exc_info=True)
@@ -175,15 +175,16 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
         add_param(root, "版本", env_config["browser_version"])
         add_param(root, "BASE_URL", env_config["base_url"])
         add_param(root, "VPS_URL", env_config["vps_url"])
-        # add_param(root, "Markdown汇总报告", md_url)  # 纯路径
-        add_param(root, "汇总报告", html_url)  # 纯路径
+        add_param(root, "Markdown汇总报告", md_url)  # 保留MD汇总报告路径
+        add_param(root, "HTML汇总报告", html_url)  # 保留HTML汇总报告路径
 
         env_file_path = os.path.join(merged_results_dir, "environment.xml")
         tree = ET.ElementTree(root)
         tree.write(env_file_path, encoding="utf-8", xml_declaration=True)
 
         print(f"合并执行环境文件生成成功：{env_file_path}")
-        print(f"HTML 汇总报告纯路径: {html_url}")
+        print(f"Markdown汇总报告纯路径: {md_url}")
+        print(f"HTML汇总报告纯路径: {html_url}")
         return True
     except Exception as e:
         print(f"生成合并执行环境文件失败：{str(e)}")

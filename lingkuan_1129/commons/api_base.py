@@ -132,11 +132,6 @@ class APITestBase:
                     allure.attachment_type.TEXT,
                 )
 
-    # PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 上两级目录为项目根目录
-    # TIME_RECORD_FILE = os.path.join(
-    #     PROJECT_ROOT,  # 项目根目录
-    #     "report", "vps_results", "time_record.json"  # 拼接目标路径
-    # )
     @property
     def TIME_RECORD_FILE(self):
         """
