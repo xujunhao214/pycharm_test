@@ -3,9 +3,9 @@ import logging
 import pytest
 import time
 import math
-from lingkuan_1127.VAR.VAR import *
-from lingkuan_1127.conftest import var_manager
-from lingkuan_1127.commons.api_base import *
+from lingkuan_1201.VAR.VAR import *
+from lingkuan_1201.conftest import var_manager
+from lingkuan_1201.commons.api_base import *
 
 logger = logging.getLogger(__name__)
 SKIP_REASON = "跳过此用例"

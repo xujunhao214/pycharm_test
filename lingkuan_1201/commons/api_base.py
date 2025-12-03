@@ -15,8 +15,8 @@ from requests.exceptions import (
     HTTPError, SSLError
 )
 from jsonpath_ng import parse
-from lingkuan_1127.VAR.VAR import *
-from lingkuan_1127.commons.wait_utils import wait_for_condition
+from lingkuan_1201.VAR.VAR import *
+from lingkuan_1201.commons.wait_utils import wait_for_condition
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

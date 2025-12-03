@@ -14,7 +14,7 @@ except ImportError:
 
 # 配置降级处理
 try:
-    from lingkuan_1127.config import ENV_CONFIG, Environment
+    from lingkuan_1201.config import ENV_CONFIG, Environment
     from VAR.VAR import *
 except ImportError:
     class Environment:

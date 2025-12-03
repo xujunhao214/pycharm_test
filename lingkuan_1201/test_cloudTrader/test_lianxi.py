@@ -4,9 +4,9 @@ import allure
 import logging
 import pytest
 import re
-from lingkuan_1127.VAR.VAR import *
-from lingkuan_1127.conftest import var_manager
-from lingkuan_1127.commons.api_base import *
+from lingkuan_1201.VAR.VAR import *
+from lingkuan_1201.conftest import var_manager
+from lingkuan_1201.commons.api_base import *
 from template.commons.jsonpath_utils import *
 
 logger = logging.getLogger(__name__)

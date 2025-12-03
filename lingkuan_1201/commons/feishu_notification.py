@@ -2,9 +2,9 @@ import os
 import requests
 import logging
 from typing import Dict, List
-from lingkuan_1127.VAR.VAR import *
+from lingkuan_1201.VAR.VAR import *
 import statistics
-from lingkuan_1127.commons.enums import Environment
+from lingkuan_1201.commons.enums import Environment
 
 logger = logging.getLogger(__name__)
 

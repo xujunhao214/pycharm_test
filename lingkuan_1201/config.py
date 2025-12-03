@@ -1,6 +1,6 @@
-# lingkuan_1127/config.py
+# lingkuan_1201/config.py
 # 导入已有的Environment枚举（无需重复定义）
-from lingkuan_1127.commons.enums import Environment
+from lingkuan_1201.commons.enums import Environment
 import pymysql
 
 # 环境配置（仅保留配置数据，依赖现有枚举）
@@ -25,7 +25,7 @@ ENV_CONFIG = {
             "db": 1,
             "password": "diVMn9bMpACrXh79QyYY"
         },
-        "data_source_dir": "lingkuan_1127/VAR"
+        "data_source_dir": "lingkuan_1201/VAR"
     },
     Environment.UAT: {
         "base_url": "https://uat.atcp.top/api",
@@ -46,6 +46,6 @@ ENV_CONFIG = {
             "db": 2,
             "password": "diVMn9bMpACrXh79QyYY"
         },
-        "data_source_dir": "lingkuan_1127/VAR"
+        "data_source_dir": "lingkuan_1201/VAR"
     }
 }
