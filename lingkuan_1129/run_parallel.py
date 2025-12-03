@@ -43,7 +43,7 @@ def run_test_script(script_path: str, env: str = "test", report_root: str = "") 
 
     try:
         env_vars = os.environ.copy()
-        env_vars["REPORT_ROOT"] = report_root  # 传递报告根目录给子脚本
+        env_vars["REPORT_ROOT"] = report_root
         process = subprocess.Popen(
             [sys.executable, script_path, env],
             stdout=subprocess.PIPE,
@@ -71,7 +71,6 @@ def run_test_script(script_path: str, env: str = "test", report_root: str = "") 
     stdout_thread.join()
     stderr_thread.join()
 
-    # 子脚本的报告目录（在report_root下）
     if "cloud" in script_name:
         report_dir = os.path.join(report_root, "cloud_results")
     else:
@@ -110,17 +109,15 @@ def run_all_tests_parallel(env: str = "test"):
         "run_cloud_tests.py"
     ]
 
-    # 核心逻辑：Jenkins用build_${BUILD_NUMBER}，本地用固定目录
+    # 核心逻辑：仅Jenkins环境生成带构建号的目录，本地用固定目录
     if "JENKINS_URL" in os.environ:
         build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
-        # 报告根目录：report/build_${BUILD_NUMBER}（保留历史版本）
         report_root = os.path.join(PROJECT_ROOT, "report", f"build_{build_number}")
     else:
         report_root = os.path.join(PROJECT_ROOT, "report")
     os.makedirs(report_root, exist_ok=True)
     print(f"当前构建报告根目录: {report_root} (Jenkins环境: {'是' if 'JENKINS_URL' in os.environ else '否'})")
 
-    # 检查脚本是否存在
     for script in test_scripts:
         script_path = os.path.join(PROJECT_ROOT, script)
         if not os.path.exists(script_path):
@@ -129,18 +126,15 @@ def run_all_tests_parallel(env: str = "test"):
 
     print(f"\n====== 开始并行执行测试（环境: {env}）======")
     with ThreadPoolExecutor(max_workers=2) as executor:
-        # 传递report_root给子脚本
-        futures = [executor.submit(run_test_script, os.path.join(PROJECT_ROOT, script), env, report_root) for script in
-                   test_scripts]
+        futures = [executor.submit(run_test_script, script, env, report_root) for script in test_scripts]
         results = [future.result() for future in futures]
 
-    # 收集有效结果目录
     valid_source_dirs = [dir for (_, _, dir) in results if os.path.exists(dir) and os.listdir(dir)]
     if not valid_source_dirs:
         print("错误: 无有效测试结果目录，无法合并报告")
         return 1
 
-    # 汇总报告路径（均在report_root下）
+    # 所有汇总报告路径基于report_root（Jenkins带构建号，本地固定）
     merged_results_dir = os.path.join(report_root, "merged_allure-results")
     merged_html_dir = os.path.join(report_root, "merged_html-report")
     merged_markdown_path = os.path.join(report_root, "汇总接口自动化测试报告.md")
@@ -152,22 +146,19 @@ def run_all_tests_parallel(env: str = "test"):
         print("\n====== 开始生成汇总Markdown报告 ======")
         generate_simple_report(merged_results_dir, env, merged_markdown_path)
         merged_markdown_abs = os.path.abspath(merged_markdown_path)
-        print(f"汇总Markdown报告路径: {merged_markdown_abs}")
+        standard_path = merged_markdown_abs.replace("\\", "/")
+        markdown_file_url = f"file:///{standard_path}"
+        print(f"汇总Markdown报告（带协议路径）: {markdown_file_url}")
 
         print("\n====== 生成合并环境文件（供HTML报告使用）======")
-        # 传递Markdown报告的绝对路径
-        generate_merged_env(merged_results_dir, merged_markdown_abs, env_value=env)
+        generate_merged_env(merged_results_dir, markdown_file_url, env_value=env)
 
-        print("\n====== 开始生成汇总HTML报告 ======")
+        print("\n====== 开始生成汇总HTML报告（读取最新环境文件）======")
         if os.path.exists(merged_html_dir):
             shutil.rmtree(merged_html_dir)
-        # 适配Windows和Linux的allure命令
-        if os.name == "nt":
-            subprocess.run(f"allure generate {merged_results_dir} -o {merged_html_dir} --clean", shell=True, check=True)
-        else:
-            subprocess.run(f"allure generate {merged_results_dir} -o {merged_html_dir} --clean", shell=True, check=True)
+        os.system(f"chcp 65001 >nul && allure generate {merged_results_dir} -o {merged_html_dir} --clean")
         merged_html_abs = os.path.abspath(merged_html_dir)
-        print(f"汇总HTML报告生成成功: {merged_html_abs}/index.html")
+        print(f"汇总HTML报告生成成功: file://{merged_html_abs}/index.html")
 
     except Exception as e:
         print(f"错误: 汇总报告生成失败: {str(e)}")
@@ -182,10 +173,10 @@ def run_all_tests_parallel(env: str = "test"):
             total_failed += 1
 
     print("\n====== 所有报告路径 ======")
-    print(f"1. VPS独立报告目录: {os.path.join(report_root, 'vps_results')}")
-    print(f"2. Cloud独立报告目录: {os.path.join(report_root, 'cloud_results')}")
-    print(f"3. 汇总Markdown报告: {merged_markdown_abs}")
-    print(f"4. 汇总HTML报告: {merged_html_abs}/index.html")
+    print(f"1. VPS独立Markdown报告: {os.path.join(report_root, 'VPS接口自动化测试报告.md')}")
+    print(f"2. Cloud独立Markdown报告: {os.path.join(report_root, 'Cloud接口自动化测试报告.md')}")
+    print(f"3. 汇总HTML报告: file://{merged_html_abs}/index.html")
+    print(f"4. 汇总Markdown报告: {merged_markdown_abs}")
 
     return 0 if total_failed == 0 else 1
 
