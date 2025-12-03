@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 import threading
 from report_generator import generate_simple_report
-from generate_env import generate_merged_env
+from generate_env import *
 
 current_script_path = os.path.abspath(__file__)
 PROJECT_ROOT = os.path.dirname(current_script_path)
@@ -145,9 +145,10 @@ def run_all_tests_parallel(env: str = "test"):
 
         print("\n====== 开始生成汇总Markdown报告 ======")
         generate_simple_report(merged_results_dir, env, merged_markdown_path)
+        # 修正后（调用工具函数生成链接）
         merged_markdown_abs = os.path.abspath(merged_markdown_path)
-        standard_path = merged_markdown_abs.replace("\\", "/")
-        markdown_file_url = f"file:///{standard_path}"
+        # 调用get_pure_report_paths，自动生成Jenkins/http或本地/file路径
+        markdown_file_url, _ = get_pure_report_paths(merged_markdown_abs)
         print(f"汇总Markdown报告（带协议路径）: {markdown_file_url}")
 
         print("\n====== 生成合并环境文件（供HTML报告使用）======")
