@@ -8,6 +8,10 @@ from datetime import datetime
 from VAR.VAR import *
 
 
+# 注意：VAR.VAR需确保存在，若不存在需注释/替换
+# from VAR.VAR import *
+
+
 # ------------------------------
 # 统一配置（复用逻辑，避免冗余）
 # ------------------------------
@@ -63,7 +67,7 @@ def get_unique_build_identifier():
 
 
 def get_pure_report_paths(markdown_report_path):
-    """修复Jenkins报告链接格式"""
+    """修复Jenkins报告链接格式（指向workspace永久路径）"""
     # 1. 处理本地路径（剥离file协议）
     pure_md_path = markdown_report_path.replace("file:///", "").replace("file://", "")
     html_report_path = pure_md_path.replace(".md", ".html")
@@ -73,20 +77,18 @@ def get_pure_report_paths(markdown_report_path):
     md_filename = os.path.basename(pure_md_path)
     html_filename = os.path.basename(html_report_path)
 
-    # 3. Jenkins环境处理（核心修复链接格式）
+    # 3. Jenkins环境处理（核心：链接指向workspace）
     if "JENKINS_URL" in os.environ:
         jenkins_url = os.environ["JENKINS_URL"].rstrip("/")
         job_name = os.environ.get("JOB_NAME", "QA-Documentatio-test")
         build_number = os.environ.get("BUILD_NUMBER", build_id)
 
-        # 正确的Jenkins归档报告访问路径：
-        # 格式：{Jenkins地址}/job/{任务名}/{构建号}/artifact/{报告相对路径}
-        # 说明：`artifact`是Jenkins归档产物的固定路径前缀
+        # 关键修正：ws = workspace，指向永久存储路径
         md_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1129/report/build_{build_number}/{md_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/ws/lingkuan_1129/report/build_{build_number}/{md_filename}"
         )
         html_url = (
-            f"{jenkins_url}/view/自动化测试/job/{job_name}/ws/lingkuan_1129/report/build_{build_number}/{html_filename}"
+            f"{jenkins_url}/job/{job_name}/{build_number}/ws/lingkuan_1129/report/build_{build_number}/{html_filename}"
         )
 
     else:
@@ -178,8 +180,8 @@ def generate_merged_env(merged_results_dir, markdown_report_path, env_value="tes
         add_param(root, "版本", env_config["browser_version"])
         add_param(root, "BASE_URL", env_config["base_url"])
         add_param(root, "VPS_URL", env_config["vps_url"])
-        # add_param(root, "Markdown汇总报告", md_url)  # 启用带构建号的MD汇总链接
         add_param(root, "汇总报告", html_url)  # 带构建号的HTML汇总链接
+        add_param(root, "Markdown汇总报告", md_url)  # 启用MD汇总链接
 
         env_file_path = os.path.join(merged_results_dir, "environment.xml")
         tree = ET.ElementTree(root)

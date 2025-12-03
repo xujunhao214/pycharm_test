@@ -81,12 +81,16 @@ def run_cloud_tests(env: str = "test"):
     except Exception as e:
         print(f"\nCloud 环境文件生成失败: {str(e)}（不影响Markdown报告生成）")
 
-    # 生成Allure独立HTML报告（兼容Windows/Linux）
+    # 生成Allure独立HTML报告（关键：Jenkins用绝对路径）
     try:
         if os.name == "nt":  # Windows
             os.system(f"chcp 65001 >nul && allure generate {report_dir} -o {html_dir} --clean")
         else:  # Linux（Jenkins）
-            os.system(f"allure generate {report_dir} -o {html_dir} --clean")
+            if "JENKINS_URL" in os.environ:
+                allure_cmd = "/var/lib/jenkins/tools/ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation/Allure2.12.0/bin/allure"
+                os.system(f"{allure_cmd} generate {report_dir} -o {html_dir} --clean")
+            else:
+                os.system(f"allure generate {report_dir} -o {html_dir} --clean")
         print(f"\nCloud独立HTML报告: file://{os.path.abspath(html_dir)}/index.html")
     except Exception as e:
         print(f"\nCloud独立HTML报告生成失败: {str(e)}（不影响Markdown报告生成）")

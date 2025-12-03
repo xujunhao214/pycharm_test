@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 import threading
 from report_generator import generate_simple_report
-from generate_env import generate_merged_env
+from generate_env import generate_merged_env, get_pure_report_paths  # 新增导入
 
 current_script_path = os.path.abspath(__file__)
 PROJECT_ROOT = os.path.dirname(current_script_path)
@@ -112,6 +112,7 @@ def run_all_tests_parallel(env: str = "test"):
     # 核心逻辑：仅Jenkins环境生成带构建号的目录，本地用固定目录
     if "JENKINS_URL" in os.environ:
         build_number = os.environ.get("BUILD_NUMBER", datetime.now().strftime("%Y%m%d%H%M%S"))
+        # 报告根目录直接指向workspace下的report
         report_root = os.path.join(PROJECT_ROOT, "report", f"build_{build_number}")
     else:
         report_root = os.path.join(PROJECT_ROOT, "report")
@@ -146,8 +147,8 @@ def run_all_tests_parallel(env: str = "test"):
         print("\n====== 开始生成汇总Markdown报告 ======")
         generate_simple_report(merged_results_dir, env, merged_markdown_path)
         merged_markdown_abs = os.path.abspath(merged_markdown_path)
-        standard_path = merged_markdown_abs.replace("\\", "/")
-        markdown_file_url = f"file:///{standard_path}"
+        # 关键修正：调用工具函数生成正确链接（替换手动拼接）
+        markdown_file_url, _ = get_pure_report_paths(merged_markdown_abs)
         print(f"汇总Markdown报告（带协议路径）: {markdown_file_url}")
 
         print("\n====== 生成合并环境文件（供HTML报告使用）======")
@@ -156,7 +157,12 @@ def run_all_tests_parallel(env: str = "test"):
         print("\n====== 开始生成汇总HTML报告（读取最新环境文件）======")
         if os.path.exists(merged_html_dir):
             shutil.rmtree(merged_html_dir)
-        os.system(f"chcp 65001 >nul && allure generate {merged_results_dir} -o {merged_html_dir} --clean")
+        # 关键修正：Jenkins用Allure绝对路径，本地用allure
+        if "JENKINS_URL" in os.environ:
+            allure_cmd = "/var/lib/jenkins/tools/ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation/Allure2.12.0/bin/allure"
+            os.system(f"{allure_cmd} generate {merged_results_dir} -o {merged_html_dir} --clean")
+        else:
+            os.system(f"chcp 65001 >nul && allure generate {merged_results_dir} -o {merged_html_dir} --clean")
         merged_html_abs = os.path.abspath(merged_html_dir)
         print(f"汇总HTML报告生成成功: file://{merged_html_abs}/index.html")
 
