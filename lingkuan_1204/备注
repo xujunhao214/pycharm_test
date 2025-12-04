@@ -1,0 +1,15 @@
+1027版本：
+1.sum手数的统计，保留两位小数：total = round(float(total), 2)，避免float出现多位小数的情况
+
+1028版本：
+1.使用随机数代替之前的固定备注：class_random_str
+2.重构跟随策略备注的结构，补充云策略列表的备注场景
+
+1126版本：
+1.之前的当前时间有问题，调用一次之后时间就固定了，现在改为获取实时时间
+# DATETIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+# 去掉原有的get_current_time()固定变量，改为函数
+def get_current_time():
+    """实时获取当前时间，格式：YYYY-MM-DD HH:MM:SS"""
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+2.修改基类里面的请求逻辑，现在需要接口的耗时
